@@ -20,7 +20,7 @@ HEADERS += \
     drugdatabasedescription.h \
     idrugdatabase.h \
 #    countries/be/belgishdrugsdatabase.h \
-#    countries/ca/canadiandrugsdatabase.h \
+    countries/ca/canadiandrugsdatabase.h \
     countries/fr/frenchdrugsdatabasecreator.h \
 #    countries/pt/portuguesedrugsdatabase.h \
     countries/us/fdadrugsdatabase.h \
@@ -39,7 +39,7 @@ SOURCES += \
     drugdatabasedescription.cpp \
     idrugdatabase.cpp \
 #    countries/be/belgishdrugsdatabase.cpp \
-#    countries/ca/canadiandrugsdatabase.cpp \
+    countries/ca/canadiandrugsdatabase.cpp \
     countries/fr/frenchdrugsdatabasecreator.cpp \
 #    countries/pt/portuguesedrugsdatabase.cpp \
     countries/us/fdadrugsdatabase.cpp \

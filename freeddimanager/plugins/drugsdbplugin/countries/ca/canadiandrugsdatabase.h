@@ -24,71 +24,31 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef CANADIANDRUGSDATABASE_H
-#define CANADIANDRUGSDATABASE_H
+#ifndef DDIMANAGER_DRUGSDB_INTERNAL_CANADIANDRUGSDATABASECREATOR_H
+#define DDIMANAGER_DRUGSDB_INTERNAL_CANADIANDRUGSDATABASECREATOR_H
 
-#include <coreplugin/itoolpage.h>
-#include <coreplugin/ftb_constants.h>
-#include <drugsdb/idrugdatabasestep.h>
+#include <drugsdbplugin/idrugdatabase.h>
+#include <QStringList>
 
-#include <QIcon>
-#include <QString>
-#include <QWidget>
-#include <QMultiHash>
-#include <QHash>
+/**
+ * \file canadiandrugsdatabase.h
+ * \author Eric Maeker
+ * \version 0.10.0
+ * \date 11 Mar 2014
+*/
 
-namespace DrugsDB {
+namespace DrugsDb {
 namespace Internal {
-class CaDrugDatatabaseStep;
 
-class FreeCanadianDrugsDatabasePage : public Core::IToolPage
-{
-    Q_OBJECT
-public:
-    FreeCanadianDrugsDatabasePage(QObject *parent = 0);
-    ~FreeCanadianDrugsDatabasePage();
-
-    virtual QString id() const {return "FreeCanadianDrugsDatabasePage";}
-    virtual QString name() const;
-    virtual QString category() const;
-    virtual QIcon icon() const {return QIcon();}
-
-    // widget will be deleted after the show
-    virtual QWidget *createPage(QWidget *parent = 0);
-
-private:
-    CaDrugDatatabaseStep *_step;
-};
-
-class NonFreeCanadianDrugsDatabasePage : public Core::IToolPage
-{
-    Q_OBJECT
-public:
-    NonFreeCanadianDrugsDatabasePage(QObject *parent = 0);
-    ~NonFreeCanadianDrugsDatabasePage();
-
-    virtual QString id() const {return "NonFreeCanadianDrugsDatabasePage";}
-    virtual QString name() const;
-    virtual QString category() const;
-    virtual QIcon icon() const {return QIcon();}
-
-    // widget will be deleted after the show
-    virtual QWidget *createPage(QWidget *parent = 0);
-
-private:
-    CaDrugDatatabaseStep *_step;
-};
-
-class CaDrugDatatabaseStep : public DrugsDB::Internal::IDrugDatabaseStep
+class CaDrugDatabase : public DrugsDb::Internal::IDrugDatabase
 {
     Q_OBJECT
 
 public:
-    CaDrugDatatabaseStep(QObject *parent = 0);
-    ~CaDrugDatatabaseStep();
+    CaDrugDatabase(QObject *parent = 0);
+    ~CaDrugDatabase();
 
-    QString id() const {return "CaDrugDatatabaseStep";}
-    Steps stepNumber() const {return Core::IFullReleaseStep::DrugsDatabase;}
+    QString id() const {return "CaDrugDatabase";}
     void setLicenseType(LicenseType type);
 
     bool process();
@@ -97,16 +57,12 @@ public:
     bool unzipFiles();
     bool prepareData();
     bool populateDatabase();
-    bool linkDrugsRoutes();
-    bool linkMolecules();
+//    bool linkDrugsComponentsAndDrugInteractors();
 
     QStringList errors() const {return m_Errors;}
 
 private:
-    QMultiHash<int, QString> extractUidRelatedDatas(
-            const QString &absFileName,
-            const int uidCol, const int dataCol,
-            const QHash<int, QString> &equalityCondition);
+    QMultiHash<int, QString> extractUidRelatedDatas(const QString &absFileName, const int uidCol, const int dataCol, const QHash<int, QString> &equalityCondition);
 
 private:
     QStringList m_Errors;
@@ -117,4 +73,4 @@ private:
 }  //  namespace DrugsDB
 
 
-#endif // CANADIANDRUGSDATABASE_H
+#endif // DDIMANAGER_DRUGSDB_INTERNAL_CANADIANDRUGSDATABASECREATOR_H

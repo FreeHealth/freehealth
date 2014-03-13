@@ -25,152 +25,85 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #include "canadiandrugsdatabase.h"
-#include "moleculelinkermodel.h"
 #include "drug.h"
-#include "drugsdbcore.h"
-#include "idrugdatabasestepwidget.h"
-#include "moleculelinkdata.h"
 
 #include <coreplugin/icore.h>
-#include <coreplugin/imainwindow.h>
-#include <coreplugin/ftb_constants.h>
 #include <coreplugin/isettings.h>
+#include <coreplugin/fdm_constants.h>
 
-#include <drugsdb/drugdatabasedescription.h>
-#include <drugsdb/tools.h>
+#include <drugsdbplugin/drugdatabasedescription.h>
+#include <drugsdbplugin/tools.h>
 
 #include <drugsbaseplugin/drugbaseessentials.h>
 
 #include <utils/log.h>
-#include <utils/database.h>
-#include <extensionsystem/pluginmanager.h>
-#include <quazip/global.h>
+#include <utils/global.h>
 #include <translationutils/constants.h>
 #include <translationutils/trans_drugs.h>
 #include <translationutils/trans_countries.h>
+#include <quazip/global.h>
 
+#include <QFile>
+#include <QMap>
+#include <QSqlDatabase>
+#include <QSqlQuery>
+#include <QSqlError>
+#include <QFileInfo>
 #include <QDir>
+#include <QDate>
 #include <QProgressDialog>
-#include <QTimer>
+#include <QHash>
+#include <QStringList>
+#include <QString>
+#include <QTextStream>
 
-using namespace DrugsDB;
+#include <QDebug>
+
+// For your tests, you can limit the number of drugs computed and inserted into the database
+// using this debugging enum. Set to -1 if you want all drugs to be processed
+enum { LimitDrugsTo = -1 };
+
+using namespace DrugsDb;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
 namespace {
 const char* const  CANADIAN_URL               = "http://www.hc-sc.gc.ca/dhp-mps/alt_formats/zip/prodpharma/databasdon/allfiles.zip";
 //const char* const  CANADIAN_URL               = "http://www.hc-sc.gc.ca/dhp-mps/prodpharma/databasdon/txt/allfiles.zip";
-const char* const  CA_DRUGS_DATABASE_NAME     = "CA_HCDPD";
 }
 
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
-static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
-static inline DrugsDB::DrugsDBCore *drugsDbCore() {return DrugsDB::DrugsDBCore::instance();}
 
-FreeCanadianDrugsDatabasePage::FreeCanadianDrugsDatabasePage(QObject *parent) :
-    Core::IToolPage(parent),
-    _step(0)
-{
-    setObjectName("CanadianDrugsDatabasePage");
-    _step = new CaDrugDatatabaseStep(this);
-    pluginManager()->addObject(_step);
-}
-
-FreeCanadianDrugsDatabasePage::~FreeCanadianDrugsDatabasePage()
-{
-    pluginManager()->removeObject(_step);
-}
-
-QString FreeCanadianDrugsDatabasePage::name() const
-{
-    return tkTr(Trans::Constants::COUNTRY_CANADA);
-}
-
-QString FreeCanadianDrugsDatabasePage::category() const
-{
-    return tkTr(Trans::Constants::DRUGS) + "|" + Core::Constants::CATEGORY_FREEDRUGSDATABASE;
-}
-
-QWidget *FreeCanadianDrugsDatabasePage::createPage(QWidget *parent)
-{
-    Q_ASSERT(_step);
-    IDrugDatabaseStepWidget *widget = new IDrugDatabaseStepWidget(parent);
-    widget->initialize(_step);
-    return widget;
-}
-
-/**
- * Option page for the non-free French drugs database.
- * The ctor also create the DrugsDB::Internal::IDrugDatabaseStep object and
- * register it in the plugin manager object pool.
- */
-NonFreeCanadianDrugsDatabasePage::NonFreeCanadianDrugsDatabasePage(QObject *parent) :
-    IToolPage(parent),
-    _step(0)
-{
-    setObjectName("NonFreeCanadianDrugsDatabasePage");
-    _step = new CaDrugDatatabaseStep(this);
-    _step->setLicenseType(IDrugDatabaseStep::NonFree);
-    pluginManager()->addObject(_step);
-}
-
-NonFreeCanadianDrugsDatabasePage::~NonFreeCanadianDrugsDatabasePage()
-{
-    pluginManager()->removeObject(_step);
-}
-
-QString NonFreeCanadianDrugsDatabasePage::name() const
-{
-    return tkTr(Trans::Constants::COUNTRY_CANADA);
-}
-
-QString NonFreeCanadianDrugsDatabasePage::category() const
-{
-    return tkTr(Trans::Constants::DRUGS) + "|" + Core::Constants::CATEGORY_NONFREEDRUGSDATABASE;
-}
-
-QWidget *NonFreeCanadianDrugsDatabasePage::createPage(QWidget *parent)
-{
-    Q_ASSERT(_step);
-    IDrugDatabaseStepWidget *widget = new IDrugDatabaseStepWidget(parent);
-    widget->initialize(_step);
-    return widget;
-}
-
-CaDrugDatatabaseStep::CaDrugDatatabaseStep(QObject *parent) :
-    IDrugDatabaseStep(parent),
+CaDrugDatabase::CaDrugDatabase(QObject *parent) :
+    DrugsDb::Internal::IDrugDatabase(parent),
     m_WithProgress(false)
 {
-    setObjectName("CaDrugDatatabaseStep");
+    setObjectName("CaDrugDatabase");
+    setDatabaseUid("CA_HCDPD");
+    setDatabaseLanguage("en");
     setTempPath(QString("%1/%2")
                 .arg(settings()->value(Core::Constants::S_TMP_PATH).toString())
                 .arg("/CaRawSources/"));
-    setConnectionName("ca_free");
-    setOutputPath(Tools::databaseOutputPath() + "/drugs/");
     setDatabaseDescriptionFile(QString("%1/%2/%3")
                                .arg(settings()->value(Core::Constants::S_GITFILES_PATH).toString())
                                .arg(Core::Constants::PATH_TO_DRUG_DATABASE_DESCRIPTION_FILES)
                                .arg("ca/description.xml"));
-    setDatapackDescriptionFile(QString("%1/%2/%3")
-                               .arg(settings()->value(Core::Constants::S_GITFILES_PATH).toString())
-                               .arg(Core::Constants::PATH_TO_DATAPACK_DESCRIPTION_FILES)
-                               .arg("drugs/ca_noddi/packdescription.xml"));
-    setDownloadUrl("http://www.hc-sc.gc.ca/dhp-mps/alt_formats/zip/prodpharma/databasdon/allfiles.zip");
+    setDownloadUrl(::CANADIAN_URL);
     setLicenseType(Free);
+    // setSpcHtmlFilesDefaultEncoding("ISO-8859-1");
     createTemporaryStorage();
 }
 
-CaDrugDatatabaseStep::~CaDrugDatatabaseStep()
+CaDrugDatabase::~CaDrugDatabase()
 {
 }
 
-void CaDrugDatatabaseStep::setLicenseType(LicenseType type)
+void CaDrugDatabase::setLicenseType(LicenseType type)
 {
-    IDrugDatabaseStep::setLicenseType(type);
+    IDrugDatabase::setLicenseType(type);
     if (type==NonFree) {
         setDisplayName(tr("Non-free Canadian drugs database"));
         setConnectionName("ca_nonfree");
-        setServerOwner(FrenchAssociation);
         setDatapackDescriptionFile(QString("%1/%2/%3")
                                    .arg(settings()->value(Core::Constants::S_GITFILES_PATH).toString())
                                    .arg(Core::Constants::PATH_TO_DATAPACK_DESCRIPTION_FILES)
@@ -184,27 +117,32 @@ void CaDrugDatatabaseStep::setLicenseType(LicenseType type)
                                    .arg(Core::Constants::PATH_TO_DATAPACK_DESCRIPTION_FILES)
                                    .arg("drugs/ca_noddi/packdescription.xml"));
     }
+    setOutputPath(QString("%1/%2/%3")
+                  .arg(settings()->value(Core::Constants::S_DBOUTPUT_PATH).toString())
+                  .arg("/drugs/")
+                  .arg(connectionName())
+                  );
 }
 
-QString CaDrugDatatabaseStep::processMessage() const
+QString CaDrugDatabase::processMessage() const
 {
     if (licenseType() == NonFree)
         return tr("Non-free Canadian drugs database creation");
     return tr("Free Canadian drugs database creation");
 }
 
-bool CaDrugDatatabaseStep::process()
+bool CaDrugDatabase::process()
 {
     unzipFiles();
     prepareData();
     createDatabase();
     populateDatabase();
-    linkMolecules();
+    linkDrugsComponentsAndDrugInteractors();
     Q_EMIT processFinished();
     return true;
 }
 
-bool CaDrugDatatabaseStep::unzipFiles()
+bool CaDrugDatabase::unzipFiles()
 {
     Q_EMIT progressLabelChanged(tr("Canadian database creation: unzipping files..."));
     Q_EMIT progressRangeChanged(0, 1);
@@ -221,8 +159,10 @@ bool CaDrugDatatabaseStep::unzipFiles()
     LOG(QString("Starting unzipping Canadian file %1").arg(fileName));
 
     // unzip downloaded using QProcess
-    if (!QuaZipTools::unzipFile(fileName, tempPath()))
+    if (!QuaZipTools::unzipFile(fileName, tempPath())) {
+        LOG_ERROR(QString("Unable to unzip Canadian file %1").arg(fileName));
         return false;
+    }
 
     // unzip all files in the working path
     QFileInfoList list = QDir(tempPath()).entryInfoList(QStringList()<<"*.zip");
@@ -242,12 +182,12 @@ bool CaDrugDatatabaseStep::unzipFiles()
     return true;
 }
 
-bool CaDrugDatatabaseStep::prepareData()
+bool CaDrugDatabase::prepareData()
 {
     return true;
 }
 
-QMultiHash<int, QString> CaDrugDatatabaseStep::extractUidRelatedDatas(const QString &absFileName, const int uidCol, const int dataCol, const QHash<int, QString> &equalityCondition)
+QMultiHash<int, QString> CaDrugDatabase::extractUidRelatedDatas(const QString &absFileName, const int uidCol, const int dataCol, const QHash<int, QString> &equalityCondition)
 {
     // Get forms
     QMultiHash<int, QString> uid_vals;
@@ -294,7 +234,7 @@ QMultiHash<int, QString> CaDrugDatatabaseStep::extractUidRelatedDatas(const QStr
     return uid_vals;
 }
 
-bool CaDrugDatatabaseStep::populateDatabase()
+bool CaDrugDatabase::populateDatabase()
 {
     if (!checkDatabase())
         return false;
@@ -496,8 +436,17 @@ bool CaDrugDatatabaseStep::populateDatabase()
     return true;
 }
 
-bool CaDrugDatatabaseStep::linkMolecules()
-{
+//bool CaDrugDatabase::linkMolecules()
+//{
+
+    //    Mar 2014
+    //    Refactoring the code for the FreeDDIManager -> only use ComponentAtcModel
+    //    ATC 5665
+    //    NUMBER OF MOLECULES           1827
+    //    LINKERMODEL                   868
+    //    LEFT                          959
+    //    CONFIDENCE INDICE             47.5096
+
     // 18 Oct 2011
     //    NUMBER OF MOLECULES 1845
     //    CORRECTED BY NAME 23
@@ -599,89 +548,89 @@ bool CaDrugDatatabaseStep::linkMolecules()
     // Found: 1071, Left: 327
     // Drugs with one mol and ATC (7-char): 1358
 
-    if (licenseType() == Free)
-        return true;
+//    if (licenseType() == Free)
+//        return true;
 
-    // Connect to databases
-    if (!checkDatabase())
-        return false;
+//    // Connect to databases
+//    if (!checkDatabase())
+//        return false;
 
-    Q_EMIT progressLabelChanged(tr("Linking drugs components to ATC codes"));
-    Q_EMIT progressRangeChanged(0, 2);
-    Q_EMIT progress(0);
+//    Q_EMIT progressLabelChanged(tr("Linking drugs components to ATC codes"));
+//    Q_EMIT progressRangeChanged(0, 2);
+//    Q_EMIT progress(0);
 
-    // Associate Mol <-> ATC for drugs with one molecule only
-    MoleculeLinkerModel *model = drugsDbCore()->moleculeLinkerModel();
-    MoleculeLinkData data(drugEssentialDatabase(), sourceId(), ::CA_DRUGS_DATABASE_NAME, "fr");
+//    // Associate Mol <-> ATC for drugs with one molecule only
+//    MoleculeLinkerModel *model = drugsDbCore()->moleculeLinkerModel();
+//    MoleculeLinkData data(drugEssentialDatabase(), sourceId(), ::CA_DRUGS_DATABASE_NAME, "fr");
 
-    // TODO: add this code ?
-    // Associate molecule from Drugs == 1 molecule and Drug got 7-char length ATC code
-    // add them to corrected
-    //         SELECT DISTINCT composition.molecule_name, drugs.atc
-    //         FROM composition, drugs
-    //         WHERE drugs.uid=composition.uid AND length(drugs.atc)=7
-    //         GROUP BY composition.uid
-    //         HAVING count(composition.molecule_name) = 1
-    //         LIMIT 100;
+//    // TODO: add this code ?
+//    // Associate molecule from Drugs == 1 molecule and Drug got 7-char length ATC code
+//    // add them to corrected
+//    //         SELECT DISTINCT composition.molecule_name, drugs.atc
+//    //         FROM composition, drugs
+//    //         WHERE drugs.uid=composition.uid AND length(drugs.atc)=7
+//    //         GROUP BY composition.uid
+//    //         HAVING count(composition.molecule_name) = 1
+//    //         LIMIT 100;
 
-//    QString req;
-//    LOG("Getting Drugs with ATC and one molecule - Can take some times");
-//    QMultiHash<QString, QString> correctedByAtcCode;
-//    QSqlQuery drugs(ca);
-//    req = "SELECT DISTINCT composition.molecule_name, drugs.atc "
-//            "FROM composition, drugs "
-//            "WHERE drugs.uid=composition.uid AND length(drugs.atc)=7 "
-//            "GROUP BY composition.uid "
-//            "HAVING count(composition.molecule_name) = 1;";
-//    if (drugs.exec(req)) {
-//        while (drugs.next()) {
-//            correctedByAtcCode.insertMulti(drugs.value(0).toString(), drugs.value(1).toString());
-//        }
-//    }
-    data.correctedByName.insert("CALCIUM (CALCIUM CARBONATE)", "CALCIUM CARBONATE");
-    data.correctedByName.insert("VITAMIN D3", "COLECALCIFEROL");
-    data.correctedByName.insert("VITAMIN D3 (CHOLECALCIFEROL)", "COLECALCIFEROL");
-    data.correctedByName.insert("DIATRIZOATE SODIUM", "DIATRIZOIC ACID");
-    data.correctedByName.insert("DIATRIZOATE MEGLUMINE", "DIATRIZOIC ACID");
-    data.correctedByName.insert("IOXAGLATE MEGLUMINE", "IOXAGLIC ACID");
-    data.correctedByName.insert("IOXAGLATE SODIUM", "IOXAGLIC ACID");
-    data.correctedByName.insert("THIAMINE MONONITRATE", "THIAMINE (VIT B1)");
-    data.correctedByName.insert("ETHINYL ESTRADIOL", "ETHINYLESTRADIOL");
-    data.correctedByName.insert("NORGESTREL", "LEVONORGESTREL");
-    data.correctedByName.insert("ALUMINUM CHLOROHYDRATE", "ALUMINIUM CHLOROHYDRATE");
-    data.correctedByName.insert("VITAMIN B6 (PYRIDOXINE HYDROCHLORIDE)", "PYRIDOXINE (VIT B6)");
-    data.correctedByName.insert("VITAMIN B1 (THIAMINE HYDROCHLORIDE)", "THIAMINE (VIT B1)");
-    data.correctedByName.insert("FORMOTEROL FUMARATE DIHYDRATE", "FORMOTEROL");
-    data.correctedByName.insert("FIBRINOGEN (HUMAN)", "FIBRINOGEN, HUMAN");
-    data.correctedByName.insert("FIBRINOGEN (HUMAN)", "HUMAN FIBRINOGEN");
-    data.correctedByName.insert("FACTOR XIII", "COAGULATION FACTOR XIII");
-    data.correctedByName.insert("BETA-CAROTENE", "BETACAROTENE");
-    data.correctedByName.insert("L-ARGININE" , "ARGININE HYDROCHLORIDE" );
-    data.correctedByName.insert("L-LYSINE (L-LYSINE HYDROCHLORIDE)" ,"LYSINE" );
-    data.correctedByName.insert("L-METHIONINE" ,"METHIONINE" );
-    data.correctedByName.insert("GLUTAMIC ACID" ,"GLUTAMIC ACID HYDROCHLORIDE" );
-    data.correctedByName.insert("D-ALPHA TOCOPHEROL", "TOCOPHEROL");
-    data.correctedByName.insert("D-PANTOTHENIC ACID (CALCIUM D-PANTOTHENATE)" ,"CALCIUM PANTOTHENATE" );
+////    QString req;
+////    LOG("Getting Drugs with ATC and one molecule - Can take some times");
+////    QMultiHash<QString, QString> correctedByAtcCode;
+////    QSqlQuery drugs(ca);
+////    req = "SELECT DISTINCT composition.molecule_name, drugs.atc "
+////            "FROM composition, drugs "
+////            "WHERE drugs.uid=composition.uid AND length(drugs.atc)=7 "
+////            "GROUP BY composition.uid "
+////            "HAVING count(composition.molecule_name) = 1;";
+////    if (drugs.exec(req)) {
+////        while (drugs.next()) {
+////            correctedByAtcCode.insertMulti(drugs.value(0).toString(), drugs.value(1).toString());
+////        }
+////    }
+//    data.correctedByName.insert("CALCIUM (CALCIUM CARBONATE)", "CALCIUM CARBONATE");
+//    data.correctedByName.insert("VITAMIN D3", "COLECALCIFEROL");
+//    data.correctedByName.insert("VITAMIN D3 (CHOLECALCIFEROL)", "COLECALCIFEROL");
+//    data.correctedByName.insert("DIATRIZOATE SODIUM", "DIATRIZOIC ACID");
+//    data.correctedByName.insert("DIATRIZOATE MEGLUMINE", "DIATRIZOIC ACID");
+//    data.correctedByName.insert("IOXAGLATE MEGLUMINE", "IOXAGLIC ACID");
+//    data.correctedByName.insert("IOXAGLATE SODIUM", "IOXAGLIC ACID");
+//    data.correctedByName.insert("THIAMINE MONONITRATE", "THIAMINE (VIT B1)");
+//    data.correctedByName.insert("ETHINYL ESTRADIOL", "ETHINYLESTRADIOL");
+//    data.correctedByName.insert("NORGESTREL", "LEVONORGESTREL");
+//    data.correctedByName.insert("ALUMINUM CHLOROHYDRATE", "ALUMINIUM CHLOROHYDRATE");
+//    data.correctedByName.insert("VITAMIN B6 (PYRIDOXINE HYDROCHLORIDE)", "PYRIDOXINE (VIT B6)");
+//    data.correctedByName.insert("VITAMIN B1 (THIAMINE HYDROCHLORIDE)", "THIAMINE (VIT B1)");
+//    data.correctedByName.insert("FORMOTEROL FUMARATE DIHYDRATE", "FORMOTEROL");
+//    data.correctedByName.insert("FIBRINOGEN (HUMAN)", "FIBRINOGEN, HUMAN");
+//    data.correctedByName.insert("FIBRINOGEN (HUMAN)", "HUMAN FIBRINOGEN");
+//    data.correctedByName.insert("FACTOR XIII", "COAGULATION FACTOR XIII");
+//    data.correctedByName.insert("BETA-CAROTENE", "BETACAROTENE");
+//    data.correctedByName.insert("L-ARGININE" , "ARGININE HYDROCHLORIDE" );
+//    data.correctedByName.insert("L-LYSINE (L-LYSINE HYDROCHLORIDE)" ,"LYSINE" );
+//    data.correctedByName.insert("L-METHIONINE" ,"METHIONINE" );
+//    data.correctedByName.insert("GLUTAMIC ACID" ,"GLUTAMIC ACID HYDROCHLORIDE" );
+//    data.correctedByName.insert("D-ALPHA TOCOPHEROL", "TOCOPHEROL");
+//    data.correctedByName.insert("D-PANTOTHENIC ACID (CALCIUM D-PANTOTHENATE)" ,"CALCIUM PANTOTHENATE" );
 
-    if (!model->moleculeLinker(&data))
-        return false;
+//    if (!model->moleculeLinker(&data))
+//        return false;
 
-    Q_EMIT progress(1);
+//    Q_EMIT progress(1);
 
-    Q_EMIT progressLabelChanged(tr("Saving components to ATC links to database"));
-    Q_EMIT progressRangeChanged(0, 1);
-    Q_EMIT progress(0);
+//    Q_EMIT progressLabelChanged(tr("Saving components to ATC links to database"));
+//    Q_EMIT progressRangeChanged(0, 1);
+//    Q_EMIT progress(0);
 
-    // Save to links to drugs database
-    Tools::addComponentAtcLinks(drugEssentialDatabase(), data.moleculeIdToAtcId, sourceId());
+//    // Save to links to drugs database
+//    Tools::addComponentAtcLinks(drugEssentialDatabase(), data.moleculeIdToAtcId, sourceId());
 
-    LOG(QString("Database processed"));
+//    LOG(QString("Database processed"));
 
-    // add unfound to extralinkermodel
-    Q_EMIT progressLabelChanged(tr("Updating component link XML file"));
-    model->addUnreviewedMolecules(::CA_DRUGS_DATABASE_NAME, data.unfoundMoleculeAssociations);
-    model->saveModel();
-    Q_EMIT progress(1);
+//    // add unfound to extralinkermodel
+//    Q_EMIT progressLabelChanged(tr("Updating component link XML file"));
+//    model->addUnreviewedMolecules(::CA_DRUGS_DATABASE_NAME, data.unfoundMoleculeAssociations);
+//    model->saveModel();
+//    Q_EMIT progress(1);
 
-    return true;
-}
+//    return true;
+//}

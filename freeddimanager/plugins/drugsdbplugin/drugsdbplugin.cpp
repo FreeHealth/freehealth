@@ -28,6 +28,7 @@
 #include "idrugdatabase.h"
 #include <drugsdbplugin/countries/fr/frenchdrugsdatabasecreator.h>
 #include <drugsdbplugin/countries/za/southafricandrugsdatabase.h>
+#include <drugsdbplugin/countries/ca/canadiandrugsdatabase.h>
 
 #include <coreplugin/icore.h>
 //#include <coreplugin/isettings.h>
@@ -91,6 +92,10 @@ bool DrugsDbPlugin::initialize(const QStringList &arguments, QString *errorMessa
     _databases.append(base);
 
     base = new ZaDrugDatabase(this);
+    _mode->registerDrugDatabase(base);
+    _databases.append(base);
+
+    base = new CaDrugDatabase(this);
     _mode->registerDrugDatabase(base);
     _databases.append(base);
 
