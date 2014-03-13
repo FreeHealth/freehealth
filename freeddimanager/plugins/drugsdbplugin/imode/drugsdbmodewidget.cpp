@@ -277,6 +277,18 @@ void DrugsDbModeWidget::onCurrentDrugsDatabaseChanged(const QItemSelection &curr
     d->ui->output->setText(base->outputPath() + QDir::separator() + base->outputFileName());
     d->ui->title->setText(base->displayName());
 
+    // Reset all checkboxes label
+    d->ui->unzip->setText(d->ui->unzip->text().remove(" CORRECTLY DONE"));
+    d->ui->prepare->setText(d->ui->prepare->text().remove(" CORRECTLY DONE"));
+    d->ui->createDb->setText(d->ui->createDb->text().remove(" CORRECTLY DONE"));
+    d->ui->populate->setText(d->ui->populate->text().remove(" CORRECTLY DONE"));
+    d->ui->addAtc->setText(d->ui->addAtc->text().remove(" CORRECTLY DONE"));
+    d->ui->linkMols->setText(d->ui->linkMols->text().remove(" CORRECTLY DONE"));
+    d->ui->addDDI->setText(d->ui->addDDI->text().remove(" CORRECTLY DONE"));
+    d->ui->addPims->setText(d->ui->addPims->text().remove(" CORRECTLY DONE"));
+    d->ui->addPreg->setText(d->ui->addPreg->text().remove(" CORRECTLY DONE"));
+    d->ui->spc->setText(d->ui->spc->text().remove(" CORRECTLY DONE"));
+
     // Add tooltips to buttons
     d->ui->seeDbDescription->setToolTip(base->databaseDescriptionFile());
     d->ui->seeDatapackDescription->setToolTip(base->datapackDescriptionFile());
