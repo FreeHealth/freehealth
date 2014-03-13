@@ -697,6 +697,8 @@ ComponentLinkerResult &ComponentAtcModel::startComponentLinkage(const ComponentL
     // For all items, try to find link -> then populate the model
     // This will allow to correct wrong automatic association
 
+    // FIXME: all components must be managed uppercase
+
     // Ask the current model database for links (DDI::COMPO table)
     db.transaction();
     int z = 0;
@@ -852,7 +854,12 @@ ComponentLinkerResult &ComponentAtcModel::startComponentLinkage(const ComponentL
                  << "BISULFATE DE" << "BISULFATE D'"
                  << "TRINITRATE D'" << "TRINITRATE DE"
                  << "DINITRATE D'" << "DINITRATE DE"
-                 << "NITRATE D'" << "NITRATE DE";
+                 << "NITRATE D'" << "NITRATE DE"
+                 << "HYDROCHLORIDE" << "MONOSULFIDE"
+                 << "CHLORIDE" << "PEROXIDE" << "CITRATE"
+                 << "HYDROBROMIDE" << "SUCCINATE"
+                 << "ACETATE" << "DISULFIDE"
+                 << "SULFATE";
         foreach(const QString &prefix, toRemove) {
             if (transformedLbl.startsWith(prefix)) {
                 QString tmp = transformedLbl;
@@ -953,27 +960,29 @@ bool ComponentAtcModel::submitAll()
     return true;
 }
 
+/**
+ * Removes all unreviewed molecules from the currently selected component drug database. You must select
+ * your database first \sa selectDatabase().
+ */
 int ComponentAtcModel::removeUnreviewedMolecules()
 {
-//    int nb = 0;
-//    int examined = 0;
-//    QDomElement n = d->m_RootItem->node().firstChildElement();
+    const QStringList &uids = databaseUids();
+    if (uids.isEmpty())
+        return 0;
 
-//     while (!n.isNull()) {
-//         if (n.attribute("review").compare("true", Qt::CaseInsensitive) != 0) {
-//             QDomElement save = n.nextSiblingElement();
-//             QDomNode rem = d->m_RootItem->node().removeChild(n);
-//             if (!rem.isNull())
-//                 ++nb;
-//             n = save;
-//             ++examined;
-//             continue;
-//         }
-//         ++examined;
-//         n = n.nextSiblingElement();
-//     }
-//     reset();
-//     return nb;
+    QHash<int, QString> where;
+    where.insert(Constants::COMPO_ISREVIEWED, "=0");
+    where.insert(Constants::COMPO_DRUGDB_UID1, QString("='%1'").arg(d->_dbUid1));
+    if (!d->_dbUid2.isEmpty())
+        where.insert(Constants::COMPO_DRUGDB_UID2, QString("='%1'").arg(d->_dbUid2));
+    QString removeUnreviewed = ddiCore()->database().prepareDeleteQuery(Constants::Table_COMPONENTS, where);
+    qWarning() << removeUnreviewed;
+    QSqlDatabase db = ddiCore()->database().database();
+    ddiCore()->database().executeSQL(removeUnreviewed, db);
+    if (uids.count() == 2)
+        selectDatabase(uids.at(0), uids.at(1));
+    else
+        selectDatabase(uids.at(0));
     return 0;
 }
 

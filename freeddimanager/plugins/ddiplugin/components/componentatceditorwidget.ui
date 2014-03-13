@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>702</width>
+    <width>715</width>
     <height>369</height>
    </rect>
   </property>
@@ -41,6 +41,13 @@
          <string>Graham Chui, MD (NZ)</string>
         </property>
        </item>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="removeUnreviewed">
+       <property name="text">
+        <string>Remove unreviewed</string>
+       </property>
       </widget>
      </item>
      <item>

@@ -131,6 +131,7 @@ ComponentAtcEditorWidget::ComponentAtcEditorWidget(QWidget *parent) :
 
     connect(d->ui->availableDrugsDb, SIGNAL(activated(int)), this, SLOT(onChangeComponentDrugDatabaseUidRequested(int)));
     connect(d->ui->saveButton, SIGNAL(clicked()), this, SLOT(saveModel()));
+    connect(d->ui->removeUnreviewed, SIGNAL(clicked()), this, SLOT(onRemoveUnreviewedRequested()));
     connect(d->ui->reveiwers, SIGNAL(activated(QString)), d->model, SLOT(setActualReviewer(QString)));
     connect(d->ui->tableView, SIGNAL(activated(QModelIndex)), this, SLOT(onComponentViewItemActivated(QModelIndex)));
     connect(d->ui->tableView, SIGNAL(pressed(QModelIndex)), this, SLOT(onComponentViewItemPressed(QModelIndex)));
@@ -221,6 +222,13 @@ void ComponentAtcEditorWidget::onComponentViewItemActivated(const QModelIndex &i
         }
     }
 }
+
+/** Removes all unreviewed components to the ComponentAtcModel */
+void ComponentAtcEditorWidget::onRemoveUnreviewedRequested()
+{
+    d->model->removeUnreviewedMolecules();
+}
+
 
 namespace {
 struct Unreviewed {
