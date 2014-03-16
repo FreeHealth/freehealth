@@ -139,6 +139,7 @@ bool FrDrugDatatabase::process()
     createDatabase();
     populateDatabase();
     linkDrugsComponentsAndDrugInteractors();
+    showReportDialog();
     Q_EMIT processFinished();
     return true;
 }
@@ -155,6 +156,7 @@ bool FrDrugDatatabase::prepareData()
             return false;
         }
     }
+    addFinalReportMessage(tr("French Pharmaceutical Drug Database: raw data processed."));
     return true;
 }
 

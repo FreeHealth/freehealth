@@ -295,13 +295,15 @@ bool IDrugDatabase::addRoutes()
 
     // Routes already in database ?
     if (_database->count(Constants::Table_ROUTES, Constants::ROUTES_RID) > 0) {
-        LOG("Routes already in database");
+        LOG(tr("Routes already in database"));
+        addFinalReportMessage(tr("Routes already in database"));
         return true;
     }
 
     QString content = Utils::readTextFile(routeCsvAbsoluteFile());
     if (content.isEmpty()) {
-        LOG_ERROR(QString("Routes file does not exist. File: %1").arg(routeCsvAbsoluteFile()));
+        LOG_ERROR(tr("Routes file does not exist. File: %1").arg(routeCsvAbsoluteFile()));
+        addFinalReportMessage(tr("Routes file does not exist. File: %1").arg(routeCsvAbsoluteFile()));
         return false;
     }
     LOG("Adding routes to database from " + routeCsvAbsoluteFile());
@@ -352,7 +354,8 @@ bool IDrugDatabase::addRoutes()
         }
         query.finish();
     }
-    LOG("Routes saved");
+    addFinalReportMessage(tr("Routes included to database."));
+    LOG(tr("Routes included to database."));
     return true;
 }
 
@@ -524,6 +527,8 @@ bool IDrugDatabase::saveDrugDatabaseDescription()
     }
     query.finish();
 
+    addFinalReportMessage(tr("Saving database description: %1.").arg(descr.data(DrugDatabaseDescription::Uuid).toString()));
+
     return true;
 }
 
@@ -544,6 +549,8 @@ bool IDrugDatabase::updateDatabaseCompletion(int completion)
         return false;
     }
     query.finish();
+    LOG(tr("Updating confidence indice to %1.").arg(completion));
+    addFinalReportMessage(tr("Updating confidence indice to %1.").arg(completion));
     return true;
 }
 
@@ -729,9 +736,11 @@ bool IDrugDatabase::saveDrugsIntoDatabase(QVector<Drug *> drugs)
             }
         }
     }
-    LOG(QString("Saved %1 drugs").arg(drugs.count()));
     query.finish();
     db.commit();
+
+    LOG(tr("Added %1 drugs to database.").arg(drugs.count()));
+    addFinalReportMessage(tr("Added %1 drugs to database.").arg(drugs.count()));
 
     return true;
 }
@@ -794,6 +803,7 @@ QHash<int, QString> IDrugDatabase::saveMoleculeIds(const QStringList &molnames)
         query.finish();
     }
     _database->database().commit();
+    addFinalReportMessage(tr("Added %1 components to database.").arg(molnames.count()));
     return mids;
 }
 
@@ -807,7 +817,13 @@ bool IDrugDatabase::addAtc()
     Q_EMIT progressRangeChanged(0, 1);
     Q_EMIT progressLabelChanged(tr("Adding ATC classification to database."));
     Q_EMIT progress(0);
+
     bool ok = _databasePopulator->saveAtcClassification(_database);
+    if (ok)
+        addFinalReportMessage(tr("Added ATC data to database."));
+    else
+        addFinalReportMessage(tr("ERROR: unable to include ATC data to database."));
+
     return ok;
 }
 
@@ -820,7 +836,13 @@ bool IDrugDatabase::addDrugDrugInteractions()
     Q_EMIT progressRangeChanged(0, 1);
     Q_EMIT progressLabelChanged(tr("Adding ATC classification to database."));
     Q_EMIT progress(0);
+
     bool ok = _databasePopulator->saveDrugDrugInteractions(_database);
+    if (ok)
+        addFinalReportMessage(tr("Added drug-drug interactions to database."));
+    else
+        addFinalReportMessage(tr("ERROR: unable to include drug-drug interactions to database."));
+
     return ok;
 }
 
@@ -888,6 +910,7 @@ bool IDrugDatabase::downloadSpcContents()
         return false;
     }
     LOG(QString("Number of SPC links: %1").arg(_spcUrls.count()));
+    addFinalReportMessage(tr("Starting %1 Pharmaceutical Drug Summary of Product Caracteristics saved in the database.").arg(_spcUrls.count()));
 
     // Create the SPC url downloader
     Utils::HttpMultiDownloader *_multiDownloader = new Utils::HttpMultiDownloader(this);
@@ -932,6 +955,7 @@ bool IDrugDatabase::onAllSpcDownloadFinished()
         return false;
     }
     disconnect(_multiDownloader, SIGNAL(allDownloadFinished()), this, SLOT(onAllSpcDownloadFinished()));
+    addFinalReportMessage(tr("Pharmaceutical Drug Summary of Product Caracteristics downloaded."));
 
     // TODO: manage progressbar signals
 
@@ -946,6 +970,7 @@ bool IDrugDatabase::onAllSpcDownloadFinished()
         QTimer::singleShot(1, this, SIGNAL(spcProcessFinished()));
         return true;
     }
+    addFinalReportMessage(tr("%1 Pharmaceutical Drug Summary of Product Caracteristics downloaded.").arg(downloadedUrls.count()));
 
     // TODO: manage downloader errors
 
@@ -1035,6 +1060,8 @@ bool IDrugDatabase::onAllSpcDownloadFinished()
         saveDrugSpc(content);
     }
 
+    addFinalReportMessage(tr("%1 Pharmaceutical Drug Summary of Product Caracteristics saved in the database.").arg(spcUrls.count()));
+
     QTimer::singleShot(1, this, SIGNAL(spcProcessFinished()));
     return true;
 }
@@ -1053,6 +1080,7 @@ bool IDrugDatabase::saveDrugSpc(const SpcContent &content)
     if (!checkDatabase())
         return false;
     qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
+
     using namespace DrugsDB::Constants;
     _database->database().transaction();
     QSqlQuery query(_database->database());
@@ -1282,6 +1310,7 @@ bool IDrugDatabase::startDownload()
     dld->setOutputPath(tempPath());
     dld->setUrl(QUrl(downloadUrl()));
     dld->startDownload();
+    addFinalReportMessage(tr("Starting raw source files download."));
     return true;
 }
 
@@ -1304,7 +1333,10 @@ bool IDrugDatabase::unzipFiles()
         .arg(connectionName())
         .arg(fileName));
 
-    return QuaZipTools::unzipFile(fileName, tempPath());
+    bool ok = QuaZipTools::unzipFile(fileName, tempPath());
+    if (ok)
+        addFinalReportMessage(tr("Raw source files unzipped."));
+    return ok;
 }
 
 /**
@@ -1347,6 +1379,17 @@ void IDrugDatabase::clearFinalReport()
     _finalReport.clear();
 }
 
+void IDrugDatabase::showReportDialog() const
+{
+    Utils::withButtonsMessageBox(tr("Pharmaceutical drug database report"),
+                                 tr("Pharmaceutical drug database processing finished. The full report "
+                                    "is available in the detailled part of this dialog. Click 'Details' to "
+                                    "access the report."),
+                                 _finalReport.join("\n"),
+                                 QMessageBox::Ok, QMessageBox::Ok,
+                                 tr("Pharmaceutical drug database report"));
+}
+
 /** Add a message that will be presented to the user with the final processing dialog. */
 void IDrugDatabase::addFinalReportMessage(const QString &msg)
 {
@@ -1372,6 +1415,7 @@ DrugsDB::Internal::DrugBaseEssentials *IDrugDatabase::createDrugDatabase(const Q
         return 0;
     }
     LOG(tr("Drug database created: %1/%2").arg(db.hostName()).arg(db.databaseName()));
+    addFinalReportMessage(tr("Drug database created: %1/%2").arg(db.hostName()).arg(db.databaseName()));
     return _database;
 }
 
@@ -1395,6 +1439,7 @@ bool IDrugDatabase::linkDrugsComponentsAndDrugInteractors()
     Q_EMIT progressRangeChanged(0, 2);
     Q_EMIT progressLabelChanged(tr("Linking drugs components to ATC codes. Step 1"));
     Q_EMIT progress(0);
+    addFinalReportMessage(tr("*** Starting drug component to ATC linkage ***"));
 
     // Create component linker data
     DDI::ComponentLinkerData data;
@@ -1417,6 +1462,7 @@ bool IDrugDatabase::linkDrugsComponentsAndDrugInteractors()
     data.setAtcCodeIds(ids);
     query.finish();
     qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
+    addFinalReportMessage(tr("  . %1 ATC codes retrieved from database").arg(ids.count()));
 
     // Get all components ids
     req = _database->select(Constants::Table_MOLS, QList<int>()
@@ -1434,6 +1480,7 @@ bool IDrugDatabase::linkDrugsComponentsAndDrugInteractors()
     query.finish();
     data.setComponentIds(ids);
     qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
+    addFinalReportMessage(tr("  . %1 drug components retrieved from database").arg(ids.count()));
 
     // Get all linked component (compo1 is linked to compo2 using LK_NATURE in compo table)
     // TODO: this part could be improved using SQL specific commands... Any taker?
@@ -1506,10 +1553,16 @@ bool IDrugDatabase::linkDrugsComponentsAndDrugInteractors()
 
     // Start the linking processus
     DDI::ComponentLinkerResult result = linkerModel->startComponentLinkage(data);
+    addFinalReportMessage(tr("  . Links processed."));
+    foreach(const QString &e, result.errors())
+        addFinalReportMessage(tr("    . ERROR: %1.").arg(e));
+    foreach(const QString &m, result.messages())
+        addFinalReportMessage(tr("    . %1.").arg(m));
 
     // Push data to the drugs database
     updateDatabaseCompletion(result.completionPercentage());
     _databasePopulator->saveComponentAtcLinks(_database, result.componentIdToAtcId(), _sid);
+    addFinalReportMessage(tr("  . Links saved to database."));
 
     // Push data to the ComponentModel
     //    // Inform model of founded links

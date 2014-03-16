@@ -162,6 +162,7 @@ public:
     // Reporting
     QStringList finalReport() const;
     void clearFinalReport();
+    void showReportDialog() const;
 
 private Q_SLOTS:
     void onSubProcessFinished();

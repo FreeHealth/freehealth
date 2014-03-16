@@ -230,9 +230,7 @@ void DrugsDbModeWidget::on_startJobs_clicked()
     d->_progress->setRange(0, 1);
     d->_progress->setValue(1);
 
-    // TODO: show a 'job finished' dialog with the content of the finalReport() of the IDrugDatabase
-    Utils::Log::messagesToTreeWidget(d->ui->messages);
-    Utils::Log::errorsToTreeWidget(d->ui->errors);
+    base->showReportDialog();
 }
 
 bool DrugsDbModeWidget::on_download_clicked()
