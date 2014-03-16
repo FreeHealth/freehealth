@@ -71,6 +71,10 @@ showHelp()
     echo "        libs         for the shared libs code"
     echo "  -h  Show this help"
     echo ""
+    # Test if cppcheck is installed on the computer
+    if [ ! -f $CPPCHECK ]; then
+      echo "ERROR: $CPPCHECK not available. Please install cppcheck";
+    fi
     cd $SCRIPT_PATH
 }
 
@@ -149,6 +153,18 @@ startCppCheck()
 
 }
 
+# Check args
+while getopts "hb:" option
+do
+  case $option in
+    h) showHelp
+       exit 0
+    ;;
+    b) PROJECTS=$OPTARG
+    ;;
+  esac
+done
+
 # Test if cppcheck is installed on the computer
 if [ ! -f $CPPCHECK ]; then
   echo "ERROR: $CPPCHECK not available. Please install cppcheck";
@@ -161,18 +177,6 @@ if [ ! -z `mkdir -p $OUTPUT_PATH` ]; then
     echo "ERROR: unable to create path: $OUTPUT_PATH"
     exit 124;
 fi
-
-# Check args
-while getopts "hb:" option
-do
-  case $option in
-    h) showHelp
-       exit 0
-    ;;
-    b) PROJECTS=$OPTARG
-    ;;
-  esac
-done
 
 startCppCheck
 
