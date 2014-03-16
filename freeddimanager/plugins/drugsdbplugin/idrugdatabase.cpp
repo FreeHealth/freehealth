@@ -1161,6 +1161,12 @@ bool IDrugDatabase::saveDrugSpc(const SpcContent &content)
     return true;
 }
 
+/** Return the final report of the current processing */
+QStringList IDrugDatabase::finalReport() const
+{
+    return _finalReport;
+}
+
 /** Create all object path (temp, output, download...) */
 bool IDrugDatabase::createTemporaryStorage()
 {
@@ -1333,6 +1339,19 @@ bool IDrugDatabase::registerDataPack()
 //    }
 //    LOG(QString("Registered datapack for drugs database: %1; in server %2").arg(connectionName()).arg(server));
     return true;
+}
+
+/** Clear the cached report. */
+void IDrugDatabase::clearFinalReport()
+{
+    _finalReport.clear();
+}
+
+/** Add a message that will be presented to the user with the final processing dialog. */
+void IDrugDatabase::addFinalReportMessage(const QString &msg)
+{
+    if (!_finalReport.contains(msg))
+        _finalReport.append(msg);
 }
 
 /** Create the drug database using the absolute path \e absPath, and the connectionName \e connection */

@@ -133,6 +133,7 @@ QString FrDrugDatatabase::processMessage() const
 
 bool FrDrugDatatabase::process()
 {
+    clearFinalReport();
     unzipFiles();
     prepareData();
     createDatabase();
@@ -295,10 +296,10 @@ bool FrDrugDatatabase::populateDatabase()
     //    Feb 2014
     //    Refactoring the code for the FreeDDIManager -> only use ComponentAtcModel
     //    ATC 5665
-    //    NUMBER OF MOLECULES           5618
-    //    LINKERMODEL                   4192
+    //    NUMBER OF MOLECULES           5634
+    //    LINKERMODEL                   4403
     //    LEFT                          1036
-    //    CONFIDENCE INDICE             81.5593
+    //    CONFIDENCE INDICE             84.5403
 
 //    // 21 May 2013
 //    //    NUMBER OF MOLECULES 5492

@@ -32,12 +32,13 @@
 #include <QVector>
 #include <QHash>
 #include <QMultiHash>
+#include <QStringList>
 
 /**
  * \file idrugdatabase.h
  * \author Eric Maeker
  * \version 0.10.0
- * \date 10 Feb 2014
+ * \date 16 Mar 2014
 */
 
 namespace DrugsDB {
@@ -158,6 +159,10 @@ public:
 
     bool saveDrugSpc(const SpcContent &content);
 
+    // Reporting
+    QStringList finalReport() const;
+    void clearFinalReport();
+
 private Q_SLOTS:
     void onSubProcessFinished();
     bool onAllSpcDownloadFinished();
@@ -176,6 +181,8 @@ Q_SIGNALS:
     void progressRangeChanged(int min, int max);
 
 protected:
+    void addFinalReportMessage(const QString &msg);
+
     DrugsDB::Internal::DrugBaseEssentials *createDrugDatabase(const QString &absPath, const QString &connection);
     // DrugsDB::Internal::DrugBaseEssentials *drugsBaseFromCache(const QString &connection);
 
@@ -194,6 +201,7 @@ private:
     ProcessTiming _currentTiming;
     SubProcess _currentSubProcess;
     DrugDatabasePopulator *_databasePopulator;
+    QStringList _finalReport;
 };
 
 }  // namespace Internal

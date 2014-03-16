@@ -163,6 +163,8 @@ void DrugsDbModeWidget::on_startJobs_clicked()
     if (d->_progress)
         delete d->_progress;
 
+    base->clearFinalReport();
+
     // Prepare the progress dialog
     d->_progress = new QProgressDialog(mainwindow());
     d->_progress->setLabelText(tr("Starting jobs"));
@@ -224,11 +226,13 @@ void DrugsDbModeWidget::on_startJobs_clicked()
         if (base->downloadSpcContents())
             d->ui->spc->setText(d->ui->spc->text() + " CORRECTLY DONE");
     }
-    Utils::Log::messagesToTreeWidget(d->ui->messages);
-    Utils::Log::errorsToTreeWidget(d->ui->errors);
 
     d->_progress->setRange(0, 1);
     d->_progress->setValue(1);
+
+    // TODO: show a 'job finished' dialog with the content of the finalReport() of the IDrugDatabase
+    Utils::Log::messagesToTreeWidget(d->ui->messages);
+    Utils::Log::errorsToTreeWidget(d->ui->errors);
 }
 
 bool DrugsDbModeWidget::on_download_clicked()
@@ -237,6 +241,7 @@ bool DrugsDbModeWidget::on_download_clicked()
     if (!base)
         return false;
 
+    base->clearFinalReport();
     d->ui->download->setEnabled(false);
     d->ui->progressBar->show();
     connect(base, SIGNAL(progressRangeChanged(int,int)), d->ui->progressBar, SLOT(setRange(int,int)));
@@ -250,6 +255,13 @@ void DrugsDbModeWidget::downloadFinished()
 {
     d->ui->progressBar->hide();
     d->ui->download->setEnabled(true);
+
+    // Wrong db index, no index?
+    IDrugDatabase *base = d->currentDatabase();
+    if (!base)
+        return;
+
+    // TODO: show a 'job finished' dialog with the content of the finalReport() of the IDrugDatabase
 }
 
 void DrugsDbModeWidget::changeStepProgressRange(int min, int max)
