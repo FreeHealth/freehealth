@@ -46,7 +46,7 @@ class EdrcWidgetFactory;
 class EdrcPlugin : public ExtensionSystem::IPlugin
 {
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID "org.freemedforms.FreeMedForms.ToolsPlugin" FILE "EdrcPlugin.json")
+    Q_PLUGIN_METADATA(IID "org.freemedforms.FreeMedForms.ToolsPlugin"  FILE "eDRC.json")
 
 public:
     EdrcPlugin();
