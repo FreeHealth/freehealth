@@ -1,51 +1,50 @@
-                  Welcome to FreeMeForms
-           Copyright (C) 2008-2012 by Eric MAEKER
+                  The FreeMeForms Project
+                        Source Code
+           Copyright (C) 2008-2014 by Eric MAEKER
                http://www.freemedforms.com/
-                   eric.maeker@gmail.com
-                    All rights reserved.
 
 
+I. What is the FreeMedForms project?
 
-I. What is FreeMedForms?
-
-FreeMedForms aims to be an open Electronic Medical Record Manager.
-FreeMedForms is also a lot of derivative sub-projects, which are
-just standalone compilations of FreeMedForms plugins.
-
-This project is a free and open source project. A community grows up
-around it. FreeMedForms and derivatives are released under the terms
-of the GPLv3. Some parts of the code are LGPL v2.1.
+FreeMedForms project is a fully open source medical project. It includes:
+- an open Electronic Medical Record Manager: FreeMedForms EMR
+- a pharmaceutical drug prescriptor assistant: FreeDiams
+- a drug and drug-interaction database manager: FreeDDIManager
+- an ICD10 coding assistant: FreeICD
+- a french specific coding assistant: FreeDRC (in partnership with the SMFG)
 
 FreeMedForms and Derivatives are coded in C++/Qt4/Qt5
-FreeMedForms and Derivatives are available for:
+
+All FreeMedForms apps are available for:
 - MacOS X universal
-- Linux: Ubuntu, Debian, OpenSuse, standalone binary
+- Linux: Debian, Ubuntu, OpenSuse and standalone binary
 - FreeBSD: need compilation of git trunk (please contact the author)
-- Windows
+- Windows (from XP to latest)
 
 
-II. When did this project start?
+II. Where can I find informations about FreeMedForms?
 
-This project started from scratch in October 2008. It was conducted by
-a few professionals. Eric Maeker, MD (France) is the Main Creator and
-Main Developer.
+Main web site:
+    http://www.freemedforms.com/
+
+Sources and issues are located on
+    - GitHub server since 2014:
+        https://github.com/FreeMedForms/freemedforms
+    - GoogleCode before 2014
+        https://code.google.com/p/freemedforms/source/checkout
+
+Build instructions and code documentation:
+    http://www.freemedforms.com/en/code_doc
+
+Some code analysis:
+    http://www.ohloh.net/p/freemedforms/
 
 
-III. Where can I find informations about FreeMedForms?
+III. How to contribute to FreeMedForms?
 
-Descriptive informations on our main web site:
-http://www.freemedforms.com/
+Main web site:
+    [Français]  http://freemedforms.com/fr/contribute
+    [English]   http://freemedforms.com/en/contribute
 
-Sources and issues are located on GoogleCode server:
-http://code.google.com/p/freemedforms/
-
-Build instructions and technical documentation are described here:
-http://www.freemedforms.com/en/code_doc
-
-
-IV. I want to contribute to this project
-
-Please feel free to present yourself to our mailing list:
-freemedforms@googlegroups.com
-Describe your ambitions and your competences. We talk French and English.
-
+Project mailing list:
+    freemedforms@googlegroups.com [Français] [English]
