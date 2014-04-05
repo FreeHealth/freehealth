@@ -880,6 +880,10 @@ bool DrugDatabasePopulator::saveDrugDrugInteractions(DrugsDB::Internal::DrugBase
     return true;
 }
 
+/**
+ * Save all ATC <-> drug component links to the country drug database.
+ * \sa IDrugDatabase::linkDrugsComponentsAndDrugInteractors()
+ */
 bool DrugDatabasePopulator::saveComponentAtcLinks(DrugsDB::Internal::DrugBaseEssentials *database, const QMultiHash<int, int> &componentIdToAtcId, const int sid)
 {
     QSqlDatabase db = database->database();

@@ -1482,10 +1482,9 @@ bool IDrugDatabase::linkDrugsComponentsAndDrugInteractors()
     qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     addFinalReportMessage(tr("  . %1 drug components retrieved from database").arg(ids.count()));
 
-    // Get all linked component (compo1 is linked to compo2 using LK_NATURE in compo table)
+    // Get all linked component (compo1 is linked to compo2 using Constants::COMPO_LK_NATURE in compo table)
     // TODO: this part could be improved using SQL specific commands... Any taker?
     // For each drug, if one component is linked to another one, get the link between components
-    // QHash<QString, QString> compoLinkByLbl;
     QTime chrono;
     chrono.start();
     QHash<int, QString> where;
@@ -1540,7 +1539,12 @@ bool IDrugDatabase::linkDrugsComponentsAndDrugInteractors()
         return false;
     }
     query.finish();
-    Utils::Log::logTimeElapsed(chrono, "dd", "dd");
+
+
+    // TODO: get all drug with 1 ATC code and 1 component -> to add to suggested ATC codes.
+
+
+    Utils::Log::logTimeElapsed(chrono, "IDrugDatabase", "Retrieve data for ATC / Drug Components computation");
 
     // qWarning() << data.debugEquivalences();
 
@@ -1563,21 +1567,6 @@ bool IDrugDatabase::linkDrugsComponentsAndDrugInteractors()
     updateDatabaseCompletion(result.completionPercentage());
     _databasePopulator->saveComponentAtcLinks(_database, result.componentIdToAtcId(), _sid);
     addFinalReportMessage(tr("  . Links saved to database."));
-
-    // Push data to the ComponentModel
-    //    // Inform model of founded links
-    //    addAutoFoundMolecules(mol_atc_forModel, true);
-    //    mol_atc_forModel.clear();
-
-//    Old
-//    MoleculeLinkerModel *model = drugsDbCore()->moleculeLinkerModel();
-//    MoleculeLinkData data(drugEssentialDatabase(), sourceId(), ::FR_DRUGS_DATABASE_NAME, "fr");
-//    if (!model->moleculeLinker(&data))
-//        return false;
-
-
-    // Save to links to drugs database
-//    Tools::addComponentAtcLinks(drugEssentialDatabase(), data.moleculeIdToAtcId, sourceId());
 
     LOG(QString("Database processed"));
     Q_EMIT progress(2);
