@@ -257,14 +257,21 @@ createSource()
     cd $PACKPATH/global_resources/package_helpers
     FILES=`find ./ -type f -name '*.iss'`
     for f in $FILES; do
-        sed -i "bkup" 's#__version__#'$PROJECT_VERSION'#' $f
+        # ISS files are latin1, sed can generate error on utf8 system working on latin1 files
+        # So convert the charset, sed the file, convert the charset
+        iconv -f latin1 -t utf-8 $f > $f.utf8
+        sed -i "bkup" 's#__version__#'$PROJECT_VERSION'#' $f.utf8
+        iconv -f utf-8 -t latin1 $f.utf8 > $f
+        rm $f
+        rm $f.utf8
+        # sed -i "bkup" 's#__version__#'$PROJECT_VERSION'#' $f
     done
     rm *.*bkup
     echo "   * DEFINING *.BAT FILES APP VERSION"
     cd $PACKPATH/scripts
     FILES=`find ./ -type f -name '*.bat'`
     for f in $FILES; do
-        sed -i "bkup" 's#__version__#'$PROJECT_VERSION'#' $f
+        sed -i "bkup" 's#__version__#'$PROJECT_VERSION'#'
     done
     rm *.*bkup
 
