@@ -848,6 +848,7 @@ ComponentLinkerResult &ComponentAtcModel::startComponentLinkage(const ComponentL
         // -> Remove prefix: CHLORHYDRATE DE, ACETATE DE
         QStringList toRemove;
         toRemove << "CHLORHYDRATE DE" << "CHLORHYDRATE D'"
+                 << "DICHLORHYDRATE DE" << "DICHLORHYDRATE D'"
                  << "ACETATE DE" << "ACETATE D'"
                  << "MONOHYDRATE DE" << "MONOHYDRATE D'"
                  << "SULFATE DE" << "SULFATE D'"
@@ -855,6 +856,10 @@ ComponentLinkerResult &ComponentAtcModel::startComponentLinkage(const ComponentL
                  << "TRINITRATE D'" << "TRINITRATE DE"
                  << "DINITRATE D'" << "DINITRATE DE"
                  << "NITRATE D'" << "NITRATE DE"
+                 << "BROMURE DE" << "BROMURE D'"
+                 << "MESILATE DE" << " BASE" << " ANHYDRE"
+                 << "MALATE DE" << "MALATE D'"
+                 << "MALEATE DE" << "MALEATE D'"
                  << "HYDROCHLORIDE" << "MONOSULFIDE"
                  << "CHLORIDE" << "PEROXIDE" << "CITRATE"
                  << "HYDROBROMIDE" << "SUCCINATE"
