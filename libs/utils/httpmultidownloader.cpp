@@ -65,7 +65,7 @@ using namespace Trans::ConstantTranslations;
 
 namespace {
 const char *const TAG_ROOT = "MultiDownloader";
-const char *const TAG_SERVER = "Server";
+//const char *const TAG_SERVER = "Server";
 const char *const TAG_URLROOT = "Url";
 const char *const ATTRIB_URL = "u";
 const char *const ATTRIB_FILENAME = "f";

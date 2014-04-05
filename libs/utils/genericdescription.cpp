@@ -91,7 +91,7 @@ const char* const TAG_VERSION          = "version";
 const char* const TAG_WEBLINK          = "weblink";
 const char* const TAG_ICON             = "icon";
 const char* const TAG_TOOLTIP          = "tooltip";
-const char* const TAG_EXTRA            = "extra";
+//const char* const TAG_EXTRA            = "extra";
 const char* const TAG_AUTHORS          = "authors";
 const char* const TAG_COUNTRY          = "country";
 const char* const TAG_URL              = "url";
@@ -104,12 +104,12 @@ const char* const TAG_SPECIALTIES      = "specialties";
 const char* const TAG_TYPENAME         = "typename";
 const char* const TAG_CREATIONDATE     = "cdate";
 const char* const TAG_LASTMODIFDATE    = "lmdate";
-const char* const TAG_BIBLIOGRAPHY     = "bibliography";
+//const char* const TAG_BIBLIOGRAPHY     = "bibliography";
 const char* const TAG_DESCRIPTION      = "description";
 const char* const TAG_HTMLDESCRIPTION  = "htmldescription";
 const char* const TAG_HTMLSYNTHESIS    = "htmlsynthesis";
 const char* const TAG_LABEL            = "label";
-const char* const TAG_PLUGINNAME       = "type";
+//const char* const TAG_PLUGINNAME       = "type";
 const char* const TAG_ABSFILENAME      = "file";
 
 }

@@ -66,7 +66,6 @@ using namespace Internal;
 
 namespace {
 const int MAX_AUTHENTIFICATION_TRIES = 3;
-const char * const  ICONEYES = "eyes.png";
 }
 
 /** CTor of the object */

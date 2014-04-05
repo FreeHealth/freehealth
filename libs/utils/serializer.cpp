@@ -37,9 +37,9 @@ namespace {
 const char * const  HASH_PREFIX           = "@HASH@@";          /*!< Constant prefix for hash serialization
                                                                      \ingroup constants_serializer
                                                                      \sa tkSerializer */
-const char * const  STRINGLIST_PREFIX     = "@STRINGLIST@@";    /*!< Constant prefix for StringList serialization
-                                                                     \ingroup constants_serializer
-                                                                     \sa tkSerializer */
+//const char * const  STRINGLIST_PREFIX     = "@STRINGLIST@@";    /*!< Constant prefix for StringList serialization
+//                                                                     \ingroup constants_serializer
+//                                                                     \sa tkSerializer */
 const char * const  SERIALIZER_SEPARATOR  = "@||@";             /*!< Constant separator used by tkSerializer
                                                                      \ingroup constants_serializer
                                                                      \sa tkSerializer */
