@@ -130,6 +130,7 @@ ButtonMenuPathItemView::ButtonMenuPathItemView(Form::FormItem *formItem, QWidget
 
     setFocusedWidget(_button);
 
+    this->setSizePolicy(QSizePolicy::Preferred , QSizePolicy::Fixed);
     connect(_menu, SIGNAL(triggered(QModelIndex)) , this , SLOT(onIndexTriggered(QModelIndex)));
 }
 
