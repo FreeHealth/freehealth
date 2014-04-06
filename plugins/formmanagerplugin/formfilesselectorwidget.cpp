@@ -130,15 +130,19 @@ public:
         Form::FormIOQuery query;
         query.setGetAllAvailableFormDescriptions(m_GetLocal);
         query.setExcludeGenderSpecific(m_ExcludeGenderSpecific);
-        if (m_Type==FormFilesSelectorWidget::CompleteForms)
-            query.setTypeOfForms(Form::FormIOQuery::CompleteForms);
-        else if (m_Type==FormFilesSelectorWidget::SubForms)
-            query.setTypeOfForms(Form::FormIOQuery::SubForms);
         switch (m_Type) {
-        case FormFilesSelectorWidget::AllForms: query.setTypeOfForms(Form::FormIOQuery::CompleteForms | Form::FormIOQuery::SubForms);break;
-        case FormFilesSelectorWidget::CompleteForms: query.setTypeOfForms(Form::FormIOQuery::CompleteForms); break;
-        case FormFilesSelectorWidget::SubForms: query.setTypeOfForms(Form::FormIOQuery::SubForms); break;
-//        case FormFilesSelectorWidget::Pages: query.setTypeOfForms(Form::FormIOQuery::SubForms); break;
+        case FormFilesSelectorWidget::AllForms:
+            query.setTypeOfForms(Form::FormIOQuery::CompleteForms | Form::FormIOQuery::SubForms);
+            break;
+        case FormFilesSelectorWidget::CompleteForms:
+            query.setTypeOfForms(Form::FormIOQuery::CompleteForms);
+            break;
+        case FormFilesSelectorWidget::SubForms:
+            query.setTypeOfForms(Form::FormIOQuery::SubForms);
+            break;
+        // case FormFilesSelectorWidget::Pages:
+        //     query.setTypeOfForms(Form::FormIOQuery::Pages);
+        //     break;
         default: break;
         }
         foreach(Form::IFormIO *io, ios)
