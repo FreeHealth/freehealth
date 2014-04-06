@@ -185,7 +185,7 @@ linkQtLibs()
      echo "   * moving to cd $PACKAGES_PATH/mac/$BUNDLE_NAME"
    fi
 
-   MAKE_STEP=`$MAC_SCRIPTS_PATH/macDeploy.sh -a $BUNDLE_NAME -p iconengines -p imageformats -p sqldrivers -p accessible`
+   MAKE_STEP=`$MAC_SCRIPTS_PATH/macDeploy.sh -a $BUNDLE_NAME -p iconengines -p imageformats -p sqldrivers -p accessible -p platforms`
    MAKE_STEP=$?
    if [ ! $MAKE_STEP = 0 ]; then
    echo "   *** Error: Deployement step wrong ***"
@@ -229,22 +229,27 @@ linkOpenCVLib()
     ACTUAL_PATH=`pwd`
     cd $PACKAGES_PATH/mac/$BUNDLE_NAME/$BUNDLE_NAME.app
     WEBCAM_PLUGIN="./Contents/plugins/libWebcam.dylib"
-    FRAMEWORK_PATH="./Contents/Frameworks"
-    opencvlib=""
-    for n in `otool -LX "$WEBCAM_PLUGIN" | grep libopencv` ; do
-        path=`echo $n | grep libopencv`
-        if [ $path ] ; then
-            opencvlib=$path
-            echo "    Found lib: $path"
-            echo "      Linking OpenCV lib from $opencvlib to $FRAMEWORK_PATH for $BUNDLE_NAME"
-            opencvlib_source=`basename $opencvlib`
-            opencvlib_source=`locate $opencvlib_source`
-            cp $opencvlib_source $FRAMEWORK_PATH
-            name=`basename $opencvlib`
-            install_name_tool -change $opencvlib @executable_path/../Frameworks/$name "$WEBCAM_PLUGIN"
-        fi
-    done
-    #    fi
+
+    # test source package
+    if [ ! -e $WEBCAM_PLUGIN ] ; then
+        echo "No WebCam plugin found."
+    else
+        FRAMEWORK_PATH="./Contents/Frameworks"
+        opencvlib=""
+        for n in `otool -LX "$WEBCAM_PLUGIN" | grep libopencv` ; do
+            path=`echo $n | grep libopencv`
+            if [ $path ] ; then
+                opencvlib=$path
+                echo "    Found lib: $path"
+                echo "      Linking OpenCV lib from $opencvlib to $FRAMEWORK_PATH for $BUNDLE_NAME"
+                opencvlib_source=`basename $opencvlib`
+                opencvlib_source=`locate $opencvlib_source`
+                cp $opencvlib_source $FRAMEWORK_PATH
+                name=`basename $opencvlib`
+                install_name_tool -change $opencvlib @executable_path/../Frameworks/$name "$WEBCAM_PLUGIN"
+            fi
+        done
+    fi
     cd $ACTUAL_PATH
 }
 
@@ -298,9 +303,7 @@ if [ ! -e $PACKAGES_PATH ] ; then
 fi
 
 echo $START_COLOR"*** Creating package for $BUNDLE_NAME $VERSION"
-echo "      * project file $PROJECT_FILE"
 echo "      * from source path $SOURCES_PATH"
-echo "      * to package path $PACKAGES_PATH"
 echo $END_COLOR
 
 buildTranslations
@@ -311,6 +314,7 @@ for i in $TMP; do
     BUNDLE_NAME=$i
     PROJECT=`echo $i | tr '[A-Z]' '[a-z]'`;
     PROJECT_FILE=$SOURCES_PATH$PROJECT/$PROJECT.pro;
+    echo $START_COLOR"      * starting project: $PROJECT_FILE"$END_COLOR
     buildApp
     linkQtLibs
     linkMySqlLib
