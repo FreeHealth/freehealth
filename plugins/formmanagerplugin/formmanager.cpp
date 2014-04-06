@@ -983,6 +983,14 @@ QHash<QString, QVariant> FormManager::formToTokens(Form::FormMain *form) const
     return tokens;
 }
 
+/**
+ * Start the Form update checking.
+ * Forms are stored into the user database to ensure their constant availability.
+ * This function will check local files for an update of the form stored in the
+ * user database. \n
+ * \note If the version of form is defined to "test", it will \e always be considered as
+ * an update. You can use this version naming for your form creation and testings.
+ */
 void FormManager::checkFormUpdates()
 {
     if (!commandLine()->value(Core::ICommandLine::CheckFormUpdates).toBool())
@@ -1024,6 +1032,9 @@ void FormManager::checkFormUpdates()
     }
 }
 
+/**
+ * Reacts to DataPack installation or removal.
+ */
 void FormManager::packChanged(const DataPack::Pack &pack)
 {
     if ((pack.dataType() != DataPack::Pack::FormSubset) ||
