@@ -1,14 +1,38 @@
 #!/bin/sh
-# Copyright 2008 AZEVEDO Filipe MonkeyStudio script
-# Adaptations by Eric MAEKER (command line parser) - 2008
+#/***************************************************************************
+# *  The FreeMedForms project is a set of free, open source medical         *
+# *  applications.                                                          *
+# *  (C) 2008-2013 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
+# *  All rights reserved.                                                   *
+# *                                                                         *
+# *  This program is free software: you can redistribute it and/or modify   *
+# *  it under the terms of the GNU General Public License as published by   *
+# *  the Free Software Foundation, either version 3 of the License, or      *
+# *  (at your option) any later version.                                    *
+# *                                                                         *
+# *  This program is distributed in the hope that it will be useful,        *
+# *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
+# *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
+# *  GNU General Public License for more details.                           *
+# *                                                                         *
+# *  You should have received a copy of the GNU General Public License      *
+# *  along with this program (COPYING.FREEMEDFORMS file).                   *
+# *  If not, see <http://www.gnu.org/licenses/>.                            *
+# ***************************************************************************/
+#/***************************************************************************
+# *   Main developers : Eric MAEKER, <eric.maeker@gmail.com>                *
+# *  Contributors:                                                          *
+# *       NAME <MAIL@ADDRESS.COM>                                           *
+# *       NAME <MAIL@ADDRESS.COM>                                           *
+# ***************************************************************************/
 
-### get system configuration ########################################
-# as long as we can find qmake, we don't need QTDIR
 QT_LIBS_PATH=`qmake -query QT_INSTALL_LIBS`
+QT_MAIN_VERSION=`qmake -query QT_VERSION` | cut -f 1 -d.
+
 if [ ! -d $QT_LIBS_PATH/QtCore.framework ] ; then
-	echo "ERROR: cannot find the Qt frameworks. Make sure Qt is installed"
-	echo "and qmake is in your environment path."
-	exit
+    echo "ERROR: cannot find the Qt frameworks. Make sure Qt is installed"
+    echo "and qmake is in your environment path."
+    exit
 fi
 
 #### getting params ###################################################
@@ -23,8 +47,8 @@ do
         case $option in
                 a) APP_NAME=$OPTARG
                 ;;
-		p) PLUGS=$PLUGS"  "$OPTARG     # creating plugins to install list
-		;;
+        p) PLUGS=$PLUGS"  "$OPTARG     # creating plugins to install list
+        ;;
 #                :) echo "*** option \"$OPTARG\" sans arg"
 #                ;;
 #                \?) echo "*** option \"$OPTARG\" inconnue !!!"
@@ -36,23 +60,23 @@ done
 
 # APP_NAME empty --> ask user
 if [ -z "$APP_NAME" ] ; then
-	echo
-	echo "This script prepares a Qt application bundle for deployment. It will"
-	echo "copy over the required Qt frameworks and sets the installation"
-	echo "identifications. Please see the \"Deploying an Application on Qt/Mac\""
-	echo "page in the Qt documentation for more information."
-	echo
-	echo "This script assumes you have already built the application bundle."
-	echo
-	echo -n "What is the name of the application? "
-	read userinput
-	APP_NAME=$userinput
+    echo
+    echo "This script prepares a Qt application bundle for deployment. It will"
+    echo "copy over the required Qt frameworks and sets the installation"
+    echo "identifications. Please see the \"Deploying an Application on Qt/Mac\""
+    echo "page in the Qt documentation for more information."
+    echo
+    echo "This script assumes you have already built the application bundle."
+    echo
+    echo -n "What is the name of the application? "
+    read userinput
+    APP_NAME=$userinput
 fi
 
 # PLUGS empty --> all plugins to install
 if [ -z "$PLUGS" ] ; then
-	echo
-	echo "No Qt Plugin specified in command line."
+    echo
+    echo "No Qt Plugin specified in command line."
         echo "Will install all Qt plugins".
         PLUGS="all"
 fi
@@ -67,13 +91,13 @@ APP_LIBS_PATH="$BUNDLE/Contents/libs"
 QT_PLUGINS_PATH=`qmake -query QT_INSTALL_PLUGINS`
 
 if [ ! -d "${BUNDLE}" ] ; then
-	echo "ERROR: cannot find application bundle \"$BUNDLE\" in current directory"
-	exit
+    echo "ERROR: cannot find application bundle \"$BUNDLE\" in current directory"
+    exit
 fi
 
 if [ ! -x "${APP_BIN}" ] ; then
-	echo "ERROR: cannot find application \"$APP_BIN\" in bundle. Did you forget to run make?"
-	exit
+    echo "ERROR: cannot find application \"$APP_BIN\" in bundle. Did you forget to run make?"
+    exit
 fi
 
 echo "application: ${APP_NAME}"
@@ -84,84 +108,84 @@ echo
 ### functions ######################################################
 copyPlugins()
 {
-	path="$2/$1"
-	if [ ! -d "${path}" ] ; then
-		echo "Copying $1 plugins..."
-		mkdir -p "${path}"
-		cp -R "$QT_PLUGINS_PATH/${1}" "${2}"
-                rm "${path}"/*_debug.*
-	fi
+    path="$2/$1"
+    if [ ! -d "${path}" ] ; then
+        echo "Copying $1 plugins..."
+        mkdir -p "${path}"
+        cp -R "$QT_PLUGINS_PATH/${1}" "${2}"
+        rm "${path}"/*_debug.*
+    fi
 }
 
 copyAllPlugins()
 {
-	copyPlugins "accessible" "$APP_QT_PLUGINS_PATH"
-	copyPlugins "codecs" "$APP_QT_PLUGINS_PATH"
-        copyPlugins "designer" "$APP_QT_PLUGINS_PATH"
-        copyPlugins "graphicssystems" "$APP_QT_PLUGINS_PATH"
-	copyPlugins "iconengines" "$APP_QT_PLUGINS_PATH"
-	copyPlugins "imageformats" "$APP_QT_PLUGINS_PATH"
-#	copyPlugins "inputmethods" "$APP_QT_PLUGINS_PATH"
-	copyPlugins "phonon_backend" "$APP_QT_PLUGINS_PATH"
-	copyPlugins "script" "$APP_QT_PLUGINS_PATH"
-	copyPlugins "sqldrivers" "$APP_QT_PLUGINS_PATH"
+    copyPlugins "accessible" "$APP_QT_PLUGINS_PATH"
+    copyPlugins "codecs" "$APP_QT_PLUGINS_PATH"
+    copyPlugins "designer" "$APP_QT_PLUGINS_PATH"
+    copyPlugins "graphicssystems" "$APP_QT_PLUGINS_PATH"
+    copyPlugins "iconengines" "$APP_QT_PLUGINS_PATH"
+    copyPlugins "imageformats" "$APP_QT_PLUGINS_PATH"
+    # copyPlugins "inputmethods" "$APP_QT_PLUGINS_PATH"
+    copyPlugins "phonon_backend" "$APP_QT_PLUGINS_PATH"
+    copyPlugins "script" "$APP_QT_PLUGINS_PATH"
+    copyPlugins "sqldrivers" "$APP_QT_PLUGINS_PATH"
 }
 
 changeBinaryPaths()
 {
-	echo "Changing framework paths for `basename "${1}"`..."
-	for path in $2 ; do
-		name=`basename "${path}"`
-		echo -n " $name"
-		install_name_tool -change $path @executable_path/../Frameworks/$name "${1}"
-	done
+    echo "Changing framework paths for `basename "${1}"`..."
+    for path in $2 ; do
+        name=`basename "${path}"`
+        echo -n " $name"
+        install_name_tool -change $path @executable_path/../Frameworks/$name "${1}"
+    done
 }
 
 getSourceFramework()
 {
-	framework="$QT_LIBS_PATH/$1"
-		
-	# check for non framework, like libQtCLuScene.4.dylib
-	dylib=`expr "${framework}" : '.*\(dylib\)$'`
-	if [ "x${dylib}" = "x" ] ; then
-		framework="$QT_LIBS_PATH/$1.framework/Versions/4/$1"
-	fi
-	
-	# is symlink ?
-	if [ -h "${framework}" ] ; then
-		symlink=`readlink "${framework}"`
-		if [ $symlink[0] = '/' ] ; then
-			$framework=$symlink
-		else
-			framework="$QT_LIBS_PATH/$symlink"
-		fi
-	fi
-	
-	echo "$framework"
+    framework="$QT_LIBS_PATH/$1"
+
+    # check for non framework, like libQtCLuScene.4.dylib
+    dylib=`expr "${framework}" : '.*\(dylib\)$'`
+    if [ "x${dylib}" = "x" ] ; then
+        framework="$QT_LIBS_PATH/$1.framework/Versions/$QT_MAIN_VERSION/$1"
+    fi
+
+    # is symlink ?
+    if [ -h "${framework}" ] ; then
+        symlink=`readlink "${framework}"`
+        if [ $symlink[0] = '/' ] ; then
+            $framework=$symlink
+        else
+            framework="$QT_LIBS_PATH/$symlink"
+        fi
+    fi
+
+    echo "$framework"
 }
 
 getTargetFramework()
 {
-	echo "$APP_FRAMEWORKS_PATH/$1"
+    echo "$APP_FRAMEWORKS_PATH/$1"
 }
 
 getBinaryDependencies()
 {
-	tmp=""
-	for n in `otool -LX "${1}" | grep Qt` ; do
-		path=`echo $n | grep Qt`
-		if [ $path ] ; then
-			tmp="$tmp $path"
-		fi
-	done
-	
-	echo $tmp
+    tmp=""
+    for n in `otool -LX "${1}" | grep Qt` ; do
+        path=`echo $n | grep Qt`
+        if [ $path ] ; then
+            tmp="$tmp $path"
+        fi
+    done
+
+    echo $tmp
 }
 
 setId()
 {
-	echo "Updating $1 id..."
-	install_name_tool -id @executable_path/../Frameworks/"${1}" "${2}"
+    echo "Updating $1 id..."
+    install_name_tool -id @executable_path/../Frameworks/"${1}" "${2}"
 }
 
 relinkPlugins()
@@ -188,56 +212,56 @@ relinkPlugins()
 
 makeInstall()
 {
-	echo "Running make install..."
-	qmake
-	if [ -e Makefile.Release ] ; then
-		make -f Makefile.Release && make -f Makefile.Release install
-	elif [ -e Makefile ] ; then
-		make && make install
-	else
-		echo -n "ERROR: Makefile not found. This script requires the macx-g++ makespec"
-	fi
+    echo "Running make install..."
+    qmake
+    if [ -e Makefile.Release ] ; then
+        make -f Makefile.Release && make -f Makefile.Release install
+    elif [ -e Makefile ] ; then
+        make && make install
+    else
+        echo -n "ERROR: Makefile not found. This script requires the macx-g++ makespec"
+    fi
 }
 
 relinkBinary()
 {
-	echo "Striping `basename \"${1}\"` binary..."
-	# strip libs (-x is max allowable for shared libs)
-	#strip -x "${1}"
-	
-	# set id in target
-	if [ ! "x${2}" = "x" ] ; then
-		setId "${2}" "${1}"
-	fi
-	
-	# get dependencies
-	frameworks_path=`getBinaryDependencies "$1"`
-	
-	# update framework/library paths
-	changeBinaryPaths "$1" "$frameworks_path"
-	
-	# copy dependencies frameworks/libraries
-	for framework_path in $frameworks_path ; do
-		# get framework
-		framework=`basename "${framework_path}"`
-		
-		# get filenames
-		source=`getSourceFramework "$framework"`
-		target=`getTargetFramework "$framework"`
-		
-		# copy file if needed
-		if [ -e "${source}" ] ; then
-			if [ ! -e "${target}" ] ; then
-				#echo "Copying & striping `basename \"${source}\"` framework/library..."
-				path=`dirname "${target}"`
-				mkdir -p "${path}"
-				cp -f "${source}" "${target}"
-				
-				echo
-				relinkBinary "${target}" "${framework}"
-			fi
-		fi
-	done
+    echo "Striping `basename \"${1}\"` binary..."
+    # strip libs (-x is max allowable for shared libs)
+    #strip -x "${1}"
+
+    # set id in target
+    if [ ! "x${2}" = "x" ] ; then
+        setId "${2}" "${1}"
+    fi
+
+    # get dependencies
+    frameworks_path=`getBinaryDependencies "$1"`
+
+    # update framework/library paths
+    changeBinaryPaths "$1" "$frameworks_path"
+
+    # copy dependencies frameworks/libraries
+    for framework_path in $frameworks_path ; do
+        # get framework
+        framework=`basename "${framework_path}"`
+
+        # get filenames
+        source=`getSourceFramework "$framework"`
+        target=`getTargetFramework "$framework"`
+
+        # copy file if needed
+        if [ -e "${source}" ] ; then
+            if [ ! -e "${target}" ] ; then
+                #echo "Copying & striping `basename \"${source}\"` framework/library..."
+                path=`dirname "${target}"`
+                mkdir -p "${path}"
+                cp -f "${source}" "${target}"
+
+                echo
+                relinkBinary "${target}" "${framework}"
+            fi
+        fi
+    done
 }
 
 ### deployement #################################################
@@ -294,39 +318,39 @@ echo "Done"
 
 copyDependencies()
 {
-	echo "Copying dependencies..."
-	mkdir -p "${1}"
-	for path in $2 ; do
-		name=`basename "${path}"`
-		fullname="$QT_LIBS_PATH/$name"
-		
-		# check for non framework, like libQtCLuScene.4.dylib
-		dylib=`expr "${path}" : '.*\(dylib\)$'`
-		if [ "x${dylib}" = "x" ] ; then
-			fullname="$QT_LIBS_PATH/$name.framework/Versions/4/$name"
-		fi
-		
-		# is symlink ?
-		if [ -h "${fullname}" ] ; then
-			symlink=`readlink "${fullname}"`
-			if [ $symlink[0] = '/' ] ; then
-				$fullname=$symlink
-			else
-				fullname="$QT_LIBS_PATH/$symlink"
-			fi
-		fi
-		
-		# is file exists
-		if [ ! -f "${fullname}" ] ; then
-			echo "ERROR: cannot find $fullname"
-			exit
-		fi
-		
-		echo -n "$name framework"
-		target="$1/$name"
-		cp -f "${fullname}" "${target}"
-		# strip libs (-x is max allowable for shared libs)
-		#strip -x "${target}"
-	done
+    echo "Copying dependencies..."
+    mkdir -p "${1}"
+    for path in $2 ; do
+        name=`basename "${path}"`
+        fullname="$QT_LIBS_PATH/$name"
+
+        # check for non framework, like libQtCLuScene.4.dylib
+        dylib=`expr "${path}" : '.*\(dylib\)$'`
+        if [ "x${dylib}" = "x" ] ; then
+            fullname="$QT_LIBS_PATH/$name.framework/Versions/$QT_MAIN_VERSION/$name"
+        fi
+
+        # is symlink ?
+        if [ -h "${fullname}" ] ; then
+            symlink=`readlink "${fullname}"`
+            if [ $symlink[0] = '/' ] ; then
+                $fullname=$symlink
+            else
+                fullname="$QT_LIBS_PATH/$symlink"
+            fi
+        fi
+
+        # is file exists
+        if [ ! -f "${fullname}" ] ; then
+            echo "ERROR: cannot find $fullname"
+            exit
+        fi
+
+        echo -n "$name framework"
+        target="$1/$name"
+        cp -f "${fullname}" "${target}"
+        # strip libs (-x is max allowable for shared libs)
+        #strip -x "${target}"
+    done
 }
 
