@@ -173,9 +173,9 @@ int main(int argc, char *argv[])
          QMap<QString, bool> appOptions;
          QString errorMessage;
          if (!pluginManager.parseOptions(arguments, appOptions, &foundAppOptions, &errorMessage)) {
-             qWarning() << errorMessage;
-             qWarning() << HELP_MESSAGE;
-             return -1;
+                // qWarning() << errorMessage;
+                // qWarning() << HELP_MESSAGE;
+                // return -1;
          }
      }
 
