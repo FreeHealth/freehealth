@@ -26,7 +26,10 @@
  ***************************************************************************/
 /**
  * \class Forms::FormFilesSelectorWidget
- * A patient form file selector.
+ * A patient form file selector widget. Shows all available forms using
+ * - an internal tree model
+ * - a category sorter (by category, by specialties...)
+ * Allow user to browse available form screenshots.
  */
 
 #include "formfilesselectorwidget.h"
