@@ -2,7 +2,7 @@
 #/***************************************************************************
 # *  The FreeMedForms project is a set of free, open source medical         *
 # *  applications.                                                          *
-# *  (C) 2008-2013 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
+# *  (C) 2008-2014 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
 # *  All rights reserved.                                                   *
 # *                                                                         *
 # *  This program is free software: you can redistribute it and/or modify   *
@@ -26,58 +26,73 @@
 # *       NAME <MAIL@ADDRESS.COM>                                           *
 # ***************************************************************************/
 
-THIS_NAME=$0
+# define colors for highlighting
+START_COLOR="\033[1;37m"
+END_COLOR="\033[0m"
+
 APP_NAME=""
 BUNDLE_PATH=""
 FILES_PATH=""
 VERSION="No_Version"
 DMG_SIZE=200
 
+# Get scripts names and paths
+SCRIPT_NAME=`basename $0`
+if [ "`echo $0 | cut -c1`" = "/" ]; then
+  SCRIPT_PATH=`dirname $0`
+else
+  SCRIPT_PATH=`pwd`/`echo $0 | sed -e s/$SCRIPT_NAME//`
+fi
+
 echoHelp()
 {
-  echo $THISNAME" creates a dmg file for mac deployment."
+  echo $SCRIPT_NAME" creates a dmg file for mac deployment."
   echo "Usage: "
-  echo $THIS_NAME" <options> -a "App Name for the bundle" -p /path/to/the/bundle/ -s 100 -f /path/to/standard/files"
-  echo $THIS_NAME" -p path to the application bundle to store in the DMG"
-  echo $THIS_NAME" -s size of the DMG"
-  echo $THIS_NAME" -f path to source files"
-  echo $THIS_NAME" -v packaging version"
-  echo $THIS_NAME" -h shows this message"
+  echo $SCRIPT_NAME" <options> -a \"AppName\" -p /path/to/the/bundle -s 100 -f /path/to/standard/files"
+  echo "    -p ...  path to the application bundle to be stored in the DMG"
+  echo "    -s ...  size of the DMG (Mo)"
+  echo "    -f ...  path to source files"
+  echo "    -v ...  packaging version"
+  echo "    -h      shows this message"
 }
 
 createDmg()
 {
-  FULL_BUNDLE_NAME=$BUNDLE_PATH$APP_NAME".app"
-  TMP="./tmp"
+  FULL_BUNDLE_NAME=$BUNDLE_PATH"/"$APP_NAME".app"
+  TMP=$SCRIPT_PATH"/tmp"
   DMG_FILE=$APP_NAME".dmg"
 
-  echo "    *** DMG Release : Creating temporary package"
-  rm -rf $TMP
+  echo $START_COLOR"*** DMG Release : Creating temporary package: "$END_COLOR
+  echo "    $TMP"
+  if [ -e $TMP ]; then
+      echo "$TMP exist";
+      rm -rf $TMP
+  fi
   mkdir -p $TMP
 
-  #  echo "    *** DMG Release : Copying $FULL_BUNDLE_NAME to $TMP..."
-  cp -R $FULL_BUNDLE_NAME $TMP
+  echo $START_COLOR"*** DMG Release : Copying $FULL_BUNDLE_NAME"
+  cp -aR $FULL_BUNDLE_NAME $TMP
   ln -s /Applications $TMP"/Applications"
 
-  #  echo "    *** DMG Release : Copying icons to $TMP..."
+  echo $START_COLOR"*** DMG Release : Copying icon"$END_COLOR
   cp $FILES_PATH"/global_resources/pixmap/svg/"$APP_NAME".icns" $TMP"/.VolumeIcon.icns"
   LOWERED_APPNAME=`echo $APP_NAME | tr '[A-Z]' '[a-z]'`
   cp $FILES_PATH"/global_resources/pixmap/svg/"$LOWERED_APPNAME".icns" $TMP"/.VolumeIcon.icns"
 
-  #  echo "    *** DMG Release : Copying folder params to $TMP..."
-  tar zxvf $FILES_PATH"global_resources/package_helpers/"$LOWERED_APPNAME"_dmg.tgz" -C $TMP
+  echo $START_COLOR"*** DMG Release : Copying folder params"$END_COLOR
+  tar zxvf $FILES_PATH"/global_resources/package_helpers/"$LOWERED_APPNAME"_dmg.tgz" -C $TMP
 
-  echo "    *** DMG Release : Copying standard files..."
+  echo $START_COLOR"*** DMG Release : Copying standard files"$END_COLOR
   cp $FILES_PATH"/COPYING.txt" $TMP
   cp $FILES_PATH"/README.txt" $TMP
-  touch $FILEPATH"/$VERSION"
+  touch $TMP"/"$VERSION
 
-  echo "    *** DMG Release : Cleaning dmg for undesired files..."
+  echo $START_COLOR"*** DMG Release : Cleaning undesired files"$END_COLOR
   find "${TMP}" | egrep "CVS" | xargs rm -rf
   find "${TMP}" | egrep ".svn" | xargs rm -rf
   find "${TMP}" | egrep ".git" | xargs rm -rf
 
-  echo "    *** DMG Release : Cleaning dmg and adding icon"
+  echo $START_COLOR"*** DMG Release : Creating DMG file"$END_COLOR
   SetFile -c icnC $TMP/.VolumeIcon.icns
   hdiutil create -srcfolder $TMP -volname $APP_NAME -format UDRW -ov raw-$DMG_FILE
   rm -rf $TMP
@@ -90,15 +105,15 @@ createDmg()
   hdiutil convert raw-$DMG_FILE -format UDZO -o $DMG_FILE
   rm -f raw-$DMG_FILE
 
-#  echo "    *** DMG Release : Creating $DMG_SIZE Mo temporary dmg into this directory..."
+#  echo "*** DMG Release : Creating $DMG_SIZE Mo temporary dmg into this directory..."
 #  hdiutil create -megabytes $DMG_SIZE tmp.dmg -layout NONE -fs HFS+ -volname $APP_NAME -ov
 #  tmp=`hdid tmp.dmg`
 #  disk=`echo $tmp | cut -f 1 -d\ `
 
-#  echo "    *** DMG Release : Copying $FULL_BUNDLE_NAME to Volumes/$APP_NAME..."
+#  echo "*** DMG Release : Copying $FULL_BUNDLE_NAME to Volumes/$APP_NAME..."
 #  cp -R $FULL_BUNDLE_NAME "/Volumes/"$APP_NAME
 
-#  echo "    *** DMG Release : Copying standard files..."
+#  echo "*** DMG Release : Copying standard files..."
 #  ln -s /Applications "/Volumes/"$APP_NAME"/Applications"
 #  cp $FILES_PATH"/global_resources/pixmap/svg/"$APP_NAME".icns" "/Volumes/"$APP_NAME"/.VolumeIcon.icns"
 #  LOWERED_APPNAME=$APPNAME | tr '[A-Z]' '[a-z]'
@@ -109,7 +124,7 @@ createDmg()
 #  cp ../readme.txt "/Volumes/"$APP_NAME
 
 
-  echo "    *** DMG Release : Creating dmg file..."
+  # echo "*** DMG Release : Creating dmg file..."
 #  hdiutil eject "$disk"
 #  hdiutil convert -format UDZO tmp.dmg -o $APP_NAME.dmg
 #  rm tmp.dmg
@@ -136,12 +151,12 @@ done
 
 # manage command line errors
 if [ -z "$APP_NAME" ] ; then
-   echo "    *** DMG Release : Error: you must specify an application name with -a parameter."
+   echo "*** DMG Release : Error: you must specify an application name with -a parameter."
    exit
 fi
 
 if [ -z "$BUNDLE_PATH" ] ; then
-   echo "    *** DMG Release : Error: you must specify the path to the bundle with -p parameter."
+   echo "*** DMG Release : Error: you must specify the path to the bundle with -p parameter."
    exit
 fi
 
