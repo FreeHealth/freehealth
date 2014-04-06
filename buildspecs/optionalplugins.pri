@@ -66,7 +66,7 @@
 # *                                  Webcam Plugin                                      *
 # ***************************************************************************************
 # Uncomment the following line to build the plugin
- CONFIG *= with-webcam
+# CONFIG *= with-webcam
 # ***************************************************************************************
 
 
@@ -74,7 +74,7 @@
 # *                                French eDRC Plugin                                   *
 # ***************************************************************************************
 # Uncomment the following line to build the plugin
- CONFIG *= with-edrc
+# CONFIG *= with-edrc
 # ***************************************************************************************
 
 # The following lines must not be modified
