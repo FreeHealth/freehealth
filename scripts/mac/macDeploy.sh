@@ -2,7 +2,7 @@
 #/***************************************************************************
 # *  The FreeMedForms project is a set of free, open source medical         *
 # *  applications.                                                          *
-# *  (C) 2008-2013 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
+# *  (C) 2008-2014 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
 # *  All rights reserved.                                                   *
 # *                                                                         *
 # *  This program is free software: you can redistribute it and/or modify   *
@@ -26,8 +26,20 @@
 # *       NAME <MAIL@ADDRESS.COM>                                           *
 # ***************************************************************************/
 
+# TODO: do not process symlinks with otools
+
+# define colors for highlighting
+START_COLOR="\033[1;37m"
+END_COLOR="\033[0m"
+
+# define some Qt vars
 QT_LIBS_PATH=`qmake -query QT_INSTALL_LIBS`
-QT_MAIN_VERSION=`qmake -query QT_VERSION` | cut -f 1 -d.
+QT_PLUGINS_PATH=`qmake -query QT_INSTALL_PLUGINS`
+QT_MAIN_VERSION=`qmake -query QT_VERSION`
+QT_MAIN_VERSION=`echo $QT_MAIN_VERSION | cut -f 1 -d.`
+
+APP_NAME=""
+PLUGS=""
 
 if [ ! -d $QT_LIBS_PATH/QtCore.framework ] ; then
     echo "ERROR: cannot find the Qt frameworks. Make sure Qt is installed"
@@ -35,50 +47,59 @@ if [ ! -d $QT_LIBS_PATH/QtCore.framework ] ; then
     exit
 fi
 
-#### getting params ###################################################
-# accepted command line
-# -a application_name
-# -p plugins_to_install             many times you want
-APP_NAME=""
-PLUGS=""
+# Get scripts names and paths
+SCRIPT_NAME=`basename $0`
+if [ "`echo $0 | cut -c1`" = "/" ]; then
+  SCRIPT_PATH=`dirname $0`
+else
+  SCRIPT_PATH=`pwd`/`echo $0 | sed -e s/$SCRIPT_NAME//`
+fi
 
-while getopts ":a:p:" option
+echoVersion()
+{
+    echo $SCRIPT_NAME" version "$VERSION
+    echo "    Qt libs detected: "$QT_LIBS_PATH
+    echo "    Qt main version detected: "$QT_MAIN_VERSION
+    echo "    Qt full version number: "`qmake -query QT_VERSION`
+    exit 0;
+}
+
+echoHelp()
+{
+  echo $SCRIPT_NAME" runs Mac deployment commands on a specified FreeMedForms project bundle."
+  echo "The script must run in the path of the bundle."
+  echo "Usage: "
+  echo "    "$SCRIPT_NAME" -a \"AppName\" -p \"plugin\" -p \"to-install\""
+  echo "        -p ...  Qt plugins to install inside the bundle"
+  echo "        -v ...  show version of the script"
+  echo "        -h      shows this message"
+  exit 0;
+}
+
+while getopts ":a:p:hv" option
 do
-        case $option in
-                a) APP_NAME=$OPTARG
-                ;;
+    case $option in
+        a) APP_NAME=$OPTARG
+        ;;
         p) PLUGS=$PLUGS"  "$OPTARG     # creating plugins to install list
         ;;
-#                :) echo "*** option \"$OPTARG\" sans arg"
-#                ;;
-#                \?) echo "*** option \"$OPTARG\" inconnue !!!"
-#                ;;
-#                *) echo "*** user \"$OPTARG\" !!!"
-#                ;;
+        h) echoHelp
+        ;;
+        v) echoVersion
+        ;;
         esac
 done
 
-# APP_NAME empty --> ask user
+# No APP_NAME -> error
 if [ -z "$APP_NAME" ] ; then
-    echo
-    echo "This script prepares a Qt application bundle for deployment. It will"
-    echo "copy over the required Qt frameworks and sets the installation"
-    echo "identifications. Please see the \"Deploying an Application on Qt/Mac\""
-    echo "page in the Qt documentation for more information."
-    echo
-    echo "This script assumes you have already built the application bundle."
-    echo
-    echo -n "What is the name of the application? "
-    read userinput
-    APP_NAME=$userinput
+    echo "Error: No application name specified"
+    echo "For more help, please read $SCRIPT_NAME -h"
+    exit 1;
 fi
 
 # PLUGS empty --> all plugins to install
 if [ -z "$PLUGS" ] ; then
-    echo
-    echo "No Qt Plugin specified in command line."
-        echo "Will install all Qt plugins".
-        PLUGS="all"
+    PLUGS="all"
 fi
 
 #### bundle structure ###################################################
@@ -88,22 +109,16 @@ APP_PLUGINS_PATH="$BUNDLE/Contents/plugins"
 APP_QT_PLUGINS_PATH="$BUNDLE/Contents/plugins/qt"
 APP_FRAMEWORKS_PATH="$BUNDLE/Contents/Frameworks"
 APP_LIBS_PATH="$BUNDLE/Contents/libs"
-QT_PLUGINS_PATH=`qmake -query QT_INSTALL_PLUGINS`
 
 if [ ! -d "${BUNDLE}" ] ; then
     echo "ERROR: cannot find application bundle \"$BUNDLE\" in current directory"
-    exit
+    exit 2
 fi
 
 if [ ! -x "${APP_BIN}" ] ; then
     echo "ERROR: cannot find application \"$APP_BIN\" in bundle. Did you forget to run make?"
-    exit
+    exit 3
 fi
-
-echo "application: ${APP_NAME}"
-echo "bundle:      ${BUNDLE}"
-echo "libs path:   ${APP_LIBS_PATH}"
-echo
 
 ### functions ######################################################
 copyPlugins()
@@ -119,16 +134,9 @@ copyPlugins()
 
 copyAllPlugins()
 {
-    copyPlugins "accessible" "$APP_QT_PLUGINS_PATH"
-    copyPlugins "codecs" "$APP_QT_PLUGINS_PATH"
-    copyPlugins "designer" "$APP_QT_PLUGINS_PATH"
-    copyPlugins "graphicssystems" "$APP_QT_PLUGINS_PATH"
-    copyPlugins "iconengines" "$APP_QT_PLUGINS_PATH"
-    copyPlugins "imageformats" "$APP_QT_PLUGINS_PATH"
-    # copyPlugins "inputmethods" "$APP_QT_PLUGINS_PATH"
-    copyPlugins "phonon_backend" "$APP_QT_PLUGINS_PATH"
-    copyPlugins "script" "$APP_QT_PLUGINS_PATH"
-    copyPlugins "sqldrivers" "$APP_QT_PLUGINS_PATH"
+    for plug in `ls $QT_PLUGINS_PATH`; do
+        copyPlugins "$plug" "$APP_QT_PLUGINS_PATH"
+    done
 }
 
 changeBinaryPaths()
@@ -136,7 +144,7 @@ changeBinaryPaths()
     echo "Changing framework paths for `basename "${1}"`..."
     for path in $2 ; do
         name=`basename "${path}"`
-        echo -n " $name"
+        # echo -n " $name"
         install_name_tool -change $path @executable_path/../Frameworks/$name "${1}"
     done
 }
@@ -190,42 +198,27 @@ setId()
 
 relinkPlugins()
 {
-        tmp_plugins=`find "${1}" | egrep ".dylib"`
+    tmp_plugins=`find "${1}" | egrep ".dylib"`
+    old_ifs="$IFS"
+    IFS=$'\n'
+    count=0
+    for plugin in $tmp_plugins ; do
+        plugins[$count]="${plugin}"
+        ((count++))
+    done
+    IFS=$old_ifs
 
-        old_ifs="$IFS"
-        IFS=$'\n'
-        count=0
-        for plugin in $tmp_plugins ; do
-                plugins[$count]="${plugin}"
-                ((count++))
-        done
-        IFS=$old_ifs
-
-        count=${#plugins[@]}
-        for ((i=0;i<$count;i++));
-        do
-                plugin=${plugins[${i}]}
-                relinkBinary "$plugin"
-                echo
-        done
-}
-
-makeInstall()
-{
-    echo "Running make install..."
-    qmake
-    if [ -e Makefile.Release ] ; then
-        make -f Makefile.Release && make -f Makefile.Release install
-    elif [ -e Makefile ] ; then
-        make && make install
-    else
-        echo -n "ERROR: Makefile not found. This script requires the macx-g++ makespec"
-    fi
+    count=${#plugins[@]}
+    for ((i=0;i<$count;i++)) ; do
+        plugin=${plugins[${i}]}
+        relinkBinary "$plugin"
+        echo
+    done
 }
 
 relinkBinary()
 {
-    echo "Striping `basename \"${1}\"` binary..."
+    # echo "Striping `basename \"${1}\"` binary..."
     # strip libs (-x is max allowable for shared libs)
     #strip -x "${1}"
 
@@ -257,65 +250,54 @@ relinkBinary()
                 mkdir -p "${path}"
                 cp -f "${source}" "${target}"
 
-                echo
+                # echo
                 relinkBinary "${target}" "${framework}"
             fi
         fi
     done
 }
 
-### deployement #################################################
-#makeInstall "$APP_BIN"
-#echo
+# In FreeMedForms project all plugins are in the 'plugins' path
+# We need to inform Qt about that using a qt.conf file
+createQtConfFile()
+{
+    cd $BUNDLE"/Contents/Resources"
+    echo "[Paths]" > qt.conf
+    echo "Plugins=plugins/qt" >> qt.conf
+}
+
+echo $START_COLOR"MacDeploy: Starting deployment"$END_COLOR
+echo "    * Application: ${APP_NAME}"
+echo "    * Bundle:      ${BUNDLE}"
+echo "    * Libs path:   ${APP_LIBS_PATH}"
+echo "    * Qt libs: "$QT_LIBS_PATH
+echo "    * Qt version: "`qmake -query QT_VERSION`
+echo "    * Qt main version: "$QT_MAIN_VERSION
 
 relinkBinary "$APP_BIN"
-echo
 
-# manage Qt plugins to add to the bundle
+echo $START_COLOR"MacDeploy: Copying Qt plugins: "$PLUGS$END_COLOR
 if [[ $PLUGS = "all" ]]; then
      copyAllPlugins
 else
-  for p in $PLUGS
-   do
-     copyPlugins $p "$APP_QT_PLUGINS_PATH"
-   done
+    for p in $PLUGS ; do
+        copyPlugins $p "$APP_QT_PLUGINS_PATH"
+    done
 fi
 
-echo
-
-
-echo
-
+echo $START_COLOR"MacDeploy: Linking Qt plugins: "$END_COLOR
 relinkPlugins "$APP_PLUGINS_PATH"
-echo
 
+echo $START_COLOR"MacDeploy: Linking application libs"$END_COLOR
 relinkPlugins "$APP_LIBS_PATH"
-echo
+
+createQtConfFile
 
 #echo "Striping `basename \"${APP_BIN}\"` binary..."
 #strip "${APP_BIN}"
 echo
 
-### misc cleanup ##################################################
-target="$BUNDLE/Contents"
-find "${target}" | egrep "CVS" | xargs rm -rf
-find "${target}" | egrep ".svn" | xargs rm -rf
-
-### create disk image ###############################################
-#echo "Creating disk image"
-#imagedir="/tmp/$APP_NAME.$$"
-#mkdir $imagedir
-#cp -R $BUNDLE $imagedir
-
-# TODO: copy over additional files, if any
-#hdiutil create -ov -srcfolder $imagedir -format UDBZ -volname "$APP_NAME" "$APP_NAME.dmg"
-#hdiutil internet-enable -yes "$APP_NAME.dmg"
-#rm -rf $imagedir
-
-echo "Done"
-
-#### functions ###################################################
-
+# UNUSED
 copyDependencies()
 {
     echo "Copying dependencies..."
@@ -353,4 +335,6 @@ copyDependencies()
         #strip -x "${target}"
     done
 }
+# /UNUSED
 
+exit 0;
