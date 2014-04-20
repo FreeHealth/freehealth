@@ -56,9 +56,9 @@
 using namespace DDI;
 using namespace Internal;
 
-static inline Core::IMainWindow *mainwindow() {return Core::ICore::instance()->mainWindow();}
-static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
-static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
+//static inline Core::IMainWindow *mainwindow() {return Core::ICore::instance()->mainWindow();}
+//static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
+//static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline DDI::DDICore *ddiCore() {return DDI::DDICore::instance();}
 static inline DDI::Internal::DDIDatabase &ddiBase()  { return DDI::DDICore::instance()->database(); }
 

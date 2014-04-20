@@ -87,7 +87,7 @@ using namespace DrugsDb::Internal;
 using namespace Trans::ConstantTranslations;
 
 static inline DDI::DDICore *ddiCore() {return DDI::DDICore::instance();}
-static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
+//static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 
 namespace  {
 const int CLASS_OR_MOL_ID = 65000;
