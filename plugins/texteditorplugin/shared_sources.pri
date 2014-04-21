@@ -11,18 +11,21 @@ HEADERS +=  \
     $${PWD}/tabledialog.h \
     $${PWD}/tableeditor.h \
     $${PWD}/texteditor.h \
-    $${PWD}/tablepropertieswidget.h
+    $${PWD}/tablepropertieswidget.h \
+    $${PWD}/texteditordialog.h
 
 SOURCES += \
     $${PWD}/editoractionhandler.cpp \
     $${PWD}/editormanager.cpp \
     $${PWD}/tableeditor.cpp \
     $${PWD}/texteditor.cpp \
-    $${PWD}/tablepropertieswidget.cpp
+    $${PWD}/tablepropertieswidget.cpp \
+    $${PWD}/texteditordialog.cpp
 
 FORMS += $${PWD}/tabledialog.ui \
     $${PWD}/tablepropertieswidget.ui \
-    $${PWD}/tablepropertiesdialog.ui
+    $${PWD}/tablepropertiesdialog.ui \
+    $${PWD}/texteditordialog.ui
 
 # include translations
 TRANSLATION_NAME = texteditor
