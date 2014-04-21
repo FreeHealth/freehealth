@@ -29,16 +29,11 @@
 #include <drugsdbplugin/countries/fr/frenchdrugsdatabasecreator.h>
 #include <drugsdbplugin/countries/za/southafricandrugsdatabase.h>
 #include <drugsdbplugin/countries/ca/canadiandrugsdatabase.h>
+#include <drugsdbplugin/countries/us/fdadrugsdatabase.h>
 
 #include <coreplugin/icore.h>
-//#include <coreplugin/isettings.h>
 #include <coreplugin/translators.h>
 #include <coreplugin/dialogs/pluginaboutpage.h>
-//#include <coreplugin/constants_menus.h>
-//#include <coreplugin/constants_icons.h>
-//#include <coreplugin/actionmanager/actionmanager.h>
-//#include <coreplugin/actionmanager/actioncontainer.h>
-//#include <coreplugin/contextmanager/contextmanager.h>
 
 #include <extensionsystem/pluginmanager.h>
 #include <utils/log.h>
@@ -49,10 +44,6 @@
 
 using namespace DrugsDb;
 using namespace Internal;
-
-//static inline Core::ActionManager *actionManager() {return Core::ICore::instance()->actionManager();}
-//static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
-//static inline Core::ContextManager *contextManager() { return Core::ICore::instance()->contextManager(); }
 
 /**
  * The core IPlugin object manages:
@@ -99,6 +90,10 @@ bool DrugsDbPlugin::initialize(const QStringList &arguments, QString *errorMessa
     _mode->registerDrugDatabase(base);
     _databases.append(base);
 
+    base = new FdaDrugDatatabase(this);
+    _mode->registerDrugDatabase(base);
+    _databases.append(base);
+
     // add plugin info page
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
 
@@ -109,9 +104,6 @@ void DrugsDbPlugin::extensionsInitialized()
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "DrugsDbPlugin::extensionsInitialized";
-
-    // Create all IDrugDatabase objects
-    // _databases << new DrugDatabase(this);
 }
 
 ExtensionSystem::IPlugin::ShutdownFlag DrugsDbPlugin::aboutToShutdown()
