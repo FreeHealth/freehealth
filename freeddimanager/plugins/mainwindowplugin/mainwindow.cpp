@@ -139,8 +139,8 @@ bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
     // Core::ActionContainer *fmenu = actionManager()->createMenu(Core::Constants::M_FILE_RECENTFILES);
     // fmenu->setOnAllDisabledBehavior(Core::ActionContainer::Show);
     // connect(fmenu->menu(), SIGNAL(aboutToShow()),this, SLOT(aboutToShowRecentFiles()));
-    // createEditMenu();
-    // createFormatMenu();
+    createEditMenu();
+    createFormatMenu();
     createConfigurationMenu();
     createHelpMenu();
 
