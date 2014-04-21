@@ -62,6 +62,37 @@ using namespace Trans::ConstantTranslations;
 
 namespace DDI {
 namespace Internal {
+class ComponentProxyModel : public QSortFilterProxyModel
+{
+public:
+    explicit ComponentProxyModel(QObject *parent = 0) :
+        QSortFilterProxyModel(parent),
+        _revColumn(-1),
+        _unrevOnly(false)
+    {}
+
+    void setReviewedStateColumn(int column) {_revColumn = column;}
+    void setFilterUnreviewedOnly(bool enabled) {_unrevOnly = enabled;}
+    bool filterUnreviewedOnly() const {return _unrevOnly;}
+
+protected:
+    bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const
+    {
+        // According to the unreviewed item filter state
+        // Accept only unreviewed items
+        if (_unrevOnly && _revColumn >= 0) {
+            bool isReviewed = sourceModel()->index(source_row, _revColumn, source_parent).data(Qt::CheckStateRole).toInt() == Qt::Checked ? true : false;
+            return (!isReviewed);
+        }
+        // By default let the QSortFilterProxyModel choose
+        return QSortFilterProxyModel::filterAcceptsRow(source_row, source_parent);
+    }
+
+private:
+    int _revColumn;
+    bool _unrevOnly;
+};
+
 class ComponentAtcEditorWidgetPrivate
 {
 public:
@@ -69,6 +100,9 @@ public:
         ui(new Ui::ComponentAtcEditorWidget),
         model(0),
         proxyModel(0),
+        aRemoveUnreviewed(0),
+        aFilterUnreviewedOnly(0),
+        aCreateUnreviewedWikiPages(0),
         q(parent)
     {
         Q_UNUSED(q);
@@ -79,10 +113,46 @@ public:
         delete ui;
     }
 
+    void createActions()
+    {
+        aRemoveUnreviewed = new QAction(q);
+        aFilterUnreviewedOnly = new QAction(q);
+        aCreateUnreviewedWikiPages = new QAction(q);
+        ui->actionButton->addAction(aFilterUnreviewedOnly);
+        ui->actionButton->addAction(aCreateUnreviewedWikiPages);
+        ui->actionButton->addAction(aRemoveUnreviewed);
+        q->translateActions();
+    }
+
+    void prepareComponentViewHeader()
+    {
+        ui->tableView->verticalHeader()->hide();
+        ui->tableView->horizontalHeader()->setStretchLastSection(false);
+        ui->tableView->horizontalHeader()->setResizeMode(ComponentAtcModel::FancyButton, QHeaderView::Fixed);
+        ui->tableView->horizontalHeader()->setResizeMode(ComponentAtcModel::DrugDatabaseComponentUid1, QHeaderView::ResizeToContents);
+        ui->tableView->horizontalHeader()->setResizeMode(ComponentAtcModel::DrugDatabaseComponentUid2, QHeaderView::ResizeToContents);
+        ui->tableView->horizontalHeader()->setResizeMode(ComponentAtcModel::IsValid, QHeaderView::ResizeToContents);
+        ui->tableView->horizontalHeader()->setResizeMode(ComponentAtcModel::IsReviewed, QHeaderView::ResizeToContents);
+        ui->tableView->horizontalHeader()->setResizeMode(ComponentAtcModel::Name, QHeaderView::Stretch);
+        ui->tableView->horizontalHeader()->setResizeMode(ComponentAtcModel::AtcCodeList, QHeaderView::Interactive);
+        ui->tableView->horizontalHeader()->setResizeMode(ComponentAtcModel::SuggestedAtcCodeList, QHeaderView::Interactive);
+        ui->tableView->horizontalHeader()->setResizeMode(ComponentAtcModel::DateCreation, QHeaderView::Interactive);
+        ui->tableView->horizontalHeader()->setResizeMode(ComponentAtcModel::DateUpdate, QHeaderView::Interactive);
+        ui->tableView->horizontalHeader()->setResizeMode(ComponentAtcModel::Reviewer, QHeaderView::Interactive);
+        ui->tableView->horizontalHeader()->setResizeMode(ComponentAtcModel::Comments, QHeaderView::Interactive);
+        ui->tableView->setColumnWidth(ComponentAtcModel::FancyButton, 24);
+    //    ui->tableView->horizontalHeader()->hideSection(ComponentAtcModel::Id);
+        ui->tableView->horizontalHeader()->hideSection(ComponentAtcModel::Uid);
+        ui->tableView->horizontalHeader()->hideSection(ComponentAtcModel::DrugDatabaseComponentUid1);
+        ui->tableView->horizontalHeader()->hideSection(ComponentAtcModel::DrugDatabaseComponentUid2);
+    }
+
+
 public:
     Ui::ComponentAtcEditorWidget *ui;
     ComponentAtcModel *model;
-    QSortFilterProxyModel *proxyModel;
+    ComponentProxyModel *proxyModel;
+    QAction *aRemoveUnreviewed, *aFilterUnreviewedOnly, *aCreateUnreviewedWikiPages;
 
 private:
     ComponentAtcEditorWidget *q;
@@ -96,53 +166,40 @@ ComponentAtcEditorWidget::ComponentAtcEditorWidget(QWidget *parent) :
 {
     setObjectName("ComponentAtcEditorWidget");
     d->ui->setupUi(this);
+    d->createActions();
+
+    // Fetch all components in the model
     d->model = ddiCore()->componentAtcModel();
     d->model->fetchAll();
     d->ui->availableDrugsDb->addItems(d->model->availableDrugsDatabases());
     if (d->model->availableDrugsDatabases().count())
         d->model->selectDatabase(d->model->availableDrugsDatabases().at(0));
 
-    d->proxyModel = new QSortFilterProxyModel(this);
+    // Create a proxy model over the component model
+    d->proxyModel = new ComponentProxyModel(this);
+    d->proxyModel->setReviewedStateColumn(ComponentAtcModel::IsReviewed);
     d->proxyModel->setSourceModel(d->model);
     d->proxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
     d->proxyModel->setFilterKeyColumn(ComponentAtcModel::Name);
 
+    // Manage component table view
     d->ui->tableView->setModel(d->proxyModel);
     d->ui->tableView->setSortingEnabled(true);
-    d->ui->tableView->verticalHeader()->hide();
-    d->ui->tableView->horizontalHeader()->setStretchLastSection(false);
-    d->ui->tableView->horizontalHeader()->setResizeMode(ComponentAtcModel::FancyButton, QHeaderView::Fixed);
-    d->ui->tableView->horizontalHeader()->setResizeMode(ComponentAtcModel::DrugDatabaseComponentUid1, QHeaderView::ResizeToContents);
-    d->ui->tableView->horizontalHeader()->setResizeMode(ComponentAtcModel::DrugDatabaseComponentUid2, QHeaderView::ResizeToContents);
-    d->ui->tableView->horizontalHeader()->setResizeMode(ComponentAtcModel::IsValid, QHeaderView::ResizeToContents);
-    d->ui->tableView->horizontalHeader()->setResizeMode(ComponentAtcModel::IsReviewed, QHeaderView::ResizeToContents);
-    d->ui->tableView->horizontalHeader()->setResizeMode(ComponentAtcModel::Name, QHeaderView::ResizeToContents);
-    d->ui->tableView->horizontalHeader()->setResizeMode(ComponentAtcModel::AtcCodeList, QHeaderView::Interactive);
-    d->ui->tableView->horizontalHeader()->setResizeMode(ComponentAtcModel::SuggestedAtcCodeList, QHeaderView::Interactive);
-    d->ui->tableView->horizontalHeader()->setResizeMode(ComponentAtcModel::DateCreation, QHeaderView::Interactive);
-    d->ui->tableView->horizontalHeader()->setResizeMode(ComponentAtcModel::DateUpdate, QHeaderView::Interactive);
-    d->ui->tableView->horizontalHeader()->setResizeMode(ComponentAtcModel::Reviewer, QHeaderView::Interactive);
-    d->ui->tableView->horizontalHeader()->setResizeMode(ComponentAtcModel::Comments, QHeaderView::Interactive);
-    d->ui->tableView->setColumnWidth(ComponentAtcModel::FancyButton, 24);
-//    d->ui->tableView->horizontalHeader()->hideSection(ComponentAtcModel::Id);
-    d->ui->tableView->horizontalHeader()->hideSection(ComponentAtcModel::Uid);
-    d->ui->tableView->horizontalHeader()->hideSection(ComponentAtcModel::DrugDatabaseComponentUid1);
-    d->ui->tableView->horizontalHeader()->hideSection(ComponentAtcModel::DrugDatabaseComponentUid2);
+    d->prepareComponentViewHeader();
 
+    // Connect Ui and Actions
     connect(d->ui->availableDrugsDb, SIGNAL(activated(int)), this, SLOT(onChangeComponentDrugDatabaseUidRequested(int)));
     connect(d->ui->saveButton, SIGNAL(clicked()), this, SLOT(saveModel()));
-    connect(d->ui->removeUnreviewed, SIGNAL(clicked()), this, SLOT(onRemoveUnreviewedRequested()));
+    connect(d->ui->actionButton, SIGNAL(triggered(QAction*)), this, SLOT(onActionButtonTriggered(QAction*)));
     connect(d->ui->reveiwers, SIGNAL(activated(QString)), d->model, SLOT(setActualReviewer(QString)));
     connect(d->ui->tableView, SIGNAL(activated(QModelIndex)), this, SLOT(onComponentViewItemActivated(QModelIndex)));
     connect(d->ui->tableView, SIGNAL(pressed(QModelIndex)), this, SLOT(onComponentViewItemPressed(QModelIndex)));
     connect(d->ui->tableView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(onComponentViewItemChanged(QModelIndex,QModelIndex)));
-    connect(d->ui->createUnreviewed, SIGNAL(clicked()), this, SLOT(onCreateUnreviewedFileRequested()));
     connect(d->ui->searchMol, SIGNAL(textChanged(QString)), d->proxyModel, SLOT(setFilterWildcard(QString)));
     connect(d->model, SIGNAL(modelReset()), this, SLOT(onModelReset()));
 
+    // Reset the view
     onModelReset();
-
-//        processCSVFile();
 }
 
 ComponentAtcEditorWidget::~ComponentAtcEditorWidget()
@@ -223,12 +280,29 @@ void ComponentAtcEditorWidget::onComponentViewItemActivated(const QModelIndex &i
     }
 }
 
+void ComponentAtcEditorWidget::onActionButtonTriggered(QAction *a)
+{
+    if (a == d->aCreateUnreviewedWikiPages)
+        onCreateUnreviewedFileRequested();
+    else if (a == d->aFilterUnreviewedOnly)
+        onFilterUnreviewedStateChanged();
+    else if (a == d->aRemoveUnreviewed)
+        onRemoveUnreviewedRequested();
+}
+
 /** Removes all unreviewed components to the ComponentAtcModel */
 void ComponentAtcEditorWidget::onRemoveUnreviewedRequested()
 {
     d->model->removeUnreviewedMolecules();
 }
 
+/** Toogle component proxy model from filter only Unreviewed component to all component and vice versa */
+void ComponentAtcEditorWidget::onFilterUnreviewedStateChanged()
+{
+    d->proxyModel->setFilterUnreviewedOnly(!d->proxyModel->filterUnreviewedOnly());
+    d->proxyModel->invalidate();
+    d->prepareComponentViewHeader();
+}
 
 namespace {
 struct Unreviewed {
@@ -535,12 +609,21 @@ void ComponentAtcEditorWidget::saveModel()
 //    out.close();
 //}
 
+void ComponentAtcEditorWidget::translateActions()
+{
+    d->aRemoveUnreviewed->setText(tr("Remove unreviewed"));
+    d->aFilterUnreviewedOnly->setText(tr("Filter unreviewed only"));
+    d->aCreateUnreviewedWikiPages->setText(tr("Create unreviewed wiki pages"));
+}
+
 void ComponentAtcEditorWidget::changeEvent(QEvent *e)
 {
     QWidget::changeEvent(e);
     switch (e->type()) {
     case QEvent::LanguageChange:
         d->ui->retranslateUi(this);
+        // Translate actions
+        translateActions();
         break;
     default:
         break;

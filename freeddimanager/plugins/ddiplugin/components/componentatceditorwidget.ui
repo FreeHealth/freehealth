@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>715</width>
+    <width>885</width>
     <height>369</height>
    </rect>
   </property>
@@ -44,16 +44,12 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="removeUnreviewed">
+      <widget class="QToolButton" name="actionButton">
        <property name="text">
-        <string>Remove unreviewed</string>
+        <string>Select an action</string>
        </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="createUnreviewed">
-       <property name="text">
-        <string>Create unreviewed.txt</string>
+       <property name="popupMode">
+        <enum>QToolButton::InstantPopup</enum>
        </property>
       </widget>
      </item>

@@ -33,7 +33,7 @@
  * \file componentatceditorwidget.h
  * \author Eric Maeker
  * \version 0.10.0
- * \date 05 Dec 2013
+ * \date 21 Apr 2014
 */
 
 namespace DDI {
@@ -43,6 +43,7 @@ class ComponentAtcEditorWidgetPrivate;
 class ComponentAtcEditorWidget : public QWidget
 {
     Q_OBJECT
+    friend class DDI::Internal::ComponentAtcEditorWidgetPrivate;
 
 public:
     explicit ComponentAtcEditorWidget(QWidget *parent = 0);
@@ -55,12 +56,15 @@ protected Q_SLOTS:
     void onComponentViewItemActivated(const QModelIndex &index);
     void onComponentViewItemChanged(const QModelIndex &current, const QModelIndex &previous);
     void onComponentViewItemPressed(const QModelIndex &index);
+    void onActionButtonTriggered(QAction *a);
     void onCreateUnreviewedFileRequested();
     void onRemoveUnreviewedRequested();
+    void onFilterUnreviewedStateChanged();
     void onModelReset();
     void saveModel();
 
 protected:
+    void translateActions();
     void changeEvent(QEvent *e);
 
 #ifdef WITH_TESTS
