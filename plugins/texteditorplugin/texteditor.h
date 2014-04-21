@@ -45,8 +45,8 @@ class QMenu;
 /**
  * \file texteditor.h
  * \author Eric MAEKER
- * \version 0.8.2
- * \date 21 Dec 2012
+ * \version 0.10.0
+ * \date 21 Apr 2014
 */
 
 namespace Core {
@@ -98,10 +98,14 @@ public:
 
     TextEditor(QWidget *parent = 0, Types type = Simple);
     ~TextEditor();
+
     void setTypes(Types type);
     void setUserDocumentForPrintingProcess(Core::IDocumentPrinter::PapersToUse papers);
     void setAlwaysPrintDuplicata(bool printDuplicata);
     void setDocumentTitle(const QString &title);
+
+    void setCurrentFileName(const QString &absPath);
+    QString currentFileName() const;
 
     void addContext(const Core::Context &context);
 
@@ -130,7 +134,7 @@ public Q_SLOTS:
     void clear() {textEdit()->clear();}
     virtual void toogleToolbar(bool state);
 
-protected Q_SLOTS:
+public Q_SLOTS:
     void fileOpen();
     void saveAs();
     void print();

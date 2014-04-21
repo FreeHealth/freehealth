@@ -95,7 +95,10 @@ static inline Core::IUser *user() {return Core::ICore::instance()->user();}
 static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 static inline Core::IDocumentPrinter *printer() {return ExtensionSystem::PluginManager::instance()->getObject<Core::IDocumentPrinter>();}
-static inline Core::IPadTools *padTools() {return Core::ICore::instance()->padTools();}
+#ifdef WITH_PAD
+    static inline Core::IPadTools *padTools() {return Core::ICore::instance()->padTools();}
+#endif
+
 
 namespace Editor {
 namespace Internal {
@@ -164,7 +167,7 @@ public:
 class TextEditorPrivate
 {
 public:
-    TextEditorPrivate(QWidget *parent , TextEditor::Types type) :
+    TextEditorPrivate(TextEditor *parent , TextEditor::Types type) :
         m_Type(type),
         m_Context(0),
         m_ToolBar(0),
@@ -172,7 +175,8 @@ public:
         m_Parent(parent),
         m_ToolBarIsVisible(false),
         _papers(Core::IDocumentPrinter::Papers_Generic_User),
-        _alwaysPrintDuplicata(false)
+        _alwaysPrintDuplicata(false),
+        q(parent)
     {
         textEdit = new TextEditorWithControl(m_Parent);
         //textEdit = new TextEditorHtmlPaster(m_Parent);
@@ -280,6 +284,28 @@ public:
         textEdit->mergeCurrentCharFormat(format);
     }
 
+    // Read file content and run padtools on the content according to the running app
+    // Does not modify the _currentFileName string
+    void readFile(const QString &file)
+    {
+        QString str = Utils::readTextFile(file, Utils::WarnUser);
+        // run token if FreeMedForms
+    #ifdef FREEMEDFORMS
+        patient()->replaceTokens(str);
+        user()->replaceTokens(str);
+
+    #ifdef WITH_PAD
+        str = padTools()->processPlainText(str);
+    #endif
+
+    #endif
+        if (Qt::mightBeRichText(str)) {
+            q->textEdit()->setHtml(str);
+        } else {
+            q->textEdit()->setPlainText(str);
+        }
+    }
+
 public:
     TextEditor::Types m_Type;
     EditorContext *m_Context;
@@ -291,7 +317,10 @@ public:
 
     Core::IDocumentPrinter::PapersToUse _papers;
     bool _alwaysPrintDuplicata;
-    QString _docTitle;
+    QString _docTitle, _currentFileName;
+
+private:
+    TextEditor *q;
 };
 
 }  // End Internal
@@ -399,6 +428,18 @@ void TextEditor::setAlwaysPrintDuplicata(bool printDuplicata)
 void TextEditor::setDocumentTitle(const QString &title)
 {
     d->_docTitle = title;
+}
+
+/** Open a selected file in the editor */
+void TextEditor::setCurrentFileName(const QString &absPath)
+{
+    d->_currentFileName = absPath;
+}
+
+/** If the editor is currently editing a file, returns the abspath of the file */
+QString TextEditor::currentFileName() const
+{
+    return d->_currentFileName;
 }
 
 /** Adds a Core::Context to this contextual widget */
@@ -576,22 +617,8 @@ void TextEditor::fileOpen()
                                                 &selected);
     if (file.isEmpty())
         return;
-    QString str = Utils::readTextFile(file, Utils::WarnUser);
-    // run token if FreeMedForms
-#ifdef FREEMEDFORMS
-    patient()->replaceTokens(str);
-    user()->replaceTokens(str);
-
-#ifdef WITH_PAD
-    str = padTools()->processPlainText(str);
-#endif
-
-#endif
-    if (Qt::mightBeRichText(str)) {
-        textEdit()->setHtml(str);
-    } else {
-        textEdit()->setPlainText(str);
-    }
+    d->_currentFileName = file;
+    d->readFile(file);
 }
 
 /** Save the content of the text editor */
@@ -613,6 +640,7 @@ void TextEditor::saveAs()
                                                     &selected);
     if (fileName.isEmpty())
         return;
+    d->_currentFileName = fileName;
     if (selected==tkTr(Trans::Constants::FILE_FILTER_HTML)) {
         if (Utils::saveStringToFile(Utils::htmlReplaceAccents(textEdit()->document()->toHtml("UTF-8")),
                                     fileName, Utils::Overwrite, Utils::WarnUser, this))
