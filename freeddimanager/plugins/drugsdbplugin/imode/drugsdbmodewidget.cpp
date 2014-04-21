@@ -304,12 +304,18 @@ void DrugsDbModeWidget::onCurrentDrugsDatabaseChanged(const QItemSelection &curr
     d->ui->seeDatapackDescription->setToolTip(base->datapackDescriptionFile());
 }
 
+// #include <texteditorplugin/texteditordialog.h>
 void DrugsDbModeWidget::onSeeDatabaseDescriptionFileRequested()
 {
+    // qWarning() << "onSeeDatabaseDescriptionFileRequested()";
     IDrugDatabase *base = d->currentDatabase();
+    // qWarning() << base;
     if (!base)
         return;
-    // TODO: open file in a TextEditor that allow save & edit
+    // qWarning() << base->databaseDescriptionFile();
+//    Editor::TextEditorDialog dlg(this);
+//    dlg.readFile(base->databaseDescriptionFile());
+//    dlg.exec();
     QDesktopServices::openUrl(QUrl(base->databaseDescriptionFile()));
 }
 
