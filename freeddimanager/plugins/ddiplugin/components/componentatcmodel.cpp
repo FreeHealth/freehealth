@@ -504,9 +504,17 @@ bool ComponentAtcModel::setData(const QModelIndex &index, const QVariant &value,
         switch (index.column()) {
         case IsValid:
         case IsReviewed:
+            // Switch to boolean
             ok = d->_sql->setData(sqlIndex, value.toBool()?1:0, role);
             break;
-        default: ok = d->_sql->setData(sqlIndex, value, role); break;
+        case AtcCodeList:
+        case SuggestedAtcCodeList:
+            // Switch to coma separated list
+            ok = d->_sql->setData(sqlIndex, value.toString().replace(" ", ";"), role);
+            break;
+        default:
+            // Store as it is
+            ok = d->_sql->setData(sqlIndex, value, role); break;
         }
 
         // set the date update
