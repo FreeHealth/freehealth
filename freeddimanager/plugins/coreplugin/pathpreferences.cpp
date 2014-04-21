@@ -183,7 +183,7 @@ void PathPreferencesWidget::writeDefaultSettings(Core::ISettings *s)
     if (!set) {
         set = settings();
     }
-    Utils::Log("PathPreferencesWidget", tkTr(Trans::Constants::CREATING_DEFAULT_SETTINGS_FOR_1).arg("PathPreferencesWidget"));
+    Utils::Log::addMessage("PathPreferencesWidget", tkTr(Trans::Constants::CREATING_DEFAULT_SETTINGS_FOR_1).arg("PathPreferencesWidget"));
 
     QString appName = qApp->applicationName();
     if (appName.contains(" "))
