@@ -53,6 +53,10 @@
 
 #include "ui_componentatceditorwidget.h"
 
+// TODO: add actions like:
+// - Try to find ATC links (for all component / for unreviewed only)
+// - Try to find ATC links using another drug component database (eg: USA <-> ZA <-> CA)
+
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 static inline DDI::DDICore *ddiCore() {return DDI::DDICore::instance();}
 

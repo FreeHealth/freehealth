@@ -56,9 +56,10 @@
 using namespace DDI;
 using namespace Internal;
 
-//static inline Core::IMainWindow *mainwindow() {return Core::ICore::instance()->mainWindow();}
-//static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
-//static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
+// TODO: add a report including
+// - linked ATC does not exist in the database
+// - "association" in the ATC label
+
 static inline DDI::DDICore *ddiCore() {return DDI::DDICore::instance();}
 static inline DDI::Internal::DDIDatabase &ddiBase()  { return DDI::DDICore::instance()->database(); }
 
@@ -388,6 +389,7 @@ bool ComponentAtcModel::selectDatabase(const QString &dbUid1, const QString &dbU
     return true;
 }
 
+/** Return all available (registered) drug component database uid */
 QStringList ComponentAtcModel::databaseUids() const
 {
     QStringList uids;
