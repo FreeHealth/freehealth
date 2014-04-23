@@ -874,9 +874,15 @@ ComponentLinkerResult &ComponentAtcModel::startComponentLinkage(const ComponentL
                  << "CHLORIDE" << "PEROXIDE" << "CITRATE"
                  << "HYDROBROMIDE" << "SUCCINATE"
                  << "ACETATE" << "DISULFIDE"
-                 << "SULFATE";
+                 << "SULFATE" << "TROMETHAMINE" << "TROMETHAMINE"
+                 << "BISULFATE" << "LACTATE"
+                 << "DIHYDROCHLORIDE" << "FUMARATE" << "TANNATE"
+                 << "BITARTRATE" << "TARTRATE" << "ESTOLATE"
+                 << "BROMIDE" << "CAPROATE" << "MALATE"
+                 << "MESYLATE" << "DISODIUM" << "ETHANOLATE" << "IODIDE"
+                 << "MALEATE" << "NITRATE" << "SODIUM";
         foreach(const QString &prefix, toRemove) {
-            if (transformedLbl.startsWith(prefix)) {
+            if (transformedLbl.contains(prefix)) {
                 QString tmp = transformedLbl;
                 tmp.remove(prefix);
                 tmp = tmp.simplified();

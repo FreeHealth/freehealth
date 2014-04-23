@@ -75,12 +75,7 @@ using namespace DrugsDb;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
-namespace {
-const char* const  FDA_DRUGS_DATABASE_NAME     = "FDA_US";
-}
-
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
-static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
 
 FdaDrugDatatabase::FdaDrugDatatabase(QObject *parent) :
     IDrugDatabase(parent),
@@ -157,31 +152,48 @@ bool FdaDrugDatatabase::process()
 
 class Parser {
 public:
+    enum Fields {
+        ApplNo = 0,
+        ProductNo,
+        FormRoute,
+        Dosage,
+        ProductMktStatus,
+        TECode,
+        ReferenceDrug,
+        DrugName,
+        ActiveIngred,
+        TotalFields
+    };
+
     Parser(const QString &line)
     {
+        // ApplNo	ProductNo	Form	Dosage	ProductMktStatus	TECode	ReferenceDrug	drugname	activeingred
+        // 000004	004	SOLUTION/DROPS;OPHTHALMIC	1%	3		0	PAREDRINE	HYDROXYAMPHETAMINE HYDROBROMIDE
+        // 000159	001	TABLET;ORAL	500MG	3		0	SULFAPYRIDINE	SULFAPYRIDINE
+
         // Process line
         QStringList vals = line.split("\t");
-        if (vals.count() != 9) {
+        if (vals.count() != TotalFields) {
             qWarning() << "Error with line" << line;
         }
 
         // Get uid
-        uid1 = vals.at(0);
-        uid2 = vals.at(1);
+        uid1 = vals.at(ApplNo);
+        uid2 = vals.at(ProductNo);
 
         // Get form
-        QString forms = vals.at(2);
+        QString forms = vals.at(FormRoute);
 
         if (forms.contains(";")) {
-            int begin = forms.lastIndexOf(";") + 2;
+            int begin = forms.lastIndexOf(";") + 1;
             route = forms.mid(begin).toLower().simplified();
-            form = forms.left(begin - 2).toLower().simplified();
+            form = forms.left(begin - 1).toLower().simplified();
         } else {
-            form = vals.at(2);
+            form = vals.at(FormRoute);
         }
 
         // Get strength
-        globalStrength = vals.at(3);
+        globalStrength = vals.at(Dosage);
         if (globalStrength.contains("*")) {
             int begin = globalStrength.indexOf("*");
             if (begin!=-1) {
@@ -201,7 +213,7 @@ public:
             } else {
                 strengths = globalStrength.split(";");
             }
-            QStringList mols = vals.at(8).split(";");
+            QStringList mols = vals.at(ActiveIngred).split(";");
             if (strengths.count() != mols.count()) {
                 qWarning() << line;
                 // NPLATE
@@ -222,11 +234,11 @@ public:
                 mols_strength.insert(mols.at(i).simplified(), strengths.at(i));
             }
         } else {
-            mols_strength.insert(vals.at(8).simplified(), vals.at(3));
+            mols_strength.insert(vals.at(ActiveIngred).simplified(), vals.at(Dosage));
         }
 
         // Get drug brand name
-        name = vals.at(7);
+        name = vals.at(DrugName);
     }
 
     Drug *getDrug()
@@ -377,6 +389,18 @@ bool FdaDrugDatatabase::populateDatabase()
 
 //bool FdaDrugDatatabase::linkMolecules()
 //{
+    // 21 Apr 2014
+    // Added 2122 components to database.
+    // Added 30987 drugs to database.
+    // Added ATC data to database.
+    // *** Starting drug component to ATC linkage ***
+    //   . 6092 ATC codes retrieved from database
+    //   . 2122 drug components retrieved from database
+    //   . Links processed.
+    //     . Suggestion found (number of components): 171.
+    // Updating confidence indice to 8.
+    //   . Links saved to database.
+
 //    // 17 Feb 2012
 //    //    NUMBER OF MOLECULES 2033
 //    //    CORRECTED BY NAME 11
