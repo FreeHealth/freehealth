@@ -128,11 +128,18 @@ AgendaCore::AgendaCore(QObject *parent) :
 AgendaCore::~AgendaCore()
 {
     // remove object from plugin manager pool
-    pluginManager()->removeObject(d->m_UserViewerPage);
-    pluginManager()->removeObject(d->m_UserCreatorPage);
-    pluginManager()->removeObject(d->m_CalItemMapper);
-    pluginManager()->removeObject(d->m_AgendaMode);
-    delete d;
+    if (d->m_UserViewerPage)
+        pluginManager()->removeObject(d->m_UserViewerPage);
+    if (d->m_UserCreatorPage)
+        pluginManager()->removeObject(d->m_UserCreatorPage);
+    if (d->m_CalItemMapper)
+        pluginManager()->removeObject(d->m_CalItemMapper);
+    if (d->m_AgendaMode)
+        pluginManager()->removeObject(d->m_AgendaMode);
+    if (d) {
+        delete d;
+        d = 0;
+    }
 }
 
 bool AgendaCore::initializeDatabase()
