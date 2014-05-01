@@ -18,6 +18,7 @@ The FreeMedForms project
     * Correctly select user language at startup
     * Correctly define the default print-to-PDF-cache path in the user documents path
     * Added a login checker in the user creator dialog
+    * Patient data exportation now includes HTML header and footer
   * FreeDiams
     * Correctly select user language at startup
     * Correctly define the default print-to-PDF-cache path in the user documents path

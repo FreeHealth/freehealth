@@ -63,6 +63,18 @@ static inline Core::IPatient *patient() {return Core::ICore::instance()->patient
 static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
 static inline Core::IDocumentPrinter *printer() {return ExtensionSystem::PluginManager::instance()->getObject<Core::IDocumentPrinter>();}
 
+namespace {
+const char * const HTML_HEADER = "<!DOCTYPE html>\n"
+        "<html>\n"
+        "<head>\n"
+        "%1\n"
+        "<title>%2</title>\n"
+        "</head>\n"
+        "<body>\n";
+
+const char * const HTML_FOOTER = "\n\n</body></html>\n";
+}
+
 namespace Patients {
 namespace Internal {
 
@@ -366,8 +378,14 @@ void PatientDataExtractorDialog::onExportRequested()
                         .arg(QString("<b>%1</b>")
                              .arg(patient()->data(Core::IPatient::FullName).toString())
                              );
+
+        // Re-create a full HTML document with exported datas
+        QString header = QString(HTML_HEADER).arg(outCss).arg(tr("Patient file exportation - %1").arg(patient()->data(Core::IPatient::FullName).toString()));
+        QString html = QString("%1\n%2\n%3").arg(header).arg(out).arg(HTML_FOOTER);
+
+        // Save HTML file
         if (d->ui->outputFormat->currentText().contains("HTML", Qt::CaseInsensitive)) {
-            if (!Utils::saveStringToFile(outCss + out, job.outputAbsolutePath() + "/export.html")) {
+            if (!Utils::saveStringToFile(html, job.outputAbsolutePath() + "/export.html")) {
                 LOG_ERROR("Unable to save file");
                 finalMessage << QString("&nbsp;&nbsp;%1")
                                 .arg(tr("An error occured when saving the HTML patient file"));
@@ -379,9 +397,9 @@ void PatientDataExtractorDialog::onExportRequested()
             }
         }
 
-        // According to params -> transform to PDF file
+        // Save PDF file
         if (d->ui->outputFormat->currentText().contains("PDF", Qt::CaseInsensitive)) {
-            if (!printer()->toPdf(outCss+out, job.outputAbsolutePath() + "/export.pdf")) {
+            if (!printer()->toPdf(html, job.outputAbsolutePath() + "/export.pdf")) {
                 LOG_ERROR("Unable to save file");
                 finalMessage << QString("&nbsp;&nbsp;%1")
                                 .arg(tr("An error occured when saving the PDF patient file"));
