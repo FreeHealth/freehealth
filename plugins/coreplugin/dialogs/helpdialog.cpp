@@ -66,10 +66,7 @@ using namespace Trans::ConstantTranslations;
 
 namespace Core {
 namespace Internal {
-
-    const char * const TOC_FILENAME = "toc.html";
-    const char * const INDEX_FILENAME = "toc.html";
-
+const char * const INDEX_FILENAME = "toc.html";
 
 class HelpDialogPrivate
 {

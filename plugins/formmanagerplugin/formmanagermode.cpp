@@ -53,9 +53,6 @@ using namespace Trans::ConstantTranslations;
 static inline ExtensionSystem::PluginManager *pluginManager() { return ExtensionSystem::PluginManager::instance(); }
 static inline Form::FormManager &formManager() {return Form::FormCore::instance().formManager();}
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
-static inline Core::ModeManager *modeManager()  { return Core::ICore::instance()->modeManager(); }
-static inline Core::ActionManager *actionManager()  { return Core::ICore::instance()->actionManager(); }
-static inline Core::IMainWindow *mainWindow()  { return Core::ICore::instance()->mainWindow(); }
 
 /**
  * \class Form::Internal::FormManagerMode

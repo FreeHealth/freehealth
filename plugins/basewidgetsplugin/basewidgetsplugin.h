@@ -23,10 +23,8 @@
  *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef BASEFORMWIDGESTPLUGIN_H
-#define BASEFORMWIDGETSPLUGIN_H
-
-//#include "basewigets_exporter.h"
+#ifndef BASEWIDGETSPLUGIN_BASEFORMWIDGESTPLUGIN_H
+#define BASEWIDGETSPLUGIN_BASEFORMWIDGESTPLUGIN_H
 
 #include <extensionsystem/iplugin.h>
 
@@ -68,4 +66,4 @@ private:
 } // namespace Internal
 } // End BaseWidgets
 
-#endif
+#endif  // BASEWIDGETSPLUGIN_BASEFORMWIDGESTPLUGIN_H

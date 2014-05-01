@@ -56,7 +56,6 @@ using namespace DrugsWidget::Constants;
 using namespace Trans::ConstantTranslations;
 
 static inline Core::ISettings *settings() { return Core::ICore::instance()->settings(); }
-static inline DrugsDB::DrugsBase &drugsBase() {return DrugsDB::DrugBaseCore::instance().drugsBase();}
 
 DrugsUserWidget::DrugsUserWidget(QWidget *parent) :
         QWidget(parent)

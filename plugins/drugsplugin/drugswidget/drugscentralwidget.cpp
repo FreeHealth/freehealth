@@ -71,10 +71,8 @@ using namespace DrugsWidget;
 using namespace Trans::ConstantTranslations;
 
 static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
-static inline DrugsDB::DrugsModel *drugModel() { return DrugsDB::DrugsModel::activeModel(); }
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline Core::ContextManager *contextManager() {return Core::ICore::instance()->contextManager();}
-static inline Core::ActionManager *actionManager() {return Core::ICore::instance()->actionManager();}
 static inline Core::IUser *user() {return Core::ICore::instance()->user();}
 static inline DrugsDB::DrugsBase &drugsBase() {return DrugsDB::DrugBaseCore::instance().drugsBase();}
 static inline DrugsDB::ProtocolsBase &protocolsBase() {return DrugsDB::DrugBaseCore::instance().protocolsBase();}

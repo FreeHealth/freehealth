@@ -278,18 +278,18 @@ namespace {
     const char* const WEBSITE              = "http://www.freemedforms.org/";
 
     // BUNDLE RESOURCES  --> located inside the bundle. Location calculated from BundleRootPath
-    const char* const READONLYRESOURCES    = "";
+    // const char* const READONLYRESOURCES    = "";
     const char* const READONLYDATABASE     = "/databases";
     const char* const TRANSLATIONS_PATH    = "/translations";
     const char* const DEFAULTFORMS         = "/forms";
-    const char* const DEFAULTDATAPACK      = "/datapacks";
+    // const char* const DEFAULTDATAPACK      = "/datapacks";
     const char* const DEFAULTDATAPACK_APPINSTALLED               = "/datapacks/appinstalled";
     const char* const DEFAULTDATAPACK_APPINSTALLED_SUBFORMS      = "/datapacks/appinstalled/forms/subforms";
     const char* const DEFAULTDATAPACK_APPINSTALLED_COMPLETEFORMS = "/datapacks/appinstalled/forms/completeforms";
     const char* const DEFAULT_BUNDLED_ALERTPACKS = "/alertpacks";
     const char* const DEFAULTTHEME_PATH    = "";
     const char* const DEFAULTTHEME_PIXMAP  = "/pixmap";
-    const char* const DEFAULTTHEME_SPLASH  = "/pixmap/splashscreens";
+    // const char* const DEFAULTTHEME_SPLASH  = "/pixmap/splashscreens";
     const char* const USERMANUAL_PATH      = "/doc/%1";
     const char* const LINUX_USERMANUAL_PATH  = "/usr/share/doc/freemedforms-project/%1/html";
     // User documents sub-paths
@@ -308,7 +308,7 @@ namespace {
     const char* const BSD_TOBUNDLEROOTPATH = "/..";
 
     // USER WRITABLE RESOURCES  --> located inside/outside the bundle. Location calculated from UserResourcesPath (where stands the ini file)
-    const char* const WRITABLEDATABASE     = "/databases";
+    // const char* const WRITABLEDATABASE     = "/databases";
 
     // SETTINGS
     const char* const S_LICENSE_VERSION    = "License/AcceptedVersion";

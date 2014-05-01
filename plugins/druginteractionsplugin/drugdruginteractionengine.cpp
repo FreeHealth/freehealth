@@ -78,29 +78,29 @@ namespace  {
             "<tr>"
             "  <td>%4<br />&nbsp;&nbsp;&nbsp;&nbsp;%5</td>\n"
             "</tr>\n";
-    const char* const LIST_FULL_INFO =
-            "<tr>\n"
-            "  <td>%1</td>\n"
-            "  <td>%2</td>\n"
-            "</tr>\n"
-            "<tr>\n"
-            "  <td>%3</td>\n"
-            "  <td>%4</td>\n"
-            "</tr>\n";
+    // FIXME: unused? const char* const LIST_FULL_INFO =
+//            "<tr>\n"
+//            "  <td>%1</td>\n"
+//            "  <td>%2</td>\n"
+//            "</tr>\n"
+//            "<tr>\n"
+//            "  <td>%3</td>\n"
+//            "  <td>%4</td>\n"
+//            "</tr>\n";
 
-        const char* const LIST_MASK =
-                "<table border=1 cellpadding=2 cellspacing=2 width=100%>\n"
-                "<tr>\n"
-                "  <td align=center>\n"
-                "   <span style=\"font-weight:bold\">%1\n</span>"
-                "  </td>\n"
-    //            "<tr>\n"
-    //            "  <td colspan=2 align=center>\n"
-    //            "   <span style=\"font-weight:bold\">%2\n</span>"
-    //            "</td>\n"
-                "</tr>\n"
-                "<tr><td>%2</td></tr>\n"
-                "</table>\n";
+        // FIXME: unused? const char* const LIST_MASK =
+//                "<table border=1 cellpadding=2 cellspacing=2 width=100%>\n"
+//                "<tr>\n"
+//                "  <td align=center>\n"
+//                "   <span style=\"font-weight:bold\">%1\n</span>"
+//                "  </td>\n"
+//    //            "<tr>\n"
+//    //            "  <td colspan=2 align=center>\n"
+//    //            "   <span style=\"font-weight:bold\">%2\n</span>"
+//    //            "</td>\n"
+//                "</tr>\n"
+//                "<tr><td>%2</td></tr>\n"
+//                "</table>\n";
 
 static inline DrugDrugInteractionEngine::TypesOfIAM getLevels(const QString &t)
 {

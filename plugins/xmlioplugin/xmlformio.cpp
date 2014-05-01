@@ -67,10 +67,7 @@ static inline Core::IPatient *patient() {return Core::ICore::instance()->patient
 ///////////////////////////////////////  Inline static functions  //////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
-static inline Category::CategoryCore *categoryCore() {return  Category::CategoryCore::instance();}
-static inline PMH::PmhCore *pmhCore() {return PMH::PmhCore::instance();}
 static inline Internal::XmlFormContentReader *reader() {return Internal::XmlFormContentReader::instance();}
 static inline Internal::XmlIOBase *base() {return Internal::XmlIOBase::instance();}
 

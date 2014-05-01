@@ -72,9 +72,7 @@ using namespace Trans::ConstantTranslations;
 
 static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
-static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
 static inline Form::FormManager &formManager() {return Form::FormCore::instance().formManager();}
-static inline Form::EpisodeManager &episodeManager() {return Form::FormCore::instance().episodeManager();}
 
 namespace Tools {
 namespace Internal {

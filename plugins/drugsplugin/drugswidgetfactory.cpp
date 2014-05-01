@@ -76,7 +76,7 @@
 namespace {
     const char* const OPTION_HIDESELECTOR     = "hideselector";
     const char* const OPTION_WITHPRESCRIBING  = "withprescribing";
-    const char* const OPTION_WITHPRINTING     = "withprinting";
+    // FIXME: unused? const char* const OPTION_WITHPRINTING     = "withprinting";
 
     const char * const  DONTPRINTEMPTYVALUES = "DontPrintEmptyValues";
     const char * const  ADDCHRONICTHERAPY = "AddChronicTherapyButton";
@@ -85,10 +85,8 @@ namespace {
 using namespace DrugsWidget;
 using namespace Internal;
 
-static inline DrugsDB::DrugsBase &drugsBase() {return DrugsDB::DrugBaseCore::instance().drugsBase();}
 static inline DrugsDB::PrescriptionPrinter &prescriptionPrinter() {return DrugsDB::DrugBaseCore::instance().prescriptionPrinter();}
 static inline DrugsDB::DrugsIO &drugsIo() {return DrugsDB::DrugBaseCore::instance().drugsIo();}
-static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
 
 static inline bool dontPrintEmptyValues(Form::FormItem *item)

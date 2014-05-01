@@ -90,7 +90,6 @@ using namespace Trans::ConstantTranslations;
 
 static inline Core::ActionManager *actionManager() {return Core::ICore::instance()->actionManager();}
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
-static inline Core::ContextManager *contextManager() { return Core::ICore::instance()->contextManager(); }
 static inline Core::ModeManager *modeManager() { return Core::ICore::instance()->modeManager(); }
 static inline Core::IUser *user() {return Core::ICore::instance()->user();}
 static inline Core::ICommandLine *commandLine() {return Core::ICore::instance()->commandLine();}

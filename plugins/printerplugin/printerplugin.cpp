@@ -49,7 +49,6 @@
 using namespace Print;
 using namespace Internal;
 
-static inline Core::ISettings *settings() { return Core::ICore::instance()->settings(); }
 static inline Core::IUser *user() { return Core::ICore::instance()->user(); }
 
 PrinterPlugin::PrinterPlugin() :

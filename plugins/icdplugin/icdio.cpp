@@ -43,12 +43,12 @@ namespace ICD {
     namespace Constants {
 
         const char * const XML_HEADER = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-        const char * const XML_GLOBALTAG = "FreeMedForms";
+        // FIXME: unused? const char * const XML_GLOBALTAG = "FreeMedForms";
         const char * const XML_MAINTAG = "IcdCollection";
         const char * const XML_TAG_CODE = "IcdCode";
         const char * const XML_TAG_CODEASSOCIATION = "IcdAssociation";
 
-        const char * const XML_ATTRIB_XMLVERSION = "xmlversion";
+        // FIXME: unused? const char * const XML_ATTRIB_XMLVERSION = "xmlversion";
         const char * const XML_ATTRIB_DATABASEVERSION = "dbversion";
         const char * const XML_ATTRIB_DATE = "date";
 

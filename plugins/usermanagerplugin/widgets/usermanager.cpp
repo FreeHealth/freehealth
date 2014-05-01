@@ -97,7 +97,6 @@ using namespace Trans::ConstantTranslations;
 static inline Core::ActionManager *actionManager() { return Core::ICore::instance()->actionManager(); }
 static inline Core::ContextManager *contextManager() { return Core::ICore::instance()->contextManager(); }
 static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
-static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
 static inline Core::IUser *user() {return Core::ICore::instance()->user();}
 static inline UserPlugin::UserCore &userCore() {return UserPlugin::UserCore::instance();}
 static inline UserPlugin::UserModel *userModel() {return userCore().userModel();}

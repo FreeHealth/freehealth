@@ -56,7 +56,6 @@ using namespace PMH;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
-static inline Core::IUser *user()  { return Core::ICore::instance()->user(); }
 static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
 static inline PMH::PmhCategoryModel *pmhCategoryModel() {return PMH::PmhCore::instance()->pmhCategoryModel();}
 

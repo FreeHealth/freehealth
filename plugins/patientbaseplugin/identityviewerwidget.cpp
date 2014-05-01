@@ -72,7 +72,6 @@
 
 #include <QDebug>
 
-static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
 static inline Core::ITheme *theme() { return Core::ICore::instance()->theme(); }
 static inline Core::IUser *user() { return Core::ICore::instance()->user(); }
 

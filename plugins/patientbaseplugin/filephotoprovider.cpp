@@ -46,9 +46,6 @@
 using namespace Patients;
 using namespace Trans::ConstantTranslations;
 
-static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
-
-
 /*! Constructor of the Patients::FilePhotoProvider class */
 FilePhotoProvider::FilePhotoProvider(QObject *parent) :
     IPhotoProvider(parent)

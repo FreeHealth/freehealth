@@ -83,7 +83,6 @@ static inline Core::IUser *user() {return Core::ICore::instance()->user();}
 static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
 static inline Core::IMainWindow *mainWindow() {return Core::ICore::instance()->mainWindow();}
 static inline Core::ActionManager *actionManager() { return Core::ICore::instance()->actionManager(); }
-static inline Core::ModeManager *modeManager() {return Core::ICore::instance()->modeManager();}
 static inline Patients::PatientCore *patientCore() {return Patients::PatientCore::instance();}
 
 namespace Patients {

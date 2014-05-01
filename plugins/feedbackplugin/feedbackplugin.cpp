@@ -48,7 +48,6 @@
 
 using namespace Feedback::Internal;
 
-static inline Core::IUser *user()  { return Core::ICore::instance()->user(); }
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline void messageSplash(const QString &s) {theme()->messageSplashScreen(s); }
 

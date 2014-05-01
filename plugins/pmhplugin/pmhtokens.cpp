@@ -57,6 +57,7 @@ public:
         _model(0),
         q(parent)
     {
+        Q_UNUSED(q);
     }
     
     ~PmhTokensPrivate()

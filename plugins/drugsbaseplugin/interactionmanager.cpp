@@ -67,37 +67,21 @@
 
 enum { WarnComputations = false };
 
-namespace  {
-    const char* const LIST_MASK =
-            "<table border=1 cellpadding=2 cellspacing=2 width=100%>\n"
-            "<tr>\n"
-            "  <td align=center>\n"
-            "   <span style=\"font-weight:bold\">%1\n</span>"
-            "  </td>\n"
-//            "<tr>\n"
-//            "  <td colspan=2 align=center>\n"
-//            "   <span style=\"font-weight:bold\">%2\n</span>"
-//            "</td>\n"
-            "</tr>\n"
-            "<tr><td>%2</td></tr>\n"
-            "</table>\n";
-}
-
 using namespace DrugsDB;
 using namespace Trans::ConstantTranslations;
 
 static inline ExtensionSystem::PluginManager *pluginManager() { return ExtensionSystem::PluginManager::instance(); }
 
-
 namespace DrugsDB {
 namespace Internal {
-
 class InteractionManagerPrivate
 {
 public:
-    InteractionManagerPrivate() :
-            m_LogChrono(false)
+    InteractionManagerPrivate(InteractionManager *parent) :
+        m_LogChrono(false),
+        q(parent)
     {
+        Q_UNUSED(q);
     }
 
     ~InteractionManagerPrivate()
@@ -107,6 +91,9 @@ public:
 public:
     QVector<IDrugEngine*> m_Engines;
     bool m_LogChrono;
+
+private:
+    InteractionManager *q;
 };
 
 }  // End Internal
@@ -120,7 +107,7 @@ InteractionManager::InteractionManager(QObject *parent) :
 {
     static int handler = 0;
     ++handler;
-    d = new Internal::InteractionManagerPrivate();
+    d = new Internal::InteractionManagerPrivate(this);
     setObjectName("InteractionManager" + QString::number(handler));
 
     // Get all engines from plugin manager

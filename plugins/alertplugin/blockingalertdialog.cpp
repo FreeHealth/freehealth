@@ -127,7 +127,6 @@ using namespace Trans::ConstantTranslations;
 
 static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 static inline Core::IUser *user() {return Core::ICore::instance()->user();}
-static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
 static inline Alert::AlertCore &alertCore() {return Alert::AlertCore::instance();}
 
 static QWidget *addAlertToLayout(const AlertItem &alert, bool showCategory, QLayout *lay)

@@ -46,11 +46,8 @@
 using namespace UserPlugin;
 using namespace Internal;
 
-//static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
-//static inline Core::IUser *user() {return Core::ICore::instance()->user();}
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 static inline UserPlugin::UserCore &userCore() {return UserPlugin::UserCore::instance();}
-static inline UserPlugin::Internal::UserBase *userBase() {return userCore().userBase();}
 static inline UserPlugin::UserModel *userModel() {return userCore().userModel();}
 
 namespace {

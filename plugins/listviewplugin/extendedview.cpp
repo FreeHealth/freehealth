@@ -56,7 +56,6 @@ using namespace Views::Internal;
 using namespace Trans::ConstantTranslations;
 
 static inline Core::ActionManager *actionManager() { return Core::ICore::instance()->actionManager(); }
-static inline Core::ContextManager *contextManager() { return Core::ICore::instance()->contextManager(); }
 
 IView::IView(QWidget *parent) :
     QWidget(parent)

@@ -109,7 +109,6 @@ static inline Patients::PatientCore *patientCore() {return Patients::PatientCore
 
 // SplashScreen Messagers
 static inline void messageSplash(const QString &s) {theme()->messageSplashScreen(s); }
-static inline void finishSplash(QMainWindow *w) {theme()->finishSplashScreen(w); }
 
 MainWindowUserListener::MainWindowUserListener(MainWindow *parent) :
     UserPlugin::IUserListener(parent), m_MainWindow(parent)

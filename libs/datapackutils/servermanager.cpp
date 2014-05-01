@@ -48,7 +48,7 @@ namespace {
 
 const char * const TAG_ROOT                 = "ServerManagerConfig";
 const char * const TAG_SERVER               = "Server";
-const char * const TAG_PACK                 = "Pack";
+// const char * const TAG_PACK                 = "Pack";
 
 // Server attribs
 const char * const ATTRIB_URL                 = "url";
@@ -57,14 +57,12 @@ const char * const ATTRIB_RECORDEDVERSION     = "recVer";
 const char * const ATTRIB_USERUPDATEFREQUENCY = "uUpFq";
 
 // Pack specific attribs
-const char * const ATTRIB_INSTALLED         = "inst";
-const char * const ATTRIB_INSTALLPATH       = "instPath";
+//const char * const ATTRIB_INSTALLED         = "inst";
+//const char * const ATTRIB_INSTALLPATH       = "instPath";
 
-const char * const SERVER_CONFIG_FILENAME   = "server.conf.xml";
+//const char * const SERVER_CONFIG_FILENAME   = "server.conf.xml";
 
 }  // End namespace Anonymous
-
-static inline DataPack::DataPackCore &core() {return DataPack::DataPackCore::instance();}
 
 ServerManager::ServerManager(QObject *parent) :
     IServerManager(parent),

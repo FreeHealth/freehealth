@@ -70,8 +70,6 @@ static inline Form::FormManager &formManager() {return Form::FormCore::instance(
 static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline Core::IPatient *patient()  { return Core::ICore::instance()->patient(); }
-static inline Category::CategoryCore *categoryCore() {return  Category::CategoryCore::instance();}
-static inline Internal::XmlFormContentReader *reader() {return Internal::XmlFormContentReader::instance();}
 static inline Internal::XmlIOBase *base() {return Internal::XmlIOBase::instance();}
 
 static QString getNamespace(const Form::FormItem *item)

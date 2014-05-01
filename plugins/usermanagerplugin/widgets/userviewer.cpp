@@ -59,8 +59,6 @@ using namespace UserPlugin;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
-static inline Core::IUser *user() {return Core::ICore::instance()->user();}
-static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
 static inline UserPlugin::UserCore &userCore() {return UserPlugin::UserCore::instance();}
 static inline UserPlugin::UserModel *userModel() {return userCore().userModel();}

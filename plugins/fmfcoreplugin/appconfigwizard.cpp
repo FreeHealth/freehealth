@@ -69,7 +69,6 @@ using namespace Trans::ConstantTranslations;
 
 static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
 static inline Core::ISettings *settings() { return Core::ICore::instance()->settings(); }
-static inline Core::Translators *translators() { return Core::ICore::instance()->translators(); }
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline Core::ICommandLine *commandLine()  { return Core::ICore::instance()->commandLine(); }
 static inline QString serverConfigurationSqlScript() {return settings()->path(Core::ISettings::BundleResourcesPath) + "/sql/server_config/config.sql";}

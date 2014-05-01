@@ -50,8 +50,6 @@ using namespace Trans::ConstantTranslations;
 static inline ExtensionSystem::PluginManager *pluginManager() { return ExtensionSystem::PluginManager::instance(); }
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline Core::IUser *user()  { return Core::ICore::instance()->user(); }
-static inline Core::IPatient *patient()  { return Core::ICore::instance()->patient(); }
-static inline Core::ModeManager *modeManager()  { return Core::ICore::instance()->modeManager(); }
 
 UserManagerMode::UserManagerMode(QObject *parent) :
     Core::IMode(parent), inPool(false)

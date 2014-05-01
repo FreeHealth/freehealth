@@ -76,7 +76,6 @@ using namespace Internal;
 
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
-static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
 static inline Core::Translators *translators() {return Core::ICore::instance()->translators();}
 static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
 static inline DrugsDB::DrugsBase &drugsBase() {return DrugsDB::DrugBaseCore::instance().drugsBase();}

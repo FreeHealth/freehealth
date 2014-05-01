@@ -44,7 +44,6 @@
 using namespace BaseWidgets;
 using namespace Internal;
 
-static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
 static inline Core::IScriptManager *scriptManager() {return Core::ICore::instance()->scriptManager();}
 
 namespace {
@@ -71,16 +70,6 @@ enum ProvidedWidget {
 };
 
 }  // End namespace Anonymous
-
-static inline Form::IFormWidget::LabelOptions labelAlignement(Form::FormItem *item, Form::IFormWidget::LabelOptions defaultValue = Form::IFormWidget::OnLeft)
-{
-    const QStringList &o = item->getOptions();
-    if (o.contains(::LABEL_ALIGN_TOP, Qt::CaseInsensitive))
-        return Form::IFormWidget::OnTop;
-    else if (o.contains(::LABEL_ALIGN_LEFT, Qt::CaseInsensitive))
-        return Form::IFormWidget::OnLeft;
-    return defaultValue;
-}
 
 static inline bool dontPrintEmptyValues(Form::FormItem *item)
 {

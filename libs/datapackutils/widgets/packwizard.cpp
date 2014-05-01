@@ -338,12 +338,12 @@ PackDownloadPage::PackDownloadPage(QWidget *parent) :
 
 static inline QString packKey(const Pack &pack) {return pack.uuid() + pack.vendor() + pack.version();}
 
-static inline QMovie *movie()
-{
-    QMovie *m = new QMovie(iconFullPath("spinner.png", DataPackCore::SmallPixmaps));
-    m->start();
-    return m;
-}
+//static inline QMovie *movie()
+//{
+//    QMovie *m = new QMovie(iconFullPath("spinner.png", DataPackCore::SmallPixmaps));
+//    m->start();
+//    return m;
+//}
 
 void PackDownloadPage::initializePage()
 {

@@ -50,7 +50,6 @@ using namespace DataPackPlugin;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
-static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline DataPack::DataPackCore &dataPackCore() { return DataPack::DataPackCore::instance(); }
 static inline DataPack::IPackManager *packManager() { return dataPackCore().packManager(); }

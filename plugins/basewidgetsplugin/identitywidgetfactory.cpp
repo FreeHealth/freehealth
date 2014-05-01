@@ -46,13 +46,13 @@ using namespace Trans::ConstantTranslations;
 
 static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
 
-static inline QStringList getOptions(Form::FormItem *item)
-{
-    QStringList l;
-    l = item->extraData().value("options").split(";", QString::SkipEmptyParts);
-    l += item->extraData().value("option").split(";", QString::SkipEmptyParts);
-    return l;
-}
+//static inline QStringList getOptions(Form::FormItem *item)
+//{
+//    QStringList l;
+//    l = item->extraData().value("options").split(";", QString::SkipEmptyParts);
+//    l += item->extraData().value("option").split(";", QString::SkipEmptyParts);
+//    return l;
+//}
 
 IdentityWidgetFactory::IdentityWidgetFactory(QObject *parent) :
     IFormWidgetFactory(parent)
@@ -94,15 +94,6 @@ Form::IFormWidget *IdentityWidgetFactory::createWidget(const QString &name, Form
 {
     Q_UNUSED(name);
     return new IdentityFormWidget(formItem,parent);
-}
-
-
-static inline int getNumberOfColumns(Form::FormItem *item, int defaultValue = 1)
-{
-    if (!item->extraData().value("column").isEmpty())
-        return item->extraData().value("column").toInt();
-    else
-        return defaultValue;
 }
 
 IdentityFormWidget::IdentityFormWidget(Form::FormItem *formItem, QWidget *parent) :

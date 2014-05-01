@@ -54,9 +54,7 @@ using namespace Trans::ConstantTranslations;
 
 
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
-static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline Core::ActionManager *actionManager() { return Core::ICore::instance()->actionManager(); }
-static inline Core::ContextManager *contextManager() { return Core::ICore::instance()->contextManager(); }
 
 namespace Views {
 

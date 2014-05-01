@@ -76,7 +76,6 @@ using namespace Trans::ConstantTranslations;
 
 static inline ExtensionSystem::PluginManager *pluginManager() { return ExtensionSystem::PluginManager::instance(); }
 
-static inline PmhCore *pmhCore() {return PmhCore::instance();}
 static inline PmhCategoryModel *catModel() {return PmhCore::instance()->pmhCategoryModel();}
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline Core::IPatient *patient()  { return Core::ICore::instance()->patient(); }

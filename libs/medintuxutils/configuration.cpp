@@ -42,7 +42,6 @@ namespace Constants {
     const char* const  MEDINTUX_SEARCH    = "*edin*ux*";
     const char* const  MEDINTUX_ROOT_PATH = "MedinTux";
     const char* const  MANAGER_PATH       = "Programmes/Manager/bin";
-    const char* const  DRTUX_PATH         = "Programmes/drtux/bin";
     const char* const  MANAGER_INI        = "Manager.ini";
     const char* const  DRTUX_INI          = "drtux.ini";
 

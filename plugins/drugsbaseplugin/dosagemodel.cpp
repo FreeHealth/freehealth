@@ -77,8 +77,6 @@ enum Warn { WarnDebuggingData = false };
   \todo remove QCache of DosageModels
 */
 
-static inline Core::IUser *user() {return Core::ICore::instance()->user();}
-
 namespace DosageModelConstants {
     const char *const XML_DOSAGE_MAINTAG            = "DOSAGE";
     const char* const DIRTYROW_BACKGROUNDCOLOR      = "yellow";

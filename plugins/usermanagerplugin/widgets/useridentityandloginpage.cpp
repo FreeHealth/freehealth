@@ -79,7 +79,6 @@ using namespace UserPlugin;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
-static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline UserPlugin::UserCore &userCore() {return UserPlugin::UserCore::instance();}
 static inline UserPlugin::Internal::UserBase *userBase() {return userCore().userBase();}
 

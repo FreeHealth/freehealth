@@ -43,14 +43,19 @@ namespace {
     const char * const  ROOT_TAG = "PubmedArticle";
 
     const char * const  MEDLINE_CITATION = "MedlineCitation";
-    const char * const      PMID_TAG = "PMID";
-    const char * const      DATECREATED_TAG = "DateCreated";
-    const char * const      DATECOMPLETED_TAG = "DateCompleted";
-    const char * const      DATEREVISED_TAG = "DateRevised";
+    // FIXME: extract PMID
+    // const char * const      PMID_TAG = "PMID";
+    // FIXME: extrat date of creation
+    // const char * const      DATECREATED_TAG = "DateCreated";
+    // FIXME: extrat date completed
+    // const char * const      DATECOMPLETED_TAG = "DateCompleted";
+    // FIXME: extrat date revised
+    // const char * const      DATEREVISED_TAG = "DateRevised";
 
     const char * const      ARTICLE_TAG = "Article";
     const char * const          JOURNAL_TAG = "Journal";
-    const char * const              JOURNAL_ISSN_TAG = "ISSN";
+    // FIXME: extract Journal ISSN
+    // const char * const              JOURNAL_ISSN_TAG = "ISSN";
     const char * const              JOURNALISSUE_TAG = "JournalIssue";
     const char * const                  VOLUME_TAG = "Volume";
     const char * const                  ISSUE_TAG = "Issue";
@@ -71,17 +76,10 @@ namespace {
     const char * const              AUTHOR_VALID_ATTRIB = "ValidYN";
     const char * const                  AUTHORLASTNAME_TAG = "LastName";
     const char * const                  AUTHORFORENAME_TAG = "ForeName";
-    const char * const                  AUTHORINITIALS_TAG = "Initials";
+    // FIXME: extract autor initials
+    // const char * const                  AUTHORINITIALS_TAG = "Initials";
 
 }
-
-
-//    const char * const          PMID_TAG = "PMID";
-//    const char * const          PMID_TAG = "PMID";
-
-//    const char * const  SECOND_ROOT_TAG = "PubmedArticle";
-//    const char * const  SECOND_ROOT_TAG = "PubmedArticle";
-
 
 // PubMed XML Sample
 

@@ -41,11 +41,6 @@
 using namespace MainWin::Internal;
 using namespace Trans::ConstantTranslations;
 
-
-static inline Core::ISettings *settings() { return Core::ICore::instance()->settings(); }
-static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
-
-
 VirtualPatientBasePage::VirtualPatientBasePage(QObject *parent) :
         IOptionsPage(parent), m_Widget(0)
 { setObjectName("VirtualPatientBasePage"); }

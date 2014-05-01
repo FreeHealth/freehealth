@@ -54,7 +54,6 @@ using namespace Patients;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
-static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline Core::IPatient *patient()  { return Core::ICore::instance()->patient(); }
 

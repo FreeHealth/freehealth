@@ -918,10 +918,10 @@ bool IDrug::atcIdsContains(const int atcId)
 namespace {
     const char *const XML_COMPOSITION                  = "Composition";
     const char *const XML_COMPOSITION_INN              = "inn";
-    const char *const XML_COMPOSITION_ATC              = "atc";
+    // FIXME: unused? const char *const XML_COMPOSITION_ATC              = "atc";
     const char *const XML_COMPOSITION_FORM             = "form";
     const char *const XML_COMPOSITION_ROUTE            = "route";
-    const char *const XML_COMPOSITION_STRENGTH         = "strenght";
+    // FIXME: unused? const char *const XML_COMPOSITION_STRENGTH         = "strenght";
     const char *const XML_COMPOSITION_MOLECULAR        = "molecularName";
     const char *const XML_COMPOSITION_NATURE           = "nature";
     const char *const XML_COMPOSITION_NATURE_LK        = "natureLink";

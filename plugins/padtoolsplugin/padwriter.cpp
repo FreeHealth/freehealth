@@ -85,7 +85,6 @@ static inline Core::ActionManager *actionManager() { return Core::ICore::instanc
 static inline Core::ContextManager *contextManager() { return Core::ICore::instance()->contextManager(); }
 static inline Core::ITheme *theme() { return Core::ICore::instance()->theme(); }
 static inline Core::ISettings *settings() { return Core::ICore::instance()->settings(); }
-static inline Core::IPadTools *padTools() {return Core::ICore::instance()->padTools();}
 static inline PadTools::Internal::PadToolsCore &padCore() {return PadTools::Internal::PadToolsCore::instance();}
 
 namespace PadTools {

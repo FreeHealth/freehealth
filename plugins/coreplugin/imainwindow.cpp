@@ -48,8 +48,6 @@
 using namespace Core;
 using namespace Core::Internal;
 
-static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
-
 namespace {
     QDialog *dlg = 0;
     QWidget *widget = 0;

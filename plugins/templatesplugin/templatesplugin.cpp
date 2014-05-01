@@ -44,8 +44,6 @@
 using namespace Templates;
 using namespace Internal;
 
-static inline Core::ISettings *settings() { return Core::ICore::instance()->settings(); }
-
 TemplatesPlugin::TemplatesPlugin()
 {
     if (Utils::Log::warnPluginsCreation())

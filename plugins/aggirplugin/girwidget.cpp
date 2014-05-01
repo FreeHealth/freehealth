@@ -97,12 +97,12 @@ void GirUi::girCalculated(const int gir)
     m_ui->girLineEdit->setText(QString::number(gir));
 }
 
-static inline int calculateGirScore(const QString &s)
-{
-    MedicalUtils::AGGIR::OldGirScore score;
-    score.setValues(s[0], s[1], s.mid(2,2), s.mid(4,3), s.mid(7,2), s.mid(9,2),s[11], s[12]);
-    return score.resultingGir();
-}
+//static inline int calculateGirScore(const QString &s)
+//{
+//    MedicalUtils::AGGIR::OldGirScore score;
+//    score.setValues(s[0], s[1], s.mid(2,2), s.mid(4,3), s.mid(7,2), s.mid(9,2),s[11], s[12]);
+//    return score.resultingGir();
+//}
 
 void GirUi::setStringfiedGirScore(const QString &gir)
 {

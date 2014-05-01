@@ -157,7 +157,7 @@ const char * const XML_RELATED_ELEMENTTAG = "Rel";
 const char * const XML_VALIDATION_ELEMENTTAG = "Val";
 const char * const XML_SCRIPT_ELEMENTTAG = "Script";
 
-const char * const XML_DATABASE_VALUES_TAG = "Alert";
+//const char * const XML_DATABASE_VALUES_TAG = "Alert";
 }
 
 namespace Alert {
@@ -1689,7 +1689,7 @@ AlertTiming &AlertTiming::fromXml(const QString &xml)
     }
     // Find the XML element corresponding to the script
     QDomElement el = doc.documentElement();
-    if (!el.tagName().compare(::XML_TIMING_ELEMENTTAG, Qt::CaseInsensitive) == 0)
+    if (el.tagName().compare(::XML_TIMING_ELEMENTTAG, Qt::CaseInsensitive) != 0)
         el = el.firstChildElement(::XML_TIMING_ELEMENTTAG);
     if (el.isNull()) {
         LOG_ERROR_FOR("AlertTiming", tkTr(Trans::Constants::XML_WRONG_NUMBER_OF_TAG_1).arg(::XML_TIMING_ELEMENTTAG));
@@ -1848,7 +1848,7 @@ AlertScript &AlertScript::fromXml(const QString &xml)
     }
     // Find the XML element corresponding to the script
     QDomElement el = doc.documentElement();
-    if (!el.tagName().compare(::XML_SCRIPT_ELEMENTTAG, Qt::CaseInsensitive) == 0)
+    if (el.tagName().compare(::XML_SCRIPT_ELEMENTTAG, Qt::CaseInsensitive) != 0)
         el = el.firstChildElement(::XML_SCRIPT_ELEMENTTAG);
     if (el.isNull()) {
         LOG_ERROR_FOR("AlertScript", tkTr(Trans::Constants::XML_WRONG_NUMBER_OF_TAG_1).arg(::XML_SCRIPT_ELEMENTTAG));
@@ -1930,7 +1930,7 @@ AlertValidation &AlertValidation::fromXml(const QString &xml)
     }
     // Find the XML element corresponding to the script
     QDomElement el = doc.documentElement();
-    if (!el.tagName().compare(::XML_VALIDATION_ELEMENTTAG, Qt::CaseInsensitive) == 0)
+    if (el.tagName().compare(::XML_VALIDATION_ELEMENTTAG, Qt::CaseInsensitive) != 0)
         el = el.firstChildElement(::XML_VALIDATION_ELEMENTTAG);
     if (el.isNull()) {
         LOG_ERROR_FOR("AlertValidation", tkTr(Trans::Constants::XML_WRONG_NUMBER_OF_TAG_1).arg(::XML_VALIDATION_ELEMENTTAG));
@@ -2075,7 +2075,7 @@ AlertRelation &AlertRelation::fromXml(const QString &xml)
     }
     // Find the XML element corresponding to the script
     QDomElement el = doc.documentElement();
-    if (!el.tagName().compare(::XML_RELATED_ELEMENTTAG, Qt::CaseInsensitive) == 0)
+    if (el.tagName().compare(::XML_RELATED_ELEMENTTAG, Qt::CaseInsensitive) != 0)
         el = el.firstChildElement(::XML_RELATED_ELEMENTTAG);
     if (el.isNull()) {
         LOG_ERROR_FOR("AlertRelation", tkTr(Trans::Constants::XML_WRONG_NUMBER_OF_TAG_1).arg(::XML_RELATED_ELEMENTTAG));

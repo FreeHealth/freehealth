@@ -50,8 +50,6 @@ using namespace Core;
 using namespace Core::Internal;
 using namespace Trans::ConstantTranslations;
 
-static inline Core::IUser *user() {return Core::ICore::instance()->user();}
-
 DebugDialog::DebugDialog(QWidget *parent) :
     QDialog(parent), m_ui(new Core::Internal::Ui::DebugDialog)
 {

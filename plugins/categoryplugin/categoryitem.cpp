@@ -52,9 +52,6 @@
 using namespace Category;
 using namespace Internal;
 
-static inline Core::IPatient *patient()  { return Core::ICore::instance()->patient(); }
-static inline QString currentUserUuid() {return Core::ICore::instance()->user()->uuid();}
-
 namespace Category {
 namespace Internal {
 class CategoryItemPrivate

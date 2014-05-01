@@ -63,12 +63,8 @@
 using namespace DrugsDB::Internal;
 using namespace Trans::ConstantTranslations;
 
-// static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
-// static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
-// static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline Core::IPadTools *padTools() {return Core::ICore::instance()->padTools();}
 static inline DrugsDB::DrugBaseCore &drugsCore() {return DrugsDB::DrugBaseCore::instance();}
-static inline DrugsDB::InteractionManager &interactionManager() {return DrugsDB::DrugBaseCore::instance().interactionManager();}
 static inline DrugsDB::DrugsBase &drugsBase() {return DrugsDB::DrugBaseCore::instance().drugsBase();}
 static inline DrugsDB::ProtocolsBase &protocolsBase() {return DrugsDB::DrugBaseCore::instance().protocolsBase();}
 static inline DrugsDB::DrugsIO &drugsIo() {return DrugsDB::DrugBaseCore::instance().drugsIo();}

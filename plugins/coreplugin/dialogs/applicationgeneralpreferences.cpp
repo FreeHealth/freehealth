@@ -47,7 +47,6 @@ using namespace Core;
 using namespace Internal;
 
 static inline Core::ISettings *settings() { return Core::ICore::instance()->settings(); }
-static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 
 ApplicationGeneralPreferencesWidget::ApplicationGeneralPreferencesWidget(QWidget *parent) :
         QWidget(parent),

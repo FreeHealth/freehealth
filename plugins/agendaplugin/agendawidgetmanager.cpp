@@ -57,8 +57,6 @@ using namespace Trans::ConstantTranslations;
 
 static inline Core::ActionManager *actionManager() {return Core::ICore::instance()->actionManager();}
 static inline Core::ContextManager *contextManager() { return Core::ICore::instance()->contextManager(); }
-static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
-static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline Agenda::AgendaCore &agendaCore() {return Agenda::AgendaCore::instance();}
 

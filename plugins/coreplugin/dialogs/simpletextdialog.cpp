@@ -59,7 +59,6 @@ using namespace Trans::ConstantTranslations;
 
 static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
-static inline Core::IUser *user() {return Core::ICore::instance()->user();}
 static inline Core::IDocumentPrinter *printer() {return ExtensionSystem::PluginManager::instance()->getObject<Core::IDocumentPrinter>();}
 
 SimpleTextDialog::SimpleTextDialog(const QString &title, const QString &zoomSettingKey, QWidget *parent) :

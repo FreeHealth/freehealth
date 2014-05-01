@@ -69,7 +69,6 @@ using namespace Trans::ConstantTranslations;
 static inline Core::ContextManager *contextManager() { return Core::ICore::instance()->contextManager(); }
 static inline Core::ActionManager *actionManager() {return Core::ICore::instance()->actionManager();}
 static inline Core::ITheme *theme() { return Core::ICore::instance()->theme(); }
-static inline Core::IPatient *patient() { return Core::ICore::instance()->patient(); }
 static inline Form::Internal::EpisodeBase *episodeBase() { return Form::Internal::EpisodeBase::instance(); }
 
 // Register an existing Core action

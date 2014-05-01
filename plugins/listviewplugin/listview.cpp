@@ -62,7 +62,6 @@ using namespace Views;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
-static inline Core::ActionManager *actionManager() { return Core::ICore::instance()->actionManager(); }
 static inline Core::ContextManager *contextManager() { return Core::ICore::instance()->contextManager(); }
 
 

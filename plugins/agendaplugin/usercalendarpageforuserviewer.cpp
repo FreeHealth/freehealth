@@ -54,8 +54,6 @@ using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
 static inline Core::IUser *user() {return Core::ICore::instance()->user();}
-static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
-static inline Agenda::Internal::AgendaBase &base() {return Agenda::AgendaCore::instance().agendaBase();}
 static inline Agenda::AgendaCore &agendaCore() {return Agenda::AgendaCore::instance();}
 
 UserCalendarPageForUserViewerWidget::UserCalendarPageForUserViewerWidget(QWidget *parent) :

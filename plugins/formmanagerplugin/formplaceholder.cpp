@@ -114,10 +114,7 @@ using namespace Trans::ConstantTranslations;
 static inline ExtensionSystem::PluginManager *pluginManager() { return ExtensionSystem::PluginManager::instance(); }
 static inline Form::FormManager &formManager() {return Form::FormCore::instance().formManager();}
 static inline Form::EpisodeManager &episodeManager() {return Form::FormCore::instance().episodeManager();}
-static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
-static inline Core::IUser *user()  { return Core::ICore::instance()->user(); }
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
-static inline Core::IMainWindow *mainWindow()  { return Core::ICore::instance()->mainWindow(); }
 static inline Core::IPatient *patient()  { return Core::ICore::instance()->patient(); }
 static inline Core::ActionManager *actionManager() {return Core::ICore::instance()->actionManager();}
 static inline Core::IDocumentPrinter *printer() {return ExtensionSystem::PluginManager::instance()->getObject<Core::IDocumentPrinter>();}

@@ -120,24 +120,15 @@ using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
 static inline ExtensionSystem::PluginManager *pluginManager() { return ExtensionSystem::PluginManager::instance(); }
-static inline Core::ModeManager *modeManager() { return Core::ICore::instance()->modeManager(); }
-static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline Core::ICommandLine *commandLine()  { return Core::ICore::instance()->commandLine(); }
 static inline Core::IUser *user()  { return Core::ICore::instance()->user(); }
 static inline Core::IPadTools *padTools()  { return Core::ICore::instance()->padTools(); }
 static inline Form::Internal::EpisodeBase *episodeBase() {return Form::Internal::EpisodeBase::instance();}
 static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
-static inline Core::ContextManager *contextManager() { return Core::ICore::instance()->contextManager(); }
-static inline Core::ActionManager *actionManager() {return Core::ICore::instance()->actionManager();}
-static inline Core::IScriptManager *scriptManager() {return Core::ICore::instance()->scriptManager();}
 static inline DataPack::DataPackCore &dataPackCore() { return DataPack::DataPackCore::instance(); }
 static inline DataPack::IPackManager *packManager() { return dataPackCore().packManager(); }
 
 namespace Form {
-namespace Constants {
-    const char * const XML_FORM_GENERAL_TAG = "FormXmlContent";
-}
-
 namespace Internal {
 class FormManagerPrivate
 {

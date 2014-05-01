@@ -48,10 +48,7 @@ using namespace Agenda;
 using namespace Internal;
 
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
-static inline Core::ISettings *settings() { return Core::ICore::instance()->settings(); }
-static inline Core::IPatient *patient() { return Core::ICore::instance()->patient(); }
 static inline Core::IUser *user() { return Core::ICore::instance()->user(); }
-static inline Agenda::Internal::AgendaBase &base() {return Agenda::AgendaCore::instance().agendaBase();}
 static inline Agenda::AgendaCore &agendaCore() {return Agenda::AgendaCore::instance();}
 static inline Core::ModeManager *modeManager() { return Core::ICore::instance()->modeManager(); }
 static inline Core::ActionManager *actionManager() { return Core::ICore::instance()->actionManager(); }

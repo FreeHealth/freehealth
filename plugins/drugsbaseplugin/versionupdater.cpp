@@ -61,7 +61,6 @@ using namespace DrugsDB;
 using namespace Trans::ConstantTranslations;
 
 static inline DrugsDB::DrugBaseCore &core() {return DrugsDB::DrugBaseCore::instance();}
-static inline DrugsDB::DrugsBase &drugsBase() {return core().drugsBase();}
 static inline DrugsDB::ProtocolsBase &protocolsBase() {return core().protocolsBase();}
 
 ///////////////////////////////////////////////////////////////////////

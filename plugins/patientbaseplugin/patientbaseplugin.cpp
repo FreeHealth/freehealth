@@ -73,7 +73,6 @@ static inline Core::ISettings *settings()  { return Core::ICore::instance()->set
 static inline Core::ICommandLine *commandLine() {return Core::ICore::instance()->commandLine();}
 
 static inline Patients::PatientCore *patientCore() {return Patients::PatientCore::instance();}
-static inline Core::ModeManager *modeManager() { return Core::ICore::instance()->modeManager(); }
 
 PatientBasePlugin::PatientBasePlugin() :
     m_Mode(0),

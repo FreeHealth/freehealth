@@ -56,9 +56,7 @@ using namespace DrugsWidget;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
-static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
-static inline DrugsDB::DrugsDatabaseSelector *selector() {return DrugsDB::DrugsDatabaseSelector::instance();}
 static inline DrugsDB::DrugsBase &drugsBase() {return DrugsDB::DrugBaseCore::instance().drugsBase();}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////

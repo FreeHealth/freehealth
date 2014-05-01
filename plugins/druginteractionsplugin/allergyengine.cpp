@@ -56,19 +56,19 @@ using namespace Trans::ConstantTranslations;
 
 namespace {
 
-    const char* const LIST_MASK =
-            "<table border=1 cellpadding=2 cellspacing=2 width=100%>\n"
-            "<tr>\n"
-            "  <td align=center>\n"
-            "   <span style=\"font-weight:bold\">%1\n</span>"
-            "  </td>\n"
+    // FIXME: unused? const char* const LIST_MASK =
+//            "<table border=1 cellpadding=2 cellspacing=2 width=100%>\n"
 //            "<tr>\n"
-//            "  <td colspan=2 align=center>\n"
-//            "   <span style=\"font-weight:bold\">%2\n</span>"
-//            "</td>\n"
-            "</tr>\n"
-            "<tr><td>%2</td></tr>\n"
-            "</table>\n";
+//            "  <td align=center>\n"
+//            "   <span style=\"font-weight:bold\">%1\n</span>"
+//            "  </td>\n"
+////            "<tr>\n"
+////            "  <td colspan=2 align=center>\n"
+////            "   <span style=\"font-weight:bold\">%2\n</span>"
+////            "</td>\n"
+//            "</tr>\n"
+//            "<tr><td>%2</td></tr>\n"
+//            "</table>\n";
 
 class AllergyInteraction : public IDrugInteraction {
 public:

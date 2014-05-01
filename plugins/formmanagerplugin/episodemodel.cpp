@@ -105,8 +105,6 @@ static inline Form::FormManager &formManager() {return Form::FormCore::instance(
 
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
-static inline Core::ActionManager *actionManager() { return Core::ICore::instance()->actionManager(); }
-static inline ExtensionSystem::PluginManager *pluginManager() { return ExtensionSystem::PluginManager::instance(); }
 
 namespace Form {
 namespace Internal {

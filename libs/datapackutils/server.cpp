@@ -52,8 +52,6 @@ const char * const SERVER_CONF_XML = "server.conf.xml";
 const char * const SERVER_CONF_ZIP = "serverconf.zip";
 }
 
-static inline DataPack::DataPackCore &core() { return DataPack::DataPackCore::instance(); }
-
 /** Create a server pointing to the URL \e url. The URL must be unique in the server's pool. */
 Server::Server(const QString &url) :
     m_Connected(false),

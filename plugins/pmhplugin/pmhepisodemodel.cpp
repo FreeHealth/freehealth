@@ -36,17 +36,16 @@ using namespace PMH;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
-static inline PmhCore *pmhCore() {return PmhCore::instance();}
-
 namespace PMH {
 namespace Internal {
-
 class PmhEpisodeModelPrivate
 {
 public:
-    PmhEpisodeModelPrivate(PmhEpisodeModel */*parent*/) :
-        m_Pmh(0) //, q(parent)
+    PmhEpisodeModelPrivate(PmhEpisodeModel *parent) :
+        m_Pmh(0),
+        q(parent)
     {
+        Q_UNUSED(q);
     }
 
     ~PmhEpisodeModelPrivate()
@@ -59,7 +58,7 @@ public:
     PmhData *m_Pmh;
 
 private:
-//    PmhEpisodeModel *q;
+    PmhEpisodeModel *q;
 
 };
 

@@ -44,16 +44,8 @@
 using namespace Form;
 using namespace Internal;
 
-//static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
-//static inline Core::IUser *user() {return Core::ICore::instance()->user();}
-static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 static inline Form::FormCore &formCore() {return Form::FormCore::instance();}
 static inline Form::Internal::EpisodeBase *episodeBase() {return Form::Internal::EpisodeBase::instance();}
-
-namespace {
-const int loop = 10; // number of tests per objects
-} // anonymous namespace
-
 
 void FormManagerPlugin::initTestCase()
 {

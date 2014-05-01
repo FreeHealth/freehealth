@@ -106,14 +106,14 @@ static inline Core::IPatient *patient() {return Core::ICore::instance()->patient
 namespace {
 const char * const XML_NAME1    = "n1";
 const char * const XML_NAME2    = "n2";
-const char * const XML_NAME3    = "n3";
-const char * const XML_NAME4    = "n4";
+//const char * const XML_NAME3    = "n3";
+//const char * const XML_NAME4    = "n4";
 const char * const XML_FIRSTNAME= "first";
 const char * const XML_TITLE    = "tt";
 const char * const XML_GENDER   = "gdr";
 const char * const XML_LANG     = "i18";
 const char * const XML_DOB      = "dob";
-const char * const XML_DOD      = "dod";
+//const char * const XML_DOD      = "dod";
 const char * const XML_PHOTO    = "pix";
 const char * const XML_STREET   = "str";
 const char * const XML_CITY     = "city";

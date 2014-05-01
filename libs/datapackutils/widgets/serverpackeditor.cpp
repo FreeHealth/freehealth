@@ -75,13 +75,8 @@ const char *const ICON_SERVER_REFRESH = "datapack-server-refresh.png";
 const char *const ICON_SERVER_EDIT = "datapack-server-edit.png";
 const char *const ICON_SERVER_ADD = "server-add.png";
 const char *const ICON_SERVER_REMOVE = "server-remove.png";
-const char *const ICON_SERVER_INFO = "server-info.png";
 
-const char *const ICON_UPDATE = "updateavailable.png";
 const char *const ICON_INSTALL = "install-package.png";
-const char *const ICON_REMOVE = "remove.png";
-
-const char *const ICON_PACKAGE = "package.png";
 
 const char *const TITLE_CSS = "text-indent:5px;padding:5px;font-weight:bold;background:qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0.464 rgba(255, 255, 176, 149), stop:1 rgba(255, 255, 255, 0))";
 

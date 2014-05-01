@@ -53,12 +53,6 @@ using namespace Agenda;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
-static inline Core::IUser *user() {return Core::ICore::instance()->user();}
-static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
-static inline Core::ModeManager *modeManager() {return Core::ICore::instance()->modeManager();}
-static inline Core::ActionManager *actionManager() {return Core::ICore::instance()->actionManager();}
-static inline Agenda::Internal::AgendaBase &base() {return Agenda::AgendaCore::instance().agendaBase();}
-
 UserCalendarModelFullEditorWidget::UserCalendarModelFullEditorWidget(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::UserCalendarModelFullEditorWidget),

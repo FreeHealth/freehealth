@@ -262,21 +262,21 @@ static inline QString defaultPaper(const QString &profession, const QString &pap
     return QString();
 }
 
-static inline QString defaultHeader(const QString &profession)
-{
-    return defaultPaper(profession, "header");
-}
+//static inline QString defaultHeader(const QString &profession)
+//{
+//    return defaultPaper(profession, "header");
+//}
 
-static inline QString defaultFooter(const QString &profession)
-{
-    return defaultPaper(profession, "footer");
-}
+//static inline QString defaultFooter(const QString &profession)
+//{
+//    return defaultPaper(profession, "footer");
+//}
 
-// paperType == "prescription" "administrative" "generic"
-static inline QString defaultWatermark(const QString &profession, const QString &paperType = QString::null)
-{
-    return defaultPaper(profession, "watermark", paperType);
-}
+//// paperType == "prescription" "administrative" "generic"
+//static inline QString defaultWatermark(const QString &profession, const QString &paperType = QString::null)
+//{
+//    return defaultPaper(profession, "watermark", paperType);
+//}
 
 QHash<int, QString> UserCreatorWizardPrivate::m_Papers;
 QHash<int, int> UserCreatorWizardPrivate::m_Rights;

@@ -47,7 +47,6 @@
 #include <QDebug>
 
 static inline Core::ModeManager *modeManager()  { return Core::ICore::instance()->modeManager(); }
-static inline Core::ContextManager *contextManager() { return Core::ICore::instance()->contextManager(); }
 static inline Core::ActionManager *actionManager() {return Core::ICore::instance()->actionManager();}
 static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 
@@ -85,8 +84,6 @@ static inline QAction *createAction(QObject *parent, const QString &name, const 
 
 using namespace Script;
 using namespace Internal;
-
-static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 
 ScriptPlugin::ScriptPlugin() :
     m_Manager(0),

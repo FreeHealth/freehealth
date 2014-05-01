@@ -37,7 +37,6 @@ using namespace Views;
 using namespace Internal;
 
 static inline Core::ContextManager *contextManager() { return Core::ICore::instance()->contextManager(); }
-static inline Core::ActionManager *actionManager() { return Core::ICore::instance()->actionManager(); }
 
 namespace Views {
 namespace Internal {

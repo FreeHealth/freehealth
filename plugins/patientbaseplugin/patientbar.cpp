@@ -70,10 +70,8 @@
 
 using namespace Patients;
 
-static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 static inline Core::IPatient *patient()  { return Core::ICore::instance()->patient(); }
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
-static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
 
 namespace Patients {
 namespace Internal {

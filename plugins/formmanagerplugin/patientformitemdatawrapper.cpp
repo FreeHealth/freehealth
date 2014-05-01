@@ -52,7 +52,6 @@ using namespace Form;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
-static inline Form::FormCore &formCore() {return Form::FormCore::instance();}
 static inline Form::FormManager &formManager() {return Form::FormCore::instance().formManager();}
 static inline Form::EpisodeManager &episodeManager() {return Form::FormCore::instance().episodeManager();}
 static inline Core::IPatient *patient()  { return Core::ICore::instance()->patient(); }

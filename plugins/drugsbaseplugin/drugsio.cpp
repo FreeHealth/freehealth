@@ -77,10 +77,6 @@ static inline DrugsDB::ProtocolsBase &protocolsBase() {return core().protocolsBa
 static inline DrugsDB::VersionUpdater &versionUpdater() {return core().versionUpdater();}
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 static inline Core::IPadTools *padTools() {return Core::ICore::instance()->padTools();}
-static inline DrugsDB::DrugsModel *drugModel() { return DrugsDB::DrugsModel::activeModel(); }
-static inline Core::IUser *user() {return Core::ICore::instance()->user();}
-static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
-static inline Core::IDocumentPrinter *printer() {return ExtensionSystem::PluginManager::instance()->getObject<Core::IDocumentPrinter>();}
 
 namespace {
 
@@ -90,7 +86,7 @@ namespace {
     const char *const XML_VERSION                          = "version";
     const char *const XML_PRESCRIPTION_MAINTAG             = "Prescription";
     const char *const XML_PRESCRIPTION_ISTEXTUAL           = "IsTextual";
-    const char *const XML_PRESCRIPTION_TEXTUALDRUGNAME     = "TextualDrugName";
+    // FIXME: unused ? const char *const XML_PRESCRIPTION_TEXTUALDRUGNAME     = "TextualDrugName";
 
     const char *const XML_DRUG_ROOT         = "Drug";
     const char *const XML_DRUG_ATTR_UID1    = "u1";
@@ -103,12 +99,12 @@ namespace {
     const char *const XML_DRUG_FORM         = "DrugForm";
     const char *const XML_DRUG_ROUTE        = "DrugRoute";
     const char *const XML_DRUG_STRENGTH     = "DrugStrength";
-    const char *const XML_DRUG_COMPOSITION  = "DrugComponents";
+    // FIXME: unused? const char *const XML_DRUG_COMPOSITION  = "DrugComponents";
     // Unused
     const char *const XML_DRUG_INNS         = "DrugINN";
     const char *const XML_DRUG_INNS_ATC     = "DrugINN_ATC";
     const char *const XML_DRUG_ATC          = "DrugATC";
-    const char *const XML_PRESCRIPTION_UID  = "PrescrUuid";
+    // FIXME: unused? const char *const XML_PRESCRIPTION_UID  = "PrescrUuid";
 
     const char *const XML_COMPOSITION                  = "Composition";
     const char *const XML_COMPOSITION_INN              = "inn";

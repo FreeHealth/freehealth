@@ -59,7 +59,6 @@ static inline Core::IPatient *patient() {return Core::ICore::instance()->patient
 static inline Core::IPadTools *padTools()  { return Core::ICore::instance()->padTools(); }
 static inline Form::FormCore &formCore() {return Form::FormCore::instance();}
 static inline Form::FormManager &formManager() {return Form::FormCore::instance().formManager();}
-static inline Form::Internal::EpisodeBase *episodeBase() {return Form::Internal::EpisodeBase::instance();}
 
 // TODO: manage user rights here +++
 

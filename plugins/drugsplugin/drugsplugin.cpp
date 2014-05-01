@@ -69,7 +69,6 @@ using namespace DrugsWidget::Internal;
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline void messageSplash(const QString &s) {theme()->messageSplashScreen(s); }
-static inline DrugsDB::DrugsBase &drugsBase() {return DrugsDB::DrugBaseCore::instance().drugsBase();}
 
 DrugsPlugin::DrugsPlugin() :
     viewPage(0),

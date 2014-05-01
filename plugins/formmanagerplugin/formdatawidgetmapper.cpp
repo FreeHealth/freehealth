@@ -63,8 +63,6 @@ enum { WarnLogChronos=false, WarnDirty=true };
 
 static inline Form::FormManager &formManager() {return Form::FormCore::instance().formManager();}
 static inline Form::EpisodeManager &episodeManager() {return Form::FormCore::instance().episodeManager();}
-static inline Core::IUser *user() {return Core::ICore::instance()->user();}
-static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
 
 namespace Form {
 namespace Internal {
