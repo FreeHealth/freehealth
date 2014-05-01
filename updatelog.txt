@@ -19,6 +19,7 @@ The FreeMedForms project
     * Correctly define the default print-to-PDF-cache path in the user documents path
     * Added a login checker in the user creator dialog
     * Patient data exportation now includes HTML header and footer
+    * Segfaulting when cancelling the installation wizard before the end
   * FreeDiams
     * Correctly select user language at startup
     * Correctly define the default print-to-PDF-cache path in the user documents path
@@ -34,6 +35,7 @@ The FreeMedForms project
   * Forms
   * Debian specific
   * Under the hood
+    * Multi-job compilation corrected (for libs)
   * Various unloggued bug corrected
 
 ===== Packaging and documentation ====
