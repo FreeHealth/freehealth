@@ -206,13 +206,6 @@ void MainWindow::extensionsInitialized()
 //        }
     }
 
-    // Start the update checker
-    if (updateChecker()->needsUpdateChecking(settings()->getQSettings())) {
-        settings()->setPath(Core::ISettings::UpdateUrl, Utils::Constants::FREEACCOUNT_UPDATE_URL);
-        if (checkUpdate())
-            settings()->setValue(Utils::Constants::S_LAST_CHECKUPDATE, QDate::currentDate());
-    }
-
     userChanged();
 
     createDockWindows();
@@ -260,6 +253,12 @@ void MainWindow::postCoreOpened()
         setCentralWidget(new ReceiptViewer(this));
     }
 
+    // Start the update checker
+    if (updateChecker()->needsUpdateChecking(settings()->getQSettings())) {
+        settings()->setPath(Core::ISettings::UpdateUrl, Utils::Constants::FREEACCOUNT_UPDATE_URL);
+        if (checkUpdate())
+            settings()->setValue(Utils::Constants::S_LAST_CHECKUPDATE, QDate::currentDate());
+    }
 
     actionManager()->retranslateMenusAndActions();
     contextManager()->updateContext();

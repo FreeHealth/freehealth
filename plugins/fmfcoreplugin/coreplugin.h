@@ -66,6 +66,7 @@ public:
 
     bool initialize(const QStringList &arguments, QString *errorMessage = 0);
     void extensionsInitialized();
+    ShutdownFlag aboutToShutdown();
 
 public Q_SLOTS:
     void remoteArgument(const QString&);

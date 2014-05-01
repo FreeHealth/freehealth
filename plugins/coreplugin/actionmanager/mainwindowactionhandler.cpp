@@ -122,7 +122,9 @@ MainWindowActionHandler::MainWindowActionHandler(QWidget *parent) :
 MainWindowActionHandler::~MainWindowActionHandler()
 {
     // Save last used language
-    settings()->setValue(Constants::S_PREFERREDLANGUAGE, QLocale().name().left(2));
+    if (Core::ICore::instance() && settings() && aLanguageGroup->checkedAction())
+        settings()->setValue(Constants::S_PREFERREDLANGUAGE,
+                             aLanguageGroup->checkedAction()->data().toString());//QLocale().name().left(2));
 }
 
 void MainWindowActionHandler::createGeneralMenu()
@@ -985,11 +987,12 @@ void MainWindowActionHandler::createConfigurationActions(int actions)
 
         foreach(const QString &loc, loc_lang.keys()) {
             ++i;
-            QAction *action = new QAction(this);  // QString("&%1 %2").arg(QString::number(i), loc_lang.value(loc)), this);
+            QAction *action = new QAction(this);
             action->setText(loc_lang.value(loc));
             action->setObjectName(loc);
             action->setData(loc);
             action->setCheckable(true);
+            action->setChecked(loc=="en");
             cmd = actionManager()->registerAction(action, Id(loc), ctx);
             lmenu->addAction(cmd, Id(Constants::G_LANGUAGES));
             aLanguageGroup->addAction(action);

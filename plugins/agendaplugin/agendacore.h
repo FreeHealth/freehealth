@@ -68,6 +68,7 @@ protected Q_SLOTS:
 protected:
     explicit AgendaCore(QObject *parent = 0);
     void extensionsInitialized();
+    void removeObjectFromPluginManager();
 
 private:
     static AgendaCore *m_Instance;

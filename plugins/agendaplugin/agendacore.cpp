@@ -127,15 +127,6 @@ AgendaCore::AgendaCore(QObject *parent) :
 
 AgendaCore::~AgendaCore()
 {
-    // remove object from plugin manager pool
-    if (d->m_UserViewerPage)
-        pluginManager()->removeObject(d->m_UserViewerPage);
-    if (d->m_UserCreatorPage)
-        pluginManager()->removeObject(d->m_UserCreatorPage);
-    if (d->m_CalItemMapper)
-        pluginManager()->removeObject(d->m_CalItemMapper);
-    if (d->m_AgendaMode)
-        pluginManager()->removeObject(d->m_AgendaMode);
     if (d) {
         delete d;
         d = 0;
@@ -150,6 +141,19 @@ bool AgendaCore::initializeDatabase()
 void AgendaCore::extensionsInitialized()
 {
     connect(user(), SIGNAL(userChanged()), this, SLOT(postCoreInitialization()));
+}
+
+void AgendaCore::removeObjectFromPluginManager()
+{
+    // remove object from plugin manager pool
+    if (d->m_UserViewerPage)
+        pluginManager()->removeObject(d->m_UserViewerPage);
+    if (d->m_UserCreatorPage)
+        pluginManager()->removeObject(d->m_UserCreatorPage);
+    if (d->m_CalItemMapper)
+        pluginManager()->removeObject(d->m_CalItemMapper);
+    if (d->m_AgendaMode)
+        pluginManager()->removeObject(d->m_AgendaMode);
 }
 
 /** Direct access to agenda base. Please DONT use this function outside the agenda plugin. */

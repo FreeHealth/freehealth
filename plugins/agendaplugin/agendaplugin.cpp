@@ -445,8 +445,10 @@ ExtensionSystem::IPlugin::ShutdownFlag AgendaPlugin::aboutToShutdown()
     // Disconnect from signals that are not needed during shutdown
     // Hide UI (if you add UI that is not in the main window directly)
     // Remove preferences pages to plugins manager object pool
-    if (m_Core)
+    if (m_Core) {
+        m_Core->removeObjectFromPluginManager();
         delete m_Core;
+    }
     m_Core = 0;
     return SynchronousShutdown;
 }

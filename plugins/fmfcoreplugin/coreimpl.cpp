@@ -158,10 +158,10 @@ CoreImpl::CoreImpl(QObject *parent) :
 CoreImpl::~CoreImpl()
 {
     Q_EMIT coreAboutToClose();
-    if (m_ModeManager)
-        delete m_ModeManager;
     if (m_MainWindow)
         delete m_MainWindow;
+    if (m_ModeManager)
+        delete m_ModeManager;
 }
 
 IMainWindow *CoreImpl::mainWindow() const  { return m_MainWindow; }
