@@ -5,10 +5,21 @@ qt:greaterThan(QT_MAJOR_VERSION, 4) {
 
 TEMPLATE = subdirs
 
-CONFIG *= ordered
+SUBDIRS += translation \
+    aggregation \
+    extension \
+    utils
 
-SUBDIRS  = \
-           ../../libs/aggregation \
-           ../../libs/extensionsystem \
-           ../../libs/translationutils \
-           ../../libs/utils
+LIBSPATH=../../libs
+
+aggregation.subdir  = $${LIBSPATH}/aggregation
+aggregation.depends =
+
+extension.subdir    = $${LIBSPATH}/extensionsystem
+extension.depends   += aggregation
+
+translation.subdir  = $${LIBSPATH}/translationutils
+translation.depends =
+
+utils.subdir        = $${LIBSPATH}/utils
+utils.depends       += translation
