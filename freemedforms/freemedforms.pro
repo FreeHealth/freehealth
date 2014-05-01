@@ -11,4 +11,3 @@ SUBDIRS += \
     libs \
     plugins \
     freemedforms-src
-    #../qtcreator_wizards
