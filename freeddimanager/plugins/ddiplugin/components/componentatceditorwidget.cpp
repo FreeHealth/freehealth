@@ -441,7 +441,8 @@ void ComponentAtcEditorWidget::onCreateUnreviewedFileRequested()
             atc += QString("\n    * [[http://www.whocc.no/atc_ddd_index/?code=%1|%1]]").arg(code);
 
         // Create component search links
-        // TODO: improve this for foreign drug database (we don't need CNAMTS links)
+        // TODO: improve this for non-french drug database (we don't need CNAMTS links)
+        // TODO: add link: http://www.kegg.jp/kegg-bin/search?q=COMPONENT_NAME&display=drug&from=drug
         QString search;
         search += QString("\n    * [[%1|Search CNAMTS database]]").arg(QString("http://www.codage.ext.cnamts.fr/codif/bdm//critere/index_lis_rech.php?p_nom_rech=%1%2&p_remb=tout&p_cri=subact&p_site=").arg("%25").arg(Utils::removeAccents(ur.name.toUpper()).simplified()));
         search += QString("\n    * [[%1|Search Google]]").arg(QString("http://www.google.fr/search?rls=en&q=%1+atc&ie=UTF-8&oe=UTF-8&redir_esc=").arg(ur.name.toUpper()));
