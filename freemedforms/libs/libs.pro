@@ -19,13 +19,13 @@ LIBSPATH=../../libs
 CONTRIBPATH=../../contrib
 
 aggregation.subdir  = $${LIBSPATH}/aggregation
-aggregation.depends =
+#aggregation.depends =
 
 extension.subdir    = $${LIBSPATH}/extensionsystem
 extension.depends   += aggregation
 
 translation.subdir  = $${LIBSPATH}/translationutils
-translation.depends =
+#translation.depends =
 
 utils.subdir        = $${LIBSPATH}/utils
 utils.depends       += translation
