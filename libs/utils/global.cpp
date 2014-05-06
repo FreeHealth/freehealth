@@ -444,7 +444,7 @@ QStringList applicationPluginsPath(const QString &binaryName, const QString &lib
 {
     QString app = qApp->applicationDirPath();
 
-    // Debug with installation compilation
+    // Debug without installation compilation
     // Plugins are stored in the bin path next to the binaries (or binaries.app)
     // bin
     //  `- freemedforms (dir)
