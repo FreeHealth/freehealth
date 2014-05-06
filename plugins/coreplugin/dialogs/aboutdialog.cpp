@@ -53,7 +53,6 @@ using namespace Trans::ConstantTranslations;
 AboutDialog::AboutDialog(QWidget *parent) :
     QDialog(parent), m_ui(new Core::Internal::Ui::AboutDialog)
 {
-    typedef QMap<QString, QTreeWidgetItem *> CategoryItemMap;
     m_ui->setupUi(this);
     m_ui->applicationNameLabel->setText(qApp->applicationName());
 
