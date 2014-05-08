@@ -236,7 +236,7 @@ bool Icd10Step::startDownload()
     Utils::HttpDownloader *dld = new Utils::HttpDownloader(this);
     connect(dld, SIGNAL(downloadFinished()), this, SIGNAL(downloadFinished()), Qt::UniqueConnection);
     connect(dld, SIGNAL(downloadFinished()), dld, SLOT(deleteLater()));
-    connect(dld, SIGNAL(downloadProgressPermill(int)), this, SIGNAL(progress(int)));
+    connect(dld, SIGNAL(downloadProgressPermille(int)), this, SIGNAL(progress(int)));
 
     Q_EMIT progressRangeChanged(0, 1000);
     Q_EMIT progress(0);
