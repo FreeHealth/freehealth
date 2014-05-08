@@ -7,23 +7,14 @@ TEMPLATE = subdirs
 
 SUBDIRS = \
     core \
-    drugsdb \
     icd10db \
     icd \
     zip \
     listview \
     biblio \
-    datapack \
-    account
-
+    datapack
 
 core.subdir = coreplugin
-
-drugsdb.subdir   = drugsdb
-drugsdb.depends += core
-drugsdb.depends += biblio
-drugsdb.depends += listview
-drugsdb.depends += icd10db
 
 icd10db.subdir = icd10db
 icd10db.depends += core
@@ -46,6 +37,3 @@ biblio.depends += core
 
 datapack.subdir = datapackplugin
 datapack.depends += core
-
-account.subdir = accountplugin
-account.depends += core
