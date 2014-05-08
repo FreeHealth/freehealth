@@ -80,8 +80,10 @@ public:
 
     ~GenericZipCodesStepPrivate() {}
 
+    // Source URL for geonames zipcodes
     QUrl url() const {return QUrl("http://download.geonames.org/export/zip/allCountries.zip");}
 
+    // Temporary path
     QString tmpPath() const {return settings()->value(Core::Constants::S_TMP_PATH).toString() + "/GeonamesZipCodes/";}
 
     // This database contains **all** zipcodes available for **all** countries
@@ -95,12 +97,17 @@ public:
         return info.absolutePath() + QDir::separator() + countries.join("-") + QDir::separator() + "zipcodes.db";
     }
 
+    // ZipCodes database SQL scheme file
     QString sqlMasterFileAbsPath() const {return settings()->value(Core::Constants::S_GITFILES_PATH).toString() + "/global_resources/sql/zipcodes/zipcodes.sql";}
 
+    // When user wants to create multiple country datapacks
+    // This file describes all countries to include
     QString multiCountryDefinitionFile() const {return settings()->value(Core::Constants::S_GITFILES_PATH).toString() + QString("%1/%2").arg(Core::Constants::PATH_TO_DATAPACK_DESCRIPTION_FILES).arg("/geonames/multi.csv");}
 
+    // Path to generic datapack description file
     QString genericDatapackDescriptionFile() const {return settings()->value(Core::Constants::S_GITFILES_PATH).toString() + QString("%1/%2").arg(Core::Constants::PATH_TO_DATAPACK_DESCRIPTION_FILES).arg("/geonames/packdescription.xml");}
 
+    // Connect the raw source database
     bool connectRawDatabase()
     {
         QSqlDatabase db;
@@ -109,6 +116,11 @@ public:
         } else {
             db = QSqlDatabase::addDatabase("QSQLITE", DB_NAME);
             db.setDatabaseName(databaseOutputAbsFilePath());
+
+            // Improve speed when creating the drug database
+            database().exec("PRAGMA synchronous = OFF");
+            database().exec("PRAGMA journal_mode = MEMORY");
+
             LOG_FOR(q, "Using zipcodes database: " + databaseOutputAbsFilePath());
         }
         if (!db.isOpen()) {
@@ -120,6 +132,7 @@ public:
         return true;
     }
 
+    // If the raw source database does not exists -> create it
     bool createRawDatabase()
     {
         if (!connectRawDatabase())
@@ -131,6 +144,7 @@ public:
         return true;
     }
 
+    // Populate the raw source database wih downloaded data
     bool populateRawDatabase()
     {
         if (!connectRawDatabase())
@@ -196,6 +210,7 @@ public:
         return true;
     }
 
+    // Create all datapacks using the 'multi-country' description file
     bool createAllDatapackDatabase()
     {
         // Read the multi-country definition file
@@ -255,6 +270,7 @@ public:
         return true;
     }
 
+    // Create the database corresponding to listed countries
     bool createDatabaseForDatapack(const QStringList &countryIsoCodes)
     {
         Q_UNUSED(countryIsoCodes);
@@ -339,6 +355,7 @@ public:
         return true;
     }
 
+    // Tag the database with the current version
     bool setDatabaseVersion(const QString &connection, const QString &version, const QDate &date)
     {
         QSqlDatabase db = QSqlDatabase::database(connection);
@@ -484,7 +501,6 @@ void GenericZipCodesStep::onSubProcessFinished()
 {
     Q_EMIT subProcessFinished(d->_currentTiming, d->_currentSubProcess);
 }
-
 
 /*!
  * Downloads the list of available countries.
