@@ -24,8 +24,8 @@
  *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef PACKDESCRIPTION_H
-#define PACKDESCRIPTION_H
+#ifndef LIB_DATAPACK_PACKDESCRIPTION_H
+#define LIB_DATAPACK_PACKDESCRIPTION_H
 
 #include <datapackutils/datapack_exporter.h>
 #include <utils/genericdescription.h>
@@ -126,4 +126,4 @@ public:
 
 }  // End namespace DataPack
 
-#endif // PACKDESCRIPTION_H
+#endif // LIB_DATAPACK_PACKDESCRIPTION_H
