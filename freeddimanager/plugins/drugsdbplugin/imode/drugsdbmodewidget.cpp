@@ -26,8 +26,9 @@
  ***************************************************************************/
 /*!
  * \class DrugsDb::Internal::DrugsDbModeWidget
- * Allow users to interact with IDrugDatabase objects (download sources, prepare database,
- * populate database...). All IDrugDatabase objects must be registered using the DrugsDbMode object.
+ * Allow users to interact with IDrugDatabase objects (download sources,
+ * prepare database, populate database...). All IDrugDatabase objects
+ * must be registered using the DrugsDbMode object.
  */
 
 #include "drugsdbmodewidget.h"
@@ -41,6 +42,9 @@
 #include <utils/log.h>
 #include <utils/global.h>
 #include <translationutils/constants.h>
+#include <translationutils/trans_filepathxml.h>
+#include <datapackutils/pack.h>
+#include <datapackutils/packdescription.h>
 
 #include <QProgressDialog>
 #include <QPointer>
@@ -112,6 +116,7 @@ public:
         ui->seeDbDescription->setEnabled(enabled);
         ui->seeDatapackDescription->setEnabled(enabled);
         ui->createDatapack->setEnabled(enabled);
+        ui->showDbReport->setEnabled(enabled);
 
         if (!enabled)
             ui->title->setText(QCoreApplication::translate("DrugsDbModeWidget", "Select the drug database to create in the view"));
@@ -143,6 +148,7 @@ DrugsDbModeWidget::DrugsDbModeWidget(QWidget *parent) :
     connect(d->ui->seeDbDescription, SIGNAL(clicked()), this, SLOT(onSeeDatabaseDescriptionFileRequested()));
     connect(d->ui->seeDatapackDescription, SIGNAL(clicked()), this, SLOT(onSeeDatapackDescriptionFileRequested()));
     connect(d->ui->createDatapack, SIGNAL(clicked()), this, SLOT(onCreateDatapackFiles()));
+    connect(d->ui->showDbReport, SIGNAL(clicked()), this, SLOT(onShowDatabaseReportRequested()));
 
     onCurrentDrugsDatabaseChanged(QItemSelection(), QItemSelection());
 }
@@ -349,11 +355,14 @@ void DrugsDbModeWidget::onCreateDatapackFiles()
 
     // Confirmation dialog (YesNo)
     bool yes = Utils::yesNoMessageBox(tr("Create datapack files"),
-                           tr("You are about to create datapack files for the the database: <br><b>%1</b><br>"
-                              "These files are only used by the FreeToolBox application when creating "
+                           tr("You are about to create datapack files for the "
+                              "database: <br><b>%1</b><br>"
+                              "These files are only used by the FreeToolBox "
+                              "application when creating "
                               "datapack's' server contents.<br><br>"
-                               "Do you really want to create the datapack files for the database: %1?"
-                              ), "", tr("Datapack Files"));
+                              "Do you really want to create the datapack files "
+                              "for the database: %1?"
+                              ).arg(base->displayName()), "", tr("Datapack Files"));
     if (!yes)
         return;
 
@@ -366,6 +375,83 @@ void DrugsDbModeWidget::onCreateDatapackFiles()
                 return;
     }
 
+    // Create a specific path with the connection name of the database
+    path += QDir::cleanPath(QString("/%1/").arg(base->connectionName().toLower()));
+    if (!QDir().mkpath(path)) {
+        Utils::warningMessageBox(tr("Error"),
+                                 tkTr(Trans::Constants::PATH_1_CANNOT_BE_CREATED)
+                                 .arg(path)
+                                 );
+        return;
+    }
+
     // Prepare XML datapack files
-    qWarning() << Utils::readTextFile(base->datapackDescriptionFilePath());
+    // Set date of update, (authors?), size, md5, sha1, update infos, version
+    DataPack::Pack pack;
+    pack.fromXmlFile(base->datapackDescriptionFilePath());
+    DataPack::PackDescription descr = pack.description();
+    QString packVersion = qApp->applicationVersion();
+    descr.setData(DataPack::PackDescription::Version, packVersion);
+    // TODO: improve version compatibility coding
+    descr.setData(DataPack::PackDescription::FreeDiamsCompatVersion, qApp->applicationVersion());
+    descr.setData(DataPack::PackDescription::FreeMedFormsCompatVersion, qApp->applicationVersion());
+    descr.setData(DataPack::PackDescription::LastModificationDate, QDate::currentDate().toString(Qt::ISODate));
+    descr.setData(DataPack::PackDescription::Size, QFileInfo(base->absoluteFilePath()).size());
+    descr.setData(DataPack::PackDescription::Md5, Utils::fileMd5(base->absoluteFilePath()));
+    descr.setData(DataPack::PackDescription::Sha1, Utils::fileSha1(base->absoluteFilePath()));
+    Utils::GenericUpdateInformation update;
+    update.setDate(QDate::currentDate());
+    update.setAuthor("The FreeMedForms Team");
+    // TODO: update.setFromVersion();
+    update.setToVersion(packVersion);
+    update.setText("Complete update of the database. "
+                   "For more information, please check the FreeMedForms project website: "
+                   "http://freemedforms.com/");
+    descr.addUpdateInformation(update);
+    pack.setPackDescription(descr);
+
+    // TODO: remove magic number "packdescription.xml". see also DataPack lib & plugins
+    QString fileName = QString("%1/packdescription.xml").arg(path);
+    if (!Utils::saveStringToFile(pack.toXml(), fileName, Utils::Overwrite, Utils::DontWarnUser, 0)) {
+        Utils::warningMessageBox(tr("Error"),
+                                 tkTr(Trans::Constants::FILE_1_CAN_NOT_BE_CREATED)
+                                 .arg(QString("Datapack description at: %1").arg(fileName))
+                                 );
+        return;
+    }
+
+    // Copy database file next to the XML file
+    // TODO: remove magic number "master.db"
+    fileName = QString("%1/master.db").arg(path);
+    QFile outFile(fileName);
+    if (outFile.exists()) {
+        outFile.remove();
+        // TODO: in case of error add dialog
+    }
+
+    QFile baseFile(base->absoluteFilePath());
+    if (!baseFile.copy(fileName)) {
+        Utils::warningMessageBox(tr("Error"),
+                                 tkTr(Trans::Constants::FILE_1_CAN_NOT_BE_CREATED)
+                                 .arg(QString("Datapack content at: %1").arg(fileName))
+                                 );
+        return;
+    }
+    // Option: zip database file
+
+    yes = Utils::yesNoMessageBox(tr("Datapack created"),
+                                      tr("Datapack succesfully created. Do you want to "
+                                         "open your file explorer to navigate throught "
+                                         "the datapack files?"),
+                                      "",
+                                      tr("Datapack created"));
+    if (yes)
+        QDesktopServices::openUrl(QUrl(QString("file://%1").arg(path)));
+
+}
+
+/** At any time, user can request a database report */
+void DrugsDbModeWidget::onShowDatabaseReportRequested()
+{
+    // TODO: create a specific report on a DrugDatabase (not the DDIDatabase like the ddiplugin/database/ddidatabasereporter.h
 }

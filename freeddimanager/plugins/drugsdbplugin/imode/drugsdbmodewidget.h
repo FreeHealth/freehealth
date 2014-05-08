@@ -63,6 +63,7 @@ private Q_SLOTS:
     void onSeeDatabaseDescriptionFileRequested();
     void onSeeDatapackDescriptionFileRequested();
     void onCreateDatapackFiles();
+    void onShowDatabaseReportRequested();
 
 //private:
 //    void showEvent(QShowEvent *event);
