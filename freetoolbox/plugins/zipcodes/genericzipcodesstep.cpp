@@ -118,8 +118,8 @@ public:
             db.setDatabaseName(databaseOutputAbsFilePath());
 
             // Improve speed when creating the drug database
-            database().exec("PRAGMA synchronous = OFF");
-            database().exec("PRAGMA journal_mode = MEMORY");
+            db.exec("PRAGMA synchronous = OFF");
+            db.exec("PRAGMA journal_mode = MEMORY");
 
             LOG_FOR(q, "Using zipcodes database: " + databaseOutputAbsFilePath());
         }
