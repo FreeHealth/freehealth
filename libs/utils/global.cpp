@@ -499,6 +499,44 @@ QStringList applicationPluginsPath(const QString &binaryName, const QString &lib
 ////////////////////////////////////////   FILES FUNCTIONS   /////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /**
+ * Copy all content of a path \e absSourcePath to a destination \e absDestPath. \n
+ * The all contents are recursively included.\n
+ * \warning When the destination already exists, source files are added without any cleaning
+ * or checking. Be warned!
+ */
+bool copyDir(const QString &absSourcePath, const QString &absDestPath)
+{
+    // No source?
+    if (!QDir(absSourcePath).exists())
+        return false;
+
+    // Create destination path
+    if (!QDir(absDestPath).exists()) {
+        if (!QDir().mkpath(absDestPath))
+            return false;
+    }
+
+    // Get file content of the current directory
+    QDir srcDir(absSourcePath);
+    foreach(const QFileInfo &info, srcDir.entryInfoList(QDir::Dirs | QDir::Files | QDir::NoDotAndDotDot)) {
+        QString srcItemPath = absSourcePath + "/" + info.fileName();
+        QString dstItemPath = absDestPath + "/" + info.fileName();
+        if (info.isDir()) {
+            if (!copyDir(srcItemPath, dstItemPath)) {
+                return false;
+            }
+        } else if (info.isFile()) {
+            if (!QFile::copy(srcItemPath, dstItemPath)) {
+                return false;
+            }
+        } else {
+            qDebug() << "Unhandled item" << info.filePath() << "in Utils::copyDir()";
+        }
+    }
+    return true;
+}
+
+/**
  * This function deletes all files in the selected dir (non recursively)
  * and tries to remove the dir
  * \sa Utils::removeDirRecursively()
