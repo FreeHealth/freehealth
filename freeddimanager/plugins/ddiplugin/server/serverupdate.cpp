@@ -133,7 +133,11 @@ public:
     // Transforms a wiki content to hashed tokens
     // _type & _subType must be defined
     bool wikiContentToTokens(const QString &wikiContent)
-    {}
+    {
+        // TODO: code here
+        Q_UNUSED(wikiContent);
+        return false;
+    }
     
 public:
     ServerUpdate::UpdateType _type;
@@ -198,6 +202,7 @@ ServerUpdate::UpdateSubType ServerUpdate::subType() const
 
 QString ServerUpdate::wikiContent() const
 {
+    return QString::null;
 }
 
 QString ServerUpdate::hashTag() const
@@ -206,7 +211,10 @@ QString ServerUpdate::hashTag() const
 }
 
 bool ServerUpdate::populateFromServerContent(const QString &hashTag)
-{}
+{
+    Q_UNUSED(hashTag);
+    return false;
+}
 
 bool ServerUpdate::operator==(const ServerUpdate &other) const
 {

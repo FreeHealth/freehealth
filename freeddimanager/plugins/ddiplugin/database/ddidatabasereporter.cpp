@@ -143,6 +143,7 @@ bool DDIDatabaseReporter::initialize()
     return true;
 }
 
+/** Returns a full plain text report about the drug-drug interaction database */
 QString DDIDatabaseReporter::plainTextFullReport() const
 {
     QString report;

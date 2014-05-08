@@ -146,6 +146,11 @@ ServerManagerWidget::ServerManagerWidget(QWidget *parent) :
     QPushButton *send = d->ui->buttonBox->addButton(tr("Send to the FreeMedForms server"), QDialogButtonBox::ActionRole);
     QPushButton *print = d->ui->buttonBox->addButton(tr("Print your proposals"), QDialogButtonBox::ActionRole);
     QPushButton *help = d->ui->buttonBox->addButton(tr("Help"), QDialogButtonBox::HelpRole);
+
+    // TODO: code here
+    Q_UNUSED(send);
+    Q_UNUSED(print);
+    Q_UNUSED(help);
 }
 
 /*! Destructor of the DDI::Internal::ServerManagerWidget class */
