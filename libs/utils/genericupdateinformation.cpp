@@ -180,7 +180,7 @@ bool GenericUpdateInformation::toDomElement(QDomElement *root, QDomDocument *doc
         e.setAttribute(::ATTRIB_UPDATEINFOVERSION_TO, m_To);
     }
     if (!m_Date.isEmpty()) {
-        e.setAttribute(::ATTRIB_UPDATEINFOVERSION_FROM, m_Date);
+        e.setAttribute(::ATTRIB_UPDATEINFOVERSION_DATE, m_Date);
     }
     QHashIterator<QString, QString> i(m_TrText);
     while (i.hasNext()) {
