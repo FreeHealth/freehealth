@@ -60,6 +60,9 @@ public:
     const PackDescription &description() const {return m_descr;}
     const PackDependencies &dependencies() const {return m_depends;}
 
+    void setPackDescription(const PackDescription &descr) {m_descr = descr;}
+    void setPackDependencies(const PackDependencies &depends) {m_depends = depends;}
+
     QString uuid() const;
     QString version() const;
     QString name() const;
@@ -94,7 +97,7 @@ public:
     bool operator!=(const Pack &other) const {return (!operator==(other));}
 
 private:
-    void fromXml(const QString &fullPackConfigXml);
+    void readXml(const QString &fullPackConfigXml);
 
 private:
     QString m_OriginalFileName;

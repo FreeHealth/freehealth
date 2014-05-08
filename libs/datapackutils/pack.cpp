@@ -59,6 +59,12 @@ Pack::~Pack()
 {
 }
 
+/**
+ * Returns \e true if the Pack is correctly configured, at least:
+ * - one UUID
+ * - version is defined
+ * - Description Label is defined
+ */
 bool Pack::isValid() const
 {
     return (!uuid().isEmpty() &&
@@ -66,21 +72,25 @@ bool Pack::isValid() const
             !m_descr.data(PackDescription::Label).toString().isEmpty());
 }
 
+/** Returns the UUID of the Pack (extracted from the PackDescription) */
 QString Pack::uuid() const
 {
     return m_descr.data(PackDescription::Uuid).toString();
 }
 
+/** Returns the Version of the Pack (extracted from the PackDescription) */
 QString Pack::version() const
 {
     return m_descr.data(PackDescription::Version).toString();
 }
 
+/** Returns the Name (displayName) of the Pack (extracted from the PackDescription) */
 QString Pack::name() const
 {
     return m_descr.data(PackDescription::Label).toString();
 }
 
+/** Returns the VendorName of the Pack (extracted from the PackDescription) */
 QString Pack::vendor() const
 {
     const QString &v = m_descr.data(PackDescription::Vendor).toString();
@@ -104,13 +114,13 @@ QString Pack::serverLicenseFileName() const
     return QString();
 }
 
-/** Return the expected MD5 checksum of the datapack file content */
+/** Returns the expected MD5 checksum of the Pack file content (extracted from the PackDescription) */
 QString Pack::md5ControlChecksum() const
 {
     return m_descr.data(PackDescription::Md5).toString();
 }
 
-/** Return the expected SHA1 checksum of the datapack file content */
+/** Returns the expected MD5 checksum of the Pack file content (extracted from the PackDescription) */
 QString Pack::sha1ControlChecksum() const
 {
     return m_descr.data(PackDescription::Sha1).toString();
@@ -259,7 +269,7 @@ void Pack::fromXmlFile(const QString &absFileName)
 {
     m_OriginalFileName = absFileName;
 //    qWarning() << "PackFromXml" << absFileName;
-    fromXml(Utils::readTextFile(absFileName, Utils::DontWarnUser));
+    readXml(Utils::readTextFile(absFileName, Utils::DontWarnUser));
 }
 
 /**
@@ -267,11 +277,14 @@ void Pack::fromXmlFile(const QString &absFileName)
  * create the DataPack::PackDescription and the DataPack::PackDependencies
  * related to this pack.
 */
-void Pack::fromXml(const QString &fullPackConfigXml)
+void Pack::readXml(const QString &fullPackConfigXml)
 {
     QDomDocument doc;
     QString error;
     int line, col;
+
+    qWarning() << fullPackConfigXml;
+
     if (!doc.setContent(fullPackConfigXml, &error, &line, &col)) {
         LOG_ERROR_FOR("DataPack::Pack", tkTr(Trans::Constants::ERROR_1_LINE_2_COLUMN_3).arg(error).arg(line).arg(col));
         return;
@@ -296,7 +309,13 @@ QString Pack::toXml() const
     return QString("<?xml version='1.0' encoding='UTF-8'?>\n" + doc.toString(2));
 }
 
-/** Check equality between two Pack */
+/**
+ * Check equality between two Pack. Based on:
+ * - UUID
+ * - Version
+ * - VendorName
+ * - Name of the Pack
+*/
 bool Pack::operator==(const Pack &other) const
 {
     return (this->uuid()==other.uuid() &&
