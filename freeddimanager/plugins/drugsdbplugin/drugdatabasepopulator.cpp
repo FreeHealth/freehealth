@@ -246,6 +246,7 @@ public:
         req = database->prepareDeleteQuery(DrugsDB::Constants::Table_IA_IAK);
         database->executeSQL(req, db);
 
+        // Create the global transaction
         db.transaction();
 
         for(int i = 0; i < ddis.count(); ++i) {
@@ -422,7 +423,9 @@ public:
             }
         }
 
+        // Commit the global transaction
         db.commit();
+
         qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
         LOG_FOR(q, "Drug drug interactions saved");
 
@@ -430,6 +433,7 @@ public:
     }
 
     // Save all needed bibliographic references to a drug database
+    // \note This member does not create transaction, does not commit or rollback.
     bool saveBibliographicReferences(DrugsDB::Internal::DrugBaseEssentials *database)
     {
         LOG_FOR(q, "Saving bibliographic references in: " + database->database().databaseName());
@@ -539,6 +543,7 @@ public:
     }
 
     // Read the FreeDDIManager DDIDatabase and return the list of valid DDI
+    // \note creates its transaction
     QList<DrugDrugInteraction *> getDrugDrugInteractions()
     {
         QSqlDatabase db = ddiCore()->database().database();
@@ -604,6 +609,7 @@ public:
     }
 
     // Read the FreeDDIManager DDIDatabase and return the list of valid DrugInteractors
+    // \note creates its transaction
     QList<DrugInteractor *> getDrugInteractors()
     {
         QSqlDatabase db = ddiCore()->database().database();
@@ -721,7 +727,10 @@ bool DrugDatabasePopulator::initialize()
     return true;
 }
 
-/** Save the ATC data to a drug database. Read the XML resource file */
+/**
+ * Save the ATC data to a drug database. Read the XML resource file
+ * \note This member does not create transaction, does not commit or rollback.
+ */
 bool DrugDatabasePopulator::saveAtcClassification(DrugsDB::Internal::DrugBaseEssentials *database)
 {
     QSqlDatabase db = database->database();
@@ -765,13 +774,70 @@ bool DrugDatabasePopulator::saveAtcClassification(DrugsDB::Internal::DrugBaseEss
             // TODO: add a Q_EMIT for QProgress...
         }
     }
-    db.commit();
     Utils::Log::logTimeElapsed(chrono, "DrugDatabasePopulator", "Saving WHO ATC codes to Drugs database");
-    // 53686ms
+    // 53686ms MacOs
+    // TODO: inserting ATC data under Ubuntu 14.04 is TOOOOOOOOO S.L.O.W. then under macos!!!
+    // Samle computer (MacBook 5,1), ubuntu 14.04
+    //    0 218 ms
+    //    100 18618 ms
+    //    200 37501 ms
+    //    300 57891 ms
+    //    400 78921 ms
+    //    500 99291 ms
+    //    600 120078 ms
+    //    700 141213 ms
+    //    800 162379 ms
+    //    900 183524 ms
+    //    1000 204805 ms
+    //    1100 226137 ms
+    //    1200 247346 ms
+    //    1300 268549 ms
+    //    1400 290353 ms
+    //    1500 311501 ms
+    //    1600 332986 ms
+    //    1700 354254 ms
+    //    1800 375646 ms
+    //    1900 398155 ms
+    //    2000 419714 ms
+    //    2100 441354 ms
+    //    2200 462111 ms
+    //    2300 483106 ms
+    //    2400 503139 ms
+    //    2500 524241 ms
+    //    2600 545288 ms
+    //    2700 566284 ms
+    //    2800 587401 ms
+    //    2900 608846 ms
+    //    3000 630108 ms
+    //    3100 651477 ms
+    //    3200 673558 ms
+    //    3300 694816 ms
+    //    3400 715565 ms
+    //    3500 736508 ms
+    //    3600 757644 ms
+    //    3700 778660 ms
+    //    3800 799796 ms
+    //    3900 820876 ms
+    //    4000 841911 ms
+    //    4100 863609 ms
+    //    4200 884695 ms
+    //    4300 905806 ms
+    //    4400 926953 ms
+    //    4500 948139 ms
+    //    4600 969287 ms
+    //    4700 990333 ms
+    //    4800 1011520 ms
+    //    4900 1032800 ms
+    //    5000 1054554 ms
+    //    5100 1075739 ms
+    //    5200 1097208 ms
+    //    5300 1118174 ms
+    //    5400 1138894 ms
+    //    5500 1159588 ms
+    //    5600 1180772 ms
+    //    5700 1201376 ms
 
     // add FreeDiams ATC specific codes
-    db.transaction();
-
     // 100 000 < ID < 199 999  == Interacting molecules without ATC code
     // 200 000 < ID < 299 999  == Interactings classes
     int molId = 100000;
@@ -818,10 +884,8 @@ bool DrugDatabasePopulator::saveAtcClassification(DrugsDB::Internal::DrugBaseEss
         // TODO: add a Q_EMIT for QProgress...
         qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     }
-    db.commit();
 
     // Recreate interacting classes tree
-    db.transaction();
     LOG("Saving interactors");
     req = database->prepareDeleteQuery(DrugsDB::Constants::Table_ATC_CLASS_TREE);
     database->executeSQL(req, db);
@@ -833,9 +897,8 @@ bool DrugDatabasePopulator::saveAtcClassification(DrugsDB::Internal::DrugBaseEss
             }
         }
     }
-    db.commit();
-    Utils::Log::logTimeElapsed(chrono, "DrugDatabasePopulator", "Saving FreeMedForms ATC codes to Drugs database");
 
+    Utils::Log::logTimeElapsed(chrono, "DrugDatabasePopulator", "Saving FreeMedForms ATC codes to Drugs database");
     LOG(tr("%1 ATC code saved").arg(n));
     return true;
 }
@@ -883,6 +946,7 @@ bool DrugDatabasePopulator::saveDrugDrugInteractions(DrugsDB::Internal::DrugBase
 /**
  * Save all ATC <-> drug component links to the country drug database.
  * \sa IDrugDatabase::linkDrugsComponentsAndDrugInteractors()
+ * \note This member does not create transaction, does not commit or rollback.
  */
 bool DrugDatabasePopulator::saveComponentAtcLinks(DrugsDB::Internal::DrugBaseEssentials *database, const QMultiHash<int, int> &componentIdToAtcId, const int sid)
 {
@@ -902,7 +966,6 @@ bool DrugDatabasePopulator::saveComponentAtcLinks(DrugsDB::Internal::DrugBaseEss
         .arg(componentIdToAtcId.count()));
     QString req = database->prepareDeleteQuery(DrugsDB::Constants::Table_LK_MOL_ATC);
     database->executeSQL(req, db);
-    db.transaction();
     QSqlQuery query(db);
     for(int i = 0; i < uniqueKeys.count(); ++i) {
         QList<int> atcCodesSaved;
@@ -921,12 +984,10 @@ bool DrugDatabasePopulator::saveComponentAtcLinks(DrugsDB::Internal::DrugBaseEss
             if (!query.exec()) {
                 LOG_QUERY_ERROR(query);
                 query.finish();
-                db.rollback();
                 return false;
             }
             query.finish();
         }
     }
-    db.commit();
     return true;
 }

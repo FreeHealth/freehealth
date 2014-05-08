@@ -200,8 +200,11 @@ bool signDatabase(const QString &connectionName)
 }
 
 /**
- * Add translated labels \e trLabels into the drugs database \e database, using the \e masterLid primkey.
- * If the \e masterLib is set to -1, the function will find the first available primkey and will return it.
+ * Add translated labels \e trLabels into the drugs database \e database,
+ * using the \e masterLid primkey.
+ * If the \e masterLib is set to -1, the function will find the first
+ * available primkey and will return it.
+ * \note This member does not create transaction, does not commit or rollback.
  */
 int addLabels(DrugsDB::Internal::DrugBaseEssentials *database, const int masterLid, const QMultiHash<QString, QVariant> &trLabels)
 {
@@ -289,18 +292,18 @@ int addLabels(DrugsDB::Internal::DrugBaseEssentials *database, const int masterL
 
 /**
  * Create a specific ATC code using the \e code and the translated labels \e trLabels.
- * \e trLabels key represent the langage ("fr", "en", "de"...) while the value represent the label itself. \n
+ * \e trLabels key represent the langage ("fr", "en", "de"...) while the
+ * value represent the label itself. \n
  * You can force the database id for this ATC with \e forceAtcId. \n
- * If you do not need the drug interaction engine to warn ATC duplication in prescription you can set
- * \e warnDuplicates to \e false, otherwise set it to \e true. \n
- * This member creates it own transaction with the DrugsDB::Internal::DrugBaseEssentials.
+ * If you do not need the drug interaction engine to warn ATC duplication
+ * in prescription you can set \e warnDuplicates to \e false, otherwise set it to \e true.\n
+ * \note This member does not create transaction, does not commit or rollback.
  */
 bool createAtc(DrugsDB::Internal::DrugBaseEssentials *database, const QString &code, const QMultiHash<QString, QVariant> &trLabels, const int forceAtcId, const bool warnDuplicates)
 {
     QSqlDatabase db = database->database();
     if (!db.isOpen())
         return false;
-    db.transaction();
     QSqlQuery query(db);
     int id = 0;
     query.prepare(database->prepareInsertQuery(DrugsDB::Constants::Table_ATC));
@@ -314,7 +317,6 @@ bool createAtc(DrugsDB::Internal::DrugBaseEssentials *database, const QString &c
         if (forceAtcId != -1 && forceAtcId != id) {
             LOG_ERROR_FOR("Tools", QString("Wrong ATC_ID Db=%1 / Asked=%2").arg(id).arg(forceAtcId));
             query.finish();
-            db.rollback();
             return false;
         }
     } else {
@@ -327,7 +329,6 @@ bool createAtc(DrugsDB::Internal::DrugBaseEssentials *database, const QString &c
     if (masterLid == -1) {
         LOG_ERROR_FOR("Tools", "No MasterLid");
         query.finish();
-        //db.rollback();
         return false;
     }
 
@@ -338,11 +339,9 @@ bool createAtc(DrugsDB::Internal::DrugBaseEssentials *database, const QString &c
     if (!query.exec()) {
         LOG_QUERY_ERROR_FOR("Tools", query);
         query.finish();
-        db.rollback();
         return false;
     }
     query.finish();
-    db.commit();
     return true;
 }
 
@@ -354,6 +353,7 @@ bool createAtc(DrugsDB::Internal::DrugBaseEssentials *database, const QString &c
  * @param type: coded type of interaction
  * @param risk: translated risk labels
  * @param management: translated management labels
+ * \note This member does not create transaction, does not commit or rollback.
  */
 bool addInteraction(DrugsDB::Internal::DrugBaseEssentials *database, const QStringList &atc1, const QStringList &atc2, const QString &type, const QMultiHash<QString, QVariant> &risk, const QMultiHash<QString, QVariant> &management)
 {
@@ -460,6 +460,7 @@ bool addInteraction(DrugsDB::Internal::DrugBaseEssentials *database, const QStri
 
 /**
  * Add a bibliographic reference to a drugs database \e database.
+ * \note This member does not create transaction, does not commit or rollback.
  */
 int addBibliography(DrugsDB::Internal::DrugBaseEssentials *database, const QString &type, const QString &link, const QString &reference, const QString &abstract, const QString &explain, const QString &xml)
 {
@@ -470,7 +471,6 @@ int addBibliography(DrugsDB::Internal::DrugBaseEssentials *database, const QStri
         }
     }
     QString req;
-    db.transaction();
     QSqlQuery query(db);
 
     // Bibliography exists ?
@@ -511,18 +511,15 @@ int addBibliography(DrugsDB::Internal::DrugBaseEssentials *database, const QStri
                 bib_id = query.lastInsertId().toInt();
             } else {
                 LOG_QUERY_ERROR_FOR("Tools", query);
-                db.rollback();
                 return false;
             }
             query.finish();
         }
     } else {
         LOG_QUERY_ERROR_FOR("Tools", query);
-        db.rollback();
         return false;
     }
     query.finish();
-    db.commit();
     return bib_id;
 }
 
@@ -531,6 +528,7 @@ int addBibliography(DrugsDB::Internal::DrugBaseEssentials *database, const QStri
  * @param database: output drugs database
  * @param mol_atc: Molecule Id to ATC Id
  * @param sid: recorded SourceId of the drugs database collection
+ * \note This member does not create transaction, does not commit or rollback.
 */
 bool addComponentAtcLinks(DrugsDB::Internal::DrugBaseEssentials *database, const QMultiHash<int, int> &mol_atc, const int sid)
 {
@@ -547,7 +545,6 @@ bool addComponentAtcLinks(DrugsDB::Internal::DrugBaseEssentials *database, const
     database->executeSQL(database->prepareDeleteQuery(DrugsDB::Constants::Table_LK_MOL_ATC, w), db);
 
     // Save to links to drugs database
-    db.transaction();
     QSqlQuery query(db);
     foreach(int mol, mol_atc.uniqueKeys()) {
         QList<int> atcCodesSaved;
@@ -562,17 +559,19 @@ bool addComponentAtcLinks(DrugsDB::Internal::DrugBaseEssentials *database, const
             if (!query.exec()) {
                 LOG_QUERY_ERROR_FOR("Tools", query);
                 query.finish();
-                db.rollback();
                 return false;
             }
             query.finish();
         }
     }
-    db.commit();
     return true;
 }
 
-/** Return the ATC ids associated with the \e label, searching in the drugs database \e database */
+/**
+ * Return the ATC ids associated with the \e label,
+ * searching in the drugs database \e database
+ * \note This member does not create transaction, does not commit or rollback.
+ */
 QVector<int> getAtcIdsFromLabel(DrugsDB::Internal::DrugBaseEssentials *database, const QString &label)
 {
     QVector<int> ret;
@@ -601,7 +600,11 @@ QVector<int> getAtcIdsFromLabel(DrugsDB::Internal::DrugBaseEssentials *database,
     return ret;
 }
 
-/** Return the ATC ids associated with the \e code, searching in the drugs database \e database */
+/**
+ * Return the ATC ids associated with the \e code,
+ * searching in the drugs database \e database
+ * \note This member does not create transaction, does not commit or rollback.
+ */
 QVector<int> getAtcIdsFromCode(DrugsDB::Internal::DrugBaseEssentials *database, const QString &code)
 {
     QVector<int> ret;

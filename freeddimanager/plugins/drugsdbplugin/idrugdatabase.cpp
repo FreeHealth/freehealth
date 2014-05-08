@@ -47,9 +47,6 @@
 #include <coreplugin/isettings.h>
 #include <coreplugin/constants_tokensandsettings.h>
 
-//#include <datapackplugin/datapackcore.h>
-//#include <datapackplugin/datapackquery.h>
-
 #include <translationutils/constants.h>
 #include <translationutils/trans_msgerror.h>
 #include <quazip/global.h>
@@ -67,6 +64,10 @@
 #include <QTimer>
 
 #include <QDebug>
+
+enum {
+    LogDrugSavingChrono = false
+};
 
 using namespace DrugsDB;
 using namespace DrugsDb;
@@ -286,7 +287,10 @@ bool IDrugDatabase::createDatabase()
     return true;
 }
 
-/** Add drug routes to the database. This function uses the default routes text file. */
+/**
+ * Add drug routes to the database. This function uses the default routes text file.
+ * \note This member does not create transaction, does not commit or rollback.
+ */
 bool IDrugDatabase::addRoutes()
 {
     // TODO: move this code into DrugsDb::DrugDatabasePopulator
@@ -359,7 +363,10 @@ bool IDrugDatabase::addRoutes()
     return true;
 }
 
-/** Recreate drug routes in the database. This function uses the default routes text file. */
+/**
+ * Recreate drug routes in the database. This function uses the default routes text file.
+ * \note This member creates a transaction, does commit or rollback.
+ */
 bool IDrugDatabase::recreateRoutes()
 {
     // TODO: move this code into DrugsDb::DrugDatabasePopulator
@@ -367,11 +374,20 @@ bool IDrugDatabase::recreateRoutes()
         return false;
     QSqlDatabase db = _database->database();
     // TODO: to improve: we need to remove labels also
+    db.transaction();
     _database->executeSQL(_database->prepareDeleteQuery(DrugsDB::Constants::Table_ROUTES), db);
-    return addRoutes();
+    bool ok = addRoutes();
+    if (ok)
+        db.commit();
+    else
+        db.rollback();
+    return ok;
 }
 
-/** Save the database description and create a drug base source ID */
+/**
+ * Save the database description and create a drug base source ID
+ * \note This member does not create transaction, does not commit or rollback.
+ */
 bool IDrugDatabase::saveDrugDatabaseDescription()
 {
     // TODO: move this code into DrugsDb::DrugDatabasePopulator
@@ -532,7 +548,10 @@ bool IDrugDatabase::saveDrugDatabaseDescription()
     return true;
 }
 
-/** Update the INN <-> molecules linking completion percentage */
+/**
+ * Update the drug component to ATC code linking completion percentage
+ * \note This member does not create transaction, does not commit or rollback.
+ */
 bool IDrugDatabase::updateDatabaseCompletion(int completion)
 {
     // TODO: move this code into DrugsDb::DrugDatabasePopulator
@@ -554,9 +573,16 @@ bool IDrugDatabase::updateDatabaseCompletion(int completion)
     return true;
 }
 
-/** Save a list of drugs in the database. The drugs vector will be sorted. */
+/**
+ * Save a list of drugs in the database. The drugs vector will be sorted.
+ * \note This member creates a transaction, does commit or rollback.
+ */
 bool IDrugDatabase::saveDrugsIntoDatabase(QVector<Drug *> drugs)
 {
+    // This general chrono is used to log the whole process duration
+    QTime chrono;
+    chrono.start();
+
     // TODO: move this code into DrugsDb::DrugDatabasePopulator
     if (!checkDatabase())
         return false;
@@ -564,6 +590,7 @@ bool IDrugDatabase::saveDrugsIntoDatabase(QVector<Drug *> drugs)
         LOG_ERROR_FOR("Drug", "NO SID DEFINED");
         return false;
     }
+    LOG(tr("Starting to save %1 drugs to database").arg(drugs.count()));
 
     // Clear database
     QHash<int, QString> w;
@@ -583,6 +610,8 @@ bool IDrugDatabase::saveDrugsIntoDatabase(QVector<Drug *> drugs)
     qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     db.commit();
 
+    Utils::Log::logTimeElapsed(chrono, this->objectName(), "Save drugs: step 1: Clear db");
+
     // get distinct component names
     QStringList molnames;
     foreach(Drug *drug, drugs) {
@@ -594,9 +623,15 @@ bool IDrugDatabase::saveDrugsIntoDatabase(QVector<Drug *> drugs)
         }
     }
     qSort(molnames);
+
+    db.transaction();
     QHash<int, QString> mids = saveMoleculeIds(molnames);
+    db.commit();
+
     qSort(drugs.begin(), drugs.end(), Drug::lessThanOnNames);
     qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
+
+    Utils::Log::logTimeElapsed(chrono, this->objectName(), "Save drugs: step 2: Get all components");
 
     db.transaction();
     QSqlQuery query(db);
@@ -605,6 +640,8 @@ bool IDrugDatabase::saveDrugsIntoDatabase(QVector<Drug *> drugs)
     Q_EMIT progressRangeChanged(0, drugs.count());
     DDI::RoutesModel *routesModel = new DDI::RoutesModel(this);
 
+    QTime chrono2;
+    chrono2.start();
     foreach(Drug *drug, drugs) {
         ++n;
         if (n % 10 == 0) {
@@ -620,6 +657,9 @@ bool IDrugDatabase::saveDrugsIntoDatabase(QVector<Drug *> drugs)
         }
         int aidLID = Tools::addLabels(_database, -1, multiLang);
         multiLang.clear();
+
+        if (LogDrugSavingChrono)
+            Utils::Log::logTimeElapsed(chrono2, this->objectName(), "   Drug authorization");
 
         // Table MASTER && DRUGS
         foreach(const QString &lang, drug->availableLanguages()) {
@@ -664,6 +704,9 @@ bool IDrugDatabase::saveDrugsIntoDatabase(QVector<Drug *> drugs)
 
         }
 
+        if (LogDrugSavingChrono)
+            Utils::Log::logTimeElapsed(chrono2, this->objectName(), "   Drug base data");
+
         // Composition
         foreach(Component *compo, drug->components()) {
             foreach(const QString &lang, drug->availableLanguages()) {
@@ -685,6 +728,9 @@ bool IDrugDatabase::saveDrugsIntoDatabase(QVector<Drug *> drugs)
                 query.finish();
             }
         }
+
+        if (LogDrugSavingChrono)
+            Utils::Log::logTimeElapsed(chrono2, this->objectName(), "   Drug composition");
 
         // Routes
         const QStringList &routes = drug->data(Drug::Routes).toStringList();
@@ -711,6 +757,9 @@ bool IDrugDatabase::saveDrugsIntoDatabase(QVector<Drug *> drugs)
             }
         }
 
+        if (LogDrugSavingChrono)
+            Utils::Log::logTimeElapsed(chrono2, this->objectName(), "   Drug routes");
+
         // Forms
         // TODO: improve drugs form management (like routes we need to create a specific model & specific set of data)
         foreach(const QString &lang, drug->availableLanguages()) {
@@ -735,10 +784,15 @@ bool IDrugDatabase::saveDrugsIntoDatabase(QVector<Drug *> drugs)
                 query.finish();
             }
         }
+
+        if (LogDrugSavingChrono)
+            Utils::Log::logTimeElapsed(chrono2, this->objectName(), "   Drug forms");
+
     }
     query.finish();
     db.commit();
 
+    Utils::Log::logTimeElapsed(chrono, this->objectName(), "Save drugs: step 3: Save all drugs");
     LOG(tr("Added %1 drugs to database.").arg(drugs.count()));
     addFinalReportMessage(tr("Added %1 drugs to database.").arg(drugs.count()));
 
@@ -748,6 +802,7 @@ bool IDrugDatabase::saveDrugsIntoDatabase(QVector<Drug *> drugs)
 /**
  * Save a list of molecules and return a hash containing the MoleculeID
  * as key and the molecule name os value
+ * \note This member does not create transaction, does not commit or rollback.
  */
 QHash<int, QString> IDrugDatabase::saveMoleculeIds(const QStringList &molnames)
 {
@@ -758,6 +813,7 @@ QHash<int, QString> IDrugDatabase::saveMoleculeIds(const QStringList &molnames)
         return mids;
     using namespace DrugsDB::Constants;
     QString req;
+
     _database->database().transaction();
     QSqlQuery query(_database->database());
 
@@ -811,6 +867,7 @@ QHash<int, QString> IDrugDatabase::saveMoleculeIds(const QStringList &molnames)
  * Add the ATC classification to the drug database. This classification is REQUIRED
  * by all non-free steps (that need ATC to compute interactions).
  * \sa DrugsDB::DrugDrugInteractionCore::addAtcDataToDatabase()
+ * \note This member creates a transaction, commit or rollback.
  */
 bool IDrugDatabase::addAtc()
 {
@@ -818,11 +875,22 @@ bool IDrugDatabase::addAtc()
     Q_EMIT progressLabelChanged(tr("Adding ATC classification to database."));
     Q_EMIT progress(0);
 
+    if (!_database)
+        return false;
+    if (!_database->database().isOpen()) {
+        if (!_database->database().open())
+            return false;
+    }
+
+    _database->database().transaction();
     bool ok = _databasePopulator->saveAtcClassification(_database);
-    if (ok)
+    if (ok) {
+        _database->database().commit();
         addFinalReportMessage(tr("Added ATC data to database."));
-    else
+    } else {
+        _database->database().rollback();
         addFinalReportMessage(tr("ERROR: unable to include ATC data to database."));
+    }
 
     return ok;
 }
@@ -830,6 +898,7 @@ bool IDrugDatabase::addAtc()
 /**
  * Add the drug-drug interaction data to the drug database.
  * \sa DrugsDB::DrugDrugInteractionCore::addDrugDrugInteractionsToDatabase()
+ * \note This member creates a transaction, commit or rollback.
  */
 bool IDrugDatabase::addDrugDrugInteractions()
 {
@@ -837,11 +906,22 @@ bool IDrugDatabase::addDrugDrugInteractions()
     Q_EMIT progressLabelChanged(tr("Adding ATC classification to database."));
     Q_EMIT progress(0);
 
+    if (!_database)
+        return false;
+    if (!_database->database().isOpen()) {
+        if (!_database->database().open())
+            return false;
+    }
+
+    _database->database().transaction();
     bool ok = _databasePopulator->saveDrugDrugInteractions(_database);
-    if (ok)
+    if (ok) {
+        _database->database().commit();
         addFinalReportMessage(tr("Added drug-drug interactions to database."));
-    else
+    } else {
+        _database->database().rollback();
         addFinalReportMessage(tr("ERROR: unable to include drug-drug interactions to database."));
+    }
 
     return ok;
 }
@@ -1069,6 +1149,7 @@ bool IDrugDatabase::onAllSpcDownloadFinished()
 /**
  * Save the SPC content.
  * \warning code does not manage duplicates
+ * \note This member creates a transaction, commit or rollback.
  */
 bool IDrugDatabase::saveDrugSpc(const SpcContent &content)
 {
