@@ -34,8 +34,6 @@
 #include <coreplugin/isettings.h>
 #include <coreplugin/ftb_constants.h>
 
-#include <drugsdb/tools.h>
-
 #include <icdplugin/icdcollectiondialog.h>
 #include <icdplugin/icdcollectionmodel.h>
 #include <icdplugin/icddatabase.h>
