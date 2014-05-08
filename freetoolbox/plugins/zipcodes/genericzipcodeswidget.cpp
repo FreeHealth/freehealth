@@ -185,6 +185,7 @@ void GenericZipCodesWidget::selectCurrentCountry()
 void GenericZipCodesWidget::deselectCountry(const QModelIndex &index)
 {
     // TODO: code here
+    Q_UNUSED(index);
 //    m_Step->deselectCountry(index);
 //    updateActions();
 //    ui->createPackageButton->setEnabled(m_selectedCountriesModel->rowCount() > 0);
