@@ -430,6 +430,10 @@ bool DrugBaseEssentials::initialize(const QString &pathToDb, bool createIfNotExi
         LOG_FOR("DrugBaseEssentials", QString("Using drug database version " + version()));
     }
 
+    // Improve speed when creating the drug database
+    database().exec("PRAGMA synchronous = OFF");
+    database().exec("PRAGMA journal_mode = MEMORY");
+
     m_dbcore_initialized = true;
     return true;
 }
