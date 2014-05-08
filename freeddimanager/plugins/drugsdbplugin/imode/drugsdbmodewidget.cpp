@@ -35,6 +35,8 @@
 
 #include <coreplugin/icore.h>
 #include <coreplugin/imainwindow.h>
+#include <coreplugin/isettings.h>
+#include <coreplugin/fdm_constants.h>
 
 #include <utils/log.h>
 #include <utils/global.h>
@@ -46,6 +48,7 @@
 #include <QDir>
 #include <QDesktopServices>
 #include <QUrl>
+#include <QFileDialog>
 
 #include <QDebug>
 
@@ -56,6 +59,7 @@ using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
 static inline Core::IMainWindow *mainwindow() {return Core::ICore::instance()->mainWindow();}
+static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 //static inline DrugsDB::DrugsDBCore *drugsDbCore() {return DrugsDB::DrugsDBCore::instance();}
 //static inline DrugsDB::DrugDrugInteractionCore *ddiCore() {return drugsDbCore()->ddiCore();}
 
@@ -105,6 +109,10 @@ public:
         ui->nonFreeGroup->setEnabled(enabled);
         ui->download->setEnabled(enabled);
         ui->startJobs->setEnabled(enabled);
+        ui->seeDbDescription->setEnabled(enabled);
+        ui->seeDatapackDescription->setEnabled(enabled);
+        ui->createDatapack->setEnabled(enabled);
+
         if (!enabled)
             ui->title->setText(QCoreApplication::translate("DrugsDbModeWidget", "Select the drug database to create in the view"));
     }
@@ -134,6 +142,7 @@ DrugsDbModeWidget::DrugsDbModeWidget(QWidget *parent) :
 
     connect(d->ui->seeDbDescription, SIGNAL(clicked()), this, SLOT(onSeeDatabaseDescriptionFileRequested()));
     connect(d->ui->seeDatapackDescription, SIGNAL(clicked()), this, SLOT(onSeeDatapackDescriptionFileRequested()));
+    connect(d->ui->createDatapack, SIGNAL(clicked()), this, SLOT(onCreateDatapackFiles()));
 
     onCurrentDrugsDatabaseChanged(QItemSelection(), QItemSelection());
 }
@@ -300,8 +309,8 @@ void DrugsDbModeWidget::onCurrentDrugsDatabaseChanged(const QItemSelection &curr
     d->ui->spc->setText(d->ui->spc->text().remove(" CORRECTLY DONE"));
 
     // Add tooltips to buttons
-    d->ui->seeDbDescription->setToolTip(base->databaseDescriptionFile());
-    d->ui->seeDatapackDescription->setToolTip(base->datapackDescriptionFile());
+    d->ui->seeDbDescription->setToolTip(base->databaseDescriptionFilePath());
+    d->ui->seeDatapackDescription->setToolTip(base->datapackDescriptionFilePath());
 }
 
 // #include <texteditorplugin/texteditordialog.h>
@@ -316,7 +325,7 @@ void DrugsDbModeWidget::onSeeDatabaseDescriptionFileRequested()
 //    Editor::TextEditorDialog dlg(this);
 //    dlg.readFile(base->databaseDescriptionFile());
 //    dlg.exec();
-    QDesktopServices::openUrl(QUrl(base->databaseDescriptionFile()));
+    QDesktopServices::openUrl(QUrl(base->databaseDescriptionFilePath()));
 }
 
 void DrugsDbModeWidget::onSeeDatapackDescriptionFileRequested()
@@ -325,53 +334,38 @@ void DrugsDbModeWidget::onSeeDatapackDescriptionFileRequested()
     if (!base)
         return;
     // TODO: open file in a TextEditor that allow save & edit
-    QDesktopServices::openUrl(QUrl(base->datapackDescriptionFile()));
+    QDesktopServices::openUrl(QUrl(base->datapackDescriptionFilePath()));
 }
 
-//void DrugsDbModeWidget::showEvent(QShowEvent *event)
-//{
-//    IDrugDatabase *base = d->currentDatabase();
-//    if (!base)
-//        return;
-//    if (base->licenseType() == IDrugDatabase::Free) {
-//        d->ui->addAtc->setChecked(false);
-//        d->ui->linkMols->setChecked(false);
-//        d->ui->addDDI->setChecked(false);
-//        d->ui->addPims->setChecked(false);
-//        d->ui->addPreg->setChecked(false);
+/**
+ * Reacts on the 'Create Datapack Files' button clicks.
+ */
+void DrugsDbModeWidget::onCreateDatapackFiles()
+{
+    // Get the currently selected database
+    IDrugDatabase *base = d->currentDatabase();
+    if (!base)
+        return;
 
-//        d->ui->addAtc->setEnabled(false);
-//        d->ui->linkMols->setEnabled(false);
-//        d->ui->addDDI->setEnabled(false);
-//        d->ui->addPims->setEnabled(false);
-//        d->ui->addPreg->setEnabled(false);
-//        QWidget::showEvent(event);
-//        return;
-//    }
+    // Confirmation dialog (YesNo)
+    bool yes = Utils::yesNoMessageBox(tr("Create datapack files"),
+                           tr("You are about to create datapack files for the the database: <br><b>%1</b><br>"
+                              "These files are only used by the FreeToolBox application when creating "
+                              "datapack's' server contents.<br><br>"
+                               "Do you really want to create the datapack files for the database: %1?"
+                              ), "", tr("Datapack Files"));
+    if (!yes)
+        return;
 
+    // If setting Core::S_DATAPACK_SERVER_OUTPUT_PATH is empty -> Ask for a path
+    QString path = settings()->value(Core::Constants::S_DATAPACK_SERVER_OUTPUT_PATH).toString();
+    if (path.isEmpty() || !QDir(path).exists()) {
+            path = QFileDialog::getExistingDirectory(this, tr("Select a path for the datapack"),
+                                                     settings()->path(Core::ISettings::UserDocumentsPath));
+            if (path.isEmpty())
+                return;
+    }
 
-//    // check the possibilities of the ddiCore
-////    bool atc = ddiCore()->canAddAtc();
-////    if (!atc) {
-////        d->ui->addAtc->setChecked(false);
-////        d->ui->linkMols->setChecked(false);
-////    }
-////    d->ui->addAtc->setEnabled(atc);
-////    d->ui->linkMols->setEnabled(atc);
-
-////    bool ddi = ddiCore()->canAddDrugDrugInteractions();
-////    if (!ddi)
-////        d->ui->addDDI->setChecked(false);
-////    d->ui->addDDI->setEnabled(ddi);
-
-////    bool pim = ddiCore()->canAddPims();
-////    if (!pim)
-////        d->ui->addPims->setChecked(false);
-////    d->ui->addPims->setEnabled(pim);
-
-////    bool preg = ddiCore()->canAddPregnancyChecking();
-////    if (!preg)
-////        d->ui->addPreg->setChecked(false);
-////    d->ui->addPreg->setEnabled(preg);
-//    QWidget::showEvent(event);
-//}
+    // Prepare XML datapack files
+    qWarning() << Utils::readTextFile(base->datapackDescriptionFilePath());
+}

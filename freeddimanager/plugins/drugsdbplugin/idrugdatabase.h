@@ -119,8 +119,8 @@ public:
     QString absoluteFilePath() const;
     QString downloadUrl() const {return _downloadingUrl;}
     QString finalizationScript() const {return _finalizationScriptPath;}
-    QString databaseDescriptionFile() const {return _descriptionFilePath;}
-    QString datapackDescriptionFile() const {return _datapackDescriptionFilePath;}
+    QString databaseDescriptionFilePath() const {return _descriptionFilePath;}
+    QString datapackDescriptionFilePath() const {return _datapackDescriptionFilePath;}
     QString spcHtmlFilesDefaultEncoding() const {return _spcDefaultEncoding;}
     QString databaseLanguage() const {return _lang;}
     int sourceId() const;

@@ -62,6 +62,7 @@ private Q_SLOTS:
     void onCurrentDrugsDatabaseChanged(const QItemSelection &current, const QItemSelection &previous);
     void onSeeDatabaseDescriptionFileRequested();
     void onSeeDatapackDescriptionFileRequested();
+    void onCreateDatapackFiles();
 
 //private:
 //    void showEvent(QShowEvent *event);
