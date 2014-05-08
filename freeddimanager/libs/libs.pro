@@ -11,8 +11,8 @@ SUBDIRS += translation \
     utils \
     medical \
     quazip \
-#    medintux \
-#    datapack
+    datapack
+#    medintux
 
 
 LIBSPATH=../../libs
