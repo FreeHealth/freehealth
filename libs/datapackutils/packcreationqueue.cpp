@@ -94,6 +94,7 @@ bool PackCreationQueue::addToQueue(const RequestedPackCreation &request)
         return false;
     // TODO: check duplicates
     _queue << request;
+    return true;
 }
 
 /**
@@ -169,7 +170,7 @@ bool PackCreationQueue::fromXmlFile(const QString &absFile)
     if (absFile.isEmpty() || !QFile(absFile).exists())
         return false;
 
-    QString content = Utils::readTextFile(descriptionFile, Utils::DontWarnUser);
+    QString content = Utils::readTextFile(absFile, Utils::DontWarnUser);
     if (content.isEmpty())
         return false;
 
@@ -178,15 +179,14 @@ bool PackCreationQueue::fromXmlFile(const QString &absFile)
     int col = 0;
     QString error;
     if (!doc.setContent(content, &error, &line, &col)) {
-        LOG_ERROR(tkTr(Trans::Constants::ERROR_1_LINE_2_COLUMN_3).arg(error).arg(line).arg(col));
-        addError(Process, DataPackSubProcess, QString("Unable to read file. %1;%2: %3").arg(line).arg(col).arg(error));
+        LOG_ERROR_FOR("PackCreationQueue", tkTr(Trans::Constants::ERROR_1_LINE_2_COLUMN_3).arg(error).arg(line).arg(col));
         return false;
     }
 
     // Read XML
     QDomElement root = doc.documentElement();
     if (root.tagName().compare(::XML_ROOT_TAG, Qt::CaseInsensitive) != 0) {
-        LOG_ERROR("Wrong root tag: " + root.tagName() + "; awaiting " + ::XML_ROOT_TAG);
+        LOG_ERROR_FOR("PackCreationQueue", "Wrong root tag: " + root.tagName() + "; awaiting " + ::XML_ROOT_TAG);
         return false;
     }
 
@@ -196,11 +196,11 @@ bool PackCreationQueue::fromXmlFile(const QString &absFile)
 
         // Get the Pack description file
         QString descrFile = packElement.attribute(::XML_DATAPACK_DESCRIPTION_ATTRIB);
-        QFileInfo packDescrFile(packDescr);
+        QFileInfo packDescrFile(descrFile);
         if (packDescrFile.isRelative())
-            packDescrFile.setFile(QString("%1/%2").arg(QFileInfo(descriptionFile).absolutePath()).arg(descrFile));
+            packDescrFile.setFile(QString("%1/%2").arg(QFileInfo(absFile).absolutePath()).arg(descrFile));
         if (!packDescrFile.exists()) {
-            LOG_ERROR("Pack does not exists: " + packDescrFile.absoluteFilePath());
+            LOG_ERROR_FOR("PackCreationQueue", "Pack does not exists: " + packDescrFile.absoluteFilePath());
             packElement = packElement.nextSiblingElement(::XML_DATAPACK_TAG);
             continue;
         }
@@ -234,10 +234,13 @@ bool PackCreationQueue::fromXmlFile(const QString &absFile)
         // Next requested Pack sibling
         packElement = packElement.nextSiblingElement(::XML_DATAPACK_TAG);
     }
+    return true;
 }
 
 QString PackCreationQueue::toXml() const
-{}
+{
+    return QString::null;
+}
 
 
 //// Get XML file from the git path
