@@ -24,6 +24,16 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
+/**
+ * \class DrugsDB::Internal::DrugBaseEssentials
+ * Represent the basics of any drug database including some basic features:
+ * - connection to database (SQLite, pragma journal_mode memroy, synchronous = off)
+ * - creation of the database
+ * - scheme and version checking
+ * Can load any database using the initialize().
+ */
+
+
 #include "drugbaseessentials.h"
 #include <drugsbaseplugin/constants.h>
 
@@ -341,7 +351,10 @@ DrugBaseEssentials::DrugBaseEssentials():
 #endif
 }
 
-/** Force the re-initialization of the database. Call initialize() after this. */
+/**
+ * Force the re-initialization of the database.
+ * You must call initialize() after this.
+ */
 void DrugBaseEssentials::forceFullDatabaseRefreshing()
 {
     m_dbcore_initialized = false;
@@ -421,6 +434,11 @@ bool DrugBaseEssentials::initialize(const QString &pathToDb, bool createIfNotExi
     return true;
 }
 
+/**
+ * Define the version of the database (this version will be stored inside the database). \n
+ * We use this version to differentiate database scheme evolutions, not
+ * The whole application evolution.
+ */
 void DrugBaseEssentials::setVersion(const QString &version)
 {
     QSqlDatabase DB = QSqlDatabase::database(connectionName());
@@ -436,6 +454,10 @@ void DrugBaseEssentials::setVersion(const QString &version)
     }
 }
 
+/**
+ * Returns the version of the database.
+ * \sa setVersion()
+ */
 QString DrugBaseEssentials::version() const
 {
     QSqlDatabase DB = QSqlDatabase::database(connectionName());
@@ -453,11 +475,19 @@ QString DrugBaseEssentials::version() const
     return QString();
 }
 
+/**
+ * Check if the scheme database version is the latest one according to this code.
+ */
 bool DrugBaseEssentials::checkDatabaseVersion() const
 {
     return (version()==::CURRENTVERSION);
 }
 
+/**
+ * Each drug database can contains multiple UUID data set (for eg, one drug database
+ * can contain multiple countries data, each country set is defined by an UUID).\n
+ * Returns the primary key of the database UUID.
+*/
 int DrugBaseEssentials::getSourceId(const QString &drugsDbUid)
 {
     QSqlDatabase DB = QSqlDatabase::database(connectionName());
@@ -478,7 +508,7 @@ int DrugBaseEssentials::getSourceId(const QString &drugsDbUid)
 }
 
 /**
- * Check the database ATC table content.
+ * Check the database for ATC table content.\n
  * Returns true if the ATC classification is available in the database.
  */
 bool DrugBaseEssentials::isAtcAvailable() const
@@ -490,6 +520,10 @@ bool DrugBaseEssentials::isAtcAvailable() const
     return m > 5000;
 }
 
+/**
+ * Private member. Creates the database and returns \e true if all goes fine.
+ * \sa Utils::Database::createConnection()
+ */
 bool DrugBaseEssentials::createDatabase(const QString &connection, const QString &prefixedDbName,
                                   const Utils::DatabaseConnector &connector,
                                   CreationOption createOption
