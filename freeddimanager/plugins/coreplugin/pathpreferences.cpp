@@ -91,7 +91,10 @@ void PathPreferencesPage::checkSettingsValidity()
     QString appName = qApp->applicationName();
     if (appName.contains(" "))
         appName = appName.left(appName.indexOf(" "));
-    QString docPath = QString("%1/%2").arg(QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation)).arg(appName);
+    QString docPath = QString("%1/%2")
+            .arg(settings()->path(Core::ISettings::UserDocumentsPath))
+            .arg(appName);
+
     QHash<QString, QVariant> defaultvalues;
     defaultvalues.insert(Constants::S_FILEOUTPUT_PATH, QString("%1/Files/").arg(docPath));
     defaultvalues.insert(Constants::S_DBOUTPUT_PATH, QString("%1/DrugsDb/").arg(docPath));
@@ -188,8 +191,10 @@ void PathPreferencesWidget::writeDefaultSettings(Core::ISettings *s)
     QString appName = qApp->applicationName();
     if (appName.contains(" "))
         appName = appName.left(appName.indexOf(" "));
+    QString docPath = QString("%1/%2")
+            .arg(settings()->path(Core::ISettings::UserDocumentsPath))
+            .arg(appName);
 
-    QString docPath = QString("%1/%2").arg(QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation)).arg(appName);
     set->setValue(Constants::S_FILEOUTPUT_PATH, QString("%1/Files/").arg(docPath));
     set->setValue(Constants::S_DBOUTPUT_PATH, QString("%1/DrugsDb/").arg(docPath));
     set->setValue(Constants::S_DATAPACK_SERVER_OUTPUT_PATH, QString("%1/DataPacks/").arg(docPath));
