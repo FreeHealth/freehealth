@@ -89,7 +89,6 @@ void GenericDataPackCreator::onSubProcessFinished()
 
 bool GenericDataPackCreator::registerDataPack()
 {
-    WARN_FUNC;
     // Read all queue, prepare and append all datapacks to the servers
 
     // Get the default XML file from the git path
