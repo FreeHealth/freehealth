@@ -31,11 +31,16 @@
 #include <translationutils/constants.h>
 #include <translationutils/trans_msgerror.h>
 #include <quazip/JlCompress.h>
+#include <quazip/global.h>
 
 #include <QString>
 #include <QDir>
 #include <QFile>
 #include <QDomDocument>
+
+enum {
+    WarnRequestChecking = true
+};
 
 using namespace DataPack;
 using namespace Trans::ConstantTranslations;
@@ -61,6 +66,17 @@ const char * const XML_CONTENT_TYPE_ATTRIB = "type";
 const char * const XML_TYPE_FILE_ZIPPED = "file_zipped";
 const char * const XML_TYPE_FILE_UNZIPPED = "file_unzipped";
 const char * const XML_TYPE_DIR = "dir";
+
+static QString xmlContentType(const int type)
+{
+    switch (type)
+    {
+    case DataPack::RequestedPackCreation::ZippedFile: return ::XML_TYPE_FILE_ZIPPED;
+    case DataPack::RequestedPackCreation::UnzippedFile: return ::XML_TYPE_FILE_UNZIPPED;
+    case DataPack::RequestedPackCreation::DirContent: return ::XML_TYPE_DIR;
+    }
+    return QString::null;
+}
 }
 
 PackCreationQueue::PackCreationQueue()
@@ -73,14 +89,20 @@ PackCreationQueue::~PackCreationQueue()
 bool PackCreationQueue::checkValidity(const RequestedPackCreation &request) const
 {
     // Description file exists
-    if (!QFileInfo(request.descriptionFilePath).exists())
+    if (!QFileInfo(request.descriptionFilePath).exists()) {
+        if (WarnRequestChecking)
+            qDebug() << "File does not exists:" << request.descriptionFilePath;
         return false;
+    }
 
     // All contents exists
     foreach(int key, request.content.uniqueKeys()) {
         foreach(const QString &path, request.content.values(key)) {
-            if (!QFileInfo(path).exists())
+            if (!QFileInfo(path).exists()) {
+                if (WarnRequestChecking)
+                    qDebug() << "File does not exists:" << path;
                 return false;
+            }
         }
     }
     return true;
@@ -96,6 +118,11 @@ bool PackCreationQueue::addToQueue(const RequestedPackCreation &request)
     _queue << request;
     return true;
 }
+
+/**
+ * \fn const QList<RequestedPackCreation> &PackCreationQueue::queue() const
+ * Returns the current queue of the object
+ */
 
 /**
  * Prepare the zipped file \e absZipeFileName with all the content of the datapack. \n
@@ -124,6 +151,7 @@ bool PackCreationQueue::createZippedContent(const RequestedPackCreation &request
         // Copy dir content into the tmp path
         if (!Utils::copyDir(path, tmpPath)) {
             // Clean tmp path
+            Utils::removeDirRecursively(tmpPath);
             return false;
         }
         ++n;
@@ -135,6 +163,7 @@ bool PackCreationQueue::createZippedContent(const RequestedPackCreation &request
         QString dest = tmpPath + path; // problem with relative path because we processed them
         if (!QFile::copy(path, dest)) {
             // Clean tmp path
+            Utils::removeDirRecursively(tmpPath);
             return false;
         }
         ++n;
@@ -149,9 +178,12 @@ bool PackCreationQueue::createZippedContent(const RequestedPackCreation &request
     }
     foreach(const QString &path, request.content.values(RequestedPackCreation::ZippedFile)) {
         // Copy file into the tmp path
+        if (!QuaZipTools::unzipFile(path, tmpPath))
+            LOG_ERROR_FOR("PackCreationQueue", "Unable to unzip file: " + path);
         ++n;
     }
 
+    // Decompress the create dir with all its content
     if (!JlCompress::compressDir(absZipFileName, tmpPath, true)) {
         LOG_ERROR_FOR("PackCreationQueue", "Unable to compress dir: "+tmpPath);
         // Clean tmpPath
@@ -165,6 +197,10 @@ bool PackCreationQueue::createZippedContent(const RequestedPackCreation &request
     return true;
 }
 
+/**
+ * Read a creation queue from an XML file.
+ * \warning The current queue is cleared.
+ */
 bool PackCreationQueue::fromXmlFile(const QString &absFile)
 {
     if (absFile.isEmpty() || !QFile(absFile).exists())
@@ -215,8 +251,12 @@ bool PackCreationQueue::fromXmlFile(const QString &absFile)
             const QString &type = content.attribute(::XML_CONTENT_TYPE_ATTRIB);
             // Get path
             QString path = content.text();
-            if (QDir(path).isRelative())
-                path.prepend(absFile);
+            if (QDir(path).isRelative()) {
+                path = QDir::cleanPath(QString("%1/%2")
+                        .arg(QFileInfo(absFile).absolutePath())
+                        .arg(path)
+                                       );
+            }
 
             // Get type
             if (type.compare(::XML_TYPE_DIR, Qt::CaseInsensitive) == 0) {
@@ -232,14 +272,50 @@ bool PackCreationQueue::fromXmlFile(const QString &absFile)
         }
 
         // Next requested Pack sibling
+        addToQueue(request);
         packElement = packElement.nextSiblingElement(::XML_DATAPACK_TAG);
     }
     return true;
 }
 
-QString PackCreationQueue::toXml() const
+/** Save the queue to an XML file */
+bool PackCreationQueue::saveToXmlFile(const QString &absFile, bool useRelativePath) const
 {
-    return QString::null;
+    QDomDocument doc("FreeMedForms");
+    QDomElement root = doc.createElement(::XML_ROOT_TAG);
+    doc.appendChild(root);
+
+    // Append all packs
+    foreach(const RequestedPackCreation &request, _queue) {
+        QDomElement requestElement = doc.createElement(::XML_DATAPACK_TAG);
+        root.appendChild(requestElement);
+        if (useRelativePath) {
+            QString rpath = QDir(QFileInfo(absFile).absolutePath()).relativeFilePath(request.descriptionFilePath);
+            requestElement.setAttribute(::XML_DATAPACK_DESCRIPTION_ATTRIB, rpath);
+        } else {
+            requestElement.setAttribute(::XML_DATAPACK_DESCRIPTION_ATTRIB, request.descriptionFilePath);
+        }
+        requestElement.setAttribute(::XML_DATAPACK_SERVER_ATTRIB, request.serverUid);
+        // Append all contents
+        foreach(int key, request.content.uniqueKeys()) {
+            foreach(const QString &path, request.content.values(key)) {
+                QDomElement contentElement = doc.createElement(::XML_DATAPACK_CONTENT_TAG);
+                requestElement.appendChild(contentElement);
+                contentElement.setAttribute(::XML_CONTENT_TYPE_ATTRIB, xmlContentType(key));
+                if (useRelativePath) {
+                    QString rpath = QDir(QFileInfo(absFile).absolutePath()).relativeFilePath(path);
+                    QDomText text = doc.createTextNode(rpath);
+                    contentElement.appendChild(text);
+                } else {
+                    QDomText text = doc.createTextNode(path);
+                    contentElement.appendChild(text);
+                }
+            }
+        }
+    }
+
+    QString xml = doc.toString(2);
+    return Utils::saveStringToFile(xml, absFile, Utils::Overwrite, Utils::DontWarnUser);
 }
 
 

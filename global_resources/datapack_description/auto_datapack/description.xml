@@ -11,14 +11,16 @@
   * - Non-free Asso: asso_nonfree
   *
   * Available content types:
-  * - file_zipped: the file is already zipped
-  * - file_nonzipped: the file is not zipped and will be automatically zipped
-  * - dir: all the content of the dir will be zipped and included into the datapack
+  * - file_zipped: the file is already zipped and will be unzipped at install
+  * - file_unzipped: the file must be zipped in the datapack and installed unzipped
+  * - dir: all the content of the dir will be zipped and included into the datapack,
+  *        installation as it was before the zip process
   *
-  * WARNING: Actually FreeToolBox can manage only ONE content per datapack.
+  * FreeToolBox can manage multiple contents per datapack. All contents will be
+  * included in the installation path described in the packdescription.xml file.
 -->
 
-<Automatic_DataPack>
+<PackCreationQueue>
   <datapack description="./nonfree/pdfcompletion/mac/packdescription.xml" server="asso_nonfree">
     <content type="dir">./nonfree/pdfcompletion/mac/zipme</content>
   </datapack>
@@ -28,15 +30,15 @@
   </datapack>
 
   <datapack description="./nonfree/fsp/packdescription.xml" server="asso_nonfree">
-    <content type="file_nonzipped">./nonfree/fsp/fsp_general.xml</content>
+    <content type="file_unzipped">./nonfree/fsp/fsp_general.xml</content>
   </datapack>
 
   <datapack description="./nonfree/cheques/packdescription.xml" server="asso_nonfree">
-    <content type="file_nonzipped">./nonfree/cheques/france.xml</content>
+    <content type="file_unzipped">./nonfree/cheques/france.xml</content>
   </datapack>
 
   <datapack description="./nonfree/french_medical_docs/packdescription.xml" server="asso_nonfree">
     <content type="dir">./nonfree/french_medical_docs/docs</content>
   </datapack>
 
-</Automatic_DataPack>
+</PackCreationQueue>

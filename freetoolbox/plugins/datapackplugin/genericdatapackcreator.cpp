@@ -34,39 +34,20 @@
 
 #include <utils/log.h>
 #include <utils/global.h>
-#include <quazip/JlCompress.h>
 #include <translationutils/constants.h>
 #include <translationutils/trans_msgerror.h>
+#include <datapackutils/packcreationqueue.h>
 
-#include <QDomDocument>
-#include <QFileInfo>
 #include <QTimer>
+
+// TODO: create a specific page for "Automatic Pack Creation"
 
 using namespace DataPackPlugin;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
-/** --- XML Architecture ---
-  <datapack description="" server="">
-    <content type=""></content>
-  </datapack>
- */
-
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline DataPackPlugin::DataPackCore *datapackCore() {return DataPackPlugin::DataPackCore::instance();}
-
-namespace {
-const char * const XML_ROOT_TAG = "Automatic_DataPack";
-const char * const XML_DATAPACK_TAG = "datapack";
-const char * const XML_DATAPACK_CONTENT_TAG = "content";
-const char * const XML_DATAPACK_DESCRIPTION_ATTRIB = "description";
-const char * const XML_DATAPACK_SERVER_ATTRIB = "server";
-const char * const XML_CONTENT_TYPE_ATTRIB = "type";
-
-const char * const XML_TYPE_FILE_ZIPPED = "file_zipped";
-const char * const XML_TYPE_FILE_NONZIPPED = "file_nonzipped";
-const char * const XML_TYPE_DIR = "dir";
-}
 
 GenericDataPackCreator::GenericDataPackCreator(QObject *parent) :
     Core::IFullReleaseStep(parent)
@@ -108,89 +89,29 @@ void GenericDataPackCreator::onSubProcessFinished()
 
 bool GenericDataPackCreator::registerDataPack()
 {
-    // Get XML file from the git path
-    QString descriptionFile = QString("%1/%2/%3")
+    WARN_FUNC;
+    // Read all queue, prepare and append all datapacks to the servers
+
+    // Get the default XML file from the git path
+    QString descriptionFile = QDir::cleanPath(QString("%1/%2/%3")
             .arg(settings()->value(Core::Constants::S_GITFILES_PATH).toString())
             .arg(Core::Constants::PATH_TO_DATAPACK_DESCRIPTION_FILES)
-            .arg("auto_datapack/description.xml");
-    QString descriptionFilePath = QFileInfo(descriptionFile).absolutePath() + QDir::separator();
-    QDomDocument doc;
-    int line = 0;
-    int col = 0;
-    QString error;
-    if (!doc.setContent(Utils::readTextFile(descriptionFile, Utils::DontWarnUser), &error, &line, &col)) {
-        LOG_ERROR(tkTr(Trans::Constants::ERROR_1_LINE_2_COLUMN_3).arg(error).arg(line).arg(col));
-        addError(Process, DataPackSubProcess, QString("Unable to read file. %1;%2: %3").arg(line).arg(col).arg(error));
-        return false;
-    }
-
-    // Read XML
-    QDomElement root = doc.documentElement();
-    if (root.tagName().compare(::XML_ROOT_TAG, Qt::CaseInsensitive) != 0) {
-        LOG_ERROR("Wrong root tag: " + root.tagName() + "; awaiting Automatic_DataPack");
-        addError(Process, DataPackSubProcess, QString("Wrong root tag: " + root.tagName() + "; awaiting Automatic_DataPack"));
-        return false;
-    }
-
-    QDomElement packElement = root.firstChildElement(::XML_DATAPACK_TAG);
-    while (!packElement.isNull()) {
-        // Get pack description filename
-        QString packDescr = packElement.attribute(::XML_DATAPACK_DESCRIPTION_ATTRIB);
-        QFileInfo packDescrFile(packDescr);
-        if (packDescrFile.isRelative())
-            packDescrFile.setFile(descriptionFilePath + packDescr);
-        if (!packDescrFile.exists()) {
-            LOG_ERROR("Pack does not exists: " + packDescrFile.absoluteFilePath());
-            addError(Process, DataPackSubProcess, QString("Pack does not exists: " + packDescrFile.absoluteFilePath()));
-            packElement = packElement.nextSiblingElement(::XML_DATAPACK_TAG);
-            continue;
-        }
-
-        // Get server
-        QString server = packElement.attribute(::XML_DATAPACK_SERVER_ATTRIB);
-
+            .arg("auto_datapack/description.xml"));
+    DataPack::PackCreationQueue packQueue;
+    packQueue.fromXmlFile(descriptionFile);
+    foreach(const DataPack::RequestedPackCreation &request, packQueue.queue()) {
         // Prepare pack
+        QString zipFileName = QFileInfo(request.descriptionFilePath).absolutePath()+"/pack.zip";
+        packQueue.createZippedContent(request, zipFileName);
+
         DataPackQuery query;
-        query.setDescriptionFileAbsolutePath(packDescrFile.absoluteFilePath());
+        query.setDescriptionFileAbsolutePath(request.descriptionFilePath);
+        query.setOriginalContentFileAbsolutePath(zipFileName);
 
-        // Get datapack content
-        QDomElement content = packElement.firstChildElement(::XML_DATAPACK_CONTENT_TAG);
-        if (!content.isNull()) {
-            const QString &type = content.attribute(::XML_CONTENT_TYPE_ATTRIB);
-            if (type.compare(::XML_TYPE_DIR, Qt::CaseInsensitive) == 0) {
-                // Zip dir content
-                QString dirPath = content.text();
-                if (QDir(dirPath).isRelative())
-                    dirPath.prepend(descriptionFilePath);
-                if (!JlCompress::compressDir(packDescrFile.absolutePath()+"/pack.zip", dirPath, true)) {
-                    LOG_ERROR("Unable to compress dir: "+dirPath);
-                    addError(Process, DataPackSubProcess, QString("Unable to compress dir: "+dirPath));
-                }
-                // Include zipped file into the query
-                query.setOriginalContentFileAbsolutePath(packDescrFile.absolutePath()+"/pack.zip");
-            } else if (type.compare(::XML_TYPE_FILE_NONZIPPED, Qt::CaseInsensitive) == 0) {
-                // Zip file
-                if (QFileInfo(content.text()).isRelative())
-                    query.setOriginalContentFileAbsolutePath(descriptionFilePath + content.text());
-                else
-                    query.setOriginalContentFileAbsolutePath(content.text());
-                query.setZipOriginalFile(true);
-            } else {
-                // Just include the zipped file to the query
-                if (QFileInfo(content.text()).isRelative())
-                    query.setOriginalContentFileAbsolutePath(descriptionFilePath + content.text());
-                else
-                    query.setOriginalContentFileAbsolutePath(content.text());
-            }
-        }
-
-        if (!datapackCore()->registerDataPack(query, server)) {
+        if (!datapackCore()->registerDataPack(query, request.serverUid)) {
             LOG_ERROR("Datapack not registered: " + query.descriptionFileAbsolutePath());
             addError(Process, DataPackSubProcess, QString("Datapack not registered: " + query.descriptionFileAbsolutePath()));
         }
-
-        // Next sibling
-        packElement = packElement.nextSiblingElement(::XML_DATAPACK_TAG);
     }
     return true;
 }

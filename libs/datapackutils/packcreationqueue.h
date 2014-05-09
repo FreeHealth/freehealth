@@ -30,6 +30,7 @@
 #include <datapackutils/datapack_exporter.h>
 #include <QString>
 #include <QMultiHash>
+#include <QList>
 
 /**
  * \file packcreationqueue.h
@@ -58,12 +59,12 @@ public:
 
     bool checkValidity(const RequestedPackCreation &request) const;
     bool addToQueue(const RequestedPackCreation &request);
-    const QList<RequestedPackCreation> &queue() const;
+    const QList<RequestedPackCreation> &queue() const {return _queue;}
 
     bool createZippedContent(const RequestedPackCreation &request, const QString &absZipFileName);
 
     bool fromXmlFile(const QString &absFile);
-    QString toXml() const;
+    bool saveToXmlFile(const QString &absFile, bool useRelativePath = false) const;
 
 private:
     QList<RequestedPackCreation> _queue;
