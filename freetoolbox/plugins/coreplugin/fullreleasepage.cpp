@@ -233,7 +233,11 @@ void FullReleasePageWidget::endLastAddedProcess()
 ///////////////////////////////    FullReleasePage    ///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////
 FullReleasePage::FullReleasePage(QObject *parent) :
-        IToolPage(parent), m_Widget(0), m_CentralWidget(0), ui(0), m_Spacer(0)
+    IToolPage(parent),
+    m_Widget(0),
+    m_CentralWidget(0),
+    ui(0),
+    m_Spacer(0)
 {
 }
 

@@ -60,8 +60,8 @@ public:
     MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
-    bool initialize(const QStringList &arguments, QString *errorString);
-    void extensionsInitialized() {}
+    bool initialize(const QStringList &arguments, QString *errorString = 0);
+    void extensionsInitialized();
 
 public Q_SLOTS:
     void postCoreInitialization();

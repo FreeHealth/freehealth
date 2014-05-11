@@ -47,7 +47,6 @@ CorePlugin::CorePlugin() :
     m_CoreImpl(new CoreImpl(this)),
     prefPage(0)
 {
-    // Core add translators
 }
 
 CorePlugin::~CorePlugin()

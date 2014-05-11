@@ -117,8 +117,10 @@ MainWindow::~MainWindow()
 }
 
 /** Initialize the main window (create actions and menus) */
-bool MainWindow::initialize(const QStringList &, QString *)
+bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
 {
+    Q_UNUSED(arguments);
+    Q_UNUSED(errorString);
     // create the help dialog
     createFileMenu();
     createConfigurationMenu();
@@ -126,25 +128,19 @@ bool MainWindow::initialize(const QStringList &, QString *)
 
     Core::MainWindowActions actions;
     actions.setFileActions(
-//            Core::MainWindowActions::A_FileNew  |
-//            Core::MainWindowActions::A_FileOpen |
-//            Core::MainWindowActions::A_FileSave |
-//            Core::MainWindowActions::A_FileSaveAs |
-//            Core::MainWindowActions::A_FilePrintPreview |
-            Core::MainWindowActions::A_FileQuit
-            );
+                Core::MainWindowActions::A_FileQuit
+                );
     actions.setConfigurationActions(
-            Core::MainWindowActions::A_AppPreferences |
-            Core::MainWindowActions::A_LanguageChange
-            );
+                Core::MainWindowActions::A_AppPreferences |
+                Core::MainWindowActions::A_LanguageChange
+                );
     actions.setHelpActions(
-            Core::MainWindowActions::A_AppAbout |
-            Core::MainWindowActions::A_PluginsAbout |
-            Core::MainWindowActions::A_AppHelp |
-            Core::MainWindowActions::A_DebugDialog |
-            Core::MainWindowActions::A_CheckUpdate //|
-//            Core::MainWindowActions::A_QtAbout
-            );
+                Core::MainWindowActions::A_AppAbout |
+                Core::MainWindowActions::A_PluginsAbout |
+                Core::MainWindowActions::A_AppHelp |
+                Core::MainWindowActions::A_DebugDialog |
+                Core::MainWindowActions::A_CheckUpdate
+                );
     actions.createEditActions(false);
     createActions(actions);
 
@@ -152,43 +148,40 @@ bool MainWindow::initialize(const QStringList &, QString *)
     connectConfigurationActions();
     connectHelpActions();
 
-    Core::Command *cmd = 0;
-    Core::Context globalcontext(Core::Constants::C_GLOBAL);
-
-    Core::ActionContainer *menu = actionManager()->actionContainer(Core::Id(Core::Constants::M_FILE));
-
-    // Create local actions
-    QAction *a_openPreferences = new QAction(this);
-    a_openPreferences->setObjectName("FTB_Preferences");
-    a_openPreferences->setIcon(theme()->icon(Constants::ICONPREFERENCES, ITheme::MediumIcon));
-    cmd = actionManager()->registerAction(a_openPreferences, Core::Id("FTB_Preferences"), globalcontext);
-    cmd->setTranslations(Trans::Constants::PREFERENCES_TEXT);
-    menu->addAction(cmd, Core::Id(Core::Constants::G_PREFERENCES));
-    connect(a_openPreferences, SIGNAL(triggered()), this, SLOT(applicationPreferences()));
-
     // Create General pages
     m_FullReleasePage = new FullReleasePage(this);
 
     ui = new Ui::MainWindow;
     ui->setupUi(this);
     ui->centralWidget->layout()->setMargin(0);
-    setMenuBar(actionManager()->actionContainer(Core::Id(Constants::MENUBAR))->menuBar());
 
     ui->splitter->setCollapsible(1, false);
     ui->pageTree->header()->hide();
 
-    // Start the update checker
-    if (updateChecker()->needsUpdateChecking(settings()->getQSettings())) {
-        settings()->setPath(Core::ISettings::UpdateUrl, Utils::Constants::FREETOOLBOX_UPDATE_URL);
-        if (checkUpdate())
-            settings()->setValue(Utils::Constants::S_LAST_CHECKUPDATE, QDate::currentDate());
-    }
-
     connect(ui->pageTree, SIGNAL(currentItemChanged(QTreeWidgetItem *, QTreeWidgetItem *)),
         this, SLOT(pageSelected()));
 
-    readSettings();
     return true;
+}
+
+/**
+ * When all dependent plugins are initialized, start the second initialization:
+ * - setup ui
+ * - start update checker
+ */
+void MainWindow::extensionsInitialized()
+{
+#ifndef WITH_TESTS
+    // Start the update checker
+    if (updateChecker()->needsUpdateChecking(settings()->getQSettings())) {
+        settings()->setPath(Core::ISettings::UpdateUrl, Utils::Constants::FREEDDIMANAGER_UPDATE_URL);
+        if (checkUpdate())
+            settings()->setValue(Utils::Constants::S_LAST_CHECKUPDATE, QDate::currentDate());
+    }
+#endif
+
+    setWindowTitle(QString("%1 %2 - (c) %3").arg(qApp->applicationName()).arg(qApp->applicationVersion()).arg(tkTr(Trans::Constants::THE_FREEMEDFORMS_COMMUNITY)));
+    setWindowIcon(theme()->icon(Core::Constants::ICONFREEDDIMANAGER));
 }
 
 /**
@@ -197,12 +190,13 @@ bool MainWindow::initialize(const QStringList &, QString *)
  */
 void MainWindow::postCoreInitialization()
 {
+    actionManager()->retranslateMenusAndActions();
+    contextManager()->updateContext();
     raise();
     show();
-    preparePages();
+    readSettings();
 
-    contextManager()->updateContext();
-    actionManager()->retranslateMenusAndActions();
+    preparePages();
 
     const QString &path = settings()->value(Constants::S_GITFILES_PATH).toString();
     if (path.isEmpty() || !QDir(settings()->value(Constants::S_GITFILES_PATH).toString()).exists()) {
