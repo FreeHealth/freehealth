@@ -517,6 +517,11 @@ QString DDIDatabase::interactorLabel(const QString &uid, const QString &lang) co
     return toReturn;
 }
 
+/**
+ * Extracts from the interaction database all available drugs database uids.
+ * The unique uid is constructed like this "\b uid1 \b - \b uid2"
+ * if the drugs database contains two uids.
+ */
 QStringList DDIDatabase::availableComponentDrugsDatabaseUids() const
 {
     QStringList list;
