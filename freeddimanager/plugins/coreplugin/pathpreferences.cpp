@@ -88,12 +88,7 @@ void PathPreferencesPage::apply()
 
 void PathPreferencesPage::checkSettingsValidity()
 {
-    QString appName = qApp->applicationName();
-    if (appName.contains(" "))
-        appName = appName.left(appName.indexOf(" "));
-    QString docPath = QString("%1/%2")
-            .arg(settings()->path(Core::ISettings::UserDocumentsPath))
-            .arg(appName);
+    QString docPath = settings()->path(Core::ISettings::UserDocumentsPath);
 
     QHash<QString, QVariant> defaultvalues;
     defaultvalues.insert(Constants::S_FILEOUTPUT_PATH, QString("%1/Files/").arg(docPath));
@@ -114,6 +109,15 @@ void PathPreferencesPage::checkSettingsValidity()
         if (!Utils::checkDir(settings()->value(key).toString(), true, this->objectName()))
             Utils::warningMessageBox(tr("Can not use and/or create the following directory\n%1").arg(settings()->value(key).toString()),
                                      tr("Please go in the application preferences and select a valid directory."));
+    }
+
+    // Create Preferred paths
+    foreach(const QString &key, defaultvalues.keys()) {
+        QString path = settings()->value(key).toString();
+        if (!QDir(path).exists()) {
+            if (!QDir().mkpath(path))
+                LOG_ERROR(tkTr(Trans::Constants::PATH_1_CANNOT_BE_CREATED).arg(path));
+        }
     }
     settings()->sync();
 }
@@ -188,12 +192,7 @@ void PathPreferencesWidget::writeDefaultSettings(Core::ISettings *s)
     }
     Utils::Log::addMessage("PathPreferencesWidget", tkTr(Trans::Constants::CREATING_DEFAULT_SETTINGS_FOR_1).arg("PathPreferencesWidget"));
 
-    QString appName = qApp->applicationName();
-    if (appName.contains(" "))
-        appName = appName.left(appName.indexOf(" "));
-    QString docPath = QString("%1/%2")
-            .arg(settings()->path(Core::ISettings::UserDocumentsPath))
-            .arg(appName);
+    QString docPath = settings()->path(Core::ISettings::UserDocumentsPath);
 
     set->setValue(Constants::S_FILEOUTPUT_PATH, QString("%1/Files/").arg(docPath));
     set->setValue(Constants::S_DBOUTPUT_PATH, QString("%1/DrugsDb/").arg(docPath));
