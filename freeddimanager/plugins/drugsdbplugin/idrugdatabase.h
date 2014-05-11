@@ -124,6 +124,7 @@ public:
     QString spcHtmlFilesDefaultEncoding() const {return _spcDefaultEncoding;}
     QString databaseLanguage() const {return _lang;}
     int sourceId() const;
+    virtual QString serverUid() const;
 
     virtual bool checkDatabase();
     virtual bool canCreateDatabase() const;

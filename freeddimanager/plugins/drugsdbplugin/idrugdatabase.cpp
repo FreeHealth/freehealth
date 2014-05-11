@@ -206,6 +206,29 @@ int IDrugDatabase::sourceId() const
     return _sid;
 }
 
+/**
+ * Returns the server uid according to the licence type and the owner of the server. \n
+ * This server uid is used for DataPack Server creation/edition/read.
+ * \sa Core::Constants::TAG_SERVER_ASSO_NONFREE, Core::Constants::TAG_SERVER_ASSO_FREE
+ * \sa Core::Constants::TAG_SERVER_COMMUNITY_NONFREE, Core::Constants::TAG_SERVER_COMMUNITY_FREE
+ */
+QString IDrugDatabase::serverUid() const
+{
+    if (licenseType() == IDrugDatabase::NonFree) {
+        if (serverOwner() == IDrugDatabase::Community)
+            return Core::Constants::TAG_SERVER_COMMUNITY_NONFREE;
+        else
+            return Core::Constants::TAG_SERVER_ASSO_NONFREE;
+
+    } else {
+        if (serverOwner() == IDrugDatabase::Community)
+            return Core::Constants::TAG_SERVER_COMMUNITY_FREE;
+        else
+            return Core::Constants::TAG_SERVER_ASSO_NONFREE;
+    }
+    return Core::Constants::TAG_SERVER_COMMUNITY_FREE;
+}
+
 /** Check the existence of the database internal pointer and check if the datbase is correctly open */
 bool IDrugDatabase::checkDatabase()
 {

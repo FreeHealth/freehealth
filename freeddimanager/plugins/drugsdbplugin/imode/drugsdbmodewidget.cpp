@@ -46,6 +46,7 @@
 #include <datapackutils/constants.h>
 #include <datapackutils/pack.h>
 #include <datapackutils/packdescription.h>
+#include <datapackutils/packcreationqueue.h>
 
 #include <QProgressDialog>
 #include <QPointer>
@@ -411,33 +412,46 @@ void DrugsDbModeWidget::onCreateDatapackFiles()
     descr.addUpdateInformation(update);
     pack.setPackDescription(descr);
 
-    QString fileName = QString("%1/%2").arg(path).arg(DataPack::Constants::PACKDESCRIPTION_FILENAME);
-    if (!Utils::saveStringToFile(pack.toXml(), fileName, Utils::Overwrite, Utils::DontWarnUser, 0)) {
+    // Save the DataPack Description file
+    QString newDescriptionFileName = QString("%1/%2").arg(path).arg(DataPack::Constants::PACKDESCRIPTION_FILENAME);
+    if (!Utils::saveStringToFile(pack.toXml(), newDescriptionFileName, Utils::Overwrite, Utils::DontWarnUser, 0)) {
         Utils::warningMessageBox(tr("Error"),
                                  tkTr(Trans::Constants::FILE_1_CAN_NOT_BE_CREATED)
-                                 .arg(QString("Datapack description at: %1").arg(fileName))
+                                 .arg(QString("Datapack description at: %1").arg(newDescriptionFileName))
                                  );
         return;
     }
 
     // Copy database file next to the XML file
     // TODO: remove magic number "master.db"
-    fileName = QString("%1/master.db").arg(path);
-    QFile outFile(fileName);
+    QString contentFileName = QString("%1/master.db").arg(path);
+    QFile outFile(contentFileName);
     if (outFile.exists()) {
         outFile.remove();
         // TODO: in case of error add dialog
     }
-
     QFile baseFile(base->absoluteFilePath());
-    if (!baseFile.copy(fileName)) {
+    if (!baseFile.copy(contentFileName)) {
         Utils::warningMessageBox(tr("Error"),
                                  tkTr(Trans::Constants::FILE_1_CAN_NOT_BE_CREATED)
-                                 .arg(QString("Datapack content at: %1").arg(fileName))
+                                 .arg(QString("Datapack content at: %1").arg(contentFileName))
                                  );
         return;
     }
-    // Option: zip database file
+
+    // Create a PackCreationQueue with the DataPack contents (here a simple unzipped file)
+    DataPack::PackCreationQueue queue;
+    DataPack::RequestedPackCreation request;
+    request.serverUid = base->serverUid();
+    request.descriptionFilePath = newDescriptionFileName;
+    request.content.insert(DataPack::RequestedPackCreation::UnzippedFile, contentFileName);
+    if (!queue.addToQueue(request))
+        LOG_ERROR_FOR("PackCreationQueue", "Unable to create CreationQueue file");
+    QString queueFileName = QString("%1/%2").arg(path).arg(DataPack::Constants::PACKCREATIONQUEUE_DEFAULT_FILENAME);
+    if (!queue.saveToXmlFile(queueFileName, DataPack::PackCreationQueue::UseRelativePath))
+        LOG_ERROR_FOR("PackCreationQueue", "Unable to save CreationQueue file");
+
+    // Option: zip database file?
 
     yes = Utils::yesNoMessageBox(tr("Datapack created"),
                                       tr("Datapack succesfully created. Do you want to "
