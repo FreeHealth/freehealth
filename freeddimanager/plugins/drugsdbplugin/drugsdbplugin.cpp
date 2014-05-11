@@ -78,19 +78,48 @@ bool DrugsDbPlugin::initialize(const QStringList &arguments, QString *errorMessa
 
     // Create the database creator
     IDrugDatabase *base = 0;
-    base = new FrDrugDatatabase(this);
+
+    // French drugs databases (Free & NonFree)
+    base = new FrDrugDatabase(this);
     _mode->registerDrugDatabase(base);
     _databases.append(base);
 
+    base = new FrDrugDatabase(this);
+    base->setLicenseType(IDrugDatabase::NonFree);
+    base->setServerOwner(IDrugDatabase::FrenchAssociation);
+    _mode->registerDrugDatabase(base);
+    _databases.append(base);
+
+    // South-African drugs databases (Free & NonFree)
     base = new ZaDrugDatabase(this);
     _mode->registerDrugDatabase(base);
     _databases.append(base);
 
+    base = new ZaDrugDatabase(this);
+    base->setLicenseType(IDrugDatabase::NonFree);
+    base->setServerOwner(IDrugDatabase::FrenchAssociation);
+    _mode->registerDrugDatabase(base);
+    _databases.append(base);
+
+    // Canadian drugs databases (Free & NonFree)
     base = new CaDrugDatabase(this);
     _mode->registerDrugDatabase(base);
     _databases.append(base);
 
-    base = new FdaDrugDatatabase(this);
+    base = new CaDrugDatabase(this);
+    base->setLicenseType(IDrugDatabase::NonFree);
+    base->setServerOwner(IDrugDatabase::FrenchAssociation);
+    _mode->registerDrugDatabase(base);
+    _databases.append(base);
+
+    // USA drugs databases (Free & NonFree)
+    base = new FdaDrugDatabase(this);
+    _mode->registerDrugDatabase(base);
+    _databases.append(base);
+
+    base = new FdaDrugDatabase(this);
+    base->setLicenseType(IDrugDatabase::NonFree);
+    base->setServerOwner(IDrugDatabase::FrenchAssociation);
     _mode->registerDrugDatabase(base);
     _databases.append(base);
 
