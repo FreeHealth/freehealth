@@ -788,20 +788,32 @@ void DrugDrugInteractionFilteredTableModel::filterNewItems(const QDate &since)
 }
 
 void DrugDrugInteractionFilteredTableModel::filterLastUpdatedAndNewItems(const QDate &since)
-{}
+{
+    Q_UNUSED(since);
+    // TODO: code this
+}
 
 bool DrugDrugInteractionFilteredTableModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
+    Q_UNUSED(index);
+    Q_UNUSED(value);
+    Q_UNUSED(role);
     return false;
 }
 
 bool DrugDrugInteractionFilteredTableModel::insertRows(int row, int count, const QModelIndex &parent)
 {
+    Q_UNUSED(row);
+    Q_UNUSED(count);
+    Q_UNUSED(parent);
     return false;
 }
 
 bool DrugDrugInteractionFilteredTableModel::removeRows(int row, int count, const QModelIndex &parent)
 {
+    Q_UNUSED(row);
+    Q_UNUSED(count);
+    Q_UNUSED(parent);
     return false;
 }
 

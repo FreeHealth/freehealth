@@ -265,7 +265,6 @@ bool DrugInteractorTableModel::setData(const QModelIndex &index, const QVariant 
 {
     if (!index.isValid())
         return false;
-    int sql = -1;
     if (role == Qt::EditRole) {
         int sql = d->sqlColumn(index);
         bool ok = false;
@@ -558,24 +557,37 @@ void DrugInteractorFilteredTableModel::filterNewItems(const QDate &since)
 }
 
 void DrugInteractorFilteredTableModel::filterLastUpdatedAndNewItems(const QDate &since)
-{}
+{
+    Q_UNUSED(since);
+    // TODO: code this
+}
 
 bool DrugInteractorFilteredTableModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
+    Q_UNUSED(index);
+    Q_UNUSED(value);
+    Q_UNUSED(role);
     return false;
 }
 
 bool DrugInteractorFilteredTableModel::insertRows(int row, int count, const QModelIndex &parent)
 {
+    Q_UNUSED(row);
+    Q_UNUSED(count);
+    Q_UNUSED(parent);
     return false;
 }
 
 bool DrugInteractorFilteredTableModel::removeRows(int row, int count, const QModelIndex &parent)
 {
+    Q_UNUSED(row);
+    Q_UNUSED(count);
+    Q_UNUSED(parent);
     return false;
 }
 
 bool DrugInteractorFilteredTableModel::submit()
 {
+    // TODO: code this?
     return true;
 }

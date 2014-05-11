@@ -426,6 +426,8 @@ bool MainWindow::openFile()
  */
 bool MainWindow::saveFileContent(const QString &fileName)
 {
+    // TODO: something to code here???
+    Q_UNUSED(fileName);
     // Create extra-xml content
 //    QDomDocument doc;
 //    QDomElement pe = doc.createElement(::XML_PATIENT_NAME);
@@ -448,6 +450,8 @@ bool MainWindow::saveFileContent(const QString &fileName)
  */
 void MainWindow::readFile(const QString &fileName)
 {
+    // TODO: something to code here???
+    Q_UNUSED(fileName);
 //    QString extra;
 //    QList<ConsultResult> list = ConsultResult::fromXml(Utils::readTextFile(fileName), &extra);
 //    extra = extra.simplified();

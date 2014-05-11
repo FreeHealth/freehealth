@@ -386,6 +386,8 @@ void AtcCollectionEditorWidget::changeEvent(QEvent *e)
 
 static inline Core::IMainWindow *mainWindow()  { return Core::ICore::instance()->mainWindow(); }
 
+//TODO: write tests
+
 void AtcCollectionEditorWidget::test_runAllTests()
 {
     test_views();
@@ -400,6 +402,7 @@ void AtcCollectionEditorWidget::test_views()
 
 void AtcCollectionEditorWidget::test_editorEnabledState(bool state)
 {
+    Q_UNUSED(state);
 }
 
 void AtcCollectionEditorWidget::test_actions()
