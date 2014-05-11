@@ -77,15 +77,13 @@ void PathPreferencesPage::apply()
 
 void PathPreferencesPage::checkSettingsValidity()
 {
-    QString appName = qApp->applicationName();
-    if (appName.contains(" "))
-        appName = appName.left(appName.indexOf(" "));
+    QString docPath = settings()->path(Core::ISettings::UserDocumentsPath);
 
     QHash<QString, QVariant> defaultvalues;
-    defaultvalues.insert(Constants::S_FILEOUTPUT_PATH, QString(QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation) + QDir::separator() + appName));
-    defaultvalues.insert(Constants::S_DBOUTPUT_PATH, QString(QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation) + QDir::separator() + appName));
-    defaultvalues.insert(Constants::S_DATAPACK_SERVER_OUTPUT_PATH, QString(QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation) + QDir::separator() + appName));
-    defaultvalues.insert(Constants::S_TMP_PATH, QString(QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation) + QDir::separator() + appName + "/tmp"));
+    defaultvalues.insert(Constants::S_FILEOUTPUT_PATH, QString("%1/Files/").arg(docPath));
+    defaultvalues.insert(Constants::S_DBOUTPUT_PATH, QString("%1/Databases/").arg(docPath));
+    defaultvalues.insert(Constants::S_DATAPACK_SERVER_OUTPUT_PATH, QString("%1/DataPacks/").arg(docPath));
+    defaultvalues.insert(Constants::S_TMP_PATH, QString("%1/Tmp/").arg(docPath));
     defaultvalues.insert(Constants::S_GITFILES_PATH, QString());
 
     foreach(const QString &k, defaultvalues.keys()) {
@@ -101,6 +99,16 @@ void PathPreferencesPage::checkSettingsValidity()
             Utils::warningMessageBox(tr("Can not use and/or create the following directory\n%1").arg(settings()->value(key).toString()),
                                      tr("Please go in the application preferences and select a valid directory."));
     }
+
+    // Create Preferred paths
+    foreach(const QString &key, defaultvalues.keys()) {
+        QString path = settings()->value(key).toString();
+        if (!QDir(path).exists()) {
+            if (!QDir().mkpath(path))
+                LOG_ERROR(tkTr(Trans::Constants::PATH_1_CANNOT_BE_CREATED).arg(path));
+        }
+    }
+
     settings()->sync();
 }
 
@@ -174,14 +182,12 @@ void PathPreferencesWidget::writeDefaultSettings(Core::ISettings *s)
     }
     Utils::Log::addMessage("PathPreferencesWidget", tkTr(Trans::Constants::CREATING_DEFAULT_SETTINGS_FOR_1).arg("PathPreferencesWidget"));
 
-    QString appName = qApp->applicationName();
-    if (appName.contains(" "))
-        appName = appName.left(appName.indexOf(" "));
+    QString docPath = settings()->path(Core::ISettings::UserDocumentsPath);
 
-    set->setValue(Constants::S_FILEOUTPUT_PATH, QString(QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation) + QDir::separator() + appName));
-    set->setValue(Constants::S_DBOUTPUT_PATH, QString(QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation) + QDir::separator() + appName));
-    set->setValue(Constants::S_TMP_PATH, QString(QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation) + QDir::separator() + appName + "/tmp"));
-    set->setValue(Constants::S_DATAPACK_SERVER_OUTPUT_PATH, QString(QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation) + QDir::separator() + appName));
+    set->setValue(Constants::S_FILEOUTPUT_PATH, QString("%1/Files/").arg(docPath));
+    set->setValue(Constants::S_DBOUTPUT_PATH, QString("%1/Databases/").arg(docPath));
+    set->setValue(Constants::S_DATAPACK_SERVER_OUTPUT_PATH, QString("%1/DataPacks/").arg(docPath));
+    set->setValue(Constants::S_TMP_PATH, QString("%1/Tmp/").arg(docPath));
     set->setValue(Constants::S_GITFILES_PATH, QString());
     set->sync();
 }
