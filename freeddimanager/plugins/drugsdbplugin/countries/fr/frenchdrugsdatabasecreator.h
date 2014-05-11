@@ -40,15 +40,15 @@
 namespace DrugsDb {
 namespace Internal {
 
-class FrDrugDatatabase : public DrugsDb::Internal::IDrugDatabase
+class FrDrugDatabase : public DrugsDb::Internal::IDrugDatabase
 {
     Q_OBJECT
 
 public:
-    FrDrugDatatabase(QObject *parent = 0);
-    ~FrDrugDatatabase();
+    FrDrugDatabase(QObject *parent = 0);
+    ~FrDrugDatabase();
 
-    QString id() const {return "FrDrugDatatabase";}
+    QString id() const {return "FrDrugDatabase";}
     void setLicenseType(LicenseType type);
 
     bool process();

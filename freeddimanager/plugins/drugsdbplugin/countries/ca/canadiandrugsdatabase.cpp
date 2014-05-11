@@ -82,6 +82,7 @@ CaDrugDatabase::CaDrugDatabase(QObject *parent) :
     setObjectName("CaDrugDatabase");
     setDatabaseUid("CA_HCDPD");
     setDatabaseLanguage("en");
+    setCountry(QLocale::Canada);
     setTempPath(QString("%1/%2")
                 .arg(settings()->value(Core::Constants::S_TMP_PATH).toString())
                 .arg("/CaRawSources/"));

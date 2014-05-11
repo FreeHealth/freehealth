@@ -112,6 +112,7 @@ ZaDrugDatabase::ZaDrugDatabase(QObject *parent) :
     setObjectName("ZaDrugDatabase");
     setDatabaseUid("SAEPI_ZA");
     setDatabaseLanguage("en");
+    setCountry(QLocale::SouthAfrica);
     setTempPath(QString("%1/%2")
                 .arg(settings()->value(Core::Constants::S_TMP_PATH).toString())
                 .arg("/ZaRawSources/"));

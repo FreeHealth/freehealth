@@ -78,13 +78,14 @@ using namespace Trans::ConstantTranslations;
 
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 
-FdaDrugDatatabase::FdaDrugDatatabase(QObject *parent) :
+FdaDrugDatabase::FdaDrugDatabase(QObject *parent) :
     IDrugDatabase(parent),
     m_WithProgress(false)
 {
-    setObjectName("FdaDrugDatatabase");
+    setObjectName("FdaDrugDatabase");
     setDatabaseUid("FDA_US");
     setDatabaseLanguage("en");
+    setCountry(QLocale::UnitedStates);
     setTempPath(QString("%1/%2")
                 .arg(settings()->value(Core::Constants::S_TMP_PATH).toString())
                 .arg("FdaRawSources"));
@@ -98,11 +99,11 @@ FdaDrugDatatabase::FdaDrugDatatabase(QObject *parent) :
     createTemporaryStorage();
 }
 
-FdaDrugDatatabase::~FdaDrugDatatabase()
+FdaDrugDatabase::~FdaDrugDatabase()
 {
 }
 
-void FdaDrugDatatabase::setLicenseType(LicenseType type)
+void FdaDrugDatabase::setLicenseType(LicenseType type)
 {
     IDrugDatabase::setLicenseType(type);
     if (type==NonFree) {
@@ -131,14 +132,14 @@ void FdaDrugDatatabase::setLicenseType(LicenseType type)
                   );
 }
 
-QString FdaDrugDatatabase::processMessage() const
+QString FdaDrugDatabase::processMessage() const
 {
     if (licenseType() == NonFree)
         return tr("Non-free FDA drugs database creation");
     return tr("Free FDA drugs database creation");
 }
 
-bool FdaDrugDatatabase::process()
+bool FdaDrugDatabase::process()
 {
     unzipFiles();
     prepareData();
@@ -285,12 +286,12 @@ public:
     QHash<QString, QString> mols_strength;
 };
 
-bool FdaDrugDatatabase::prepareData()
+bool FdaDrugDatabase::prepareData()
 {
     return true;
 }
 
-bool FdaDrugDatatabase::populateDatabase()
+bool FdaDrugDatabase::populateDatabase()
 {
     if (!checkDatabase())
         return false;
@@ -386,7 +387,7 @@ bool FdaDrugDatatabase::populateDatabase()
     return true;
 }
 
-//bool FdaDrugDatatabase::linkMolecules()
+//bool FdaDrugDatabase::linkMolecules()
 //{
     // 21 Apr 2014
     // Added 2122 components to database.

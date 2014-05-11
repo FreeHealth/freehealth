@@ -73,13 +73,14 @@ const char* const FRENCH_RPC_LINK           = "http://agence-prd.ansm.sante.fr/p
 
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 
-FrDrugDatatabase::FrDrugDatatabase(QObject *parent) :
+FrDrugDatabase::FrDrugDatabase(QObject *parent) :
     DrugsDb::Internal::IDrugDatabase(parent),
     m_WithProgress(false)
 {
-    setObjectName("FrDrugDatatabase");
+    setObjectName("FrDrugDatabase");
     setDatabaseUid("FR_AFSSAPS");
     setDatabaseLanguage("fr");
+    setCountry(QLocale::France);
     setTempPath(QString("%1/%2")
                 .arg(settings()->value(Core::Constants::S_TMP_PATH).toString())
                 .arg("/FrenchRawSources/"));
@@ -93,11 +94,11 @@ FrDrugDatatabase::FrDrugDatatabase(QObject *parent) :
     createTemporaryStorage();
 }
 
-FrDrugDatatabase::~FrDrugDatatabase()
+FrDrugDatabase::~FrDrugDatabase()
 {
 }
 
-void FrDrugDatatabase::setLicenseType(LicenseType type)
+void FrDrugDatabase::setLicenseType(LicenseType type)
 {
     IDrugDatabase::setLicenseType(type);
     if (type==NonFree) {
@@ -126,14 +127,14 @@ void FrDrugDatatabase::setLicenseType(LicenseType type)
                   );
 }
 
-QString FrDrugDatatabase::processMessage() const
+QString FrDrugDatabase::processMessage() const
 {
     if (licenseType() == NonFree)
         return tr("Non-free French drugs database creation");
     return tr("Free French drugs database creation");
 }
 
-bool FrDrugDatatabase::process()
+bool FrDrugDatabase::process()
 {
     clearFinalReport();
     unzipFiles();
@@ -146,7 +147,7 @@ bool FrDrugDatatabase::process()
     return true;
 }
 
-bool FrDrugDatatabase::prepareData()
+bool FrDrugDatabase::prepareData()
 {
     // check files
     QStringList files;
@@ -163,7 +164,7 @@ bool FrDrugDatatabase::prepareData()
 }
 
 /** Read the raw source files and create the drugs database (this does not include the interaction data) */
-bool FrDrugDatatabase::populateDatabase()
+bool FrDrugDatabase::populateDatabase()
 {
     if (!checkDatabase()) {
         if (!createDatabase())
@@ -295,7 +296,7 @@ bool FrDrugDatatabase::populateDatabase()
     return true;
 }
 
-//bool FrDrugDatatabase::linkMolecules()
+//bool FrDrugDatabase::linkMolecules()
 //{
     //    Mar 2014
     //    Refactoring the code for the FreeDDIManager -> only use ComponentAtcModel

@@ -92,7 +92,8 @@ IDrugDatabase::IDrugDatabase(QObject *parent) :
     _spcDefaultEncoding("UTF-8"),
     _lang("en"),
     _sid(-1),
-    _databasePopulator(0)
+    _databasePopulator(0),
+    _country(QLocale::AnyCountry)
 {
     setObjectName("FreeDDIManager::IDrugDatabase");
     _outputFileName = "master.db";

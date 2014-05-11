@@ -33,6 +33,7 @@
 #include <QHash>
 #include <QMultiHash>
 #include <QStringList>
+#include <QLocale>
 
 /**
  * \file idrugdatabase.h
@@ -108,6 +109,7 @@ public:
     void setDatapackDescriptionFile(const QString &absPath);
     void setSpcHtmlFilesDefaultEncoding(const QString &encoding) {_spcDefaultEncoding=encoding;}
     void setDatabaseLanguage(const QString &lang) {_lang = lang;}
+    void setCountry(const QLocale::Country &country) {_country = country;} // Use anyCountries for multicountry database
 
     virtual QString displayName() const {return _name;}
     virtual LicenseType licenseType() const {return _licenseType;}
@@ -123,6 +125,7 @@ public:
     QString datapackDescriptionFilePath() const {return _datapackDescriptionFilePath;}
     QString spcHtmlFilesDefaultEncoding() const {return _spcDefaultEncoding;}
     QString databaseLanguage() const {return _lang;}
+    QLocale::Country country() const {return _country;}
     int sourceId() const;
     virtual QString serverUid() const;
 
@@ -204,6 +207,7 @@ private:
     SubProcess _currentSubProcess;
     DrugDatabasePopulator *_databasePopulator;
     QStringList _finalReport;
+    QLocale::Country _country;
 };
 
 }  // namespace Internal
