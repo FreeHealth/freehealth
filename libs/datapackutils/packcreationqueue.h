@@ -54,6 +54,11 @@ struct DATAPACK_EXPORT RequestedPackCreation {
 class DATAPACK_EXPORT PackCreationQueue
 {
 public:
+    enum {
+        UseRelativePath = true,
+        UseAbsolutePath = false
+    };
+
     explicit PackCreationQueue();
     ~PackCreationQueue();
 
