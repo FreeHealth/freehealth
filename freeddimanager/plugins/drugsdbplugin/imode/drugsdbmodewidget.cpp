@@ -338,8 +338,11 @@ void DrugsDbModeWidget::onCurrentDrugsDatabaseChanged(const QItemSelection &curr
     d->setUiEnabled(true);
 
     // Update UI labels and texts
-    d->ui->output->setText(base->outputPath() + QDir::separator() + base->outputFileName());
-    d->ui->title->setText(base->displayName());
+    QFileInfo info(QString("%1/%2").arg(base->outputPath()).arg(base->outputFileName()));
+    d->ui->fileNameLabel->setText(info.fileName());
+    d->ui->path->setText(info.absolutePath());
+    d->ui->dateLabel->setText(QLocale().toString(info.lastModified(), QLocale::LongFormat));
+    d->ui->sizeLabel->setText(QLocale().toString(info.size()));
 
     // Reset all checkboxes label
     d->ui->unzip->setText(d->ui->unzip->text().remove(" CORRECTLY DONE"));

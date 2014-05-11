@@ -31,6 +31,81 @@
      </widget>
      <widget class="QWidget" name="layoutWidget">
       <layout class="QGridLayout" name="gridLayout_4">
+       <item row="1" column="0">
+        <widget class="QPushButton" name="downloadSPC">
+         <property name="text">
+          <string>Download SPC</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="1">
+        <widget class="QPushButton" name="showDbReport">
+         <property name="text">
+          <string>Show database report</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0">
+        <widget class="QPushButton" name="seeComponents">
+         <property name="toolTip">
+          <string>To see components, you must run at least one time the database creation and populate it with the drugs.</string>
+         </property>
+         <property name="text">
+          <string>Show components</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QPushButton" name="download">
+         <property name="text">
+          <string>Download sources</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="1">
+        <widget class="QPushButton" name="createDatapack">
+         <property name="text">
+          <string>Create DataPack</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QGroupBox" name="freeGroup">
+         <property name="title">
+          <string>Free part</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_2">
+          <item row="0" column="0">
+           <widget class="QCheckBox" name="unzip">
+            <property name="text">
+             <string>Unzip sources</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QCheckBox" name="prepare">
+            <property name="text">
+             <string>Prepare raw sources</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QCheckBox" name="createDb">
+            <property name="text">
+             <string>Create drugs database</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QCheckBox" name="populate">
+            <property name="text">
+             <string>Populate database with drugs</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
        <item row="2" column="1">
         <widget class="QGroupBox" name="nonFreeGroup">
          <property name="title">
@@ -82,112 +157,7 @@
          </layout>
         </widget>
        </item>
-       <item row="3" column="0" colspan="2">
-        <widget class="QGroupBox" name="groupBox_3">
-         <property name="title">
-          <string>Information</string>
-         </property>
-         <layout class="QGridLayout" name="gridLayout">
-          <item row="2" column="0" colspan="2">
-           <layout class="QHBoxLayout" name="horizontalLayout">
-            <item>
-             <widget class="QPushButton" name="seeDbDescription">
-              <property name="text">
-               <string>See database description file</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QPushButton" name="seeDatapackDescription">
-              <property name="text">
-               <string>See datapack description file</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item row="1" column="1">
-           <widget class="QLabel" name="output">
-            <property name="text">
-             <string notr="true"/>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QLabel" name="label">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="text">
-             <string>Output filename</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item row="0" column="1">
-        <widget class="QProgressBar" name="progressBar">
-         <property name="value">
-          <number>24</number>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QPushButton" name="downloadSPC">
-         <property name="text">
-          <string>Download SPC</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="0">
-        <widget class="QPushButton" name="download">
-         <property name="text">
-          <string>Download sources</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="0">
-        <widget class="QGroupBox" name="freeGroup">
-         <property name="title">
-          <string>Free part</string>
-         </property>
-         <layout class="QGridLayout" name="gridLayout_2">
-          <item row="0" column="0">
-           <widget class="QCheckBox" name="unzip">
-            <property name="text">
-             <string>Unzip sources</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QCheckBox" name="prepare">
-            <property name="text">
-             <string>Prepare raw sources</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="0">
-           <widget class="QCheckBox" name="createDb">
-            <property name="text">
-             <string>Create drugs database</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="0">
-           <widget class="QCheckBox" name="populate">
-            <property name="text">
-             <string>Populate database with drugs</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item row="6" column="0">
+       <item row="7" column="0">
         <spacer name="verticalSpacer">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -200,27 +170,123 @@
          </property>
         </spacer>
        </item>
-       <item row="4" column="1">
-        <widget class="QPushButton" name="showDbReport">
-         <property name="text">
-          <string>Show database report</string>
+       <item row="0" column="1">
+        <widget class="QProgressBar" name="progressBar">
+         <property name="value">
+          <number>24</number>
          </property>
         </widget>
        </item>
-       <item row="5" column="1">
-        <widget class="QPushButton" name="createDatapack">
-         <property name="text">
-          <string>Create DataPack</string>
+       <item row="3" column="0" colspan="2">
+        <widget class="QGroupBox" name="groupBox_3">
+         <property name="title">
+          <string>Output database information</string>
          </property>
+         <layout class="QGridLayout" name="gridLayout">
+          <item row="1" column="0" colspan="2">
+           <layout class="QGridLayout" name="gridLayout_6">
+            <item row="0" column="0">
+             <widget class="QLabel" name="label_2">
+              <property name="font">
+               <font>
+                <weight>75</weight>
+                <bold>true</bold>
+               </font>
+              </property>
+              <property name="text">
+               <string>Filename</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1">
+             <widget class="QLabel" name="sizeLabel">
+              <property name="text">
+               <string/>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QLabel" name="fileNameLabel">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="1">
+             <widget class="QLabel" name="dateLabel">
+              <property name="text">
+               <string/>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="0">
+             <widget class="QLabel" name="label">
+              <property name="font">
+               <font>
+                <weight>75</weight>
+                <bold>true</bold>
+               </font>
+              </property>
+              <property name="text">
+               <string>Date</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="0">
+             <widget class="QLabel" name="label_3">
+              <property name="font">
+               <font>
+                <weight>75</weight>
+                <bold>true</bold>
+               </font>
+              </property>
+              <property name="text">
+               <string>Size</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QLabel" name="label_4">
+              <property name="font">
+               <font>
+                <weight>75</weight>
+                <bold>true</bold>
+               </font>
+              </property>
+              <property name="text">
+               <string>Path</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QLabel" name="path">
+              <property name="text">
+               <string/>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
         </widget>
        </item>
        <item row="4" column="0">
-        <widget class="QPushButton" name="seeComponents">
-         <property name="toolTip">
-          <string>To see components, you must run at least one time the database creation and populate it with the drugs.</string>
-         </property>
+        <widget class="QPushButton" name="seeDbDescription">
          <property name="text">
-          <string>Show components</string>
+          <string>See database description file</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="1">
+        <widget class="QPushButton" name="seeDatapackDescription">
+         <property name="text">
+          <string>See datapack description file</string>
          </property>
         </widget>
        </item>
