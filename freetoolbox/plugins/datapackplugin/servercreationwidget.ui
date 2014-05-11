@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>DataPackPlugin::Internal::DataPackWidget</class>
- <widget class="QWidget" name="DataPackPlugin::Internal::DataPackWidget">
+ <class>DataPackPlugin::Internal::ServerCreationWidget</class>
+ <widget class="QWidget" name="DataPackPlugin::Internal::ServerCreationWidget">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -53,8 +53,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>637</width>
-        <height>337</height>
+        <width>643</width>
+        <height>352</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="scrollLayout">

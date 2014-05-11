@@ -31,7 +31,7 @@
  * \sa DataPackPlugin::Internal::DataPackPage
  */
 
-#include "datapackwidget.h"
+#include "servercreationwidget.h"
 #include "datapackcore.h"
 
 #include <coreplugin/icore.h>
@@ -50,7 +50,7 @@
 
 #include <QDebug>
 
-#include "ui_datapackwidget.h"
+#include "ui_servercreationwidget.h"
 #include "ui_serverwidget.h"
 
 using namespace DataPackPlugin;
@@ -68,7 +68,7 @@ public:
     DataPackWidgetPrivate(DataPackWidget *parent) :
         q(parent)
     {
-        ui = new Ui::DataPackWidget;
+        ui = new Ui::ServerCreationWidget;
     }
 
     ~DataPackWidgetPrivate()
@@ -136,7 +136,7 @@ public:
     }
 
 public:
-    Ui::DataPackWidget *ui;
+    Ui::ServerCreationWidget *ui;
     QHash<QString, Ui::ServerWidget *> _sui;
     QHash<QToolButton *, QString> _toolButtonToServerUid;
 

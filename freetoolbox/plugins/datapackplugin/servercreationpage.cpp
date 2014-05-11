@@ -25,14 +25,14 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 /*!
- * \class DataPackPlugin::Internal::DataPackPage
+ * \class DataPackPlugin::Internal::ServerCreationPage
  * Datapack pack and server creation page.
  * Allow user to create/update datapack server by-hand.
  * \sa DataPackPlugin::DataPackCore
  */
 
-#include "datapackpage.h"
-#include "datapackwidget.h"
+#include "servercreationpage.h"
+#include "servercreationwidget.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
@@ -55,47 +55,47 @@ static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionS
 
 namespace DataPackPlugin {
 namespace Internal {
-class DataPackPagePrivate
+class ServerCreationPagePrivate
 {
 public:
-    DataPackPagePrivate(DataPackPage *parent) :
+    ServerCreationPagePrivate(ServerCreationPage *parent) :
         _step(0),
         q(parent)
     {
         Q_UNUSED(q);
     }
 
-    ~DataPackPagePrivate()
+    ~ServerCreationPagePrivate()
     {
     }
 
 public:
-    DataPackStep *_step;
+    ServerCreationStep *_step;
 
 private:
-    DataPackPage *q;
+    ServerCreationPage *q;
 };
 } // namespace Internal
 } // namespace DataPackPlugin
 
 /*!
- * Constructor of the DataPackPlugin::Internal::DataPackPage class.
- * This object creates, owns and register the DataPackPlugin::Internal::DataPackStep
+ * Constructor of the DataPackPlugin::Internal::ServerCreationPage class.
+ * This object creates, owns and register the DataPackPlugin::Internal::ServerCreationStep
  * to the plugin manager object pool.
  */
-DataPackPage::DataPackPage(QObject *parent) :
+ServerCreationPage::ServerCreationPage(QObject *parent) :
     Core::IToolPage(parent),
-    d(new DataPackPagePrivate(this))
+    d(new ServerCreationPagePrivate(this))
 {
-    d->_step = new DataPackStep(this);
+    d->_step = new ServerCreationStep(this);
     pluginManager()->addObject(d->_step);
 }
 
 /*!
- * Destructor of the DataPackPlugin::Internal::DataPackPage class.
+ * Destructor of the DataPackPlugin::Internal::ServerCreationPage class.
  * Remove the step from the plugin manager.
  */
-DataPackPage::~DataPackPage()
+ServerCreationPage::~ServerCreationPage()
 {
     pluginManager()->removeObject(d->_step);
     if (d)
@@ -104,27 +104,27 @@ DataPackPage::~DataPackPage()
 }
 
 /*! Initializes the object with the default values. Return true if initialization was completed. */
-bool DataPackPage::initialize()
+bool ServerCreationPage::initialize()
 {
     return true;
 }
 
-QString DataPackPage::name() const
+QString ServerCreationPage::name() const
 {
     return tkTr(Trans::Constants::DATAPACK);
 }
 
-QString DataPackPage::category() const
+QString ServerCreationPage::category() const
 {
     return tkTr(Trans::Constants::DATAPACK);
 }
 
-QIcon DataPackPage::icon() const
+QIcon ServerCreationPage::icon() const
 {
     return theme()->icon(Core::Constants::ICON_PACKAGE);
 }
 
-QWidget *DataPackPage::createPage(QWidget *parent)
+QWidget *ServerCreationPage::createPage(QWidget *parent)
 {
     DataPackWidget *w = new DataPackWidget(parent);
     w->initialize();
@@ -132,27 +132,27 @@ QWidget *DataPackPage::createPage(QWidget *parent)
 }
 
 /** Datapack pack and server creation step CTor. */
-DataPackStep::DataPackStep(QObject *parent) :
+ServerCreationStep::ServerCreationStep(QObject *parent) :
     Core::IFullReleaseStep(parent)
 {
-    setObjectName("DataPackStep");
+    setObjectName("ServerCreationStep");
 }
 
-DataPackStep::~DataPackStep()
+ServerCreationStep::~ServerCreationStep()
 {
 }
 
-bool DataPackStep::createTemporaryStorage()
-{
-    return true;
-}
-
-bool DataPackStep::cleanTemporaryStorage()
+bool ServerCreationStep::createTemporaryStorage()
 {
     return true;
 }
 
-bool DataPackStep::startProcessing(ProcessTiming timing, SubProcess subProcess)
+bool ServerCreationStep::cleanTemporaryStorage()
+{
+    return true;
+}
+
+bool ServerCreationStep::startProcessing(ProcessTiming timing, SubProcess subProcess)
 {
     _currentTiming = timing;
     _currentSubProcess = subProcess;
@@ -160,7 +160,7 @@ bool DataPackStep::startProcessing(ProcessTiming timing, SubProcess subProcess)
     return true;
 }
 
-void DataPackStep::onSubProcessFinished()
+void ServerCreationStep::onSubProcessFinished()
 {
     Q_EMIT subProcessFinished(_currentTiming, _currentSubProcess);
 }

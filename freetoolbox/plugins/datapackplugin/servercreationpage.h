@@ -24,14 +24,14 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef DATAPACKPLUGIN_INTERNAL_DATAPACKPAGE_H
-#define DATAPACKPLUGIN_INTERNAL_DATAPACKPAGE_H
+#ifndef DATAPACKPLUGIN_INTERNAL_SERVERCREATIONPAGE_H
+#define DATAPACKPLUGIN_INTERNAL_SERVERCREATIONPAGE_H
 
 #include <coreplugin/itoolpage.h>
 #include <coreplugin/ifullreleasestep.h>
 
 /**
- * \file datapackpage.h
+ * \file servercreationpage.h
  * \author Eric Maeker
  * \version 0.8.0
  * \date 11 Nov 2012
@@ -39,18 +39,18 @@
 
 namespace DataPackPlugin {
 namespace Internal {
-class DataPackPagePrivate;
-class DataPackStep;
+class ServerCreationPagePrivate;
+class ServerCreationStep;
 
-class DataPackPage : public Core::IToolPage
+class ServerCreationPage : public Core::IToolPage
 {
     Q_OBJECT
 public:
-    explicit DataPackPage(QObject *parent = 0);
-    ~DataPackPage();
+    explicit ServerCreationPage(QObject *parent = 0);
+    ~ServerCreationPage();
     bool initialize();
 
-    virtual QString id() const {return "DataPackPage";}
+    virtual QString id() const {return "ServerCreationPage";}
     virtual QString name() const;
     virtual QString category() const;
     virtual QIcon icon() const;
@@ -59,18 +59,18 @@ public:
     virtual QWidget *createPage(QWidget *parent = 0);
 
 private:
-    Internal::DataPackPagePrivate *d;
+    Internal::ServerCreationPagePrivate *d;
 };
 
-class DataPackStep : public Core::IFullReleaseStep
+class ServerCreationStep : public Core::IFullReleaseStep
 {
     Q_OBJECT
 
 public:
-    DataPackStep(QObject *parent = 0);
-    ~DataPackStep();
+    ServerCreationStep(QObject *parent = 0);
+    ~ServerCreationStep();
 
-    QString id() const {return "DataPackStep";}
+    QString id() const {return "ServerCreationStep";}
     Steps stepNumber() const {return Core::IFullReleaseStep::DataPackProcessing;}
 
     bool createTemporaryStorage();
@@ -89,5 +89,5 @@ private:
 } // namespace Internal
 } // namespace DataPackPlugin
 
-#endif // DATAPACKPLUGIN_INTERNAL_DATAPACKPAGE_H
+#endif // DATAPACKPLUGIN_INTERNAL_SERVERCREATIONPAGE_H
 
