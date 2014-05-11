@@ -34,9 +34,14 @@
 #include "drugsdbmodewidget.h"
 #include "idrugdatabase.h"
 
+#include <ddiplugin/constants.h>
+#include <ddiplugin/ddicore.h>
+#include <ddiplugin/components/componentatcmodel.h>
+
 #include <coreplugin/icore.h>
 #include <coreplugin/imainwindow.h>
 #include <coreplugin/isettings.h>
+#include <coreplugin/modemanager/modemanager.h>
 #include <coreplugin/fdm_constants.h>
 
 #include <utils/log.h>
@@ -66,8 +71,8 @@ using namespace Trans::ConstantTranslations;
 
 static inline Core::IMainWindow *mainwindow() {return Core::ICore::instance()->mainWindow();}
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
-//static inline DrugsDB::DrugsDBCore *drugsDbCore() {return DrugsDB::DrugsDBCore::instance();}
-//static inline DrugsDB::DrugDrugInteractionCore *ddiCore() {return drugsDbCore()->ddiCore();}
+static inline Core::ModeManager *modeManager() {return Core::ICore::instance()->modeManager();}
+static inline DDI::DDICore *ddiCore() {return DDI::DDICore::instance();}
 
 namespace DrugsDb {
 namespace Internal {
@@ -183,7 +188,7 @@ DrugsDbModeWidget::DrugsDbModeWidget(QWidget *parent) :
     connect(d->ui->seeDatapackDescription, SIGNAL(clicked()), this, SLOT(onSeeDatapackDescriptionFileRequested()));
     connect(d->ui->createDatapack, SIGNAL(clicked()), this, SLOT(onCreateDatapackFiles()));
     connect(d->ui->showDbReport, SIGNAL(clicked()), this, SLOT(onShowDatabaseReportRequested()));
-
+    connect(d->ui->seeComponents, SIGNAL(clicked()), this, SLOT(onShowComponentsRequested()));
     onCurrentDrugsDatabaseChanged(QItemSelection(), QItemSelection());
 }
 
@@ -517,4 +522,18 @@ void DrugsDbModeWidget::onCreateDatapackFiles()
 void DrugsDbModeWidget::onShowDatabaseReportRequested()
 {
     // TODO: create a specific report on a DrugDatabase (not the DDIDatabase like the ddiplugin/database/ddidatabasereporter.h
+}
+
+void DrugsDbModeWidget::onShowComponentsRequested()
+{
+    // Get currently selected drugs database
+    IDrugDatabase *base = d->currentDatabase();
+    if (!base)
+        return;
+
+    // Update the component model filter
+    ddiCore()->componentAtcModel()->selectDatabase(base->databaseUid1(), base->databaseUid2());
+
+    // Activate Component mode
+    modeManager()->activateMode(DDI::Constants::MODE_COMPONENTATC);
 }

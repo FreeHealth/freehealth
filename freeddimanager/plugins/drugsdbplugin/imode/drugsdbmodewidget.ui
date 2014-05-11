@@ -214,6 +214,16 @@
          </property>
         </widget>
        </item>
+       <item row="4" column="0">
+        <widget class="QPushButton" name="seeComponents">
+         <property name="toolTip">
+          <string>To see components, you must run at least one time the database creation and populate it with the drugs.</string>
+         </property>
+         <property name="text">
+          <string>Show components</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
     </widget>
