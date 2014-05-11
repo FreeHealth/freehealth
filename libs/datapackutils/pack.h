@@ -32,6 +32,13 @@
 
 #include <QString>
 
+/**
+ * \file pack.h
+ * \author Eric Maeker
+ * \version 0.9.0
+ * \date 06 Feb 2012
+*/
+
 namespace DataPack {
 
 class DATAPACK_EXPORT Pack
