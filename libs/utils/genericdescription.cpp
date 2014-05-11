@@ -252,9 +252,9 @@ bool GenericDescription::fromDomElement(const QDomElement &root)
         LOG_ERROR_FOR("GenericDescription", "Wrong XML. No root tag: " + m_RootTag);
         return false;
     }
-    QHash<int, QString> elements;
+    QMap<int, QString> elements;
     elements = nonTranslatableTagsDataReference();
-    QHashIterator<int, QString> i(elements);
+    QMapIterator<int, QString> i(elements);
     while (i.hasNext()) {
         i.next();
         setData(i.key(), root.firstChildElement(i.value()).text());
@@ -308,9 +308,9 @@ bool GenericDescription::toDomElement(QDomElement *root, QDomDocument *doc) cons
     toRoot.appendChild(comment);
 
     // Set non translatable items
-    QHash<int, QString> elements;
+    QMap<int, QString> elements;
     elements = nonTranslatableTagsDataReference();
-    QHashIterator<int, QString> i(elements);
+    QMapIterator<int, QString> i(elements);
     while (i.hasNext()) {
         i.next();
         if (data(i.key()).toString().isEmpty())
@@ -477,9 +477,9 @@ bool GenericDescription::operator==(const GenericDescription &other) const
     return true;
 }
 
-QHash<int, QString> GenericDescription::nonTranslatableTagsDataReference() const
+QMap<int, QString> GenericDescription::nonTranslatableTagsDataReference() const
 {
-    QHash<int, QString> elements;
+    QMap<int, QString> elements;
     // get non translatable items
     elements.insert(GenericDescription::Uuid, TAG_UUID);
     elements.insert(GenericDescription::Version, TAG_VERSION);
@@ -504,9 +504,9 @@ QHash<int, QString> GenericDescription::nonTranslatableTagsDataReference() const
     return elements;
 }
 
-QHash<int, QString> GenericDescription::translatableTagsDataReference() const
+QMap<int, QString> GenericDescription::translatableTagsDataReference() const
 {
-    QHash<int, QString> elements;
+    QMap<int, QString> elements;
     elements.insert(GenericDescription::Label, TAG_LABEL);
     elements.insert(GenericDescription::Category, TAG_CATEGORY);
     elements.insert(GenericDescription::ToolTip, TAG_TOOLTIP);

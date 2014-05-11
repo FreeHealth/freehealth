@@ -135,8 +135,8 @@ public:
     bool operator!=(const GenericDescription &other) const {return !operator==(other);}
 
 private:
-    QHash<int, QString> nonTranslatableTagsDataReference() const;
-    QHash<int, QString> translatableTagsDataReference() const;
+    QMap<int, QString> nonTranslatableTagsDataReference() const;
+    QMap<int, QString> translatableTagsDataReference() const;
 
 private:
     QList<Utils::GenericUpdateInformation> m_UpdateInfos;
