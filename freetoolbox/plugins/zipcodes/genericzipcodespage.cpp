@@ -23,19 +23,6 @@
  *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#include <coreplugin/icore.h>
-#include <coreplugin/imainwindow.h>
-#include <coreplugin/ftb_constants.h>
-#include <coreplugin/isettings.h>
-#include <coreplugin/ftb_constants.h>
-
-#include <drugsdb/tools.h>
-
-#include <extensionsystem/pluginmanager.h>
-
-#include <QFile>
-#include <QDir>
-
 #include "genericzipcodespage.h"
 #include "genericzipcodeswidget.h"
 

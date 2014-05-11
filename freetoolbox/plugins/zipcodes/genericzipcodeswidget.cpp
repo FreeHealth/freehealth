@@ -170,6 +170,7 @@ void GenericZipCodesWidget::onPostDownloadProcessFinished()
 void GenericZipCodesWidget::selectCountry(const QModelIndex &index)
 {
     // TODO: code here
+    Q_UNUSED(index);
 //    const bool validIndex = index.isValid();
 //    if (validIndex)
 //        m_Step->selectCountry(index);
