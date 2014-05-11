@@ -37,6 +37,7 @@
 #include <utils/database.h>
 #include <utils/httpdownloader.h>
 #include <quazip/global.h>
+#include <datapackutils/constants.h>
 
 #include <extensionsystem/pluginmanager.h>
 
@@ -87,7 +88,11 @@ public:
     QString tmpPath() const {return settings()->value(Core::Constants::S_TMP_PATH).toString() + "/GeonamesZipCodes/";}
 
     // This database contains **all** zipcodes available for **all** countries
-    QString databaseOutputAbsFilePath() const {return settings()->value(Core::Constants::S_DBOUTPUT_PATH).toString() + "/geonameszipcodes/zipcodes.db";}
+    QString databaseOutputAbsFilePath() const
+    {
+        return settings()->value(Core::Constants::S_DBOUTPUT_PATH).toString() +
+                "/geonameszipcodes/zipcodes.db";
+    }
 
     // Return the path for a database containing \e countries usable for a datapack creation
     // This database is different from the databaseOutputAbsFilePath()
@@ -98,14 +103,30 @@ public:
     }
 
     // ZipCodes database SQL scheme file
-    QString sqlMasterFileAbsPath() const {return settings()->value(Core::Constants::S_GITFILES_PATH).toString() + "/global_resources/sql/zipcodes/zipcodes.sql";}
+    QString sqlMasterFileAbsPath() const
+    {
+        return settings()->value(Core::Constants::S_GITFILES_PATH).toString() +
+                "/global_resources/sql/zipcodes/zipcodes.sql";
+    }
 
     // When user wants to create multiple country datapacks
     // This file describes all countries to include
-    QString multiCountryDefinitionFile() const {return settings()->value(Core::Constants::S_GITFILES_PATH).toString() + QString("%1/%2").arg(Core::Constants::PATH_TO_DATAPACK_DESCRIPTION_FILES).arg("/geonames/multi.csv");}
+    QString multiCountryDefinitionFile() const
+    {
+        return settings()->value(Core::Constants::S_GITFILES_PATH).toString() +
+                QString("%1/%2")
+                .arg(Core::Constants::PATH_TO_DATAPACK_DESCRIPTION_FILES)
+                .arg("/geonames/multi.csv");
+    }
 
     // Path to generic datapack description file
-    QString genericDatapackDescriptionFile() const {return settings()->value(Core::Constants::S_GITFILES_PATH).toString() + QString("%1/%2").arg(Core::Constants::PATH_TO_DATAPACK_DESCRIPTION_FILES).arg("/geonames/packdescription.xml");}
+    QString genericDatapackDescriptionFile() const
+    {
+        return settings()->value(Core::Constants::S_GITFILES_PATH).toString() +
+                QString("%1/%2/%3")
+                .arg(Core::Constants::PATH_TO_DATAPACK_DESCRIPTION_FILES)
+                .arg("geonames")
+                .arg(DataPack::Constants::PACKDESCRIPTION_FILENAME);}
 
     // Connect the raw source database
     bool connectRawDatabase()
@@ -345,7 +366,7 @@ public:
         }
         content = content.replace("__COUNTRY__", names.join(", "));
         content = content.replace("__COUNTRY_ISO__", countryIsoCodes.join(", "));
-        Utils::saveStringToFile(content, file.absolutePath() + "/packdescription.xml", Utils::Overwrite, Utils::DontWarnUser);
+        Utils::saveStringToFile(content, QString("%1/%2").arg(file.absolutePath()).arg(DataPack::Constants::PACKDESCRIPTION_FILENAME), Utils::Overwrite, Utils::DontWarnUser);
         qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
 
         // Vacuum
@@ -638,7 +659,7 @@ bool GenericZipCodesStep::registerDataPack()
     QString dbFileName = QFileInfo(d->databaseOutputAbsFilePath()).fileName();
 
     // Find all created datapacks
-    QFileInfoList files = Utils::getFiles(QFileInfo(d->databaseOutputAbsFilePath()).absolutePath(), "packdescription.xml");
+    QFileInfoList files = Utils::getFiles(QFileInfo(d->databaseOutputAbsFilePath()).absolutePath(), DataPack::Constants::PACKDESCRIPTION_FILENAME);
     foreach(const QFileInfo &file, files) {
         DataPackPlugin::DataPackQuery query;
         query.setDescriptionFileAbsolutePath(file.absoluteFilePath());

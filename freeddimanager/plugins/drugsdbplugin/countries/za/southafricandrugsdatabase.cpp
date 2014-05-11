@@ -58,6 +58,7 @@
 #include <translationutils/constants.h>
 #include <translationutils/trans_drugs.h>
 #include <translationutils/trans_countries.h>
+#include <datapackutils/constants.h>
 
 #include <QFile>
 #include <QMap>
@@ -119,10 +120,6 @@ ZaDrugDatabase::ZaDrugDatabase(QObject *parent) :
                                .arg(settings()->value(Core::Constants::S_GITFILES_PATH).toString())
                                .arg(Core::Constants::PATH_TO_DRUG_DATABASE_DESCRIPTION_FILES)
                                .arg("za/description.xml"));
-    setDatapackDescriptionFile(QString("%1/%2/%3")
-                               .arg(settings()->value(Core::Constants::S_GITFILES_PATH).toString())
-                               .arg(Core::Constants::PATH_TO_DATAPACK_DESCRIPTION_FILES)
-                               .arg("drugs/za_noddi/packdescription.xml"));
     setLicenseType(Free);
     setDownloadUrl("");
     createTemporaryStorage();
@@ -139,18 +136,20 @@ void ZaDrugDatabase::setLicenseType(LicenseType type)
         setDisplayName(tr("Non-free South African drugs database"));
         setConnectionName("za_nonfree");
         setServerOwner(FrenchAssociation);
-        setDatapackDescriptionFile(QString("%1/%2/%3")
+        setDatapackDescriptionFile(QString("%1/%2/drugs/%3/%4")
                                    .arg(settings()->value(Core::Constants::S_GITFILES_PATH).toString())
                                    .arg(Core::Constants::PATH_TO_DATAPACK_DESCRIPTION_FILES)
-                                   .arg("drugs/za_ddi/packdescription.xml"));
+                                   .arg("za_ddi")
+                                   .arg(DataPack::Constants::PACKDESCRIPTION_FILENAME));
     } else {
         setDisplayName(tr("Free South African drugs database"));
         setConnectionName("za_free");
         setServerOwner(Community);
-        setDatapackDescriptionFile(QString("%1/%2/%3")
+        setDatapackDescriptionFile(QString("%1/%2/drugs/%3/%4")
                                    .arg(settings()->value(Core::Constants::S_GITFILES_PATH).toString())
                                    .arg(Core::Constants::PATH_TO_DATAPACK_DESCRIPTION_FILES)
-                                   .arg("drugs/za_noddi/packdescription.xml"));
+                                   .arg("za_noddi")
+                                   .arg(DataPack::Constants::PACKDESCRIPTION_FILENAME));
     }
     setOutputPath(QString("%1/%2/%3")
                   .arg(settings()->value(Core::Constants::S_DBOUTPUT_PATH).toString())

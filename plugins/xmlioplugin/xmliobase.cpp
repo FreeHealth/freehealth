@@ -50,6 +50,7 @@
 #include <utils/log.h>
 #include <utils/global.h>
 #include <utils/databaseconnector.h>
+#include <datapackutils/constants.h>
 
 #include <QCoreApplication>
 #include <QSqlError>
@@ -998,7 +999,7 @@ bool XmlIOBase::registerAlertPacks(const XmlFormName &form)
     bool ok = true;
     if (alertPacksPath.exists()) {
         LOG_FOR("XmlFormIO","Saving attached alertpacks to database " + form.uid);
-        QFileInfoList files = Utils::getFiles(alertPacksPath, "packdescription.xml", Utils::Recursively);
+        QFileInfoList files = Utils::getFiles(alertPacksPath, DataPack::Constants::PACKDESCRIPTION_FILENAME, Utils::Recursively);
         foreach(const QFileInfo &f, files) {
             if (!Alert::AlertCore::instance().registerAlertPack(f.absolutePath())) {
                 LOG_ERROR("Unable to read alertpack: "+ f.absolutePath());

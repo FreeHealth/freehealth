@@ -48,6 +48,7 @@
 #include <translationutils/trans_database.h>
 #include <translationutils/trans_filepathxml.h>
 #include <quazip/global.h>
+#include <datapackutils/constants.h>
 
 #include <QDir>
 #include <QFile>
@@ -104,10 +105,11 @@ Icd10Step::Icd10Step(QObject *parent) :
     d->_connection = "icd10";
     d->_outputPath = settings()->value(Core::Constants::S_DBOUTPUT_PATH).toString() + "/icd10/";
     d->_databaseFileName = "icd10.db";
-    d->_datapackDescriptionFile = QString("%1/%2/%3")
+    d->_datapackDescriptionFile = QString("%1/%2/%3/%4")
             .arg(settings()->value(Core::Constants::S_GITFILES_PATH).toString())
             .arg(Core::Constants::PATH_TO_DATAPACK_DESCRIPTION_FILES)
-            .arg("icd10/packdescription.xml");
+            .arg("icd10")
+            .arg(DataPack::Constants::PACKDESCRIPTION_FILENAME);
 
     d->_url = "http://www.icd10.ch/telechargement/Exp_text.zip";
 }

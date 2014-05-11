@@ -49,6 +49,7 @@
 #include <translationutils/constants.h>
 #include <translationutils/trans_drugs.h>
 #include <translationutils/trans_countries.h>
+#include <datapackutils/constants.h>
 
 #include <QDir>
 #include <QFile>
@@ -162,10 +163,6 @@ BeDrugDatabaseStep::BeDrugDatabaseStep(QObject *parent) :
                                .arg(settings()->value(Core::Constants::S_GITFILES_PATH).toString())
                                .arg(Core::Constants::PATH_TO_DRUG_DATABASE_DESCRIPTION_FILES)
                                .arg("be/description.xml"));
-    setDatapackDescriptionFile(QString("%1/%2/%3")
-                               .arg(settings()->value(Core::Constants::S_GITFILES_PATH).toString())
-                               .arg(Core::Constants::PATH_TO_DATAPACK_DESCRIPTION_FILES)
-                               .arg("drugs/be_noddi/packdescription.xml"));
     setDownloadUrl("");
     setLicenseType(Free);
     createTemporaryStorage();
@@ -185,7 +182,7 @@ void BeDrugDatabaseStep::setLicenseType(LicenseType type)
         setDatapackDescriptionFile(QString("%1/%2/%3")
                                    .arg(settings()->value(Core::Constants::S_GITFILES_PATH).toString())
                                    .arg(Core::Constants::PATH_TO_DATAPACK_DESCRIPTION_FILES)
-                                   .arg("drugs/be_ddi/packdescription.xml"));
+                                   .arg(QString("drugs/be_ddi/%1").arg(DataPack::Constants::PACKDESCRIPTION_FILENAME));
     } else {
         setDisplayName(tr("Free Belguish drugs database"));
         setConnectionName("be_free");
@@ -193,7 +190,7 @@ void BeDrugDatabaseStep::setLicenseType(LicenseType type)
         setDatapackDescriptionFile(QString("%1/%2/%3")
                                    .arg(settings()->value(Core::Constants::S_GITFILES_PATH).toString())
                                    .arg(Core::Constants::PATH_TO_DATAPACK_DESCRIPTION_FILES)
-                                   .arg("drugs/be_noddi/packdescription.xml"));
+                                   .arg(QString("drugs/be_noddi/%1").arg(DataPack::Constants::PACKDESCRIPTION_FILENAME));
     }
 }
 

@@ -36,7 +36,8 @@ HEADERS += datapack_exporter.h \
     packmanager.h \
     serverenginestatus.h \
     widgets/packwizard.h \
-    packcreationqueue.h
+    packcreationqueue.h \
+    constants.h
 
 SOURCES += \
     servermanager.cpp \

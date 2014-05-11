@@ -42,6 +42,7 @@
 #include <translationutils/trans_drugs.h>
 #include <translationutils/trans_countries.h>
 #include <quazip/global.h>
+#include <datapackutils/constants.h>
 
 #include <QFile>
 #include <QMap>
@@ -104,18 +105,20 @@ void CaDrugDatabase::setLicenseType(LicenseType type)
     if (type==NonFree) {
         setDisplayName(tr("Non-free Canadian drugs database"));
         setConnectionName("ca_nonfree");
-        setDatapackDescriptionFile(QString("%1/%2/%3")
+        setDatapackDescriptionFile(QString("%1/%2/drugs/%3/%4")
                                    .arg(settings()->value(Core::Constants::S_GITFILES_PATH).toString())
                                    .arg(Core::Constants::PATH_TO_DATAPACK_DESCRIPTION_FILES)
-                                   .arg("drugs/ca_ddi/packdescription.xml"));
+                                   .arg("ca_ddi")
+                                   .arg(DataPack::Constants::PACKDESCRIPTION_FILENAME));
     } else {
         setDisplayName(tr("Free Canadian drugs database"));
         setConnectionName("ca_free");
         setServerOwner(Community);
-        setDatapackDescriptionFile(QString("%1/%2/%3")
+        setDatapackDescriptionFile(QString("%1/%2/drugs/%3/%4")
                                    .arg(settings()->value(Core::Constants::S_GITFILES_PATH).toString())
                                    .arg(Core::Constants::PATH_TO_DATAPACK_DESCRIPTION_FILES)
-                                   .arg("drugs/ca_noddi/packdescription.xml"));
+                                   .arg("ca_noddi")
+                                   .arg(DataPack::Constants::PACKDESCRIPTION_FILENAME));
     }
     setOutputPath(QString("%1/%2/%3")
                   .arg(settings()->value(Core::Constants::S_DBOUTPUT_PATH).toString())

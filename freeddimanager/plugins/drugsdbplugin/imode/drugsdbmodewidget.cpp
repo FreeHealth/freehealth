@@ -43,6 +43,7 @@
 #include <utils/global.h>
 #include <translationutils/constants.h>
 #include <translationutils/trans_filepathxml.h>
+#include <datapackutils/constants.h>
 #include <datapackutils/pack.h>
 #include <datapackutils/packdescription.h>
 
@@ -385,7 +386,7 @@ void DrugsDbModeWidget::onCreateDatapackFiles()
         return;
     }
 
-    // Prepare XML datapack files
+    // Update XML datapack description files using the default one (available on the git repo)
     // Set date of update, (authors?), size, md5, sha1, update infos, version
     DataPack::Pack pack;
     pack.fromXmlFile(base->datapackDescriptionFilePath());
@@ -410,8 +411,7 @@ void DrugsDbModeWidget::onCreateDatapackFiles()
     descr.addUpdateInformation(update);
     pack.setPackDescription(descr);
 
-    // TODO: remove magic number "packdescription.xml". see also DataPack lib & plugins
-    QString fileName = QString("%1/packdescription.xml").arg(path);
+    QString fileName = QString("%1/%2").arg(path).arg(DataPack::Constants::PACKDESCRIPTION_FILENAME);
     if (!Utils::saveStringToFile(pack.toXml(), fileName, Utils::Overwrite, Utils::DontWarnUser, 0)) {
         Utils::warningMessageBox(tr("Error"),
                                  tkTr(Trans::Constants::FILE_1_CAN_NOT_BE_CREATED)

@@ -45,6 +45,7 @@
 #include <datapackutils/packdescription.h>
 #include <datapackutils/serverdescription.h>
 #include <extensionsystem/pluginmanager.h>
+#include <datapackutils/constants.h>
 
 #include <quazip/JlCompress.h>
 
@@ -371,7 +372,7 @@ bool DataPackCore::createServer(const QString &serverUid)
             descr.setData(DataPack::PackDescription::FreeAccountCompatVersion, qApp->applicationVersion());
         }
 
-        QString outputPackDescriptionFile = QFileInfo(path).absolutePath() + "/packdescription.xml";
+        QString outputPackDescriptionFile = QString("%1/%2").arg(QFileInfo(path).absolutePath()).arg(DataPack::Constants::PACKDESCRIPTION_FILENAME);
         if (!Utils::saveStringToFile(descr.toXml(), outputPackDescriptionFile, Utils::Overwrite, Utils::DontWarnUser)) {
             LOG_ERROR("Unable to add the pack description file: " + outputPackDescriptionFile);
             continue;

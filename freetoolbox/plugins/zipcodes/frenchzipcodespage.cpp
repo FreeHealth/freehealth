@@ -42,6 +42,7 @@
 #include <translationutils/constants.h>
 #include <translationutils/trans_database.h>
 #include <quazip/global.h>
+#include <datapackutils/constants.h>
 
 #include <extensionsystem/pluginmanager.h>
 
@@ -73,7 +74,7 @@ static inline QString workingPath()     {return QDir::cleanPath(settings()->valu
 static inline QString csvFileAbsPath()         {return workingPath() + "/insee.csv";}
 static inline QString sqlMasterFileAbsPath()   {return QDir::cleanPath(settings()->value(Core::Constants::S_GITFILES_PATH).toString() + "/global_resources/sql/zipcodes/zipcodes.sql");}
 static inline QString sqlImportFileAbsPath()   {return QDir::cleanPath(settings()->value(Core::Constants::S_GITFILES_PATH).toString() + "/global_resources/sql/zipcodes/zipcodes-fr-import.sql");}
-static inline QString datapackDescriptionFile(){return QDir::cleanPath(settings()->value(Core::Constants::S_GITFILES_PATH).toString() + QString("%1/%2").arg(Core::Constants::PATH_TO_DATAPACK_DESCRIPTION_FILES).arg("/zipcodes/nonfree_french/packdescription.xml"));}
+static inline QString datapackDescriptionFile(){return QDir::cleanPath(settings()->value(Core::Constants::S_GITFILES_PATH).toString() + QString("%1/%2/%3").arg(Core::Constants::PATH_TO_DATAPACK_DESCRIPTION_FILES).arg("zipcodes/nonfree_french").arg(DataPack::Constants::PACKDESCRIPTION_FILENAME));}
 
 }
 
