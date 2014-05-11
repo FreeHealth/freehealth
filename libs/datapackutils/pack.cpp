@@ -282,9 +282,6 @@ void Pack::readXml(const QString &fullPackConfigXml)
     QDomDocument doc;
     QString error;
     int line, col;
-
-    qWarning() << fullPackConfigXml;
-
     if (!doc.setContent(fullPackConfigXml, &error, &line, &col)) {
         LOG_ERROR_FOR("DataPack::Pack", tkTr(Trans::Constants::ERROR_1_LINE_2_COLUMN_3).arg(error).arg(line).arg(col));
         return;
