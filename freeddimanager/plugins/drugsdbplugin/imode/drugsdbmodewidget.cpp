@@ -78,6 +78,8 @@ public:
     DrugsDbModeWidgetPrivate(DrugsDbModeWidget *parent) :
         ui(0),
         _progress(0),
+        _treeNonFree(0),
+        _treeFree(0),
         q(parent)
     {
         Q_UNUSED(q);
@@ -90,22 +92,50 @@ public:
     void updateAvailableDatabase()
     {
         // Update available database listWidget
-        QObject::disconnect(ui->availableListWidget->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), q, SLOT(onCurrentDrugsDatabaseChanged(QItemSelection,QItemSelection)));
-        ui->availableListWidget->clear();
-        foreach(IDrugDatabase *db, _databases) {
-            ui->availableListWidget->addItem(db->displayName());
+        QObject::disconnect(ui->availableTreeWidget->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), q, SLOT(onCurrentDrugsDatabaseChanged(QItemSelection,QItemSelection)));
+        if (!_treeNonFree) {
+            _treeNonFree = new QTreeWidgetItem(ui->availableTreeWidget, QStringList() << "Non-Free");
+            QFont bold;
+            bold.setBold(true);
+            _treeNonFree->setFont(0, bold);
         }
-        ui->availableListWidget->setCurrentIndex(QModelIndex());
-        QObject::connect(ui->availableListWidget->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), q, SLOT(onCurrentDrugsDatabaseChanged(QItemSelection,QItemSelection)));
+        if (!_treeFree) {
+            _treeFree = new QTreeWidgetItem(ui->availableTreeWidget, QStringList() << "Free");
+            QFont bold;
+            bold.setBold(true);
+            _treeFree->setFont(0, bold);
+        }
+        foreach(IDrugDatabase *db, _databases) {
+            if (_databaseItems.values().contains(db))
+                continue;
+            QTreeWidgetItem *item = 0;
+            QFont bold;
+            bold.setBold(true);
+            if (db->licenseType() == IDrugDatabase::NonFree) {
+                _treeNonFree->addChild(item);
+                // Create a country child
+                item = new QTreeWidgetItem(_treeNonFree, QStringList() << QLocale::countryToString(db->country()));
+                item->setFont(0, bold);
+                item->setForeground(0, QBrush(Qt::darkBlue));
+                item = new QTreeWidgetItem(item, QStringList() << db->displayName());
+            } else {
+                _treeFree->addChild(item);
+                item = new QTreeWidgetItem(_treeFree, QStringList() << QLocale::countryToString(db->country()));
+                item->setFont(0, bold);
+                item->setForeground(0, QBrush(Qt::darkBlue));
+                item = new QTreeWidgetItem(item, QStringList() << db->displayName());
+            }
+            _databaseItems.insert(item, db);
+        }
+        ui->availableTreeWidget->setCurrentIndex(QModelIndex());
+        ui->availableTreeWidget->expandAll();
+        QObject::connect(ui->availableTreeWidget->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), q, SLOT(onCurrentDrugsDatabaseChanged(QItemSelection,QItemSelection)));
     }
 
     // Returns zero in case of error
     IDrugDatabase *currentDatabase()
     {
-        int row = ui->availableListWidget->selectionModel()->currentIndex().row();
-        if (!IN_RANGE_STRICT_MAX(row, 0, _databases.count()))
-            return 0;
-        return _databases.at(row);
+        return _databaseItems.value(ui->availableTreeWidget->currentItem());
     }
 
     // Set UI 'modifiers' enabled state
@@ -128,6 +158,8 @@ public:
     Ui::DrugsDbModeWidget *ui;
     QList<IDrugDatabase*> _databases;
     QPointer<QProgressDialog> _progress;
+    QTreeWidgetItem *_treeNonFree, *_treeFree;
+    QHash<QTreeWidgetItem *, IDrugDatabase *> _databaseItems;
 
 private:
     DrugsDbModeWidget *q;
@@ -316,9 +348,25 @@ void DrugsDbModeWidget::onCurrentDrugsDatabaseChanged(const QItemSelection &curr
     d->ui->addPreg->setText(d->ui->addPreg->text().remove(" CORRECTLY DONE"));
     d->ui->spc->setText(d->ui->spc->text().remove(" CORRECTLY DONE"));
 
+    // Uncheck all checkboxes
+    d->ui->unzip->setChecked(false);
+    d->ui->prepare->setChecked(false);
+    d->ui->createDb->setChecked(false);
+    d->ui->populate->setChecked(false);
+    d->ui->addAtc->setChecked(false);
+    d->ui->linkMols->setChecked(false);
+    d->ui->addDDI->setChecked(false);
+    d->ui->addPims->setChecked(false);
+    d->ui->addPreg->setChecked(false);
+    d->ui->spc->setChecked(false);
+
     // Add tooltips to buttons
     d->ui->seeDbDescription->setToolTip(base->databaseDescriptionFilePath());
     d->ui->seeDatapackDescription->setToolTip(base->datapackDescriptionFilePath());
+
+    // Enable ui parts according to licence type
+    bool enableNonFree = (base->licenseType() == IDrugDatabase::NonFree);
+    d->ui->nonFreeGroup->setEnabled(enableNonFree);
 }
 
 // #include <texteditorplugin/texteditordialog.h>
@@ -401,6 +449,7 @@ void DrugsDbModeWidget::onCreateDatapackFiles()
     descr.setData(DataPack::PackDescription::Size, QFileInfo(base->absoluteFilePath()).size());
     descr.setData(DataPack::PackDescription::Md5, Utils::fileMd5(base->absoluteFilePath()));
     descr.setData(DataPack::PackDescription::Sha1, Utils::fileSha1(base->absoluteFilePath()));
+    descr.setData(DataPack::PackDescription::Country, QLocale::countryToString(base->country()));
     Utils::GenericUpdateInformation update;
     update.setDate(QDate::currentDate());
     update.setAuthor("The FreeMedForms Team");
