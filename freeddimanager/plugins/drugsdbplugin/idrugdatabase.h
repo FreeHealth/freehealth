@@ -114,6 +114,8 @@ public:
     virtual QString displayName() const {return _name;}
     virtual LicenseType licenseType() const {return _licenseType;}
     virtual ServerOwner serverOwner() const {return _serverOwner;}
+    QString databaseUid1() const {return _dbUid1;}
+    QString databaseUid2() const {return _dbUid2;}
     QString tempPath() const {return _tempPath;}
     QString outputPath() const {return _outputPath;}
     QString connectionName() const {return _connection;}

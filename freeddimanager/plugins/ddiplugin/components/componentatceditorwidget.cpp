@@ -621,6 +621,25 @@ void ComponentAtcEditorWidget::translateActions()
     d->aCreateUnreviewedWikiPages->setText(tr("Create unreviewed wiki pages"));
 }
 
+void ComponentAtcEditorWidget::showEvent(QShowEvent *e)
+{
+    d->ui->availableDrugsDb->setCurrentIndex(-1);
+    // Check the database uid combo
+    for(int i = 0; i < d->ui->availableDrugsDb->count(); ++i) {
+        QString uid = d->ui->availableDrugsDb->itemText(i);
+        qWarning() << uid << d->model->databaseUids();
+        if (d->model->databaseUids().count() == 2) {
+            if (uid == QString("%1 - %2")
+                    .arg(d->model->databaseUids().at(0))
+                    .arg(d->model->databaseUids().at(1)))
+            d->ui->availableDrugsDb->setCurrentIndex(i);
+        } else if (uid == d->model->databaseUids().at(0)) {
+            d->ui->availableDrugsDb->setCurrentIndex(i);
+        }
+    }
+    QWidget::showEvent(e);
+}
+
 void ComponentAtcEditorWidget::changeEvent(QEvent *e)
 {
     QWidget::changeEvent(e);

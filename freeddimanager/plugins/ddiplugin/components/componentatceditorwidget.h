@@ -65,6 +65,7 @@ protected Q_SLOTS:
 
 protected:
     void translateActions();
+    void showEvent(QShowEvent *e);
     void changeEvent(QEvent *e);
 
 #ifdef WITH_TESTS
