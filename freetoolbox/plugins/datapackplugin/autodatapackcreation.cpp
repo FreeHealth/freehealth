@@ -25,14 +25,14 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 /*!
- * \class DataPackPlugin::Internal::ServerCreationPage
+ * \class DataPackPlugin::Internal::AutoDataPackCreationPage
  * Datapack pack and server creation page.
  * Allow user to create/update datapack server by-hand.
  * \sa DataPackPlugin::DataPackCore
  */
 
-#include "servercreationpage.h"
-#include "servercreationwidget.h"
+#include "autodatapackcreation.h"
+#include "ui_autodatapackcreation.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
@@ -55,47 +55,47 @@ static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionS
 
 namespace DataPackPlugin {
 namespace Internal {
-class ServerCreationPagePrivate
+class AutoDataPackCreationPagePrivate
 {
 public:
-    ServerCreationPagePrivate(ServerCreationPage *parent) :
+    AutoDataPackCreationPagePrivate(AutoDataPackCreationPage *parent) :
         _step(0),
         q(parent)
     {
         Q_UNUSED(q);
     }
 
-    ~ServerCreationPagePrivate()
+    ~AutoDataPackCreationPagePrivate()
     {
     }
 
 public:
-    ServerCreationStep *_step;
+    AutoDataPackCreationStep *_step;
 
 private:
-    ServerCreationPage *q;
+    AutoDataPackCreationPage *q;
 };
 } // namespace Internal
 } // namespace DataPackPlugin
 
 /*!
- * Constructor of the DataPackPlugin::Internal::ServerCreationPage class.
- * This object creates, owns and register the DataPackPlugin::Internal::ServerCreationStep
+ * Constructor of the DataPackPlugin::Internal::AutoDataPackCreationPage class.
+ * This object creates, owns and register the DataPackPlugin::Internal::AutoDataPackCreationStep
  * to the plugin manager object pool.
  */
-ServerCreationPage::ServerCreationPage(QObject *parent) :
+AutoDataPackCreationPage::AutoDataPackCreationPage(QObject *parent) :
     Core::IToolPage(parent),
-    d(new ServerCreationPagePrivate(this))
+    d(new AutoDataPackCreationPagePrivate(this))
 {
-    d->_step = new ServerCreationStep(this);
+    d->_step = new AutoDataPackCreationStep(this);
     pluginManager()->addObject(d->_step);
 }
 
 /*!
- * Destructor of the DataPackPlugin::Internal::ServerCreationPage class.
+ * Destructor of the DataPackPlugin::Internal::AutoDataPackCreationPage class.
  * Remove the step from the plugin manager.
  */
-ServerCreationPage::~ServerCreationPage()
+AutoDataPackCreationPage::~AutoDataPackCreationPage()
 {
     pluginManager()->removeObject(d->_step);
     if (d)
@@ -104,55 +104,57 @@ ServerCreationPage::~ServerCreationPage()
 }
 
 /*! Initializes the object with the default values. Return true if initialization was completed. */
-bool ServerCreationPage::initialize()
+bool AutoDataPackCreationPage::initialize()
 {
     return true;
 }
 
-QString ServerCreationPage::name() const
+QString AutoDataPackCreationPage::name() const
 {
-    return tkTr(Trans::Constants::SERVER);
+    return tr("Automatic Datapack Creation");
 }
 
-QString ServerCreationPage::category() const
+QString AutoDataPackCreationPage::category() const
 {
     return tkTr(Trans::Constants::DATAPACK);
 }
 
-QIcon ServerCreationPage::icon() const
+QIcon AutoDataPackCreationPage::icon() const
 {
     return theme()->icon(Core::Constants::ICON_PACKAGE);
 }
 
-QWidget *ServerCreationPage::createPage(QWidget *parent)
+QWidget *AutoDataPackCreationPage::createPage(QWidget *parent)
 {
-    DataPackWidget *w = new DataPackWidget(parent);
-    w->initialize();
+    QWidget *w = new QWidget(parent);
+    Ui::AutoDataPackCreation *ui = new Ui::AutoDataPackCreation;
+    ui->setupUi(w);
+    // w->initialize();
     return w;
 }
 
 /** Datapack pack and server creation step CTor. */
-ServerCreationStep::ServerCreationStep(QObject *parent) :
+AutoDataPackCreationStep::AutoDataPackCreationStep(QObject *parent) :
     Core::IFullReleaseStep(parent)
 {
-    setObjectName("ServerCreationStep");
+    setObjectName("AutoDataPackCreationStep");
 }
 
-ServerCreationStep::~ServerCreationStep()
+AutoDataPackCreationStep::~AutoDataPackCreationStep()
 {
 }
 
-bool ServerCreationStep::createTemporaryStorage()
-{
-    return true;
-}
-
-bool ServerCreationStep::cleanTemporaryStorage()
+bool AutoDataPackCreationStep::createTemporaryStorage()
 {
     return true;
 }
 
-bool ServerCreationStep::startProcessing(ProcessTiming timing, SubProcess subProcess)
+bool AutoDataPackCreationStep::cleanTemporaryStorage()
+{
+    return true;
+}
+
+bool AutoDataPackCreationStep::startProcessing(ProcessTiming timing, SubProcess subProcess)
 {
     _currentTiming = timing;
     _currentSubProcess = subProcess;
@@ -160,7 +162,7 @@ bool ServerCreationStep::startProcessing(ProcessTiming timing, SubProcess subPro
     return true;
 }
 
-void ServerCreationStep::onSubProcessFinished()
+void AutoDataPackCreationStep::onSubProcessFinished()
 {
     Q_EMIT subProcessFinished(_currentTiming, _currentSubProcess);
 }
