@@ -244,6 +244,13 @@ private:
 } // namespace Internal
 } // end namespace Tools
 
+// Default path of the plugin
+static inline QString defaultPath()
+{
+    return QString("%1/%2")
+            .arg(settings()->path(Core::ISettings::UserDocumentsPath))
+            .arg("HPRIM/Received");
+}
 
 /*! Constructor of the Tools::Internal::HprimFileModel class */
 HprimFileModel::HprimFileModel(QObject *parent) :
@@ -251,13 +258,46 @@ HprimFileModel::HprimFileModel(QObject *parent) :
     d(new HprimFileModelPrivate(this))
 {
     setDynamicSortFilter(true);
-    d->_fileModel = new QFileSystemModel(this);
-    d->_fileModel->setReadOnly(true);
-    d->_fileModel->setResolveSymlinks(false);
-    d->_fileModel->setFilter(QDir::Files);
-    d->_rootPathIndex = d->_fileModel->setRootPath(settings()->value(Constants::S_PATH_TO_SCAN).toString());
-    setSourceModel(d->_fileModel);
-    connect(d->_fileModel, SIGNAL(directoryLoaded(QString)), this, SLOT(_onDirectoryLoaded(QString)));
+
+    // FIXME: using full path in settings is not crossplatform:
+    // Create a patient db under macos, set HPRIM preferences
+    //      default is /Users/name/freemedforms/Documents/Hprim
+    // Go to Linux with the same database -> Error because under Linux
+    //      default is /home/name/freemedforms/Documents/Hprim
+    // The fix -> considere usage of relatives path inside the
+    //      Core::ISettings::UserDocumentsPath
+
+    QString path = settings()->value(Constants::S_PATH_TO_SCAN).toString();
+
+    // No path defined in settings -> use default path
+    if (path.isEmpty() || (path == qApp->applicationDirPath()))
+        path = defaultPath();
+
+    // Ensure that the HPRIM path to scan exists
+    if (!QDir(path).exists()) {
+        if (!QDir().mkpath(path)) {
+            // Path does not exist && can not be created -> Fallback to default path
+            path = defaultPath();
+            if (!QDir(path).exists()) {
+                // Path does not exist && can not be created -> Error
+                if (!QDir().mkpath(path)) {
+                    LOG_ERROR(tkTr(Trans::Constants::PATH_1_CANNOT_BE_CREATED).arg(path));
+                    path.clear();
+                }
+            }
+        }
+    }
+
+    // Create the FileSystemModel
+    if (!path.isEmpty()) {
+        d->_fileModel = new QFileSystemModel(this);
+        d->_fileModel->setReadOnly(true);
+        d->_fileModel->setResolveSymlinks(false);
+        d->_fileModel->setFilter(QDir::Files);
+        d->_rootPathIndex = d->_fileModel->setRootPath(path);
+        setSourceModel(d->_fileModel);
+        connect(d->_fileModel, SIGNAL(directoryLoaded(QString)), this, SLOT(_onDirectoryLoaded(QString)));
+    }
 }
 
 /*! Destructor of the Tools::Internal::HprimFileModel class */
@@ -343,6 +383,10 @@ Qt::ItemFlags HprimFileModel::flags(const QModelIndex &) const
 
 void HprimFileModel::_onDirectoryLoaded(const QString &absPath)
 {
+
+    qWarning() << "----------------------------------- HPRIM onDirLoaded" << absPath;
+    return;
+
 //    // Check for the internal XML content file
 //    if (!d->xmlIndexExists(absPath))
 //        return;

@@ -448,6 +448,17 @@ void HprimIntegratorWidget::onDataIntegrationRequested()
     {
         QFileInfo info(sourceFileName);
         QString newFileName = QString("%1/%2").arg(settings()->value(Constants::S_FILE_MANAGEMENT_STORING_PATH).toString()).arg(info.fileName());
+
+        // Ensure that output dir exists
+        QDir dir(QFileInfo(newFileName).absolutePath());
+        if (!dir.exists()) {
+            if (!QDir().mkpath(dir.absolutePath())) {
+                LOG_ERROR(tkTr(Trans::Constants::PATH_1_CANNOT_BE_CREATED).arg(dir.absolutePath()));
+                break;
+            }
+        }
+
+        // Move source file
         if (!QFile(sourceFileName).copy(newFileName)) {
             fileMsg += tkTr(Trans::Constants::FILE_1_CAN_NOT_BE_COPIED)
                     .arg(sourceFileName);
