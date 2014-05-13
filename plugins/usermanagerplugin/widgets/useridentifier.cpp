@@ -60,6 +60,7 @@
 
 #include <QApplication>
 #include <QSplashScreen>
+#include <QClipboard>
 
 #include "ui_useridentifier.h"
 
@@ -107,6 +108,12 @@ UserIdentifier::UserIdentifier(QWidget *parent) :
     } else {
         m_ui->groupServer->hide();
     }
+
+    // Clear the clipboard (security improvement)
+    qApp->clipboard()->clear(QClipboard::Clipboard);
+    qApp->clipboard()->clear(QClipboard::FindBuffer);
+    qApp->clipboard()->clear(QClipboard::Selection);
+
     adjustSize();
     layout()->setSizeConstraint(QLayout::SetFixedSize);
     Utils::centerWidget(this);
