@@ -35,6 +35,7 @@
 #include <QDebug>
 
 using namespace MainWin;
+using namespace Internal;
 
 MainWinPlugin::MainWinPlugin() :
         m_MainWindow(0)

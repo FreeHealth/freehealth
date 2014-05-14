@@ -57,9 +57,6 @@
 #include <utils/global.h>
 #include <utils/updatechecker.h>
 
-#include <calendar/calendar_widget.h>
-#include <calendar/basic_calendar_model.h>
-
 #include "ui_mainwindow.h"
 
 #include <QSettings>
@@ -95,8 +92,8 @@ MainWindow::MainWindow( QWidget * parent ) :
     setObjectName("MainWindow");
     messageSplash(tr("Creating Main Window"));
 
-    // Install the event filter
-//    qApp->installEventFilter(this);
+    // Connect post core initialization
+    connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
 }
 
 /** \brief Create the menubar and the MainWindow actions. */
@@ -106,8 +103,8 @@ bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
     Q_UNUSED(errorString);
     // create menus
     createFileMenu();
-    Core::ActionContainer *fmenu = actionManager()->actionContainer(Core::Constants::M_FILE);
-    connect(fmenu->menu(), SIGNAL(aboutToShow()),this, SLOT(aboutToShowRecentFiles()));
+//    Core::ActionContainer *fmenu = actionManager()->actionContainer(Core::Constants::M_FILE);
+//    connect(fmenu->menu(), SIGNAL(aboutToShow()),this, SLOT(aboutToShowRecentFiles()));
     createEditMenu();
     createConfigurationMenu();
     createHelpMenu();
@@ -149,13 +146,6 @@ bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
 void MainWindow::extensionsInitialized()
 {
     setCentralWidget(new QLabel("WORK IN PROGRESS..."));
-
-    readSettings();
-    show();
-    raise();
-
-    // Connect post core initialization
-    connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
 }
 
 MainWindow::~MainWindow()
@@ -164,6 +154,10 @@ MainWindow::~MainWindow()
 
 void MainWindow::postCoreInitialization()
 {
+    readSettings();
+    show();
+    raise();
+
     contextManager()->updateContext();
     actionManager()->retranslateMenusAndActions();
 

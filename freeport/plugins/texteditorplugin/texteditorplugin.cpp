@@ -32,6 +32,7 @@
 #include <QDebug>
 
 using namespace Editor;
+using namespace Internal;
 
 /**
   \todo Find a way to add a spell checking (see ispell, aspell, macspecific...)

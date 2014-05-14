@@ -18,10 +18,10 @@
  *  along with this program (COPYING.FREEMEDFORMS file).                   *
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
-#ifndef FREEPAD_MAINWIN_EXPORT_H
-#define FREEPAD_MAINWIN_EXPORT_H
+#ifndef FREEPORT_PORTPLUGIN_EXPORT_H
+#define FREEPORT_PORTPLUGIN_EXPORT_H
 
-#include <qglobal.h>
+#include <QtCore/QtGlobal>
 
 #if defined(PORT_LIBRARY)
 #define PORT_EXPORT Q_DECL_EXPORT
@@ -29,4 +29,4 @@
 #define PORT_EXPORT Q_DECL_IMPORT
 #endif
 
-#endif
+#endif  // FREEPORT_PORTPLUGIN_EXPORT_H

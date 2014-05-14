@@ -32,7 +32,7 @@
 #include <QDebug>
 
 using namespace Port;
-
+using namespace Internal;
 
 PortPlugin::PortPlugin()
 {

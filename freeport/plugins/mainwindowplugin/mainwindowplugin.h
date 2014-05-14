@@ -21,11 +21,10 @@
 /***************************************************************************
  *  Main Developer: Eric MAEKER, <eric.maeker@gmail.com>                   *
  *  Contributors:                                                          *
- *       Guillaume DENRY <guillaume.denry@gmail.com>                       *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef FREEPAD_MAINWIN_PLUGIN_H
-#define FREEPAD_MAINWIN_PLUGIN_H
+#ifndef FREEPORT_MAINWIN_PLUGIN_H
+#define FREEPORT_MAINWIN_PLUGIN_H
 
 #include <extensionsystem/iplugin.h>
 
@@ -33,9 +32,9 @@
 
 /**
  * \file mainwindowplugin.h
- * \author Eric MAEKER <eric.maeker@gmail.com>
+ * \author Eric Maeker
  * \version 0.4.0
- * \date 12 Oct 2010
+ * \date 12 may 2014
 */
 
 namespace MainWin {
@@ -61,4 +60,4 @@ private:
 } // namespace Internal
 }  // End MainWin
 
-#endif  // End FREEPAD_MAINWIN_PLUGIN_H
+#endif  // End FREEPORT_MAINWIN_PLUGIN_H

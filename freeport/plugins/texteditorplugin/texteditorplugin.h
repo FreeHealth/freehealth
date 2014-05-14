@@ -21,7 +21,6 @@
 /***************************************************************************
  *  Main Developer: Eric MAEKER, <eric.maeker@gmail.com>                   *
  *  Contributors:                                                          *
- *       Guillaume DENRY <guillaume.denry@gmail.com>                       *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #ifndef TEXTEDITORTPLUGIN_H
@@ -33,9 +32,9 @@
 
 /**
  * \file texteditorplugin.h
- * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.2.1
- * \date 25 Oct 2009
+ * \author Eric Maeker
+ * \version 0.10.0
+ * \date 14 May 2014
 */
 
 namespace Editor {

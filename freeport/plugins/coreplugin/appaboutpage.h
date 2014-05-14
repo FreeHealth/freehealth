@@ -38,11 +38,13 @@ public:
     AppAboutPage(QObject *parent);
     ~AppAboutPage();
 
-    QString id() const       { return objectName();   }
-    QString name() const     { return tr("1. General"); }
-    QString category() const { return tr("Application"); }
+    QString id() const          { return objectName();   }
+    QString displayName() const { return tr("1. General"); }
+    QString title() const       { return displayName();}
+    QString category() const    { return tr("Application"); }
 
     QWidget *createPage(QWidget *parent = 0);
+    virtual int sortIndex() const {return 0;}
 
 };
 

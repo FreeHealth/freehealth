@@ -23,8 +23,8 @@
  *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef PORTPLUGIN_H
-#define PORTPLUGIN_H
+#ifndef FREEPORT_PORTPLUGIN_H
+#define FREEPORT_PORTPLUGIN_H
 
 #include <extensionsystem/iplugin.h>
 
@@ -33,8 +33,8 @@
 /**
  * \file portplugin.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.8.0
- * \date 28 Apr 2012
+ * \version 0.10.0
+ * \date 14 May 2014
 */
 
 namespace Port {
@@ -43,7 +43,7 @@ namespace Internal {
 class PortPlugin : public ExtensionSystem::IPlugin
 {
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID "org.freemedforms.FreePort.PortPlugin" FILE "Port.json")
+    Q_PLUGIN_METADATA(IID "org.freemedforms.FreePort.PortPlugin" FILE "PortPlugin.json")
 
 public:
     PortPlugin();
@@ -54,6 +54,6 @@ public:
 };
 
 } // namespace Internal
-}  // End Editor
+} // namespace Port
 
-#endif // End PORTPLUGIN_H
+#endif // End FREEPORT_PORTPLUGIN_H

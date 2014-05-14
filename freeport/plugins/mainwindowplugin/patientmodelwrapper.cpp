@@ -100,6 +100,11 @@ bool PatientModelWrapper::setData(const QModelIndex &item, const QVariant &value
     return true;
 }
 
+Core::IPatientBar * PatientModelWrapper::patientBar() const
+{
+    return 0;
+}
+
 void PatientModelWrapper::hidePatientBar()
 {
 }
