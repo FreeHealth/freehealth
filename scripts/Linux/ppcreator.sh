@@ -20,13 +20,13 @@ DEBUILD_SOURCE="-sa"
 PPA_VERSION="1"
 DPUT_ARGS=""
 SERIES="precise quantal raring"
+DEBUILD_OPTIONS=""
 
 showHelp()
 {
   #hb:v:k:
   SCRIPT_NAME=`basename $0`
   echo $SCRIPT_NAME" "$SCRIPT_VERSION" creates and sends package to the FreeMedForms LaunchPad PPA"
-  echo
   echo "Usage: "$SCRIPT_NAME" -h -b application -v applicationVersion [-k pgpKeyToUse -p 2] -r \"oneiric maverick\" "
   echo
   echo "   -h           show this help"
@@ -38,6 +38,7 @@ showHelp()
   echo "   -n           Do not use proxy when downloading"
   echo "   -r           Specify the Series to build (oneiric maverick natty lucid)"
   echo "   -f           Use dput -f to upload packages"
+  echo "   -d           Don't execute dpkg-checkbuilddeps (like debuild -d)"
   echo
 }
 
@@ -77,8 +78,8 @@ downloadDebianMedFiles()
 buildSourcePackage()
 {
   cd $SOURCEDIR
-  echo "    * Building DSC file: debuild -k$PGP_KEY -S $DEBUILD_SOURCE --lintian-opts -i"
-  debuild -k$PGP_KEY -S $DEBUILD_SOURCE --lintian-opts -i
+  echo "    * Building DSC file: debuild -k$PGP_KEY -S $DEBUILD_SOURCE --lintian-opts -i $DEBUILD_OPTIONS"
+  debuild -k$PGP_KEY -S $DEBUILD_SOURCE --lintian-opts -i $DEBUILD_OPTIONS
   # sudo pbuilder build *.dsc > log.txt
 }
 
@@ -173,13 +174,13 @@ svnBuildPackage()
   checkDependenciesVersion
   cd $PACKDIR"/trunk"
   echo "    * Building DSC file: svn-buildpackage --svn-download-orig -k$PGP_KEY -S $DEBUILD_SOURCE --svn-ignore"
-  svn-buildpackage --svn-download-orig -k$PGP_KEY -S $DEBUILD_SOURCE --svn-ignore
+  svn-buildpackage --svn-download-orig -k$PGP_KEY -S $DEBUILD_SOURCE --svn-ignore $DEBUILD_OPTIONS
 }
 
 #########################################################################################
 ## Analyse options
 #########################################################################################
-while getopts "hb:v:k:p:r:ns" option
+while getopts "hb:v:k:p:r:nsd" option
 do
   case $option in
     h) showHelp
@@ -200,6 +201,8 @@ do
     r) SERIES=$OPTARG
     ;;
     f) DPUT_ARGS="-f"
+    ;;
+    d) DEBUILD_OPTIONS=$DEBUILD_OPTIONS" -d"
     ;;
   esac
 done
