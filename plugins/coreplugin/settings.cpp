@@ -650,12 +650,14 @@ QString SettingsPrivate::path(const int type) const
 {
     if (type == ISettings::DocumentationPath) {
         QString tmp = m_Enum_Path.value(type);
-        QString translatedPath = tmp + QDir::separator() + QLocale().name().left(2) + "/html";
-//        qWarning() << tmp << translatedPath;
-        if (QDir(translatedPath).exists())
-            return translatedPath;
+        QString trPath = QString("%1/%2/html")
+                .arg(tmp).arg(QLocale()
+                              .name().left(2));
+//        qWarning() << tmp << trPath;
+        if (QDir(trPath).exists())
+            return trPath;
         else
-            return tmp + "/en/html";
+            return QString("%1/en/html").arg(tmp);
 
     }
     return m_Enum_Path.value(type);
@@ -1034,6 +1036,7 @@ QTreeWidget* SettingsPrivate::getTreeWidget(QWidget *parent) const
     paths.insert(tr("Datapack installation path"), path(DataPackInstallPath));
     paths.insert(tr("Datapack Complete Forms installation path"), path(DataPackCompleteFormsInstallPath));
     paths.insert(tr("Datapack SubForms installation path"), path(DataPackSubFormsInstallPath));
+    paths.insert(tr("DocumentationPath"), path(DocumentationPath));
 
     QTreeWidgetItem * absPathsItem = new QTreeWidgetItem(tree, QStringList() << tr("Absolute Paths"));
     absPathsItem->setFont(0,bold);
@@ -1085,26 +1088,6 @@ QTreeWidget* SettingsPrivate::getTreeWidget(QWidget *parent) const
 
     return tree;
 }
-
-//static QString cupsInfo()
-//{
-//    QString tmp;
-//    QProcess cups;
-//    cups.start("cups-config", QStringList() << "--version");
-//    if (!cups.waitForStarted())
-//        LOG_ERROR_FOR("Utils", QApplication::translate("Utils", "Error while retrieve information of uname under %1").arg(system));
-//    if (!cups.waitForFinished())
-//        LOG_ERROR_FOR("Utils", QApplication::translate("Utils", "Error while retrieve information of uname under %1").arg(system));
-//    tmp += "| Version | " + cups.readAll() + " |";
-
-//    cups.start("cups-config", QStringList() << "--datadir");
-//    if (!cups.waitForStarted())
-//        LOG_ERROR_FOR("Utils", QApplication::translate("Utils", "Error while retrieve information of uname under %1").arg(system));
-//    if (!cups.waitForFinished())
-//        LOG_ERROR_FOR("Utils", QApplication::translate("Utils", "Error while retrieve information of uname under %1").arg(system));
-//    tmp += "| DataDir | " + cups.readAll() + " |";
-//    return tmp;
-//}
 
 /** \brief For debugging purpose. */
 QString SettingsPrivate::toString() const
