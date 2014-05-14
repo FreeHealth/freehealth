@@ -31,12 +31,19 @@
  */
 
 /*!
- * \fn void setExcludeGenderSpecific(bool excludeGenderSpecific)
+ * \fn void Form::FormIOQuery::setExcludeGenderSpecific(bool excludeGenderSpecific)
  * \brief Sets GenderSpecific filter for form searches.
  *
  * Some forms are gender specific, by setting this property to \e true, all form gender information will be checked
  * and excluded if the gender is different to the current patient gender. If set to \e false, gender is not checked.
  * By default, this property is set to false.
+ */
+
+/*!
+ * \fn void Form::FormIOQuery::setIncludeUserDocumentForms(const bool includeUserDoc)
+ * Includes users' form files stored in the UserCompleteFormsPath, UserSubFormsPath. \n
+ * By default, this property is set to true.
+ * \sa Form::FormIOQuery::includeUserDocumentForms()
  */
 
 
@@ -165,7 +172,8 @@ FormIOQuery::FormIOQuery() :
     m_ForceFile(false),
     m_AllForms(false),
     m_AllDescr(false),
-    m_ExcludeGenderSpecific(false)
+    m_ExcludeGenderSpecific(false),
+    m_includeUserDoc(true)
 {
 }
 

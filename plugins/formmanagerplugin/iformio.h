@@ -91,8 +91,8 @@ public:
     void setForceFileReading(const bool force) {m_ForceFile = force;}
     bool forceFileReading() const {return m_ForceFile;}
 
-//    void setIncludeLocalFiles(const bool includeLocal) {m_Local = includeLocal;}
-//    bool includeLocalFiles() const {return m_Local;}
+//    void setIncludeUserDocumentForms(const bool includeUserDoc) {m_includeUserDoc = includeUserDoc;}
+//    bool includeUserDocumentForms() const {return m_includeUserDoc;}
 
     void setGetAllAvailableForms(bool state) {m_AllForms=state;}
     bool getAllAvailableForms() {return m_AllForms;}
@@ -104,7 +104,7 @@ private:
     TypesOfForm m_type;
     QStringList m_langs, m_spe, m_authors;
     QString m_uuid;
-    bool m_ForceFile, m_AllForms, m_AllDescr, m_ExcludeGenderSpecific;
+    bool m_ForceFile, m_AllForms, m_AllDescr, m_ExcludeGenderSpecific, m_includeUserDoc;
 };
 
 }
