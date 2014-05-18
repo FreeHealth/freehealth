@@ -148,13 +148,13 @@ checkDependenciesVersion()
     sed -i "s/\"CONFIG+=dontbuildquazip\"//" $RULES_FILE
   fi
 
-  # Manage OpenCV lib: precise/quantal=2.3 ; raring/saucy=2.4
-  if [ "$UBUNTU_RELEASE_NAME" = "raring" ]||[ "$UBUNTU_RELEASE_NAME" = "saucing" ]; then
-    echo "    * Patching debian/{control,rules} for opencv"
-    sed -i "s/libopencv-core2.3 (>= 2.3)/libopencv-core2.4 (>= 2.4)/" $CONTROL_FILE
-    sed -i "s/libopencv-highgui2.3 (>= 2.3)/libopencv-highgui2.4 (>= 2.4)/" $CONTROL_FILE
-    sed -i "s/libopencv-objdetect2.3 (>= 2.3)/libopencv-objdetect2.4 (>= 2.4)/" $CONTROL_FILE
-  fi
+  # //OLD// Manage OpenCV lib: precise/quantal=2.3 ; raring/saucy/trusty=2.4
+  #if [ "$UBUNTU_RELEASE_NAME" = "precise" ]||[ "$UBUNTU_RELEASE_NAME" = "quantal" ]; then
+  #  echo "    * Patching debian/{control,rules} for opencv"
+  #  sed -i "s/libopencv-core2.3 (>= 2.3)/libopencv-core2.4 (>= 2.4)/" $CONTROL_FILE
+  #  sed -i "s/libopencv-highgui2.3 (>= 2.3)/libopencv-highgui2.4 (>= 2.4)/" $CONTROL_FILE
+  #  sed -i "s/libopencv-objdetect2.3 (>= 2.3)/libopencv-objdetect2.4 (>= 2.4)/" $CONTROL_FILE
+  #fi
 }
 
 # prepare source package using svn-buildpackage
