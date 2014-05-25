@@ -28,7 +28,7 @@
 
 /**
  * \file fdm_constants.h
- * \author Eric MAEKER <eric.maeker@gmail.com>
+ * \author Eric Maeker
  * \version 0.9.2
  * \date 25 Sept 2013
 */

@@ -220,6 +220,7 @@ bool DataPackCore::refreshServerDataPacks(const QString &serverUid)
     // ask all steps to register datapacks
     QList<Core::IFullReleaseStep *> steps = pluginManager()->getObjects<Core::IFullReleaseStep>();
     foreach(Core::IFullReleaseStep *step, steps) {
+        // TODO: remove ugly Utils::waitForSignal()
         qApp->setOverrideCursor(QCursor(Qt::WaitCursor));
         step->startProcessing(Core::IFullReleaseStep::PreProcess, Core::IFullReleaseStep::DataPackSubProcess);
         Utils::waitForSignal(step, SIGNAL(subProcessFinished(Core::IFullReleaseStep::ProcessTiming, Core::IFullReleaseStep::SubProcess)), 600000); // wait 10 minutes

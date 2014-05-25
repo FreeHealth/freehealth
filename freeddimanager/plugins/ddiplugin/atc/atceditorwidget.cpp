@@ -225,6 +225,7 @@ void AtcEditorWidget::test_views()
 
 void AtcEditorWidget::test_editorEnabledState(bool state)
 {
+    Q_UNUSED(state);
 }
 
 void AtcEditorWidget::test_actions()

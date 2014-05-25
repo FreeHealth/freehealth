@@ -32,7 +32,7 @@
 
 /**
  * \file serverupdatemanager.h
- * \author EricMaeker
+ * \author Eric Maeker
  * \version 0.10.0
  * \date 01 Nov 2013
 */

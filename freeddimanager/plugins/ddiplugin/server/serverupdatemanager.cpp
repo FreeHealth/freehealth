@@ -65,6 +65,9 @@ public:
     // {{~ServerDate~}} -> current server date
     void createWikiContent(ServerUpdate::UpdateType type, ServerUpdate::UpdateSubType subType)
     {
+        // TODO: code here
+        Q_UNUSED(type);
+        Q_UNUSED(subType);
     }
     
     // Returns the last date of server update extracted from the database,
@@ -110,7 +113,11 @@ bool ServerUpdateManager::initialize()
 }
 
 void ServerUpdateManager::prepareUpdateToSend(ServerUpdate::UpdateType type, ServerUpdate::UpdateSubType subType)
-{}
+{
+    // TODO: code here
+    Q_UNUSED(type);
+    Q_UNUSED(subType);
+}
 
 void ServerUpdateManager::sendUpdates()
 {}
