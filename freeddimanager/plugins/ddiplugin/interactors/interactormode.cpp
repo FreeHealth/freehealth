@@ -65,7 +65,7 @@ InteractorMode::InteractorMode(QObject *parent) :
 {
     setDisplayName("Interactors");
     setIcon(theme()->icon(Constants::ICON_INTERACTORSMODE, Core::ITheme::BigIcon));
-    setPriority(100);
+    setPriority(Core::Constants::FirstModeGroup + Core::Constants::FirstModeSubGroup + Constants::ModePriority_Interactors);
     setId(Constants::MODE_INTERACTOR);
 //    Core::Context context(Constants::C_PATIENTS, Constants::C_PATIENTS_SEARCH);
 //    setContext(context);

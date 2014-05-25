@@ -65,7 +65,7 @@ ComponentAtcMode::ComponentAtcMode(QObject *parent) :
 {
     setDisplayName(tr("Components"));
     setIcon(theme()->icon(Constants::ICON_COMPONENTATC, Core::ITheme::BigIcon));
-    setPriority(1);
+    setPriority(Core::Constants::FirstModeGroup + Core::Constants::FirstModeSubGroup + Constants::ModePriority_Components);
     setId(Constants::MODE_COMPONENTATC);
 //    Core::Context context(Constants::C_PATIENTS, Constants::C_PATIENTS_SEARCH);
 //    setContext(context);

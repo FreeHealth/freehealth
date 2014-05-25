@@ -74,6 +74,17 @@ const char * const MODE_PREGNANCY = "mPregnancy";
 const char * const MODE_SERVERMANAGER = "mServerManager";
 const char * const MODE_COMPONENTATC = "mComponentAtc";
 
+// Put mode priorities in the reverse order you want them in the mode stack
+enum ModePriority {
+    ModePriority_Components = 1,
+    ModePriority_Pregnancy,
+    ModePriority_PIM,
+    ModePriority_DDI,
+    ModePriority_Interactors,
+    ModePriority_ATC,
+    ModePriority_ServerManager
+};
+
 const char * const ICON_DDIMODE = "drugengine_ddi.png";
 const char * const ICON_INTERACTORSMODE = "drugengines.png";
 const char * const ICON_ATCMODE = "drug_infos.png";

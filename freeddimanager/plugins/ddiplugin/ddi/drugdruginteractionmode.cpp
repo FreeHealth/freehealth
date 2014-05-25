@@ -65,7 +65,7 @@ DDIMode::DDIMode(QObject *parent) :
 {
     setDisplayName("DDI");
     setIcon(theme()->icon(Constants::ICON_DDIMODE, Core::ITheme::BigIcon));
-    setPriority(10);
+    setPriority(Core::Constants::FirstModeGroup + Core::Constants::FirstModeSubGroup + Constants::ModePriority_DDI);
     setId(Constants::MODE_DDI);
 //    Core::Context context(Constants::C_PATIENTS, Constants::C_PATIENTS_SEARCH);
 //    setContext(context);

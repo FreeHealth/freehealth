@@ -303,8 +303,8 @@ const char * const  A_CONFIGURE_MEDINTUX = "aConfMedintux";  /*!< \brief Default
 const char * const  A_CHECKUPDATE      = "aCheckUpdate";      /*!< \brief Default action object name  \ingroup constants_actionmanager */
 const char * const  A_VIEWUPDATE       = "aViewUpdate";      /*!< \brief Default action object name  \ingroup constants_actionmanager */
 
-
-//modes
+// Modes
+// TODO: mode uids should not be stored in the Core plugin
 const char * const MODE_PATIENT_SEARCH    = "PatientSearch";
 const char * const MODE_PATIENT_FILE      = "central";
 const char * const MODE_PATIENT_HISTORY   = "PatientHistory";
@@ -313,15 +313,34 @@ const char * const MODE_ACCOUNT           = "account";
 const char * const MODE_AGENDA            = "agenda";
 const char * const MODE_USERMANAGER       = "usermanager";
 
-// Mode priorities
-const int          P_MODE_PATIENT_SEARCH  = 1000;
-const int          P_MODE_AGENDA          = 900;
-const int          P_MODE_PATIENT_HISTORY = 800;
-const int          P_MODE_PATIENT_DRUGS   = 600;
-const int          P_MODE_PATIENT_FILE    = 400;
-const int          P_MODE_USERMANAGER     = 300;
-const int          P_MODE_TOOLS           = 200;
-const int          P_MODE_ACCOUNT         = 100;
+// Mode priorities: use Group+SubGroup+{YourGroupOrder}
+enum ModeGroup {
+    LastModeGroup   = 1000,
+    FifthModeGroup  = LastModeGroup + 1000,
+    FourthModeGroup = FifthModeGroup + 1000,
+    ThirdModeGroup  = FourthModeGroup + 1000,
+    SecondModeGroup = ThirdModeGroup + 1000,
+    FirstModeGroup  = SecondModeGroup + 1000
+};
+
+enum ModeSubGroup {
+    LastModeSubGroup   = 0,
+    FifthModeSubGroup  = LastModeSubGroup + 50,
+    FourthModeSubGroup = FifthModeSubGroup + 50,
+    ThirdModeSubGroup  = FourthModeSubGroup + 50,
+    SecondModeSubGroup = ThirdModeSubGroup + 50,
+    FirstModeSubGroup  = SecondModeSubGroup + 50
+};
+
+// TODO: Mode Priorities should not be stored in the Core plugin
+const int P_MODE_PATIENT_SEARCH  = FirstModeGroup + FirstModeSubGroup;
+const int P_MODE_AGENDA          = SecondModeGroup + FirstModeSubGroup;
+const int P_MODE_PATIENT_HISTORY = ThirdModeGroup + FirstModeSubGroup;
+const int P_MODE_PATIENT_DRUGS   = ThirdModeGroup + SecondModeSubGroup;
+const int P_MODE_PATIENT_FILE    = ThirdModeGroup + ThirdModeSubGroup;
+const int P_MODE_USERMANAGER     = FourthModeGroup + FirstModeSubGroup;
+const int P_MODE_TOOLS           = FourthModeGroup + SecondModeSubGroup;
+const int P_MODE_ACCOUNT         = FourthModeGroup + ThirdModeSubGroup;
 
 // Options page sortIndex (per categories)
 const int          OPTIONINDEX_MAIN         = 0;

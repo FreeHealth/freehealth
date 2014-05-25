@@ -73,7 +73,7 @@ ServerManagerMode::ServerManagerMode(QObject *parent) :
 {
     setDisplayName(tkTr(Trans::Constants::SERVER));
     setIcon(theme()->icon(Constants::ICON_SERVERMODE, Core::ITheme::BigIcon));
-    setPriority(1000);
+    setPriority(Core::Constants::FirstModeGroup + Core::Constants::FirstModeSubGroup + Constants::ModePriority_ServerManager);
     setId(Constants::MODE_SERVERMANAGER);
     setPatientBarVisibility(false);
 

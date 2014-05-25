@@ -41,15 +41,10 @@
 #include "drugsdbmodewidget.h"
 #include <drugsdbplugin/constants.h>
 #include <drugsdbplugin/idrugdatabase.h>
-//#include <ddiplugin/constants.h>
 
 #include <coreplugin/icore.h>
 #include <coreplugin/theme.h>
-//#include <coreplugin/modemanager/modemanager.h>
-//#include <coreplugin/actionmanager/actionmanager.h>
-//#include <coreplugin/contextmanager/contextmanager.h>
-//#include <coreplugin/constants_menus.h>
-//#include <coreplugin/constants_icons.h>
+#include <coreplugin/constants_menus.h>
 
 #include <translationutils/constants.h>
 
@@ -57,8 +52,6 @@ using namespace DrugsDb;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
-//static inline Core::ModeManager *modeManager() { return Core::ICore::instance()->modeManager(); }
-//static inline Core::ActionManager *actionManager() { return Core::ICore::instance()->actionManager(); }
 static inline Core::ITheme *theme() { return Core::ICore::instance()->theme(); }
 
 DrugsDbMode::DrugsDbMode(QObject *parent) :
@@ -67,7 +60,7 @@ DrugsDbMode::DrugsDbMode(QObject *parent) :
 {
     setDisplayName("DrugsDb");
     setIcon(theme()->icon(Constants::ICON_DRUGSCOUNTRYDATABASE, Core::ITheme::BigIcon));
-    setPriority(1);
+    setPriority(Core::Constants::FirstModeGroup + Core::Constants::SecondModeSubGroup);
     setId(Constants::MODE_DRUGSDB);
 //    Core::Context context(Constants::C_PATIENTS, Constants::C_PATIENTS_SEARCH);
 //    setContext(context);
