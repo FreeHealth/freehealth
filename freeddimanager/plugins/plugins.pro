@@ -12,7 +12,8 @@ SUBDIRS = \
     texteditor \
     listview \
     ddi \
-    drugsdb
+    drugsdb \
+    datapack
 
 core.subdir = coreplugin
 
@@ -39,3 +40,6 @@ listview.depends += core
 
 texteditor.subdir   = texteditorplugin
 texteditor.depends += core
+
+datapack.subdir = datapackplugin
+datapack.depends += core
