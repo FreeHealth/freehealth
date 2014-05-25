@@ -89,8 +89,9 @@ bool DDIPlugin::initialize(const QStringList &arguments, QString *errorMessage)
     addObject(_ddiMode = new DDIMode(this));
     addObject(_interactorMode = new InteractorMode(this));
     addObject(_atcMode = new AtcMode(this));
-    addObject(_serverMode = new ServerManagerMode(this));
     addObject(_componentAtcMode = new ComponentAtcMode(this));
+    // TODO: The server mode is not yet implemented
+    // addObject(_serverMode = new ServerManagerMode(this));
 
     // add plugin info page
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
@@ -119,7 +120,8 @@ ExtensionSystem::IPlugin::ShutdownFlag DDIPlugin::aboutToShutdown()
     removeObject(_ddiMode);
     removeObject(_interactorMode);
     removeObject(_atcMode);
-    removeObject(_serverMode);
+    if (_serverMode)
+        removeObject(_serverMode);
     removeObject(_componentAtcMode);
 
     return SynchronousShutdown;
