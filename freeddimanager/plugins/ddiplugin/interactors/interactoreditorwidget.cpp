@@ -82,7 +82,7 @@ public:
         aTranslateThis(0),
         aNextUnreviewedOrUnlinked(0),
         aDownloadAllNeededPmids(0),
-        _toolButton(0),
+        _searchToolButton(0),
         aGoogle(0),
         aWho(0),
         aResip(0),
@@ -153,17 +153,17 @@ public:
         aRemoveCurrent->setEnabled(false);
         aTranslateThis->setEnabled(false);
 
-        _toolButton = new QToolButton(q);
-        _toolButton->setIconSize(QSize(32,32));
-        _toolButton->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
-        _toolButton->addAction(aAtcSearchDialog);
-        _toolButton->addAction(aGoogle);
-        _toolButton->addAction(aWho);
-        _toolButton->addAction(aResip);
-        _toolButton->addAction(aCopyClip);
-        _toolButton->setDefaultAction(aAtcSearchDialog);
-        _toolButton->setIcon(theme()->icon(Core::Constants::ICONHELP));
-        _toolButton->setPopupMode(QToolButton::InstantPopup);
+        _searchToolButton = new QToolButton(q);
+        _searchToolButton->setIconSize(QSize(32,32));
+        _searchToolButton->setToolButtonStyle(Qt::ToolButtonIconOnly);
+        _searchToolButton->addAction(aAtcSearchDialog);
+        _searchToolButton->addAction(aGoogle);
+        _searchToolButton->addAction(aWho);
+        _searchToolButton->addAction(aResip);
+        _searchToolButton->addAction(aCopyClip);
+        _searchToolButton->setDefaultAction(aAtcSearchDialog);
+        _searchToolButton->setIcon(theme()->icon(Core::Constants::ICONHELP));
+        _searchToolButton->setPopupMode(QToolButton::InstantPopup);
 
         _toolBar = new QToolBar(q);
 
@@ -188,7 +188,7 @@ public:
         _toolBar->addSeparator();
         _toolBar->addAction(aRevert);
         _toolBar->addAction(aSave);
-        _toolBar->addWidget(_toolButton);
+        _toolBar->addWidget(_searchToolButton);
         _toolBar->setIconSize(QSize(32, 32));
         _toolBar->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
         ui->toolbarLayout->addWidget(_toolBar);
@@ -203,7 +203,7 @@ public:
         // QObject::connect(aTranslateThis, SIGNAL(triggered()), q, SLOT(translateCurrent()));
         QObject::connect(aNextUnreviewedOrUnlinked, SIGNAL(triggered()), q, SLOT(nextUnreviewedOrUnlinked()));
         // QObject::connect(aDownloadAllNeededPmids, SIGNAL(triggered()), ddiCore(), SLOT(downloadAllPmids()));
-        QObject::connect(_toolButton, SIGNAL(triggered(QAction*)), q, SLOT(buttonActivated(QAction*)));
+        QObject::connect(_searchToolButton, SIGNAL(triggered(QAction*)), q, SLOT(searchButtonActivated(QAction*)));
         QObject::connect(aCreateNewClass, SIGNAL(triggered()), q, SLOT(onNewInteractorRequested()));
         QObject::connect(aCreateNewInteractor, SIGNAL(triggered()), q, SLOT(onNewInteractorRequested()));
     }
@@ -311,7 +311,7 @@ public:
     QAction *aNextUnreviewedOrUnlinked;
     QAction *aDownloadAllNeededPmids;
 
-    QToolButton *_toolButton;
+    QToolButton *_searchToolButton;
     QAction *aGoogle;
     QAction *aWho;
     QAction *aResip;
@@ -596,7 +596,7 @@ void InteractorEditorWidget::interactorActivated(const QModelIndex &index)
 }
 
 /** React when a search action (WHO, google...) is clicked */
-void InteractorEditorWidget::buttonActivated(QAction *selected)
+void InteractorEditorWidget::searchButtonActivated(QAction *selected)
 {
     QModelIndex idx = ddiCore()->drugInteractorTableModel()->index(d->m_EditingIndex.row(), DrugInteractorTableModel::TranslatedLabel, d->m_EditingIndex.parent());
     QString label = idx.data().toString();

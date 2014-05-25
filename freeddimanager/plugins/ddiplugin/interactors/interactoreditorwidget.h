@@ -63,7 +63,7 @@ private Q_SLOTS:
     void editCurrent();
     void revertEdition();
     void interactorActivated(const QModelIndex &index);
-    void buttonActivated(QAction*);
+    void searchButtonActivated(QAction*);
     void toggleClassMolsFilter(QAction*);
     void updateCounts();
     void nextUnreviewedOrUnlinked();
