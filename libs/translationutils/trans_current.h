@@ -151,6 +151,7 @@ const char* const DISEASES_CLASSIFICATIONS          = QT_TRANSLATE_NOOP("tkConst
 const char* const ALERT_PACKS                       = QT_TRANSLATE_NOOP("tkConstants", "Alert packs");
 const char* const BINARY_PACKS                      = QT_TRANSLATE_NOOP("tkConstants", "Binary packs");
 const char* const VARIOUS                           = QT_TRANSLATE_NOOP("tkConstants", "Various");
+const char* const NO_ITEM                           = QT_TRANSLATE_NOOP("tkConstants", "No item");
 
 // About page
 const char* const APPLICATION_ABOUT_YEAR_1_WEB_2 =

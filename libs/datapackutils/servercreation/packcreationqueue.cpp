@@ -80,7 +80,9 @@ static QString xmlContentType(const int type)
 }
 
 PackCreationQueue::PackCreationQueue()
-{}
+{
+    _uid = Utils::createUid();
+}
 
 PackCreationQueue::~PackCreationQueue()
 {}

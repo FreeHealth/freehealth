@@ -36,7 +36,7 @@
 #include <utils/global.h>
 #include <translationutils/constants.h>
 #include <translationutils/trans_msgerror.h>
-#include <datapackutils/packcreationqueue.h>
+#include <datapackutils/servercreation/packcreationqueue.h>
 
 #include <QTimer>
 

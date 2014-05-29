@@ -51,7 +51,7 @@
 #include <datapackutils/constants.h>
 #include <datapackutils/pack.h>
 #include <datapackutils/packdescription.h>
-#include <datapackutils/packcreationqueue.h>
+#include <datapackutils/servercreation/packcreationqueue.h>
 
 #include <QProgressDialog>
 #include <QPointer>

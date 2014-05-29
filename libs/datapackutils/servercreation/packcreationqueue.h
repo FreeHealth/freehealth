@@ -61,6 +61,7 @@ public:
 
     explicit PackCreationQueue();
     ~PackCreationQueue();
+    QString uid() const {return _uid;}
 
     bool checkValidity(const RequestedPackCreation &request) const;
     bool addToQueue(const RequestedPackCreation &request);
@@ -73,6 +74,7 @@ public:
 
 private:
     QList<RequestedPackCreation> _queue;
+    QString _uid;
 };
 
 } // namespace DataPack

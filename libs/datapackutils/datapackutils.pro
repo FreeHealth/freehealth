@@ -13,6 +13,7 @@ include(../datapackutils_dependencies.pri)
 DEFINES *= DATAPACKUTILS_LIBRARY
 
 HEADERS += datapack_exporter.h \
+    constants.h \
     servermanager.h \
     server.h \
     serverdescription.h \
@@ -36,8 +37,8 @@ HEADERS += datapack_exporter.h \
     packmanager.h \
     serverenginestatus.h \
     widgets/packwizard.h \
-    packcreationqueue.h \
-    constants.h
+    servercreation/packcreationqueue.h \
+    servercreation/packcreationmodel.h
 
 SOURCES += \
     servermanager.cpp \
@@ -62,7 +63,8 @@ SOURCES += \
     packmanager.cpp \
     widgets/packwizard.cpp \
     ipackmanager.cpp \
-    packcreationqueue.cpp
+    servercreation/packcreationqueue.cpp \
+    servercreation/packcreationmodel.cpp
 
 FORMS += \
     widgets/serverpackeditor.ui \
