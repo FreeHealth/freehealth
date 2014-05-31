@@ -57,6 +57,7 @@ public:
         UserClearLogin,
         UserClearPassword,
         CheckFormUpdates,
+        AlwaysUpdateForms,
         MaxParam
     };
 

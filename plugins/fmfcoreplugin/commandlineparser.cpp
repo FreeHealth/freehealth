@@ -48,6 +48,7 @@ CommandLine::CommandLine(QObject *parent) :
     ref.insert(UserClearLogin,       "--user-clear-log");
     ref.insert(UserClearPassword,    "--user-clear-password");
     ref.insert(CheckFormUpdates,     "--dont-check-form-update");
+    ref.insert(AlwaysUpdateForms,    "--always-update-forms");
 
     // set default values
     params.insert(Chrono, false);
@@ -59,6 +60,7 @@ CommandLine::CommandLine(QObject *parent) :
     params.insert(UserClearLogin, QVariant());
     params.insert(UserClearPassword, QVariant());
     params.insert(CheckFormUpdates, true);
+    params.insert(AlwaysUpdateForms, false);
 
     // read command line params
     QStringList args = qApp->arguments();
@@ -81,6 +83,7 @@ CommandLine::CommandLine(QObject *parent) :
         case UserClearLogin: params.insert(CommandLine::UserClearLogin, a.mid(a.indexOf("=")+1).remove("\"")); break;
         case UserClearPassword: params.insert(CommandLine::UserClearPassword, a.mid(a.indexOf("=")+1).remove("\"")); break;
         case CheckFormUpdates: params.insert(CommandLine::CheckFormUpdates, false); break;
+        case AlwaysUpdateForms: params.insert(CommandLine::AlwaysUpdateForms, true); break;
         default : break;
         }
     }

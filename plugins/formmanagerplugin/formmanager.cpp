@@ -909,7 +909,6 @@ QHash<QString, QVariant> FormManager::formToTokens(Form::FormMain *form) const
     QHash<QString, QVariant> tokens;
 #ifdef WITH_PAD
     // Removes all formitem token from the token pool
-    // qWarning() << "____________ formToTokens" << form->uuid();
     // Include all formitems token from the formmain to the token pool
     if (d->_tokens.values(form).isEmpty()) {
         QVector<FormItemToken::ValueType> types;
@@ -971,6 +970,12 @@ QHash<QString, QVariant> FormManager::formToTokens(Form::FormMain *form) const
         parent = parent->formParent();
     }
     tokens.insert("EpisodeFullFormLabel", fullFormName.join(" / "));
+
+
+    qWarning() << tokens;
+
+
+
     return tokens;
 }
 
@@ -1016,10 +1021,18 @@ void FormManager::checkFormUpdates()
             msg << html;
         }
 
-        if (Utils::yesNoMessageBox(tr("Form update detected."),
-                                   tr("A form update has been detected. Do you want to update the forms?"),
-                                   msg.join("<br />")) == true)
-            io->updateForms();
+        // Ask user according to commandline params
+        if (!commandLine()->value(Core::ICommandLine::AlwaysUpdateForms).toBool()) {
+            if (!Utils::yesNoMessageBox(tr("Form update detected."),
+                                       tr("A form update has been detected. Do you want to update the forms?"),
+                                       msg.join("<br />")) == true)
+                continue;
+        }
+        if (!io->updateForms()) {
+            LOG_ERROR("Unable to update forms");
+        } else {
+            LOG("Forms updated");
+        }
     }
 }
 
