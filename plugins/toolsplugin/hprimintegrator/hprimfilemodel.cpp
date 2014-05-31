@@ -383,17 +383,6 @@ Qt::ItemFlags HprimFileModel::flags(const QModelIndex &) const
 
 void HprimFileModel::_onDirectoryLoaded(const QString &absPath)
 {
-
-    qWarning() << "----------------------------------- HPRIM onDirLoaded" << absPath;
-    return;
-
-//    // Check for the internal XML content file
-//    if (!d->xmlIndexExists(absPath))
-//        return;
-
-//    // If xml index exists read it
-//    d->readXmlIndex(absPath);
-
     // Populate the QFileSystemModel with extra data
     d->readPatientName(absPath);
 }
