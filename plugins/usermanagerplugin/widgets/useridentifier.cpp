@@ -26,20 +26,22 @@
  ***************************************************************************/
 
 /**
- \class UserPlugin::Internal::UserIdentifier
- This class is a dialog that ask user for is login/password, with a limited number of tries.
- You can show some information on the left using the first parameter of the constructor.
- If there is not information to show, the information's groupBox is hidden.
-
- When the user is successfully identified on the server and/or the database:
-   - the dialog result() is set to QDialog::Accepted,
-   - current user is set into user's model with the current login and password,
-   - the login history is completed,
-   - the lastLogin information is saved into database.
-
- In the other case, the dialog returns \e QDialog::Rejected.
-
- You can retreive login(), login64crypt(), password() and cryptedPassword().
+ * \class UserPlugin::Internal::UserIdentifier
+ * This class is a dialog that ask user for is login/password, with a limited number of tries.
+ * You can show some information on the left using the first parameter of the constructor.
+ * If there is not information to show, the information's groupBox is hidden.
+ *
+ * The dialog does not need the UserPlugin::Internal::UserBase to be initialized
+ * (UserPlugin::Internal::UserBase::initialize()) to check the login informations.
+ *
+ * When the user is successfully identified on the server and/or the database:
+ *   - the UserPlugin::Internal::UserBase is initialized,
+ *   - the dialog result() is set to QDialog::Accepted,
+ * You still need to set the current user into user's model.
+ *
+ * In the other case, the dialog returns \e QDialog::Rejected.
+ *
+ * You can retreive login(), login64crypt(), password() and cryptedPassword().
 */
 
 #include "useridentifier.h"
@@ -55,7 +57,6 @@
 #include <utils/widgets/loginwidget.h>
 
 #include <usermanagerplugin/usercore.h>
-#include <usermanagerplugin/usermodel.h>
 #include <usermanagerplugin/database/userbase.h>
 
 #include <QApplication>
@@ -70,7 +71,6 @@ using namespace UserPlugin::Internal;
 static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 static inline Core::ISettings *settings() { return Core::ICore::instance()->settings(); }
 static inline UserPlugin::UserCore &userCore() {return UserPlugin::UserCore::instance();}
-static inline UserPlugin::UserModel *userModel() {return userCore().userModel();}
 static inline UserPlugin::Internal::UserBase *userBase() {return userCore().userBase();}
 
 UserIdentifier::UserIdentifier(QWidget *parent) :
@@ -121,29 +121,26 @@ UserIdentifier::UserIdentifier(QWidget *parent) :
 
 void UserIdentifier::done(int result)
 {
-    UserModel *m = userModel();
     if (result == QDialog::Accepted) {
         // ask database with login/password couple
-        if (!m->isCorrectLogin(login(), password())) {
+        if (!userBase()->checkLogin(login(), password())) {
             m_NumberOfTries++;
-            if (m_NumberOfTries == MaxNumberOfTries)
-		QDialog::done(QDialog::Rejected);
-            else {
+            if (m_NumberOfTries == MaxNumberOfTries) {
+                QDialog::done(QDialog::Rejected);
+            } else {
                 Utils::warningMessageBox(tr("Incorrect login/password information."),
                                          tr("You can try %1 more time(s).")
                                          .arg(MaxNumberOfTries - m_NumberOfTries),"",qApp->applicationName());
             }
         } else {
-            LOG(tr("User is identified."));
-            m->setCurrentUser(login(), password());
+            LOG(tr("User can be identified."));
             if (theme()->splashScreen())
                 theme()->splashScreen()->show();
             QDialog::done(QDialog::Accepted);
         }
-    }
-    else if (result == QDialog::Rejected) {
+    } else if (result == QDialog::Rejected) {
         LOG(tr("User is not identified."));
-	QDialog::done(QDialog::Rejected);
+        QDialog::done(QDialog::Rejected);
     }
 }
 

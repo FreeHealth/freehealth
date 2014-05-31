@@ -100,7 +100,7 @@ public:
     bool saveUserDynamicData(const QString &userUid, const QString &dynDataUuid, const QVariant &value);
 
     // data checkers
-    bool checkLogin(const QString &clearLogin, const QString &clearPassword) const;
+    bool checkLogin(const QString &clearLogin, const QString &clearPassword);
     bool isLoginAlreadyExists(const QString &clearLogin) const;
     QDateTime recordLastLogin(const QString &log, const QString &pass);
 

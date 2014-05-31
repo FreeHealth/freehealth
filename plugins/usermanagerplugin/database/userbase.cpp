@@ -189,13 +189,15 @@ bool UserBase::initialize()
 
     // connect
     if (commandLine()->value(Core::ICommandLine::ClearUserDatabases).toBool()) {
-        createConnection(USER_DB_CONNECTION, USER_DB_CONNECTION,
+        if (!createConnection(USER_DB_CONNECTION, USER_DB_CONNECTION,
                          settings()->databaseConnector(),
-                         Utils::Database::DeleteAndRecreateDatabase);
+                         Utils::Database::DeleteAndRecreateDatabase))
+            return false;
     } else {
-        createConnection(USER_DB_CONNECTION, USER_DB_CONNECTION,
+        if (!createConnection(USER_DB_CONNECTION, USER_DB_CONNECTION,
                          settings()->databaseConnector(),
-                         Utils::Database::CreateDatabase);
+                         Utils::Database::CreateDatabase))
+            return false;
     }
 
     if (!database().isOpen()) {
@@ -391,7 +393,10 @@ UserData* UserBase::getUserByUuid(const QString & uuid) const
     return getUser(where);
 }
 
-/** Retreive all users data from the users' database. If an error occurs, it returns 0. \sa getUser() */
+/**
+ * Retreive all users data from the users' database.
+ * If an error occurs, it returns 0. \sa getUser()
+ */
 UserData *UserBase::getUserByLoginPassword(const QVariant &login, const QVariant &cryptedPassword) const
 {
     // retreive corresponding user
@@ -403,43 +408,69 @@ UserData *UserBase::getUserByLoginPassword(const QVariant &login, const QVariant
     return getUser(where);
 }
 
-/** Check the couple login/password passed as params. Return true if a user can connect with these identifiants (to the server + to freemedforms). */
-bool UserBase::checkLogin(const QString &clearLogin, const QString &clearPassword) const
+/**
+ * Check the couple login/password passed as params.
+ * Returns \e true if a user can connect with these identifiants
+ * (to the server + to freemedforms user database).
+ */
+bool UserBase::checkLogin(const QString &clearLogin, const QString &clearPassword)
 {
     m_LastUuid.clear();
     m_LastLogin.clear();
     m_LastPass.clear();
 
-    // Connect to drivers
     if (QSqlDatabase::connectionNames().contains("__ConnectionTest__"))
         QSqlDatabase::removeDatabase("__ConnectionTest__");
 
-    switch (driver()) {
+    // Connect to database server
+    switch (settings()->databaseConnector().driver()) {
     case Utils::Database::MySQL:
     {
         // Try to connect with the new identifiers to MySQL server
-        QSqlDatabase connectionTest = database().cloneDatabase(database(), "__ConnectionTest__");
+        QSqlDatabase connectionTest = database().addDatabase("QMYSQL", "__ConnectionTest__");
+        connectionTest.setHostName(settings()->databaseConnector().host());
+        connectionTest.setPort(settings()->databaseConnector().port());
         connectionTest.setUserName(clearLogin);
         connectionTest.setPassword(clearPassword);
         if (!connectionTest.open()) {
-            LOG_ERROR(QString("Unable to connect to the MySQL server, with user %1: %2").arg(clearLogin).arg(clearPassword.length()));
+            LOG_ERROR(QString("Unable to connect to the MySQL server, with user %1").arg(clearLogin));
             LOG_ERROR(database().lastError().text());
             return false;
         }
         LOG(QString("Database server identifiers are correct for login %1: %2").arg(clearLogin).arg(clearPassword.length()));
-        // Reconnect with these identifiers all databases
+
+        // If user database is not currently initialized, we need to initialize it
+        Utils::DatabaseConnector connector = settings()->databaseConnector();
+        connector.setClearLog(clearLogin);
+        connector.setClearPass(clearPassword);
+        settings()->setDatabaseConnector(connector);
+        if (!initialize()) {
+            LOG_ERROR(tr("Unable to initialize the database with the login: %1").arg(clearLogin));
+            return false;
+        }
         break;
     }
-    case Utils::Database::SQLite: break;
-    case Utils::Database::PostSQL: return false; // not implemented
+    case Utils::Database::SQLite:
+    {
+        if (!initialize()) {
+            LOG_ERROR(tr("Unable to initialize the database with the login: %1").arg(clearLogin));
+            return false;
+        }
+        break;
+    }
+    case Utils::Database::PostSQL:
+        // TODO: not implemented
+        return false;
+    default: return false;
     }
 
+    // Connect to the user database
     QSqlDatabase DB = QSqlDatabase::database(Constants::USER_DB_CONNECTION);
     if (!connectDatabase(DB, __LINE__))
         return false;
     DB.transaction();
 
-    // Try to get the uuid and cache it
+    // Try to get the user uuid and cache it
     QList<int> list;
     list << USER_UUID << USER_LOGIN << USER_PASSWORD;
     QHash<int, QString> where;

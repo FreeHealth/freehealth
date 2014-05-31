@@ -82,7 +82,10 @@
 
 #include <QDebug>
 
-enum { WithUserMode = false };
+enum {
+    WithUserMode = false    // When set to true a Core::IMode is created with a
+                            // usermanager widget inside
+};
 
 using namespace UserPlugin;
 using namespace Internal;
@@ -143,19 +146,36 @@ bool UserManagerPlugin::initialize(const QStringList &arguments, QString *errorS
 
     messageSplash(tr("Initializing user manager plugin..."));
 
+    // WorkFlow:
+    // 1. Create the userBase without initialization
+    // 2. Identify user
+    //   2.1. Three tries -> no users -> close app
+    //   2.2. User logs are correct -> continue
+    // 3. Initialize database, create usermodel, connect user using the model
+
+    // Ask for User login
+    if (!identifyUser()) {
+        if (!errorString)
+            errorString = new QString();
+        errorString->append(tr("User is not identified."));
+        Core::ICore::instance()->setUser(0);
+        return false;
+    }
+
     if (!userCore().initialize()
             || !userBase()->isInitialized()) {
-        LOG_ERROR("Unable to initialize user core/base. Starting the configuration dialog.");
-        if (!Core::ICore::instance()->applicationConfigurationDialog()) {
-            Utils::warningMessageBox(tr("Unable to connect to the user database."),
-                                     tr("The user database is not reachable. Please check your configuration.\n"
-                                        "Application will stop."));
-            LOG_ERROR(settings()->databaseConnector().toString());
-            return false;
-        }
+        LOG_ERROR("Unable to initialize user core/base. Application closes.");
+        return false;
+    }
+
+    // Set current user into UserModel
+    if (!userModel()->setCurrentUser(settings()->databaseConnector().clearLog(), settings()->databaseConnector().clearPass())) {
+        LOG("Unable to set UserModel current user. Quit application.");
+        return false;
     }
 
     // manage virtual user creation
+    // TODO: warning: creating virtual user can lead to severe security issue (because log and pass are known)
     if (commandLine()->value(Core::ICommandLine::CreateVirtuals).toBool()) {
         QProgressDialog dlg(tr("Creating virtual users"), tr("Please wait"), 0, 0);
         dlg.setWindowModality(Qt::WindowModal);
@@ -193,15 +213,6 @@ bool UserManagerPlugin::initialize(const QStringList &arguments, QString *errorS
             // clear cache, don't check preferences validity
             userModel()->setCurrentUser(c.clearLog(), c.clearPass(), true, false);
         }
-    }
-
-    // Ask for User login
-    if (!identifyUser()) {
-        if (!errorString)
-            errorString = new QString();
-        errorString->append(tr("User is not identified."));
-        Core::ICore::instance()->setUser(0);
-        return false;
     }
 
     if (m_UserManagerMainWin) {
@@ -309,68 +320,54 @@ void UserManagerPlugin::extensionsInitialized()
         m_Mode = new Internal::UserManagerMode(this);
 }
 
+/**
+ * Try to identify the current user using:
+ * - settings
+ * - commandline
+ * - or at least a dialog
+ */
 bool UserManagerPlugin::identifyUser()
 {
     // instanciate user model
     userModel();
+
+    // Try to catch user log and pass from settings and/or commandline
     QString log;
     QString pass;
-    bool sqliteVersion = (settings()->databaseConnector().driver()==Utils::Database::SQLite);
-    bool usingCommandLine = false;
+    Utils::DatabaseConnector connector = settings()->databaseConnector();
+
 #ifdef WITH_USER_AUTOLOGIN
-    if (sqliteVersion) {
-        log = settings()->databaseConnector().clearLog();
-        pass = settings()->databaseConnector().clearPass();
+    if (connector.driver()==Utils::Database::SQLite) {
+        log = connector.clearLog();
+        pass = connector.clearPass();
     }
 #endif
     if (commandLine()->value(Core::ICommandLine::UserClearLogin).isValid()) {
         log = commandLine()->value(Core::ICommandLine::UserClearLogin).toString();
         pass = commandLine()->value(Core::ICommandLine::UserClearPassword).toString();
-        usingCommandLine = true;
-        LOG(tr("Using command line user identifiants: %1 - %2").arg(log).arg(pass));
+        LOG(tr("Using command line user identifiants: %1").arg(log));
     }
-    bool ask = true;
+
+    // Try to connect to user database
     while (true) {
-        if (userModel()->isCorrectLogin(log, pass)) {
-            userModel()->setCurrentUser(log, pass, true, false);
-            if (!usingCommandLine && ask) {
-                int r = Utils::withButtonsMessageBox(tkTr(Trans::Constants::CONNECTED_AS_1)
-                                                     .arg(userModel()->currentUserData(Core::IUser::FullName).toString()),
-                                                     QApplication::translate("UserManagerPlugin", "You can proceed with this user or connect with another one."),
-                                                     "", QStringList()
-                                                     << QApplication::translate("UserManagerPlugin", "Stay connected")
-                                                     << QApplication::translate("UserManagerPlugin", "Change the current user"));
-                if (r==1) {
-                    log.clear();
-                    pass.clear();
-                    userModel()->clear();
-                    ask = false;
-                    continue;
-                }
-                break;
-            }
+        if ((!log.isEmpty() && !pass.isEmpty())
+            && userBase()->checkLogin(log, pass)) {
+            // We currently have the correct log and pass, store them in the connector
+            connector.setClearLog(log);
+            connector.setClearPass(pass);
             break;
         } else {
-            log.clear();
-            pass.clear();
-            usingCommandLine = false;
             Internal::UserIdentifier ident;
             if (ident.exec() == QDialog::Rejected)
                 return false;
-            log = ident.login();
-            pass = ident.password();
-
-            if (sqliteVersion) {
-                Utils::DatabaseConnector c = settings()->databaseConnector();
-                c.setClearLog(log);
-                c.setClearPass(pass);
-                settings()->setDatabaseConnector(c);
-            }
-
-            ask = false;
+            connector.setClearLog(ident.login());
+            connector.setClearPass(ident.password());
             break;
         }
     }
+
+    // Here the connector should be complete
+    settings()->setDatabaseConnector(connector);
     return true;
 }
 
