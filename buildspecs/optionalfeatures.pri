@@ -28,10 +28,12 @@ DEFINES += DRUGS_DATABASE_VERSION=0x000804
 # ***************************************************************************************
 # *                                   User auto login                                   *
 # ***************************************************************************************
-# * By default this feature is not activated. When activated, users can get             *
-# * automatically connected to FreeMedForms according to their last identification.     *
+# * By default this feature is not activated. When activated, users can be              *
+# * automatically connected to FreeMedForms according to their last identification      *
+# * without any required action.                                                        *
 # * This is a high security failure to activate this feature, as it keeps a weak        *
 # * crypted version of the identifiants of the user on the local hard drive.            *
+# * This can cause a high security failure to activate this feature.                    *
 # ***************************************************************************************
 # * Dependencies: WITH_LOGINANDPASSWORD_CACHING feature.                                *
 # ***************************************************************************************
@@ -39,18 +41,6 @@ DEFINES += DRUGS_DATABASE_VERSION=0x000804
 # ***************************************************************************************
 # Uncomment the following line to activate the feature
 # DEFINES *= WITH_USER_AUTOLOGIN
-
-# ***************************************************************************************
-# *                                  Password caching                                   *
-# ***************************************************************************************
-# * By default this feature is not activated. When activated, current user's login and  *
-# * password are cached on a local file with a very weak encryption.                    *
-# * This is a high security failure to activate this feature.                           *
-# ***************************************************************************************
-# * We suggest to never activate this feature                                           *
-# ***************************************************************************************
-# Uncomment the following line to activate the feature
-# DEFINES *= WITH_LOGINANDPASSWORD_CACHING
 
 # ***************************************************************************************
 # *                                 Allow episode removal                               *
