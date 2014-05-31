@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>376</width>
+    <width>387</width>
     <height>373</height>
    </rect>
   </property>
@@ -15,7 +15,7 @@
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="3" column="0" colspan="2">
-    <widget class="QPushButton" name="testButton">
+    <widget class="QPushButton" name="testMySQLButton">
      <property name="enabled">
       <bool>false</bool>
      </property>
@@ -204,7 +204,7 @@
   </customwidget>
  </customwidgets>
  <tabstops>
-  <tabstop>testButton</tabstop>
+  <tabstop>testMySQLButton</tabstop>
  </tabstops>
  <resources/>
  <connections/>

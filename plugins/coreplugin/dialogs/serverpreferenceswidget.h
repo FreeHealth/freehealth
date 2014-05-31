@@ -24,8 +24,8 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef SERVERPREFERENCESWIDGET_H
-#define SERVERPREFERENCESWIDGET_H
+#ifndef COREPLUGIN_SERVERPREFERENCESWIDGET_H
+#define COREPLUGIN_SERVERPREFERENCESWIDGET_H
 
 #include <coreplugin/core_exporter.h>
 #include <utils/database.h>
@@ -36,15 +36,18 @@ namespace Core {
 class ISettings;
 
 namespace Internal {
+class ServerPreferencesWidgetPrivate;
+
 namespace Ui {
 class ServerPreferencesWidget;
-}  // End namespace Ui
-}  // End namespace Internal
+}  // namespace Ui
+}  // namespace Internal
 
 class CORE_EXPORT ServerPreferencesWidget : public QWidget
 {
     Q_OBJECT
     Q_DISABLE_COPY(ServerPreferencesWidget)
+    friend class Core::Internal::ServerPreferencesWidgetPrivate;
 
 public:
     explicit ServerPreferencesWidget(QWidget *parent = 0);
@@ -59,8 +62,7 @@ public:
     int port() const;
     QString login() const;
     QString password() const;
-
-    Utils::Database::Grants grantsOnLastConnectedDatabase() const {return m_Grants;}
+    Utils::Database::Grants grantsOnLastConnectedDatabase() const;
 
     static void writeDefaultSettings(Core::ISettings *s);
 
@@ -68,30 +70,22 @@ Q_SIGNALS:
     void hostConnectionChanged(bool coonected);
     void userConnectionChanged(bool coonected);
 
-private:
-    void setDataToUi();
-
 protected Q_SLOTS:
     void testHost();
     void testHost(const QString &hostName);
     void saveToSettings(Core::ISettings *s = 0);
 
 private Q_SLOTS:
-    void on_testButton_clicked();
+    void on_testMySQLButton_clicked();
     void toggleLogPass(bool state);
 
 protected:
     virtual void changeEvent(QEvent *e);
 
 private:
-    Internal::Ui::ServerPreferencesWidget *ui;
-    bool m_HostReachable, m_ConnectionSucceeded;
-    Utils::Database::Grants m_Grants;
-    QString _groupTitle, _groupTitleTrContext;
+    Internal::ServerPreferencesWidgetPrivate *d;
 };
-
 
 }  // End namespace Core
 
-
-#endif // SERVERPREFERENCESWIDGET_H
+#endif // COREPLUGIN_SERVERPREFERENCESWIDGET_H

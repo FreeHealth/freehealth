@@ -24,6 +24,12 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
+/**
+ * \class Core::ServerPreferencesWidget
+ * Allow you to edit Server connection (like MySQL). The widget automatically
+ * catches data from the settings in Ctor.
+ */
+
 #include "serverpreferenceswidget.h"
 #include "ui_serverpreferenceswidget.h"
 
@@ -47,115 +53,183 @@ using namespace Trans::ConstantTranslations;
 static inline Core::ISettings *settings() { return Core::ICore::instance()->settings(); }
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 
+namespace Core {
+namespace Internal {
+class ServerPreferencesWidgetPrivate
+{
+public:
+    ServerPreferencesWidgetPrivate(ServerPreferencesWidget *parent) :
+        ui(new Internal::Ui::ServerPreferencesWidget),
+        _hostReachable(false),
+        _connectionSucceeded(false),
+        _grants(Utils::Database::Grant_NoGrant),
+        q(parent)
+    {}
+
+    ~ServerPreferencesWidgetPrivate()
+    {
+        delete ui;
+    }
+
+    void setupUi()
+    {
+        ui->setupUi(q);
+        ui->log->setIcon(theme()->icon(Core::Constants::ICONEYES));
+        ui->pass->setIcon(theme()->icon(Core::Constants::ICONEYES));
+        ui->pass->toogleEchoMode();
+        ui->useDefaultAdminLog->setVisible(false);
+        ui->testMySQLButton->setEnabled(_hostReachable);
+        ui->userGroupBox->setEnabled(false);
+
+        // Populate with settings()->databaseConnector() data
+        const Utils::DatabaseConnector &db = settings()->databaseConnector();
+        ui->host->setText(db.host());
+        ui->log->setText(db.clearLog());
+        ui->pass->setText(db.clearPass());
+        ui->port->setValue(db.port());
+        if (db.host().isEmpty()) {
+            ui->host->setText("localhost");
+            q->testHost("localhost");
+        }
+        ui->port->setValue(3306);
+    }
+
+
+public:
+    Internal::Ui::ServerPreferencesWidget *ui;
+    bool _hostReachable, _connectionSucceeded;
+    Utils::Database::Grants _grants;
+    QString _groupTitle, _groupTitleTrContext;
+
+private:
+    ServerPreferencesWidget *q;
+};
+} // namespace Internal
+} // namespace Core
+
+// TODO: add an automatic test when host is reachable to detect mysql, mariadb... installation
+
 ServerPreferencesWidget::ServerPreferencesWidget(QWidget *parent) :
     QWidget(parent),
-    ui(new Internal::Ui::ServerPreferencesWidget),
-    m_HostReachable(false),
-    m_ConnectionSucceeded(false),
-    m_Grants(Utils::Database::Grant_NoGrant)
+    d(new ServerPreferencesWidgetPrivate(this))
 {
     setObjectName("ServerPreferencesWidget");
-    ui->setupUi(this);
-    connect(ui->useDefaultAdminLog, SIGNAL(clicked(bool)), this, SLOT(toggleLogPass(bool)));
-    setDataToUi();
-    ui->log->setIcon(theme()->icon(Core::Constants::ICONEYES));
-    ui->pass->setIcon(theme()->icon(Core::Constants::ICONEYES));
-    ui->pass->toogleEchoMode();
+
+    d->setupUi();
+
     if (settings()->value(Core::Constants::S_USE_EXTERNAL_DATABASE, false).toBool())
-        on_testButton_clicked();
-    connect(ui->testHostButton, SIGNAL(clicked()), this, SLOT(testHost()));
-    ui->testButton->setEnabled(m_HostReachable);
-    ui->userGroupBox->setEnabled(false);
+        on_testMySQLButton_clicked();
+
+    connect(d->ui->useDefaultAdminLog, SIGNAL(clicked(bool)), this, SLOT(toggleLogPass(bool)));
+    connect(d->ui->testHostButton, SIGNAL(clicked()), this, SLOT(testHost()));
 }
 
 ServerPreferencesWidget::~ServerPreferencesWidget()
 {
-    delete ui;
+    if (d) {
+        delete d;
+        d = 0;
+    }
 }
 
+/**
+ * Returns \e true if the connection to the database succeeded. This means
+ * that connection to the server is correct and the user login and password
+ * were accepted.
+ */
 bool ServerPreferencesWidget::connectionSucceeded() const
 {
-    return m_ConnectionSucceeded;
+    return d->_connectionSucceeded;
 }
 
+/** Set the translation to use on the user login group */
 void ServerPreferencesWidget::setUserLoginGroupTitle(const QString &trContext, const QString &untranslatedtext)
 {
-    _groupTitle = untranslatedtext;
-    _groupTitleTrContext = trContext;
-    ui->userGroupBox->setTitle(QApplication::translate(trContext.toUtf8(), untranslatedtext.toUtf8()));
+    d->_groupTitle = untranslatedtext;
+    d->_groupTitleTrContext = trContext;
+    d->ui->userGroupBox->setTitle(QApplication::translate(trContext.toUtf8(), untranslatedtext.toUtf8()));
 }
 
+/**
+ * You can show a checkbox that allow user to automatically use the
+ * default administrator login and password to test the connection.
+ * By default, this box is not visible
+ */
 void ServerPreferencesWidget::showUseDefaultAdminLogCheckbox(bool show)
 {
-    ui->useDefaultAdminLog->setVisible(show);
+    d->ui->useDefaultAdminLog->setVisible(show);
 }
 
+/** Returns current host name */
 QString ServerPreferencesWidget::hostName() const
 {
-    return ui->host->text();
+    return d->ui->host->text();
 }
+
+/** Returns current port */
 int ServerPreferencesWidget::port() const
 {
-    return ui->port->value();
+    return d->ui->port->value();
 }
+
+/** Returns the current login (uncrypted) */
 QString ServerPreferencesWidget::login() const
 {
-    return ui->log->text();
+    return d->ui->log->text();
 }
+
+/** Returns the current password (uncrypted) */
 QString ServerPreferencesWidget::password() const
 {
-    return ui->pass->text();
+    // FIXME: potential security issue
+    return d->ui->pass->text();
 }
 
-void ServerPreferencesWidget::setDataToUi()
+/** Returns current user grants on database (only available is connection is reached) */
+Utils::Database::Grants ServerPreferencesWidget::grantsOnLastConnectedDatabase() const
 {
-    // Get from settings()->databaseConnector()
-    const Utils::DatabaseConnector &db = settings()->databaseConnector();
-    ui->host->setText(db.host());
-    ui->log->setText(db.clearLog());
-    ui->pass->setText(db.clearPass());
-    ui->port->setValue(db.port());
-    if (db.host().isEmpty()) {
-        ui->host->setText("localhost");
-        testHost("localhost");
-    }
-    ui->port->setValue(3306);
+    return d->_grants;
 }
 
+/** Slot, test connection to host using the UI hostname */
 void ServerPreferencesWidget::testHost()
 {
-    testHost(ui->host->text());
+    testHost(d->ui->host->text());
 }
 
+/** Slot, test connection to host using a specific \e hostName */
 void ServerPreferencesWidget::testHost(const QString &hostName)
 {
     QString error;
     if (hostName.length() < 3) {
-        m_HostReachable = false;
+        d->_hostReachable = false;
     } else {
         QHostInfo info = QHostInfo::fromName(hostName);
-        m_HostReachable = (info.error()==QHostInfo::NoError);
+        d->_hostReachable = (info.error()==QHostInfo::NoError);
         error = info.errorString();
     }
-    QPalette palette = ui->host->palette();
-    palette.setColor(QPalette::Active, QPalette::Text, m_HostReachable ? Qt::darkBlue : Qt::darkRed);
-    ui->host->setPalette(palette);
-    ui->labelHost->setPalette(palette);
 
-    ui->userGroupBox->setEnabled(m_HostReachable);
-    ui->testButton->setEnabled(m_HostReachable);
+    // Change palette of the host edit
+    QPalette palette = d->ui->host->palette();
+    palette.setColor(QPalette::Active, QPalette::Text, d->_hostReachable ? Qt::darkBlue : Qt::darkRed);
+    d->ui->host->setPalette(palette);
+    d->ui->labelHost->setPalette(palette);
 
-    if (!m_HostReachable) {
-        LOG_ERROR(QString("Host (%1:%2) not reachable: %3").arg(ui->host->text()).arg(ui->port->text()).arg(error));
-        ui->testHostConnectionLabel->setText(tr("Host not reachable..."));
-        ui->testHostConnectionLabel->setToolTip(error);
+    // Change the login/password edit enable state according to host reached or not
+    d->ui->userGroupBox->setEnabled(d->_hostReachable);
+    d->ui->testMySQLButton->setEnabled(d->_hostReachable);
+
+    if (!d->_hostReachable) {
+        LOG_ERROR(QString("Host (%1:%2) not reachable: %3").arg(d->ui->host->text()).arg(d->ui->port->text()).arg(error));
+        d->ui->testHostConnectionLabel->setText(tr("Host not reachable..."));
+        d->ui->testHostConnectionLabel->setToolTip(error);
     } else {
-        LOG(QString("Host available: %1:%2").arg(ui->host->text()).arg(ui->port->text()));
-        ui->testHostConnectionLabel->setText(tr("Host available..."));
+        LOG(QString("Host available: %1:%2").arg(d->ui->host->text()).arg(d->ui->port->text()));
+        d->ui->testHostConnectionLabel->setText(tr("Host available..."));
     }
 
-    Q_EMIT hostConnectionChanged(m_HostReachable);
-    ui->userGroupBox->setEnabled(m_HostReachable);
+    Q_EMIT hostConnectionChanged(d->_hostReachable);
+    d->ui->userGroupBox->setEnabled(d->_hostReachable);
 }
 
 void ServerPreferencesWidget::saveToSettings(Core::ISettings *sets)
@@ -166,14 +240,16 @@ void ServerPreferencesWidget::saveToSettings(Core::ISettings *sets)
     else
         s = sets;
 
-    if (!m_HostReachable) {
-        LOG_ERROR_FOR("ServerPreferencesWidget", tr("Host name error (%1:%2)").arg(ui->host->text()).arg(ui->port->value()));
+    if (!d->_hostReachable) {
+        LOG_ERROR_FOR("ServerPreferencesWidget", tr("Host name error (%1:%2)").arg(d->ui->host->text()).arg(d->ui->port->value()));
         return;
     }
     LOG("saving host");
-    Utils::DatabaseConnector db(ui->log->text(), ui->pass->text(), ui->host->text(), ui->port->value());
+    Utils::DatabaseConnector db(login(), password(), hostName(), port());
+
+    // FIXME: only working with MySQL as network database
     db.setDriver(Utils::Database::MySQL);
-    if (ui->useDefaultAdminLog->isChecked()) {
+    if (d->ui->useDefaultAdminLog->isChecked()) {
         db.setClearLog("fmf_admin");
         db.setClearPass("fmf_admin");
     }
@@ -190,45 +266,47 @@ void ServerPreferencesWidget::writeDefaultSettings(Core::ISettings *s)
     s->sync();
 }
 
-void ServerPreferencesWidget::on_testButton_clicked()
+/** Test mysql database connection */
+void ServerPreferencesWidget::on_testMySQLButton_clicked()
 {
-    if (!m_HostReachable) {
-        ui->testConnectionLabel->setText(tr("Host not reachable..."));
-        ui->userGroupBox->setEnabled(false);
+    // FIXME: only manages MySQL
+    if (!d->_hostReachable) {
+        d->ui->testConnectionLabel->setText(tr("Host not reachable..."));
+        d->ui->userGroupBox->setEnabled(false);
         Q_EMIT userConnectionChanged(false);
         return;
     }
-    ui->userGroupBox->setEnabled(true);
-    if (ui->log->text().isEmpty() && !ui->useDefaultAdminLog->isChecked()) {
-        ui->testConnectionLabel->setText(tr("No anonymous connection allowed"));
+    d->ui->userGroupBox->setEnabled(true);
+    if (login().isEmpty() && !d->ui->useDefaultAdminLog->isChecked()) {
+        d->ui->testConnectionLabel->setText(tr("No anonymous connection allowed"));
         Q_EMIT userConnectionChanged(false);
         return;
     }
-    ui->testConnectionLabel->setText(tr("Test in progress..."));
+    d->ui->testConnectionLabel->setText(tr("Test in progress..."));
     {
         QSqlDatabase test = QSqlDatabase::addDatabase("QMYSQL", "__APP_CONNECTION_TESTER");
-        test.setHostName(ui->host->text());
-        test.setPort(ui->port->value());
-        if (ui->useDefaultAdminLog->isChecked()) {
+        test.setHostName(hostName());
+        test.setPort(port());
+        if (d->ui->useDefaultAdminLog->isChecked()) {
             test.setUserName("fmf_admin");
             test.setPassword("fmf_admin");
         } else {
-            test.setUserName(ui->log->text());
-            test.setPassword(ui->pass->text());
+            test.setUserName(login());
+            test.setPassword(password());
         }
         if (!test.open()) {
-            ui->testButton->setIcon(theme()->icon(Core::Constants::ICONERROR));
-            ui->testConnectionLabel->setText(tr("Connection error: %1").arg(test.lastError().number()));
-            ui->testConnectionLabel->setToolTip(test.lastError().driverText());
-            m_ConnectionSucceeded = false;
-            m_Grants = Utils::Database::Grant_NoGrant;
+            d->ui->testMySQLButton->setIcon(theme()->icon(Core::Constants::ICONERROR));
+            d->ui->testConnectionLabel->setText(tr("Connection error: %1").arg(test.lastError().number()));
+            d->ui->testConnectionLabel->setToolTip(test.lastError().driverText());
+            d->_connectionSucceeded = false;
+            d->_grants = Utils::Database::Grant_NoGrant;
             Q_EMIT userConnectionChanged(false);
         } else {
-            ui->testButton->setIcon(theme()->icon(Core::Constants::ICONOK));
-            ui->testConnectionLabel->setText(tr("Connected"));
-            m_ConnectionSucceeded = true;
-            m_Grants = Utils::Database::getConnectionGrants("__APP_CONNECTION_TESTER");
-//            qWarning() << "GRANTS" << m_Grants;
+            d->ui->testMySQLButton->setIcon(theme()->icon(Core::Constants::ICONOK));
+            d->ui->testConnectionLabel->setText(tr("Connected"));
+            d->_connectionSucceeded = true;
+            d->_grants = Utils::Database::getConnectionGrants("__APP_CONNECTION_TESTER");
+//            qWarning() << "GRANTS" << _grants;
             saveToSettings();
             Q_EMIT userConnectionChanged(true);
         }
@@ -236,10 +314,11 @@ void ServerPreferencesWidget::on_testButton_clicked()
     QSqlDatabase::removeDatabase("__APP_CONNECTION_TESTER");
 }
 
+/** Toggle login and password edits to enabled/disabled */
 void ServerPreferencesWidget::toggleLogPass(bool state)
 {
-    ui->log->setEnabled(!state);
-    ui->pass->setEnabled(!state);
+    d->ui->log->setEnabled(!state);
+    d->ui->pass->setEnabled(!state);
 }
 
 void ServerPreferencesWidget::changeEvent(QEvent *e)
@@ -247,9 +326,9 @@ void ServerPreferencesWidget::changeEvent(QEvent *e)
     QWidget::changeEvent(e);
     switch (e->type()) {
     case QEvent::LanguageChange:
-        ui->retranslateUi(this);
-        if (!_groupTitle.isEmpty())
-            ui->userGroupBox->setTitle(QApplication::translate(_groupTitleTrContext.toUtf8(), _groupTitle.toUtf8()));
+        d->ui->retranslateUi(this);
+        if (!d->_groupTitle.isEmpty())
+            d->ui->userGroupBox->setTitle(QApplication::translate(d->_groupTitleTrContext.toUtf8(), d->_groupTitle.toUtf8()));
         break;
     default:
         break;
