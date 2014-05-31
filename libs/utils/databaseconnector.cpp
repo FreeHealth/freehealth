@@ -50,6 +50,15 @@
 #include <QApplication>
 #include <QFileInfo>
 
+enum {
+    CryptSerialization =
+#ifdef RELEASE
+    true // In release mode, you must keep encryption enabled
+#else
+    true // for your tests you can change this value only in a debug compilation
+#endif
+};
+
 using namespace Utils;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;
@@ -336,7 +345,9 @@ QString DatabaseConnector::forSettings() const
     tmp += d->m_HostName + QString(SEPARATOR);
     tmp += QString::number(d->m_Port) + QString(SEPARATOR);
     tmp += QString::number(d->m_Driver);
-    return Utils::crypt(tmp);
+    if (CryptSerialization)
+        return Utils::crypt(tmp);
+    return tmp;
 }
 
 /**
@@ -346,7 +357,11 @@ QString DatabaseConnector::forSettings() const
 void DatabaseConnector::fromSettings(const QString &value)
 {
     clear();
-    QString tmp = Utils::decrypt(value.toUtf8());
+    QString tmp;
+    if (CryptSerialization)
+        tmp = Utils::decrypt(value.toUtf8());
+    else
+        tmp = value;
     QStringList vals = tmp.split(SEPARATOR);
     if (vals.count() != 5) {
         LOG_ERROR_FOR("DatabaseConnector", "Decrypt error");
