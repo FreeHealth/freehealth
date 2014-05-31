@@ -408,6 +408,7 @@ SettingsPrivate::SettingsPrivate(QObject *parent, const QString &appName, const 
     }
 
     readDatabaseConnector();
+    LOG(databaseConnector().toString());
 
     if (parent)
         setParent(parent);
