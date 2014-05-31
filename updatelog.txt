@@ -22,6 +22,7 @@ The FreeMedForms project
     * Segfaulting when cancelling the installation wizard before the end
     * Security issue: clear clipboard when requesting user login and password
     * HPRIM file model going crazy when path to scan does not exists (eg in crossplatform usage)
+    * Correcting user identification with MySQL
   * FreeDiams
     * Correctly select user language at startup
     * Correctly define the default print-to-PDF-cache path in the user documents path
