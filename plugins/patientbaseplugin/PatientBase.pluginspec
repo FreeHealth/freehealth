@@ -1,6 +1,6 @@
 <plugin name="PatientBase" version="0.0.1" compatVersion="0.0.1">
     <vendor>FreeMedForms</vendor>
-    <copyright>(C) 2008-2012 by Eric MAEKER, MD</copyright>
+    <copyright>(C) 2008-2014 by Eric MAEKER, MD</copyright>
     <license>GPLv3</license>
     <category>Patient data</category>
     <description>Basic plugin for complete patient access.</description>
@@ -11,5 +11,6 @@
         <dependency name="ZipCodes" version="0.0.1"/>
         <dependency name="FormManager" version="0.0.1"/>
         <dependency name="Identity" version="0.0.1"/>
+        <dependency name="UserManager" version="0.0.1"/>
     </dependencyList>
 </plugin>
