@@ -221,6 +221,7 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
 #include <coreplugin/modemanager/imode.h>
+#include <coreplugin/constants_menus.h>
 #include <coreplugin/constants_tokensandsettings.h>
 
 #include <formmanagerplugin/formmanager.h>
@@ -738,7 +739,7 @@ FormPage::~FormPage()
 void FormPage::onPatientFormsLoaded()
 {
     Form::FormTreeModel *model = formManager().formTreeModelForMode(spec()->uuid());
-    _mode->setPriority(spec()->value(Form::FormItemSpec::Spec_Priority).toInt());
+    _mode->setPriority(Core::Constants::P_MODE_PATIENT_FILE + spec()->value(Form::FormItemSpec::Spec_Priority).toInt());
     if (!model) {
         if (_inPool)
             pluginManager()->removeObject(_mode);

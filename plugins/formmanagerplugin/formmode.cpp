@@ -61,6 +61,7 @@ FormMode::FormMode(FormItemSpec *spec, QObject *parent) :
 
     setUniqueModeName(_spec->uuid().toUtf8());
     setPatientBarVisibility(true);
+    setPriority(Core::Constants::P_MODE_PATIENT_FILE);
     retranslate();
 
     connect(formManager(), SIGNAL(patientFormsLoaded()), this, SLOT(getPatientForm()));
