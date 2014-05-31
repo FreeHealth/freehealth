@@ -19,30 +19,29 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /**
-  \class Core::ISettings
-  \brief This class is a multiOS settings manager.
-    When instanciating this class, the ini file is determined using member getIniFile().\n
-     - If command line contains '--config=path/to/ini/file.ini' this file is tested and used if possible.\n
-     - Else :
-         - try ini file in home path
-         - try to find next to the binary a file called \e pathtoconfig.ini which contains the path to the
-         ini file to use (this feature is used for the USB-Key multi-OS configuration)
-
-    m_ResourcesPath is protected and can be defined, retreive it using userResourcesPath().\n
-    m_DatabasePath is protected and can be defined, retreive it using databasePath().
-
-    The debugging members are used by Core::DebugDialog :
-        - getTreeWidget() returns a treeWidget containing all values of the QSettings\n
-        - toString() is idem but returns a QString formatted.
-
-    You can store extra-data such as webSiteUrl().
-
-    getTreeWidget() mechanism :\n
-    - if *parent is a QTreeWidget, just populate it with infos\n
-    - if passing QMap each element is supposed to be : "Name of path to show", "/absolute/path/to/show"\n
-
-    DEFAULT BUNDLE PATHS
-
+ * \class Core::ISettings
+ * \brief This class is a multiOS settings manager.
+ *   When instanciating this class, the ini file is determined using member getIniFile().\n
+ *    - If command line contains '--config=path/to/ini/file.ini' this file is tested and used if possible.\n
+ *    - Else :
+ *        - try ini file in home path
+ *        - try to find next to the binary a file called \e pathtoconfig.ini which contains the path to the
+ *        ini file to use (this feature is used for the USB-Key multi-OS configuration)
+ *
+ *   m_ResourcesPath is protected and can be defined, retreive it using userResourcesPath().\n
+ *   m_DatabasePath is protected and can be defined, retreive it using databasePath().
+ *
+ *   The debugging members are used by Core::DebugDialog :
+ *       - getTreeWidget() returns a treeWidget containing all values of the QSettings\n
+ *       - toString() is idem but returns a QString formatted.
+ *
+ *   You can store extra-data such as webSiteUrl().
+ *
+ *   getTreeWidget() mechanism :\n
+ *   - if *parent is a QTreeWidget, just populate it with infos\n
+ *   - if passing QMap each element is supposed to be : "Name of path to show", "/absolute/path/to/show"\n
+ *
+ *   DEFAULT BUNDLE PATHS
 \verbatim
        MacOSX                                Linux/Win32
 
@@ -84,7 +83,7 @@
           |                                  |
           `- FrameWorks (Qt FrameWorks)      `- libs (Qt if needed)
 \endverbatim
-*/
+ */
 
 /*!
  \enum Core::ISettings::Paths
