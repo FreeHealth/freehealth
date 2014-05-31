@@ -21,27 +21,28 @@
 /**
  * \class Core::ISettings
  * \brief This class is a multiOS settings manager.
- *   When instanciating this class, the ini file is determined using member getIniFile().\n
- *    - If command line contains '--config=path/to/ini/file.ini' this file is tested and used if possible.\n
- *    - Else :
- *        - try ini file in home path
- *        - try to find next to the binary a file called \e pathtoconfig.ini which contains the path to the
+ * When instanciating this class, the ini file is determined using member getIniFile().\n
+ *  - If command line contains '--config=path/to/ini/file.ini' this file is tested and used if possible.\n
+ *  - Else :
+ *      - try ini file in home path
+ *      - try to find next to the binary a file called \e pathtoconfig.ini which contains the path to the
  *        ini file to use (this feature is used for the USB-Key multi-OS configuration)
  *
- *   m_ResourcesPath is protected and can be defined, retreive it using userResourcesPath().\n
- *   m_DatabasePath is protected and can be defined, retreive it using databasePath().
+ * m_ResourcesPath is protected and can be defined, retreive it using userResourcesPath().\n
+ * m_DatabasePath is protected and can be defined, retreive it using databasePath().
  *
- *   The debugging members are used by Core::DebugDialog :
- *       - getTreeWidget() returns a treeWidget containing all values of the QSettings\n
- *       - toString() is idem but returns a QString formatted.
+ * The debugging members are used by Core::DebugDialog :
+ *     - getTreeWidget() returns a treeWidget containing all values of the QSettings\n
+ *     - toString() is idem but returns a QString formatted.
  *
- *   You can store extra-data such as webSiteUrl().
+ * You can store extra-data such as webSiteUrl().
  *
- *   getTreeWidget() mechanism :\n
- *   - if *parent is a QTreeWidget, just populate it with infos\n
- *   - if passing QMap each element is supposed to be : "Name of path to show", "/absolute/path/to/show"\n
+ * The Core::ISettings manages two different setting files:
+ * - one for the network connection (available locally)
+ * - one for the application preferences (that is stored in the database
+ *   with the FreeMedForms EMR and is stored locally for any other apps).
  *
- *   DEFAULT BUNDLE PATHS
+ * DEFAULT BUNDLE PATHS
 \verbatim
        MacOSX                                Linux/Win32
 
@@ -268,10 +269,6 @@
 #include <QRegExp>
 #include <QDesktopWidget>
 
-/**
-  \todo Manage user's settings stored into database
-*/
-
 namespace {
 
     const char* const WEBSITE              = "http://www.freemedforms.org/";
@@ -333,13 +330,17 @@ SettingsPrivate::SettingsPrivate(QObject *parent, const QString &appName, const 
 {
     setObjectName("SettingsPrivate");
 
-    QString file = getIniFile(appName, fileName);
-    QFileInfo fi(file);
-    QString f = fi.absolutePath() + QDir::separator() + fi.baseName() + "-net." + fi.completeSuffix();
-    m_NetworkSettings = new QSettings(f, QSettings::IniFormat, this);
-    LOG_FOR("Settings", "Using network ini file " + f);
+    // Get and create the Ini file names and corresponding QSettings
+    QString userFileName = getIniFile(appName, fileName);
+    QFileInfo file(userFileName);
+    QString networkFileName = QString("%1/%2-net.%3")
+            .arg(file.absolutePath())
+            .arg(file.baseName())
+            .arg(file.completeSuffix());
+    m_NetworkSettings = new QSettings(networkFileName, QSettings::IniFormat, this);
+    LOG_FOR("Settings", "Using network ini file " + networkFileName);
 
-    m_UserSettings = new QSettings(file, QSettings::IniFormat, this);
+    m_UserSettings = new QSettings(userFileName, QSettings::IniFormat, this);
     QString resourcesPath;
     QString applicationName;
 
