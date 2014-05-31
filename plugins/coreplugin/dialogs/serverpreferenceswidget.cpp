@@ -201,12 +201,15 @@ void ServerPreferencesWidget::testHost()
 void ServerPreferencesWidget::testHost(const QString &hostName)
 {
     QString error;
+
+    // Check that hostname is reachable on the network
     if (hostName.length() < 3) {
         d->_hostReachable = false;
     } else {
         QHostInfo info = QHostInfo::fromName(hostName);
         d->_hostReachable = (info.error()==QHostInfo::NoError);
         error = info.errorString();
+        // TODO: Test that a database server is configured
     }
 
     // Change palette of the host edit
