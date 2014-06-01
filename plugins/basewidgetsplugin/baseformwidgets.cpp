@@ -1073,16 +1073,25 @@ QVariant BaseCheckData::data(const int ref, const int role) const
         if (vals.count()>=2)
             return vals.at(1);
     } else if (role == Form::IFormItemData::PrintRole) {
+        // Check if a Print value is defined for this item
+        QString toPrint = m_FormItem->spec()->label();
+        const QStringList &vals = m_FormItem->valueReferences()->values(Form::FormItemValues::Value_Printing);
+        if (vals.count() >= 1 && !vals.at(0).isEmpty()) {
+            toPrint = vals.at(0);
+        }
+        if (vals.count() >= 2 && !vals.at(1).isEmpty())
+            toPrint = vals.at(1);
+
         // ⍌⎕☒☑
         if (m_Check->isChecked()) {
 #if QT_VERSION >= 0x05000
-            return QString("%1&nbsp;%2").arg("&#10003;").arg(m_FormItem->spec()->label());
+            return QString("%1&nbsp;%2").arg("&#10003;").arg(toPrint);
 #else
-            return QString("%1&nbsp;%2").arg("☒").arg(m_FormItem->spec()->label());
+            return QString("%1&nbsp;%2").arg("☒").arg(toPrint);
 #endif
         } else {
             if (!m_FormItem->getOptions().contains("printonlychecked", Qt::CaseInsensitive))
-                return QString("%1&nbsp;%2").arg("⎕").arg(m_FormItem->spec()->label());
+                return QString("%1&nbsp;%2").arg("⎕").arg(toPrint);
         }
         return QVariant();
     }
@@ -1380,12 +1389,23 @@ QVariant BaseRadioData::data(const int ref, const int role) const
         }
         int id = parentItem()->valueReferences()->values(Form::FormItemValues::Value_Uuid).indexOf(selectedUid);
         const QStringList &vals = parentItem()->valueReferences()->values(Form::FormItemValues::Value_Numerical);
-//        qWarning() << "Radio -> DATA" << selectedUid << id << vals;
-        if (id < vals.count() && id >= 0)
+        if (IN_RANGE_STRICT_MAX(id, 0, vals.count()))
             return vals.at(id);
-    } else if (role==Qt::DisplayRole || role==Form::IFormItemData::PatientModelRole || role==Form::IFormItemData::PrintRole) {
+    } else if (role==Qt::DisplayRole
+               || role==Form::IFormItemData::PatientModelRole
+               || role==Form::IFormItemData::PrintRole) {
         foreach(QRadioButton *but, m_Radio->m_RadioList) {
             if (but->isChecked()) {
+                if (role == Form::IFormItemData::PrintRole) {
+                    // Check if a Print value is defined for this radio item
+                    QString selectedUid = but->property("id").toString();
+                    QString toPrint = but->text();
+                    int id = parentItem()->valueReferences()->values(Form::FormItemValues::Value_Uuid).indexOf(selectedUid);
+                    const QStringList &vals = parentItem()->valueReferences()->values(Form::FormItemValues::Value_Printing);
+                    if (IN_RANGE_STRICT_MAX(id, 0, vals.count()))
+                        toPrint = vals.at(id);
+                    return toPrint;
+                }
                 return but->text();
             }
         }
