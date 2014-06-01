@@ -1117,12 +1117,12 @@ BaseRadio::BaseRadio(Form::FormItem *formItem, QWidget *parent) :
     Form::IFormWidget(formItem,parent), m_ButGroup(0)
 {
     setObjectName("BaseRadio");
-    QLayout *radioLayout = 0;
+    QBoxLayout *radioLayout = 0;
     // QtUi Loaded ?
     const QString &layout = formItem->spec()->value(Form::FormItemSpec::Spec_UiInsertIntoLayout).toString();
     if (!layout.isEmpty()) {
         // Find widget
-        radioLayout = formItem->parentFormMain()->formWidget()->findChild<QLayout*>(layout);
+        radioLayout = formItem->parentFormMain()->formWidget()->findChild<QBoxLayout*>(layout);
         if (!radioLayout) {
             radioLayout = new QHBoxLayout(this);
         }
@@ -1132,21 +1132,15 @@ BaseRadio::BaseRadio(Form::FormItem *formItem, QWidget *parent) :
         QBoxLayout *hb = getBoxLayout(Constants::labelAlignement(formItem, OnTop), m_FormItem->spec()->label(), this);
 
         // Add QLabel
-        //    m_Label->setSizePolicy(QSizePolicy::Preferred , QSizePolicy::Preferred);
         hb->addWidget(m_Label);
 
         // Add Buttons
         QGroupBox *gb = new QGroupBox(this);
-        //     gb->setFlat(true);
-        //     QSizePolicy sizePolicy = gb->sizePolicy();
-        //     sizePolicy.setHorizontalPolicy(QSizePolicy::Fixed);
-        //     gb->setSizePolicy(sizePolicy);
         if (Constants::isRadioHorizontalAlign(m_FormItem)) {
             radioLayout = new QBoxLayout(QBoxLayout::LeftToRight, gb);
         } else {
             radioLayout = new QBoxLayout(QBoxLayout::TopToBottom, gb);
         }
-    //    qWarning() << isRadioHorizontalAlign(m_FormItem);
         radioLayout->setContentsMargins(1, 0, 1, 0);
         hb->addWidget(gb);
     }
@@ -1174,6 +1168,12 @@ BaseRadio::BaseRadio(Form::FormItem *formItem, QWidget *parent) :
         i++;
         radioLayout->addWidget(rb);
         m_RadioList.append(rb);
+    }
+
+    // For compact view, add a spaceritem inside the layout
+    if (Constants::isCompactView(formItem)) {
+        // TODO: manage a new option for right ou left compacting
+        radioLayout->addSpacerItem(new QSpacerItem(20, 20, QSizePolicy::Expanding, QSizePolicy::Expanding));
     }
 
     if (m_RadioList.count() >= 1)
