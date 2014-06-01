@@ -926,7 +926,6 @@ QHash<QString, QVariant> FormManager::formToTokens(Form::FormMain *form) const
         padTools()->tokenPool()->addTokens(d->_tokens.values(form).toVector());
     }
 #else
-    // TODO: manage PadTools here
     // Create a token for each FormItem of the FormMain (label and value)
     foreach(FormItem *item, form->flattenedFormItemChildren()) {
         tokens.insert(item->uuid() + ".label", item->spec()->label());
@@ -970,12 +969,6 @@ QHash<QString, QVariant> FormManager::formToTokens(Form::FormMain *form) const
         parent = parent->formParent();
     }
     tokens.insert("EpisodeFullFormLabel", fullFormName.join(" / "));
-
-
-    qWarning() << tokens;
-
-
-
     return tokens;
 }
 
