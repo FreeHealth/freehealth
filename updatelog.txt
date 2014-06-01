@@ -26,6 +26,9 @@ The FreeMedForms project
     * New options for some FormItem:
       * Radio: compact option
       * Lists: print separator options
+    * FormItem corrections:
+      * Check: correctly returns the printing values instead of the label on print demand
+      * Radio: correctly returns the printing values instead of the label on print demand
   * FreeDiams
     * Correctly select user language at startup
     * Correctly define the default print-to-PDF-cache path in the user documents path
