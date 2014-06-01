@@ -23,6 +23,9 @@ The FreeMedForms project
     * Security issue: clear clipboard when requesting user login and password
     * HPRIM file model going crazy when path to scan does not exists (eg in crossplatform usage)
     * Correcting user identification with MySQL
+    * New options for some FormItem:
+      * Radio: compact option
+      * Lists: print separator options
   * FreeDiams
     * Correctly select user language at startup
     * Correctly define the default print-to-PDF-cache path in the user documents path

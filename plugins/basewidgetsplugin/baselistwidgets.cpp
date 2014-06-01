@@ -48,6 +48,29 @@ using namespace BaseWidgets;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
+namespace {
+static QString getPrintRoleSeparator(Form::FormItem *item)
+{
+    Q_ASSERT(item);
+    if (!item)
+        return QString::null;
+    QString printSeparator = "<br/>";
+    const QStringList &options = item->getOptions();
+    if (options.contains("htmllinebreakseparator", Qt::CaseInsensitive))
+        printSeparator = "<br/>";
+    else if (options.contains("plaintextlinebreakseparator", Qt::CaseInsensitive))
+        printSeparator = Utils::isRunningOnWin()?"\r\n":"\n";
+    else if (options.contains("spaceseparator", Qt::CaseInsensitive))
+        printSeparator = " ";
+    else if (options.contains("semicolonseparator", Qt::CaseInsensitive))
+        printSeparator = "; ";
+    else if (options.contains("commaseparator", Qt::CaseInsensitive))
+        printSeparator = ", ";
+    else if (options.contains("htmlsemicolonseparator", Qt::CaseInsensitive))
+        printSeparator = "&nbsp;; ";
+    return printSeparator;
+}
+}
 ///////////////////////////////////////////////////////////////////////////////
 /////////////////////////////   BaseList   ////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
@@ -247,7 +270,7 @@ void BaseEditableStringList::retranslate()
 }
 
 
-////////////////////////////////////////// ItemData /////////////////////////////////////////////
+//////////////////////////////////// ItemData /////////////////////////////////////////////
 BaseListData::BaseListData(Form::FormItem *item) :
     m_FormItem(item),
     m_List(0),
@@ -342,6 +365,13 @@ QVariant BaseListData::data(const int ref, const int role) const
             || role==Form::IFormItemData::PatientModelRole
             || role==Form::IFormItemData::PrintRole
             || role==Form::IFormItemData::CalculationsRole)  {
+
+        // Get print separator
+        QString printSeparator;
+        if (role==Form::IFormItemData::PrintRole) {
+            printSeparator = getPrintRoleSeparator(m_FormItem);
+        }
+
         if (m_List) {
             QStringList selected;
             QItemSelectionModel *selModel = m_List->m_List->selectionModel();
@@ -358,11 +388,11 @@ QVariant BaseListData::data(const int ref, const int role) const
                 }
             }
             if (role==Form::IFormItemData::PrintRole)
-                return selected.join("<br/>");
+                return selected.join(printSeparator);
             return selected;
         } else if (m_EditableList) {
             if (role==Form::IFormItemData::PrintRole)
-                return  m_EditableList->m_StringListView->getStringList().toStringList().join("<br/>");
+                return  m_EditableList->m_StringListView->getStringList().toStringList().join(printSeparator);
             return m_EditableList->m_StringListView->getStringList();
         }
     }
