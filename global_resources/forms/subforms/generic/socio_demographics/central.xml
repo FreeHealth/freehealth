@@ -8,7 +8,7 @@
         <fmfv>0.9.1</fmfv>
         <cdate>2014-05-31</cdate>
         <lmdate>2014-06-01</lmdate>
-        <icon>geriatrics.png</icon>
+        <icon>__theme__/identity.png</icon>
         <weblink/>
         <bibliography/>
 
@@ -17,12 +17,10 @@
         <description lang="xx">Socio-demographics data</description>
         <description lang="fr">Données socio-démographiques</description>
         <description lang="de">Sozio-demografische Daten</description>
-        <category lang="xx">Geriatrics</category>
-        <category lang="fr">Gériatrie</category>
-        <category lang="de">Geriatrie</category>
-        <specialties lang="xx">Geriatrics</specialties>
-        <specialties lang="fr">Gériatrie</specialties>
-        <specialties lang="de">Geriatrie</specialties>
+        <category lang="xx">Generic tools</category>
+        <category lang="fr">Outils généraux</category>
+        <specialties lang="fr">Outils</specialties>
+        <specialties lang="xx">Tools</specialties>
 
         <updateinfo>
           <updateversion from="" to="0.9.1">
