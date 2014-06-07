@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="48px"
+   height="48px"
+   id="svg2985"
+   version="1.1"
+   inkscape:version="0.48.3.1 r9886"
+   sodipodi:docname="radioactivity.svg"
+   inkscape:export-filename="/home/hoel/icones/radioactivity16.png"
+   inkscape:export-xdpi="30"
+   inkscape:export-ydpi="30">
+  <title
+     id="title2988">radioactivity</title>
+  <defs
+     id="defs2987" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="8"
+     inkscape:cx="-36.202836"
+     inkscape:cy="10.670209"
+     inkscape:current-layer="layer1"
+     showgrid="true"
+     inkscape:grid-bbox="true"
+     inkscape:document-units="px"
+     inkscape:window-width="1857"
+     inkscape:window-height="1056"
+     inkscape:window-x="63"
+     inkscape:window-y="24"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata2990">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>radioactivity</dc:title>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>Hoel CHARBONNEL</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by/3.0/" />
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by/3.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <g
+     id="layer1"
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer">
+    <path
+       sodipodi:type="arc"
+       style="fill:#2e3436;fill-rule:evenodd;stroke:#edd400;stroke-width:4.52853346000000023;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       id="path2993"
+       sodipodi:cx="45.714287"
+       sodipodi:cy="0.14285716"
+       sodipodi:rx="31.714287"
+       sodipodi:ry="23"
+       d="m 77.428574,0.14285716 a 31.714287,23 0 1 1 -63.428574,0 31.714287,23 0 1 1 63.428574,0 z"
+       transform="matrix(0.69799327,0,0,0.96406494,-7.9281056,23.783519)" />
+    <path
+       sodipodi:type="arc"
+       style="fill:#edd400;fill-rule:evenodd;stroke:none"
+       id="path3763"
+       sodipodi:cx="24.04163"
+       sodipodi:cy="24.059385"
+       sodipodi:rx="24.04163"
+       sodipodi:ry="23.940615"
+       d="M 48.08326,24.059385 A 24.04163,23.940615 0 0 1 36.062444,44.792566 L 24.04163,24.059385 z"
+       sodipodi:start="0"
+       sodipodi:end="1.0471976" />
+    <path
+       sodipodi:end="1.0471976"
+       sodipodi:start="0"
+       d="M 48.08326,24.059385 A 24.04163,23.940615 0 0 1 36.062444,44.792566 L 24.04163,24.059385 z"
+       sodipodi:ry="23.940615"
+       sodipodi:rx="24.04163"
+       sodipodi:cy="24.059385"
+       sodipodi:cx="24.04163"
+       id="path3765"
+       style="fill:#edd400;fill-rule:evenodd;stroke:none"
+       sodipodi:type="arc"
+       transform="matrix(-1,0,0,1,48.083258,0.10101525)" />
+    <path
+       sodipodi:type="arc"
+       style="fill:#edd400;fill-rule:evenodd;stroke:none"
+       id="path3769"
+       sodipodi:cx="21.566757"
+       sodipodi:cy="42.44416"
+       sodipodi:rx="21.566757"
+       sodipodi:ry="18.675982"
+       d="m 10.783379,26.270286 a 21.566757,18.675982 0 0 1 21.566758,0 L 21.566757,42.44416 z"
+       transform="matrix(1.0917139,0,0,1.2877398,0.49690238,-30.597653)"
+       sodipodi:start="4.1887902"
+       sodipodi:end="5.2359878" />
+    <path
+       sodipodi:type="arc"
+       style="fill:#edd400;fill-rule:evenodd;stroke:none"
+       id="path3771"
+       sodipodi:cx="-32.173359"
+       sodipodi:cy="31.484005"
+       sodipodi:rx="11.162186"
+       sodipodi:ry="9.8489876"
+       d="m -21.011173,31.484005 a 11.162186,9.8489876 0 1 1 -22.324372,0 11.162186,9.8489876 0 1 1 22.324372,0 z"
+       transform="matrix(0.71670551,0,0,0.81226623,47.058824,-1.573394)" />
+    <path
+       sodipodi:type="arc"
+       style="fill:#2e3436;fill-rule:evenodd;stroke:none"
+       id="path3773"
+       sodipodi:cx="-38.234272"
+       sodipodi:cy="29.564716"
+       sodipodi:rx="7.1215754"
+       sodipodi:ry="7.323606"
+       d="m -31.112697,29.564716 a 7.1215754,7.323606 0 1 1 -14.24315,0 7.1215754,7.323606 0 1 1 14.24315,0 z"
+       transform="matrix(0.70209185,0,0,0.68272378,50.843971,3.8154651)" />
+  </g>
+</svg>
+

@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:osb="http://www.openswatchbook.org/uri/2009/osb"
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="48px"
+   height="48px"
+   id="svg4718"
+   version="1.1"
+   inkscape:version="0.48.3.1 r9886"
+   sodipodi:docname="bloodCell.svg"
+   inkscape:export-filename="/home/hoel/icones/bloodCell16.png"
+   inkscape:export-xdpi="30"
+   inkscape:export-ydpi="30">
+  <title
+     id="title7024">Blood Cell</title>
+  <defs
+     id="defs4720">
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient5401"
+       osb:paint="gradient">
+      <stop
+         style="stop-color:#eeeeec;stop-opacity:1;"
+         offset="0"
+         id="stop5403" />
+      <stop
+         style="stop-color:#eeeeec;stop-opacity:0;"
+         offset="1"
+         id="stop5405" />
+    </linearGradient>
+    <filter
+       inkscape:collect="always"
+       id="filter5307"
+       x="-0.2018919"
+       width="1.4037838"
+       y="-0.29584158"
+       height="1.5916832">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="1.7785715"
+         id="feGaussianBlur5309" />
+    </filter>
+    <filter
+       inkscape:collect="always"
+       id="filter6887"
+       x="-0.6435916"
+       width="2.2871832"
+       y="-0.61717398"
+       height="2.234348">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="3.7671475"
+         id="feGaussianBlur6889" />
+    </filter>
+    <filter
+       inkscape:collect="always"
+       id="filter7001">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="0.59635688"
+         id="feGaussianBlur7003" />
+    </filter>
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="7"
+     inkscape:cx="-33.195833"
+     inkscape:cy="41.759816"
+     inkscape:current-layer="layer1"
+     showgrid="true"
+     inkscape:grid-bbox="true"
+     inkscape:document-units="px"
+     showguides="true"
+     inkscape:guide-bbox="true"
+     inkscape:window-width="1857"
+     inkscape:window-height="1056"
+     inkscape:window-x="63"
+     inkscape:window-y="24"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata4723">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>Blood Cell</dc:title>
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by/3.0/" />
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>Hoel CHARBONNEL</dc:title>
+          </cc:Agent>
+        </dc:creator>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by/3.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <g
+     id="layer1"
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer">
+    <path
+       style="fill:#ef2929;fill-opacity:1;stroke:none"
+       d="M 2.2341049,35.39142 C 1.0721767,33.185474 0.17532432,30.544592 0.61152279,28.089801 1.2073582,24.736622 3.8425343,22.014812 6.1283018,19.490115 8.3506405,17.035477 11.106576,15.075663 13.916696,13.324303 17.222228,11.264188 20.762899,9.5093399 24.46348,8.2942985 28.283096,7.0401729 32.289641,5.9111397 36.308329,6.022684 c 2.229168,0.061873 4.724318,0.2608851 6.490328,1.622582 2.492003,1.9214776 4.116299,5.157496 4.543231,8.275169 0.354207,2.586599 -0.583257,5.308346 -1.784841,7.626136 -1.798505,3.469216 -4.725101,6.33577 -7.788395,8.761942 -3.566541,2.824754 -7.701934,5.018954 -12.007106,6.490329 -4.097562,1.400421 -8.507094,2.514119 -12.8184,2.109358 C 9.9619195,40.62831 7.0019847,39.478989 4.5057198,37.825292 3.5805606,37.212404 2.7512837,36.373295 2.2341049,35.39142 z"
+       id="path6925"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ssssssssssssss" />
+    <path
+       sodipodi:nodetypes="ssssssssssssss"
+       inkscape:connector-curvature="0"
+       id="path6927"
+       d="m 5.3739158,34.003559 c -0.995419,-1.889824 -1.7637489,-4.152258 -1.3900594,-6.255267 0.5104497,-2.872654 2.7679944,-5.204418 4.7262021,-7.367316 1.9038685,-2.102878 4.2648655,-3.781843 6.6722845,-5.282225 2.831836,-1.764893 5.865115,-3.268264 9.035387,-4.309185 3.27225,-1.0744043 6.704641,-2.0416428 10.147434,-1.9460833 1.909719,0.053006 4.047303,0.2234992 5.560238,1.3900593 2.134889,1.646122 3.526416,4.418407 3.892167,7.089304 0.303448,2.215929 -0.499674,4.547638 -1.529066,6.533279 -1.540772,2.972064 -4.047975,5.427828 -6.672286,7.506321 -3.055441,2.419954 -6.598216,4.299717 -10.286439,5.560238 -3.510365,1.199734 -7.287992,2.153835 -10.981471,1.807077 C 11.994303,38.489982 9.4585388,37.505364 7.3199991,36.088648 6.527419,35.563589 5.8169809,34.844727 5.3739158,34.003559 z"
+       style="fill:none;stroke:#eeeeec;stroke-width:0.97304159px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter7001)"
+       transform="matrix(1.150661,0,0,1.1404614,-3.4766793,-3.5802766)" />
+    <path
+       style="fill:#eeeeec;fill-opacity:1;stroke:none;filter:url(#filter6887)"
+       d="M 44.428572,14.142859 C 41.812352,16.019048 15.338369,30.077321 14.714287,32 14.358703,33.095486 9.5986839,32.463015 9.2857159,33.571429 8.9542979,34.74518 11.208214,36.833417 9.8571439,38 7.5066299,40.029552 6.5679999,36.603177 5.4285719,33.714286 4.4485879,31.229648 4.9929539,27.6194 6.9999999,25.857142 9.1160489,23.999176 38.333228,11.238408 41.000001,12.142857 c 1.501771,0.509334 4.717243,1.075846 3.428571,2.000002 z"
+       id="path6861"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ssssssss"
+       transform="matrix(1.1358074,0,0,1.1358074,-3.4449325,-3.3882923)" />
+    <path
+       style="fill:none;stroke:#cc0000;stroke-width:8;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;filter:url(#filter5307)"
+       d="m 14.000001,31.714286 c 0,0 7.060983,1.062448 15.571428,-3.714286 8.510445,-4.776734 9.637552,-10.670204 9.571429,-10.714286 l 0,0"
+       id="path5301"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="czcc"
+       transform="matrix(1.1358074,0,0,1.1358074,-3.4449325,-3.3882923)" />
+  </g>
+</svg>
+

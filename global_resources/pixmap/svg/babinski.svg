@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:osb="http://www.openswatchbook.org/uri/2009/osb"
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="48px"
+   height="48px"
+   id="svg3784"
+   version="1.1"
+   inkscape:version="0.48.3.1 r9886"
+   sodipodi:docname="babinsky.svg"
+   inkscape:export-filename="/home/hoel/icones/babinsky48.png"
+   inkscape:export-xdpi="90"
+   inkscape:export-ydpi="90">
+  <title
+     id="title3005">babinski hammer</title>
+  <defs
+     id="defs3786">
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient3793">
+      <stop
+         style="stop-color:#eeeeec;stop-opacity:1;"
+         offset="0"
+         id="stop3795" />
+      <stop
+         style="stop-color:#eeeeec;stop-opacity:0;"
+         offset="1"
+         id="stop3797" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient5898">
+      <stop
+         style="stop-color:#d3d7cf;stop-opacity:0.49803922;"
+         offset="0"
+         id="stop5900" />
+      <stop
+         id="stop5902"
+         offset="1"
+         style="stop-color:#d3d7cf;stop-opacity:0;" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient5888">
+      <stop
+         id="stop5896"
+         offset="0"
+         style="stop-color:#d3d7cf;stop-opacity:0.49803922;" />
+      <stop
+         style="stop-color:#d3d7cf;stop-opacity:0;"
+         offset="1"
+         id="stop5892" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient5864"
+       osb:paint="solid">
+      <stop
+         style="stop-color:#d3d7cf;stop-opacity:1;"
+         offset="0"
+         id="stop5866" />
+    </linearGradient>
+    <inkscape:perspective
+       sodipodi:type="inkscape:persp3d"
+       inkscape:vp_x="0 : 24 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_z="48 : 24 : 1"
+       inkscape:persp3d-origin="24 : 16 : 1"
+       id="perspective3810" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3793"
+       id="linearGradient3799"
+       x1="6.2391615"
+       y1="10.961472"
+       x2="6.6273103"
+       y2="10.09952"
+       gradientUnits="userSpaceOnUse" />
+    <filter
+       inkscape:collect="always"
+       id="filter3833"
+       x="-0.43744902"
+       width="1.874898"
+       y="-0.54304839"
+       height="2.0860968">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="1.7207995"
+         id="feGaussianBlur3835" />
+    </filter>
+    <filter
+       inkscape:collect="always"
+       id="filter3849"
+       x="-0.13914495"
+       width="1.2782899"
+       y="-0.23162545"
+       height="1.4632509">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="1.598843"
+         id="feGaussianBlur3851" />
+    </filter>
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.875"
+     inkscape:cx="-559.31406"
+     inkscape:cy="-247.57764"
+     inkscape:current-layer="layer1"
+     showgrid="true"
+     inkscape:grid-bbox="true"
+     inkscape:document-units="px"
+     inkscape:window-width="1061"
+     inkscape:window-height="855"
+     inkscape:window-x="63"
+     inkscape:window-y="24"
+     inkscape:window-maximized="0" />
+  <metadata
+     id="metadata3789">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>babinski hammer</dc:title>
+        <dc:subject>
+          <rdf:Bag>
+            <rdf:li>neurology</rdf:li>
+          </rdf:Bag>
+        </dc:subject>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>Hoel CHARBONNEL</dc:title>
+          </cc:Agent>
+        </dc:creator>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     id="layer1"
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer">
+    <path
+       sodipodi:type="arc"
+       style="fill:#555753;stroke:none;filter:url(#filter3833)"
+       id="path3792-0"
+       sodipodi:cx="7.6428571"
+       sodipodi:cy="8.5714283"
+       sodipodi:rx="4.7142859"
+       sodipodi:ry="3.7857141"
+       d="m 12.357143,8.5714283 a 4.7142859,3.7857141 0 1 1 -9.4285718,0 4.7142859,3.7857141 0 1 1 9.4285718,0 z"
+       transform="matrix(1.6177419,-0.25576441,0.30567318,1.3536052,-1.1894226,14.941545)"
+       inkscape:transform-center-y="2.8469215" />
+    <rect
+       style="fill:#555753;fill-opacity:1;fill-rule:nonzero;stroke:#eeeeec;stroke-width:0.89905649;stroke-linecap:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       id="rect4041"
+       width="51.604443"
+       height="3"
+       x="25.279507"
+       y="10.555865"
+       transform="matrix(0.86432563,0.5029326,-0.51657297,0.85624317,0,0)"
+       ry="0.050753865" />
+    <path
+       sodipodi:type="arc"
+       style="fill:#2e3436;stroke:none"
+       id="path3792"
+       sodipodi:cx="7.6428571"
+       sodipodi:cy="8.5714283"
+       sodipodi:rx="4.7142859"
+       sodipodi:ry="3.7857141"
+       d="m 12.357143,8.5714283 a 4.7142859,3.7857141 0 1 1 -9.4285718,0 4.7142859,3.7857141 0 1 1 9.4285718,0 z"
+       transform="matrix(2.3167501,-0.37597818,0.43775116,1.9898234,-7.6639396,4.0935698)"
+       inkscape:transform-center-y="4.1850243" />
+    <path
+       sodipodi:type="arc"
+       style="fill:#d3d7cf;fill-opacity:1;fill-rule:evenodd;stroke:none"
+       id="path4412"
+       sodipodi:cx="6.6417532"
+       sodipodi:cy="10.573848"
+       sodipodi:rx="3.005204"
+       sodipodi:ry="1.6162441"
+       d="m 9.6469572,10.573848 a 3.005204,1.6162441 0 1 1 -6.010408,0 3.005204,1.6162441 0 1 1 6.010408,0 z"
+       transform="matrix(2.5711905,-0.22342656,0.19618218,2.9282593,-5.3607594,-12.991276)" />
+    <path
+       sodipodi:type="arc"
+       style="fill:url(#linearGradient3799);fill-opacity:1;fill-rule:evenodd;stroke:none"
+       id="path4412-6"
+       sodipodi:cx="6.6417532"
+       sodipodi:cy="10.573848"
+       sodipodi:rx="3.005204"
+       sodipodi:ry="1.6162441"
+       d="m 9.6469572,10.573848 a 3.005204,1.6162441 0 1 1 -6.010408,0 3.005204,1.6162441 0 1 1 6.010408,0 z"
+       transform="matrix(2.5711905,-0.22342656,0.19618218,2.9282593,-5.3607594,-12.991276)" />
+    <path
+       style="fill:none;stroke:#555753;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter3849)"
+       d="M 18.384776,26.685782 45.961941,43.252283"
+       id="path3819"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cc" />
+  </g>
+</svg>
+
