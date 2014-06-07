@@ -17,10 +17,10 @@ include($${SOURCE_PATH}/libs/datapackutils.pri)
 include($${SOURCE_PATH}/contrib/quazip/quazip.pri)
 
 SOURCES = \
-    ../../main.cpp
+    ../main.cpp
 
 HEADERS += \
-    ../../autotest.h
+    ../autotest.h
 
 # Include unit-tests for librairies
 include(lib_utils/lib_utils.pri)
@@ -28,4 +28,4 @@ include(lib_translations/lib_translations.pri)
 include(lib_datapacks/lib_datapacks.pri)
 
 # Include unit-tests for FreeMedForms' project plugins
-include(plugin_edrc/plugin_edrc.pri)
+# FIXME: include(plugin_edrc/plugin_edrc.pri)

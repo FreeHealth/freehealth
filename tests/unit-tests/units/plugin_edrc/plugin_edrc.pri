@@ -1,6 +1,6 @@
-PATH_TO_PLUGIN = ../../../../freedrc/plugins/edrcplugin
+PATH_TO_PLUGIN = ../../../../plugins/edrcplugin
 
-INCLUDEPATH += ../../../../freedrc/plugins
+INCLUDEPATH += ../../../../plugins
 
 SOURCES += \
     $${PATH_TO_PLUGIN}/consultresultvalidator.cpp \

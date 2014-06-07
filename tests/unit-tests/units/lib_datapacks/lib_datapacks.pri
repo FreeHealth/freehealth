@@ -1,4 +1,5 @@
 SOURCES += \
-    $${PWD}/tst_xml.cpp \
+    $${PWD}/tst_datapack_xml.cpp \
+
 
 
