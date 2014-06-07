@@ -44,7 +44,11 @@
 
 #include <QDebug>
 
-static QString configurationFile() {return QDir::homePath() + "/datapack/servers.conf.xml";}
+// Testing configuration file is included in the testing code source, in 'config'
+static QString configurationFile() {
+    QFileInfo file(TESTING_SOURCES_PATH);
+    return QString("%1/config/test.servers.conf.xml").arg(file.absolutePath());
+}
 
 void testInternet()
 {
