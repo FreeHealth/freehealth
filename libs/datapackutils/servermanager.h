@@ -75,7 +75,7 @@ public:
     int serverCount() const;
     Server getServerAt(int index) const;
     int getServerIndex(const QString &url) const;
-    void removeServerAt(int index);
+    bool removeServerAt(int index);
 
     // Downloads
     void getServerDescription(const int index);

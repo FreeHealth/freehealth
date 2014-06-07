@@ -24,14 +24,19 @@
  *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#include "addserverdialog.h"
+/**
+ * \class DataPack::ServerConfigurationDialog
+ * Allow user to edit a server configuration
+ */
+
+#include "serverconfigurationdialog.h"
 #include <datapackutils/server.h>
 #include <datapackutils/datapackcore.h>
 
 #include <translationutils/constants.h>
 #include <translationutils/trans_msgerror.h>
 
-#include "ui_addserverdialog.h"
+#include "ui_serverconfigurationdialog.h"
 
 #include <QFileDialog>
 
@@ -44,33 +49,6 @@ static inline QIcon icon(const QString &name, DataPack::DataPackCore::ThemePath 
 
 namespace {
 const char *const   ICON_PACKAGE = "package.png";
-}
-
-AddServerDialog::AddServerDialog(QWidget *parent) :
-    QDialog(parent),
-    ui(new Internal::Ui::AddServerDialog)
-{
-    ui->setupUi(this);
-    setWindowTitle(ui->titleLabel->text());
-    setWindowIcon(icon(ICON_PACKAGE));
-    ui->loginGroupBox->hide();
-    ui->checkUpdate->addItems(checkUpdateLabels());
-    // Do not change the order
-    ui->serverType->addItem(tr("Default FreeMedForms server (mirror)")); // 0
-    ui->serverType->addItem(tr("Local file"));                           // 1
-    ui->serverType->addItem(tr("HTTP (standard mode)"));                 // 2
-    ui->serverType->addItem(tr("FTP (standard mode)"));                  // 3
-    ui->serverType->addItem(tr("Protected HTTP with zipped content"));   // 4
-    ui->serverType->addItem(tr("Protected HTTP non-zipped"));            // 5
-    ui->serverType->addItem(tr("FTP with zipped content"));              // 6
-    ui->selectPath->hide();
-    adjustSize();
-}
-
-AddServerDialog::~AddServerDialog()
-{
-    delete ui;
-}
 
 static Server::UrlStyle urlType(QComboBox *box)
 {
@@ -100,7 +78,37 @@ static void setUrlType(QComboBox *box, int urlType)
     }
 }
 
-void AddServerDialog::setServer(const Server &server)
+}
+
+/** Construct a defaut empty DataPack::Server configuration dialog */
+ServerConfigurationDialog::ServerConfigurationDialog(QWidget *parent) :
+    QDialog(parent),
+    ui(new Internal::Ui::ServerConfigurationDialog)
+{
+    ui->setupUi(this);
+    setWindowTitle(ui->titleLabel->text());
+    setWindowIcon(icon(ICON_PACKAGE));
+    ui->loginGroupBox->hide();
+    ui->checkUpdate->addItems(checkUpdateLabels());
+    // Do not change the order
+    ui->serverType->addItem(tr("Default FreeMedForms server (mirror)")); // 0
+    ui->serverType->addItem(tr("Local file"));                           // 1
+    ui->serverType->addItem(tr("HTTP (standard mode)"));                 // 2
+    ui->serverType->addItem(tr("FTP (standard mode)"));                  // 3
+    ui->serverType->addItem(tr("Protected HTTP with zipped content"));   // 4
+    ui->serverType->addItem(tr("Protected HTTP non-zipped"));            // 5
+    ui->serverType->addItem(tr("FTP with zipped content"));              // 6
+    ui->selectPath->hide();
+    adjustSize();
+}
+
+ServerConfigurationDialog::~ServerConfigurationDialog()
+{
+    delete ui;
+}
+
+/** Set the server to edit */
+void ServerConfigurationDialog::setServer(const Server &server)
 {
     ui->serverUrl->setText(server.nativeUrl());
     setUrlType(ui->serverType, server.urlStyle());
@@ -108,14 +116,10 @@ void AddServerDialog::setServer(const Server &server)
     ui->userLogin->setText("Not yet implemented");
     ui->userPassword->setText("Not yet implemented");
     ui->checkUpdate->setCurrentIndex(server.userUpdateFrequency());
-//    int id = server.recommendedUpdateFrequency();
-//    if (id > 0 && id < checkUpdateLabels().count())
-//        ui->updateServerReco->setText(checkUpdateLabels().at(id));
-//    else
-//        ui->updateServerReco->setText(tkTr(Trans::Constants::UNKNOWN));
 }
 
-void AddServerDialog::on_serverType_currentIndexChanged(int index)
+/** Private slot */
+void ServerConfigurationDialog::on_serverType_currentIndexChanged(int index)
 {
     if (index==1) {
         ui->selectPath->show();
@@ -124,7 +128,8 @@ void AddServerDialog::on_serverType_currentIndexChanged(int index)
     }
 }
 
-void AddServerDialog::on_selectPath_clicked()
+/** Select a path for a local file server type */
+void ServerConfigurationDialog::on_selectPath_clicked()
 {
     QString path = QFileDialog::getExistingDirectory(this, tr("Select datapack local path"),
                                                      QDir::homePath(),
@@ -135,7 +140,8 @@ void AddServerDialog::on_selectPath_clicked()
     ui->serverUrl->setFocus();
 }
 
-void AddServerDialog::submitTo(Server *server)
+/** Submit changes to the \e server */
+void ServerConfigurationDialog::submitTo(Server *server)
 {
     Q_ASSERT(server);
     if (!server)

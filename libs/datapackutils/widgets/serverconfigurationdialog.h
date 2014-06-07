@@ -24,8 +24,8 @@
  *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef DATAPACK_ADDSERVERDIALOG_H
-#define DATAPACK_ADDSERVERDIALOG_H
+#ifndef DATAPACK_SERVERCONFIGURATIONDIALOG_H
+#define DATAPACK_SERVERCONFIGURATIONDIALOG_H
 
 #include <datapackutils/datapack_exporter.h>
 
@@ -36,17 +36,17 @@ class Server;
 
 namespace Internal {
 namespace Ui {
-    class AddServerDialog;
+    class ServerConfigurationDialog;
 }
 }  // End namespace Internal
 
-class DATAPACK_EXPORT AddServerDialog : public QDialog
+class DATAPACK_EXPORT ServerConfigurationDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit AddServerDialog(QWidget *parent = 0);
-    ~AddServerDialog();
+    explicit ServerConfigurationDialog(QWidget *parent = 0);
+    ~ServerConfigurationDialog();
 
     void setServer(const Server &server);
 
@@ -58,11 +58,9 @@ private Q_SLOTS:
     void on_selectPath_clicked();
 
 private:
-    Internal::Ui::AddServerDialog *ui;
+    Internal::Ui::ServerConfigurationDialog *ui;
 };
-
 
 } // namespace DataPack
 
-
-#endif // DATAPACK_ADDSERVERDIALOG_H
+#endif // DATAPACK_SERVERCONFIGURATIONDIALOG_H

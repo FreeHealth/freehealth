@@ -30,8 +30,9 @@
 */
 
 #include "serverpackeditor.h"
-#include "addserverdialog.h"
+#include "serverconfigurationdialog.h"
 
+#include <utils/log.h>
 #include <utils/global.h>
 #include <utils/widgets/htmldelegate.h>
 #include <utils/widgets/segmentedbutton.h>
@@ -104,17 +105,22 @@ class ServerPackEditorPrivate
 public:
     ServerPackEditorPrivate(ServerPackEditor *parent) :
         ui(new Ui::ServerPackEditor),
-        m_PackModel(0),
-        m_PackCategoriesModel(0),
-        m_serverModel(0),
-        aServerRefresh(0), aServerEdit(0), aServerRemove(0), aServerAdd(0),
-        aPackRefresh(0), aPackApply(0),
-        m_ToolBarPacks(0),
-        bServer(0), bPack(0),
-        m_ServerMapper(0),
+        _packModel(0),
+        _packCategoriesModel(0),
+        _serverModel(0),
+        _toolBarPacks(0),
+        _serverMapper(0),
         _segmented(0), _segPack(0), _segServer(0),
         _toolbarCurrentMode(-1),
         _progressDialog(0),
+        aServerRefresh(0),
+        aServerEdit(0),
+        aServerRemove(0),
+        aServerAdd(0),
+        aPackRefresh(0),
+        aPackApply(0),
+        bServer(0),
+        bPack(0),
         q(parent)
     {}
 
@@ -124,16 +130,22 @@ public:
         QActionGroup *srvgr = new QActionGroup(q);
         QAction *a = aServerRefresh = new QAction(q);
         a->setObjectName("aServerRefresh");
-        a->setIcon(icon(::ICON_SERVER_REFRESH, DataPack::DataPackCore::MediumPixmaps));
+        a->setIcon(icon(::ICON_SERVER_REFRESH));
         a = aServerEdit = new QAction(q);
         a->setObjectName("aServerEdit");
-        a->setIcon(icon(::ICON_SERVER_EDIT, DataPack::DataPackCore::MediumPixmaps));
+        a->setIcon(icon(::ICON_SERVER_EDIT));
         a = aServerAdd = new QAction(q);
-        a->setObjectName("aInstall");
-        a->setIcon(icon(::ICON_SERVER_ADD, DataPack::DataPackCore::MediumPixmaps));
+        a->setObjectName("aServerAdd");
+        a->setIcon(icon(::ICON_SERVER_ADD));
         a = aServerRemove = new QAction(q);
         a->setObjectName("aServerRemove");
-        a->setIcon(icon(::ICON_SERVER_REMOVE, DataPack::DataPackCore::MediumPixmaps));
+        a->setIcon(icon(::ICON_SERVER_REMOVE));
+
+        srvgr->addAction(aServerRefresh);
+        srvgr->addAction(aServerEdit);
+        srvgr->addAction(aServerAdd);
+        srvgr->addAction(aServerRemove);
+
         QObject::connect(srvgr, SIGNAL(triggered(QAction*)), q, SLOT(serverActionTriggered(QAction *)));
 
         // Create pack actions
@@ -149,8 +161,8 @@ public:
 
     void createToolbar()
     {
-        m_ToolBarPacks = new QToolBar(q);
-        m_ToolBarPacks->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
+        _toolBarPacks = new QToolBar(q);
+        _toolBarPacks->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
 
         // Create the segmented button with server/pack
         bServer = new QPushButton(q);
@@ -164,20 +176,20 @@ public:
         QWidget *w1 = new QWidget(q);
         w1->setMinimumSize(20,20);
         w1->setMaximumSize(20,20);
-        m_ToolBarPacks->addWidget(w1);
-        m_ToolBarPacks->addWidget(_segmented);
+        _toolBarPacks->addWidget(w1);
+        _toolBarPacks->addWidget(_segmented);
         w1 = new QWidget(q);
         w1->setMinimumSize(20,20);
         w1->setMaximumSize(20,20);
-        m_ToolBarPacks->addWidget(w1);
-        m_ToolBarPacks->addSeparator();
+        _toolBarPacks->addWidget(w1);
+        _toolBarPacks->addSeparator();
 
         processToolBar(::PACK_MODE);
 
-        m_ToolBarPacks->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-        ui->toolbarLayout->addWidget(m_ToolBarPacks);
+        _toolBarPacks->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+        ui->toolbarLayout->addWidget(_toolBarPacks);
 
-        QObject::connect(m_ToolBarPacks, SIGNAL(actionTriggered(QAction*)), q, SLOT(serverActionTriggered(QAction*)));
+        QObject::connect(_toolBarPacks, SIGNAL(actionTriggered(QAction*)), q, SLOT(serverActionTriggered(QAction*)));
         QObject::connect(bPack, SIGNAL(clicked()), q, SLOT(switchToPackView()));
         QObject::connect(bServer, SIGNAL(clicked()), q, SLOT(switchToServerView()));
     }
@@ -188,33 +200,35 @@ public:
             return;
         _toolbarCurrentMode = mode;
         if (mode==::SERVER_MODE) {
-            m_ToolBarPacks->removeAction(aPackRefresh);
-            m_ToolBarPacks->removeAction(aPackApply);
-            m_ToolBarPacks->addAction(aServerRefresh);
-            m_ToolBarPacks->addAction(aServerAdd);
-            m_ToolBarPacks->addAction(aServerRemove);
+            _toolBarPacks->removeAction(aPackRefresh);
+            _toolBarPacks->removeAction(aPackApply);
+            _toolBarPacks->addAction(aServerRefresh);
+            _toolBarPacks->addAction(aServerAdd);
+            _toolBarPacks->addAction(aServerRemove);
+            _toolBarPacks->addAction(aServerEdit);
         } else if (mode==::PACK_MODE) {
-            m_ToolBarPacks->removeAction(aServerRefresh);
-            m_ToolBarPacks->removeAction(aServerAdd);
-            m_ToolBarPacks->removeAction(aServerRemove);
-            m_ToolBarPacks->addAction(aPackRefresh);
-            m_ToolBarPacks->addAction(aPackApply);
+            _toolBarPacks->removeAction(aServerRefresh);
+            _toolBarPacks->removeAction(aServerAdd);
+            _toolBarPacks->removeAction(aServerRemove);
+            _toolBarPacks->removeAction(aServerEdit);
+            _toolBarPacks->addAction(aPackRefresh);
+            _toolBarPacks->addAction(aPackApply);
         }
     }
 
 public:
     Ui::ServerPackEditor *ui;
-    PackModel *m_PackModel;
-    PackCategoriesModel *m_PackCategoriesModel;
-    ServerModel *m_serverModel;
-    QAction *aServerRefresh, *aServerEdit, *aServerRemove, *aServerAdd;
-    QAction *aPackRefresh, *aPackApply;
-    QToolBar *m_ToolBarPacks;
-    QPushButton *bServer, *bPack;
-    QDataWidgetMapper *m_ServerMapper;
+    PackModel *_packModel;
+    PackCategoriesModel *_packCategoriesModel;
+    ServerModel *_serverModel;
+    QToolBar *_toolBarPacks;
+    QDataWidgetMapper *_serverMapper;
     Utils::SegmentedButton *_segmented, *_segPack, *_segServer;
     int _toolbarCurrentMode;
     QProgressDialog *_progressDialog; // used for server content refreshing
+    QAction *aServerRefresh, *aServerEdit, *aServerRemove, *aServerAdd;
+    QAction *aPackRefresh, *aPackApply;
+    QPushButton *bServer, *bPack;
 
 private:
     ServerPackEditor *q;
@@ -248,13 +262,13 @@ ServerPackEditor::ServerPackEditor(QWidget *parent) :
     }
 
     // Manage pack model/view
-    d->m_PackModel = new PackModel(this);
-    d->m_PackModel->setPackCheckable(true);
-    d->m_PackModel->setInstallChecker(true);
-    d->ui->packView->setModel(d->m_PackModel);
+    d->_packModel = new PackModel(this);
+    d->_packModel->setPackCheckable(true);
+    d->_packModel->setInstallChecker(true);
+    d->ui->packView->setModel(d->_packModel);
     d->ui->packView->setModelColumn(PackModel::Label);
-    d->m_PackCategoriesModel = new PackCategoriesModel(this);
-    d->ui->packCategoriesView->setModel(d->m_PackCategoriesModel);
+    d->_packCategoriesModel = new PackCategoriesModel(this);
+    d->ui->packCategoriesView->setModel(d->_packCategoriesModel);
     d->ui->packCategoriesView->header()->hide();
     d->ui->packCategoriesView->setStyleSheet(::CSS);
     connect(d->ui->packCategoriesView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(onPackCategoriesChanged(QModelIndex, QModelIndex)));
@@ -268,9 +282,9 @@ ServerPackEditor::ServerPackEditor(QWidget *parent) :
 
     // server view/model/delegate
     Utils::HtmlDelegate *serverdelegate = new Utils::HtmlDelegate(this);
-    d->m_serverModel = new ServerModel(this);
-    d->m_serverModel->initialize();
-    d->ui->serverListView->setModel(d->m_serverModel);
+    d->_serverModel = new ServerModel(this);
+    d->_serverModel->initialize();
+    d->ui->serverListView->setModel(d->_serverModel);
     d->ui->serverListView->setModelColumn(ServerModel::HtmlLabel);
     d->ui->serverListView->setItemDelegate(serverdelegate);
     d->ui->serverListView->setStyleSheet(::CSS);
@@ -312,6 +326,7 @@ ServerPackEditor::~ServerPackEditor()
     }
 }
 
+/** Download all server contents */
 bool ServerPackEditor::refreshServerContent()
 {
     if (serverManager()->serverCount() == 0)
@@ -337,6 +352,7 @@ bool ServerPackEditor::refreshServerContent()
     return true;
 }
 
+/** Private slot. When all server contents are refreshed */
 void ServerPackEditor::onRefreshServerDone()
 {
     if (!d->_progressDialog)
@@ -349,26 +365,14 @@ void ServerPackEditor::onRefreshServerDone()
 
 bool ServerPackEditor::submitChanges()
 {
+    // TODO: Nothing to do?
     return true;
 }
 
-
-//void ServerPackEditor::createServerDataWidgetMapper()
-//{
-//    d->m_ServerMapper = new QDataWidgetMapper(this);
-//    d->m_ServerMapper->setModel(d->m_serverModel);
-//    d->m_ServerMapper->addMapping(d->ui->serverLabel, ServerModel::PlainTextLabel, "text");
-//    d->m_ServerMapper->addMapping(d->ui->serverVersion, ServerModel::Version, "text");
-//    d->m_ServerMapper->addMapping(d->ui->serverAuthors, ServerModel::Authors, "text");
-//    d->m_ServerMapper->addMapping(d->ui->serverCreationDate, ServerModel::CreationDate, "text");
-//    d->m_ServerMapper->addMapping(d->ui->serverVendor, ServerModel::Vendor, "text");
-//    d->m_ServerMapper->addMapping(d->ui->serverDescription, ServerModel::HtmlDescription, "html");
-//    d->m_ServerMapper->setCurrentIndex(1);
-//}
-
+/** Update the datapack view with the selected datapack \e packId */
 void ServerPackEditor::populatePackView(const int packId)
 {
-    const Pack &pack = d->m_PackModel->packageAt(packId);
+    const Pack &pack = d->_packModel->packageAt(packId);
     const PackDescription &descr = pack.description();
     QString summary;
 
@@ -399,7 +403,7 @@ void ServerPackEditor::populatePackView(const int packId)
     summary += descr.data(PackDescription::HtmlDescription).toString();
 
     // Add update information
-    bool isUpdate = d->m_PackModel->index(packId, PackModel::IsAnUpdate).data().toBool();
+    bool isUpdate = d->_packModel->index(packId, PackModel::IsAnUpdate).data().toBool();
     if (isUpdate) {
         QString up = QString("<p style=\"font-size:normal;margin-left:10px;color:darkblue\">%1</p><br />")
                      .arg(descr.htmlUpdateInformationForVersion("0.0.0"));
@@ -453,6 +457,7 @@ void ServerPackEditor::populatePackView(const int packId)
     d->ui->packSummary->setText(summary);
 }
 
+/** Swith ui to the datapack view */
 void ServerPackEditor::switchToPackView()
 {
     d->ui->stackedWidget->setCurrentWidget(d->ui->packPage);
@@ -460,6 +465,7 @@ void ServerPackEditor::switchToPackView()
     d->processToolBar(::PACK_MODE);
 }
 
+/** Swith ui to the server view */
 void ServerPackEditor::switchToServerView()
 {
     d->ui->stackedWidget->setCurrentWidget(d->ui->serverPage);
@@ -472,16 +478,16 @@ void ServerPackEditor::onPackCategoriesChanged(const QModelIndex &index, const Q
     if (!index.isValid())
         return;
     // Filter the packmodel according to the selected category
-    const QString &vendor = d->m_PackCategoriesModel->vendor(index);
-    const QList<Pack::DataType> &type = d->m_PackCategoriesModel->datatype(index);
-    d->m_PackModel->filter(vendor, type);
+    const QString &vendor = d->_packCategoriesModel->vendor(index);
+    const QList<Pack::DataType> &type = d->_packCategoriesModel->datatype(index);
+    d->_packModel->filter(vendor, type);
     // Clear the view
     d->ui->packName->clear();
     d->ui->packSummary->clear();
     // Select the first available row
-    d->ui->packView->setCurrentIndex(d->m_PackModel->index(0,0));
-    d->ui->packView->selectionModel()->select(d->m_PackModel->index(0,0), QItemSelectionModel::SelectCurrent);
-    onPackIndexActivated(d->m_PackModel->index(0,0), QModelIndex());
+    d->ui->packView->setCurrentIndex(d->_packModel->index(0,0));
+    d->ui->packView->selectionModel()->select(d->_packModel->index(0,0), QItemSelectionModel::SelectCurrent);
+    onPackIndexActivated(d->_packModel->index(0,0), QModelIndex());
 }
 
 void ServerPackEditor::onPackIndexActivated(const QModelIndex &index, const QModelIndex &previous)
@@ -491,13 +497,16 @@ void ServerPackEditor::onPackIndexActivated(const QModelIndex &index, const QMod
         populatePackView(index.row());
 }
 
+/**
+ * Private slot. Reacts on server actions triggered
+ */
 void ServerPackEditor::serverActionTriggered(QAction *a)
 {
     if (a==d->aServerRefresh) {
         d->aServerRefresh->setEnabled(false);
         refreshServerContent();
     } if (a==d->aServerAdd) {
-        AddServerDialog dlg(this);
+        ServerConfigurationDialog dlg(this);
         Server server;
         dlg.setServer(server);
         if (dlg.exec()==QDialog::Accepted) {
@@ -518,10 +527,48 @@ void ServerPackEditor::serverActionTriggered(QAction *a)
         int row = d->ui->serverListView->selectionModel()->currentIndex().row();
         serverManager()->removeServerAt(row);
     } else if (a==d->aServerEdit) {
-        switchToServerView();
+        // TODO: we should use the ServerModel instead of the ServerManager (to update server information)
+        // Get the current selected server
+        if (!d->ui->serverListView->selectionModel()->hasSelection())
+            return;
+        int id = d->ui->serverListView->selectionModel()->currentIndex().row();
+        if (id == -1)
+            return;
+        Server server = serverManager()->getServerAt(id);
+
+        // Start configuration dialog
+        ServerConfigurationDialog dlg(this);
+        dlg.setServer(server);
+        if (dlg.exec()==QDialog::Accepted) {
+            // When dialog is accepted:
+            // 1. remove server from the servermanager
+            // 2. get new server configuration
+            // 3. add server to servermanager
+            // 4. get server contents
+            // 5. update ui
+            if (!serverManager()->removeServerAt(id)) {
+                LOG_ERROR("Unable to remove server");
+                return;
+            }
+            dlg.submitTo(&server);
+            if (!serverManager()->addServer(server)) {
+                LOG_ERROR("Unable to add server");
+                return;
+            }
+
+            // TODO: manage progress dialog cancellation
+            QProgressDialog dlg(this);
+            dlg.setLabelText(tr("Downloading server information"));
+            dlg.setModal(true);
+            connect(serverManager(), SIGNAL(allServerDescriptionAvailable()), &dlg, SLOT(accept()));
+//            connect(serverManager(), SIGNAL(allServerDescriptionAvailable()), dlg, SLOT(close()));
+            serverManager()->getServerDescription(serverManager()->serverCount() - 1);
+            dlg.exec();
+        }
     }
 }
 
+/** Refresh the datapacks (download datapack description from all servers) */
 void ServerPackEditor::refreshPacks()
 {
     refreshServerContent();
@@ -531,19 +578,20 @@ void ServerPackEditor::refreshPacks()
 void ServerPackEditor::processPacks()
 {
     // Apply pack model changes
-    if (!d->m_PackModel->isDirty())
+    if (!d->_packModel->isDirty())
         return;
     // Run Pack Dialog
     PackWizard dlg;
-    dlg.setPackToProcess(d->m_PackModel->packageToInstall(), d->m_PackModel->packageToUpdate(), d->m_PackModel->packageToRemove());
+    dlg.setPackToProcess(d->_packModel->packageToInstall(), d->_packModel->packageToUpdate(), d->_packModel->packageToRemove());
     if (dlg.exec()==QDialog::Rejected) {
         return;
     }
     // Refresh the cached installed pack list from the packmanager
     packManager()->installedPack(true);
-    d->m_PackModel->updateModel();
+    d->_packModel->updateModel();
 }
 
+/** Update the server description according to the selected index \e serverId */
 void ServerPackEditor::populateServerView(const int serverId)
 {
     const Server &server = serverManager()->getServerAt(serverId);
@@ -590,7 +638,7 @@ void ServerPackEditor::populateServerView(const int serverId)
     summary += descr.data(ServerDescription::HtmlDescription).toString();
 
     // Add update information
-//    bool isUpdate = d->m_PackModel->index(packId, PackModel::IsAnUpdate).data().toBool();
+//    bool isUpdate = d->_packModel->index(packId, PackModel::IsAnUpdate).data().toBool();
 //    if (isUpdate) {
 //        QString up = QString("<p style=\"font-size:normal;margin-left:10px;color:darkblue\">%1</p><br />")
 //                     .arg(descr.htmlUpdateInformationForVersion("0.0.0"));
@@ -632,17 +680,17 @@ void ServerPackEditor::serverCurrentChanged(const QModelIndex &c, const QModelIn
 
 void ServerPackEditor::selectFirstRow()
 {
-    d->ui->packCategoriesView->setCurrentIndex(d->m_PackCategoriesModel->index(0,0));
-    d->ui->packCategoriesView->selectionModel()->select(d->m_PackCategoriesModel->index(0,0), QItemSelectionModel::SelectCurrent);
-    onPackCategoriesChanged(d->m_PackCategoriesModel->index(0,0), QModelIndex());
-    d->ui->packView->setCurrentIndex(d->m_PackModel->index(0,0));
-    d->ui->packView->selectionModel()->select(d->m_PackModel->index(0,0), QItemSelectionModel::SelectCurrent);
-    onPackIndexActivated(d->m_PackModel->index(0,0), QModelIndex());
-    for(int i=0; i<d->m_PackCategoriesModel->rowCount(); ++i)
-        d->ui->packCategoriesView->expand(d->m_PackCategoriesModel->index(i,0));
+    d->ui->packCategoriesView->setCurrentIndex(d->_packCategoriesModel->index(0,0));
+    d->ui->packCategoriesView->selectionModel()->select(d->_packCategoriesModel->index(0,0), QItemSelectionModel::SelectCurrent);
+    onPackCategoriesChanged(d->_packCategoriesModel->index(0,0), QModelIndex());
+    d->ui->packView->setCurrentIndex(d->_packModel->index(0,0));
+    d->ui->packView->selectionModel()->select(d->_packModel->index(0,0), QItemSelectionModel::SelectCurrent);
+    onPackIndexActivated(d->_packModel->index(0,0), QModelIndex());
+    for(int i=0; i<d->_packCategoriesModel->rowCount(); ++i)
+        d->ui->packCategoriesView->expand(d->_packCategoriesModel->index(i,0));
 
-    d->ui->serverListView->setCurrentIndex(d->m_serverModel->index(0,0));
-    d->ui->serverListView->selectionModel()->select(d->m_serverModel->index(0,0), QItemSelectionModel::SelectCurrent);
+    d->ui->serverListView->setCurrentIndex(d->_serverModel->index(0,0));
+    d->ui->serverListView->selectionModel()->select(d->_serverModel->index(0,0), QItemSelectionModel::SelectCurrent);
     populateServerView(0);
 }
 

@@ -72,7 +72,7 @@ public:
     virtual int serverCount() const = 0;
     virtual Server getServerAt(int index) const = 0;
     virtual int getServerIndex(const QString &url) const = 0;
-    virtual void removeServerAt(int index) = 0;
+    virtual bool removeServerAt(int index) = 0;
 
     // Downloads
     virtual void getServerDescription(const int index) = 0;

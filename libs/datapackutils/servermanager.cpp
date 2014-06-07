@@ -185,16 +185,17 @@ int ServerManager::getServerIndex(const QString &url) const
     return -1;
 }
 
-void ServerManager::removeServerAt(int index)
+bool ServerManager::removeServerAt(int index)
 {
-    if (index >= 0 && index < m_Servers.count()) {
-        Server removed = m_Servers.at(index);
-        Q_EMIT serverAboutToBeRemoved(removed);
-        Q_EMIT serverAboutToBeRemoved(index);
-        m_Servers.remove(index);
-        Q_EMIT serverRemoved(removed);
-        Q_EMIT serverRemoved(index);
-    }
+    if (!IN_RANGE_STRICT_MAX(index, 0, m_Servers.count()))
+        return false;
+    Server removed = m_Servers.at(index);
+    Q_EMIT serverAboutToBeRemoved(removed);
+    Q_EMIT serverAboutToBeRemoved(index);
+    m_Servers.remove(index);
+    Q_EMIT serverRemoved(removed);
+    Q_EMIT serverRemoved(index);
+    return true;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////

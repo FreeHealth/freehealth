@@ -24,7 +24,7 @@ HEADERS += datapack_exporter.h \
     datapackcore.h \
     iservermanager.h \
     widgets/serverpackeditor.h \
-    widgets/addserverdialog.h \
+    widgets/serverconfigurationdialog.h \
     iserverengine.h \
     serverengines/localserverengine.h \
     serverengines/httpserverengine.h \
@@ -51,7 +51,7 @@ SOURCES += \
     datapackcore.cpp \
     iservermanager.cpp \
     widgets/serverpackeditor.cpp \
-    widgets/addserverdialog.cpp \
+    widgets/serverconfigurationdialog.cpp \
     iserverengine.cpp \
     serverengines/localserverengine.cpp \
     serverengines/httpserverengine.cpp \
@@ -68,7 +68,7 @@ SOURCES += \
 
 FORMS += \
     widgets/serverpackeditor.ui \
-    widgets/addserverdialog.ui
+    widgets/serverconfigurationdialog.ui
 
 # include translations
 TRANSLATION_NAME = datapack
