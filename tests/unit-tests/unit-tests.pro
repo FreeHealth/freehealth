@@ -4,6 +4,5 @@ CONFIG += ordered
 SUBDIRS = \
     appnamedefine \
     libs \
-    autotests \
+    units \
     #qbuttonlineedit
-
