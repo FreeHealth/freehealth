@@ -78,7 +78,7 @@ public:
     QString label() const {return name();}
 
     // URL Management
-    void setUrl(const QString &url);
+    bool setUrl(const QString &url);
     const QString &nativeUrl() const {return m_Url;}
     QString url(const FileRequested &file = NoFile, const QString &fileName = QString::null) const;
     void setUrlStyle(const UrlStyle &style) {m_UrlStyle=style;}

@@ -33,6 +33,7 @@
 #include <datapackutils/server.h>
 #include <datapackutils/datapackcore.h>
 
+#include <utils/global.h>
 #include <translationutils/constants.h>
 #include <translationutils/trans_msgerror.h>
 
@@ -141,11 +142,11 @@ void ServerConfigurationDialog::on_selectPath_clicked()
 }
 
 /** Submit changes to the \e server */
-void ServerConfigurationDialog::submitTo(Server *server)
+bool ServerConfigurationDialog::submitTo(Server *server)
 {
     Q_ASSERT(server);
     if (!server)
-        return;
+        return false;
     server->setUrlStyle(urlType(ui->serverType));
     if (urlType(ui->serverType) == Server::NoStyle) {
         QString path = ui->serverUrl->text();
@@ -155,11 +156,19 @@ void ServerConfigurationDialog::submitTo(Server *server)
             else
                 path.prepend("file://");
         }
-        server->setUrl(path);
+        if (!server->setUrl(path)) {
+            Utils::warningMessageBox(tr("Wrong server URL"),
+                                     tr("Unable to set the URL to the server. Please check "
+                                        "your server configuration."),
+                                     "", tr("Wrong server URL")
+                                     );
+            return false;
+        }
     } else {
         server->setUrl(ui->serverUrl->text());
     }
 //    server->setUserLogin(ui->userLogin->text());
 //    server->setUserPassword(ui->userPassword->text());
     server->setUserUpdateFrequency(ui->checkUpdate->currentIndex());
+    return true;
 }

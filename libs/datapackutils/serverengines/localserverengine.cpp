@@ -82,7 +82,20 @@ bool LocalServerEngine::startDownloadQueue()
         Server *server = query.server;
         if (query.downloadDescriptionFiles) {
             // Read the local server config
-            server->fromXml(Utils::readTextFile(server->url(Server::ServerConfigurationFile), Utils::DontWarnUser));
+            QString fileName = server->url(Server::ServerConfigurationFile);
+            if (!QFileInfo(fileName).exists()) {
+                // Create the status of the server
+                ServerEngineStatus status;
+                status.downloadCorrectlyFinished = false;
+                status.engineMessages << tr("Server configuration can be downloaded. Path: %1").arg(fileName);
+                status.hasError = true;
+                status.isSuccessful = false;
+                status.proxyIdentificationError = false;
+                status.serverIdentificationError = false;
+                m_ServerStatus.insert(statusKey(*server), status);
+                continue;
+            }
+            server->fromXml(Utils::readTextFile(fileName, Utils::DontWarnUser));
             // Read the local pack config
             for(int j = 0; j < server->content().packDescriptionFileNames().count(); ++j) {
                 const QString &fileName = server->url(Server::PackDescriptionFile, server->content().packDescriptionFileNames().at(j));

@@ -94,7 +94,7 @@ QString Server::name() const
 }
 
 /** Define the URL of the server. All URL must be unique (url is used as uuid). */
-void Server::setUrl(const QString &url)
+bool Server::setUrl(const QString &url)
 {
     m_IsLocal = false;
     m_Url.clear();
@@ -109,10 +109,11 @@ void Server::setUrl(const QString &url)
         } else {
             LOG_ERROR_FOR("DataPackServer", tkTr(Trans::Constants::PATH_1_DOESNOT_EXISTS).arg(url));
             m_Connected = false;
-            return;
+            return false;
         }
     }
     m_Url = url;
+    return true;
 }
 
 /**

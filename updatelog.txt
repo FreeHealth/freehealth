@@ -13,6 +13,9 @@ The FreeMedForms project
 
 ===== Bug correction =====
 
+  * All applications
+    * Datapack management: 
+      * Adding a server configuration editor 
   * FreeMedForms
     * Feedback Plugin is correctly translated
     * Correctly select user language at startup

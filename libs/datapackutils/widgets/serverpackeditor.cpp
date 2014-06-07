@@ -140,12 +140,6 @@ public:
         a = aServerRemove = new QAction(q);
         a->setObjectName("aServerRemove");
         a->setIcon(icon(::ICON_SERVER_REMOVE));
-
-        srvgr->addAction(aServerRefresh);
-        srvgr->addAction(aServerEdit);
-        srvgr->addAction(aServerAdd);
-        srvgr->addAction(aServerRemove);
-
         QObject::connect(srvgr, SIGNAL(triggered(QAction*)), q, SLOT(serverActionTriggered(QAction *)));
 
         // Create pack actions
@@ -550,9 +544,12 @@ void ServerPackEditor::serverActionTriggered(QAction *a)
                 LOG_ERROR("Unable to remove server");
                 return;
             }
-            dlg.submitTo(&server);
+            if (!dlg.submitTo(&server))
+                return;
+
             if (!serverManager()->addServer(server)) {
                 LOG_ERROR("Unable to add server");
+                id = serverManager()->serverCount();
                 return;
             }
 
@@ -564,6 +561,18 @@ void ServerPackEditor::serverActionTriggered(QAction *a)
 //            connect(serverManager(), SIGNAL(allServerDescriptionAvailable()), dlg, SLOT(close()));
             serverManager()->getServerDescription(serverManager()->serverCount() - 1);
             dlg.exec();
+
+            // Find the server index and select it in the view
+            d->ui->serverListView->selectionModel()->clearSelection();
+            for(int i=0; i < d->ui->serverListView->model()->rowCount(); ++i) {
+                QModelIndex uidIndex = d->_serverModel->index(i, ServerModel::Uuid);
+                if (uidIndex.data().toString() == server.uuid()) {
+                    QModelIndex current = d->_serverModel->index(id, d->ui->serverListView->modelColumn());
+                    d->ui->serverListView->selectionModel()->setCurrentIndex(current, QItemSelectionModel::SelectCurrent);
+                    populateServerView(id);
+                    return;
+                }
+            }
         }
     }
 }

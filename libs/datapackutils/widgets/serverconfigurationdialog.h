@@ -51,7 +51,7 @@ public:
     void setServer(const Server &server);
 
 public Q_SLOTS:
-    void submitTo(Server *server);
+    bool submitTo(Server *server);
 
 private Q_SLOTS:
     void on_serverType_currentIndexChanged(int index);
