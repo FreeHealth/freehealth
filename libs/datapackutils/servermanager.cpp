@@ -227,8 +227,8 @@ void ServerManager::getAllDescriptionFile(QProgressBar *bar)
         return;
     }
 
-    m_Packs.clear();
     // Clear engine download queue
+    m_Packs.clear();
     for(int j = 0; j < m_WorkingEngines.count(); ++j) {
         m_WorkingEngines[j]->stopJobsAndClearQueue();
     }
@@ -252,6 +252,7 @@ void ServerManager::getAllDescriptionFile(QProgressBar *bar)
         }
     }
     // Populate progressBar
+    // FIXME: this object should not use QProgressBar but emit a progress signal instead
     if (bar) {
         bar->setRange(0, workingTasks);
         bar->setValue(0);
