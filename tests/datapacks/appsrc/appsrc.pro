@@ -9,6 +9,8 @@ include(../../../libs/translationutils.pri)
 include(../../../libs/datapackutils.pri)
 include(../../../libs/rpath.pri)
 
+DEFINES	*= "TESTING_SOURCES_PATH=\"\\\"$${PWD}\\\"\""
+
 HEADERS = mainwindow.h
 
 SOURCES = main.cpp \

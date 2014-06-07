@@ -99,7 +99,8 @@ BINARY_POSTFIXE=
 include(../buildspecs/projectversion.pri)
 DEFINES	*= "BINARY_NAME=\"\\\"$${BINARY_TARGET}\\\"\"" \
            "BUILD_PATH_POSTFIXE=\"\\\"$${BUILD_PATH_POSTFIXE}\\\"\"" \
-           "PACKAGE_VERSION=\"\\\"$${PACKAGE_VERSION}\\\"\""
+           "PACKAGE_VERSION=\"\\\"$${PACKAGE_VERSION}\\\"\"" \
+           "SOURCES_ROOT_PATH=\"\\\"$${SOURCES_ROOT_PATH}\\\"\""
 
 # define building path
 unix:OBJECTS_DIR   = $${SOURCES_BUILD_PATH}/$${BINARY_TARGET}/.obj/unix
