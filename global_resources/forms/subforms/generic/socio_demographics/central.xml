@@ -49,6 +49,7 @@
         <options>DontPrintEmptyValues;UseFormNameAsNameSpace</options>
         <file type="htmlprintmask">./html/xx/sociodemographic_mask.html</file>
         <file type="htmlexportmask">./html/xx/sociodemographic_mask.html</file>
+        <icon>__theme__/identity.png</icon>
 
         <Item type="detailswidget" name="PlaceOfLiving" uifilename="./ui/xx/placeofliving.ui">
             <uilink label="" widget="" layout="placeLayout"/>
