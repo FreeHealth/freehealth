@@ -1279,6 +1279,7 @@ void centerWidget(QWidget *win, QWidget *reference)
     if (!win)
         return;
     QPoint center;
+    // FIXME: buggy with multi-screen
     if (!reference) {
         // try to find the mainwindow
         QMainWindow *win = 0;
