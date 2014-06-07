@@ -189,6 +189,9 @@ MainWindow::MainWindow(QWidget *parent) :
 //    dlg.setDescription(serverDescr);
 //    dlg.exec();
 
+    // Start the check server & pack version
+    core.serverManager()->getAllDescriptionFile();
+
     resize(900,600);
 }
 
