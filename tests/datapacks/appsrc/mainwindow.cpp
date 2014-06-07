@@ -134,11 +134,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // get the global_resources directory from the command line argument
     QDir resourcesDir;
-    if (Utils::isRunningOnLinux()) {
-        resourcesDir.setPath(QCoreApplication::applicationDirPath() + "/../../global_resources");
-    } else {
-        resourcesDir.setPath(QCoreApplication::applicationDirPath() + "/../../../../../global_resources");
-    }
+    resourcesDir.setPath(QString("%1/global_resources").arg(SOURCES_ROOT_PATH));
 
     // Create and configure DataPack lib
     DataPack::DataPackCore &core = DataPack::DataPackCore::instance();
@@ -161,26 +157,14 @@ MainWindow::MainWindow(QWidget *parent) :
 //    if (!core.isInternetConnexionAvailable())
 //        qWarning() << "********* NO INTERNET CONNECTION FOUND *********";
 
-#ifdef Q_OS_MAC
     core.setThemePath(DataPack::DataPackCore::SmallPixmaps, resourcesDir.absoluteFilePath("pixmap/16x16"));
     core.setThemePath(DataPack::DataPackCore::MediumPixmaps, resourcesDir.absoluteFilePath("pixmap/32x32"));
     core.setThemePath(DataPack::DataPackCore::BigPixmaps, resourcesDir.absoluteFilePath("pixmap/64x64"));
-#else
-    core.setThemePath(DataPack::DataPackCore::SmallPixmaps, resourcesDir.absoluteFilePath("pixmap/16x16"));
-    core.setThemePath(DataPack::DataPackCore::MediumPixmaps, resourcesDir.absoluteFilePath("pixmap/32x32"));
-    core.setThemePath(DataPack::DataPackCore::BigPixmaps, resourcesDir.absoluteFilePath("pixmap/64x64"));
-#endif
 
     // Add servers
-#ifdef Q_OS_MAC
     // Test 1: local
-    core.serverManager()->addServer("file://" + resourcesDir.absoluteFilePath("datapacks/default/"));
-#else
-    // @GUILLAUME --> Change les chemins vers ton SVN ici ::
-    // Test 1: local
-    core.serverManager()->addServer("file://" + resourcesDir.absoluteFilePath("datapacks/default/"));
+    core.serverManager()->addServer(QString("file://%1").arg(resourcesDir.absoluteFilePath("datapacks/default/")));
     core.serverManager()->addServer("http://localhost/");
-#endif
 
 //    // Test 2: HttpPseudoSecuredZipped
 //    DataPack::Server http("http://test.freemedforms.com");
