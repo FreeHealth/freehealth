@@ -1,5 +1,3 @@
 <ServerManagerConfig>
-  <Server recVer="" uUpFq="0" url="http://packs.freemedforms.com/free|||1" lastChk=""/>
-  <Server recVer="" uUpFq="2" url="file:///home/eric/Bureau/Files/Programmation/Current/FreeMedForms/git/freemedforms/global_resources/datapacks/default/|||0" lastChk=""/>
-  <Server recVer="" uUpFq="-1" url="http://localhost/|||0" lastChk=""/>
+  <Server lastChk="" url="http://packs.freemedforms.com|||1" recVer="" uUpFq="2"/>
 </ServerManagerConfig>
