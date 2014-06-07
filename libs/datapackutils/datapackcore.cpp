@@ -27,7 +27,8 @@
 
 /**
   \class DataPack::DataPackCore
-  Central place for the management of DataPacks. This core mainly contains paths and single objects like
+  Central place for the management of DataPacks.
+  This core mainly contains paths and single objects like
   the unique DataPack::IServerManager to use.
 */
 

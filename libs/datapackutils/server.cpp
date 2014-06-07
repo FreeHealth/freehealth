@@ -50,6 +50,8 @@ const char *const TAG_SERVERCONTENT = "ServerContents";
 
 const char * const SERVER_CONF_XML = "server.conf.xml";
 const char * const SERVER_CONF_ZIP = "serverconf.zip";
+
+const char * const SEPARATOR = "|||";
 }
 
 /** Create a server pointing to the URL \e url. The URL must be unique in the server's pool. */
@@ -114,10 +116,12 @@ void Server::setUrl(const QString &url)
 }
 
 /**
- * Returns the server Url according to the \e UrlStyle and the \e native \e url params for the requested \e file.
+ * Returns the server Url according to the \e UrlStyle and the \e native \e url
+ * params for the requested specified \e fileName.
  */
 QString Server::url(const FileRequested &file, const QString &fileName) const
-{   // TODO: test and improve code
+{
+    // TODO: test and improve code
     switch (file) {
     case NoFile : return m_Url;
     case ServerConfigurationFile:
@@ -180,6 +184,9 @@ QString Server::url(const FileRequested &file, const QString &fileName) const
     return nativeUrl();
 }
 
+/**
+ * Returns the URL style translated display name for specified
+ * DataPack::Server::UrlStyle \e index. */
 QString Server::urlStyleName(int index)
 {
     switch (index) {
@@ -193,6 +200,7 @@ QString Server::urlStyleName(int index)
     return QString();
 }
 
+/** Returns the current URL style translated display name */
 QString Server::urlStyleName() const
 {
     return urlStyleName(m_UrlStyle);
@@ -264,13 +272,13 @@ QString Server::serverConfigurationFileName()
 
 QString Server::serialize() const
 {
-    return m_Url + "|||" + QString::number(m_UrlStyle);
+    return QString("%1%2%3").arg(m_Url).arg(SEPARATOR).arg(m_UrlStyle);
 }
 
 void Server::fromSerializedString(const QString &string)
 {
-    if (string.contains("|||")) {
-        QStringList v = string.split("|||");
+    if (string.contains(SEPARATOR)) {
+        QStringList v = string.split(SEPARATOR);
         if (v.count() == 2) {
             setUrl(v.at(0));
             setUrlStyle(m_UrlStyle=UrlStyle(v.at(1).toInt()));
