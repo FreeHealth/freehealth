@@ -72,6 +72,10 @@
 
 #include <QDebug>
 
+enum {
+    DebugEqualityOperator = true
+};
+
 using namespace Utils;
 //using namespace Internal;
 using namespace Trans::ConstantTranslations;
@@ -373,27 +377,40 @@ void GenericDescription::insertUpdateInformation(int index, const Utils::Generic
     m_UpdateInfos.insert(index, updateInfo);
 }
 
+/**
+ * Returns all the update information available */
 QList<Utils::GenericUpdateInformation> GenericDescription::updateInformation() const
 {
     return m_UpdateInfos;
 }
 
+/** Returns all the update information available since version \e version*/
 QList<Utils::GenericUpdateInformation> GenericDescription::updateInformationForVersion(const QString &version) const
 {
     return Utils::GenericUpdateInformation::updateInformationForVersion(m_UpdateInfos, version);
 }
 
+/** Returns all the update information available since version \e version*/
 QList<Utils::GenericUpdateInformation> GenericDescription::updateInformationForVersion(const Utils::VersionNumber &version) const
 {
     return Utils::GenericUpdateInformation::updateInformationForVersion(m_UpdateInfos, version);
 }
 
+/**
+ * Returns an aggregate of the translated human readable information in HTML
+ * for the specified version \e version
+ */
 QString GenericDescription::htmlUpdateInformationForVersion(const QString &version) const
 {
     Utils::VersionNumber v(version);
     return htmlUpdateInformationForVersion(v);
 }
 
+/**
+ * Returns an aggregate of the translated human readable information in HTML
+ * for the specified version \e version
+ * \sa Utils::GenericUpdateInformation::toHtml()
+ */
 QString GenericDescription::htmlUpdateInformationForVersion(const Utils::VersionNumber &version) const
 {
     QString html;
@@ -403,7 +420,11 @@ QString GenericDescription::htmlUpdateInformationForVersion(const Utils::Version
     return html;
 }
 
-/** You can add untranslatable extra-data. \e ref must be greater than NonTranslatableExtraData and lower than TranslatableExtraData. */
+/**
+ * You can add untranslatable extra-data. \e ref
+ * must be greater than NonTranslatableExtraData and
+ * lower than TranslatableExtraData.
+ */
 void GenericDescription::addNonTranslatableExtraData(const int ref, const QString &tagName)
 {
     Q_ASSERT(ref>NonTranslatableExtraData && ref<TranslatableExtraData);
@@ -412,7 +433,10 @@ void GenericDescription::addNonTranslatableExtraData(const int ref, const QStrin
     }
 }
 
-/** You can add translatable extra-data. \e ref must be greater than TranslatableExtraData. */
+/**
+ * You can add translatable extra-data. \e ref
+ * must be greater than TranslatableExtraData.
+ */
 void GenericDescription::addTranslatableExtraData(const int ref, const QString &tagName)
 {
     Q_ASSERT(ref>TranslatableExtraData);
@@ -420,14 +444,6 @@ void GenericDescription::addTranslatableExtraData(const int ref, const QString &
         m_TranslatableExtra.insert(ref, tagName);
     }
 }
-
-///** Use inheritance to access to unknown QDomElement. This member is called each time a tagName element is unknown to the engine. */
-//void GenericDescription::readUnknownElement(const QDomElement &element)
-//{
-//    // just add a warning
-//    qWarning() << Q_FUNC_INFO << "trying to access to an unknown element: tag" << element.tagName();
-//    qWarning() << "Use the Utils::GenericDescription inheritance to access to these data";
-//}
 
 void GenericDescription::fillTreeWidget(QTreeWidget *tree) const
 {
@@ -438,18 +454,43 @@ void GenericDescription::fillTreeWidget(QTreeWidget *tree) const
 bool GenericDescription::operator==(const GenericDescription &other) const
 {
     // First basic tests
-    if (m_UpdateInfos.count() != other.m_UpdateInfos.count() ||
-            m_RootTag != other.m_RootTag ||
-            m_SourceFileName != other.m_SourceFileName ||
-            m_TranslatableExtra.count() != other.m_TranslatableExtra.count() ||
-            m_NonTranslatableExtra.count() != other.m_NonTranslatableExtra.count())
+    if (m_UpdateInfos.count() != other.m_UpdateInfos.count()) {
+        if (DebugEqualityOperator)
+            LOG_FOR("GenericDescription", "Update information count mismatch");
         return false;
+    }
+    if (m_RootTag != other.m_RootTag) {
+        if (DebugEqualityOperator)
+            LOG_FOR("GenericDescription", "Root tag mismatch");
+        return false;
+    }
+    if (m_SourceFileName != other.m_SourceFileName) {
+        if (DebugEqualityOperator)
+            LOG_FOR("GenericDescription", "Source filename mismatch");
+        return false;
+    }
+    if (m_TranslatableExtra.count() != other.m_TranslatableExtra.count()) {
+        if (DebugEqualityOperator)
+            LOG_FOR("GenericDescription", "Translatable data count mismatch");
+        return false;
+    }
+    if (m_NonTranslatableExtra.count() != other.m_NonTranslatableExtra.count()) {
+        if (DebugEqualityOperator)
+            LOG_FOR("GenericDescription", "Non-translatable count mismatch");
+        return false;
+    }
 
     // Test extras
-    if (m_TranslatableExtra != other.m_TranslatableExtra)
+    if (m_TranslatableExtra != other.m_TranslatableExtra) {
+        if (DebugEqualityOperator)
+            LOG_FOR("GenericDescription", "Translatable hash mismatch");
         return false;
-    if (m_NonTranslatableExtra != other.m_NonTranslatableExtra)
+    }
+    if (m_NonTranslatableExtra != other.m_NonTranslatableExtra) {
+        if (DebugEqualityOperator)
+            LOG_FOR("GenericDescription", "Non-translatable hash mismatch");
         return false;
+    }
 
     // Test datas
     QStringList lang = m_Data.keys();
@@ -458,18 +499,62 @@ bool GenericDescription::operator==(const GenericDescription &other) const
         return false;
     lang.sort();
     other_lang.sort();
-    if (lang != other_lang)
+    if (lang != other_lang) {
+        if (DebugEqualityOperator)
+            LOG_FOR("GenericDescription", "Number of available languages in datas mismatch");
         return false;
+    }
 
     foreach(const QString &l, lang) {
         const QHash<int, QVariant> &first = m_Data.value(l);
         const QHash<int, QVariant> &second = other.m_Data.value(l);
-//         foreach(int id, first.keys()) {
-//             if (first.value(id) != second.value(id))
-//                 qWarning() << id << l << first.value(id) << second.value(id);
-//         }
-        if (first != second)
-            return false;
+        // Get all keys from hash
+        QList<int> keys;
+        keys << first.uniqueKeys();
+        keys << second.uniqueKeys();
+        keys = Utils::removeDuplicates(keys);
+        // Test key by key values
+        for(int i=0; i < keys.count(); ++i) {
+//            if (!first.uniqueKeys().contains(i)) {
+//                if (DebugEqualityOperator) {
+//                    LOG_FOR("GenericDescription", QString("Data mismatch for language: %1. "
+//                                                          "First (is empty): `%2` ; "
+//                                                          "Second: `%3` ; "
+//                                                          "Id: %4")
+//                            .arg(l)
+//                            .arg(first.value(i).toString())
+//                            .arg(second.value(i).toString())
+//                            .arg(i));
+//                }
+//            }
+
+//            if (!second.uniqueKeys().contains(i)) {
+//                if (DebugEqualityOperator) {
+//                    LOG_FOR("GenericDescription", QString("Data mismatch for language: %1. "
+//                                                          "First: `%2` ; "
+//                                                          "Second (is empty): `%3` ; "
+//                                                          "Id: %4")
+//                            .arg(l)
+//                            .arg(first.value(i).toString())
+//                            .arg(second.value(i).toString())
+//                            .arg(i));
+//                }
+//            }
+
+            if (first.value(i).toString() != second.value(i).toString()) {
+                if (DebugEqualityOperator) {
+                    LOG_FOR("GenericDescription", QString("Data mismatch for language: %1. "
+                                                          "First: `%2` ; "
+                                                          "Second: `%3` ; "
+                                                          "Id: %4")
+                            .arg(l)
+                            .arg(first.value(i).toString())
+                            .arg(second.value(i).toString())
+                            .arg(i));
+                }
+                return false;
+            }
+        }
     }
 
     // Test update infos /!\ lists must be sorted in the same order...
@@ -477,6 +562,10 @@ bool GenericDescription::operator==(const GenericDescription &other) const
     return true;
 }
 
+/**
+ * Returns an index sorted (see Utils::GenericDescription::DataRepresentation)
+ * XML tag to use for non-translatable data
+ */
 QMap<int, QString> GenericDescription::nonTranslatableTagsDataReference() const
 {
     QMap<int, QString> elements;
@@ -504,6 +593,10 @@ QMap<int, QString> GenericDescription::nonTranslatableTagsDataReference() const
     return elements;
 }
 
+/**
+ * Returns an index sorted (see Utils::GenericDescription::DataRepresentation)
+ * XML tag to use for translatable data
+ */
 QMap<int, QString> GenericDescription::translatableTagsDataReference() const
 {
     QMap<int, QString> elements;
