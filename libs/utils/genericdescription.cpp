@@ -73,7 +73,7 @@
 #include <QDebug>
 
 enum {
-    DebugEqualityOperator = true
+    DebugEqualityOperator = false
 };
 
 using namespace Utils;
