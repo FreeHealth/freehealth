@@ -22,10 +22,12 @@ SOURCES = \
 HEADERS += \
     ../autotest.h
 
+# Only librairies (not plugins) should be tested here
+# For plugins unit-tests please include them in the plugin code
+# See documentation
+
 # Include unit-tests for librairies
 include(lib_utils/lib_utils.pri)
 include(lib_translations/lib_translations.pri)
 include(lib_datapacks/lib_datapacks.pri)
 
-# Include unit-tests for FreeMedForms' project plugins
-# FIXME: include(plugin_edrc/plugin_edrc.pri)
