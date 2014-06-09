@@ -55,6 +55,7 @@
 #include <utils/waitforsignal.h>
 #include <utils/httpdownloader.h>
 #include <utils/httpmultidownloader.h>
+#include <datapackutils/constants.h>
 
 #include <QDir>
 #include <QFile>
@@ -210,24 +211,24 @@ int IDrugDatabase::sourceId() const
 /**
  * Returns the server uid according to the licence type and the owner of the server. \n
  * This server uid is used for DataPack Server creation/edition/read.
- * \sa Core::Constants::TAG_SERVER_ASSO_NONFREE, Core::Constants::TAG_SERVER_ASSO_FREE
- * \sa Core::Constants::TAG_SERVER_COMMUNITY_NONFREE, Core::Constants::TAG_SERVER_COMMUNITY_FREE
+ * \sa DataPack::Constants::SERVER_ASSO_NONFREE, DataPack::Constants::SERVER_ASSO_FREE
+ * \sa DataPack::Constants::SERVER_COMMUNITY_NONFREE, DataPack::Constants::SERVER_COMMUNITY_FREE
  */
 QString IDrugDatabase::serverUid() const
 {
     if (licenseType() == IDrugDatabase::NonFree) {
         if (serverOwner() == IDrugDatabase::Community)
-            return Core::Constants::TAG_SERVER_COMMUNITY_NONFREE;
+            return DataPack::Constants::TAG_SERVER_COMMUNITY_NONFREE;
         else
-            return Core::Constants::TAG_SERVER_ASSO_NONFREE;
+            return DataPack::Constants::TAG_SERVER_ASSO_NONFREE;
 
     } else {
         if (serverOwner() == IDrugDatabase::Community)
-            return Core::Constants::TAG_SERVER_COMMUNITY_FREE;
+            return DataPack::Constants::TAG_SERVER_COMMUNITY_FREE;
         else
-            return Core::Constants::TAG_SERVER_ASSO_NONFREE;
+            return DataPack::Constants::TAG_SERVER_ASSO_NONFREE;
     }
-    return Core::Constants::TAG_SERVER_COMMUNITY_FREE;
+    return DataPack::Constants::TAG_SERVER_COMMUNITY_FREE;
 }
 
 /** Check the existence of the database internal pointer and check if the datbase is correctly open */

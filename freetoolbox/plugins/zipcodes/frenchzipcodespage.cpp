@@ -352,7 +352,7 @@ bool FrenchZipCodesStep::setDatabaseVersion(const QString &connection, const QSt
 /** Register the ZipCode datapack to the non-free french associative server */
 bool FrenchZipCodesStep::registerDataPack()
 {
-    QString server = Core::Constants::SERVER_ASSO_NONFREE;
+    QString server = DataPack::Constants::SERVER_ASSO_NONFREE;
     DataPackPlugin::DataPackQuery query;
     query.setDescriptionFileAbsolutePath(datapackDescriptionFile());
     query.setOriginalContentFileAbsolutePath(databaseAbsPath());

@@ -401,7 +401,7 @@ QString Icd10Step::processMessage() const
 /** Register the ICD10 datapack to the free community server */
 bool Icd10Step::registerDataPack()
 {
-    QString server = Core::Constants::SERVER_COMMUNITY_FREE;
+    QString server = DataPack::Constants::SERVER_COMMUNITY_FREE;
     DataPackPlugin::DataPackQuery query;
     query.setDescriptionFileAbsolutePath(d->_datapackDescriptionFile);
     query.setOriginalContentFileAbsolutePath(d->_outputPath + QDir::separator() + d->_databaseFileName);

@@ -119,19 +119,19 @@ public:
 
         const QString &version = normalizedApplicationVersion();
 
-        freeCommunityServer->setServerInternalUuid(Core::Constants::SERVER_COMMUNITY_FREE);
+        freeCommunityServer->setServerInternalUuid(DataPack::Constants::SERVER_COMMUNITY_FREE);
         freeCommunityServer->setOriginalDescriptionFileAbsolutePath(serverDescriptionFileAbsPath() + "/free/community/server.conf.xml");
         freeCommunityServer->setOutputServerAbsolutePath(serverOutputAbsPath() + "/free/community/" + version);
 
-        nonFreeCommunityServer->setServerInternalUuid(Core::Constants::SERVER_COMMUNITY_NONFREE);
+        nonFreeCommunityServer->setServerInternalUuid(DataPack::Constants::SERVER_COMMUNITY_NONFREE);
         nonFreeCommunityServer->setOriginalDescriptionFileAbsolutePath(serverDescriptionFileAbsPath() + "/nonfree/community/server.conf.xml");
         nonFreeCommunityServer->setOutputServerAbsolutePath(serverOutputAbsPath() + "/nonfree/community/" + version);
 
-        freeFrenchAssoServer->setServerInternalUuid(Core::Constants::SERVER_ASSO_FREE);
+        freeFrenchAssoServer->setServerInternalUuid(DataPack::Constants::SERVER_ASSO_FREE);
         freeFrenchAssoServer->setOriginalDescriptionFileAbsolutePath(serverDescriptionFileAbsPath() + "/free/asso/server.conf.xml");
         freeFrenchAssoServer->setOutputServerAbsolutePath(serverOutputAbsPath() + "/free/asso/" + version);
 
-        nonFreeFrenchAssoServer->setServerInternalUuid(Core::Constants::SERVER_ASSO_NONFREE);
+        nonFreeFrenchAssoServer->setServerInternalUuid(DataPack::Constants::SERVER_ASSO_NONFREE);
         nonFreeFrenchAssoServer->setOriginalDescriptionFileAbsolutePath(serverDescriptionFileAbsPath() + "/nonfree/asso/server.conf.xml");
         nonFreeFrenchAssoServer->setOutputServerAbsolutePath(serverOutputAbsPath() + "/nonfree/asso/" + version);
 
@@ -309,7 +309,7 @@ const DataPack::ServerDescription &DataPackCore::serverDescription(const QString
  * Create the datapack server files. This will call Core::IFullReleaseStep::registerDatapack() on
  * all Core::IFullReleaseStep objects before the server processing. \n
  * Servers uids are stored in constants: Core::Constants::SERVER_*
- * \sa Core::Constants::SERVER_COMMUNITY_FREE
+ * \sa DataPack::Constants::SERVER_COMMUNITY_FREE
  */
 bool DataPackCore::createServer(const QString &serverUid)
 {

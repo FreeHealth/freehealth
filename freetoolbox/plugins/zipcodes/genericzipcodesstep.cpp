@@ -557,7 +557,7 @@ QString GenericZipCodesStep::processMessage() const
  * General processing: \n
  * Automated ZipCode database creation of all available countries in GeoName.\n
  * This step will create one datapack per available country and store them in the
- * Core::SERVER_COMMUNITY_FREE datapack server. \n
+ * DataPack::Constants::SERVER_COMMUNITY_FREE datapack server. \n
  *
  * Multi-country datapacks: \n
  * If you want to define multi-country datapacks, you can use the file in the

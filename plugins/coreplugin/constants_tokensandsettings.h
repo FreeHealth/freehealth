@@ -209,12 +209,6 @@ const char * const  TAG_DATAPACK_SUBFORMS_PATH              = "__datapackSubForm
 const char * const  TAG_USER_DOCUMENT_PATH                  = "__userDocuments__";
 const char * const  TAG_USER_RESOURCES_PATH                 = "__userResources__";
 
-// Tags for datapacks
-const char * const TAG_SERVER_COMMUNITY_FREE    = "comm_free";
-const char * const TAG_SERVER_ASSO_FREE         = "asso_free";
-const char * const TAG_SERVER_COMMUNITY_NONFREE = "comm_nonfree";
-const char * const TAG_SERVER_ASSO_NONFREE      = "asso_nonfree";
-
 // Settings keys
 const char * const  S_RECENTFILES_GROUP    = "RecentFiles";
 const char * const  S_RECENTFILES_KEY      = "File";
