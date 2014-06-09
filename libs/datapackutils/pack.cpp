@@ -24,6 +24,14 @@
  *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
+/**
+ * \class DataPack::Pack
+ * Represents a what is called a "datapack". A datapack contains:
+ * - a full description
+ * - a content
+ * A datapack is owned by a server
+ */
+
 #include "pack.h"
 #include "datapackcore.h"
 
@@ -37,6 +45,10 @@
 #include <QDomDocument>
 #include <QDomElement>
 #include <QDir>
+
+enum {
+    DebugEqualityOperator = false
+};
 
 using namespace DataPack;
 using namespace Trans::ConstantTranslations;
@@ -99,7 +111,10 @@ QString Pack::vendor() const
     return v;
 }
 
-/** Return the filename of the datapack content file (mainly the zip file to unzip and install) */
+/**
+ * Returns the filename of the datapack content file
+ * (mainly the zip file to unzip and install)
+ */
 QString Pack::serverFileName() const
 {
     if (m_descr.data(PackDescription::AbsFileName).toString().isEmpty())
@@ -107,20 +122,26 @@ QString Pack::serverFileName() const
     return m_descr.data(PackDescription::AbsFileName).toString();
 }
 
-/** Return the server filename that contains the license terms */
+/** Returns the server filename that contains the license terms */
 QString Pack::serverLicenseFileName() const
 {
 //    return m_descr.data(PackDescription::LicenseFileName).toString();
     return QString();
 }
 
-/** Returns the expected MD5 checksum of the Pack file content (extracted from the PackDescription) */
+/**
+ * Returns the expected MD5 checksum of the Pack file content
+ * (extracted from the PackDescription)
+ */
 QString Pack::md5ControlChecksum() const
 {
     return m_descr.data(PackDescription::Md5).toString();
 }
 
-/** Returns the expected MD5 checksum of the Pack file content (extracted from the PackDescription) */
+/**
+ * Returns the expected MD5 checksum of the Pack file content
+ * (extracted from the PackDescription)
+ */
 QString Pack::sha1ControlChecksum() const
 {
     return m_descr.data(PackDescription::Sha1).toString();
@@ -142,19 +163,28 @@ bool Pack::isMd5Checked() const
     return false;
 }
 
-/** Return the original file name of the pack XML config file. This file name is only valid on local servers. */
+/**
+ * Returns the original file name of the pack XML config file.
+ * This file name is only valid on local servers.
+ */
 QString Pack::originalXmlConfigFileName() const
 {
     return m_OriginalFileName;
 }
 
-/** Return the persistentCached file name of the pack XML config file. This file name is computed using the DataPack::DataPackCore::persistentCachePath(). */
+/**
+ * Returns the persistentCached file name of the pack XML config file.
+ * This file name is computed using the DataPack::DataPackCore::persistentCachePath().
+ */
 QString Pack::persistentlyCachedXmlConfigFileName() const
 {
     return core().persistentCachePath() + QDir::separator() + uuid() + QDir::separator() + "packconfig.xml";
 }
 
-/** Return the persistentCached file name of the zipped pack file. This file name is computed using the DataPack::DataPackCore::persistentCachePath(). */
+/**
+ * Returns the persistentCached file name of the zipped pack file.
+ * This file name is computed using the DataPack::DataPackCore::persistentCachePath().
+ */
 QString Pack::persistentlyCachedZipFileName() const
 {
     return core().persistentCachePath() + QDir::separator() + uuid() + QDir::separator() + QFileInfo(serverFileName()).fileName();
@@ -315,10 +345,33 @@ QString Pack::toXml() const
 */
 bool Pack::operator==(const Pack &other) const
 {
-    return (this->uuid()==other.uuid() &&
-            this->version()==other.version() &&
-            this->vendor()==other.vendor() &&
-            this->name()==other.name());
+    if (this->uuid() != other.uuid()) {
+        if (DebugEqualityOperator)
+            LOG_FOR("Pack", "Uuid mismatch");
+        return false;
+    }
+    if (this->version() != other.version()) {
+        if (DebugEqualityOperator)
+            LOG_FOR("Pack", "version mismatch");
+        return false;
+    }
+    if (this->vendor() != other.vendor()) {
+        if (DebugEqualityOperator)
+            LOG_FOR("Pack", "vendor mismatch");
+        return false;
+    }
+    if (this->name() != other.name()) {
+        if (DebugEqualityOperator)
+            LOG_FOR("Pack", "name mismatch");
+        return false;
+    }
+    if (this->description() != other.description()) {
+        if (DebugEqualityOperator)
+            LOG_FOR("Pack", "PackDescription mismatch");
+        return false;
+    }
+    // TODO: this->dependencies() != other.dependencies()
+    return true;
 }
 
 QDebug operator<<(QDebug dbg, const DataPack::Pack &p)

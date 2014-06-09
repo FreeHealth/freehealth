@@ -99,6 +99,8 @@ public:
     bool toDomElement(QDomElement *root, QDomDocument *doc) const;
     QString toXml() const;
 
+    // TODO: operator==();
+
 public:
     QList<PackDependencyData> dependencies;
     PackDependencyData null;
