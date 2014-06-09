@@ -39,7 +39,8 @@
 #include <QDomDocument>
 
 enum {
-    WarnRequestChecking = true
+    WarnRequestChecking = false,
+    DebugEqualityOperator = false
 };
 
 using namespace DataPack;
@@ -280,7 +281,11 @@ bool PackCreationQueue::fromXmlFile(const QString &absFile)
     return true;
 }
 
-/** Save the queue to an XML file */
+/**
+ * Save the queue to an XML file \e absPath.
+ * Path of the datapack contents (file and dirs) can
+ * stored as absolute path or relative path to the \e absFile.
+ */
 bool PackCreationQueue::saveToXmlFile(const QString &absFile, bool useRelativePath) const
 {
     QDomDocument doc("FreeMedForms");
@@ -319,4 +324,49 @@ bool PackCreationQueue::saveToXmlFile(const QString &absFile, bool useRelativePa
     QString xml = QString("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
                           "%1").arg(doc.toString(2));
     return Utils::saveStringToFile(xml, absFile, Utils::Overwrite, Utils::DontWarnUser);
+}
+
+/** Checks equality between two RequestedPackCreation */
+bool RequestedPackCreation::operator==(const RequestedPackCreation &other) const
+{
+    if (this->serverUid != other.serverUid) {
+        if (DebugEqualityOperator)
+            LOG_FOR("RequestedPackCreation", "serverUid mismatch");
+        return false;
+    }
+    if (this->descriptionFilePath != other.descriptionFilePath) {
+        if (DebugEqualityOperator)
+            LOG_FOR("RequestedPackCreation", "descriptionFilePath mismatch");
+        return false;
+    }
+    if (this->content != other.content) {
+        if (DebugEqualityOperator)
+            LOG_FOR("RequestedPackCreation", "content mismatch");
+        return false;
+    }
+    return true;
+}
+
+/**
+ * Checks equality between two PackCreationQueue. As all Queue must have a different
+ * UUID, this operator does not take the uid into account but only compares the
+ * queue content.
+*/
+bool PackCreationQueue::operator==(const PackCreationQueue &other) const
+{
+    if (this->_queue.count() != other._queue.count()) {
+        if (DebugEqualityOperator)
+            LOG_FOR("PackCreationQueue", "Pack count mismatch");
+        return false;
+    }
+    foreach(const RequestedPackCreation &request, _queue) {
+        if (!other._queue.contains(request)) {
+            if (DebugEqualityOperator)
+                LOG_FOR("PackCreationQueue", "request mismatch");
+            return false;
+        }
+    }
+    if (DebugEqualityOperator)
+        LOG_FOR("PackCreationQueue", "operator==() returns true");
+    return true;
 }

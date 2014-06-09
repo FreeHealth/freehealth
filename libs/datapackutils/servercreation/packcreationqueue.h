@@ -47,8 +47,10 @@ struct DATAPACK_EXPORT RequestedPackCreation {
         DirContent
     };
 
+    bool operator==(const RequestedPackCreation &other) const;
+
     QString serverUid, descriptionFilePath;
-    QMultiHash<int, QString> content;
+    QMultiHash<int, QString> content; // Key = ContentType ; Value = the content itself (path, filename...)
 };
 
 class DATAPACK_EXPORT PackCreationQueue
@@ -64,13 +66,21 @@ public:
     QString uid() const {return _uid;}
 
     bool checkValidity(const RequestedPackCreation &request) const;
+
+    // Queue management
     bool addToQueue(const RequestedPackCreation &request);
     const QList<RequestedPackCreation> &queue() const {return _queue;}
 
+    // Datapack content creation
     bool createZippedContent(const RequestedPackCreation &request, const QString &absZipFileName);
 
+    // XML import/export
     bool fromXmlFile(const QString &absFile);
     bool saveToXmlFile(const QString &absFile, bool useRelativePath = false) const;
+
+    // Equality checking
+    bool operator==(const PackCreationQueue &other) const;
+    bool operator!=(const PackCreationQueue &other) const {return (!operator==(other));}
 
 private:
     QList<RequestedPackCreation> _queue;
