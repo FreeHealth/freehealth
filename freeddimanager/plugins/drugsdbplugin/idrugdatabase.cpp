@@ -218,17 +218,17 @@ QString IDrugDatabase::serverUid() const
 {
     if (licenseType() == IDrugDatabase::NonFree) {
         if (serverOwner() == IDrugDatabase::Community)
-            return DataPack::Constants::TAG_SERVER_COMMUNITY_NONFREE;
+            return DataPack::Constants::SERVER_COMMUNITY_NONFREE;
         else
-            return DataPack::Constants::TAG_SERVER_ASSO_NONFREE;
+            return DataPack::Constants::SERVER_ASSO_NONFREE;
 
     } else {
         if (serverOwner() == IDrugDatabase::Community)
-            return DataPack::Constants::TAG_SERVER_COMMUNITY_FREE;
+            return DataPack::Constants::SERVER_COMMUNITY_FREE;
         else
-            return DataPack::Constants::TAG_SERVER_ASSO_NONFREE;
+            return DataPack::Constants::SERVER_ASSO_NONFREE;
     }
-    return DataPack::Constants::TAG_SERVER_COMMUNITY_FREE;
+    return DataPack::Constants::SERVER_COMMUNITY_FREE;
 }
 
 /** Check the existence of the database internal pointer and check if the datbase is correctly open */
@@ -1456,15 +1456,15 @@ bool IDrugDatabase::registerDataPack()
     QString server;
     if (_licenseType == Free) {
         if (_serverOwner == Community) {
-            server = Core::Constants::TAG_SERVER_COMMUNITY_FREE;
+            server = DataPack::Constants::SERVER_COMMUNITY_FREE;
         } if (_serverOwner == FrenchAssociation) {
-            server = Core::Constants::TAG_SERVER_ASSO_FREE;
+            server = DataPack::Constants::SERVER_ASSO_FREE;
         }
     } else {
         if (_serverOwner == Community) {
-            server = Core::Constants::TAG_SERVER_COMMUNITY_NONFREE;
+            server = DataPack::Constants::SERVER_COMMUNITY_NONFREE;
         } if (_serverOwner == FrenchAssociation) {
-            server = Core::Constants::TAG_SERVER_ASSO_NONFREE;
+            server = DataPack::Constants::SERVER_ASSO_NONFREE;
         }
     }
 //    DataPackPlugin::DataPackQuery query;
