@@ -34,7 +34,7 @@
  * \file packcreationmodel.h
  * \author Eric Maeker
  * \version 0.10.0
- * \date 29 May 2014
+ * \date 15 Jun 2014
 */
 
 namespace DataPack {
@@ -65,6 +65,10 @@ public:
 public Q_SLOTS:
     bool addPackCreationQueue(const PackCreationQueue &queue);
     bool addScreeningPath(const QString &screeningAbsPath);
+
+private:
+    bool setCheckStateRoleToItemAndChildren(const QModelIndex &parent, const QVariant &value);
+    bool setCheckedToAllParents(const QModelIndex &index);
 
 private:
     Internal::PackCreationModelPrivate *d;

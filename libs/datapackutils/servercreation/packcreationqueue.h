@@ -36,7 +36,7 @@
  * \file packcreationqueue.h
  * \author Eric Maeker
  * \version 0.10.0
- * \date 08 May 2014
+ * \date 15 Jun 2014
 */
 
 namespace DataPack {

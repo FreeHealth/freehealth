@@ -37,9 +37,9 @@
  * - ShowByQueue
  * - ShowByServer (default value)
  * If you set the format to ShowByQueue, the tree model is structured like this:
- * - Queue File Name
- *     - Server Name/Uid
- *         - DataPack Name
+ * - [] Queue File Name
+ *     - [] Server Name/Uid
+ *         - [] DataPack Name
  *             - Uid
  *             - TypeOfContent
  *             - TotalSize
@@ -47,8 +47,8 @@
  *             - Dates: creation, last update
  *             - ...
  * If you set the format to ShowByServer, the tree model is structured like this:
- * - Server Name/Uid
- *     - DataPack Name
+ * - [] Server Name/Uid
+ *     - [] DataPack Name
  *         - Uid
  *         - TypeOfContent
  *         - TotalSize
@@ -92,7 +92,7 @@ namespace Internal {
 class PackCreationModelPrivate {
 public:
     PackCreationModelPrivate(PackCreationModel *parent) :
-        _format(PackCreationModel::ShowByServer),
+        _format(PackCreationModel::ShowByQueue),
         q(parent)
     {}
 
@@ -166,6 +166,8 @@ public:
         QFont bold;
         bold.setBold(true);
         packItem->setFont(bold);
+        packItem->setCheckable(true);
+        packItem->setCheckState(Qt::Checked);
 
         QStandardItem *item = 0;
         item = new QStandardItem(tkTr(Trans::Constants::_1_COLON_2)
@@ -229,6 +231,8 @@ public:
                                                 .arg(queue.sourceAbsolutePathFile()));
             rootItem->setToolTip(queue.sourceAbsolutePathFile());
             rootItem->setFont(bold);
+            rootItem->setCheckable(true);
+            rootItem->setCheckState(Qt::Checked);
             q->invisibleRootItem()->appendRow(rootItem);
             insertPackCreationQueueInCache(queue, rootItem);
         } else {
@@ -257,6 +261,9 @@ public:
                     // In this format
                     // append the server item in the cache and the queueItem
                     serversUidToItem.insert(request.serverUid, server);
+                    server->setCheckable(true);
+                    server->setCheckState(Qt::Checked);
+                    server->setFont(bold);
                     rootItem->appendRow(server);
                 } else if (_format == PackCreationModel::ShowByServer) {
                     // In this format
@@ -264,6 +271,8 @@ public:
                     addServerItem(request.serverUid, server);
                     rootItem = server;
                     rootItem->setFont(bold);
+                    rootItem->setCheckable(true);
+                    rootItem->setCheckState(Qt::Checked);
                     q->invisibleRootItem()->appendRow(rootItem);
                 }
             }
@@ -271,6 +280,7 @@ public:
             // Include datapack to the server item
             server->appendRow(packToItem(request.descriptionFilePath, queue));
         }
+
         return true;
     }
 
@@ -353,14 +363,54 @@ QVariant PackCreationModel::data(const QModelIndex &index, int role) const
 }
 
 /**
+ * Apply same checkstate to all children of the branch
+ */
+bool PackCreationModel::setCheckStateRoleToItemAndChildren(const QModelIndex &parent, const QVariant &value)
+{
+    if (!itemFromIndex(parent)->isCheckable())
+        return false;
+
+    if (!QStandardItemModel::setData(parent, value, Qt::CheckStateRole))
+        return false;
+
+    for(int i=0; i < rowCount(parent); ++i) {
+        QModelIndex child = this->index(i, 0, parent);
+        if (!setCheckStateRoleToItemAndChildren(child, value))
+            continue;
+    }
+    return true;
+}
+
+/**
+ * Apply same checkstate if Qt::Checked to all parents of the index
+ */
+bool PackCreationModel::setCheckedToAllParents(const QModelIndex &index)
+{
+    if (!index.parent().isValid())
+        return false;
+
+    if (!itemFromIndex(index)->isCheckable())
+        return false;
+
+    if (QStandardItemModel::setData(index.parent(), Qt::Checked, Qt::CheckStateRole))
+        return setCheckedToAllParents(index.parent());
+
+    return true;
+}
+
+/**
  * Only manages Qt::CheckStateRole.
  */
 bool PackCreationModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
-    Q_UNUSED(index);
-    Q_UNUSED(value);
-    Q_UNUSED(role);
-    // TODO: manage checkstaterole
+    if (role == Qt::CheckStateRole) {
+        bool children = setCheckStateRoleToItemAndChildren(index, value);
+        bool parents = true;
+        if (value.toInt() == Qt::Checked) {
+            parents = setCheckedToAllParents(index);
+        }
+        return children & parents;
+    }
     return false;
 }
 
