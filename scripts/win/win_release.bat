@@ -1,5 +1,5 @@
 REM # This script is part of FreeMedForms project : http://www.freemedforms.com
-REM # (C) 2008-2013 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>
+REM # (C) 2008-2014 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>
 REM # License: BSD 3-clause
 REM #
 REM # This script compiles and create the installer for any FreeMedForms application

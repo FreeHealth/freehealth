@@ -1,6 +1,6 @@
 <plugin name="Core" version="0.0.1" compatVersion="0.0.1">
     <vendor>FreePort</vendor>
-    <copyright>(C) 2008-2012 by Eric MAEKER, MD</copyright>
+    <copyright>(C) 2008-2014 by Eric MAEKER, MD</copyright>
     <license>Released under GPLv3.</license>
     <category>FreePort</category>
     <description>The Core plugin of FreePAD.</description>

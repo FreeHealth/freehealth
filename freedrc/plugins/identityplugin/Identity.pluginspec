@@ -1,6 +1,6 @@
 <plugin name="Identity" version="0.0.1" compatVersion="0.0.1">
     <vendor>FreeMedForms</vendor>
-    <copyright>(C) 2008-2013 by Eric MAEKER, MD</copyright>
+    <copyright>(C) 2008-2014 by Eric MAEKER, MD</copyright>
     <license>GNU General Public License version 3</license>
     <description>This plugin includes all needed widgets/model preparer for identity management.</description>
     <url>http://www.freemedforms.com</url>
