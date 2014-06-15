@@ -518,15 +518,27 @@ bool copyDir(const QString &absSourcePath, const QString &absDestPath)
 
     // Get file content of the current directory
     QDir srcDir(absSourcePath);
-    foreach(const QFileInfo &info, srcDir.entryInfoList(QDir::Dirs | QDir::Files | QDir::NoDotAndDotDot)) {
-        QString srcItemPath = absSourcePath + "/" + info.fileName();
-        QString dstItemPath = absDestPath + "/" + info.fileName();
-        if (info.isDir()) {
-            if (!copyDir(srcItemPath, dstItemPath)) {
+    QFileInfoList files = Utils::getFiles(srcDir);
+    // TODO: manage empty dirs
+    foreach(const QFileInfo &info, files) {
+        QString srcItem = info.absoluteFilePath();
+        QString srcRel = QDir(absSourcePath).relativeFilePath(srcItem);
+        if (srcRel.startsWith("..")) {
+            LOG_ERROR_FOR("Tools", "Relative path outside source path tree");
+            continue;
+        }
+        QString dstItem = QDir::cleanPath(QString("%1/%2")
+                .arg(absDestPath)
+                .arg(srcRel));
+//        if (info.isDir()) {
+//            if (!copyDir(srcItem, dstItem)) {
+//                return false;
+//            }
+//        } else
+        if (info.isFile()) {
+            if (!QDir().mkpath(QFileInfo(dstItem).absolutePath()))
                 return false;
-            }
-        } else if (info.isFile()) {
-            if (!QFile::copy(srcItemPath, dstItemPath)) {
+            if (!QFile::copy(srcItem, dstItem)) {
                 return false;
             }
         } else {

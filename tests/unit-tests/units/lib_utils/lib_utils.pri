@@ -12,7 +12,8 @@ SOURCES += \
     $${PWD}/tst_hprim.cpp \
     $${PWD}/tst_databasecsvimport.cpp \
     $${PWD}/tst_genericdescription.cpp \
-    $${PWD}/tst_databaseconnector.cpp
+    $${PWD}/tst_databaseconnector.cpp \
+    $${PWD}/tst_dircopy.cpp
 
 #HEADERS += \
 #    $${PWD}/testhtmlcontent.h
