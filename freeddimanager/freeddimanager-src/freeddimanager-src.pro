@@ -1,5 +1,5 @@
 TEMPLATE         = app
-TARGET           = freedddimanager
+TARGET           = freeddimanager
 mac:TARGET       = $$quote(FreeDDIManager)
 
 BUILD_PATH_POSTFIXE = FreeDDIManager
