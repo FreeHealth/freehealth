@@ -56,6 +56,7 @@
  *         - Dates: creation, last update
  *         - QueueFile: absPathToQueue
  *         - ...
+ * By default, all items are checked.
  */
 
 // Tree Model:
@@ -443,7 +444,9 @@ bool PackCreationModel::addScreeningPath(const QString &screeningAbsPath)
 }
 
 /**
- * Returns all checked pack description file absolute path.
+ * Returns all checked pack description file absolute path.\n
+ * If you want to create packs, please be sure to create the pack content using the
+ * DataPack::PackCreationQueue::createZippedContent() before.
  */
 QStringList PackCreationModel::getCheckedPacks() const
 {
