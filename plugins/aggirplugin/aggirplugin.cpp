@@ -44,19 +44,19 @@ using namespace Gir::Internal;
 
 GirPlugin::GirPlugin() : m_Factory(0)
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "creating GirPlugin";
 }
 
 GirPlugin::~GirPlugin()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         WARN_FUNC;
 }
 
 bool GirPlugin::initialize(const QStringList &arguments, QString *errorString)
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "GirPlugin::initialize";
 
     Q_UNUSED(arguments);
@@ -68,7 +68,7 @@ bool GirPlugin::initialize(const QStringList &arguments, QString *errorString)
 
 void GirPlugin::extensionsInitialized()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "GirPlugin::extensionsInitialized";
 
         addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
@@ -76,7 +76,7 @@ void GirPlugin::extensionsInitialized()
 
 ExtensionSystem::IPlugin::ShutdownFlag GirPlugin::aboutToShutdown()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         WARN_FUNC;
     // Save settings
     // Disconnect from signals that are not needed during shutdown

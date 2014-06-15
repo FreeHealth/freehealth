@@ -58,7 +58,7 @@ CorePlugin::~CorePlugin()
 bool CorePlugin::initialize(const QStringList &arguments, QString *errorMessage)
 {
 	qDebug("coreplugin::initialize");
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "CorePlugin::initialize";
     return m_CoreImpl->initialize(arguments,errorMessage);
 }
@@ -66,7 +66,7 @@ bool CorePlugin::initialize(const QStringList &arguments, QString *errorMessage)
 void CorePlugin::extensionsInitialized()
 {
 	qDebug("coreplugin::extensionsInitialized");
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "CorePlugin::extensionsInitialized";
     m_CoreImpl->extensionsInitialized();
     // add about pages

@@ -49,7 +49,7 @@ IdentityPlugin::IdentityPlugin() :
 //    m_prefPage(0)
 {
     setObjectName("IdentityPlugin");
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "creating Identity";
 
     // Add Translator to the Application
@@ -68,7 +68,7 @@ IdentityPlugin::IdentityPlugin() :
 
 IdentityPlugin::~IdentityPlugin()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         WARN_FUNC;
     // Unregister objects from the plugin manager's object pool
     // Delete members
@@ -78,7 +78,7 @@ bool IdentityPlugin::initialize(const QStringList &arguments, QString *errorStri
 {
     Q_UNUSED(arguments)
     Q_UNUSED(errorString)
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "IdentityPlugin::initialize";
 
     // Register objects in the plugin manager's object pool
@@ -114,7 +114,7 @@ bool IdentityPlugin::initialize(const QStringList &arguments, QString *errorStri
 
 void IdentityPlugin::extensionsInitialized()
 {
-    if (Utils::Log::warnPluginsCreation()) {
+    if (Utils::Log::debugPluginsCreation()) {
         qWarning() << "IdentityPlugin::extensionsInitialized";
     }
 
@@ -142,7 +142,7 @@ void IdentityPlugin::extensionsInitialized()
 
 void IdentityPlugin::postCoreInitialization()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         WARN_FUNC;
     // Core is fully intialized as well as all plugins
     // DataPacks are checked

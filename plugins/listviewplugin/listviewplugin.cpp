@@ -37,19 +37,19 @@ using namespace Internal;
 
 ListViewPlugin::ListViewPlugin()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "creating ListViewPlugin";
 }
 
 ListViewPlugin::~ListViewPlugin()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         WARN_FUNC;
 }
 
 bool ListViewPlugin::initialize(const QStringList &arguments, QString *errorString)
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "ListViewPlugin::initialize";
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
@@ -59,14 +59,14 @@ bool ListViewPlugin::initialize(const QStringList &arguments, QString *errorStri
 
 void ListViewPlugin::extensionsInitialized()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "ListViewPlugin::extensionsInitialized";
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
 }
 
 ExtensionSystem::IPlugin::ShutdownFlag ListViewPlugin::aboutToShutdown()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         WARN_FUNC;
     // Save settings
     // Disconnect from signals that are not needed during shutdown

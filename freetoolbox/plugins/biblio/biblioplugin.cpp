@@ -39,7 +39,7 @@ using namespace Internal;
 
 BiblioPlugin::BiblioPlugin()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "Creating BiblioPlugin";
 }
 
@@ -52,7 +52,7 @@ bool BiblioPlugin::initialize(const QStringList &arguments, QString *errorMessag
 {
     Q_UNUSED(arguments);
     Q_UNUSED(errorMessage);
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "BiblioPlugin::initialize";
 
     /*BiblioCore *c = */new BiblioCore(this);
@@ -65,13 +65,13 @@ bool BiblioPlugin::initialize(const QStringList &arguments, QString *errorMessag
 
 void BiblioPlugin::extensionsInitialized()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "BiblioPlugin::extensionsInitialized";
 }
 
 ExtensionSystem::IPlugin::ShutdownFlag BiblioPlugin::aboutToShutdown()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         WARN_FUNC;
     // Save settings
     // Disconnect from signals that are not needed during shutdown

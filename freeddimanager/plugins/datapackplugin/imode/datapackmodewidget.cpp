@@ -35,6 +35,7 @@
 
 #include <utils/log.h>
 #include <utils/global.h>
+#include <utils/widgets/pathchooser.h>
 #include <translationutils/constants.h>
 
 #include <QProgressDialog>
@@ -87,7 +88,7 @@ private:
     DataPackModeWidget *q;
 };
 }  // namespace Internal
-} // end namespace DataPackPlugin
+}  // namespace DataPackPlugin
 
 /*! Constructor of the DataPackPlugin::Internal::DataPackModeWidget class */
 DataPackModeWidget::DataPackModeWidget(QWidget *parent) :
@@ -95,7 +96,11 @@ DataPackModeWidget::DataPackModeWidget(QWidget *parent) :
     d(new DataPackModeWidgetPrivate(this))
 {
     d->setupUi();
+    d->ui->serverPath->setInitialBrowsePathBackup(settings()->path(Core::ISettings::UserDocumentsPath));
+    d->ui->serverPath->setPromptDialogTitle(d->ui->selectServerPathLabel->text());
 }
+
+//TODO: add a ListView dependencies to this plugin
 
 /*! Destructor of the DataPackPlugin::Internal::DataPackModeWidget class */
 DataPackModeWidget::~DataPackModeWidget()

@@ -52,7 +52,7 @@ using namespace Internal;
 
 CategoryPlugin::CategoryPlugin()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "creating CategoryPlugin";
 
     // Add Translator to the Application
@@ -64,13 +64,13 @@ CategoryPlugin::CategoryPlugin()
 
 CategoryPlugin::~CategoryPlugin()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         WARN_FUNC;
 }
 
 bool CategoryPlugin::initialize(const QStringList &arguments, QString *errorString)
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "CategoryPlugin::initialize";
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
@@ -80,7 +80,7 @@ bool CategoryPlugin::initialize(const QStringList &arguments, QString *errorStri
 
 void CategoryPlugin::extensionsInitialized()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "CategoryPlugin::extensionsInitialized";
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
 
@@ -90,7 +90,7 @@ void CategoryPlugin::extensionsInitialized()
 
 ExtensionSystem::IPlugin::ShutdownFlag CategoryPlugin::aboutToShutdown()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         WARN_FUNC;
     // Save settings
     // Disconnect from signals that are not needed during shutdown

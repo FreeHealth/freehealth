@@ -52,7 +52,7 @@ static inline void messageSplash(const QString &s) {theme()->messageSplashScreen
 
 AccountBasePlugin::AccountBasePlugin()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "creating AccountBasePlugin";
 
     // Add Translator to the Application
@@ -64,13 +64,13 @@ AccountBasePlugin::AccountBasePlugin()
 
 AccountBasePlugin::~AccountBasePlugin()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "AccountBasePlugin::~AccountBasePlugin()";
 }
 
 bool AccountBasePlugin::initialize(const QStringList &arguments, QString *errorString)
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "AccountBasePlugin::initialize";
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
@@ -80,7 +80,7 @@ bool AccountBasePlugin::initialize(const QStringList &arguments, QString *errorS
 
 void AccountBasePlugin::extensionsInitialized()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "AccountBasePlugin::extensionsInitialized";
 
     if (!user())
@@ -99,7 +99,7 @@ void AccountBasePlugin::extensionsInitialized()
 
 ExtensionSystem::IPlugin::ShutdownFlag AccountBasePlugin::aboutToShutdown()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         WARN_FUNC;
     // Save settings
     // Disconnect from signals that are not needed during shutdown

@@ -78,7 +78,7 @@ PatientBasePlugin::PatientBasePlugin() :
     m_Mode(0),
     prefpage(0)
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "creating PatientBasePlugin";
 
     // Add Translators
@@ -96,13 +96,13 @@ PatientBasePlugin::PatientBasePlugin() :
 
 PatientBasePlugin::~PatientBasePlugin()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         WARN_FUNC;
 }
 
 bool PatientBasePlugin::initialize(const QStringList &arguments, QString *errorString)
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "PatientBasePlugin::initialize";
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
@@ -123,7 +123,7 @@ bool PatientBasePlugin::initialize(const QStringList &arguments, QString *errorS
 
 void PatientBasePlugin::extensionsInitialized()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "PatientBasePlugin::extensionsInitialized";
 
     messageSplash(tr("Initializing patients database plugin..."));
@@ -161,7 +161,7 @@ void PatientBasePlugin::extensionsInitialized()
 
 ExtensionSystem::IPlugin::ShutdownFlag PatientBasePlugin::aboutToShutdown()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         WARN_FUNC;
     // Save settings
     // Disconnect from signals that are not needed during shutdown

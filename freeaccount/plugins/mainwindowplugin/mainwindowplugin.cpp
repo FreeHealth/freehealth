@@ -54,7 +54,7 @@ static inline Core::IUser *user() { return Core::ICore::instance()->user(); }
 MainWinPlugin::MainWinPlugin() :
         m_MainWindow(0), prefPage(0)
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "creating MainWinPlugin";
 
     // Add Translator to the Application
@@ -78,7 +78,7 @@ MainWinPlugin::~MainWinPlugin()
 
 bool MainWinPlugin::initialize(const QStringList &arguments, QString *errorString)
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "MainWinPlugin::initialize";
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
@@ -87,7 +87,7 @@ bool MainWinPlugin::initialize(const QStringList &arguments, QString *errorStrin
 
 void MainWinPlugin::extensionsInitialized()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "MainWinPlugin::extensionsInitialized";
 
     if (!user())

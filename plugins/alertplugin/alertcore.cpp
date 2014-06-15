@@ -416,7 +416,7 @@ void AlertCore::processAlerts(QVector<AlertItem> &alerts, bool clearPlaceHolders
 void AlertCore::postCoreInitialization()
 {
     // Member directly called by AlertPlugin object
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << Q_FUNC_INFO;
     if (patient())
         connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(checkPatientAlerts()));

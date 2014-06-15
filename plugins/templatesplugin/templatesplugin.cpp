@@ -46,7 +46,7 @@ using namespace Internal;
 
 TemplatesPlugin::TemplatesPlugin()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "creating TemplatesPlugin";
 
     // Add Translator to the Application
@@ -61,13 +61,13 @@ TemplatesPlugin::TemplatesPlugin()
 
 TemplatesPlugin::~TemplatesPlugin()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         WARN_FUNC;
 }
 
 bool TemplatesPlugin::initialize(const QStringList &arguments, QString *errorString)
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "TemplatesPlugin::initialize";
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
@@ -77,7 +77,7 @@ bool TemplatesPlugin::initialize(const QStringList &arguments, QString *errorStr
 
 void TemplatesPlugin::extensionsInitialized()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "TemplatesPlugin::extensionsInitialized";
 
     // Initialize templateCore
@@ -91,7 +91,7 @@ void TemplatesPlugin::extensionsInitialized()
 
 ExtensionSystem::IPlugin::ShutdownFlag TemplatesPlugin::aboutToShutdown()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         WARN_FUNC;
     // Save settings
     // Disconnect from signals that are not needed during shutdown

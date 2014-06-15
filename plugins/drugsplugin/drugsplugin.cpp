@@ -81,7 +81,7 @@ DrugsPlugin::DrugsPlugin() :
     enginePage(0)
 {
     setObjectName("DrugsPlugin");
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
 #ifdef FREEMEDFORMS
         qWarning() << "creating FREEMEDFORMS::DrugsPlugin";
 #endif
@@ -117,7 +117,7 @@ DrugsPlugin::DrugsPlugin() :
 
 DrugsPlugin::~DrugsPlugin()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         WARN_FUNC;
 }
 
@@ -125,7 +125,7 @@ bool DrugsPlugin::initialize(const QStringList &arguments, QString *errorMessage
 {
     Q_UNUSED(arguments);
     Q_UNUSED(errorMessage);
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "DrugsPlugin::initialize";
 
     messageSplash(tr("Initializing drugs plugin..."));
@@ -144,7 +144,7 @@ bool DrugsPlugin::initialize(const QStringList &arguments, QString *errorMessage
 
 void DrugsPlugin::extensionsInitialized()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "DrugsPlugin::extensionsInitialized";
 
     messageSplash(tr("Initializing drugs plugin..."));
@@ -187,13 +187,13 @@ void DrugsPlugin::extensionsInitialized()
 
 void DrugsPlugin::postCoreOpened()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << Q_FUNC_INFO;
 }
 
 ExtensionSystem::IPlugin::ShutdownFlag DrugsPlugin::aboutToShutdown()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         WARN_FUNC;
     // Save settings
     // Disconnect from signals that are not needed during shutdown

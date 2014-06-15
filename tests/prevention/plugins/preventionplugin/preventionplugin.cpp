@@ -66,14 +66,14 @@ PreventionPlugin::~PreventionPlugin()
 
 bool PreventionPlugin::initialize(const QStringList &arguments, QString *errorMessage)
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "PreventionPlugin::initialize";
     return true;
 }
 
 void PreventionPlugin::extensionsInitialized()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "PreventionPlugin::extensionsInitialized";
 
 

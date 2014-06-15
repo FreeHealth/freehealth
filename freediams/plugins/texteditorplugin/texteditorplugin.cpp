@@ -39,7 +39,7 @@ using namespace Internal;
 
 TextEditorPlugin::TextEditorPlugin()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "creating TextEditorPlugin";
 }
 
@@ -49,7 +49,7 @@ TextEditorPlugin::~TextEditorPlugin()
 
 bool TextEditorPlugin::initialize(const QStringList &arguments, QString *errorString)
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "TextEditorPlugin::initialize";
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
@@ -62,7 +62,7 @@ bool TextEditorPlugin::initialize(const QStringList &arguments, QString *errorSt
 
 void TextEditorPlugin::extensionsInitialized()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "TextEditorPlugin::extensionsInitialized";
 
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));

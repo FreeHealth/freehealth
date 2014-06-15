@@ -36,7 +36,7 @@ using namespace Internal;
 
 PortPlugin::PortPlugin()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "creating PortPlugin";
     // Add Translator to the Application
     Core::ICore::instance()->translators()->addNewTranslator("plugin_port");
@@ -48,7 +48,7 @@ PortPlugin::~PortPlugin()
 
 bool PortPlugin::initialize(const QStringList &arguments, QString *errorString)
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "PortPlugin::initialize";
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
@@ -57,7 +57,7 @@ bool PortPlugin::initialize(const QStringList &arguments, QString *errorString)
 
 void PortPlugin::extensionsInitialized()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "PortPlugin::extensionsInitialized";
 
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));

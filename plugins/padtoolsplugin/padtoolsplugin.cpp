@@ -58,7 +58,7 @@ PadToolsPlugin::PadToolsPlugin() :
     _core(0),
     _impl(0)
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "creating PadToolsPlugin";
     // Add Translator to the Application
     Core::ICore::instance()->translators()->addNewTranslator("plugin_padtools");
@@ -69,13 +69,13 @@ PadToolsPlugin::PadToolsPlugin() :
 
 PadToolsPlugin::~PadToolsPlugin()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         WARN_FUNC;
 }
 
 bool PadToolsPlugin::initialize(const QStringList &arguments, QString *errorString)
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "PadToolsPlugin::initialize";
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
@@ -85,7 +85,7 @@ bool PadToolsPlugin::initialize(const QStringList &arguments, QString *errorStri
 
 void PadToolsPlugin::extensionsInitialized()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "PadToolsPlugin::extensionsInitialized";
 
 #if defined(FREEMEDFORMS) || defined(FREEACCOUNT)
@@ -102,7 +102,7 @@ void PadToolsPlugin::extensionsInitialized()
 
 ExtensionSystem::IPlugin::ShutdownFlag PadToolsPlugin::aboutToShutdown()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         WARN_FUNC;
     // Save settings
     // Disconnect from signals that are not needed during shutdown

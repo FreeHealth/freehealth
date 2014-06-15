@@ -44,8 +44,8 @@ QT_END_NAMESPACE
 /**
  * \file log.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.8.4
- * \date 28 May 2013
+ * \version 0.10.0
+ * \date 15 Jun 2014
 */
 
 #define LOG_ERROR_FOR(object, message)  Utils::Log::addError(object, message,__FILE__,__LINE__)
@@ -60,7 +60,7 @@ QT_END_NAMESPACE
 #define LOG_DATABASE_FOR(object, message) Utils::Log::addDatabaseLog(object, message,__FILE__,__LINE__)
 #define LOG_DATABASE(message) Utils::Log::addDatabaseLog(this, message,__FILE__,__LINE__)
 
-#define WARN_FUNC qWarning() << Q_FUNC_INFO
+#define WARN_FUNC qDebug() << Q_FUNC_INFO
 
 namespace Utils {
 
@@ -96,13 +96,16 @@ public:
 
 class UTILS_EXPORT Log
 {
-
     static void addData( const QString &o, const QString &m, const QDateTime &d, const int t );
 
 public:
     static void logCompilationConfiguration();
 
-    static bool warnPluginsCreation();
+    static void setDebugPluginsCreation(bool debug) {m_debugPlugins = debug;}
+    static bool debugPluginsCreation() {return m_debugPlugins;}
+
+    static void setDebugFileInOutProcess(bool debug) {m_logFileInOut = debug;}
+    static bool debugFileInOutProcess() {return m_logFileInOut;}
 
     static void muteConsoleWarnings();
 
@@ -141,6 +144,7 @@ private:
     static QList<LogData> m_Messages;
     static bool m_HasError;
     static bool m_MuteConsole;
+    static bool m_logFileInOut, m_debugPlugins;
 };
 
 }  // end Utils

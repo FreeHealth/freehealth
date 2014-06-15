@@ -48,7 +48,7 @@ using namespace Internal;
 
 ZipCodesPlugin::ZipCodesPlugin()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "Creating ZipCodesPlugin";
 }
 
@@ -61,7 +61,7 @@ bool ZipCodesPlugin::initialize(const QStringList &arguments, QString *errorMess
 {
     Q_UNUSED(arguments);
     Q_UNUSED(errorMessage);
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "ZipCodesPlugin::initialize";
 
     // add plugin info page
@@ -74,13 +74,13 @@ bool ZipCodesPlugin::initialize(const QStringList &arguments, QString *errorMess
 
 void ZipCodesPlugin::extensionsInitialized()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "ZipCodesPlugin::extensionsInitialized";
 }
 
 ExtensionSystem::IPlugin::ShutdownFlag ZipCodesPlugin::aboutToShutdown()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         WARN_FUNC;
     // Save settings
     // Disconnect from signals that are not needed during shutdown

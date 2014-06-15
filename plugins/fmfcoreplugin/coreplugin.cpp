@@ -54,7 +54,7 @@ CorePlugin::CorePlugin() :
     prefPage(0),
     proxyPage(0)
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "creating CorePlugin";
     m_CoreImpl =  new CoreImpl(this);
 
@@ -66,13 +66,13 @@ CorePlugin::CorePlugin() :
 
 CorePlugin::~CorePlugin()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         WARN_FUNC;
 }
 
 bool CorePlugin::initialize(const QStringList &arguments, QString *errorMessage)
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "CorePlugin::initialize";
 
     messageSplash(tr("Initializing core plugin..."));
@@ -93,7 +93,7 @@ bool CorePlugin::initialize(const QStringList &arguments, QString *errorMessage)
 
 void CorePlugin::extensionsInitialized()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "CorePlugin::extensionsInitialized";
 
     messageSplash(tr("Initializing core plugin..."));
@@ -135,7 +135,7 @@ void CorePlugin::remoteArgument(const QString& arg)
 
 ExtensionSystem::IPlugin::ShutdownFlag CorePlugin::aboutToShutdown()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         WARN_FUNC;
     // Save settings
     // Disconnect from signals that are not needed during shutdown

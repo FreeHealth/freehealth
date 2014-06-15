@@ -59,7 +59,7 @@ static inline void messageSplash(const QString &s) {theme()->messageSplashScreen
 
 IcdPlugin::IcdPlugin()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "creating IcdPlugin";
 
     // Create the database instance
@@ -68,13 +68,13 @@ IcdPlugin::IcdPlugin()
 
 IcdPlugin::~IcdPlugin()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         WARN_FUNC;
 }
 
 bool IcdPlugin::initialize(const QStringList &arguments, QString *errorString)
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "IcdPlugin::initialize";
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
@@ -88,7 +88,7 @@ bool IcdPlugin::initialize(const QStringList &arguments, QString *errorString)
 
 void IcdPlugin::extensionsInitialized()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "IcdPlugin::extensionsInitialized";
 
     messageSplash(tr("Initializing ICD10 plugin..."));
@@ -104,7 +104,7 @@ void IcdPlugin::extensionsInitialized()
 
 void IcdPlugin::postCoreInitialization()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         WARN_FUNC;
 
     IcdDatabase::instance()->initialize();
@@ -117,7 +117,7 @@ void IcdPlugin::postCoreInitialization()
 
 ExtensionSystem::IPlugin::ShutdownFlag IcdPlugin::aboutToShutdown()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         WARN_FUNC;
     // Save settings
     // Disconnect from signals that are not needed during shutdown

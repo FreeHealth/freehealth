@@ -58,7 +58,7 @@ static inline void messageSplash(const QString &s) {theme()->messageSplashScreen
 PmhPlugin::PmhPlugin() :
     mode(0)
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "creating PmhPlugin";
 
     // Add Translator to the Application
@@ -73,13 +73,13 @@ PmhPlugin::PmhPlugin() :
 
 PmhPlugin::~PmhPlugin()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         WARN_FUNC;
 }
 
 bool PmhPlugin::initialize(const QStringList &arguments, QString *errorString)
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "PmhPlugin::initialize";
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
@@ -91,7 +91,7 @@ bool PmhPlugin::initialize(const QStringList &arguments, QString *errorString)
 
 void PmhPlugin::extensionsInitialized()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "PmhPlugin::extensionsInitialized";
 
     // no user -> end
@@ -113,13 +113,13 @@ void PmhPlugin::extensionsInitialized()
 
 void PmhPlugin::postCoreInitialization()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         WARN_FUNC;
 }
 
 ExtensionSystem::IPlugin::ShutdownFlag PmhPlugin::aboutToShutdown()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         WARN_FUNC;
     // Save settings
     // Disconnect from signals that are not needed during shutdown

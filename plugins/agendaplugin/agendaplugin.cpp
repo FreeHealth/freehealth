@@ -83,7 +83,7 @@ static inline void messageSplash(const QString &s) {theme()->messageSplashScreen
 AgendaPlugin::AgendaPlugin() :
     m_Core(0)
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "creating AgendaPlugin";
     // Add Translator to the Application
     Core::ICore::instance()->translators()->addNewTranslator("plugin_agenda");
@@ -95,13 +95,13 @@ AgendaPlugin::AgendaPlugin() :
 
 AgendaPlugin::~AgendaPlugin()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         WARN_FUNC;
 }
 
 bool AgendaPlugin::initialize(const QStringList &arguments, QString *errorString)
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "AgendaPlugin::initialize";
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
@@ -111,7 +111,7 @@ bool AgendaPlugin::initialize(const QStringList &arguments, QString *errorString
 
 void AgendaPlugin::extensionsInitialized()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "AgendaPlugin::extensionsInitialized";
 
     messageSplash(tr("Initializing agenda plugin..."));
@@ -439,7 +439,7 @@ void AgendaPlugin::testDatabase()
 
 ExtensionSystem::IPlugin::ShutdownFlag AgendaPlugin::aboutToShutdown()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         WARN_FUNC;
     // Save settings
     // Disconnect from signals that are not needed during shutdown

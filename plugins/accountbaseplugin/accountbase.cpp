@@ -558,7 +558,7 @@ AccountBase::AccountBase(QObject *parent) :
 /** \brief Destructor. */
 AccountBase::~AccountBase()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         WARN_FUNC;
     if (d)
         delete d;

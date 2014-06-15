@@ -53,7 +53,7 @@ Account2Plugin::Account2Plugin() :
     _core(0)
 {
     setObjectName("Account2Plugin");
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "creating Account2Plugin";
 
     // Add Translator to the Application
@@ -65,13 +65,13 @@ Account2Plugin::Account2Plugin() :
 
 Account2Plugin::~Account2Plugin()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "Account2Plugin::~Account2Plugin()";
 }
 
 bool Account2Plugin::initialize(const QStringList &arguments, QString *errorString)
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "Account2Plugin::initialize";
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
@@ -81,7 +81,7 @@ bool Account2Plugin::initialize(const QStringList &arguments, QString *errorStri
 
 void Account2Plugin::extensionsInitialized()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "Account2Plugin::extensionsInitialized";
 
     if (!user())
@@ -105,7 +105,7 @@ void Account2Plugin::extensionsInitialized()
 
 ExtensionSystem::IPlugin::ShutdownFlag Account2Plugin::aboutToShutdown()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         WARN_FUNC;
     // Save settings
     // Disconnect from signals that are not needed during shutdown

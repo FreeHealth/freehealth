@@ -36,7 +36,7 @@ DrugInteractionsPlugin::DrugInteractionsPlugin() :
     m_PimEngine(0),
     m_AllergyEngine(0)
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "creating DrugInteractionsPlugin";
 
     // Add Translator to the Application
@@ -53,13 +53,13 @@ DrugInteractionsPlugin::DrugInteractionsPlugin() :
 
 DrugInteractionsPlugin::~DrugInteractionsPlugin()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         WARN_FUNC;
 }
 
 bool DrugInteractionsPlugin::initialize(const QStringList &arguments, QString *errorString)
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "DrugInteractionsPlugin::initialize";
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
@@ -69,7 +69,7 @@ bool DrugInteractionsPlugin::initialize(const QStringList &arguments, QString *e
 
 void DrugInteractionsPlugin::extensionsInitialized()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "DrugInteractionsPlugin::extensionsInitialized";
 
     messageSplash(tr("Initializing drugs interactions plugin..."));
@@ -86,14 +86,14 @@ void DrugInteractionsPlugin::extensionsInitialized()
 
 void DrugInteractionsPlugin::postCoreInitialization()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << Q_FUNC_INFO;
     // Core is fully intialized as well as all plugins
 }
 
 ExtensionSystem::IPlugin::ShutdownFlag DrugInteractionsPlugin::aboutToShutdown()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         WARN_FUNC;
     // Save settings
     // Disconnect from signals that are not needed during shutdown

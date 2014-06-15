@@ -53,7 +53,7 @@ static inline void messageSplash(const QString &s) {theme()->messageSplashScreen
 %PluginName%Plugin::%PluginName%Plugin()
 {
     setObjectName("%PluginName%Plugin");
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "creating %PluginName%";
 
     // Add Translator to the Application
@@ -80,7 +80,7 @@ bool %PluginName%Plugin::initialize(const QStringList &arguments, QString *error
     Q_UNUSED(arguments)
     Q_UNUSED(errorString)
 
-    if (Utils::Log::warnPluginsCreation()) {
+    if (Utils::Log::debugPluginsCreation()) {
         qWarning() << "creating %PluginName%";
     }
 
@@ -117,7 +117,7 @@ bool %PluginName%Plugin::initialize(const QStringList &arguments, QString *error
 
 void %PluginName%Plugin::extensionsInitialized()
 {
-    if (Utils::Log::warnPluginsCreation()) {
+    if (Utils::Log::debugPluginsCreation()) {
         qWarning() << "%PluginName%::extensionsInitialized";
     }
 

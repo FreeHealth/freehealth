@@ -49,19 +49,19 @@ BaseWidgetsPlugin::BaseWidgetsPlugin() :
         m_Factory(0),
         m_OptionsPage(0)
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "creating BaseWidgetsPlugin";
 }
 
 BaseWidgetsPlugin::~BaseWidgetsPlugin()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         WARN_FUNC;
 }
 
 bool BaseWidgetsPlugin::initialize(const QStringList &arguments, QString *errorString)
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "BaseWidgetsPlugin::initialize";
 
     Q_UNUSED(arguments);
@@ -75,7 +75,7 @@ bool BaseWidgetsPlugin::initialize(const QStringList &arguments, QString *errorS
 
 void BaseWidgetsPlugin::extensionsInitialized()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "BaseWidgetsPlugin::extensionsInitialized";
 
     m_OptionsPage = new Internal::BaseFormWidgetsOptionsPage(this);
@@ -92,7 +92,7 @@ void BaseWidgetsPlugin::extensionsInitialized()
 
 ExtensionSystem::IPlugin::ShutdownFlag BaseWidgetsPlugin::aboutToShutdown()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         WARN_FUNC;
     // Save settings
     // Disconnect from signals that are not needed during shutdown

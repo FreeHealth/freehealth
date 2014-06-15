@@ -63,7 +63,7 @@ static inline void messageSplash(const QString &s) {theme()->messageSplashScreen
 DrugsBasePlugin::DrugsBasePlugin() :
     IPlugin()
 {
-    if (Utils::Log::warnPluginsCreation()) {
+    if (Utils::Log::debugPluginsCreation()) {
 #ifdef FREEDIAMS
         qWarning() << "creating FREEDIAMS::DrugsBasePlugin";
 #else
@@ -80,13 +80,13 @@ DrugsBasePlugin::DrugsBasePlugin() :
 
 DrugsBasePlugin::~DrugsBasePlugin()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         WARN_FUNC;
 }
 
 bool DrugsBasePlugin::initialize(const QStringList &arguments, QString *errorString)
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "DrugsBasePlugin::initialize";
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
@@ -100,7 +100,7 @@ bool DrugsBasePlugin::initialize(const QStringList &arguments, QString *errorStr
 
 void DrugsBasePlugin::extensionsInitialized()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "DrugsBasePlugin::extensionsInitialized";
 
     messageSplash(tr("Initializing drugs database plugin..."));
@@ -121,7 +121,7 @@ void DrugsBasePlugin::extensionsInitialized()
 
 ExtensionSystem::IPlugin::ShutdownFlag DrugsBasePlugin::aboutToShutdown()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         WARN_FUNC;
     // Save settings
     // Disconnect from signals that are not needed during shutdown

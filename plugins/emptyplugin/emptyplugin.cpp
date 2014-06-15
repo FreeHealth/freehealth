@@ -46,7 +46,7 @@ static inline void messageSplash(const QString &s) {theme()->messageSplashScreen
 
 EmptyPlugin::EmptyPlugin()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "creating EmptyPlugin";
 
     // Add Translator to the Application
@@ -67,7 +67,7 @@ EmptyPlugin::~EmptyPlugin()
 
 bool EmptyPlugin::initialize(const QStringList &arguments, QString *errorString)
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "EmptyPlugin::initialize";
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
@@ -83,7 +83,7 @@ bool EmptyPlugin::initialize(const QStringList &arguments, QString *errorString)
 
 void EmptyPlugin::extensionsInitialized()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "EmptyPlugin::extensionsInitialized";
 
     // If you want to stop the plugin initialization if there are no identified user

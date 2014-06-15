@@ -44,7 +44,7 @@ using namespace Internal;
 
 DataPackIPlugin::DataPackIPlugin()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "Creating DataPackIPlugin";
 //    connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
     Core::ICore::instance()->translators()->addNewTranslator("plugin_ftbdatapack");
@@ -59,7 +59,7 @@ bool DataPackIPlugin::initialize(const QStringList &arguments, QString *errorMes
 {
     Q_UNUSED(arguments);
     Q_UNUSED(errorMessage);
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "DataPackIPlugin::initialize";
 
     // Create the core
@@ -77,7 +77,7 @@ bool DataPackIPlugin::initialize(const QStringList &arguments, QString *errorMes
 
 void DataPackIPlugin::extensionsInitialized()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "DataPackIPlugin::extensionsInitialized";
 }
 
@@ -87,7 +87,7 @@ void DataPackIPlugin::extensionsInitialized()
 
 ExtensionSystem::IPlugin::ShutdownFlag DataPackIPlugin::aboutToShutdown()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         WARN_FUNC;
     // Save settings
     // Disconnect from signals that are not needed during shutdown

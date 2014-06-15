@@ -40,7 +40,7 @@ using namespace Internal;
 MainWinPlugin::MainWinPlugin() :
         m_MainWindow(0)
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "creating FREEPAD::MainWinPlugin";
     m_MainWindow = new MainWindow();
     Core::ICore::instance()->setMainWindow(m_MainWindow);
@@ -53,7 +53,7 @@ MainWinPlugin::MainWinPlugin() :
 
 MainWinPlugin::~MainWinPlugin()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "MainWinPlugin::~MainWinPlugin()";
     if (m_MainWindow)
         delete m_MainWindow;
@@ -62,7 +62,7 @@ MainWinPlugin::~MainWinPlugin()
 bool MainWinPlugin::initialize(const QStringList &arguments, QString *errorString)
 {
 	qDebug("Mainwindow::initialize");
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "MainWinPlugin::initialize";
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
@@ -72,7 +72,7 @@ bool MainWinPlugin::initialize(const QStringList &arguments, QString *errorStrin
 void MainWinPlugin::extensionsInitialized()
 {
 	qDebug("Mainwindow::extensionsInitialized");
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "MainWinPlugin::extensionsInitialized";
 
     // Add Translator to the Application

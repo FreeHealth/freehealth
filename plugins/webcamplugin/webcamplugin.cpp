@@ -60,7 +60,7 @@ WebcamPlugin::WebcamPlugin() :
     ExtensionSystem::IPlugin(),
     m_prefPage(0)
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "creating Webcam";
     setObjectName("WebcamPlugin");
 
@@ -80,7 +80,7 @@ WebcamPlugin::WebcamPlugin() :
 
 WebcamPlugin::~WebcamPlugin()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         WARN_FUNC;
     // Unregister objects from the plugin manager's object pool
     // Delete members
@@ -91,7 +91,7 @@ bool WebcamPlugin::initialize(const QStringList &arguments, QString *errorString
     Q_UNUSED(arguments)
     Q_UNUSED(errorString)
 
-    if (Utils::Log::warnPluginsCreation()) {
+    if (Utils::Log::debugPluginsCreation()) {
         qDebug() << "WebcamPlugin::initialize";
     }
 
@@ -131,7 +131,7 @@ bool WebcamPlugin::initialize(const QStringList &arguments, QString *errorString
 
 void WebcamPlugin::extensionsInitialized()
 {
-    if (Utils::Log::warnPluginsCreation()) {
+    if (Utils::Log::debugPluginsCreation()) {
         qDebug() << "Webcam::extensionsInitialized";
     }
 
@@ -160,7 +160,7 @@ void WebcamPlugin::extensionsInitialized()
 
 void WebcamPlugin::postCoreInitialization()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << Q_FUNC_INFO;
     // Core is fully intialized as well as all plugins
     // DataPacks are checked
@@ -168,7 +168,7 @@ void WebcamPlugin::postCoreInitialization()
 
 ExtensionSystem::IPlugin::ShutdownFlag WebcamPlugin::aboutToShutdown()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         WARN_FUNC;
     // Save settings
     // Disconnect from signals that are not needed during shutdown

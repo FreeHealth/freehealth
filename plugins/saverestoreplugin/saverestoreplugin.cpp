@@ -41,19 +41,19 @@ using namespace Internal;
 SaveRestorePlugin::SaveRestorePlugin() :
     page(0)
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "creating SaveRestorePlugin";
 }
 
 SaveRestorePlugin::~SaveRestorePlugin()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         WARN_FUNC;
 }
 
 bool SaveRestorePlugin::initialize(const QStringList &arguments, QString *errorString)
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "SaveRestorePlugin::initialize";
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
@@ -66,7 +66,7 @@ bool SaveRestorePlugin::initialize(const QStringList &arguments, QString *errorS
 
 void SaveRestorePlugin::extensionsInitialized()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "SaveRestorePlugin::extensionsInitialized";
 
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
@@ -76,7 +76,7 @@ void SaveRestorePlugin::extensionsInitialized()
 
 ExtensionSystem::IPlugin::ShutdownFlag SaveRestorePlugin::aboutToShutdown()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         WARN_FUNC;
     // Save settings
     // Disconnect from signals that are not needed during shutdown

@@ -56,7 +56,7 @@ AlertPlugin::AlertPlugin() :
     _prefPage(0),
     _patientPlaceHolder(0)
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "creating AlertPlugin";
     setObjectName("AlertPlugin");
 
@@ -79,13 +79,13 @@ AlertPlugin::AlertPlugin() :
 
 AlertPlugin::~AlertPlugin()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         WARN_FUNC;
 }
 
 bool AlertPlugin::initialize(const QStringList &arguments, QString *errorString)
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "AlertPlugin::initialize";
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
@@ -101,7 +101,7 @@ bool AlertPlugin::initialize(const QStringList &arguments, QString *errorString)
 
 void AlertPlugin::extensionsInitialized()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "AlertPlugin::extensionsInitialized";
 
     // If you want to stop the plugin initialization if there are no identified user
@@ -132,7 +132,7 @@ void AlertPlugin::extensionsInitialized()
 
 void AlertPlugin::postCoreInitialization()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << Q_FUNC_INFO;
     // Core is fully intialized as well as all plugins
     // DataPacks are checked
@@ -148,7 +148,7 @@ void AlertPlugin::coreAboutToClose()
 
 ExtensionSystem::IPlugin::ShutdownFlag AlertPlugin::aboutToShutdown()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         WARN_FUNC;
     // Save settings
     // Disconnect from signals that are not needed during shutdown

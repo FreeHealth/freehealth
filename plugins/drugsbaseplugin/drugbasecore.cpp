@@ -162,7 +162,7 @@ bool DrugBaseCore::isInitialized() const
 
 void DrugBaseCore::postCoreInitialization()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << Q_FUNC_INFO;
     initialize();
 }

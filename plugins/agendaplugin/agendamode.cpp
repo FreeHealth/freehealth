@@ -75,7 +75,7 @@ AgendaMode::AgendaMode(QObject *parent) :
 
 void AgendaMode::postCoreInitialization()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << Q_FUNC_INFO;
 }
 

@@ -50,7 +50,7 @@ MainWinPlugin::MainWinPlugin() :
     prefPage(0),
     virtualBasePage(0)
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "creating FREEMEDFORMS::MainWinPlugin";
 
     // Add Translator to the Application
@@ -67,13 +67,13 @@ MainWinPlugin::MainWinPlugin() :
 
 MainWinPlugin::~MainWinPlugin()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         WARN_FUNC;
 }
 
 bool MainWinPlugin::initialize(const QStringList &arguments, QString *errorString)
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "FREEMEDFORMS::MainWinPlugin::initialize";
 
     Q_UNUSED(arguments);
@@ -87,7 +87,7 @@ bool MainWinPlugin::initialize(const QStringList &arguments, QString *errorStrin
 
 void MainWinPlugin::extensionsInitialized()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "FREEMEDFORMS::MainWinPlugin::extensionsInitialized";
 
     messageSplash(tr("Initializing main window plugin..."));
@@ -101,7 +101,7 @@ void MainWinPlugin::extensionsInitialized()
 
 ExtensionSystem::IPlugin::ShutdownFlag MainWinPlugin::aboutToShutdown()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         WARN_FUNC;
     // Save settings
     // Disconnect from signals that are not needed during shutdown

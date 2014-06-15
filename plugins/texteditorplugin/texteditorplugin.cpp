@@ -61,19 +61,19 @@ using namespace Internal;
 
 TextEditorPlugin::TextEditorPlugin()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "creating TextEditorPlugin";
 }
 
 TextEditorPlugin::~TextEditorPlugin()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         WARN_FUNC;
 }
 
 bool TextEditorPlugin::initialize(const QStringList &arguments, QString *errorString)
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "TextEditorPlugin::initialize";
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
@@ -86,7 +86,7 @@ bool TextEditorPlugin::initialize(const QStringList &arguments, QString *errorSt
 
 void TextEditorPlugin::extensionsInitialized()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "TextEditorPlugin::extensionsInitialized";
 
     // Add some objects to the plugin manager
@@ -95,7 +95,7 @@ void TextEditorPlugin::extensionsInitialized()
 
 ExtensionSystem::IPlugin::ShutdownFlag TextEditorPlugin::aboutToShutdown()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         WARN_FUNC;
     // Save settings
     // Disconnect from signals that are not needed during shutdown

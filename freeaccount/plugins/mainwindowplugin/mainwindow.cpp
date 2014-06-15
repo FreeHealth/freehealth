@@ -219,13 +219,13 @@ void MainWindow::extensionsInitialized()
 
 MainWindow::~MainWindow()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "MainWindow::~MainWindow()";
 }
 
 void MainWindow::postCoreOpened()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "MainWindow::postCoreOpened()";
 
     finishSplash(this);

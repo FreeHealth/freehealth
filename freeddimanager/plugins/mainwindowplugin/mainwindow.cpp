@@ -233,7 +233,7 @@ void MainWindow::extensionsInitialized()
 
 MainWindow::~MainWindow()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "MainWindow::~MainWindow()";
     // We need to delete UI components before the mainwindow is destroy
     // because all mainwindow Core components (action manager, mode manager...)
@@ -254,7 +254,7 @@ MainWindow::~MainWindow()
  */
 void MainWindow::postCoreOpened()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "MainWindow::postCoreOpened()";
 
     finishSplash(this);

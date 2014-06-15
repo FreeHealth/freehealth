@@ -72,7 +72,7 @@ FormManagerPlugin::FormManagerPlugin() :
     m_PrefPageSelector(0),
     m_PrefPage(0)
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "creating FormManagerPlugin";
 
     // Add Translator to the Application
@@ -95,13 +95,13 @@ FormManagerPlugin::FormManagerPlugin() :
 
 FormManagerPlugin::~FormManagerPlugin()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         WARN_FUNC;
 }
 
 bool FormManagerPlugin::initialize(const QStringList &arguments, QString *errorString)
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "FormManagerPlugin::initialize";
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
@@ -113,7 +113,7 @@ bool FormManagerPlugin::initialize(const QStringList &arguments, QString *errorS
 
 void FormManagerPlugin::extensionsInitialized()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "FormManagerPlugin::extensionsInitialized";
 
     // no user -> end
@@ -138,7 +138,7 @@ void FormManagerPlugin::extensionsInitialized()
 
 void FormManagerPlugin::postCoreInitialization()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << Q_FUNC_INFO;
 
 
@@ -159,7 +159,7 @@ void FormManagerPlugin::postCoreInitialization()
 
 ExtensionSystem::IPlugin::ShutdownFlag FormManagerPlugin::aboutToShutdown()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         WARN_FUNC;
     // Save settings
     // Disconnect from signals that are not needed during shutdown

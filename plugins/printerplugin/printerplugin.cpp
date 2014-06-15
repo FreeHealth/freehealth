@@ -58,7 +58,7 @@ PrinterPlugin::PrinterPlugin() :
     docPrinter(0)
 {
     setObjectName("PrinterPlugin");
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "creating PrinterPlugin";
 
     // Add preferences pages, printer manager
@@ -72,13 +72,13 @@ PrinterPlugin::PrinterPlugin() :
 
 PrinterPlugin::~PrinterPlugin()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         WARN_FUNC;
 }
 
 bool PrinterPlugin::initialize(const QStringList &arguments, QString *errorString)
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "PrinterPlugin::initialize";
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
@@ -91,7 +91,7 @@ bool PrinterPlugin::initialize(const QStringList &arguments, QString *errorStrin
 
 void PrinterPlugin::extensionsInitialized()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "PrinterPlugin::extensionsInitialized";
 
     if (!user())
@@ -119,7 +119,7 @@ void PrinterPlugin::extensionsInitialized()
 
 ExtensionSystem::IPlugin::ShutdownFlag PrinterPlugin::aboutToShutdown()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         WARN_FUNC;
     // Save settings
     // Disconnect from signals that are not needed during shutdown

@@ -69,7 +69,7 @@ EdrcPlugin::EdrcPlugin() :
     _factory(0)
 {
     setObjectName("eDRCPlugin");
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "creating eDRCPlugin";
 
     // Add Translator to the Application
@@ -97,7 +97,7 @@ bool EdrcPlugin::initialize(const QStringList &arguments, QString *errorString)
     Q_UNUSED(arguments)
     Q_UNUSED(errorString)
 
-    if (Utils::Log::warnPluginsCreation()) {
+    if (Utils::Log::debugPluginsCreation()) {
         qWarning() << "EdrcPlugin::initialize";
     }
 
@@ -131,7 +131,7 @@ bool EdrcPlugin::initialize(const QStringList &arguments, QString *errorString)
 
 void EdrcPlugin::extensionsInitialized()
 {
-    if (Utils::Log::warnPluginsCreation()) {
+    if (Utils::Log::debugPluginsCreation()) {
         qWarning() << "EdrcPlugin::extensionsInitialized";
     }
 
@@ -167,7 +167,7 @@ void EdrcPlugin::postCoreInitialization()
 
 ExtensionSystem::IPlugin::ShutdownFlag EdrcPlugin::aboutToShutdown()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         WARN_FUNC;
     // Save settings
     // Disconnect from signals that are not needed during shutdown

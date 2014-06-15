@@ -60,8 +60,14 @@ using namespace Utils;
 QList<LogData> Log::m_Messages;
 bool Log::m_HasError = false;
 bool Log::m_MuteConsole = false;
+bool Log::m_logFileInOut = false;
 
 bool Log::warnPluginsCreation() { return false; }
+
+/**
+ * \fn bool Utils::Log::setDebugFileInOutProcess(bool debug)
+ * Set the console debugging of Utils file in/out process. By default, set to false
+ */
 
 void Log::logCompilationConfiguration()
 {

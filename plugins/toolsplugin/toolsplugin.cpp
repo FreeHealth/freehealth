@@ -90,7 +90,7 @@ ToolsPlugin::ToolsPlugin() :
     m_HprimPage(0)
 {
     setObjectName("ToolsPlugin");
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "creating Tools";
 
     // Add Translator to the Application
@@ -127,7 +127,7 @@ bool ToolsPlugin::initialize(const QStringList &arguments, QString *errorString)
     Q_UNUSED(arguments)
     Q_UNUSED(errorString)
 
-    if (Utils::Log::warnPluginsCreation()) {
+    if (Utils::Log::debugPluginsCreation()) {
         qWarning() << "Tools::initialize";
     }
 
@@ -150,7 +150,7 @@ bool ToolsPlugin::initialize(const QStringList &arguments, QString *errorString)
 
 void ToolsPlugin::extensionsInitialized()
 {
-    if (Utils::Log::warnPluginsCreation()) {
+    if (Utils::Log::debugPluginsCreation()) {
         qWarning() << "Tools::extensionsInitialized";
     }
 

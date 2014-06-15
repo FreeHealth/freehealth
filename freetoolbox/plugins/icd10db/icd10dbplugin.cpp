@@ -39,7 +39,7 @@ using namespace Icd10::Internal;
 
 Icd10DbPlugin::Icd10DbPlugin()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "Creating Icd10DbPlugin";
 }
 
@@ -50,7 +50,7 @@ Icd10DbPlugin::~Icd10DbPlugin()
 
 bool Icd10DbPlugin::initialize(const QStringList &/*arguments*/, QString */*errorMessage*/)
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "Icd10DbPlugin::initialize";
 
     //    Core::ICore::instance()->translators()->addNewTranslator("freeicd-Icd10DbPlugin");
@@ -66,13 +66,13 @@ bool Icd10DbPlugin::initialize(const QStringList &/*arguments*/, QString */*erro
 
 void Icd10DbPlugin::extensionsInitialized()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "Icd10DbPlugin::extensionsInitialized";
 }
 
 ExtensionSystem::IPlugin::ShutdownFlag Icd10DbPlugin::aboutToShutdown()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         WARN_FUNC;
     // Save settings
     // Disconnect from signals that are not needed during shutdown

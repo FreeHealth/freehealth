@@ -89,7 +89,7 @@ ScriptPlugin::ScriptPlugin() :
     m_Manager(0),
     aScriptDialog(0)
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "creating ScriptPlugin";
 
     // Add here the Core::IFirstConfigurationPage objects to the pluginmanager object pool
@@ -99,13 +99,13 @@ ScriptPlugin::ScriptPlugin() :
 
 ScriptPlugin::~ScriptPlugin()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         WARN_FUNC;
 }
 
 bool ScriptPlugin::initialize(const QStringList &arguments, QString *errorString)
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "ScriptPlugin::initialize";
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
@@ -125,7 +125,7 @@ bool ScriptPlugin::initialize(const QStringList &arguments, QString *errorString
 
 void ScriptPlugin::extensionsInitialized()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "ScriptPlugin::extensionsInitialized";
 
     // At this point, user is connected
@@ -138,7 +138,7 @@ void ScriptPlugin::extensionsInitialized()
 
 void ScriptPlugin::postCoreInitialization()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << Q_FUNC_INFO;
     // Core is fully intialized as well as all plugins
 
@@ -166,7 +166,7 @@ void ScriptPlugin::patientSelected()
 
 ExtensionSystem::IPlugin::ShutdownFlag ScriptPlugin::aboutToShutdown()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         WARN_FUNC;
     // Save settings
     // Disconnect from signals that are not needed during shutdown

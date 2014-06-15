@@ -100,7 +100,7 @@ void AccountMode::setCentralWidget(QWidget *widget)
 
 void AccountMode::postCoreInitialization()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << Q_FUNC_INFO;
     if (m_Stack)
         m_Stack->addWidget(new ReceiptViewer);

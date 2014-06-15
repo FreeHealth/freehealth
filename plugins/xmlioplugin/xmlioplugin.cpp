@@ -69,7 +69,7 @@ XmlFormIOPlugin::XmlFormIOPlugin() :
     m_XmlReader(0),
     m_FormIo(0)
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "creating XmlIOPlugin";
 
     // Add Translator to the Application
@@ -84,13 +84,13 @@ XmlFormIOPlugin::XmlFormIOPlugin() :
 
 XmlFormIOPlugin::~XmlFormIOPlugin()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         WARN_FUNC;
 }
 
 bool XmlFormIOPlugin::initialize(const QStringList &arguments, QString *errorString)
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "XmlIOPlugin::initialize";
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
@@ -104,7 +104,7 @@ bool XmlFormIOPlugin::initialize(const QStringList &arguments, QString *errorStr
 
 void XmlFormIOPlugin::extensionsInitialized()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "XmlIOPlugin::extensionsInitialized";
 
     // no user -> end
@@ -135,7 +135,7 @@ void XmlFormIOPlugin::extensionsInitialized()
 
 ExtensionSystem::IPlugin::ShutdownFlag XmlFormIOPlugin::aboutToShutdown()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         WARN_FUNC;
     // Save settings
     // Disconnect from signals that are not needed during shutdown

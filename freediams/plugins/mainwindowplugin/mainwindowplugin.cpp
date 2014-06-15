@@ -36,7 +36,7 @@ using namespace Internal;
 MainWinPlugin::MainWinPlugin() :
         m_MainWindow(0)
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "creating FREEDIAMS::MainWinPlugin";
     m_MainWindow = new MainWindow();
     Core::ICore::instance()->setMainWindow(m_MainWindow);
@@ -44,13 +44,13 @@ MainWinPlugin::MainWinPlugin() :
 
 MainWinPlugin::~MainWinPlugin()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "MainWinPlugin::~MainWinPlugin()";
 }
 
 bool MainWinPlugin::initialize(const QStringList &arguments, QString *errorString)
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "MainWinPlugin::initialize";
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
@@ -64,7 +64,7 @@ bool MainWinPlugin::initialize(const QStringList &arguments, QString *errorStrin
 
 void MainWinPlugin::extensionsInitialized()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "MainWinPlugin::extensionsInitialized";
 
     m_MainWindow->extensionsInitialized();
@@ -72,7 +72,7 @@ void MainWinPlugin::extensionsInitialized()
 
 ExtensionSystem::IPlugin::ShutdownFlag MainWinPlugin::aboutToShutdown()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         WARN_FUNC;
     // Save settings
     // Disconnect from signals that are not needed during shutdown

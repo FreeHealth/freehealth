@@ -37,7 +37,7 @@ using namespace MainWin;
 MainWinPlugin::MainWinPlugin() :
         m_MainWindow(0)
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "creating FREEICD::MainWinPlugin";
 
     // Add Translator to the Application
@@ -50,7 +50,7 @@ MainWinPlugin::MainWinPlugin() :
 
 MainWinPlugin::~MainWinPlugin()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "MainWinPlugin::~MainWinPlugin()";
     if (m_MainWindow)
         delete m_MainWindow;
@@ -58,7 +58,7 @@ MainWinPlugin::~MainWinPlugin()
 
 bool MainWinPlugin::initialize(const QStringList &arguments, QString *errorString)
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "MainWinPlugin::initialize";
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
@@ -67,7 +67,7 @@ bool MainWinPlugin::initialize(const QStringList &arguments, QString *errorStrin
 
 void MainWinPlugin::extensionsInitialized()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "MainWinPlugin::extensionsInitialized";
 
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));

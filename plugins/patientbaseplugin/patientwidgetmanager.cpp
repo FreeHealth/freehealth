@@ -118,7 +118,7 @@ void PatientWidgetManager::updateContext(Core::IContext *object, const Core::Con
 
 void PatientWidgetManager::postCoreInitialization()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << Q_FUNC_INFO;
     m_CurrentView->initialize();
 }

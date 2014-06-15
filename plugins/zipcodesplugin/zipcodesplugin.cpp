@@ -40,7 +40,7 @@ using namespace Internal;
 
 ZipCodesPlugin::ZipCodesPlugin()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "creating ZipCodesPlugin";
 
     // Add here the Core::IFirstConfigurationPage objects to the pluginmanager object pool
@@ -49,13 +49,13 @@ ZipCodesPlugin::ZipCodesPlugin()
 
 ZipCodesPlugin::~ZipCodesPlugin()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         WARN_FUNC;
 }
 
 bool ZipCodesPlugin::initialize(const QStringList &arguments, QString *errorString)
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "ZipCodesPlugin::initialize";
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
@@ -75,7 +75,7 @@ bool ZipCodesPlugin::initialize(const QStringList &arguments, QString *errorStri
 
 void ZipCodesPlugin::extensionsInitialized()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "ZipCodesPlugin::extensionsInitialized";
 
     // At this point, user is connected
@@ -87,7 +87,7 @@ void ZipCodesPlugin::extensionsInitialized()
 
 ExtensionSystem::IPlugin::ShutdownFlag ZipCodesPlugin::aboutToShutdown()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         WARN_FUNC;
     // Save settings
     // Disconnect from signals that are not needed during shutdown

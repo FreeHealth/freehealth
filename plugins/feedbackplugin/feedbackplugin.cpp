@@ -54,7 +54,7 @@ static inline void messageSplash(const QString &s) {theme()->messageSplashScreen
 FeedbackPlugin::FeedbackPlugin()
 {
     setObjectName("FeedbackPlugin");
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "creating Feedback";
 
     // Add Translator to the Application
@@ -71,7 +71,7 @@ FeedbackPlugin::FeedbackPlugin()
 
 FeedbackPlugin::~FeedbackPlugin()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         WARN_FUNC;
     // Unregister objects from the plugin manager's object pool
     // Delete members
@@ -82,7 +82,7 @@ bool FeedbackPlugin::initialize(const QStringList &arguments, QString *errorStri
     Q_UNUSED(arguments)
     Q_UNUSED(errorString)
 
-    if (Utils::Log::warnPluginsCreation()) {
+    if (Utils::Log::debugPluginsCreation()) {
         qWarning() << "creating Feedback";
     }
 
@@ -119,7 +119,7 @@ bool FeedbackPlugin::initialize(const QStringList &arguments, QString *errorStri
 
 void FeedbackPlugin::extensionsInitialized()
 {
-    if (Utils::Log::warnPluginsCreation()) {
+    if (Utils::Log::debugPluginsCreation()) {
         qWarning() << "Feedback::extensionsInitialized";
     }
 
@@ -148,7 +148,7 @@ void FeedbackPlugin::extensionsInitialized()
 
 void FeedbackPlugin::postCoreInitialization()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         WARN_FUNC;
     // Core is fully intialized as well as all plugins
     // DataPacks are checked
@@ -156,7 +156,7 @@ void FeedbackPlugin::postCoreInitialization()
 
 ExtensionSystem::IPlugin::ShutdownFlag FeedbackPlugin::aboutToShutdown()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         WARN_FUNC;
     // Save settings
     // Disconnect from signals that are not needed during shutdown
@@ -198,7 +198,7 @@ void FeedbackPlugin::reportBug()
 
 void FeedbackPlugin::coreAboutToClose()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         WARN_FUNC;
     // Core is about to close
     // ICore::user() is still available

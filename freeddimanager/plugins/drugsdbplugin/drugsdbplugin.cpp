@@ -53,7 +53,7 @@ using namespace Internal;
 DrugsDbPlugin::DrugsDbPlugin() :
     _mode(0)
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "Creating DrugsDbPlugin";
     Core::ICore::instance()->translators()->addNewTranslator("plugin_drugsdb");
 }
@@ -69,7 +69,7 @@ bool DrugsDbPlugin::initialize(const QStringList &arguments, QString *errorMessa
 {
     Q_UNUSED(arguments);
     Q_UNUSED(errorMessage);
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "DrugsDbPlugin::initialize";
 
     // Create the mode
@@ -131,13 +131,13 @@ bool DrugsDbPlugin::initialize(const QStringList &arguments, QString *errorMessa
 
 void DrugsDbPlugin::extensionsInitialized()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "DrugsDbPlugin::extensionsInitialized";
 }
 
 ExtensionSystem::IPlugin::ShutdownFlag DrugsDbPlugin::aboutToShutdown()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         WARN_FUNC;
     // Save settings
     // Disconnect from signals that are not needed during shutdown

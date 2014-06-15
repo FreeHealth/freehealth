@@ -80,7 +80,7 @@ AccountPlugin::AccountPlugin() :
         m_DefaultPage(new AccountDatabaseDefaultsPage(this))
 
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "creating AccountPlugin";
 
     // Add Translator to the Application
@@ -110,13 +110,13 @@ void AccountPlugin::removeAndDelete(QObject *o)
 
 AccountPlugin::~AccountPlugin()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "AccountPlugin::~AccountPlugin()";
 }
 
 bool AccountPlugin::initialize(const QStringList &arguments, QString *errorString)
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "AccountPlugin::initialize";
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
@@ -129,7 +129,7 @@ bool AccountPlugin::initialize(const QStringList &arguments, QString *errorStrin
 
 void AccountPlugin::extensionsInitialized()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "AccountPlugin::extensionsInitialized";
 
     if (!user())
@@ -168,7 +168,7 @@ void AccountPlugin::extensionsInitialized()
 
 ExtensionSystem::IPlugin::ShutdownFlag AccountPlugin::aboutToShutdown()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         WARN_FUNC;
     // Save settings
     // Disconnect from signals that are not needed during shutdown

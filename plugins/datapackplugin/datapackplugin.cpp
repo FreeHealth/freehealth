@@ -66,7 +66,7 @@ DataPackPluginIPlugin::DataPackPluginIPlugin() :
     m_prefPage(0)
 {
     setObjectName("DataPackPlugin");
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "creating DataPackPluginIPlugin";
 
     // Add Translator to the Application
@@ -85,13 +85,13 @@ DataPackPluginIPlugin::DataPackPluginIPlugin() :
 
 DataPackPluginIPlugin::~DataPackPluginIPlugin()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         WARN_FUNC;
 }
 
 bool DataPackPluginIPlugin::initialize(const QStringList &arguments, QString *errorString)
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "DataPackPluginIPlugin::initialize";
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
@@ -107,7 +107,7 @@ bool DataPackPluginIPlugin::initialize(const QStringList &arguments, QString *er
 
 void DataPackPluginIPlugin::extensionsInitialized()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "DataPackPluginIPlugin::extensionsInitialized";
 
     if (!user())
@@ -187,7 +187,7 @@ void DataPackPluginIPlugin::extensionsInitialized()
 
 void DataPackPluginIPlugin::postCoreInitialization()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << Q_FUNC_INFO;
     // Core is fully intialized as well as all plugins
     // Add pack manager action to "Preferences" menu
@@ -214,7 +214,7 @@ void DataPackPluginIPlugin::postCoreInitialization()
 
 void DataPackPluginIPlugin::coreAboutToClose()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "DataPackPluginIPlugin::coreAboutToClose";
     // Core is about to close
     // Core::user() is still available
@@ -254,7 +254,7 @@ void DataPackPluginIPlugin::togglePackManager()
 
 ExtensionSystem::IPlugin::ShutdownFlag DataPackPluginIPlugin::aboutToShutdown()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         WARN_FUNC;
     // Save settings
     // Disconnect from signals that are not needed during shutdown

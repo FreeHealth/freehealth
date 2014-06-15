@@ -64,7 +64,7 @@ DDIPlugin::DDIPlugin() :
     _componentAtcMode(0),
     aChangeLocalDb(0)
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "Creating DDIPlugin";
     Core::ICore::instance()->translators()->addNewTranslator("plugin_ddimanager");
 }
@@ -78,7 +78,7 @@ bool DDIPlugin::initialize(const QStringList &arguments, QString *errorMessage)
 {
     Q_UNUSED(arguments);
     Q_UNUSED(errorMessage);
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "DDIPlugin::initialize";
 
     // create the core
@@ -101,14 +101,14 @@ bool DDIPlugin::initialize(const QStringList &arguments, QString *errorMessage)
 
 void DDIPlugin::extensionsInitialized()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "DDIPlugin::extensionsInitialized";
     createActions();
 }
 
 ExtensionSystem::IPlugin::ShutdownFlag DDIPlugin::aboutToShutdown()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         WARN_FUNC;
     // Save settings
     // Disconnect from signals that are not needed during shutdown

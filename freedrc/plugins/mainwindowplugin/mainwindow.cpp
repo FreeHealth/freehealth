@@ -315,7 +315,7 @@ MainWindow::~MainWindow()
     setCentralWidget(0);
     delete _headerWidget;
     delete ui;
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "MainWindow::~MainWindow()";
 }
 
@@ -330,7 +330,7 @@ MainWindow::~MainWindow()
  */
 void MainWindow::postCoreOpened()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "MainWindow::postCoreOpened()";
 
     finishSplash(this);

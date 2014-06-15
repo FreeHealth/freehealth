@@ -139,7 +139,7 @@ void PatientCore::registerPatientModel(PatientModel *model)
 /** Initialization with a full opened Core::ICore */
 void PatientCore::postCoreInitialization()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << Q_FUNC_INFO;
 
 //    PatientModel::activeModel()->refreshModel();

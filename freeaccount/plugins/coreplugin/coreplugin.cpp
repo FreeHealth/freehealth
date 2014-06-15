@@ -46,7 +46,7 @@ static inline Core::IUser *user() { return Core::ICore::instance()->user(); }
 
 CorePlugin::CorePlugin() : m_CoreImpl(new CoreImpl(this))
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "Creating CorePlugin";
 }
 
@@ -57,14 +57,14 @@ CorePlugin::~CorePlugin()
 
 bool CorePlugin::initialize(const QStringList &arguments, QString *errorMessage)
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "CorePlugin::initialize";
     return m_CoreImpl->initialize(arguments,errorMessage);
 }
 
 void CorePlugin::extensionsInitialized()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "CorePlugin::extensionsInitialized";
 
     if (!user())

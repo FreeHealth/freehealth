@@ -40,7 +40,7 @@ using namespace Internal;
 MainWinPlugin::MainWinPlugin() :
         m_MainWindow(0)
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "creating FREEPAD::MainWinPlugin";
 
     // Add Translator to the Application
@@ -57,7 +57,7 @@ MainWinPlugin::MainWinPlugin() :
 
 MainWinPlugin::~MainWinPlugin()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "MainWinPlugin::~MainWinPlugin()";
     if (m_MainWindow)
         delete m_MainWindow;
@@ -66,7 +66,7 @@ MainWinPlugin::~MainWinPlugin()
 bool MainWinPlugin::initialize(const QStringList &arguments, QString *errorString)
 {
 	qDebug("Mainwindow::initialize");
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "MainWinPlugin::initialize";
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
@@ -76,7 +76,7 @@ bool MainWinPlugin::initialize(const QStringList &arguments, QString *errorStrin
 void MainWinPlugin::extensionsInitialized()
 {
 	qDebug("Mainwindow::extensionsInitialized");
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "MainWinPlugin::extensionsInitialized";
 
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
@@ -86,7 +86,7 @@ void MainWinPlugin::extensionsInitialized()
 
 ExtensionSystem::IPlugin::ShutdownFlag MainWinPlugin::aboutToShutdown()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         WARN_FUNC;
     // Save settings
     // Disconnect from signals that are not needed during shutdown

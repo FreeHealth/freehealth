@@ -59,7 +59,7 @@ static inline void messageSplash(const QString &s) {theme()->messageSplashScreen
 
 Axisante4Plugin::Axisante4Plugin()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "creating Axisante4";
 
     // Add Translator to the Application
@@ -86,7 +86,7 @@ bool Axisante4Plugin::initialize(const QStringList &arguments, QString *errorStr
     Q_UNUSED(errorString)
 
     setObjectName("Axisante4");
-    if (Utils::Log::warnPluginsCreation()) {
+    if (Utils::Log::debugPluginsCreation()) {
         qWarning() << "creating Axisante4";
     }
 
@@ -123,7 +123,7 @@ bool Axisante4Plugin::initialize(const QStringList &arguments, QString *errorStr
 
 void Axisante4Plugin::extensionsInitialized()
 {
-    if (Utils::Log::warnPluginsCreation()) {
+    if (Utils::Log::debugPluginsCreation()) {
         qWarning() << "Axisante4::extensionsInitialized";
     }
 

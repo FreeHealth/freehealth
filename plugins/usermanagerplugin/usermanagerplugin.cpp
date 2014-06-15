@@ -113,7 +113,7 @@ UserManagerPlugin::UserManagerPlugin() :
     m_UserManagerMainWin(0)
 {
     setObjectName("UserManagerPlugin");
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "creating UserManagerPlugin";
 
     // Add Translator to the Application
@@ -133,13 +133,13 @@ UserManagerPlugin::UserManagerPlugin() :
 
 UserManagerPlugin::~UserManagerPlugin()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         WARN_FUNC;
 }
 
 bool UserManagerPlugin::initialize(const QStringList &arguments, QString *errorString)
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "UserManagerPlugin::initialize";
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
@@ -227,7 +227,7 @@ bool UserManagerPlugin::initialize(const QStringList &arguments, QString *errorS
 
 void UserManagerPlugin::extensionsInitialized()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "UserManagerPlugin::extensionsInitialized";
 
     messageSplash(tr("Initializing user manager plugin..."));
@@ -373,7 +373,7 @@ bool UserManagerPlugin::identifyUser()
 
 void UserManagerPlugin::postCoreInitialization()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         WARN_FUNC;
     userCore().postCoreInitialization();
 }
@@ -448,7 +448,7 @@ void UserManagerPlugin::showDatabaseInformation()
 
 ExtensionSystem::IPlugin::ShutdownFlag UserManagerPlugin::aboutToShutdown()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         WARN_FUNC;
     // Save settings
     // Disconnect from signals that are not needed during shutdown
