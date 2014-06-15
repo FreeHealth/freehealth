@@ -201,6 +201,16 @@ bool PackCreationQueue::createZippedContent(const RequestedPackCreation &request
 }
 
 /**
+ * If the Queue was created using a XML file (fromXmlFile()), returns
+ * the absolute file path of the XML source file, otherwise
+ * returns an empty QString
+ */
+QString PackCreationQueue::sourceAbsolutePathFile() const
+{
+    return _sourceAbsPath;
+}
+
+/**
  * Read a creation queue from an XML file.
  * \warning The current queue is cleared.
  */
@@ -278,6 +288,7 @@ bool PackCreationQueue::fromXmlFile(const QString &absFile)
         addToQueue(request);
         packElement = packElement.nextSiblingElement(::XML_DATAPACK_TAG);
     }
+    _sourceAbsPath = QDir::cleanPath(absFile);
     return true;
 }
 

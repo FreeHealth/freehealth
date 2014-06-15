@@ -75,6 +75,7 @@ public:
     bool createZippedContent(const RequestedPackCreation &request, const QString &absZipFileName);
 
     // XML import/export
+    QString sourceAbsolutePathFile() const;
     bool fromXmlFile(const QString &absFile);
     bool saveToXmlFile(const QString &absFile, bool useRelativePath = false) const;
 
@@ -85,6 +86,7 @@ public:
 private:
     QList<RequestedPackCreation> _queue;
     QString _uid;
+    QString _sourceAbsPath;
 };
 
 } // namespace DataPack
