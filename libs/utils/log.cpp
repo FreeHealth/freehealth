@@ -62,16 +62,26 @@ bool Log::m_HasError = false;
 bool Log::m_MuteConsole = false;
 bool Log::m_logFileInOut = false;
 
-bool Log::warnPluginsCreation() { return false; }
-
 /**
  * \fn bool Utils::Log::setDebugFileInOutProcess(bool debug)
- * Set the console debugging of Utils file in/out process. By default, set to false
+ * Set the console debugging of Utils file in/out process (errors are
+ * still debugged to console). By default, set to false.
+ * \sa Utils::Log::debugFileInOutProcess()
  */
 
+/**
+ * \fn bool Utils::Log::setDebugPluginsCreation(bool debug)
+ * Set the console debugging of plugins creation process (errors are
+ * still debugged to console). By default, set to false.
+ * \sa Utils::Log::debugPluginsCreation()
+ */
+
+/**
+ * Debug whole app/OS configuration to console
+ */
 void Log::logCompilationConfiguration()
 {
-    qWarning() << "\n----------";
+    qDebug() << "\n----------";
     if (isDebugWithoutInstallCompilation()) {
         LOG_FOR("Main", "Running debug non-installed version (debug_without_install)");
     } else if (isReleaseCompilation()) {
@@ -83,7 +93,7 @@ void Log::logCompilationConfiguration()
         LOG_FOR("Main", "Linux Integrated");
 
     LOG_FOR("Main","Libraries in path :\n" + qApp->libraryPaths().join("\n"));
-    qWarning() << "----------";
+    qDebug() << "----------";
 }
 
 void Log::addData(const QString &o, const QString &m, const QDateTime &d, const int t)
@@ -101,7 +111,7 @@ void Log::addMessage(const QString &object, const QString &msg, bool forceWarnin
     if (!m_MuteConsole || forceWarning) {
         QString m = lineWrapString(msg, 90-26);
         m = indentString(m, 26).mid(26);
-        qWarning() << QString("%1 %2")
+        qDebug() << QString("%1 %2")
                       .arg(object.leftJustified(25, QChar(' ')))
                       .arg(m);
     }
@@ -121,7 +131,7 @@ void Log::addError(const QString &object, const QString &err, const QString &fil
                 .arg(QFileInfo(file).fileName()).arg(line).arg(err);
         e = lineWrapString(e, 90-26);
         e = indentString(e, 26).mid(26);
-        qWarning() << QString("%1 %2")
+        qDebug() << QString("%1 %2")
                       .arg(object.leftJustified(25, QChar(' ')))
                       .arg(e);
     }
@@ -158,7 +168,7 @@ void Log::addDatabaseLog( const QObject * o, const QSqlDatabase & q, const QStri
 void Log::addDatabaseLog( const QString & o, const QSqlDatabase & q, const QString &file, const int line, bool forceWarning)
 {
     if (!m_MuteConsole || forceWarning) {
-        qWarning() << q << "user" << q.userName() << "pass" << q.password();
+        qDebug() << q << "user" << q.userName() << "pass" << q.password();
     }
     // FIXME: use tkTr(Trans::Constants::_1_COLON_2) "%1: %2" translation
     addError(o, QCoreApplication::translate("Log", "%1: %2 - Database: %3, Host: %4, Port: %5, User:%6, Pass:%7")

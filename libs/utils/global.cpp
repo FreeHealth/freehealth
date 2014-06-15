@@ -749,9 +749,11 @@ bool saveStringToEncodedFile(const QString &toSave, const QString &toFile, const
             }
             file.write(codec->fromUnicode(toSave));
             file.close();
-            LOG_FOR("Utils", QCoreApplication::translate("Utils", "%1 successfully saved (%2)").arg(file.fileName()).arg(forceEncoding));
+            if (Log::debugFileInOutProcess())
+                LOG_FOR("Utils", QCoreApplication::translate("Utils", "%1 successfully saved (%2)").arg(file.fileName()).arg(forceEncoding));
         } else {
-            LOG_FOR("Utils", QCoreApplication::translate("Utils", "Save file aborted by user (file already exists): ") + file.fileName());
+            if (Log::debugFileInOutProcess())
+                LOG_FOR("Utils", QCoreApplication::translate("Utils", "Save file aborted by user (file already exists): ") + file.fileName());
             return false;
         }
     } else {
@@ -769,7 +771,8 @@ bool saveStringToEncodedFile(const QString &toSave, const QString &toFile, const
         }
         file.write(codec->fromUnicode(toSave));
         file.close();
-        LOG_FOR("Utils", QCoreApplication::translate("Utils", "%1 successfully saved (%2)").arg(file.fileName()).arg(forceEncoding));
+        if (Log::debugFileInOutProcess())
+            LOG_FOR("Utils", QCoreApplication::translate("Utils", "%1 successfully saved (%2)").arg(file.fileName()).arg(forceEncoding));
     }
     return true;
 }
@@ -835,7 +838,8 @@ QString readTextFile(const QString &toRead, const QString &encoder, const Warn w
             return QString();
         }
         QString str = codec->toUnicode(file.readAll());
-        LOG_FOR("Utils", tkTr(Trans::Constants::FILE_1_LOADED).arg(toRead));
+        if (Log::debugFileInOutProcess())
+            LOG_FOR("Utils", tkTr(Trans::Constants::FILE_1_LOADED).arg(toRead));
         return str;
     }
     return QString::null;
