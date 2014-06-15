@@ -38,7 +38,6 @@
 #include <datapackutils/constants.h>
 
 #include <quazip/JlCompress.h>
-#include <quazip/global.h>
 
 #include <QDebug>
 #include <QTest>
@@ -49,7 +48,6 @@
 /**
  * Unit-tests for datapack creation
  * - DataPack::PackCreationQueue
- * - DataPack::PackCreationModel
 */
 
 namespace {
@@ -85,23 +83,6 @@ static void populatePackDescription(DataPack::PackDescription &desc, QHash<int, 
     desc.setData(DataPack::PackDescription::InstalledFiles, uid);
 }
 
-// Populate a queue with real packdescription files from the sources
-//     from global_resources/datapack_description
-//static void populateQueueWithRealDescriptionFiles(DataPack::PackCreationQueue &queue)
-//{
-//    // Use real packdescription.xml files from global_resources (grPath)
-//    QString grPath = QString("%1/global_resources/datapack_description").arg(SOURCES_ROOT_PATH);
-//    QFileInfoList list = Utils::getFiles(QDir(grPath), "packdescription.xml");
-//    foreach(const QFileInfo &info, list) {
-//        DataPack::RequestedPackCreation request;
-//        request.serverUid = DataPack::Constants::SERVER_COMMUNITY_FREE;
-//        request.descriptionFilePath = info.absoluteFilePath();
-//        // content -> key= type; value= content
-//        request.content.insert(DataPack::RequestedPackCreation::UnzippedFile, info.absoluteFilePath()) ;
-//        QVERIFY(queue.addToQueue(request) == true);  // files exists!
-//    }
-//}
-
 QString createFakeContent(int size)
 {
     QString content;
@@ -116,6 +97,7 @@ class tst_DataPack_QueueCreation : public QObject
 {
     Q_OBJECT
 
+    const int loop = 10;
     QString _tempPath;
     Utils::Randomizer random;
     QHash<QString, QString> _tempPathToDescriptionPath; // Key= tmppath for the request equivalent path for pack description file ; Value = pack description file path
@@ -216,13 +198,12 @@ private Q_SLOTS:
 
     void test_queue_createZippedContent_UnzippedFiles()
     {
-        return;
         using namespace DataPack;
         QHash<QString, QString> contentToMd5;
 
         // Create fake queue with UnzippedFile only
         PackCreationQueue queue;
-        for(int i = 0; i < 10; ++i) {
+        for(int i = 0; i < loop; ++i) {
             // Create a request with Unzipped files
             RequestedPackCreation request;
             createFakePackDescriptionAndContent(request, RequestedPackCreation::UnzippedFile, 5);
@@ -269,7 +250,7 @@ private Q_SLOTS:
 
         // Create fake queue with DirContent only
         PackCreationQueue queue;
-        for(int i = 0; i < 1; ++i) {
+        for(int i = 0; i < loop; ++i) {
             // Create a request with DirContent
             RequestedPackCreation request;
             createFakePackDescriptionAndContent(request, RequestedPackCreation::DirContent, 1);
@@ -298,32 +279,23 @@ private Q_SLOTS:
             files = JlCompress::extractFiles(zip, JlCompress::getFileList(zip), contentPath);
             QVERIFY(files.isEmpty() == false);
 //            QVERIFY(QuaZipTools::unzipFile(zip, contentPath) == true);
+
             // Check all MD5
             foreach(const QFileInfo &file, Utils::getFiles(contentPath, "*.txt")) {
                 QString md5 = Utils::fileMd5(file.absoluteFilePath());
                 QString source = contentToMd5.key(md5);
-
-                qDebug() << "\n---------------------------\nfile:" << file.absoluteFilePath();
-                qDebug() << "\nsource:" << source;
-
                 // source filename exists
                 QVERIFY(source.isEmpty() == false);
                 // filename of the extracted file is the same as the source file
                 QVERIFY(QFileInfo(source).fileName() == file.fileName());
                 // relative path (from the pack description file) of the extracted file is the same as the source file
-
-                qDebug() << "\nrel:" << request.relativePathFromDescriptionPath(source);
-                qDebug() << "\nrel" << QDir(_tempPathToDescriptionPath.key(request.descriptionFilePath)).relativeFilePath(file.absoluteFilePath());
-
                 QVERIFY(request.relativePathFromDescriptionPath(source) == QDir(_tempPathToDescriptionPath.key(request.descriptionFilePath)).relativeFilePath(file.absoluteFilePath()));
             }
         }
-
     }
 
     void test_queue_containsPackDescriptionFile()
     {
-        return;
         using namespace DataPack;
 
         // Create fake queue
@@ -343,8 +315,8 @@ private Q_SLOTS:
 
     void cleanupTestCase()
     {
-//        // Clear the temp dir
-//        QVERIFY(Utils::removeDirRecursively(_tempPath, 0) == true);
+        // Clear the temp dir
+        QVERIFY(Utils::removeDirRecursively(_tempPath, 0) == true);
     }
 };
 

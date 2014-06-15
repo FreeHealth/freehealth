@@ -46,14 +46,36 @@ enum {
 using namespace DataPack;
 using namespace Trans::ConstantTranslations;
 
-/** --- XML Architecture ---
-  <DataPackCreationQueue>
-    <datapack description="" server="">
-      <content type=""></content>
-      <content type=""></content>
-      <content type=""></content>
+/**
+ * \class DataPack::PackCreationQueue
+ * Keeps information about how to create a DataPack::Pack (description file, content,
+ * server owner).
+ * Information can be stored as an XML file. \n
+ *
+ * Pack stored information are:
+ * - datapack XML description absolute/relative file path
+ * - datapack server (which server owns the datapack)
+ * - datapack content (zipped file, file or dir)
+ *
+ * DataPack::Pack creation members: \n
+ * The DataPack::PackCreationQueue can help you to automatically create
+ * a serie of packs. You can set multiple requests (see DataPack::RequestedPackCreation)
+ * and manage the DataPack::Pack content creation with createZippedContent(). \n
+ * If you want to create a full server please refer to DataPack::PackCreationModel
+ * documentation.
+ *
+ * \warning: Pack content must be defined relatively to pack description file and can not start with \b ../
+ * \note: All path are internally stored as absolute path
+ *
+ * XML architecture:
+  \code
+<DataPackCreationQueue>
+    <datapack description="absOrRelativePathToDescriptionFile" server="serverOwnerUid">
+      <content type="{file_zipped,file_unzipped,dir}">./relative/path/to/content</content>
+      <content type="{file_zipped,file_unzipped,dir}">relative/path/to/content</content>
     </datapack>
-  </DataPackCreationQueue>
+</DataPackCreationQueue>
+  \endcode
  */
 
 namespace {
@@ -78,13 +100,18 @@ static QString xmlContentType(const int type)
     }
     return QString::null;
 }
-}
+} // anonymous namespace
 
+/**
+ * Ctor. Each object owns a unique uid. This uid is not shared between object.
+ * If you create a copy of a queue, the copy will not have the same uid.
+ */
 PackCreationQueue::PackCreationQueue()
 {
     _uid = Utils::createUid();
 }
 
+/** Dtor */
 PackCreationQueue::~PackCreationQueue()
 {}
 
@@ -128,31 +155,66 @@ bool PackCreationQueue::addToQueue(const RequestedPackCreation &request)
  */
 
 /**
+ * Returns \e true if the queue contains a reference to the
+ * DataPack::Pack description XML file. Note that the \e absPath
+ * \b must \b be \b an \b absolute \b path.
+ */
+bool PackCreationQueue::containsPackDescriptionFile(const QString &absPath)
+{
+    foreach(const RequestedPackCreation &request, _queue) {
+        if (request.descriptionFilePath == absPath)
+            return true;
+    }
+    return false;
+}
+
+/**
  * Prepare the zipped file \e absZipeFileName with all the content of the datapack. \n
  * \warning the zipped file must not already exists, otherwise will return \e false
+ * \warning: Pack content must be defined relatively to pack description file and can not start with \b ../
  */
 bool PackCreationQueue::createZippedContent(const RequestedPackCreation &request, const QString &absZipFileName)
 {
-    if (absZipFileName.isEmpty())
+    if (absZipFileName.isEmpty()) {
+        LOG_ERROR_FOR("PackCreationQueue", "Empty file name");
         return false;
-    if (QFileInfo(absZipFileName).exists())
+    }
+    if (QFileInfo(absZipFileName).exists()) {
+        LOG_ERROR_FOR("PackCreationQueue", "Zip file already exists");
         return false;
-    if (!checkValidity(request))
+    }
+    if (!checkValidity(request)) {
+        LOG_ERROR_FOR("PackCreationQueue", "Invalid request");
         return false;
+    }
 
     // Move all content into a tmp path
     // Unzip if needed
     // Then zip the tmp path
 
-    QString tmpPath = QDir::tempPath() + Utils::createUid();
-    if (!QDir().mkpath(tmpPath))
+    QString tmpPath = QString("%1/%2").arg(QDir::tempPath()).arg(Utils::createUid());
+    if (!QDir().mkpath(tmpPath)) {
+        LOG_ERROR_FOR("PackCreationQueue", QString("Unable to create path: %1").arg(tmpPath));
         return false;
+    }
     int n = 0;
 
-    // Dir contents
+    // Copy Dir contents to tmp path
     foreach(const QString &path, request.content.values(RequestedPackCreation::DirContent)) {
+        // Get relative path to pack description file of the content file
+        if (!request.isRelativePathFromDescriptionPathValid(path)) {
+            LOG_ERROR_FOR("PackCreationQueue", QString("Content file outside pack description dir tree: %1 / description: %2")
+                          .arg(path)
+                          .arg(request.descriptionFilePath));
+            // Clean tmp path
+            Utils::removeDirRecursively(tmpPath);
+            return false;
+        }
+
         // Copy dir content into the tmp path
-        if (!Utils::copyDir(path, tmpPath)) {
+        QString dest = QString("%1/%2").arg(tmpPath).arg(request.relativePathFromDescriptionPath(path));
+        if (!Utils::copyDir(path, dest)) {
+            LOG_ERROR_FOR("PackCreationQueue", QString("Unable to copy file: %1 to %2").arg(path).arg(dest));
             // Clean tmp path
             Utils::removeDirRecursively(tmpPath);
             return false;
@@ -160,11 +222,29 @@ bool PackCreationQueue::createZippedContent(const RequestedPackCreation &request
         ++n;
     }
 
-    // Unzipped files
+    // Copy unzipped files to tmp path
     foreach(const QString &path, request.content.values(RequestedPackCreation::UnzippedFile)) {
+        // Get relative path to pack description file of the content file
+        if (!request.isRelativePathFromDescriptionPathValid(path)) {
+            LOG_ERROR_FOR("PackCreationQueue", QString("Content file outside pack description dir tree: %1 / description: %2")
+                          .arg(path)
+                          .arg(request.descriptionFilePath));
+            // Clean tmp path
+            Utils::removeDirRecursively(tmpPath);
+            return false;
+        }
+
         // Copy file into the tmp path
-        QString dest = tmpPath + path; // problem with relative path because we processed them
+        QString dest = QString("%1/%2").arg(tmpPath).arg(request.relativePathFromDescriptionPath(path));
+        if (!QDir().mkpath(QFileInfo(dest).absolutePath())) {
+            LOG_ERROR_FOR("PackCreationQueue", QString("Unable to create path: %1").arg(path));
+            // Clean tmp path
+            Utils::removeDirRecursively(tmpPath);
+            return false;
+        }
+
         if (!QFile::copy(path, dest)) {
+            LOG_ERROR_FOR("PackCreationQueue", QString("Unable to copy file: %1 to %2").arg(path).arg(dest));
             // Clean tmp path
             Utils::removeDirRecursively(tmpPath);
             return false;
@@ -179,6 +259,8 @@ bool PackCreationQueue::createZippedContent(const RequestedPackCreation &request
             return QFile(request.content.value(RequestedPackCreation::ZippedFile)).copy(absZipFileName);
         }
     }
+
+    // Zipped file -> unzip everything into tmp dir
     foreach(const QString &path, request.content.values(RequestedPackCreation::ZippedFile)) {
         // Copy file into the tmp path
         if (!QuaZipTools::unzipFile(path, tmpPath))
@@ -186,7 +268,7 @@ bool PackCreationQueue::createZippedContent(const RequestedPackCreation &request
         ++n;
     }
 
-    // Decompress the create dir with all its content
+    // Compress the tmp dir with all its content
     if (!JlCompress::compressDir(absZipFileName, tmpPath, true)) {
         LOG_ERROR_FOR("PackCreationQueue", "Unable to compress dir: "+tmpPath);
         // Clean tmpPath
@@ -195,7 +277,8 @@ bool PackCreationQueue::createZippedContent(const RequestedPackCreation &request
     }
 
     // Clean tmpPath
-    Utils::removeDirRecursively(tmpPath);
+    if (!Utils::removeDirRecursively(tmpPath))
+        LOG_ERROR_FOR("PackCreationQueue", QString("Unable to clean temp path: %1").arg(tmpPath));
 
     return true;
 }
@@ -321,7 +404,7 @@ bool PackCreationQueue::saveToXmlFile(const QString &absFile, bool useRelativePa
                 requestElement.appendChild(contentElement);
                 contentElement.setAttribute(::XML_CONTENT_TYPE_ATTRIB, xmlContentType(key));
                 if (useRelativePath) {
-                    QString rpath = QDir(QFileInfo(absFile).absolutePath()).relativeFilePath(path);
+                    QString rpath = request.relativePathFromDescriptionPath(path);
                     QDomText text = doc.createTextNode(rpath);
                     contentElement.appendChild(text);
                 } else {
@@ -335,6 +418,22 @@ bool PackCreationQueue::saveToXmlFile(const QString &absFile, bool useRelativePa
     QString xml = QString("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
                           "%1").arg(doc.toString(2));
     return Utils::saveStringToFile(xml, absFile, Utils::Overwrite, Utils::DontWarnUser);
+}
+
+/** Returns a relative path of \e absPath from the pack description file path */
+QString RequestedPackCreation::relativePathFromDescriptionPath(const QString &absPath) const
+{
+    return QDir(QFileInfo(this->descriptionFilePath).absolutePath()).relativeFilePath(absPath);
+
+}
+
+/**
+ * Returns \e true if the relative path of \e absPath from the pack description file path
+ * is valid (inside the pack description dir tree).
+*/
+bool RequestedPackCreation::isRelativePathFromDescriptionPathValid(const QString &absPath) const
+{
+    return (!relativePathFromDescriptionPath(absPath).contains("../"));
 }
 
 /** Checks equality between two RequestedPackCreation */

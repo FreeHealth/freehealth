@@ -47,10 +47,13 @@ struct DATAPACK_EXPORT RequestedPackCreation {
         DirContent
     };
 
+    QString relativePathFromDescriptionPath(const QString &absPath) const;
+    bool isRelativePathFromDescriptionPathValid(const QString &absPath) const;
+
     bool operator==(const RequestedPackCreation &other) const;
 
     QString serverUid, descriptionFilePath;
-    QMultiHash<int, QString> content; // Key = ContentType ; Value = the content itself (path, filename...)
+    QMultiHash<int, QString> content; // Key = ContentType ; Value = the content itself (path, filename...) absolutePath
 };
 
 class DATAPACK_EXPORT PackCreationQueue
@@ -72,6 +75,7 @@ public:
     const QList<RequestedPackCreation> &queue() const {return _queue;}
 
     // Datapack content creation
+    bool containsPackDescriptionFile(const QString &absPath);
     bool createZippedContent(const RequestedPackCreation &request, const QString &absZipFileName);
 
     // XML import/export
