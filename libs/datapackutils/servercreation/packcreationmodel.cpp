@@ -116,6 +116,8 @@ public:
         _serversUidToItem.clear();
         // _screeningPathToItem.clear();
         _insertedPackCreationQueueUids.clear();
+        _packDescriptionFilesIncluded.clear();
+        _packItems.clear();
     }
 
     // Return cached item corresponding to the serverUid \e uid
@@ -208,6 +210,9 @@ public:
             item->setToolTip(item->text());
             packItem->appendRow(item);
         }
+
+        _packItems.insert(pack.originalXmlConfigFileName(), packItem);
+
         return packItem;
     }
 
@@ -243,6 +248,9 @@ public:
         // Get the content of the queue and create the tree for each pack
         QHash<QString, QStandardItem *> serversUidToItem;
         foreach(const RequestedPackCreation &request, queue.queue()) {
+            if (_packDescriptionFilesIncluded.contains(request.descriptionFilePath))
+                continue;
+            _packDescriptionFilesIncluded.append(request.descriptionFilePath);
 
             // Get the serverUid root item
             QStandardItem *server = 0;
@@ -315,7 +323,10 @@ public:
 public:
     QHash<QString, QStandardItem *> _serversUidToItem; //, _screeningPathToItem;
     QHash<QString, QStandardItem *> _insertedPackCreationQueueUids;  // Key: queue.uid()
+    QHash<QString, QStandardItem *> _packItems; // Key: absPathDescriptionFile
+
     QStringList _screenedAbsPath;
+    QStringList _packDescriptionFilesIncluded;
     PackCreationModel::Format _format;
 
 private:
@@ -429,4 +440,19 @@ bool PackCreationModel::addPackCreationQueue(const PackCreationQueue &queue)
 bool PackCreationModel::addScreeningPath(const QString &screeningAbsPath)
 {
     return d->screenPath(screeningAbsPath);
+}
+
+/**
+ * Returns all checked pack description file absolute path.
+ */
+QStringList PackCreationModel::getCheckedPacks() const
+{
+    QStringList list;
+    QHashIterator<QString, QStandardItem *> i(d->_packItems);
+    while (i.hasNext()) {
+        i.next();
+        if (i.value()->checkState() == Qt::Checked)
+            list << i.key();
+    }
+    return list;
 }
