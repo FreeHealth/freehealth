@@ -371,6 +371,7 @@ QString PrescriptionPrinterJob::patientBiometricsToHtml() const
     QStringList bio;
 
     // Include Weight
+    // FIXME: use tkTr(Trans::Constants::_1_COLON_2) "%1: %2" translation
     if (!patient()->data(Core::IPatient::WeightInGrams).toString().isEmpty()
             && patient()->data(Core::IPatient::WeightInGrams).toDouble() > 0.) {
         bio << QString("%1: %2 %3")

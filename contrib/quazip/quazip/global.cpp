@@ -45,6 +45,7 @@
 */
 namespace QuaZipTools {
 
+// FIXME: use tkTr(Trans::Constants::_1_COLON_2)
 
 /** Unzip the specified file named \e fileName to the specified path \e pathToUnZippedFiles. If the output path is empty, unzip in the same dir as the zip file. */
 bool unzipFile(const QString &fileName, const QString &pathToUnZippedFiles, QProgressBar *bar)

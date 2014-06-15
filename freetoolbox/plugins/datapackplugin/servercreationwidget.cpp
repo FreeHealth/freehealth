@@ -126,10 +126,13 @@ public:
         foreach(const DataPackQuery &query, packs) {
             QLabel *l = new QLabel(sui->datapacksGroup);
             l->setWordWrap(true);
-            l->setText(QString("%1: %2\n"
-                               "%3: %4")
-                       .arg(tkTr(Trans::Constants::M_FILE_TEXT).remove("&")).arg(query.originalContentFileAbsolutePath())
-                       .arg(tkTr(Trans::Constants::DESCRIPTION)).arg(query.descriptionFileAbsolutePath())
+            l->setText(QString("%1\n%2")
+                       .arg(tkTr(Trans::Constants::_1_COLON_2)
+                            .arg(tkTr(Trans::Constants::M_FILE_TEXT).remove("&"))
+                            .arg(query.originalContentFileAbsolutePath()))
+                       .arg(tkTr(Trans::Constants::_1_COLON_2)
+                            .arg(tkTr(Trans::Constants::DESCRIPTION))
+                            .arg(query.descriptionFileAbsolutePath()))
                        );
             sui->datapacksGroup->layout()->addWidget(l);
         }
@@ -205,12 +208,12 @@ bool DataPackWidget::addServer(const QString &serverUid)
     foreach(const QString &lang, descr.availableLanguages()) {
         // create labels
         QLabel *l = new QLabel(this);
-        l->setText(QString("%1: %2").arg(lang).arg(descr.data(DataPack::ServerDescription::Label, lang).toString()));
+        l->setText(tkTr(Trans::Constants::_1_COLON_2).arg(lang).arg(descr.data(DataPack::ServerDescription::Label, lang).toString()));
         sui->labelsLayout->addWidget(l);
 //        // create descriptions
 //        QLabel *dc = new QLabel(this);
 //        dc->setWordWrap(true);
-//        dc->setText(QString("%1: %2").arg(lang).arg(descr.data(DataPack::ServerDescription::HtmlDescription, lang).toString()));
+//        dc->setText(tkTr(Trans::Constants::_1_COLON_2).arg(lang).arg(descr.data(DataPack::ServerDescription::HtmlDescription, lang).toString()));
 //        sui->descriptionsLayout->addWidget(dc);
     }
 

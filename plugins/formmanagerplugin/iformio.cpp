@@ -267,6 +267,7 @@ QString FormIODescription::toHtml() const
     html += QString("<p style=\"font-weight:bold;font-size:large;\">%1</p>")
             .arg(data(FormIODescription::ShortDescription).toString());
     // Author and version
+    // FIXME: use tkTr(Trans::Constants::_1_COLON_2) "%1: %2" translation
     html += QString("<p style=\"margin-left:20px;font-size:small;color:darkgray\">"
                     "%1: %2<br/>"
                     "%3: %4<br/>"

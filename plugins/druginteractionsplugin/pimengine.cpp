@@ -557,6 +557,7 @@ public:
                 // construct line of risk content
                 QString riskLine;
                 foreach(IDrug *drug, pim->drugs()) {
+                    // FIXME: use tkTr(Trans::Constants::_1_COLON_2) "%1: %2" translation
                     riskLine = QString("&nbsp;&nbsp;*&nbsp;%1: %2<br />\n")
                             .arg(drug->brandName())
                             .arg(pim->interactingAtcLabels().join(";"));

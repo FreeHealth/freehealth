@@ -227,6 +227,7 @@ QToolButton *CalendarNavbar::createCurrentDateViewButton()
             menu = mWeeks->addMenu(QString("%1 - %2").arg(i).arg(i + 9));
         }
         endWeek = date.addDays(6);
+        // FIXME: use tkTr(Trans::Constants::_1_COLON_2)
         a = menu->addAction(QString("%1: %2 - %3")
                              .arg(i)
                              .arg(QLocale().toString(date, dateFormat))

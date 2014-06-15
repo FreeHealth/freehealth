@@ -134,7 +134,7 @@ void NonBlockingAlertToolButton::setAlertItem(const AlertItem &item)
 {
     setIcon(getIcon(item));
     setToolTip(item.htmlToolTip());
-    setText(QString("%1: %2").arg(item.category()).arg(item.label()));
+    setText(tkTr(Trans::Constants::_1_COLON_2).arg(item.category()).arg(item.label()));
     refreshStyleSheet();
 
     if (aLabel)

@@ -66,7 +66,7 @@ static QString serverHtmlLabel(const Server &s)
     if (s.uuid().isEmpty() && s.version().isEmpty())
         label = s.nativeUrl();
     if (s.label().isEmpty())
-        label = QString("%1: %2").arg(tkTr(Trans::Constants::UNKNOWN_SERVER)).arg(s.nativeUrl());
+        label = tkTr(Trans::Constants::_1_COLON_2).arg(tkTr(Trans::Constants::UNKNOWN_SERVER)).arg(s.nativeUrl());
     label = QString("<span style=\"color:black;font-weight:bold;\">%1</span>")
             .arg(label);
 

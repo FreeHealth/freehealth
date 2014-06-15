@@ -284,6 +284,7 @@ bool HttpDownloaderPrivate::downloadFile()
 
         file = new QFile(fileName);
         if (!file->open(QIODevice::WriteOnly)) {
+            // FIXME: use tkTr(Trans::Constants::_1_COLON_2) "%1: %2" translation
             lastError = tr("Unable to save the file %1: %2.")
                     .arg(fileName).arg(file->errorString());
             LOG_ERROR(lastError);

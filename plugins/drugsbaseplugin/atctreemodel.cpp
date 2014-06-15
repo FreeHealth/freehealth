@@ -34,6 +34,8 @@
 #include <coreplugin/translators.h>
 
 #include <utils/log.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_current.h>
 
 #include <QString>
 #include <QSqlDatabase>
@@ -44,6 +46,7 @@
 #include <QDebug>
 
 using namespace DrugsDB;
+using namespace Trans::ConstantTranslations;
 
 static inline Core::Translators *translators() {return Core::ICore::instance()->translators();}
 static inline DrugsDB::DrugsBase &drugsBase() {return DrugsDB::DrugBaseCore::instance().drugsBase();}
@@ -305,7 +308,7 @@ QVariant AtcTreeModel::data(const QModelIndex & item, int role) const
         }
     case Qt::ToolTipRole :
         {
-            return QString("%1: %2").arg(it->data(ATC_Label)).arg(it->data(ATC_Code));
+            return tkTr(Trans::Constants::_1_COLON_2).arg(it->data(ATC_Label)).arg(it->data(ATC_Code));
         }
     case Qt::ForegroundRole :
         {

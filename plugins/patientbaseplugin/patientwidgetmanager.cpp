@@ -45,6 +45,7 @@
 #include <translationutils/trans_patient.h>
 #include <translationutils/trans_menu.h>
 #include <translationutils/trans_database.h>
+#include <translationutils/trans_current.h>
 
 #include <coreplugin/icore.h>
 #include <coreplugin/iuser.h>
@@ -320,7 +321,7 @@ void PatientActionHandler::aboutToShowRecentPatients()
     const QHash<QString, QString> &names = patient()->fullPatientName(uuids);
     for(int i = 0; i < uuids.count(); ++i) {
         hasRecentFiles = true;
-        QAction *action = recentsMenu->menu()->addAction(QString("%1: %2").arg(i).arg(names.value(uuids.at(i))));
+        QAction *action = recentsMenu->menu()->addAction(tkTr(Trans::Constants::_1_COLON_2).arg(i).arg(names.value(uuids.at(i))));
         action->setData(uuids.at(i));
         connect(action, SIGNAL(triggered()), this, SLOT(openRecentPatient()));
     }

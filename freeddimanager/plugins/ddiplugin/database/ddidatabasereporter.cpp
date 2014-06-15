@@ -230,6 +230,7 @@ QString DDIDatabaseReporter::plainTextDatabaseUpdate() const
                                            , where);
             if (query.exec(req)) {
                 while (query.next()) {
+                    // FIXME: use tkTr(Trans::Constants::_1_COLON_2)
                     report << QString("     %1: %2 / %3 / %4")
                               .arg(query.value(0).toString())
                               .arg(query.value(1).toString())
@@ -258,6 +259,7 @@ QString DDIDatabaseReporter::plainTextDatabaseUpdate() const
                                            , where);
             if (query.exec(req)) {
                 while (query.next()) {
+                    // FIXME: use tkTr(Trans::Constants::_1_COLON_2)
                     report << QString("     %1: %2 / %3 / %4")
                               .arg(query.value(0).toString())
                               .arg(query.value(1).toString())
@@ -286,6 +288,7 @@ QString DDIDatabaseReporter::plainTextDatabaseUpdate() const
                                            , where);
             if (query.exec(req)) {
                 while (query.next()) {
+                    // FIXME: use tkTr(Trans::Constants::_1_COLON_2)
                     report << QString("     %1: %2 - %3 (%4)")
                               .arg(query.value(0).toString())
                               .arg(query.value(1).toString())

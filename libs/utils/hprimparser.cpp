@@ -283,30 +283,32 @@ QString HprimMessage::toBasicHtml() const
     html += QString("%1\n*%2*\n%1\n\n")
             .arg(QString().fill('*', 90))
             .arg(Utils::centerString(tkTr(Trans::Constants::MESSAGE_HEADER), ' ', 88));
-    html += QString("%1: %2 %3\n")
-            .arg(tkTr(Trans::Constants::PATIENT).rightJustified(justify, ' '))
-            .arg(header().patientName())
+    html += QString("%1 %2\n")
+            .arg(tkTr(Trans::Constants::_1_COLON_2)
+                 .arg(tkTr(Trans::Constants::PATIENT).rightJustified(justify, ' '))
+                 .arg(header().patientName()))
             .arg(header().patientFirstName());
-    html += QString("%1: %2\n")
+    html += tkTr(Trans::Constants::_1_COLON_2)
             .arg(tkTr(Trans::Constants::DATE_OF_BIRTH).rightJustified(justify, ' '))
             .arg(QLocale().toString(header().patientDateOfBirth(), QLocale::LongFormat));
-    html += QString("%1: %2\n")
+    html += tkTr(Trans::Constants::_1_COLON_2)
             .arg(tkTr(Trans::Constants::SOCIAL_NUMBER).rightJustified(justify, ' '))
             .arg(header().data(Utils::HPRIM::HprimHeader::PatientSocialNumber));
-    html += QString("%1: %2 %3 (%4 %5)\n")
-            .arg(tkTr(Trans::Constants::FULLADDRESS).rightJustified(justify, ' '))
-            .arg(header().data((Utils::HPRIM::HprimHeader::PatientAddressFirstLine)))
+    html += QString("%1 %2 (%3 %4)\n")
+            .arg(tkTr(Trans::Constants::_1_COLON_2)
+                 .arg(tkTr(Trans::Constants::FULLADDRESS).rightJustified(justify, ' '))
+                 .arg(header().data((Utils::HPRIM::HprimHeader::PatientAddressFirstLine))))
             .arg(header().data((Utils::HPRIM::HprimHeader::PatientAddressSecondLine)))
             .arg(header().data((Utils::HPRIM::HprimHeader::PatientAddressZipCode)))
             .arg(header().data((Utils::HPRIM::HprimHeader::PatientAddressCity)));
     html += "\n";
-    html += QString("%1: %2\n")
+    html += tkTr(Trans::Constants::_1_COLON_2)
             .arg(tkTr(Trans::Constants::FROM).rightJustified(justify, ' '))
             .arg(header().data(Utils::HPRIM::HprimHeader::SenderIdentity));
-    html += QString("%1: %2\n")
+    html += tkTr(Trans::Constants::_1_COLON_2)
             .arg(tkTr(Trans::Constants::TO).rightJustified(justify, ' '))
             .arg(header().data(Utils::HPRIM::HprimHeader::ReceiverIdentity));
-    html += QString("%1: %2\n")
+    html += tkTr(Trans::Constants::_1_COLON_2)
             .arg(tkTr(Trans::Constants::DATE).rightJustified(justify, ' '))
             .arg(QLocale().toString(header().dateOfExamination(), QLocale::LongFormat));
     html += "\n";

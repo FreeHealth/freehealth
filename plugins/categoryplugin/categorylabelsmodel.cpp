@@ -149,7 +149,8 @@ QVariant CategoryLabelsModel::data(const QModelIndex &index, int role) const
         } else {
             qApp->translate("QLocale", qPrintable(QLocale::languageToString(lang.lang)));
         }
-        return QString("%1: %2").arg(language).arg(lang.m_label);
+        // FIXME: use tkTr(Trans::Constants::_1_COLON_2) "%1: %2" translation
+        return tkTr(Trans::Constants::_1_COLON_2).arg(language).arg(lang.m_label);
     }
     return QVariant();
 }

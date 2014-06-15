@@ -154,6 +154,7 @@ void Log::addDatabaseLog( const QString & o, const QSqlDatabase & q, const QStri
     if (!m_MuteConsole || forceWarning) {
         qWarning() << q << "user" << q.userName() << "pass" << q.password();
     }
+    // FIXME: use tkTr(Trans::Constants::_1_COLON_2) "%1: %2" translation
     addError(o, QCoreApplication::translate("Log", "%1: %2 - Database: %3, Host: %4, Port: %5, User:%6, Pass:%7")
              .arg(o, QDateTime::currentDateTime().toString())
              .arg(q.driverName())

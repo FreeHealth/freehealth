@@ -1021,6 +1021,7 @@ QString IDrug::toHtml() const
         tmp += QString("<tr><td>%1</td><td>%2</td></tr>")
                 .arg(name)
                 .arg(compo->dosage());
+        // FIXME: use tkTr(Trans::Constants::_1_COLON_2) "%1: %2" translation
         if (compo->isMainInn())
             inn += QString("<tr><td>%1: %2</td><td>%3</td></tr>")
                     .arg(tkTr(Trans::Constants::INN_PRESCRIPTION))

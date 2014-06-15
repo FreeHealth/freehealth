@@ -73,6 +73,7 @@
 #include <utils/serializer.h>
 
 #include <translationutils/constants.h>
+#include <translationutils/trans_current.h>
 
 #include <printerplugin/textdocumentextra.h>
 
@@ -85,6 +86,7 @@
 using namespace UserPlugin;
 using namespace Internal;
 using namespace UserPlugin::Constants;
+using namespace Trans::ConstantTranslations;
 
 static inline UserPlugin::UserCore &userCore() {return UserPlugin::UserCore::instance();}
 static inline UserPlugin::Internal::UserBase *userBase() {return userCore().userBase();}
@@ -1162,7 +1164,7 @@ QString UserData::debugText() const
 
     // Fields value
     for (int i = 0; i < USER_MaxParam; i++)
-        s << QString("%1: %2")
+        s << tkTr(Trans::Constants::_1_COLON_2)
         .arg(userBase()->fieldName(Table_USERS , i))
         .arg(d->m_Table_Field_Value.value(Table_USERS).value(i).toString());
 
