@@ -128,6 +128,10 @@ private Q_SLOTS:
 
     }
 
+    // TEST: add one path, check if all files are included
+    // TEST: two queues in different path that include the same pack description file
+    // TEST: checkstate role of the model
+    // TEST: QStringList PackCreationModel::getCheckedPacks() const
 
     void cleanupTestCase()
     {

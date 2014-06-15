@@ -30,6 +30,7 @@
 #include <datapackutils/servercreation/packcreationmodel.h>
 
 #include <QPushButton>
+#include <QDebug>
 
 ServerCreationDialog::ServerCreationDialog(QWidget *parent) :
     QDialog(parent),
@@ -44,6 +45,10 @@ ServerCreationDialog::ServerCreationDialog(QWidget *parent) :
     // Connect UI
     QPushButton *apply = ui->buttonBox->button(QDialogButtonBox::Apply);
     connect(apply, SIGNAL(clicked()), this, SLOT(screenNewPath()));
+
+    QPushButton *checkedToConsole = ui->buttonBox->addButton(tr("checked to console"), QDialogButtonBox::ActionRole);
+    connect(checkedToConsole, SIGNAL(clicked()), this, SLOT(onCheckedToConsole()));
+
 }
 
 ServerCreationDialog::~ServerCreationDialog()
@@ -51,8 +56,12 @@ ServerCreationDialog::~ServerCreationDialog()
     delete ui;
 }
 
-/** Add the UI pathChooser path to the DataPack;;PackQueueModel */
 void ServerCreationDialog::screenNewPath()
 {
     _packCreationModel->addScreeningPath(ui->pathChooser->path());
+}
+
+void ServerCreationDialog::onCheckedToConsole()
+{
+    qDebug() << _packCreationModel->getCheckedPacks();
 }

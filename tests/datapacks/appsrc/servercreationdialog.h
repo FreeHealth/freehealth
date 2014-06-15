@@ -47,6 +47,7 @@ public:
 
 private Q_SLOTS:
     void screenNewPath();
+    void onCheckedToConsole();
 
 private:
     Ui::ServerCreationDialog *ui;
