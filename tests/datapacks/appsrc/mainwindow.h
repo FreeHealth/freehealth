@@ -43,6 +43,8 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+    void startServerCreation();
+
 private:
     Ui::MainWindow *ui;
     DataPack::ServerDescription serverDescr;

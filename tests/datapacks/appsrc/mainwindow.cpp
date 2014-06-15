@@ -26,6 +26,7 @@
  ***************************************************************************/
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "servercreationdialog.h"
 
 #include <datapackutils/datapackcore.h>
 #include <datapackutils/iservermanager.h>
@@ -44,6 +45,7 @@
 
 #include <QDebug>
 
+namespace {
 // Testing configuration file is included in the testing code source, in 'config'
 static QString configurationFile() {
     QFileInfo file(TESTING_SOURCES_PATH);
@@ -58,7 +60,6 @@ void testInternet()
         qWarning() << p.capabilities() << p.hostName() << p.port() << p.password() << p.type() << p.user();
     }
 }
-
 
 static DataPack::ServerDescription getDescription()
 {
@@ -121,7 +122,7 @@ static void testServerDescription()
     else
         qWarning() << "     Wrong";
 }
-
+} // anonymous namespace
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -193,6 +194,8 @@ MainWindow::MainWindow(QWidget *parent) :
     core.serverManager()->getAllDescriptionFile();
 
     resize(900,600);
+
+    startServerCreation();
 }
 
 MainWindow::~MainWindow()
@@ -201,3 +204,9 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+// Start fake server creation dialog
+void MainWindow::startServerCreation()
+{
+    ServerCreationDialog dlg(this);
+    dlg.exec();
+}

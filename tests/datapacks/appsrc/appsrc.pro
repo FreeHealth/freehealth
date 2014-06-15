@@ -11,10 +11,13 @@ include(../../../libs/rpath.pri)
 
 DEFINES	*= "TESTING_SOURCES_PATH=\"\\\"$${PWD}\\\"\""
 
-HEADERS = mainwindow.h
+HEADERS = mainwindow.h \
+    servercreationdialog.h
 
 SOURCES = main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    servercreationdialog.cpp
 
-FORMS = mainwindow.ui
+FORMS = mainwindow.ui \
+    servercreationdialog.ui
 
