@@ -354,6 +354,15 @@ PackCreationModel::~PackCreationModel()
 }
 
 /**
+ * Clear the model content, you should use the QStandardItemModel::clear()
+ * to  clear this model or you expose your code to segfaulting.
+ */
+void PackCreationModel::clearPackModel()
+{
+    d->clearModelAndCache();
+}
+
+/**
  * Set the tree model format. By default, set to ShowByQueue
  * \sa Format
  */

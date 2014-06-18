@@ -55,6 +55,7 @@ public:
     explicit PackCreationModel(QObject *parent = 0);
     ~PackCreationModel();
 
+    void clearPackModel();
     void setFormat(Format format);
 
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
