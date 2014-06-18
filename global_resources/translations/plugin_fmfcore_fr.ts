@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="fr_FR">
+<TS version="2.1" language="fr_FR">
 <context>
     <name>Core::AppConfigWizard</name>
     <message>
@@ -268,13 +268,6 @@ Sélectionnez votre langage préféré et le type d&apos;installation.</translat
     </message>
     <message>
         <source>Application</source>
-        <translation></translation>
-    </message>
-</context>
-<context>
-    <name>Core::Internal::MainWindowActionHandler</name>
-    <message>
-        <source>Ctrl+,</source>
         <translation></translation>
     </message>
 </context>
@@ -862,6 +855,14 @@ but does not contains all other form items.</source>
     <message>
         <source>FreeDRC Consultation files (*.cr)</source>
         <translation>FreeDRC fichier de consultation (*.cr)</translation>
+    </message>
+    <message>
+        <source>FreeDDIManager files (*.ddi)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>FreeMedForms database files (*.db)</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

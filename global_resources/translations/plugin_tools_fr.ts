@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="fr_FR">
+<TS version="2.1" language="fr_FR">
 <context>
     <name>Tools</name>
     <message>
-        <location filename="../../plugins/toolsplugin/toolsplugin.cpp" line="81"/>
+        <location filename="../../plugins/toolsplugin/toolsplugin.cpp" line="80"/>
         <source>Print a cheque</source>
         <translation>Imprimer un chèque</translation>
     </message>
     <message>
-        <location filename="../../plugins/toolsplugin/toolsplugin.cpp" line="82"/>
+        <location filename="../../plugins/toolsplugin/toolsplugin.cpp" line="81"/>
         <source>Print a french &apos;FSP&apos;</source>
         <translation>Imprimer une FSP</translation>
     </message>
@@ -232,7 +232,7 @@ Une par ligne</translation>
 <context>
     <name>Tools::Internal::FspPrinterDialog</name>
     <message>
-        <location filename="../../plugins/toolsplugin/fsp/fspprinterdialog.cpp" line="392"/>
+        <location filename="../../plugins/toolsplugin/fsp/fspprinterdialog.cpp" line="391"/>
         <source>French &apos;FSP&apos; printing assistant</source>
         <translation>Assistant d&apos;impression des FSP</translation>
     </message>
@@ -247,12 +247,12 @@ Une par ligne</translation>
 </context>
 <context>
     <name>Tools::Internal::FspPrinterPreferencesWidget</name>
-    <message utf8="true">
+    <message>
         <location filename="../../plugins/toolsplugin/fsp/fspprinterpreferences.ui" line="30"/>
         <source>Cerfa par défaut</source>
         <translation></translation>
     </message>
-    <message utf8="true">
+    <message>
         <location filename="../../plugins/toolsplugin/fsp/fspprinterpreferences.ui" line="36"/>
         <source>Utiliser ce CERFA par défaut</source>
         <translation></translation>
@@ -281,22 +281,22 @@ Une par ligne</translation>
 <context>
     <name>Tools::Internal::HprimFileModel</name>
     <message>
-        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimfilemodel.cpp" line="310"/>
+        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimfilemodel.cpp" line="352"/>
         <source>Patient name</source>
         <translation>Nom du patient</translation>
     </message>
     <message>
-        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimfilemodel.cpp" line="311"/>
+        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimfilemodel.cpp" line="353"/>
         <source>Patient date of birth</source>
         <translation>Date de naissance</translation>
     </message>
     <message>
-        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimfilemodel.cpp" line="312"/>
+        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimfilemodel.cpp" line="354"/>
         <source>File name</source>
         <translation>Nom du fichier</translation>
     </message>
     <message>
-        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimfilemodel.cpp" line="313"/>
+        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimfilemodel.cpp" line="355"/>
         <source>Date</source>
         <translation>Date</translation>
     </message>
@@ -304,7 +304,7 @@ Une par ligne</translation>
 <context>
     <name>Tools::Internal::HprimIntegratorMode</name>
     <message>
-        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="492"/>
+        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="501"/>
         <source>HPRIM</source>
         <translation></translation>
     </message>
@@ -363,60 +363,60 @@ Une par ligne</translation>
         <translation>Intégrer dans</translation>
     </message>
     <message>
-        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="338"/>
-        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="398"/>
+        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="336"/>
+        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="396"/>
         <source>Select a patient</source>
         <translation>Sélectionnez un patient</translation>
     </message>
     <message>
-        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="367"/>
+        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="365"/>
         <source>No patient found with the following names: %1; %2</source>
         <translation>Aucun patient ne correspond aux noms suivants : %1 ; %2</translation>
     </message>
     <message>
-        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="371"/>
+        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="369"/>
         <source>There are multiple patient with the same names: %1 %2. You will have to select the correct one.</source>
         <translation>Il existe plusieurs patients avec le même nom : %1 ; %2. Vous devrez sélectionner le bon patient.</translation>
     </message>
     <message>
-        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="379"/>
+        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="377"/>
         <source>No correct HPRIM header found: %1; %2</source>
         <translation>Pas d&apos;entête HPRIM trouvée %1; %2</translation>
     </message>
     <message>
-        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="399"/>
+        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="397"/>
         <source>No patient selected</source>
         <translation>Aucun patient sélectionné</translation>
     </message>
     <message>
-        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="411"/>
-        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="412"/>
+        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="409"/>
+        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="410"/>
         <source>Unable to find the form item for importation</source>
         <translation>Impossible de trouver l&apos;élément de formulaire pour l&apos;importation</translation>
     </message>
     <message>
-        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="420"/>
-        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="430"/>
+        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="418"/>
+        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="428"/>
         <source>Error during importation</source>
         <translation>Erreur lors l&apos;importation</translation>
     </message>
     <message>
-        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="421"/>
+        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="419"/>
         <source>Error during importation (content is empty)</source>
         <translation>Erreur lors l&apos;importation (le contenu est vide)</translation>
     </message>
     <message>
-        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="431"/>
+        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="429"/>
         <source>Error during importation (wrong checking)</source>
         <translation>Erreur lors de l&apos;importation (mauvais checksum)</translation>
     </message>
     <message>
-        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="468"/>
+        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="477"/>
         <source>Importation was successful</source>
         <translation>L&apos;importation est complète</translation>
     </message>
     <message>
-        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="469"/>
+        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="478"/>
         <source>Importation was successful. 
 %1</source>
         <translation>L&apos;importation est complète.
@@ -571,18 +571,18 @@ Une par ligne</translation>
 <context>
     <name>Tools::Internal::ToolsPlugin</name>
     <message>
-        <location filename="../../plugins/toolsplugin/toolsplugin.cpp" line="170"/>
+        <location filename="../../plugins/toolsplugin/toolsplugin.cpp" line="169"/>
         <source>Initializing Tools...</source>
         <translation>Initialisation des outils...</translation>
     </message>
     <message>
-        <location filename="../../plugins/toolsplugin/toolsplugin.cpp" line="188"/>
+        <location filename="../../plugins/toolsplugin/toolsplugin.cpp" line="187"/>
         <source>Ctrl+Shift+C</source>
         <extracomment>Translation for the &apos;Print Cheque&apos; action</extracomment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../plugins/toolsplugin/toolsplugin.cpp" line="203"/>
+        <location filename="../../plugins/toolsplugin/toolsplugin.cpp" line="202"/>
         <source>Ctrl+Shift+F</source>
         <extracomment>Translation for the &apos;Print FSP&apos; action</extracomment>
         <translation></translation>

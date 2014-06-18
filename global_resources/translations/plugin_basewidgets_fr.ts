@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="fr_FR">
+<TS version="2.1" language="fr_FR">
 <context>
     <name>BaseFormData</name>
     <message>
@@ -25,12 +25,12 @@
 <context>
     <name>BaseWidgets::Internal::BaseCombo</name>
     <message>
-        <location filename="../../plugins/basewidgetsplugin/baselistwidgets.cpp" line="569"/>
+        <location filename="../../plugins/basewidgetsplugin/baselistwidgets.cpp" line="599"/>
         <source>Wrong form&apos;s translations</source>
         <translation>Mauvaise traduction de formulaire</translation>
     </message>
     <message>
-        <location filename="../../plugins/basewidgetsplugin/baselistwidgets.cpp" line="570"/>
+        <location filename="../../plugins/basewidgetsplugin/baselistwidgets.cpp" line="600"/>
         <source>You asked to change the language of the form to %1.
 But this an error while reading translation of %2.
 Number of items of the translation (%3) are wrong.</source>
@@ -42,7 +42,7 @@ Le nombre d&apos;items est erronné (%3).</translation>
 <context>
     <name>BaseWidgets::Internal::BaseFormWidget</name>
     <message>
-        <location filename="../../plugins/basewidgetsplugin/baseformwidget.ui" line="146"/>
+        <location filename="../../plugins/basewidgetsplugin/baseformwidget.ui" line="174"/>
         <source>TextLabel</source>
         <translation></translation>
     </message>
@@ -78,12 +78,12 @@ Le nombre d&apos;items est erronné (%3).</translation>
 <context>
     <name>BaseWidgets::Internal::BaseList</name>
     <message>
-        <location filename="../../plugins/basewidgetsplugin/baselistwidgets.cpp" line="150"/>
+        <location filename="../../plugins/basewidgetsplugin/baselistwidgets.cpp" line="173"/>
         <source>Wrong form&apos;s translations</source>
         <translation>Mauvaise traduction de formulaire</translation>
     </message>
     <message>
-        <location filename="../../plugins/basewidgetsplugin/baselistwidgets.cpp" line="151"/>
+        <location filename="../../plugins/basewidgetsplugin/baselistwidgets.cpp" line="174"/>
         <source>You asked to change the language of the form to %1.
 But this an error while reading translation of %2.
 Number of items of the translation (%3) are wrong.</source>
@@ -95,12 +95,12 @@ Le nombre d&apos;items est erronné (%3).</translation>
 <context>
     <name>BaseWidgets::Internal::BaseRadio</name>
     <message>
-        <location filename="../../plugins/basewidgetsplugin/baseformwidgets.cpp" line="1273"/>
+        <location filename="../../plugins/basewidgetsplugin/baseformwidgets.cpp" line="1282"/>
         <source>Wrong form&apos;s translations</source>
         <translation>Mauvaise traduction de formulaire</translation>
     </message>
     <message>
-        <location filename="../../plugins/basewidgetsplugin/baseformwidgets.cpp" line="1274"/>
+        <location filename="../../plugins/basewidgetsplugin/baseformwidgets.cpp" line="1283"/>
         <source>You asked to change the language of the form to %1.
 But this an error while reading translation of %2.
 Number of items of the translation (%3) are wrong.</source>
@@ -112,12 +112,12 @@ Le nombre d&apos;items est erronné (%3).</translation>
 <context>
     <name>BaseWidgets::Internal::ButtonMenuPathItemView</name>
     <message>
-        <location filename="../../plugins/basewidgetsplugin/buttonmenupathitemview.cpp" line="187"/>
+        <location filename="../../plugins/basewidgetsplugin/buttonmenupathitemview.cpp" line="186"/>
         <source>Replace content</source>
         <translation>Remplacer le contenu</translation>
     </message>
     <message>
-        <location filename="../../plugins/basewidgetsplugin/buttonmenupathitemview.cpp" line="188"/>
+        <location filename="../../plugins/basewidgetsplugin/buttonmenupathitemview.cpp" line="187"/>
         <source>&lt;b&gt;You are about to replace the content of the form item %1 with the content of the file %2.&lt;/b&gt;
 Are you really sure you want to replace its content?</source>
         <translation>&lt;b&gt;Vous allez remplacer le contenu de l&apos;élément de formulaire %1 avec le contenu du fichier %2.&lt;/b&gt;

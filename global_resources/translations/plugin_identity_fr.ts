@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="fr_FR">
+<TS version="2.1" language="fr_FR">
 <context>
     <name>Identity::IdentityEditorWidget</name>
     <message>
@@ -67,7 +67,7 @@
 <context>
     <name>Identity::Internal::IdentityPlugin</name>
     <message>
-        <location filename="../../plugins/identityplugin/identityplugin.cpp" line="134"/>
+        <location filename="../../plugins/identityplugin/identityplugin.cpp" line="133"/>
         <source>Initializing Identity...</source>
         <translation>Initialisation de l&apos;identité...</translation>
     </message>
@@ -175,7 +175,7 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../../plugins/identityplugin/passwordwidget.ui" line="38"/>
+        <location filename="../../plugins/identityplugin/passwordwidget.ui" line="41"/>
         <source>Set password</source>
         <translation>Définir le mot de passe</translation>
     </message>
@@ -183,6 +183,26 @@
         <location filename="../../plugins/identityplugin/passwordwidget.ui" line="50"/>
         <source>Login</source>
         <translation>Identifiant</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/identityplugin/passwordwidget.cpp" line="226"/>
+        <source>Login must not contain the following char: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/identityplugin/passwordwidget.cpp" line="231"/>
+        <source>Login is too short (6 chars minimum)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/identityplugin/passwordwidget.cpp" line="234"/>
+        <source>Login is valid</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/identityplugin/passwordwidget.cpp" line="237"/>
+        <source>Login is invalid</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

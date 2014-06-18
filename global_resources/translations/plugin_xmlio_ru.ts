@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="ru_RU">
+<TS version="2.1" language="ru_RU">
 <context>
     <name>XmlForms::Internal::XmlFormIO</name>
     <message>
-        <location filename="../../plugins/xmlioplugin/xmlformio.cpp" line="145"/>
+        <location filename="../../plugins/xmlioplugin/xmlformio.cpp" line="142"/>
         <source>Invalid form file detected: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/xmlioplugin/xmlformio.cpp" line="146"/>
+        <location filename="../../plugins/xmlioplugin/xmlformio.cpp" line="143"/>
         <source>Invalid file detected.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/xmlioplugin/xmlformio.cpp" line="147"/>
+        <location filename="../../plugins/xmlioplugin/xmlformio.cpp" line="144"/>
         <source>An invalid file was found. Please contact your software administrator.
 Wrong file: %1
 Error: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/xmlioplugin/xmlformio.cpp" line="368"/>
+        <location filename="../../plugins/xmlioplugin/xmlformio.cpp" line="315"/>
         <source>No form file name</source>
         <translation type="unfinished"></translation>
     </message>
@@ -29,7 +29,7 @@ Error: %2</source>
 <context>
     <name>XmlForms::Internal::XmlIOBase</name>
     <message>
-        <location filename="../../plugins/xmlioplugin/xmliobase.cpp" line="937"/>
+        <location filename="../../plugins/xmlioplugin/xmliobase.cpp" line="941"/>
         <source>Error while saving PMHxCateogries (%1)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -37,7 +37,7 @@ Error: %2</source>
 <context>
     <name>XmlIOBase</name>
     <message>
-        <location filename="../../plugins/xmlioplugin/xmliobase.cpp" line="216"/>
+        <location filename="../../plugins/xmlioplugin/xmliobase.cpp" line="217"/>
         <source>Trying to create empty database.
        Location: %1
        FileName: %2

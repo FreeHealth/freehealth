@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="es_ES">
+<TS version="2.1" language="es_ES">
 <context>
     <name>DataPackPlug</name>
     <message>
@@ -12,22 +12,22 @@
 <context>
     <name>DataPackPlugin::Internal::DataPackPluginIPlugin</name>
     <message>
-        <location filename="../../plugins/datapackplugin/datapackplugin.cpp" line="120"/>
+        <location filename="../../plugins/datapackplugin/datapackplugin.cpp" line="119"/>
         <source>Initializing DataPackPlugin...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/datapackplugin/datapackplugin.cpp" line="155"/>
+        <location filename="../../plugins/datapackplugin/datapackplugin.cpp" line="154"/>
         <source>Trying to set the default datapack servers using file %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/datapackplugin/datapackplugin.cpp" line="168"/>
+        <location filename="../../plugins/datapackplugin/datapackplugin.cpp" line="167"/>
         <source>Unable to add default server %1 (%2)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/datapackplugin/datapackplugin.cpp" line="170"/>
+        <location filename="../../plugins/datapackplugin/datapackplugin.cpp" line="169"/>
         <source>Adding default server %1 (%2)</source>
         <translation type="unfinished"></translation>
     </message>

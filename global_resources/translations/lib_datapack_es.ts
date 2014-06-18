@@ -1,107 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="es_ES">
-<context>
-    <name>DataPack::AddServerDialog</name>
-    <message>
-        <location filename="../../libs/datapackutils/widgets/addserverdialog.cpp" line="59"/>
-        <source>Default FreeMedForms server (mirror)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/datapackutils/widgets/addserverdialog.cpp" line="60"/>
-        <source>Local file</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/datapackutils/widgets/addserverdialog.cpp" line="61"/>
-        <source>HTTP (standard mode)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/datapackutils/widgets/addserverdialog.cpp" line="62"/>
-        <source>FTP (standard mode)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/datapackutils/widgets/addserverdialog.cpp" line="63"/>
-        <source>Protected HTTP with zipped content</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/datapackutils/widgets/addserverdialog.cpp" line="64"/>
-        <source>Protected HTTP non-zipped</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/datapackutils/widgets/addserverdialog.cpp" line="65"/>
-        <source>FTP with zipped content</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/datapackutils/widgets/addserverdialog.cpp" line="129"/>
-        <source>Select datapack local path</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>DataPack::Internal::AddServerDialog</name>
-    <message>
-        <location filename="../../libs/datapackutils/widgets/addserverdialog.ui" line="14"/>
-        <source>Dialog</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/datapackutils/widgets/addserverdialog.ui" line="32"/>
-        <source>Datapack server editor</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/datapackutils/widgets/addserverdialog.ui" line="49"/>
-        <source>Server params</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/datapackutils/widgets/addserverdialog.ui" line="55"/>
-        <source>Server type</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/datapackutils/widgets/addserverdialog.ui" line="62"/>
-        <source>Server URL</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/datapackutils/widgets/addserverdialog.ui" line="72"/>
-        <source>Select</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/datapackutils/widgets/addserverdialog.ui" line="85"/>
-        <source>User params</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/datapackutils/widgets/addserverdialog.ui" line="91"/>
-        <source>Login</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/datapackutils/widgets/addserverdialog.ui" line="98"/>
-        <source>Password</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/datapackutils/widgets/addserverdialog.ui" line="114"/>
-        <source>Update checking</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/datapackutils/widgets/addserverdialog.ui" line="120"/>
-        <source>Check for update</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
+<TS version="2.1" language="es_ES">
 <context>
     <name>DataPack::Internal::HttpServerEngine</name>
     <message>
@@ -171,17 +70,22 @@ requires an authentication</source>
 <context>
     <name>DataPack::Internal::LocalServerEngine</name>
     <message>
-        <location filename="../../libs/datapackutils/serverengines/localserverengine.cpp" line="102"/>
+        <location filename="../../libs/datapackutils/serverengines/localserverengine.cpp" line="90"/>
+        <source>Server configuration can be downloaded. Path: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/datapackutils/serverengines/localserverengine.cpp" line="115"/>
         <source>Server configuration successfully downloaded.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/serverengines/localserverengine.cpp" line="127"/>
+        <location filename="../../libs/datapackutils/serverengines/localserverengine.cpp" line="140"/>
         <source>Pack successfully downloaded.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/serverengines/localserverengine.cpp" line="139"/>
+        <location filename="../../libs/datapackutils/serverengines/localserverengine.cpp" line="152"/>
         <source>Pack file does not exist.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -344,6 +248,64 @@ requires an authentication</source>
     </message>
 </context>
 <context>
+    <name>DataPack::Internal::ServerConfigurationDialog</name>
+    <message>
+        <location filename="../../libs/datapackutils/widgets/serverconfigurationdialog.ui" line="14"/>
+        <source>Dialog</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/datapackutils/widgets/serverconfigurationdialog.ui" line="32"/>
+        <source>Datapack server editor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/datapackutils/widgets/serverconfigurationdialog.ui" line="49"/>
+        <source>Server params</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/datapackutils/widgets/serverconfigurationdialog.ui" line="55"/>
+        <source>Server type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/datapackutils/widgets/serverconfigurationdialog.ui" line="62"/>
+        <source>Server URL</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/datapackutils/widgets/serverconfigurationdialog.ui" line="72"/>
+        <source>Select</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/datapackutils/widgets/serverconfigurationdialog.ui" line="85"/>
+        <source>User params</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/datapackutils/widgets/serverconfigurationdialog.ui" line="91"/>
+        <source>Login</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/datapackutils/widgets/serverconfigurationdialog.ui" line="98"/>
+        <source>Password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/datapackutils/widgets/serverconfigurationdialog.ui" line="114"/>
+        <source>Update checking</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/datapackutils/widgets/serverconfigurationdialog.ui" line="120"/>
+        <source>Check for update</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>DataPack::Internal::ServerPackEditor</name>
     <message>
         <location filename="../../libs/datapackutils/widgets/serverpackeditor.ui" line="14"/>
@@ -353,6 +315,60 @@ requires an authentication</source>
     <message>
         <location filename="../../libs/datapackutils/widgets/serverpackeditor.ui" line="127"/>
         <source>Servername</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>DataPack::ServerConfigurationDialog</name>
+    <message>
+        <location filename="../../libs/datapackutils/widgets/serverconfigurationdialog.cpp" line="95"/>
+        <source>Default FreeMedForms server (mirror)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/datapackutils/widgets/serverconfigurationdialog.cpp" line="96"/>
+        <source>Local file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/datapackutils/widgets/serverconfigurationdialog.cpp" line="97"/>
+        <source>HTTP (standard mode)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/datapackutils/widgets/serverconfigurationdialog.cpp" line="98"/>
+        <source>FTP (standard mode)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/datapackutils/widgets/serverconfigurationdialog.cpp" line="99"/>
+        <source>Protected HTTP with zipped content</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/datapackutils/widgets/serverconfigurationdialog.cpp" line="100"/>
+        <source>Protected HTTP non-zipped</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/datapackutils/widgets/serverconfigurationdialog.cpp" line="101"/>
+        <source>FTP with zipped content</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/datapackutils/widgets/serverconfigurationdialog.cpp" line="135"/>
+        <source>Select datapack local path</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/datapackutils/widgets/serverconfigurationdialog.cpp" line="160"/>
+        <location filename="../../libs/datapackutils/widgets/serverconfigurationdialog.cpp" line="163"/>
+        <source>Wrong server URL</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/datapackutils/widgets/serverconfigurationdialog.cpp" line="161"/>
+        <source>Unable to set the URL to the server. Please check your server configuration.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -372,78 +388,79 @@ requires an authentication</source>
 <context>
     <name>DataPack::ServerPackEditor</name>
     <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="333"/>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="337"/>
         <source>Updating server information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="411"/>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="404"/>
         <source>Update information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="427"/>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="420"/>
         <source>Dependencies</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="444"/>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="437"/>
         <source>File specification</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="447"/>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="440"/>
         <source>File name or URL:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="451"/>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="444"/>
         <source>Unzip pack to path</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="513"/>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="511"/>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="558"/>
         <source>Downloading server information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="579"/>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="589"/>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="631"/>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="641"/>
         <source>Native URL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="588"/>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="640"/>
         <source>No information available. Please check the URL of the server.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="656"/>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="708"/>
         <source>Refresh datapack servers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="657"/>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="709"/>
         <source>Server editor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="658"/>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="710"/>
         <source>Add a server</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="659"/>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="711"/>
         <source>Remove a server</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="660"/>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="712"/>
         <source>Refresh packs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="661"/>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="713"/>
         <source>Apply changes</source>
         <translation type="unfinished"></translation>
     </message>
@@ -465,32 +482,32 @@ requires an authentication</source>
 <context>
     <name>Server</name>
     <message>
-        <location filename="../../libs/datapackutils/server.cpp" line="187"/>
+        <location filename="../../libs/datapackutils/server.cpp" line="194"/>
         <source>Local file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/server.cpp" line="188"/>
+        <location filename="../../libs/datapackutils/server.cpp" line="195"/>
         <source>Protected HTTP with zipped content</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/server.cpp" line="189"/>
+        <location filename="../../libs/datapackutils/server.cpp" line="196"/>
         <source>Protected HTTP non-zipped</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/server.cpp" line="190"/>
+        <location filename="../../libs/datapackutils/server.cpp" line="197"/>
         <source>HTTP (standard mode)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/server.cpp" line="191"/>
+        <location filename="../../libs/datapackutils/server.cpp" line="198"/>
         <source>FTP with zipped content</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/server.cpp" line="192"/>
+        <location filename="../../libs/datapackutils/server.cpp" line="199"/>
         <source>FTP (standard mode)</source>
         <translation type="unfinished"></translation>
     </message>

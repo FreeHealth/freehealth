@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="cs_CZ">
+<TS version="2.1" language="cs_CZ">
 <context>
     <name>PMH</name>
     <message>
@@ -77,12 +77,12 @@
 <context>
     <name>PMH::Internal::PmhContentExporter</name>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhcontentexporter.cpp" line="134"/>
+        <location filename="../../plugins/pmhplugin/pmhcontentexporter.cpp" line="133"/>
         <source>Start PMHx exportation for patient %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhcontentexporter.cpp" line="156"/>
+        <location filename="../../plugins/pmhplugin/pmhcontentexporter.cpp" line="155"/>
         <source>Exportation done in %1 ms</source>
         <translation type="unfinished"></translation>
     </message>
@@ -95,12 +95,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhmode.cpp" line="311"/>
+        <location filename="../../plugins/pmhplugin/pmhmode.cpp" line="310"/>
         <source>Remove PMHx</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhmode.cpp" line="312"/>
+        <location filename="../../plugins/pmhplugin/pmhmode.cpp" line="311"/>
         <source>Do you really want to remove the PMHx called &lt;br /&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;b&gt;%1&lt;/b&gt;?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -283,8 +283,8 @@
 <context>
     <name>PMH::PmhCategoryModel</name>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhcategorymodel.cpp" line="1210"/>
-        <location filename="../../plugins/pmhplugin/pmhcategorymodel.cpp" line="1220"/>
+        <location filename="../../plugins/pmhplugin/pmhcategorymodel.cpp" line="1207"/>
+        <location filename="../../plugins/pmhplugin/pmhcategorymodel.cpp" line="1217"/>
         <source>Patient PMHx synthesis</source>
         <translation type="unfinished"></translation>
     </message>
@@ -305,22 +305,22 @@
 <context>
     <name>PMH::PmhEpisodeModel</name>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhepisodemodel.cpp" line="263"/>
+        <location filename="../../plugins/pmhplugin/pmhepisodemodel.cpp" line="262"/>
         <source>Starting date</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhepisodemodel.cpp" line="264"/>
+        <location filename="../../plugins/pmhplugin/pmhepisodemodel.cpp" line="263"/>
         <source>Ending date</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhepisodemodel.cpp" line="265"/>
+        <location filename="../../plugins/pmhplugin/pmhepisodemodel.cpp" line="264"/>
         <source>Label</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhepisodemodel.cpp" line="266"/>
+        <location filename="../../plugins/pmhplugin/pmhepisodemodel.cpp" line="265"/>
         <source>ICD10 coding</source>
         <translation type="unfinished"></translation>
     </message>

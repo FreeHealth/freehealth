@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="sl_SI">
+<TS version="2.1" language="sl_SI">
 <context>
     <name>DatabaseSelectorWidget</name>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/databaseselectorwidget.cpp" line="218"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/databaseselectorwidget.cpp" line="216"/>
         <source>Reset actual prescription</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/databaseselectorwidget.cpp" line="219"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/databaseselectorwidget.cpp" line="217"/>
         <source>You have selected a different drugs database than the currently-opened one. Your actual prescription will be reset. Do you want to continue?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/databaseselectorwidget.cpp" line="221"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/databaseselectorwidget.cpp" line="219"/>
         <source>Drugs database selection</source>
         <translation type="unfinished"></translation>
     </message>
@@ -54,12 +54,12 @@
 <context>
     <name>DrugsWidget::DrugsCentralWidget</name>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/drugscentralwidget.cpp" line="300"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/drugscentralwidget.cpp" line="298"/>
         <source>Preparing database and drug engines report</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/drugscentralwidget.cpp" line="318"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/drugscentralwidget.cpp" line="316"/>
         <source>Drug engine report: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -229,17 +229,17 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/dosagecreatordialog.ui" line="65"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/dosagecreatordialog.ui" line="74"/>
         <source>DrugName</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/dosagecreatordialog.ui" line="90"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/dosagecreatordialog.ui" line="99"/>
         <source>Show interaction synthesis dialog</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/dosagecreatordialog.ui" line="118"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/dosagecreatordialog.ui" line="127"/>
         <source>Available personal protocols</source>
         <translation type="unfinished"></translation>
     </message>
@@ -249,32 +249,32 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/dosagecreatordialog.cpp" line="254"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/dosagecreatordialog.cpp" line="265"/>
         <source>Help and Info</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/dosagecreatordialog.cpp" line="254"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/dosagecreatordialog.cpp" line="265"/>
         <source>Current database website</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/dosagecreatordialog.cpp" line="255"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/dosagecreatordialog.cpp" line="266"/>
         <source>Prescribe only</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/dosagecreatordialog.cpp" line="255"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/dosagecreatordialog.cpp" line="266"/>
         <source>Save protocol and prescribe</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/dosagecreatordialog.cpp" line="255"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/dosagecreatordialog.cpp" line="266"/>
         <source>Save protocol only</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/dosagecreatordialog.cpp" line="255"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/dosagecreatordialog.cpp" line="266"/>
         <source>Test interactions only</source>
         <translation type="unfinished"></translation>
     </message>
@@ -750,7 +750,7 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>DrugsWidget::Internal::DrugGeneralOptionsPage</name>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/druggeneralpreferences.cpp" line="203"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/druggeneralpreferences.cpp" line="205"/>
         <source>Drug&apos;s general preferences</source>
         <translation type="unfinished"></translation>
     </message>
@@ -768,115 +768,120 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/druggeneralpreferencespage.ui" line="44"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/druggeneralpreferencespage.ui" line="113"/>
         <source>Font</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/druggeneralpreferencespage.ui" line="95"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/druggeneralpreferencespage.ui" line="57"/>
         <source>Font size</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/druggeneralpreferencespage.ui" line="102"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/druggeneralpreferencespage.ui" line="136"/>
         <source>Size of history</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/druggeneralpreferencespage.ui" line="122"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/druggeneralpreferencespage.ui" line="94"/>
         <source>Patient&apos;s names order (needs restart)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/druggeneralpreferencespage.ui" line="130"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/druggeneralpreferencespage.ui" line="65"/>
         <source>Last names - First names</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/druggeneralpreferencespage.ui" line="135"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/druggeneralpreferencespage.ui" line="70"/>
         <source>First names - Last names</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/druggeneralpreferencespage.ui" line="146"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/druggeneralpreferencespage.ui" line="143"/>
+        <source>Size of toolbar icons</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/drugsplugin/drugspreferences/druggeneralpreferencespage.ui" line="169"/>
         <source>Testers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/druggeneralpreferencespage.ui" line="164"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/druggeneralpreferencespage.ui" line="187"/>
         <source>Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/druggeneralpreferencespage.ui" line="180"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/druggeneralpreferencespage.ui" line="203"/>
         <source>Password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/druggeneralpreferencespage.ui" line="210"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/druggeneralpreferencespage.ui" line="233"/>
         <source>Interactions warnings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/druggeneralpreferencespage.ui" line="216"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/druggeneralpreferencespage.ui" line="239"/>
         <source>Global level of passive notification</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/druggeneralpreferencespage.ui" line="230"/>
-        <location filename="../../plugins/drugsplugin/drugspreferences/druggeneralpreferencespage.ui" line="259"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/druggeneralpreferencespage.ui" line="253"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/druggeneralpreferencespage.ui" line="282"/>
         <source>Maximal information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/druggeneralpreferencespage.ui" line="235"/>
-        <location filename="../../plugins/drugsplugin/drugspreferences/druggeneralpreferencespage.ui" line="264"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/druggeneralpreferencespage.ui" line="258"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/druggeneralpreferencespage.ui" line="287"/>
         <source>Moderate information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/druggeneralpreferencespage.ui" line="240"/>
-        <location filename="../../plugins/drugsplugin/drugspreferences/druggeneralpreferencespage.ui" line="269"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/druggeneralpreferencespage.ui" line="263"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/druggeneralpreferencespage.ui" line="292"/>
         <source>Minimal information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/druggeneralpreferencespage.ui" line="248"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/druggeneralpreferencespage.ui" line="271"/>
         <source>Global level of dynamic notification</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/druggeneralpreferencespage.ui" line="277"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/druggeneralpreferencespage.ui" line="300"/>
         <source>Show interactions icons in the prescription window (static alerts)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/druggeneralpreferencespage.ui" line="284"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/druggeneralpreferencespage.ui" line="307"/>
         <source>Enable alerts needing acceptance (dynamic alerts)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/druggeneralpreferencespage.ui" line="294"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/druggeneralpreferencespage.ui" line="317"/>
         <source>Printing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/druggeneralpreferencespage.ui" line="300"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/druggeneralpreferencespage.ui" line="323"/>
         <source>Add a line break between drugs when printing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/druggeneralpreferencespage.ui" line="314"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/druggeneralpreferencespage.ui" line="337"/>
         <source>Print duplicatas</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/druggeneralpreferencespage.ui" line="321"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/druggeneralpreferencespage.ui" line="344"/>
         <source>Add current patient biometrics to every prescription printing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/druggeneralpreferencespage.ui" line="307"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/druggeneralpreferencespage.ui" line="330"/>
         <source>Automatically sort drugs on printing</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1131,12 +1136,12 @@ Do you really want to change the editing mode?</source>
 <context>
     <name>DrugsWidget::Internal::DrugsDatabaseSelectorPage</name>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/databaseselectorwidget.cpp" line="77"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/databaseselectorwidget.cpp" line="75"/>
         <source>Database selector</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/databaseselectorwidget.cpp" line="79"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/databaseselectorwidget.cpp" line="77"/>
         <source>Drug database selector</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1144,12 +1149,12 @@ Do you really want to change the editing mode?</source>
 <context>
     <name>DrugsWidget::Internal::DrugsExtraOptionsPage</name>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/drugextrapreferences.cpp" line="127"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/drugextrapreferences.cpp" line="126"/>
         <source>Extras</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/drugextrapreferences.cpp" line="129"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/drugextrapreferences.cpp" line="128"/>
         <source>Drug&apos;s extra preferences</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1180,7 +1185,8 @@ Do you really want to change the editing mode?</source>
 <context>
     <name>DrugsWidget::Internal::DrugsPlugin</name>
     <message>
-        <location filename="../../plugins/drugsplugin/drugsplugin.cpp" line="132"/>
+        <location filename="../../plugins/drugsplugin/drugsplugin.cpp" line="131"/>
+        <location filename="../../plugins/drugsplugin/drugsplugin.cpp" line="150"/>
         <source>Initializing drugs plugin...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1188,12 +1194,12 @@ Do you really want to change the editing mode?</source>
 <context>
     <name>DrugsWidget::Internal::DrugsSelectorOptionsPage</name>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/drugselectorpreferences.cpp" line="144"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/drugselectorpreferences.cpp" line="143"/>
         <source>Selector</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/drugselectorpreferences.cpp" line="146"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/drugselectorpreferences.cpp" line="145"/>
         <source>Drug&apos;s selector preferences</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1259,12 +1265,12 @@ Do you really want to change the editing mode?</source>
 <context>
     <name>DrugsWidget::Internal::DrugsUserOptionsPage</name>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/druguserpreferences.cpp" line="131"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/druguserpreferences.cpp" line="130"/>
         <source>User&apos;s documents</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/druguserpreferences.cpp" line="133"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/druguserpreferences.cpp" line="132"/>
         <source>User preferences</source>
         <translation type="unfinished"></translation>
     </message>

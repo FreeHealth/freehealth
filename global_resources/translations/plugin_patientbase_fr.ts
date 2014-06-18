@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="fr_FR">
+<TS version="2.1" language="fr_FR">
 <context>
     <name>PatientBar</name>
     <message>
@@ -315,6 +315,10 @@ Attention : Si vous utilisez FreeMedForms en réseau, cela peut causer une surch
     <message>
         <source>Patient PDF file correctly created</source>
         <translation>Le dossier patient en PDF a été correctement sauvegardé</translation>
+    </message>
+    <message>
+        <source>Patient file exportation - %1</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

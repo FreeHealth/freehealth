@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="fr_FR">
+<TS version="2.1" language="fr_FR">
 <context>
     <name>DatabaseUpdater</name>
     <message>
@@ -116,12 +116,6 @@ Veuillez vérifier vos répartitions journalières et vos relations avec le repa
     <message>
         <source>You are trying to read a corrupted XML file.</source>
         <translation>Le fichier que vous tentez de lire est corrompu.</translation>
-    </message>
-    <message>
-        <source>Error: %1
-Line: %2, Column: %3</source>
-        <translation>Erreur : %1
-Ligne : %2, colonne : %3</translation>
     </message>
     <message>
         <source>Dosage not successfully transmitted</source>

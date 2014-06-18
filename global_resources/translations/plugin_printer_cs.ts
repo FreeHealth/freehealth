@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="cs_CZ">
+<TS version="2.1" language="cs_CZ">
 <context>
     <name>Print</name>
     <message>
-        <location filename="../../plugins/printerplugin/documentprinter.cpp" line="174"/>
+        <location filename="../../plugins/printerplugin/documentprinter.cpp" line="175"/>
         <source>Made with %1.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -250,33 +250,33 @@ Thrid step, print the test page &lt;u&gt;with&lt;/u&gt; the correction and re-ch
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printdialog.cpp" line="103"/>
+        <location filename="../../plugins/printerplugin/printdialog.cpp" line="102"/>
         <source>File extra</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printdialog.cpp" line="107"/>
+        <location filename="../../plugins/printerplugin/printdialog.cpp" line="106"/>
         <source>Save to PDF</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printdialog.cpp" line="113"/>
+        <location filename="../../plugins/printerplugin/printdialog.cpp" line="112"/>
         <source>Save to HTML</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printdialog.cpp" line="291"/>
-        <location filename="../../plugins/printerplugin/printdialog.cpp" line="307"/>
+        <location filename="../../plugins/printerplugin/printdialog.cpp" line="295"/>
+        <location filename="../../plugins/printerplugin/printdialog.cpp" line="311"/>
         <source>Save File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printdialog.cpp" line="293"/>
+        <location filename="../../plugins/printerplugin/printdialog.cpp" line="297"/>
         <source>PDF file (*.pdf)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printdialog.cpp" line="309"/>
+        <location filename="../../plugins/printerplugin/printdialog.cpp" line="313"/>
         <source>HTML file (*.html *.htm)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -365,7 +365,7 @@ Thrid step, print the test page &lt;u&gt;with&lt;/u&gt; the correction and re-ch
 <context>
     <name>Print::Internal::PrinterPreferencesWidget</name>
     <message>
-        <location filename="../../plugins/printerplugin/printerpreferences.cpp" line="133"/>
+        <location filename="../../plugins/printerplugin/printerpreferences.cpp" line="134"/>
         <source>WARNING !
 No configurated printer found on your system.
 Printing and print preview should not work at all.
@@ -374,17 +374,17 @@ Refer to your operating system documentation.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printerpreferences.cpp" line="161"/>
+        <location filename="../../plugins/printerplugin/printerpreferences.cpp" line="162"/>
         <source>Always use system default printer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printerpreferences.cpp" line="165"/>
+        <location filename="../../plugins/printerplugin/printerpreferences.cpp" line="166"/>
         <source>Always ask user for the printer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printerpreferences.cpp" line="236"/>
+        <location filename="../../plugins/printerplugin/printerpreferences.cpp" line="237"/>
         <source>Select a directory</source>
         <translation type="unfinished"></translation>
     </message>

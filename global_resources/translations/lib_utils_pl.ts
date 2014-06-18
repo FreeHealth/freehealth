@@ -1,50 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="pl_PL">
+<TS version="2.1" language="pl_PL">
 <context>
     <name>Database</name>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="652"/>
+        <location filename="../../libs/utils/database.cpp" line="659"/>
         <source>WARNING: %1 database already in use</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="799"/>
+        <location filename="../../libs/utils/database.cpp" line="813"/>
         <source>ERROR: Database `%1` is not readable. Path: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="810"/>
+        <location filename="../../libs/utils/database.cpp" line="824"/>
         <source>ERROR: Database %1 is not readable. Host: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="819"/>
+        <location filename="../../libs/utils/database.cpp" line="833"/>
         <source>ERROR: Database %1 is not readable. Path: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="848"/>
+        <location filename="../../libs/utils/database.cpp" line="862"/>
         <source>ERROR: Database %1 is not writable. Path: %2.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="893"/>
+        <location filename="../../libs/utils/database.cpp" line="907"/>
         <source>INFO: database %1 connection = %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="1089"/>
+        <location filename="../../libs/utils/database.cpp" line="1103"/>
         <source>Database Scheme Error: wrong number of fields for table %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="1098"/>
+        <location filename="../../libs/utils/database.cpp" line="1112"/>
         <source>Database Scheme Error: field number %1 differs: %2 instead of %3 in table %4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="2150"/>
+        <location filename="../../libs/utils/database.cpp" line="2182"/>
         <source>Can not create table %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -61,7 +61,7 @@
 <context>
     <name>Log</name>
     <message>
-        <location filename="../../libs/utils/log.cpp" line="138"/>
+        <location filename="../../libs/utils/log.cpp" line="154"/>
         <source>SQL Error: 
      * %1
      * %2
@@ -69,22 +69,22 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/log.cpp" line="157"/>
+        <location filename="../../libs/utils/log.cpp" line="174"/>
         <source>%1: %2 - Database: %3, Host: %4, Port: %5, User:%6, Pass:%7</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/log.cpp" line="171"/>
+        <location filename="../../libs/utils/log.cpp" line="188"/>
         <source>%1 ms: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/log.cpp" line="244"/>
+        <location filename="../../libs/utils/log.cpp" line="261"/>
         <source>Unable to save %1: Error %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/log.cpp" line="274"/>
+        <location filename="../../libs/utils/log.cpp" line="291"/>
         <source>*****  Registered Errors  *****
 </source>
         <translation type="unfinished"></translation>
@@ -127,101 +127,101 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="634"/>
+        <location filename="../../libs/utils/global.cpp" line="684"/>
         <source>%1: %2 does not exist. Trying to create it.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="637"/>
+        <location filename="../../libs/utils/global.cpp" line="687"/>
         <source>Unable to create the %1: %2.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="642"/>
+        <location filename="../../libs/utils/global.cpp" line="692"/>
         <source>%1: %2 does not exist.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="689"/>
+        <location filename="../../libs/utils/global.cpp" line="739"/>
         <source>File %1 already exists. Do you want de replace it?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="694"/>
-        <location filename="../../libs/utils/global.cpp" line="699"/>
-        <location filename="../../libs/utils/global.cpp" line="722"/>
+        <location filename="../../libs/utils/global.cpp" line="744"/>
+        <location filename="../../libs/utils/global.cpp" line="749"/>
+        <location filename="../../libs/utils/global.cpp" line="774"/>
         <source>Error %1 while trying to save file %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="714"/>
-        <location filename="../../libs/utils/global.cpp" line="734"/>
+        <location filename="../../libs/utils/global.cpp" line="765"/>
+        <location filename="../../libs/utils/global.cpp" line="787"/>
         <source>%1 successfully saved (%2)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="716"/>
+        <location filename="../../libs/utils/global.cpp" line="768"/>
         <source>Save file aborted by user (file already exists): </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="746"/>
+        <location filename="../../libs/utils/global.cpp" line="802"/>
         <source>Save to file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="775"/>
+        <location filename="../../libs/utils/global.cpp" line="837"/>
         <source>File %1 does not exist or is not readable.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="781"/>
+        <location filename="../../libs/utils/global.cpp" line="843"/>
         <source>Error %1 while trying to open file %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="1032"/>
+        <location filename="../../libs/utils/global.cpp" line="1109"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="1123"/>
+        <location filename="../../libs/utils/global.cpp" line="1200"/>
         <source>This function is not available in this version.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="1124"/>
+        <location filename="../../libs/utils/global.cpp" line="1201"/>
         <source>You can send an email to developers and explain your difficulties: freemedforms@googlegroups.com.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="1165"/>
-        <location filename="../../libs/utils/global.cpp" line="1166"/>
+        <location filename="../../libs/utils/global.cpp" line="1242"/>
+        <location filename="../../libs/utils/global.cpp" line="1243"/>
         <source>License agreement acceptation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="1177"/>
+        <location filename="../../libs/utils/global.cpp" line="1254"/>
         <source>&lt;b&gt;Before you can use this software, you must agree its license terms&lt;/b&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="1185"/>
+        <location filename="../../libs/utils/global.cpp" line="1262"/>
         <source>Do you agree these terms?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="1255"/>
+        <location filename="../../libs/utils/global.cpp" line="1333"/>
         <source>%1 is now in fullScreen Mode.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="1260"/>
+        <location filename="../../libs/utils/global.cpp" line="1338"/>
         <source>%1 is now in non fullScreen Mode.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="2164"/>
+        <location filename="../../libs/utils/global.cpp" line="2242"/>
         <source>Token replacement error (%1). Wrong number of parentheses.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -371,22 +371,22 @@
 <context>
     <name>Utils::HttpMultiDownloader</name>
     <message>
-        <location filename="../../libs/utils/httpmultidownloader.cpp" line="199"/>
+        <location filename="../../libs/utils/httpmultidownloader.cpp" line="215"/>
         <source>Saving cache</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/httpmultidownloader.cpp" line="231"/>
+        <location filename="../../libs/utils/httpmultidownloader.cpp" line="247"/>
         <source>Cache saved</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/httpmultidownloader.cpp" line="242"/>
+        <location filename="../../libs/utils/httpmultidownloader.cpp" line="258"/>
         <source>Processing cache</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/httpmultidownloader.cpp" line="272"/>
+        <location filename="../../libs/utils/httpmultidownloader.cpp" line="291"/>
         <source>Cache processed</source>
         <translation type="unfinished"></translation>
     </message>
@@ -583,12 +583,12 @@
 <context>
     <name>Utils::Internal::HttpDownloaderPrivate</name>
     <message>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="263"/>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="262"/>
         <source>Initialization of the download</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="280"/>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="279"/>
         <source>There already exists a file called %1 in the current directory. Overwrite?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -732,7 +732,7 @@
 <context>
     <name>Utils::QButtonLineEdit</name>
     <message>
-        <location filename="../../libs/utils/widgets/qbuttonlineedit.cpp" line="117"/>
+        <location filename="../../libs/utils/widgets/qbuttonlineedit.cpp" line="118"/>
         <source>(press Alt up/down cursor to cycle)</source>
         <translation type="unfinished"></translation>
     </message>

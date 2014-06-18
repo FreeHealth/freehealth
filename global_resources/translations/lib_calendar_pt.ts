@@ -1,29 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="pt_PT">
+<TS version="2.1" language="pt_PT">
 <context>
     <name>Calendar::CalendarNavbar</name>
     <message>
         <location filename="../../libs/calendar/calendar_navbar.cpp" line="177"/>
-        <location filename="../../libs/calendar/calendar_navbar.cpp" line="476"/>
+        <location filename="../../libs/calendar/calendar_navbar.cpp" line="477"/>
         <source>View range</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/calendar/calendar_navbar.cpp" line="429"/>
         <location filename="../../libs/calendar/calendar_navbar.cpp" line="430"/>
-        <location filename="../../libs/calendar/calendar_navbar.cpp" line="434"/>
-        <location filename="../../libs/calendar/calendar_navbar.cpp" line="438"/>
+        <location filename="../../libs/calendar/calendar_navbar.cpp" line="431"/>
+        <location filename="../../libs/calendar/calendar_navbar.cpp" line="435"/>
+        <location filename="../../libs/calendar/calendar_navbar.cpp" line="439"/>
         <source>d MMM yyyy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/calendar/calendar_navbar.cpp" line="433"/>
+        <location filename="../../libs/calendar/calendar_navbar.cpp" line="434"/>
         <source>d MMM</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/calendar/calendar_navbar.cpp" line="437"/>
+        <location filename="../../libs/calendar/calendar_navbar.cpp" line="438"/>
         <source>d</source>
         <translation type="unfinished"></translation>
     </message>

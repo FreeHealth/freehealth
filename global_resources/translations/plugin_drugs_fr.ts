@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="fr">
+<TS version="2.1" language="fr">
 <context>
     <name>DatabaseSelectorWidget</name>
     <message>
@@ -701,6 +701,10 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>Add current patient biometrics to every prescription printing</source>
         <translation>Ajouter les données biométriques du patient courant sur chaque impression de prescription</translation>
+    </message>
+    <message>
+        <source>Size of toolbar icons</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

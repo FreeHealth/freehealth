@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="pl_PL">
+<TS version="2.1" language="pl_PL">
 <context>
     <name>DrugInteractions::Internal::DrugAllergyEngine</name>
     <message>
@@ -73,12 +73,12 @@
 <context>
     <name>DrugInteractions::Internal::PimEngine</name>
     <message>
-        <location filename="../../plugins/druginteractionsplugin/pimengine.cpp" line="782"/>
+        <location filename="../../plugins/druginteractionsplugin/pimengine.cpp" line="783"/>
         <source>(Experimental)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/druginteractionsplugin/pimengine.cpp" line="792"/>
+        <location filename="../../plugins/druginteractionsplugin/pimengine.cpp" line="793"/>
         <source>Detects interaction between drugs and patient in elderly</source>
         <translation type="unfinished"></translation>
     </message>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="ru_RU">
+<TS version="2.1" language="ru_RU">
 <context>
     <name>Feedback::BugReportDialog</name>
     <message>
@@ -121,52 +121,52 @@
 <context>
     <name>Feedback::Internal::FeedbackPlugin</name>
     <message>
-        <location filename="../../plugins/feedbackplugin/feedbackplugin.cpp" line="146"/>
+        <location filename="../../plugins/feedbackplugin/feedbackplugin.cpp" line="141"/>
         <source>Initializing Feedback...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/feedbackplugin/feedbackplugin.cpp" line="182"/>
+        <location filename="../../plugins/feedbackplugin/feedbackplugin.cpp" line="177"/>
         <source>General comment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/feedbackplugin/feedbackplugin.cpp" line="183"/>
+        <location filename="../../plugins/feedbackplugin/feedbackplugin.cpp" line="178"/>
         <source>Forms management</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/feedbackplugin/feedbackplugin.cpp" line="184"/>
+        <location filename="../../plugins/feedbackplugin/feedbackplugin.cpp" line="179"/>
         <source>Patient management</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/feedbackplugin/feedbackplugin.cpp" line="185"/>
+        <location filename="../../plugins/feedbackplugin/feedbackplugin.cpp" line="180"/>
         <source>User management</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/feedbackplugin/feedbackplugin.cpp" line="186"/>
+        <location filename="../../plugins/feedbackplugin/feedbackplugin.cpp" line="181"/>
         <source>Drugs management</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/feedbackplugin/feedbackplugin.cpp" line="187"/>
+        <location filename="../../plugins/feedbackplugin/feedbackplugin.cpp" line="182"/>
         <source>Agenda management</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/feedbackplugin/feedbackplugin.cpp" line="188"/>
+        <location filename="../../plugins/feedbackplugin/feedbackplugin.cpp" line="183"/>
         <source>Printings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/feedbackplugin/feedbackplugin.cpp" line="189"/>
+        <location filename="../../plugins/feedbackplugin/feedbackplugin.cpp" line="184"/>
         <source>Installation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/feedbackplugin/feedbackplugin.cpp" line="190"/>
+        <location filename="../../plugins/feedbackplugin/feedbackplugin.cpp" line="185"/>
         <source>Configuration</source>
         <translation type="unfinished"></translation>
     </message>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="pl_PL">
+<TS version="2.1" language="pl_PL">
 <context>
     <name>PatientBar</name>
     <message>
@@ -68,12 +68,12 @@
 <context>
     <name>Patients::FilePhotoProvider</name>
     <message>
-        <location filename="../../plugins/patientbaseplugin/filephotoprovider.cpp" line="75"/>
+        <location filename="../../plugins/patientbaseplugin/filephotoprovider.cpp" line="72"/>
         <source>Choose from file...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/filephotoprovider.cpp" line="98"/>
+        <location filename="../../plugins/patientbaseplugin/filephotoprovider.cpp" line="95"/>
         <source>Choose a photo</source>
         <translation type="unfinished"></translation>
     </message>
@@ -132,32 +132,32 @@
 <context>
     <name>Patients::Internal::PatientActionHandler</name>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientwidgetmanager.cpp" line="168"/>
+        <location filename="../../plugins/patientbaseplugin/patientwidgetmanager.cpp" line="167"/>
         <source>Fatal Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientwidgetmanager.cpp" line="168"/>
+        <location filename="../../plugins/patientbaseplugin/patientwidgetmanager.cpp" line="167"/>
         <source>%1: Unable to retreive patients menu.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientwidgetmanager.cpp" line="394"/>
+        <location filename="../../plugins/patientbaseplugin/patientwidgetmanager.cpp" line="393"/>
         <source>Remove the patient</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientwidgetmanager.cpp" line="395"/>
+        <location filename="../../plugins/patientbaseplugin/patientwidgetmanager.cpp" line="394"/>
         <source>If you want to remove a patient, you must firstly select it as the current one and then remove it. &lt;br /&gt;&lt;br /&gt;&lt;b&gt;Warning: No current patient. Select a patient first.&lt;/b&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientwidgetmanager.cpp" line="403"/>
+        <location filename="../../plugins/patientbaseplugin/patientwidgetmanager.cpp" line="402"/>
         <source>Remove the current patient</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientwidgetmanager.cpp" line="404"/>
+        <location filename="../../plugins/patientbaseplugin/patientwidgetmanager.cpp" line="403"/>
         <source>You are about to remove the current patient:&lt;br /&gt;&lt;br/&gt;    &lt;b&gt;%1&lt;/b&gt;&lt;br/&gt;    &lt;b&gt;%2&lt;/b&gt;&lt;br/&gt;    &lt;b&gt;%3&lt;/b&gt;&lt;br/&gt;&lt;br/&gt;Do you really want to remove this patient?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -165,18 +165,18 @@
 <context>
     <name>Patients::Internal::PatientBasePlugin</name>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientbaseplugin.cpp" line="111"/>
-        <location filename="../../plugins/patientbaseplugin/patientbaseplugin.cpp" line="130"/>
+        <location filename="../../plugins/patientbaseplugin/patientbaseplugin.cpp" line="110"/>
+        <location filename="../../plugins/patientbaseplugin/patientbaseplugin.cpp" line="129"/>
         <source>Initializing patients database plugin...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientbaseplugin.cpp" line="139"/>
+        <location filename="../../plugins/patientbaseplugin/patientbaseplugin.cpp" line="138"/>
         <source>Initializing patient database...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientbaseplugin.cpp" line="139"/>
+        <location filename="../../plugins/patientbaseplugin/patientbaseplugin.cpp" line="138"/>
         <source>Please wait</source>
         <translation type="unfinished"></translation>
     </message>
@@ -339,48 +339,53 @@ Warning: If you are using FreeMedForms over a network, this can lead to heavy ne
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientdataextractordialog.cpp" line="127"/>
+        <location filename="../../plugins/patientbaseplugin/patientdataextractordialog.cpp" line="139"/>
         <source>Patient data extractor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientdataextractordialog.cpp" line="129"/>
+        <location filename="../../plugins/patientbaseplugin/patientdataextractordialog.cpp" line="141"/>
         <source>Export...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientdataextractordialog.cpp" line="299"/>
+        <location filename="../../plugins/patientbaseplugin/patientdataextractordialog.cpp" line="311"/>
         <source>Start patient file extraction</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientdataextractordialog.cpp" line="317"/>
-        <location filename="../../plugins/patientbaseplugin/patientdataextractordialog.cpp" line="398"/>
+        <location filename="../../plugins/patientbaseplugin/patientdataextractordialog.cpp" line="329"/>
+        <location filename="../../plugins/patientbaseplugin/patientdataextractordialog.cpp" line="416"/>
         <source>Setting patient uuid %1 as current patient</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientdataextractordialog.cpp" line="365"/>
+        <location filename="../../plugins/patientbaseplugin/patientdataextractordialog.cpp" line="377"/>
         <source>Exporting %1 file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientdataextractordialog.cpp" line="373"/>
-        <source>An error occured when saving the HTML patient file</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/patientbaseplugin/patientdataextractordialog.cpp" line="377"/>
-        <source>Patient HTML file correctly created</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/patientbaseplugin/patientdataextractordialog.cpp" line="387"/>
-        <source>An error occured when saving the PDF patient file</source>
+        <location filename="../../plugins/patientbaseplugin/patientdataextractordialog.cpp" line="383"/>
+        <source>Patient file exportation - %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/patientbaseplugin/patientdataextractordialog.cpp" line="391"/>
+        <source>An error occured when saving the HTML patient file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/patientbaseplugin/patientdataextractordialog.cpp" line="395"/>
+        <source>Patient HTML file correctly created</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/patientbaseplugin/patientdataextractordialog.cpp" line="405"/>
+        <source>An error occured when saving the PDF patient file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/patientbaseplugin/patientdataextractordialog.cpp" line="409"/>
         <source>Patient PDF file correctly created</source>
         <translation type="unfinished"></translation>
     </message>

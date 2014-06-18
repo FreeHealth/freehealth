@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="pl_PL">
+<TS version="2.1" language="pl_PL">
 <context>
     <name>DatabaseUpdater</name>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/versionupdater.cpp" line="82"/>
+        <location filename="../../plugins/drugsbaseplugin/versionupdater.cpp" line="81"/>
         <source>Your dosage database needs to be updated from version 0.5.0 to version 0.5.4.
 This will be automatically done.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/versionupdater.cpp" line="192"/>
+        <location filename="../../plugins/drugsbaseplugin/versionupdater.cpp" line="191"/>
         <source>Your dosage database needs to be updated from version 0.4.0 to version 0.5.0.
 This will be automatically done.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/versionupdater.cpp" line="301"/>
+        <location filename="../../plugins/drugsbaseplugin/versionupdater.cpp" line="300"/>
         <source>Your dosage database needs to be updated from version 0.2.0 to version 0.4.0.
 This will be automatically done.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/versionupdater.cpp" line="405"/>
+        <location filename="../../plugins/drugsbaseplugin/versionupdater.cpp" line="404"/>
         <source>Your dosage database needs to be updated from version 0.0.8 to version 0.2.0.
 This will be automatically done.
 Please verify your daily scheme prescriptions and relations to meal.</source>
@@ -82,12 +82,12 @@ Please verify your daily scheme prescriptions and relations to meal.</source>
 <context>
     <name>DrugsDB::AtcTreeModel</name>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/atctreemodel.cpp" line="333"/>
+        <location filename="../../plugins/drugsbaseplugin/atctreemodel.cpp" line="336"/>
         <source>Label</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/atctreemodel.cpp" line="335"/>
+        <location filename="../../plugins/drugsbaseplugin/atctreemodel.cpp" line="338"/>
         <source>Code</source>
         <translation type="unfinished"></translation>
     </message>
@@ -95,32 +95,32 @@ Please verify your daily scheme prescriptions and relations to meal.</source>
 <context>
     <name>DrugsDB::DrugsBase</name>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="495"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="494"/>
         <source>Switching to the default drugs database source.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="498"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="497"/>
         <source>No drug source detected.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="693"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="692"/>
         <source>No drug database source selected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="695"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="694"/>
         <source>No drugs database loaded.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="716"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="715"/>
         <source>Asking for a drug without UID</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="854"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="853"/>
         <source>Unable to find drug with DID %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -128,71 +128,65 @@ Please verify your daily scheme prescriptions and relations to meal.</source>
 <context>
     <name>DrugsDB::DrugsIO</name>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="699"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="695"/>
         <source>Dosages transmitted.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="702"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="698"/>
         <source>Dosage not successfully transmitted</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="745"/>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="764"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="742"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="761"/>
         <source>You are trying to read a corrupted XML file.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="746"/>
-        <source>Error: %1
-Line: %2, Column: %3</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="763"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="760"/>
         <source>Unable to load XML prescription: tag %1 is missing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="765"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="762"/>
         <source>Missing tag: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="803"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="800"/>
         <source>Interaction checking will not take these drugs into account.
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="804"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="801"/>
         <source>FreeDiams encountered errors while reading the XML prescription.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="812"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="809"/>
         <source>Xml prescription successfully read.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="842"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="839"/>
         <source>No file name passed to load prescription</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="1055"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="1052"/>
         <source>Save test only drugs too?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="1056"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="1053"/>
         <source>Drugs added for testing only are actually hidden in this prescription.
 Do you want to add them to the file?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="1058"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="1055"/>
         <source>Answering &apos;no&apos; will cause definitive lost of test only drugs when reloading this file.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -208,27 +202,27 @@ Do you want to add them to the file?</source>
 <context>
     <name>DrugsDB::GlobalDrugsModel</name>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/globaldrugsmodel.cpp" line="400"/>
+        <location filename="../../plugins/drugsbaseplugin/globaldrugsmodel.cpp" line="399"/>
         <source>KNOWN ALLERGY</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/globaldrugsmodel.cpp" line="404"/>
+        <location filename="../../plugins/drugsbaseplugin/globaldrugsmodel.cpp" line="403"/>
         <source>KNOWN INTOLERANCE</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/globaldrugsmodel.cpp" line="443"/>
+        <location filename="../../plugins/drugsbaseplugin/globaldrugsmodel.cpp" line="442"/>
         <source>Form(s): </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/globaldrugsmodel.cpp" line="444"/>
+        <location filename="../../plugins/drugsbaseplugin/globaldrugsmodel.cpp" line="443"/>
         <source>Route(s): </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/globaldrugsmodel.cpp" line="445"/>
+        <location filename="../../plugins/drugsbaseplugin/globaldrugsmodel.cpp" line="444"/>
         <source>Identifier(s): </source>
         <translation type="unfinished"></translation>
     </message>
@@ -236,107 +230,107 @@ Do you want to add them to the file?</source>
 <context>
     <name>DrugsDB::Internal::DosageModel</name>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/dosagemodel.cpp" line="129"/>
+        <location filename="../../plugins/drugsbaseplugin/dosagemodel.cpp" line="127"/>
         <source>complet tab.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/dosagemodel.cpp" line="130"/>
+        <location filename="../../plugins/drugsbaseplugin/dosagemodel.cpp" line="128"/>
         <source>half tab.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/dosagemodel.cpp" line="131"/>
+        <location filename="../../plugins/drugsbaseplugin/dosagemodel.cpp" line="129"/>
         <source>quater tab.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/dosagemodel.cpp" line="135"/>
+        <location filename="../../plugins/drugsbaseplugin/dosagemodel.cpp" line="133"/>
         <source>dose per kilograms</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/dosagemodel.cpp" line="136"/>
+        <location filename="../../plugins/drugsbaseplugin/dosagemodel.cpp" line="134"/>
         <source>reference spoon</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/dosagemodel.cpp" line="137"/>
+        <location filename="../../plugins/drugsbaseplugin/dosagemodel.cpp" line="135"/>
         <source>2.5 ml spoon</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/dosagemodel.cpp" line="138"/>
+        <location filename="../../plugins/drugsbaseplugin/dosagemodel.cpp" line="136"/>
         <source>5 ml spoon</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/dosagemodel.cpp" line="139"/>
+        <location filename="../../plugins/drugsbaseplugin/dosagemodel.cpp" line="137"/>
         <source>puffs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/dosagemodel.cpp" line="140"/>
+        <location filename="../../plugins/drugsbaseplugin/dosagemodel.cpp" line="138"/>
         <source>dose</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/dosagemodel.cpp" line="141"/>
+        <location filename="../../plugins/drugsbaseplugin/dosagemodel.cpp" line="139"/>
         <source>mouthwash</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/dosagemodel.cpp" line="142"/>
+        <location filename="../../plugins/drugsbaseplugin/dosagemodel.cpp" line="140"/>
         <source>inhalation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/dosagemodel.cpp" line="143"/>
+        <location filename="../../plugins/drugsbaseplugin/dosagemodel.cpp" line="141"/>
         <source>application</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/dosagemodel.cpp" line="144"/>
+        <location filename="../../plugins/drugsbaseplugin/dosagemodel.cpp" line="142"/>
         <source>washing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/dosagemodel.cpp" line="145"/>
+        <location filename="../../plugins/drugsbaseplugin/dosagemodel.cpp" line="143"/>
         <source>shampooing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/dosagemodel.cpp" line="146"/>
+        <location filename="../../plugins/drugsbaseplugin/dosagemodel.cpp" line="144"/>
         <source>eyewash</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/dosagemodel.cpp" line="147"/>
+        <location filename="../../plugins/drugsbaseplugin/dosagemodel.cpp" line="145"/>
         <source>instillation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/dosagemodel.cpp" line="148"/>
+        <location filename="../../plugins/drugsbaseplugin/dosagemodel.cpp" line="146"/>
         <source>pulverization</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/dosagemodel.cpp" line="403"/>
+        <location filename="../../plugins/drugsbaseplugin/dosagemodel.cpp" line="401"/>
         <source>Model Error: unable to insert a row</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/dosagemodel.cpp" line="569"/>
+        <location filename="../../plugins/drugsbaseplugin/dosagemodel.cpp" line="567"/>
         <source>The intakes&apos; scheme must be defined.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/dosagemodel.cpp" line="571"/>
+        <location filename="../../plugins/drugsbaseplugin/dosagemodel.cpp" line="569"/>
         <source>The period&apos;s scheme must be defined.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/dosagemodel.cpp" line="574"/>
+        <location filename="../../plugins/drugsbaseplugin/dosagemodel.cpp" line="572"/>
         <source>The duration&apos;s scheme must be defined.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -413,8 +407,8 @@ Please find more documentation on the website %1.</source>
 <context>
     <name>DrugsDB::PrescriptionPrinter</name>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/prescriptionprinter.cpp" line="492"/>
-        <location filename="../../plugins/drugsbaseplugin/prescriptionprinter.cpp" line="512"/>
+        <location filename="../../plugins/drugsbaseplugin/prescriptionprinter.cpp" line="493"/>
+        <location filename="../../plugins/drugsbaseplugin/prescriptionprinter.cpp" line="513"/>
         <source>Drugs Prescription</source>
         <translation type="unfinished"></translation>
     </message>
@@ -442,27 +436,27 @@ Please find more documentation on the website %1.</source>
 <context>
     <name>DrugsData</name>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/idrug.cpp" line="945"/>
+        <location filename="../../plugins/drugsbaseplugin/idrug.cpp" line="959"/>
         <source>No INN found.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/idrug.cpp" line="950"/>
+        <location filename="../../plugins/drugsbaseplugin/idrug.cpp" line="964"/>
         <source>No interaction class found.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/idrug.cpp" line="988"/>
+        <location filename="../../plugins/drugsbaseplugin/idrug.cpp" line="1002"/>
         <source>Form(s): </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/idrug.cpp" line="989"/>
+        <location filename="../../plugins/drugsbaseplugin/idrug.cpp" line="1003"/>
         <source>Route(s): </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/idrug.cpp" line="990"/>
+        <location filename="../../plugins/drugsbaseplugin/idrug.cpp" line="1004"/>
         <source>Identifier(s): </source>
         <translation type="unfinished"></translation>
     </message>

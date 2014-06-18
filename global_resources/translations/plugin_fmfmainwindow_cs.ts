@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="cs_CZ">
+<TS version="2.1" language="cs_CZ">
 <context>
     <name>MainWin::Internal::MainWinPlugin</name>
     <message>
@@ -69,8 +69,8 @@
 <context>
     <name>MainWin::Internal::VirtualPatientBasePage</name>
     <message>
-        <location filename="../../plugins/fmfmainwindowplugin/mainwindowpreferences.cpp" line="60"/>
-        <location filename="../../plugins/fmfmainwindowplugin/mainwindowpreferences.cpp" line="62"/>
+        <location filename="../../plugins/fmfmainwindowplugin/mainwindowpreferences.cpp" line="55"/>
+        <location filename="../../plugins/fmfmainwindowplugin/mainwindowpreferences.cpp" line="57"/>
         <source>Virtual database</source>
         <translation type="unfinished"></translation>
     </message>
@@ -78,23 +78,23 @@
 <context>
     <name>MainWin::MainWindow</name>
     <message>
-        <location filename="../../plugins/fmfmainwindowplugin/mainwindow.cpp" line="141"/>
+        <location filename="../../plugins/fmfmainwindowplugin/mainwindow.cpp" line="140"/>
         <source>Creating Main Window</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfmainwindowplugin/mainwindow.cpp" line="379"/>
-        <location filename="../../plugins/fmfmainwindowplugin/mainwindow.cpp" line="381"/>
+        <location filename="../../plugins/fmfmainwindowplugin/mainwindow.cpp" line="380"/>
+        <location filename="../../plugins/fmfmainwindowplugin/mainwindow.cpp" line="382"/>
         <source>Unable to close window</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfmainwindowplugin/mainwindow.cpp" line="380"/>
+        <location filename="../../plugins/fmfmainwindowplugin/mainwindow.cpp" line="381"/>
         <source>Unable to close the application, error message: &lt;br/&gt;&lt;b&gt;%1&lt;/b&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfmainwindowplugin/mainwindow.cpp" line="426"/>
+        <location filename="../../plugins/fmfmainwindowplugin/mainwindow.cpp" line="427"/>
         <source>Choose a patient file directory</source>
         <translation type="unfinished"></translation>
     </message>

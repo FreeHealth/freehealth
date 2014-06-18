@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="de_DE">
+<TS version="2.1" language="de_DE">
 <context>
     <name>PatientBar</name>
     <message>
@@ -311,6 +311,10 @@ Warning: If you are using FreeMedForms over a network, this can lead to heavy ne
     </message>
     <message>
         <source>Patient PDF file correctly created</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Patient file exportation - %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

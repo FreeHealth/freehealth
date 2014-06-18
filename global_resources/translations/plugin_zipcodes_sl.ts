@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="sl_SI">
+<TS version="2.1" language="sl_SI">
 <context>
     <name>ZipCodes::Internal::ZipCountryModel</name>
     <message>
-        <location filename="../../plugins/zipcodesplugin/zipcodescompleters.cpp" line="116"/>
-        <location filename="../../plugins/zipcodesplugin/zipcodescompleters.cpp" line="123"/>
+        <location filename="../../plugins/zipcodesplugin/zipcodescompleters.cpp" line="115"/>
+        <location filename="../../plugins/zipcodesplugin/zipcodescompleters.cpp" line="122"/>
         <source>%1, %2</source>
         <extracomment>%1 = zip code, %2 = city
 ----------
@@ -44,38 +44,38 @@
 <context>
     <name>ZipCodes::ZipCountryCompleters</name>
     <message>
+        <location filename="../../plugins/zipcodesplugin/zipcodescompleters.cpp" line="538"/>
         <location filename="../../plugins/zipcodesplugin/zipcodescompleters.cpp" line="539"/>
-        <location filename="../../plugins/zipcodesplugin/zipcodescompleters.cpp" line="540"/>
         <source>No country selected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/zipcodesplugin/zipcodescompleters.cpp" line="548"/>
+        <location filename="../../plugins/zipcodesplugin/zipcodescompleters.cpp" line="547"/>
         <source>Autocompletion of zipcodes for %1 not available</source>
         <extracomment>%1 is a country</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/zipcodesplugin/zipcodescompleters.cpp" line="551"/>
+        <location filename="../../plugins/zipcodesplugin/zipcodescompleters.cpp" line="550"/>
         <source>Autocompletion of cities for %1 not available</source>
         <extracomment>%1 is a country</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../plugins/zipcodesplugin/zipcodescompleters.cpp" line="564"/>
         <location filename="../../plugins/zipcodesplugin/zipcodescompleters.cpp" line="565"/>
-        <location filename="../../plugins/zipcodesplugin/zipcodescompleters.cpp" line="566"/>
         <source>Zip/city/country association checked</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../plugins/zipcodesplugin/zipcodescompleters.cpp" line="569"/>
         <location filename="../../plugins/zipcodesplugin/zipcodescompleters.cpp" line="570"/>
-        <location filename="../../plugins/zipcodesplugin/zipcodescompleters.cpp" line="571"/>
         <source>Wrong zip/city/country association</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../plugins/zipcodesplugin/zipcodescompleters.cpp" line="576"/>
         <location filename="../../plugins/zipcodesplugin/zipcodescompleters.cpp" line="577"/>
-        <location filename="../../plugins/zipcodesplugin/zipcodescompleters.cpp" line="578"/>
         <source>Zip/city/country information available</source>
         <translation type="unfinished"></translation>
     </message>

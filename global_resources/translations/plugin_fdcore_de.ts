@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="de_DE">
+<TS version="2.1" language="de_DE">
 <context>
     <name>CommandLine</name>
     <message>
@@ -184,13 +184,6 @@
     </message>
     <message>
         <source>License</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>Core::Internal::MainWindowActionHandler</name>
-    <message>
-        <source>Ctrl+,</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -724,6 +717,14 @@ but does not contains all other form items.</source>
     </message>
     <message>
         <source>FreeDRC Consultation files (*.cr)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>FreeDDIManager files (*.ddi)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>FreeMedForms database files (*.db)</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

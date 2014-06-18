@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="de_AT">
+<TS version="2.1" language="de_AT">
 <context>
     <name>Account</name>
     <message>
@@ -1306,109 +1306,6 @@ Otherwise result will be wrong !</source>
     </message>
     <message>
         <source>Clear all.</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>ControlReceipts</name>
-    <message>
-        <source>Euros</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Select a line.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Line deleted.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Cash</source>
-        <translation type="unfinished">Bar</translation>
-    </message>
-    <message>
-        <source>Chq</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>CB</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Banking</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Others</source>
-        <translation type="unfinished">Sonstiges</translation>
-    </message>
-    <message>
-        <source>Dues</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Patient</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Date</source>
-        <translation type="unfinished">Datum</translation>
-    </message>
-    <message>
-        <source>Acts</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Comment</source>
-        <translation type="unfinished">Kommentar</translation>
-    </message>
-    <message>
-        <source>Checks</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Credit card</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Insurance</source>
-        <translation type="unfinished">Versicherung</translation>
-    </message>
-    <message>
-        <source>Other</source>
-        <translation type="unfinished">Sonstiges</translation>
-    </message>
-    <message>
-        <source>Due</source>
-        <translation type="unfinished">Schulden</translation>
-    </message>
-    <message>
-        <source>by</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Valid</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Check</source>
-        <translation type="unfinished">Scheck</translation>
-    </message>
-    <message>
-        <source>Due by</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Extract of receipts</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Credit Cards</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>TOTAL</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

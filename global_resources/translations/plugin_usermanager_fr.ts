@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="fr_FR">
+<TS version="2.1" language="fr_FR">
 <context>
     <name>UserBase</name>
     <message>
@@ -93,21 +93,6 @@
     </message>
 </context>
 <context>
-    <name>UserManagerPlugin</name>
-    <message>
-        <source>You can proceed with this user or connect with another one.</source>
-        <translation>Vous pouvez continuer avec votre utilisateur ou vous connecter avec un autre.</translation>
-    </message>
-    <message>
-        <source>Stay connected</source>
-        <translation>Rester connecté</translation>
-    </message>
-    <message>
-        <source>Change the current user</source>
-        <translation>Changer d&apos;utilisateur</translation>
-    </message>
-</context>
-<context>
     <name>UserPlugin</name>
     <message>
         <source>User creator wizard</source>
@@ -183,6 +168,10 @@
         <source>Last recorded user login: %1 </source>
         <translation>Dernière connection enregistrée : %1</translation>
     </message>
+    <message>
+        <source>Unable to initialize the database with the login: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>UserPlugin::Internal::UserIdentifier</name>
@@ -229,16 +218,16 @@ p, li { white-space: pre-wrap; }
         <translation>Vous pouvez encore essayer %1 fois.</translation>
     </message>
     <message>
-        <source>User is identified.</source>
-        <translation>Utilisateur identifié.</translation>
-    </message>
-    <message>
         <source>User is not identified.</source>
         <translation>Utilisateur non identifié.</translation>
     </message>
     <message>
         <source>appName</source>
         <translation></translation>
+    </message>
+    <message>
+        <source>User can be identified.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -321,16 +310,6 @@ p, li { white-space: pre-wrap; }
         <translation>Initialisation de gestionnaire des utilisateurs...</translation>
     </message>
     <message>
-        <source>Unable to connect to the user database.</source>
-        <translation>Impossible de connecter la base de données utilisateur.</translation>
-    </message>
-    <message>
-        <source>The user database is not reachable. Please check your configuration.
-Application will stop.</source>
-        <translation>La base de données utilisateur n&apos;est pas joignable. Veuillez vérifier votre configuration.
-L&apos;application va s&apos;arrêter.</translation>
-    </message>
-    <message>
         <source>Creating virtual users</source>
         <translation>Création des utilisateurs virtuels</translation>
     </message>
@@ -343,8 +322,8 @@ L&apos;application va s&apos;arrêter.</translation>
         <translation>Utilisateur non identifié.</translation>
     </message>
     <message>
-        <source>Using command line user identifiants: %1 - %2</source>
-        <translation>Utilise les identifiants de la ligne de commande : %1 - %2</translation>
+        <source>Using command line user identifiants: %1</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

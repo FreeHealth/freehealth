@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="fr_FR">
+<TS version="2.1" language="fr_FR">
 <context>
     <name>CommandLine</name>
     <message>
@@ -99,17 +99,6 @@
     </message>
 </context>
 <context>
-    <name>Core::Internal::CommandLineAboutPage</name>
-    <message>
-        <source>Command line</source>
-        <translation>Ligne de commande</translation>
-    </message>
-    <message>
-        <source>Application</source>
-        <translation>Application</translation>
-    </message>
-</context>
-<context>
     <name>Core::Internal::DebugDialog</name>
     <message>
         <source>Save log</source>
@@ -156,13 +145,6 @@
     </message>
 </context>
 <context>
-    <name>Core::Internal::MainWindowActionHandler</name>
-    <message>
-        <source>Ctrl+,</source>
-        <translation></translation>
-    </message>
-</context>
-<context>
     <name>Core::Internal::PageWidget</name>
     <message>
         <source>Options</source>
@@ -171,6 +153,49 @@
     <message>
         <source>0</source>
         <translation></translation>
+    </message>
+</context>
+<context>
+    <name>Core::Internal::PathPreferencesWidget</name>
+    <message>
+        <source>Form</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Data path</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Output path</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Application paths</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Temp</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select the databases output path</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select the files output path</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select the datapack server output path</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select the temporary path</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select the GIT checkout path</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -572,6 +597,18 @@
     </message>
 </context>
 <context>
+    <name>Core::PathPreferencesPage</name>
+    <message>
+        <source>Can not use and/or create the following directory
+%1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please go in the application preferences and select a valid directory.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Core::PluginDialog</name>
     <message>
         <source>Details</source>
@@ -678,6 +715,14 @@ but does not contains all other form items.</source>
     <message>
         <source>FreeDRC Consultation files (*.cr)</source>
         <translation>FreeDRC fichier de consultation (*.cr)</translation>
+    </message>
+    <message>
+        <source>FreeDDIManager files (*.ddi)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>FreeMedForms database files (*.db)</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

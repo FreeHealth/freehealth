@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="de_DE">
+<TS version="2.1" language="de_DE">
 <context>
     <name>UserBase</name>
     <message>
@@ -90,21 +90,6 @@
     </message>
 </context>
 <context>
-    <name>UserManagerPlugin</name>
-    <message>
-        <source>You can proceed with this user or connect with another one.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Stay connected</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Change the current user</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>UserPlugin</name>
     <message>
         <source>User creator wizard</source>
@@ -180,6 +165,10 @@
         <source>Last recorded user login: %1 </source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Unable to initialize the database with the login: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>UserPlugin::Internal::UserIdentifier</name>
@@ -225,11 +214,11 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>User is identified.</source>
+        <source>User is not identified.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>User is not identified.</source>
+        <source>User can be identified.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -313,15 +302,6 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Unable to connect to the user database.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>The user database is not reachable. Please check your configuration.
-Application will stop.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Creating virtual users</source>
         <translation type="unfinished"></translation>
     </message>
@@ -334,7 +314,7 @@ Application will stop.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Using command line user identifiants: %1 - %2</source>
+        <source>Using command line user identifiants: %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
