@@ -34,6 +34,7 @@
 #include <datapackutils/packdescription.h>
 #include <datapackutils/server.h>
 #include <datapackutils/servercreation/packcreationqueue.h>
+#include <datapackutils/servercreation/packcreationmodel.h>
 #include <datapackutils/constants.h>
 
 #include <quazip/JlCompress.h>
@@ -46,7 +47,7 @@
 
 /**
  * Unit-tests for datapack creation
- * - DataPack::PackCreationQueue
+ * - DataPack::PackCreationModel
 */
 
 namespace {
@@ -92,7 +93,7 @@ QString createFakeContent(int size)
 
 } // Anonymous namespace
 
-class tst_DataPack_QueueCreation : public QObject
+class tst_DataPack_QueueModel : public QObject
 {
     Q_OBJECT
 
@@ -100,13 +101,12 @@ class tst_DataPack_QueueCreation : public QObject
     QString _tempPath;
     Utils::Randomizer random;
     QHash<QString, QString> _tempPathToDescriptionPath; // Key= tmppath for the request equivalent path for pack description file ; Value = pack description file path
+    QList<DataPack::PackCreationQueue *> queues;
 
-    // Returns abspath to pack description file
-    void createFakePackDescriptionAndContent(DataPack::RequestedPackCreation &request, DataPack::RequestedPackCreation::ContentType type = DataPack::RequestedPackCreation::UnzippedFile, uint numberOfContents = 1)
+    void createFakePackDescriptionAndContent(QString path, DataPack::RequestedPackCreation &request, DataPack::RequestedPackCreation::ContentType type = DataPack::RequestedPackCreation::UnzippedFile, uint numberOfContents = 1)
     {
         using namespace DataPack;
-        // Create tmp path
-        QString path = QString("%1/%2").arg(_tempPath).arg(Utils::createUid());
+        path = QString("%1/%2").arg(path).arg(Utils::createUid());
         QVERIFY(QDir().mkpath(path) == true);
 
         // Create a Fake pack description file and content
@@ -165,6 +165,25 @@ class tst_DataPack_QueueCreation : public QObject
         }
     }
 
+    // Queue file is created in the specified path while Pack are created in subdirs
+    void createFakeQueue(const QString &path, DataPack::PackCreationQueue &queue)
+    {
+        using namespace DataPack;
+
+        // Create Pack in the path
+        for(int i=0; i < loop; ++i) {
+            RequestedPackCreation request;
+            createFakePackDescriptionAndContent(path, request);
+            QVERIFY(queue.addToQueue(request) == true);
+        }
+
+        // Create the queue XML file
+        QString queueFileName = QString("%1/%2")
+                .arg(path)
+                .arg(Constants::PACKCREATIONQUEUE_DEFAULT_FILENAME);
+        QVERIFY(queue.saveToXmlFile(queueFileName) == true);
+    }
+
 private Q_SLOTS:
 
     void initTestCase()
@@ -176,177 +195,100 @@ private Q_SLOTS:
 //            random.setPathToFiles(qApp->applicationDirPath() + "/../../global_resources/textfiles/");
 
         // Create temp path
-        _tempPath = QString("%1/packcreationqueue_%2/").arg(QDir::tempPath()).arg(Utils::createUid());
-        QVERIFY(QDir().mkpath(_tempPath));
+        _tempPath = QString("%1/packcreationmodel_%2/").arg(QDir::tempPath()).arg(Utils::createUid());
+        QVERIFY(QDir().mkpath(_tempPath) == true);
         qDebug() << "Queue test path" << _tempPath;
 
-        // Create a queue with some real pack descriptions with real contents
-        // DataPack::Constants::SERVER_COMMUNITY_FREE;
-
-    }
-
-    // PackCreationQueue
-    // TEST: pack content creation / update with zipped files and mixed content
-
-    void test_queue_isRelativePathFromDescriptionPathValid()
-    {
         using namespace DataPack;
-        RequestedPackCreation request;
-        createFakePackDescriptionAndContent(request, RequestedPackCreation::UnzippedFile, 5);
-        QString rootPath = QFileInfo(request.descriptionFilePath).absolutePath();
-        QString testPath, relativePath;
 
-        // Correct paths
-        relativePath = "relativePath/file.txt";
-        testPath = QString("%1/%2").arg(rootPath).arg(relativePath);
-        QVERIFY(request.isRelativePathFromDescriptionPathValid(testPath) == true);
-        QVERIFY(request.relativePathFromDescriptionPath(testPath) == relativePath);
-
-        relativePath = "relativePath/To/Another/file.bin";
-        testPath = QString("%1/%2").arg(rootPath).arg(relativePath);
-        QVERIFY(request.isRelativePathFromDescriptionPathValid(testPath) == true);
-        QVERIFY(request.relativePathFromDescriptionPath(testPath) == relativePath);
-
-        relativePath = "file.bin";
-        testPath = QString("%1/%2").arg(rootPath).arg(relativePath);
-        QVERIFY(request.isRelativePathFromDescriptionPathValid(testPath) == true);
-        QVERIFY(request.relativePathFromDescriptionPath(testPath) == relativePath);
-
-        // Uncorrects path
-        relativePath = "../relativePath/file.txt";
-        testPath = QString("%1/%2").arg(rootPath).arg(relativePath);
-        QVERIFY(request.isRelativePathFromDescriptionPathValid(testPath) == false);
-
-        relativePath = "../file.txt";
-        testPath = QString("%1/%2").arg(rootPath).arg(relativePath);
-        QVERIFY(request.isRelativePathFromDescriptionPathValid(testPath) == false);
-    }
-
-    void test_queue_createZippedContent_UnzippedFiles()
-    {
-        using namespace DataPack;
-        QHash<QString, QString> contentToMd5;
-
-        // Create fake queue with UnzippedFile only
-        PackCreationQueue queue;
-        for(int i = 0; i < loop; ++i) {
-            // Create a request with Unzipped files
-            RequestedPackCreation request;
-            createFakePackDescriptionAndContent(request, RequestedPackCreation::UnzippedFile, 5);
-            QVERIFY(queue.addToQueue(request) == true);
-
-            // Get all MD5 checksum of content files
-            foreach(const QString &file, request.content.values(RequestedPackCreation::UnzippedFile)) {
-                contentToMd5.insert(file, Utils::fileMd5(file));
-            }
-
-            // Create request zipped content
-            QString contentPath = QFileInfo(request.descriptionFilePath).absolutePath();
-            QString zip = QString("%1/content.zip").arg(contentPath);
-            QVERIFY(queue.createZippedContent(request, zip));
-            QVERIFY(QFile(zip).exists() == true);
-
-            // Remove all original content files
-            foreach(const QString &file, request.content.values(RequestedPackCreation::UnzippedFile)) {
-                QVERIFY(QFile(file).remove() == true);
-            }
-
-            // Unzip content file
-            QStringList files;
-            files = JlCompress::extractFiles(zip, JlCompress::getFileList(zip), contentPath);
-            QVERIFY(files.isEmpty() == false);
-            // Check all MD5
-            foreach(const QString &file, files) {
-                QString md5 = Utils::fileMd5(file);
-                QString source = contentToMd5.key(md5);
-                // source filename exists
-                QVERIFY(source.isEmpty() == false);
-                // filename of the extracted file is the same as the source file
-                QVERIFY(QFileInfo(source).fileName() == QFileInfo(file).fileName());
-                // relative path (from the pack description file) of the extracted file is the same as the source file
-                QVERIFY(request.relativePathFromDescriptionPath(source) == QDir(_tempPathToDescriptionPath.key(request.descriptionFilePath)).relativeFilePath(file));
-            }
+        // Create multiple subpath with multiple Queue/Pack files
+        for(int i=0; i < loop; ++i) {
+            PackCreationQueue *queue = new PackCreationQueue;
+            QString path = QString("%1/Q_%2").arg(_tempPath).arg(Utils::createUid());
+            createFakeQueue(path, *queue);
+            queues.append(queue);
         }
     }
 
-    void test_queue_createZippedContent_DirContents()
-    {
-        using namespace DataPack;
-        QHash<QString, QString> contentToMd5;
+    // PackCreationModel
+    // TEST: two queues in different path that include the same pack description file
+    // TEST: checkstate role of the model
 
-        // Create fake queue with DirContent only
-        PackCreationQueue queue;
-        for(int i = 0; i < loop; ++i) {
-            // Create a request with DirContent
-            RequestedPackCreation request;
-            createFakePackDescriptionAndContent(request, RequestedPackCreation::DirContent, 1);
-            QVERIFY(queue.addToQueue(request) == true);
-
-            // Get all MD5 checksum of content files
-            foreach(const QString &file, request.content.values(RequestedPackCreation::DirContent)) {
-                QFileInfoList fileContents = Utils::getFiles(QDir(file));
-                foreach(const QFileInfo &content, fileContents)
-                    contentToMd5.insert(content.absoluteFilePath(), Utils::fileMd5(content.absoluteFilePath()));
-            }
-
-            // Create request zipped content
-            QString contentPath = QFileInfo(request.descriptionFilePath).absolutePath();
-            QString zip = QString("%1/content.zip").arg(contentPath);
-            QVERIFY(queue.createZippedContent(request, zip));
-            QVERIFY(QFile(zip).exists() == true);
-
-            // Remove all original content files
-            foreach(const QString &file, request.content.values(RequestedPackCreation::UnzippedFile)) {
-                QVERIFY(QFile(file).remove() == true);
-            }
-
-            // Unzip content file
-            QStringList files;
-            files = JlCompress::extractFiles(zip, JlCompress::getFileList(zip), contentPath);
-            QVERIFY(files.isEmpty() == false);
-//            QVERIFY(QuaZipTools::unzipFile(zip, contentPath) == true);
-
-            // Check all MD5
-            foreach(const QFileInfo &file, Utils::getFiles(contentPath, "*.txt")) {
-                QString md5 = Utils::fileMd5(file.absoluteFilePath());
-                QString source = contentToMd5.key(md5);
-                // source filename exists
-                QVERIFY(source.isEmpty() == false);
-                // filename of the extracted file is the same as the source file
-                QVERIFY(QFileInfo(source).fileName() == file.fileName());
-                // relative path (from the pack description file) of the extracted file is the same as the source file
-                QVERIFY(request.relativePathFromDescriptionPath(source) == QDir(_tempPathToDescriptionPath.key(request.descriptionFilePath)).relativeFilePath(file.absoluteFilePath()));
-            }
-        }
-    }
-
-    void test_queue_containsPackDescriptionFile()
+    // Will create a set of queues and packs inside the object _tempPath
+    void test_createFakeSetOfQueue()
     {
         using namespace DataPack;
 
-        // Create fake queue
-        PackCreationQueue queue;
-        for(int i = 0; i < 10; ++i) {
-            RequestedPackCreation request;
-            createFakePackDescriptionAndContent(request);
-            QVERIFY(queue.addToQueue(request) == true);
+        // Create multiple subpath with multiple Queue/Pack files
+        QList<PackCreationQueue *> queues;
+        for(int i=0; i < loop; ++i) {
+            PackCreationQueue *queue = new PackCreationQueue;
+            QString path = QString("%1/Q_%2").arg(_tempPath).arg(Utils::createUid());
+            createFakeQueue(path, *queue);
+            queues.append(queue);
         }
 
-        // Test: containsPackDescriptionFile()
-        foreach(const RequestedPackCreation &request, queue.queue()) {
-            QVERIFY(queue.containsPackDescriptionFile(request.descriptionFilePath) == true);
-            QVERIFY(queue.containsPackDescriptionFile(request.content.values().at(0)) == false);
+        // Create Model populate it directly with queues
+        // Test: number of available packs in models
+        PackCreationModel globalModel(this);
+        for(int i=0; i < queues.count(); ++i) {
+            PackCreationQueue *queue = queues.at(i);
+
+            // Create a new model and test the number of packs
+            // Test: When we add a new queue, all Packs must be checked
+            PackCreationModel model(this);
+            QVERIFY(model.addPackCreationQueue(*queue) == true);
+            QVERIFY(model.getCheckedPacks().count() == loop);
+
+            // Test the global model
+            QVERIFY(globalModel.addPackCreationQueue(*queue) == true);
+            // Check globalModel (incrising the total row count of packs)
+            QVERIFY(globalModel.getCheckedPacks().count() == (loop * (i+1)));
         }
+
+        // Test: clearModel & addQueue
+        for(int i=0; i < queues.count(); ++i) {
+            // WARNING: using clear() expose to segfaulting
+            globalModel.clearPackModel();
+            QVERIFY(globalModel.getCheckedPacks().isEmpty() == true);
+            PackCreationQueue *queue = queues.at(i);
+            QVERIFY(globalModel.addPackCreationQueue(*queue) == true);
+            QVERIFY(globalModel.getCheckedPacks().count() == loop);
+        }
+
+        // All queues are saved in the _tempPath
+        // Test: addScreeningPath (queue by queue)
+        globalModel.clearPackModel();
+        for(int i=0; i < queues.count(); ++i) {
+            PackCreationQueue *queue = queues.at(i);
+            PackCreationModel model(this);
+            QVERIFY(model.addScreeningPath(QFileInfo(queue->sourceAbsolutePathFile()).absolutePath()) == true);
+            QVERIFY(model.getCheckedPacks().count() == loop);
+
+            // Check globalModel (incrising the total row count of packs)
+            QVERIFY(globalModel.addScreeningPath(QFileInfo(queue->sourceAbsolutePathFile()).absolutePath()) == true);
+            QVERIFY(globalModel.getCheckedPacks().count() == (loop * (i+1)));
+        }
+
+
+        // Test: Qt::CheckStateRole & getCheckedPacks
+//        for(int i = 0; i < globalModel.rowCount(); ++i) {
+//            // In each branch, get the latest checkable index == Pack
+//            QModelIndex root = globalModel.index(i,0);
+//        }
+
     }
+
 
     void cleanupTestCase()
     {
+        qDeleteAll(queues);
         // Clear the temp dir
         QVERIFY(Utils::removeDirRecursively(_tempPath, 0) == true);
     }
 };
 
-DECLARE_TEST(tst_DataPack_QueueCreation)
-#include "tst_datapack_queuecreation.moc"
+DECLARE_TEST(tst_DataPack_QueueModel)
+#include "tst_datapack_queuemodel.moc"
 
 
