@@ -90,7 +90,7 @@ public:
 private:
     QList<RequestedPackCreation> _queue;
     QString _uid;
-    QString _sourceAbsPath;
+    mutable QString _sourceAbsPath;
 };
 
 } // namespace DataPack

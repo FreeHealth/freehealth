@@ -378,7 +378,8 @@ bool PackCreationQueue::fromXmlFile(const QString &absFile)
 /**
  * Save the queue to an XML file \e absPath.
  * Path of the datapack contents (file and dirs) can
- * stored as absolute path or relative path to the \e absFile.
+ * stored as absolute path or relative path to the \e absFile. \n
+ * This member also define the result of sourceAbsolutePathFile().
  */
 bool PackCreationQueue::saveToXmlFile(const QString &absFile, bool useRelativePath) const
 {
@@ -415,9 +416,17 @@ bool PackCreationQueue::saveToXmlFile(const QString &absFile, bool useRelativePa
         }
     }
 
+    // Get XML content
     QString xml = QString("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
                           "%1").arg(doc.toString(2));
-    return Utils::saveStringToFile(xml, absFile, Utils::Overwrite, Utils::DontWarnUser);
+
+    // Save file and store the source file absolute path of this object
+    if (Utils::saveStringToFile(xml, absFile, Utils::Overwrite, Utils::DontWarnUser)) {
+        _sourceAbsPath = absFile;
+        return true;
+    }
+
+    return false;
 }
 
 /** Returns a relative path of \e absPath from the pack description file path */

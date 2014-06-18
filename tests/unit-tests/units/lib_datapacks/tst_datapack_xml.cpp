@@ -177,7 +177,11 @@ private Q_SLOTS:
 
         // Test from/to XML
         QString fileName = QDir::tempPath() + "/ut_"+Utils::createUid();
-        queue.saveToXmlFile(fileName, false);
+        QVERIFY(queue.sourceAbsolutePathFile() != fileName);
+        QVERIFY(queue.sourceAbsolutePathFile().isEmpty());
+        QVERIFY(queue.saveToXmlFile(fileName, false) == true);
+        QVERIFY(queue.sourceAbsolutePathFile() == fileName);
+
         DataPack::PackCreationQueue queue2;
         queue2.fromXmlFile(fileName);
         QVERIFY(queue == queue2);
