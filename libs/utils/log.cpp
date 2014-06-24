@@ -61,6 +61,7 @@ QList<LogData> Log::m_Messages;
 bool Log::m_HasError = false;
 bool Log::m_MuteConsole = false;
 bool Log::m_logFileInOut = false;
+bool Log::m_debugPlugins = false;
 
 /**
  * \fn bool Utils::Log::setDebugFileInOutProcess(bool debug)
