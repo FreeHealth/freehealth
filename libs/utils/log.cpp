@@ -28,16 +28,16 @@
   \class Utils::Log
   \brief this class holds the logs messages.
     Set messages with addMessage() or addMessages(), set errors with setError() or setErrors().\n
-    The strings are stored and you can retreive messages with messages() and errors with errors().\n
-    All message and error is warned into console, you can inhibate this behavior with muteConsoleWarnings(). \n
+    The strings are stored and you can retrieve messages with messages() and errors with errors().\n
+    All message and error is warned into console, you can inhibit this behavior with muteConsoleWarnings(). \n
     You can log QSqlQuery errors using addQueryError().
-    The first param of each members is the name of the class that asked to log.
+    The first param of each member is the name of the class that asked to log.
 
     Return format is for messages and errors :
      - ClassNameAsker : DateOfTheLog - Log
      - ClassNameAsker : DateOftheLog - SQL Error : Driver : xxxxx, Database : xxxx, Query : xxxxxx
 
-     You can directly save the logs via saveLog(), or retreive a string formatted using toString().
+     You can directly save the logs via saveLog(), or retrieve a string formatted using toString().
   \sa Utils::LogData
 */
 
@@ -310,7 +310,7 @@ QString Log::toString(const QString &settingsLog)
 */
 void Log::messagesToTreeWidget(QTreeWidget *parent, bool expandedByClass)
 {
-    Q_ASSERT_X(parent, "Log::toTreeWidget", "You must passed a valid QTreeWidget.");
+    Q_ASSERT_X(parent, "Log::toTreeWidget", "You must pass a valid QTreeWidget.");
     parent->clear();
     parent->setColumnCount(2);
     QHash<QString, QTreeWidgetItem*> class_item;
@@ -318,7 +318,7 @@ void Log::messagesToTreeWidget(QTreeWidget *parent, bool expandedByClass)
         foreach(const LogData &v , m_Messages) {
             if (v.isError())
                 continue;
-            // create nex treeitem if class does not already exists
+            // create next tree item if class does not already exists
             if (!class_item.keys().contains(v.object))
                 class_item.insert(v.object, new QTreeWidgetItem(parent, QStringList() << v.object));
             // add message to the class root item
@@ -353,7 +353,7 @@ void Log::errorsToTreeWidget(QTreeWidget *parent, bool expandedByClass)
         foreach(const LogData &v , m_Messages) {
             if (!v.isError())
                 continue;
-            // create nex treeitem if class does not already exists
+            // create next tree item if class does not already exist
             if (!class_item.keys().contains(v.object))
                 class_item.insert(v.object, new QTreeWidgetItem(parent, QStringList() << v.object));
             // add message to the class root item
