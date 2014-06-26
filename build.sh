@@ -20,6 +20,7 @@ SPEC=""
 BUILD="debug"
 QMAKE_CONFIG=""
 MAKE_OPTS="-j4"
+MAKE_QUAZIP=""
 RUN=""
 ZENITY="zenity"
 SHOW_ZENITY_PROGRESS="y"  # y / n
@@ -65,6 +66,28 @@ showHelp()
 #########################################################################################
 ## Build commands
 #########################################################################################
+testDependencies()
+{
+    # DEPENDENCIES_QT5=""
+    DEPENDENCIES_QT4="libqt4-dev libxext-dev" # libquazip0-dev not in wheezy
+    DEPENDENCIES_WEBCAM=""
+    if [[ "$WEBCAM" == "y" ]]; then
+        DEPENDENCIES_WEBCAM="libopencv-core-dev libopencv-highgui-dev libopencv-objdetect-dev"
+    fi
+    DEPENDENCIES="zlib1g-dev "$DEPENDENCIES_QT4" "$DEPENDENCIES_WEBCAM
+    for d in $DEPENDENCIES ; do
+        echo "* Checking dependencies $d"
+        if [[ -z `dpkg -l | grep $d` ]] ; then
+            echo "Please install $d"
+            echo "    sudo apt-get install $d"
+            exit 1;
+        fi
+    done
+    if [[ -z `dpkg -l | grep libquazip0-dev` ]] ; then
+        MAKE_QUAZIP="y"
+    fi
+}
+
 createLogFile()
 {
     LOG_FILE="./build_`date "+%s"`.log"
@@ -181,6 +204,7 @@ createTranslations()
 
 qmakeCommand()
 {
+    # TODO: update this part using the optionalplugins.pri? manage libquazip0-dev build
     # zenity progress feature
     echo "30"; sleep 1
     echo -e "# Preparing the build:\nrunning qmake" ; sleep 1
@@ -453,6 +477,8 @@ do
     b) BUNDLE_NAME=`echo "$OPTARG" | sed y/ABCDEFGHIJKLMNOPQRSTUVWXYZ/abcdefghijklmnopqrstuvwxyz/`
   esac
 done
+
+testDependencies
 
 #########################################################################################
 ## Zenity dialogs
