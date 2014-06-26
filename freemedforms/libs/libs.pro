@@ -35,6 +35,7 @@ calendar.depends    += utils
 calendar.depends    += extension
 
 medical.subdir      = $${LIBSPATH}/medicalutils
+medical.depends     += translation
 
 medintux.subdir     = $${LIBSPATH}/medintuxutils
 medintux.depends    += utils
