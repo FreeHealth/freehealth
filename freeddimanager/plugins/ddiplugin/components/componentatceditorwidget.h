@@ -28,6 +28,7 @@
 #define DDIMANAGER_DDIPLUGIN_COMPONENTATCEDITORWIDGET_H
 
 #include <QWidget>
+#include <QModelIndex>
 
 /**
  * \file componentatceditorwidget.h

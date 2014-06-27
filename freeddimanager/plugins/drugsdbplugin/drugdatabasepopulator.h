@@ -28,6 +28,7 @@
 #define DDIMANAGER_DRUGSDBPLUGIN_INTERNAL_DATABASEPOPULATOR_H
 
 #include <QObject>
+#include <QMultiHash>
 
 /**
  * \file drugdatabasepopulator.h
