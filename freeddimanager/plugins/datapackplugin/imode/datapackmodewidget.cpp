@@ -72,7 +72,6 @@ public:
 
     ~DataPackModeWidgetPrivate()
     {
-        delete ui;
     }
 
     void setupUi()
