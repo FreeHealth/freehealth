@@ -46,6 +46,8 @@
 
 #include <translationutils/constants.h>
 #include <translationutils/trans_msgerror.h>
+#include <translationutils/trans_current.h>
+#include <translationutils/trans_database.h>
 
 #include <QFile>
 #include <QDir>
@@ -171,15 +173,17 @@ void Log::addDatabaseLog( const QString & o, const QSqlDatabase & q, const QStri
     if (!m_MuteConsole || forceWarning) {
         qDebug() << q << "user" << q.userName() << "pass" << q.password();
     }
-    // FIXME: use tkTr(Trans::Constants::_1_COLON_2) "%1: %2" translation
-    addError(o, QCoreApplication::translate("Log", "%1: %2 - Database: %3, Host: %4, Port: %5, User:%6, Pass:%7")
-             .arg(o, QDateTime::currentDateTime().toString())
-             .arg(q.driverName())
-             .arg(q.hostName())
-             .arg(q.port())
-             .arg(q.userName())
-             .arg(q.password())
-             , file, line, forceWarning);
+    using namespace Trans::Constants;
+    using namespace Trans::ConstantTranslations;
+    addError(o,
+             QString("%1 ; %2 ; %3 ; %4 ; %5 ; %6")
+             .arg(tkTr(_1_COLON_2).arg(o, QDateTime::currentDateTime().toString()))
+             .arg(tkTr(_1_COLON_2).arg(tkTr(DATABASE), q.driverName()))
+             .arg(tkTr(_1_COLON_2).arg(tkTr(HOST), q.hostName()))
+             .arg(tkTr(_1_COLON_2).arg(tkTr(PORT)).arg(q.port()))
+             .arg(tkTr(_1_COLON_2).arg(tkTr(LOGIN), q.userName()))
+             .arg(tkTr(_1_COLON_2).arg(tkTr(PASSWORD), q.password())),
+             file, line, forceWarning);
 }
 
 

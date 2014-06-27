@@ -75,6 +75,9 @@ const char* const ENGINE_REPORT                      = QT_TRANSLATE_NOOP("tkCons
 const char* const OVERVIEW                           = QT_TRANSLATE_NOOP("tkConstants", "Overview");
 const char* const SENDMAIL                           = QT_TRANSLATE_NOOP("tkConstants", "Send a mail");
 const char* const SEE_ALSO                           = QT_TRANSLATE_NOOP("tkConstants", "See also");
+const char* const DATABASE                           = QT_TRANSLATE_NOOP("tkConstants", "Database");
+const char* const HOST                               = QT_TRANSLATE_NOOP("tkConstants", "Host");
+const char* const PORT                               = QT_TRANSLATE_NOOP("tkConstants", "Port");
 const char* const _1_COLON_2                         = QT_TRANSLATE_NOOP("tkConstants", "%1: %2");
 
 const char* const TOKEN                              = QT_TRANSLATE_NOOP("tkConstants", "Token");
