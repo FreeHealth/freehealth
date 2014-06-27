@@ -68,6 +68,7 @@ showHelp()
 #########################################################################################
 testDependencies()
 {
+    # TODO: this code only works with debian distros, include other distro
     # DEPENDENCIES_QT5=""
     DEPENDENCIES_QT4="libqt4-dev libxext-dev" # libquazip0-dev not in wheezy
     DEPENDENCIES_WEBCAM=""
