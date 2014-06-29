@@ -48,8 +48,11 @@ public:
     explicit ServerCreationWidget(QWidget *parent = 0);
     ~ServerCreationWidget();
 
+    void setDefaultScreeningPath(const QString &absPath);
     bool addScreeningPath(const QString &absPath);
     int numberOfCheckedPacks() const;
+
+    void setDefaultServerOutputPath(const QString &absPath);
 
 public Q_SLOTS:
     bool onCreateServerRequested();

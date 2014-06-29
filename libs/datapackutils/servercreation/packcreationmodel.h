@@ -69,6 +69,8 @@ public Q_SLOTS:
     bool addPackCreationQueue(const PackCreationQueue &queue);
     bool addScreeningPath(const QString &screeningAbsPath);
 
+    bool createDataPackServerWithCheckedPacks(const QString &absOutputPath);
+
 private:
     bool setCheckStateRoleToItemAndChildren(const QModelIndex &parent, const QVariant &value);
     bool setCheckedToAllParents(const QModelIndex &index);

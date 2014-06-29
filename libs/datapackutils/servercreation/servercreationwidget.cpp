@@ -86,7 +86,8 @@ public:
     {
         ui = new Ui::ServerCreationWidget();
         ui->setupUi(q);
-        ui->serverPath->setPromptDialogTitle(ui->selectServerPathLabel->text());
+        ui->serverPath->setExpectedKind(Utils::PathChooser::Directory);
+        ui->screeningPath->setExpectedKind(Utils::PathChooser::Directory);
     }
 
     void createModel()
@@ -130,14 +131,21 @@ ServerCreationWidget::ServerCreationWidget(QWidget *parent) :
     retranslate();
 }
 
-//TODO: add a ListView dependencies to this plugin
-
 /*! Destructor of the DataPackPlugin::Internal::ServerCreationWidget class */
 ServerCreationWidget::~ServerCreationWidget()
 {
     if (d)
         delete d;
     d = 0;
+}
+
+/**
+ * Set the line edit "Screen path" default content
+ */
+void ServerCreationWidget::setDefaultScreeningPath(const QString &absPath)
+{
+    d->ui->screeningPath->setInitialBrowsePathBackup(absPath);
+    d->ui->screeningPath->setPath(absPath);
 }
 
 /**
@@ -159,11 +167,34 @@ int ServerCreationWidget::numberOfCheckedPacks() const
 }
 
 /**
+ * Set the line edit "Server output" default content
+ */
+void ServerCreationWidget::setDefaultServerOutputPath(const QString &absPath)
+{
+    d->ui->serverPath->setInitialBrowsePathBackup(absPath);
+    d->ui->serverPath->setPath(absPath);
+}
+
+/**
  * Slot, create the server according to the elements of the UI.
  * Returns \e true on success.
  */
 bool ServerCreationWidget::onCreateServerRequested()
 {
+    if (!d->ui->serverPath->isValid()) {
+        Utils::warningMessageBox(tr("Wrong server output path"),
+                                 tr("Please set a valid server output path. \n"
+                                    "The path must be created with read/write "
+                                    "rights on."));
+        return false;
+    }
+    if (numberOfCheckedPacks() == 0) {
+        Utils::warningMessageBox(tr("No Pack selected"),
+                                 tr("No Pack selected. Please select all "
+                                    "Packs you want to include in the server."));
+        return false;
+    }
+    d->_packCreationModel;
     return false;
 }
 
@@ -179,6 +210,8 @@ void ServerCreationWidget::retranslate()
 {
     d->aGroupByServer->setText(tr("Group by server"));
     d->aGroupByQueue->setText(tr("Group by queue"));
+    d->ui->serverPath->setPromptDialogTitle(d->ui->selectServerPathLabel->text());
+    d->ui->screeningPath->setPromptDialogTitle(d->ui->labelScreenPath->text());
 }
 
 void ServerCreationWidget::changeEvent(QEvent *e)

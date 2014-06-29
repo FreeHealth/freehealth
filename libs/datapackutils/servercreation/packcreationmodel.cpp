@@ -452,6 +452,14 @@ bool PackCreationModel::addScreeningPath(const QString &screeningAbsPath)
     return d->screenPath(screeningAbsPath);
 }
 
+bool PackCreationModel::createDataPackServerWithCheckedPacks(const QString &absOutputPath)
+{
+    // Create server output path (version/vendor/pack/files.{xml,zip})
+    // Create a single internal queue with all requested packs
+    // Create the internal queue zipcontent
+    // Create the server using the internal queue
+}
+
 /**
  * Returns all checked pack description file absolute path.\n
  * If you want to create packs, please be sure to create the pack content using the

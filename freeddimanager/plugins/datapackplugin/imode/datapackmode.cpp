@@ -44,7 +44,10 @@
 
 #include <coreplugin/icore.h>
 #include <coreplugin/theme.h>
+#include <coreplugin/isettings.h>
 #include <coreplugin/constants_menus.h>
+#include <coreplugin/constants_icons.h>
+#include <coreplugin/fdm_constants.h>
 
 #include <translationutils/constants.h>
 #include <datapackutils/servercreation/servercreationwidget.h>
@@ -53,8 +56,7 @@ using namespace DataPackPlugin;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
-//static inline Core::ModeManager *modeManager() { return Core::ICore::instance()->modeManager(); }
-//static inline Core::ActionManager *actionManager() { return Core::ICore::instance()->actionManager(); }
+static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 static inline Core::ITheme *theme() { return Core::ICore::instance()->theme(); }
 
 DataPackMode::DataPackMode(QObject *parent) :
@@ -62,20 +64,18 @@ DataPackMode::DataPackMode(QObject *parent) :
     _widget(0)
 {
     setDisplayName("DataPacks");
-    setIcon(theme()->icon(Constants::ICON_DATAPACKS, Core::ITheme::BigIcon));
+    setIcon(theme()->icon(Core::Constants::ICON_PACKAGE));
     setPriority(Core::Constants::FifthModeGroup + Core::Constants::FirstModeSubGroup);
     setId(Constants::MODE_DATAPACK_SERVER);
-//    Core::Context context(Constants::C_PATIENTS, Constants::C_PATIENTS_SEARCH);
-//    setContext(context);
     setPatientBarVisibility(false);
-
-//    // Add the new patient action in the mode manager
-//    Core::Command *cmd = actionManager()->command(Core::Constants::A_PATIENT_NEW);
-//    modeManager()->addAction(cmd->action(), Core::Constants::P_MODE_PATIENT_SEARCH);
 
     // create the mode widget
     _widget = new DataPack::ServerCreationWidget;
-//    _widget->initialize();
+
+    // Populate UI with default path
+    _widget->setDefaultScreeningPath(settings()->value(Core::Constants::S_DBOUTPUT_PATH).toString());
+    _widget->setDefaultServerOutputPath(settings()->value(Core::Constants::S_DATAPACK_SERVER_OUTPUT_PATH).toString());
+
     setWidget(_widget);
 }
 
