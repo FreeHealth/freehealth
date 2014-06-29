@@ -38,7 +38,8 @@ HEADERS += datapack_exporter.h \
     serverenginestatus.h \
     widgets/packwizard.h \
     servercreation/packcreationqueue.h \
-    servercreation/packcreationmodel.h
+    servercreation/packcreationmodel.h \
+    servercreation/servercreationwidget.h
 
 SOURCES += \
     servermanager.cpp \
@@ -64,11 +65,14 @@ SOURCES += \
     widgets/packwizard.cpp \
     ipackmanager.cpp \
     servercreation/packcreationqueue.cpp \
-    servercreation/packcreationmodel.cpp
+    servercreation/packcreationmodel.cpp \
+    servercreation/servercreationwidget.cpp
 
 FORMS += \
     widgets/serverpackeditor.ui \
-    widgets/serverconfigurationdialog.ui
+    widgets/serverconfigurationdialog.ui \
+    servercreation/servercreationwidget.ui
+
 
 # include translations
 TRANSLATION_NAME = datapack
