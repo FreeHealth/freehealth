@@ -128,6 +128,7 @@ ServerCreationWidget::ServerCreationWidget(QWidget *parent) :
     d->createActions();
 
     connect(d->ui->screePathButton, SIGNAL(clicked()), this, SLOT(onAddScreeningPathButtonClicked()));
+    connect(d->_packCreationModel, SIGNAL(layoutChanged()), this, SLOT(updateTotalNumberOfPacks()));
     retranslate();
 }
 
@@ -194,16 +195,24 @@ bool ServerCreationWidget::onCreateServerRequested()
                                     "Packs you want to include in the server."));
         return false;
     }
-    d->_packCreationModel;
+    // d->_packCreationModel;
     return false;
 }
 
 bool ServerCreationWidget::onAddScreeningPathButtonClicked()
 {
     if (d->ui->screeningPath->isValid()) {
-        return addScreeningPath(d->ui->screeningPath->path());
+        if (addScreeningPath(d->ui->screeningPath->path())) {
+            updateTotalNumberOfPacks();
+            return true;
+        }
     }
     return false;
+}
+
+void ServerCreationWidget::updateTotalNumberOfPacks()
+{
+    d->ui->numberOfQueues->setText(QString::number(d->_packCreationModel->totalNumberOfPacksFound()));
 }
 
 void ServerCreationWidget::retranslate()

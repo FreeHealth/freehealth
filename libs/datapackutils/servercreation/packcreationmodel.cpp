@@ -460,6 +460,11 @@ bool PackCreationModel::createDataPackServerWithCheckedPacks(const QString &absO
     // Create the server using the internal queue
 }
 
+int PackCreationModel::totalNumberOfPacksFound() const
+{
+    return d->_packItems.count();
+}
+
 /**
  * Returns all checked pack description file absolute path.\n
  * If you want to create packs, please be sure to create the pack content using the

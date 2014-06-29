@@ -73,8 +73,8 @@ DataPackMode::DataPackMode(QObject *parent) :
     _widget = new DataPack::ServerCreationWidget;
 
     // Populate UI with default path
-    _widget->setDefaultScreeningPath(settings()->value(Core::Constants::S_DBOUTPUT_PATH).toString());
-    _widget->setDefaultServerOutputPath(settings()->value(Core::Constants::S_DATAPACK_SERVER_OUTPUT_PATH).toString());
+    _widget->setDefaultScreeningPath(settings()->value(Core::Constants::S_DATAPACK_SERVER_OUTPUT_PATH).toString());
+    _widget->setDefaultServerOutputPath(settings()->value(Core::Constants::S_FILEOUTPUT_PATH).toString());
 
     setWidget(_widget);
 }

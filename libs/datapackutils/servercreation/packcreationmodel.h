@@ -63,6 +63,7 @@ public:
 
 //    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
 
+    int totalNumberOfPacksFound() const;
     QStringList getCheckedPacks() const;
 
 public Q_SLOTS:

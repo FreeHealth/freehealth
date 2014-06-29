@@ -59,6 +59,7 @@ public Q_SLOTS:
 
 private Q_SLOTS:
     bool onAddScreeningPathButtonClicked();
+    void updateTotalNumberOfPacks();
 
 private:
     void retranslate();
