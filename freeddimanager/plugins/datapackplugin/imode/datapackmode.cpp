@@ -47,6 +47,7 @@
 #include <coreplugin/constants_menus.h>
 
 #include <translationutils/constants.h>
+#include <datapackutils/servercreation/servercreationwidget.h>
 
 using namespace DataPackPlugin;
 using namespace Internal;
@@ -73,7 +74,7 @@ DataPackMode::DataPackMode(QObject *parent) :
 //    modeManager()->addAction(cmd->action(), Core::Constants::P_MODE_PATIENT_SEARCH);
 
     // create the mode widget
-    _widget = new DataPackModeWidget;
+    _widget = new DataPack::ServerCreationWidget;
 //    _widget->initialize();
     setWidget(_widget);
 }

@@ -35,8 +35,12 @@
  * \file datapackmode.h
  * \author Eric Maeker
  * \version 0.10.0
- * \date 25 May 2014
+ * \date 29 Jun 2014
 */
+
+namespace DataPack {
+class ServerCreationWidget;
+}
 
 namespace DataPackPlugin {
 namespace Internal {
@@ -55,7 +59,7 @@ public:
 #endif
 
 private:
-    DataPackModeWidget *_widget;
+    DataPack::ServerCreationWidget *_widget;
 };
 
 } // namespace Internal
