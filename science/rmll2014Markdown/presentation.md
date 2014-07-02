@@ -22,17 +22,17 @@ Creating and using your own set of drug interactions
 * * * 
 * * *
 
-###Notes
+### Notes
 
 Hello,
 
 Please, let me begin  with a very special thanks and congratulations to the organizers of this event and for their work. I'm really impressed by what benevolent women and men have done for this Libre Software Meeting.  I would also like to thank them for allowing me to present our work today. 
 
-I'm Eric Maeker, French physician and developer C + + / Qt I'm the creator and main developer of The FreeMedForms project. The project was started in 2008 from scratch and is now usable in day-to-day practice.  FreeMedForms' project applications are now in production in some medical offices.
+Eric Maeker, french physician, C + + / Qt developer, is the creator and main developer of FreeMedForms. The project started from scratch in 2008 from scratch and is now usable in day-to-day practice.  FreeMedForms' project applications are now in production in some medical offices.
 
-You can find all information about the FreeMedForms project on our main web site: http://www.freemedforms.com/
+You can find all information about the FreeMedForms project on our web site: http://www.freemedforms.com/
 
-I will present you today the FreeDDIManager our drug interaction manager or how you can create and use your own set of interactions within the FreeMedForms applications.
+Today I will present FreeDDIManager, our drug interaction manager. It allows you to create and use your own set of interactions within the FreeMedForms applications.
 
 !
 
