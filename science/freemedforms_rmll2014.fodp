@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:presentation="urn:oasis:names:tc:opendocument:xmlns:presentation:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:smil="urn:oasis:names:tc:opendocument:xmlns:smil-compatible:1.0" xmlns:anim="urn:oasis:names:tc:opendocument:xmlns:animation:1.0" xmlns:rpt="http://openoffice.org/2005/report" xmlns:of="urn:oasis:names:tc:opendocument:xmlns:of:1.2" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:grddl="http://www.w3.org/2003/g/data-view#" xmlns:officeooo="http://openoffice.org/2009/office" xmlns:tableooo="http://openoffice.org/2009/table" xmlns:drawooo="http://openoffice.org/2010/draw" xmlns:calcext="urn:org:documentfoundation:names:experimental:calc:xmlns:calcext:1.0" xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0" xmlns:field="urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0" xmlns:formx="urn:openoffice:names:experimental:ooxml-odf-interop:xmlns:form:1.0" xmlns:css3t="http://www.w3.org/TR/css3-text/" office:version="1.2" office:mimetype="application/vnd.oasis.opendocument.presentation">
- <office:meta><meta:creation-date>2011-01-23T09:45:15</meta:creation-date><meta:editing-duration>P3DT12H54M44S</meta:editing-duration><meta:editing-cycles>394</meta:editing-cycles><dc:date>2014-06-30T17:17:18.558233275</dc:date><meta:generator>LibreOffice/4.2.5.2$Linux_X86_64 LibreOffice_project/420m0$Build-2</meta:generator><meta:print-date>2011-01-29T18:26:49</meta:print-date><dc:title>The FreeMedForms project: structuring patient files, sharing alerts.</dc:title><meta:keyword>RMLL 2013</meta:keyword><dc:creator>Eric Maeker</dc:creator><meta:document-statistic meta:object-count="184"/></office:meta>
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:presentation="urn:oasis:names:tc:opendocument:xmlns:presentation:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:smil="urn:oasis:names:tc:opendocument:xmlns:smil-compatible:1.0" xmlns:anim="urn:oasis:names:tc:opendocument:xmlns:animation:1.0" xmlns:rpt="http://openoffice.org/2005/report" xmlns:of="urn:oasis:names:tc:opendocument:xmlns:of:1.2" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:grddl="http://www.w3.org/2003/g/data-view#" xmlns:officeooo="http://openoffice.org/2009/office" xmlns:tableooo="http://openoffice.org/2009/table" xmlns:drawooo="http://openoffice.org/2010/draw" xmlns:field="urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0" xmlns:formx="urn:openoffice:names:experimental:ooxml-odf-interop:xmlns:form:1.0" xmlns:css3t="http://www.w3.org/TR/css3-text/" office:version="1.2" office:mimetype="application/vnd.oasis.opendocument.presentation">
+ <office:meta><meta:creation-date>2011-01-23T09:45:15</meta:creation-date><meta:editing-duration>P3DT12H54M44S</meta:editing-duration><meta:editing-cycles>394</meta:editing-cycles><dc:date>2014-06-30T17:17:18.558233275</dc:date><meta:generator>LibreOffice/3.5$Linux_X86_64 LibreOffice_project/350m1$Build-2</meta:generator><meta:print-date>2011-01-29T18:26:49</meta:print-date><dc:title>The FreeMedForms project: structuring patient files, sharing alerts.</dc:title><meta:keyword>RMLL 2013</meta:keyword><dc:creator>Eric Maeker</dc:creator><meta:document-statistic meta:object-count="186"/></office:meta>
  <office:settings>
   <config:config-item-set config:name="ooo:view-settings">
-   <config:config-item config:name="VisibleAreaTop" config:type="int">-321</config:config-item>
-   <config:config-item config:name="VisibleAreaLeft" config:type="int">-5292</config:config-item>
-   <config:config-item config:name="VisibleAreaWidth" config:type="int">38564</config:config-item>
-   <config:config-item config:name="VisibleAreaHeight" config:type="int">21607</config:config-item>
+   <config:config-item config:name="VisibleAreaTop" config:type="int">404</config:config-item>
+   <config:config-item config:name="VisibleAreaLeft" config:type="int">-7735</config:config-item>
+   <config:config-item config:name="VisibleAreaWidth" config:type="int">38563</config:config-item>
+   <config:config-item config:name="VisibleAreaHeight" config:type="int">21606</config:config-item>
    <config:config-item-map-indexed config:name="Views">
     <config:config-item-map-entry>
      <config:config-item config:name="ViewId" config:type="string">view1</config:config-item>
@@ -28,7 +28,7 @@
      <config:config-item config:name="NoAttribs" config:type="boolean">false</config:config-item>
      <config:config-item config:name="NoColors" config:type="boolean">true</config:config-item>
      <config:config-item config:name="RulerIsVisible" config:type="boolean">false</config:config-item>
-     <config:config-item config:name="PageKind" config:type="short">0</config:config-item>
+     <config:config-item config:name="PageKind" config:type="short">1</config:config-item>
      <config:config-item config:name="SelectedPage" config:type="short">12</config:config-item>
      <config:config-item config:name="IsLayerMode" config:type="boolean">false</config:config-item>
      <config:config-item config:name="IsDoubleClickTextEdit" config:type="boolean">true</config:config-item>
@@ -37,10 +37,10 @@
      <config:config-item config:name="EditModeStandard" config:type="int">0</config:config-item>
      <config:config-item config:name="EditModeNotes" config:type="int">0</config:config-item>
      <config:config-item config:name="EditModeHandout" config:type="int">1</config:config-item>
-     <config:config-item config:name="VisibleAreaTop" config:type="int">-321</config:config-item>
-     <config:config-item config:name="VisibleAreaLeft" config:type="int">-5292</config:config-item>
-     <config:config-item config:name="VisibleAreaWidth" config:type="int">38566</config:config-item>
-     <config:config-item config:name="VisibleAreaHeight" config:type="int">21609</config:config-item>
+     <config:config-item config:name="VisibleAreaTop" config:type="int">404</config:config-item>
+     <config:config-item config:name="VisibleAreaLeft" config:type="int">-7735</config:config-item>
+     <config:config-item config:name="VisibleAreaWidth" config:type="int">37141</config:config-item>
+     <config:config-item config:name="VisibleAreaHeight" config:type="int">20350</config:config-item>
      <config:config-item config:name="GridCoarseWidth" config:type="int">2000</config:config-item>
      <config:config-item config:name="GridCoarseHeight" config:type="int">2000</config:config-item>
      <config:config-item config:name="GridFineWidth" config:type="int">200</config:config-item>
@@ -51,7 +51,7 @@
      <config:config-item config:name="GridSnapWidthYDenominator" config:type="int">1</config:config-item>
      <config:config-item config:name="IsAngleSnapEnabled" config:type="boolean">false</config:config-item>
      <config:config-item config:name="SnapAngle" config:type="int">1500</config:config-item>
-     <config:config-item config:name="ZoomOnPage" config:type="boolean">true</config:config-item>
+     <config:config-item config:name="ZoomOnPage" config:type="boolean">false</config:config-item>
     </config:config-item-map-entry>
    </config:config-item-map-indexed>
   </config:config-item-set>
@@ -62,7 +62,6 @@
    <config:config-item config:name="ColorTableURL" config:type="string">$(user)/config/standard.soc</config:config-item>
    <config:config-item config:name="DashTableURL" config:type="string">$(user)/config/standard.sod</config:config-item>
    <config:config-item config:name="DefaultTabStop" config:type="int">1250</config:config-item>
-   <config:config-item config:name="EmbedFonts" config:type="boolean">false</config:config-item>
    <config:config-item-map-indexed config:name="ForbiddenCharacters">
     <config:config-item-map-entry>
      <config:config-item config:name="Language" config:type="string">fr</config:config-item>
@@ -95,8 +94,8 @@
    <config:config-item config:name="ParagraphSummation" config:type="boolean">false</config:config-item>
    <config:config-item config:name="PrintQuality" config:type="int">0</config:config-item>
    <config:config-item config:name="PrinterIndependentLayout" config:type="string">low-resolution</config:config-item>
-   <config:config-item config:name="PrinterName" config:type="string">HP-LaserJet-1022</config:config-item>
-   <config:config-item config:name="PrinterSetup" config:type="base64Binary">ogH+/0hQLUxhc2VySmV0LTEwMjIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQ1VQUzpIUC1MYXNlckpldC0xMDIyAAAAAAAAAAAAAAAWAAMAxAAAAAAAAwAEAAhSAAAEdAAASm9iRGF0YSAxCnByaW50ZXI9SFAtTGFzZXJKZXQtMTAyMgpvcmllbnRhdGlvbj1Qb3J0cmFpdApjb3BpZXM9MQpjb2xsYXRlPWZhbHNlCm1hcmdpbmRhanVzdG1lbnQ9MCwwLDAsMApjb2xvcmRlcHRoPTI0CnBzbGV2ZWw9MApwZGZkZXZpY2U9MQpjb2xvcmRldmljZT0wClBQRENvbnRleERhdGEKSW5wdXRTbG90OkF1dG8AUGFnZVNpemU6QTQAABIAQ09NUEFUX0RVUExFWF9NT0RFDgBEVVBMRVhfVU5LTk9XTg==</config:config-item>
+   <config:config-item config:name="PrinterName" config:type="string">MP620-series</config:config-item>
+   <config:config-item config:name="PrinterSetup" config:type="base64Binary">fQH+/01QNjIwLXNlcmllcwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQ1VQUzpNUDYyMC1zZXJpZXMAAAAAAAAAAAAAAAAAAAAWAAMAowAAAAAAAAAEAAhSAAAEdAAASm9iRGF0YSAxCnByaW50ZXI9TVA2MjAtc2VyaWVzCm9yaWVudGF0aW9uPVBvcnRyYWl0CmNvcGllcz0xCm1hcmdpbmRhanVzdG1lbnQ9MCwwLDAsMApjb2xvcmRlcHRoPTI0CnBzbGV2ZWw9MApwZGZkZXZpY2U9MQpjb2xvcmRldmljZT0wClBQRENvbnRleERhdGEKUGFnZVNpemU6QTQAABIAQ09NUEFUX0RVUExFWF9NT0RFCgBEVVBMRVhfT0ZG</config:config-item>
    <config:config-item config:name="SaveVersionOnClose" config:type="boolean">false</config:config-item>
    <config:config-item config:name="SlidesPerHandout" config:type="short">6</config:config-item>
    <config:config-item config:name="UpdateFromTemplate" config:type="boolean">true</config:config-item>
@@ -109,25 +108,6 @@
    </ooo:libraries>
   </office:script>
  </office:scripts>
- <office:font-face-decls>
-  <style:font-face style:name="Georgia1" svg:font-family="Georgia" style:font-family-generic="roman"/>
-  <style:font-face style:name="ArialMT1" svg:font-family="ArialMT" style:font-family-generic="swiss"/>
-  <style:font-face style:name="Arial" svg:font-family="Arial" style:font-family-generic="roman" style:font-pitch="variable"/>
-  <style:font-face style:name="Arial Unicode MS1" svg:font-family="&apos;Arial Unicode MS&apos;" style:font-family-generic="roman" style:font-pitch="variable"/>
-  <style:font-face style:name="Georgia" svg:font-family="Georgia" style:font-family-generic="roman" style:font-pitch="variable"/>
-  <style:font-face style:name="Liberation Sans" svg:font-family="&apos;Liberation Sans&apos;" style:font-family-generic="roman" style:font-pitch="variable"/>
-  <style:font-face style:name="Tahoma2" svg:font-family="Tahoma" style:font-family-generic="roman" style:font-pitch="variable"/>
-  <style:font-face style:name="Times New Roman" svg:font-family="&apos;Times New Roman&apos;" style:font-family-generic="roman" style:font-pitch="variable"/>
-  <style:font-face style:name="Arial1" svg:font-family="Arial" style:font-family-generic="swiss" style:font-pitch="variable"/>
-  <style:font-face style:name="Arial Unicode MS2" svg:font-family="&apos;Arial Unicode MS&apos;" style:font-family-generic="swiss" style:font-pitch="variable"/>
-  <style:font-face style:name="ArialMT" svg:font-family="ArialMT" style:font-family-generic="swiss" style:font-pitch="variable"/>
-  <style:font-face style:name="Tahoma" svg:font-family="Tahoma" style:font-family-generic="swiss" style:font-pitch="variable"/>
-  <style:font-face style:name="Times New Roman1" svg:font-family="&apos;Times New Roman&apos;" style:font-family-generic="swiss" style:font-pitch="variable"/>
-  <style:font-face style:name="Arial Unicode MS" svg:font-family="&apos;Arial Unicode MS&apos;" style:font-family-generic="system" style:font-pitch="variable"/>
-  <style:font-face style:name="Droid Sans" svg:font-family="&apos;Droid Sans&apos;" style:font-family-generic="system" style:font-pitch="variable"/>
-  <style:font-face style:name="FreeSans" svg:font-family="FreeSans" style:font-family-generic="system" style:font-pitch="variable"/>
-  <style:font-face style:name="Tahoma1" svg:font-family="Tahoma" style:font-family-generic="system" style:font-pitch="variable"/>
- </office:font-face-decls>
  <office:styles>
   <draw:gradient draw:name="Gradient_20_7" draw:display-name="Gradient 7" draw:style="linear" draw:start-color="#000000" draw:end-color="#ffffff" draw:start-intensity="100%" draw:end-intensity="100%" draw:angle="0" draw:border="0%"/>
   <draw:gradient draw:name="Square_20_yellow_2f_white" draw:display-name="Square yellow/white" draw:style="square" draw:cx="50%" draw:cy="50%" draw:start-color="#e6ff00" draw:end-color="#ffffff" draw:start-intensity="100%" draw:end-intensity="100%" draw:angle="2700" draw:border="0%"/>
@@ -152,14 +132,14 @@
    </office:binary-data>
   </draw:fill-image>
   <draw:opacity draw:name="Transparency_20_1" draw:display-name="Transparency 1" draw:style="linear" draw:start="100%" draw:end="70%" draw:angle="0" draw:border="0%"/>
-  <draw:marker draw:name="Arrow" svg:viewBox="0 0 20 30" svg:d="M10 0l-10 30h20z"/>
+  <draw:marker draw:name="Arrow" svg:viewBox="0 0 20 30" svg:d="m10 0-10 30h20z"/>
   <draw:stroke-dash draw:name="Dashed_20__28_var_29__20_1" draw:display-name="Dashed (var) 1" draw:style="rect" draw:dots1="1" draw:dots1-length="0.02cm" draw:dots2="1" draw:dots2-length="0.02cm" draw:distance="0.02cm"/>
   <style:default-style style:family="graphic">
    <style:graphic-properties svg:stroke-color="#000000" draw:fill-color="#99ccff" fo:wrap-option="no-wrap"/>
    <style:paragraph-properties style:text-autospace="ideograph-alpha" style:punctuation-wrap="simple" style:line-break="strict" style:writing-mode="lr-tb" style:font-independent-line-spacing="false">
     <style:tab-stops/>
    </style:paragraph-properties>
-   <style:text-properties style:use-window-font-color="true" style:font-name="Times New Roman" fo:font-size="24pt" fo:language="fr" fo:country="FR" style:font-name-asian="Arial Unicode MS" style:font-size-asian="24pt" style:language-asian="zxx" style:country-asian="none" style:font-name-complex="Tahoma1" style:font-size-complex="24pt" style:language-complex="zxx" style:country-complex="none"/>
+   <style:text-properties style:use-window-font-color="true" fo:font-family="&apos;Liberation Serif&apos;" style:font-family-generic="roman" style:font-pitch="variable" fo:font-size="24pt" fo:language="fr" fo:country="FR" style:font-family-asian="&apos;Bitstream Vera Sans&apos;" style:font-family-generic-asian="system" style:font-pitch-asian="variable" style:font-size-asian="24pt" style:language-asian="zxx" style:country-asian="none" style:font-family-complex="&apos;Bitstream Vera Sans&apos;" style:font-family-generic-complex="system" style:font-pitch-complex="variable" style:font-size-complex="24pt" style:language-complex="zxx" style:country-complex="none"/>
   </style:default-style>
   <style:style style:name="standard" style:family="graphic">
    <style:graphic-properties draw:stroke="solid" draw:stroke-dash="Dashed_20__28_var_29__20_1" svg:stroke-width="0cm" svg:stroke-color="#000000" draw:marker-start-width="0.3cm" draw:marker-start-center="false" draw:marker-end-width="0.3cm" draw:marker-end-center="false" draw:fill="solid" draw:fill-color="#99ccff" draw:fill-gradient-name="Gradient_20_7" draw:fill-hatch-name="Hatch_20_1" draw:fill-image-name="Bitmape_20_1" draw:opacity="100%" draw:fill-image-width="0cm" draw:fill-image-height="0cm" fo:padding-top="0.125cm" fo:padding-bottom="0.125cm" fo:padding-left="0.25cm" fo:padding-right="0.25cm" draw:shadow="hidden" draw:shadow-offset-x="0.3cm" draw:shadow-offset-y="0.3cm" draw:shadow-color="#808080" draw:shadow-opacity="100%">
@@ -207,7 +187,7 @@
     </text:list-style>
    </style:graphic-properties>
    <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0cm" fo:line-height="100%" fo:text-indent="0cm"/>
-   <style:text-properties style:use-window-font-color="true" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Arial" fo:font-family="Arial" style:font-family-generic="roman" style:font-pitch="variable" fo:font-size="18pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:font-name-asian="Arial Unicode MS" style:font-family-asian="&apos;Arial Unicode MS&apos;" style:font-family-generic-asian="system" style:font-pitch-asian="variable" style:font-size-asian="18pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-name-complex="Tahoma1" style:font-family-complex="Tahoma" style:font-family-generic-complex="system" style:font-pitch-complex="variable" style:font-size-complex="18pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+   <style:text-properties style:use-window-font-color="true" style:text-outline="false" style:text-line-through-style="none" fo:font-family="Arial" style:font-family-generic="roman" style:font-pitch="variable" fo:font-size="18pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:font-family-asian="&apos;Arial Unicode MS&apos;" style:font-family-generic-asian="system" style:font-pitch-asian="variable" style:font-size-asian="18pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-family-complex="Tahoma" style:font-family-generic-complex="system" style:font-pitch-complex="variable" style:font-size-complex="18pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
   </style:style>
   <style:style style:name="objectwitharrow" style:family="graphic" style:parent-style-name="standard">
    <style:graphic-properties draw:stroke="solid" svg:stroke-width="0.15cm" svg:stroke-color="#000000" draw:marker-start="Arrow" draw:marker-start-width="0.7cm" draw:marker-start-center="true" draw:marker-end-width="0.3cm"/>
@@ -217,9 +197,6 @@
   </style:style>
   <style:style style:name="objectwithoutfill" style:family="graphic" style:parent-style-name="standard">
    <style:graphic-properties draw:fill="none"/>
-  </style:style>
-  <style:style style:name="Objet_20_sans_20_remplissage_20_et_20_sans_20_ligne" style:display-name="Objet sans remplissage et sans ligne" style:family="graphic" style:parent-style-name="standard">
-   <style:graphic-properties draw:stroke="none" draw:fill="none"/>
   </style:style>
   <style:style style:name="text" style:family="graphic" style:parent-style-name="standard">
    <style:graphic-properties draw:stroke="none" draw:fill="none"/>
@@ -269,6 +246,9 @@
    <style:graphic-properties draw:stroke="solid" draw:marker-start="Arrow" draw:marker-start-width="0.2cm" draw:marker-end="Arrow" draw:marker-end-width="0.2cm" draw:fill="none" draw:show-unit="true"/>
    <style:text-properties fo:font-size="12pt"/>
   </style:style>
+  <style:style style:name="Objet_20_sans_20_remplissage_20_et_20_sans_20_ligne" style:display-name="Objet sans remplissage et sans ligne" style:family="graphic" style:parent-style-name="standard">
+   <style:graphic-properties draw:stroke="none" draw:fill="none"/>
+  </style:style>
   <style:style style:name="Standard-background" style:family="presentation">
    <style:graphic-properties draw:stroke="none" draw:fill="none"/>
    <style:text-properties style:letter-kerning="true"/>
@@ -280,7 +260,7 @@
   <style:style style:name="Standard-notes" style:family="presentation">
    <style:graphic-properties draw:stroke="none" draw:fill="none"/>
    <style:paragraph-properties fo:margin-left="0.6cm" fo:margin-right="0cm" fo:text-indent="0cm"/>
-   <style:text-properties style:use-window-font-color="true" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Arial" fo:font-family="Arial" style:font-family-generic="roman" style:font-pitch="variable" fo:font-size="20pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:font-name-asian="Arial Unicode MS" style:font-family-asian="&apos;Arial Unicode MS&apos;" style:font-family-generic-asian="system" style:font-pitch-asian="variable" style:font-size-asian="20pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-name-complex="Tahoma1" style:font-family-complex="Tahoma" style:font-family-generic-complex="system" style:font-pitch-complex="variable" style:font-size-complex="20pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+   <style:text-properties style:use-window-font-color="true" style:text-outline="false" style:text-line-through-style="none" fo:font-family="Arial" style:font-family-generic="roman" style:font-pitch="variable" fo:font-size="20pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:font-family-asian="&apos;Arial Unicode MS&apos;" style:font-family-generic-asian="system" style:font-pitch-asian="variable" style:font-size-asian="20pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-family-complex="Tahoma" style:font-family-generic-complex="system" style:font-pitch-complex="variable" style:font-size-complex="20pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
   </style:style>
   <style:style style:name="Standard-outline1" style:family="presentation">
    <style:graphic-properties draw:stroke="none" draw:fill="none">
@@ -328,7 +308,7 @@
     </text:list-style>
    </style:graphic-properties>
    <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0.3cm"/>
-   <style:text-properties style:use-window-font-color="true" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Arial" fo:font-family="Arial" style:font-family-generic="roman" style:font-pitch="variable" fo:font-size="28pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:font-name-asian="Arial Unicode MS" style:font-family-asian="&apos;Arial Unicode MS&apos;" style:font-family-generic-asian="system" style:font-pitch-asian="variable" style:font-size-asian="28pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-name-complex="Tahoma1" style:font-family-complex="Tahoma" style:font-family-generic-complex="system" style:font-pitch-complex="variable" style:font-size-complex="28pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+   <style:text-properties style:use-window-font-color="true" style:text-outline="false" style:text-line-through-style="none" fo:font-family="Arial" style:font-family-generic="roman" style:font-pitch="variable" fo:font-size="28pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:font-family-asian="&apos;Arial Unicode MS&apos;" style:font-family-generic-asian="system" style:font-pitch-asian="variable" style:font-size-asian="28pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-family-complex="Tahoma" style:font-family-generic-complex="system" style:font-pitch-complex="variable" style:font-size-complex="28pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
   </style:style>
   <style:style style:name="Standard-outline2" style:family="presentation" style:parent-style-name="Standard-outline1">
    <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0.2cm"/>
@@ -408,7 +388,7 @@
     </text:list-style>
    </style:graphic-properties>
    <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:text-align="center" fo:text-indent="0cm"/>
-   <style:text-properties style:use-window-font-color="true" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Arial" fo:font-family="Arial" style:font-family-generic="roman" style:font-pitch="variable" fo:font-size="32pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:font-name-asian="Arial Unicode MS" style:font-family-asian="&apos;Arial Unicode MS&apos;" style:font-family-generic-asian="system" style:font-pitch-asian="variable" style:font-size-asian="32pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-name-complex="Tahoma1" style:font-family-complex="Tahoma" style:font-family-generic-complex="system" style:font-pitch-complex="variable" style:font-size-complex="32pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+   <style:text-properties style:use-window-font-color="true" style:text-outline="false" style:text-line-through-style="none" fo:font-family="Arial" style:font-family-generic="roman" style:font-pitch="variable" fo:font-size="32pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:font-family-asian="&apos;Arial Unicode MS&apos;" style:font-family-generic-asian="system" style:font-pitch-asian="variable" style:font-size-asian="32pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-family-complex="Tahoma" style:font-family-generic-complex="system" style:font-pitch-complex="variable" style:font-size-complex="32pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
   </style:style>
   <style:style style:name="Standard-title" style:family="presentation">
    <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle">
@@ -456,7 +436,7 @@
     </text:list-style>
    </style:graphic-properties>
    <style:paragraph-properties fo:text-align="center"/>
-   <style:text-properties fo:color="#ffffff" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Arial" fo:font-family="Arial" style:font-family-generic="roman" style:font-pitch="variable" fo:font-size="44pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="bold" style:letter-kerning="true" style:font-name-asian="Arial Unicode MS" style:font-family-asian="&apos;Arial Unicode MS&apos;" style:font-family-generic-asian="system" style:font-pitch-asian="variable" style:font-size-asian="44pt" style:font-style-asian="normal" style:font-weight-asian="bold" style:font-name-complex="Tahoma1" style:font-family-complex="Tahoma" style:font-family-generic-complex="system" style:font-pitch-complex="variable" style:font-size-complex="44pt" style:font-style-complex="normal" style:font-weight-complex="bold" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+   <style:text-properties fo:color="#ffffff" style:text-outline="false" style:text-line-through-style="none" fo:font-family="Arial" style:font-family-generic="roman" style:font-pitch="variable" fo:font-size="44pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="bold" style:letter-kerning="true" style:font-family-asian="&apos;Arial Unicode MS&apos;" style:font-family-generic-asian="system" style:font-pitch-asian="variable" style:font-size-asian="44pt" style:font-style-asian="normal" style:font-weight-asian="bold" style:font-family-complex="Tahoma" style:font-family-generic-complex="system" style:font-pitch-complex="variable" style:font-size-complex="44pt" style:font-style-complex="normal" style:font-weight-complex="bold" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
   </style:style>
   <style:presentation-page-layout style:name="AL0T26">
    <presentation:placeholder presentation:object="handout" svg:x="2.058cm" svg:y="1.743cm" svg:width="10.556cm" svg:height="-0.233cm"/>
@@ -683,21 +663,24 @@
    <style:graphic-properties fo:min-height="14.232cm"/>
   </style:style>
   <style:style style:name="pr24" style:family="presentation" style:parent-style-name="Standard-outline1">
+   <style:graphic-properties fo:min-height="14.505cm"/>
+  </style:style>
+  <style:style style:name="pr25" style:family="presentation" style:parent-style-name="Standard-outline1">
    <style:graphic-properties draw:auto-grow-height="true" fo:min-height="13.859cm"/>
   </style:style>
-  <style:style style:name="pr25" style:family="presentation" style:parent-style-name="Standard-title">
+  <style:style style:name="pr26" style:family="presentation" style:parent-style-name="Standard-title">
    <style:graphic-properties fo:min-height="3.256cm"/>
   </style:style>
-  <style:style style:name="pr26" style:family="presentation" style:parent-style-name="Standard-outline1">
+  <style:style style:name="pr27" style:family="presentation" style:parent-style-name="Standard-outline1">
    <style:graphic-properties fo:min-height="12.151cm"/>
   </style:style>
-  <style:style style:name="pr27" style:family="presentation" style:parent-style-name="Standard-outline1">
+  <style:style style:name="pr28" style:family="presentation" style:parent-style-name="Standard-outline1">
    <style:graphic-properties fo:min-height="13.576cm"/>
   </style:style>
-  <style:style style:name="pr28" style:family="presentation" style:parent-style-name="Standard-outline1">
+  <style:style style:name="pr29" style:family="presentation" style:parent-style-name="Standard-outline1">
    <style:graphic-properties fo:min-height="12.451cm"/>
   </style:style>
-  <style:style style:name="pr29" style:family="presentation" style:parent-style-name="Standard-outline1">
+  <style:style style:name="pr30" style:family="presentation" style:parent-style-name="Standard-outline1">
    <style:graphic-properties draw:auto-grow-height="true" fo:min-height="13.739cm"/>
   </style:style>
   <style:style style:name="P1" style:family="paragraph">
@@ -731,7 +714,7 @@
   </style:style>
   <style:style style:name="P10" style:family="paragraph">
    <style:paragraph-properties fo:margin-top="0.2cm" fo:margin-bottom="0.2cm"/>
-   <style:text-properties style:font-name="Arial1" fo:font-size="24pt" style:font-size-asian="24pt" style:font-size-complex="24pt"/>
+   <style:text-properties fo:font-family="Arial" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="24pt" style:font-size-asian="24pt" style:font-size-complex="24pt"/>
   </style:style>
   <style:style style:name="P11" style:family="paragraph">
    <style:text-properties fo:font-size="20pt"/>
@@ -741,7 +724,7 @@
   </style:style>
   <style:style style:name="P13" style:family="paragraph">
    <style:paragraph-properties fo:margin-top="0.2cm" fo:margin-bottom="0.2cm"/>
-   <style:text-properties style:font-name="Arial1" fo:font-size="27pt" style:font-size-asian="27pt" style:font-size-complex="27pt"/>
+   <style:text-properties fo:font-family="Arial" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="27pt" style:font-size-asian="27pt" style:font-size-complex="27pt"/>
   </style:style>
   <style:style style:name="P14" style:family="paragraph">
    <style:text-properties fo:font-size="16pt" style:font-size-asian="16pt" style:font-size-complex="16pt"/>
@@ -778,7 +761,7 @@
    <style:text-properties fo:color="#b84747" fo:font-size="24pt" fo:text-shadow="1pt 1pt" fo:font-weight="bold" style:font-size-asian="24pt" style:font-weight-asian="bold" style:font-size-complex="24pt" style:font-weight-complex="bold"/>
   </style:style>
   <style:style style:name="P24" style:family="paragraph">
-   <style:text-properties style:font-name="Arial1" fo:font-size="18pt" style:font-size-asian="18pt" style:font-size-complex="18pt"/>
+   <style:text-properties fo:font-family="Arial" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="18pt" style:font-size-asian="18pt" style:font-size-complex="18pt"/>
   </style:style>
   <style:style style:name="P25" style:family="paragraph">
    <style:text-properties fo:font-size="24pt" style:font-size-asian="24pt" style:font-size-complex="24pt"/>
@@ -797,7 +780,7 @@
      <style:tab-stop style:position="1.27cm"/>
     </style:tab-stops>
    </style:paragraph-properties>
-   <style:text-properties fo:color="#262626" style:font-name="Tahoma" fo:font-size="12pt" style:text-underline-style="none" style:font-name-asian="Georgia1" style:font-size-asian="12pt" style:font-name-complex="Georgia1" style:font-size-complex="12pt"/>
+   <style:text-properties fo:color="#262626" fo:font-family="Tahoma" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="12pt" style:text-underline-style="none" style:font-family-asian="Georgia" style:font-family-generic-asian="roman" style:font-size-asian="12pt" style:font-family-complex="Georgia" style:font-family-generic-complex="roman" style:font-size-complex="12pt"/>
   </style:style>
   <style:style style:name="P29" style:family="paragraph">
    <style:paragraph-properties style:text-autospace="none"/>
@@ -805,49 +788,49 @@
   </style:style>
   <style:style style:name="P30" style:family="paragraph">
    <style:paragraph-properties fo:margin-top="0.2cm" fo:margin-bottom="0.2cm"/>
-   <style:text-properties style:font-name="Arial1" fo:font-size="32pt" style:font-size-asian="32pt" style:font-size-complex="32pt"/>
+   <style:text-properties fo:font-family="Arial" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="32pt" style:font-size-asian="32pt" style:font-size-complex="32pt"/>
   </style:style>
   <style:style style:name="T1" style:family="text">
    <style:text-properties fo:font-size="14pt" style:font-size-asian="14pt" style:font-size-complex="14pt"/>
   </style:style>
   <style:style style:name="T2" style:family="text">
-   <style:text-properties style:use-window-font-color="true" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Arial" fo:font-size="28pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:font-name-asian="Arial Unicode MS" style:font-size-asian="28pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-name-complex="Tahoma1" style:font-size-complex="28pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+   <style:text-properties style:use-window-font-color="true" style:text-outline="false" style:text-line-through-style="none" fo:font-family="Arial" style:font-family-generic="roman" style:font-pitch="variable" fo:font-size="28pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:font-family-asian="&apos;Arial Unicode MS&apos;" style:font-family-generic-asian="system" style:font-pitch-asian="variable" style:font-size-asian="28pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-family-complex="Tahoma" style:font-family-generic-complex="system" style:font-pitch-complex="variable" style:font-size-complex="28pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
   </style:style>
   <style:style style:name="T3" style:family="text">
-   <style:text-properties fo:color="#7e0021" style:font-name="Tahoma" fo:font-size="14pt" fo:font-weight="bold" style:font-size-asian="14pt" style:font-weight-asian="bold" style:font-size-complex="14pt" style:font-weight-complex="bold"/>
+   <style:text-properties fo:color="#7e0021" fo:font-family="Tahoma" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="14pt" fo:font-weight="bold" style:font-size-asian="14pt" style:font-weight-asian="bold" style:font-size-complex="14pt" style:font-weight-complex="bold"/>
   </style:style>
   <style:style style:name="T4" style:family="text">
    <style:text-properties fo:font-size="14pt" fo:font-weight="bold" style:font-size-asian="14pt" style:font-weight-asian="bold" style:font-size-complex="14pt" style:font-weight-complex="bold"/>
   </style:style>
   <style:style style:name="T5" style:family="text">
-   <style:text-properties style:font-name="Tahoma" fo:font-size="14pt" fo:font-weight="bold" style:font-size-asian="14pt" style:font-weight-asian="bold" style:font-size-complex="14pt" style:font-weight-complex="bold"/>
+   <style:text-properties fo:font-family="Tahoma" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="14pt" fo:font-weight="bold" style:font-size-asian="14pt" style:font-weight-asian="bold" style:font-size-complex="14pt" style:font-weight-complex="bold"/>
   </style:style>
   <style:style style:name="T6" style:family="text">
-   <style:text-properties fo:color="#b84747" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Georgia1" fo:font-size="48pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="bold" style:letter-kerning="true" style:font-name-asian="Georgia1" style:font-size-asian="48pt" style:font-style-asian="normal" style:font-weight-asian="bold" style:font-name-complex="Georgia1" style:font-size-complex="48pt" style:font-style-complex="normal" style:font-weight-complex="bold" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+   <style:text-properties fo:color="#b84747" style:text-outline="false" style:text-line-through-style="none" fo:font-family="Georgia" style:font-family-generic="roman" fo:font-size="48pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="bold" style:letter-kerning="true" style:font-family-asian="Georgia" style:font-family-generic-asian="roman" style:font-size-asian="48pt" style:font-style-asian="normal" style:font-weight-asian="bold" style:font-family-complex="Georgia" style:font-family-generic-complex="roman" style:font-size-complex="48pt" style:font-style-complex="normal" style:font-weight-complex="bold" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
   </style:style>
   <style:style style:name="T7" style:family="text">
-   <style:text-properties style:use-window-font-color="true" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Georgia1" fo:font-size="36pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="bold" style:letter-kerning="true" style:font-name-asian="Georgia1" style:font-size-asian="36pt" style:font-style-asian="normal" style:font-weight-asian="bold" style:font-name-complex="Georgia1" style:font-size-complex="36pt" style:font-style-complex="normal" style:font-weight-complex="bold" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+   <style:text-properties style:use-window-font-color="true" style:text-outline="false" style:text-line-through-style="none" fo:font-family="Georgia" style:font-family-generic="roman" fo:font-size="36pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="bold" style:letter-kerning="true" style:font-family-asian="Georgia" style:font-family-generic-asian="roman" style:font-size-asian="36pt" style:font-style-asian="normal" style:font-weight-asian="bold" style:font-family-complex="Georgia" style:font-family-generic-complex="roman" style:font-size-complex="36pt" style:font-style-complex="normal" style:font-weight-complex="bold" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
   </style:style>
   <style:style style:name="T8" style:family="text">
    <style:text-properties style:use-window-font-color="true" fo:font-size="22pt" fo:font-weight="bold" style:font-size-asian="22pt" style:font-weight-asian="bold" style:font-size-complex="22pt" style:font-weight-complex="bold"/>
   </style:style>
   <style:style style:name="T9" style:family="text">
-   <style:text-properties style:use-window-font-color="true" style:font-name="Georgia" fo:font-size="26pt" fo:font-weight="bold" style:font-size-asian="26pt" style:font-weight-asian="bold" style:font-size-complex="26pt" style:font-weight-complex="bold"/>
+   <style:text-properties style:use-window-font-color="true" fo:font-family="Georgia" style:font-family-generic="roman" style:font-pitch="variable" fo:font-size="26pt" fo:font-weight="bold" style:font-size-asian="26pt" style:font-weight-asian="bold" style:font-size-complex="26pt" style:font-weight-complex="bold"/>
   </style:style>
   <style:style style:name="T10" style:family="text">
-   <style:text-properties style:font-name="ArialMT1" fo:font-size="16pt" style:font-name-asian="ArialMT1" style:font-size-asian="16pt" style:font-name-complex="ArialMT1" style:font-size-complex="9.10000038146973pt"/>
+   <style:text-properties fo:font-family="ArialMT" style:font-family-generic="swiss" fo:font-size="16pt" style:font-family-asian="ArialMT" style:font-family-generic-asian="swiss" style:font-size-asian="16pt" style:font-family-complex="ArialMT" style:font-family-generic-complex="swiss" style:font-size-complex="9.10000038146973pt"/>
   </style:style>
   <style:style style:name="T11" style:family="text">
-   <style:text-properties style:use-window-font-color="true" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="ArialMT1" fo:font-size="16pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:font-name-asian="ArialMT1" style:font-size-asian="16pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-name-complex="ArialMT1" style:font-size-complex="9.10000038146973pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+   <style:text-properties style:use-window-font-color="true" style:text-outline="false" style:text-line-through-style="none" fo:font-family="ArialMT" style:font-family-generic="swiss" fo:font-size="16pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:font-family-asian="ArialMT" style:font-family-generic-asian="swiss" style:font-size-asian="16pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-family-complex="ArialMT" style:font-family-generic-complex="swiss" style:font-size-complex="9.10000038146973pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
   </style:style>
   <style:style style:name="T12" style:family="text">
-   <style:text-properties style:font-name="Arial1" fo:font-size="28pt" style:font-size-asian="28pt" style:font-size-complex="28pt"/>
+   <style:text-properties fo:font-family="Arial" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="28pt" style:font-size-asian="28pt" style:font-size-complex="28pt"/>
   </style:style>
   <style:style style:name="T13" style:family="text">
-   <style:text-properties fo:color="#262626" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Arial1" fo:font-size="28pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:font-name-asian="Georgia1" style:font-size-asian="28pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-name-complex="Georgia1" style:font-size-complex="28pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+   <style:text-properties fo:color="#262626" style:text-outline="false" style:text-line-through-style="none" fo:font-family="Arial" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="28pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:font-family-asian="Georgia" style:font-family-generic-asian="roman" style:font-size-asian="28pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-family-complex="Georgia" style:font-family-generic-complex="roman" style:font-size-complex="28pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
   </style:style>
   <style:style style:name="T14" style:family="text">
-   <style:text-properties fo:color="#b84747" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Arial1" fo:font-size="28pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="bold" style:letter-kerning="true" style:font-name-asian="Georgia1" style:font-size-asian="28pt" style:font-style-asian="normal" style:font-weight-asian="bold" style:font-name-complex="Georgia1" style:font-size-complex="28pt" style:font-style-complex="normal" style:font-weight-complex="bold" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+   <style:text-properties fo:color="#b84747" style:text-outline="false" style:text-line-through-style="none" fo:font-family="Arial" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="28pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="bold" style:letter-kerning="true" style:font-family-asian="Georgia" style:font-family-generic-asian="roman" style:font-size-asian="28pt" style:font-style-asian="normal" style:font-weight-asian="bold" style:font-family-complex="Georgia" style:font-family-generic-complex="roman" style:font-size-complex="28pt" style:font-style-complex="normal" style:font-weight-complex="bold" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
   </style:style>
   <style:style style:name="T15" style:family="text">
    <style:text-properties fo:color="#b84747" fo:font-weight="bold" style:font-weight-asian="bold" style:font-weight-complex="bold"/>
@@ -856,25 +839,25 @@
    <style:text-properties fo:font-size="20pt"/>
   </style:style>
   <style:style style:name="T17" style:family="text">
-   <style:text-properties style:use-window-font-color="true" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Arial1" fo:font-size="28pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:font-name-asian="Georgia1" style:font-size-asian="28pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-name-complex="Georgia1" style:font-size-complex="28pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+   <style:text-properties style:use-window-font-color="true" style:text-outline="false" style:text-line-through-style="none" fo:font-family="Arial" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="28pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:font-family-asian="Georgia" style:font-family-generic-asian="roman" style:font-size-asian="28pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-family-complex="Georgia" style:font-family-generic-complex="roman" style:font-size-complex="28pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
   </style:style>
   <style:style style:name="T18" style:family="text">
-   <style:text-properties fo:color="#262626" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Arial1" fo:font-size="27pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:font-name-asian="Georgia1" style:font-size-asian="27pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-name-complex="Georgia1" style:font-size-complex="27pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+   <style:text-properties fo:color="#262626" style:text-outline="false" style:text-line-through-style="none" fo:font-family="Arial" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="27pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:font-family-asian="Georgia" style:font-family-generic-asian="roman" style:font-size-asian="27pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-family-complex="Georgia" style:font-family-generic-complex="roman" style:font-size-complex="27pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
   </style:style>
   <style:style style:name="T19" style:family="text">
-   <style:text-properties fo:color="#b84747" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Arial1" fo:font-size="27pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="bold" style:letter-kerning="true" style:font-name-asian="Georgia1" style:font-size-asian="27pt" style:font-style-asian="normal" style:font-weight-asian="bold" style:font-name-complex="Georgia1" style:font-size-complex="27pt" style:font-style-complex="normal" style:font-weight-complex="bold" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+   <style:text-properties fo:color="#b84747" style:text-outline="false" style:text-line-through-style="none" fo:font-family="Arial" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="27pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="bold" style:letter-kerning="true" style:font-family-asian="Georgia" style:font-family-generic-asian="roman" style:font-size-asian="27pt" style:font-style-asian="normal" style:font-weight-asian="bold" style:font-family-complex="Georgia" style:font-family-generic-complex="roman" style:font-size-complex="27pt" style:font-style-complex="normal" style:font-weight-complex="bold" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
   </style:style>
   <style:style style:name="T20" style:family="text">
-   <style:text-properties style:use-window-font-color="true" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Arial1" fo:font-size="27pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:font-name-asian="Georgia1" style:font-size-asian="27pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-name-complex="Georgia1" style:font-size-complex="27pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+   <style:text-properties style:use-window-font-color="true" style:text-outline="false" style:text-line-through-style="none" fo:font-family="Arial" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="27pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:font-family-asian="Georgia" style:font-family-generic-asian="roman" style:font-size-asian="27pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-family-complex="Georgia" style:font-family-generic-complex="roman" style:font-size-complex="27pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
   </style:style>
   <style:style style:name="T21" style:family="text">
    <style:text-properties fo:font-size="16pt" style:font-size-asian="16pt" style:font-size-complex="16pt"/>
   </style:style>
   <style:style style:name="T22" style:family="text">
-   <style:text-properties style:use-window-font-color="true" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="ArialMT1" fo:font-size="16pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:font-name-asian="ArialMT1" style:font-size-asian="16pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-name-complex="ArialMT1" style:font-size-complex="16pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+   <style:text-properties style:use-window-font-color="true" style:text-outline="false" style:text-line-through-style="none" fo:font-family="ArialMT" style:font-family-generic="swiss" fo:font-size="16pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:font-family-asian="ArialMT" style:font-family-generic-asian="swiss" style:font-size-asian="16pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-family-complex="ArialMT" style:font-family-generic-complex="swiss" style:font-size-complex="16pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
   </style:style>
   <style:style style:name="T23" style:family="text">
-   <style:text-properties fo:color="#000000" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="ArialMT1" fo:font-size="16pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:font-name-asian="ArialMT1" style:font-size-asian="16pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-name-complex="ArialMT1" style:font-size-complex="16pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+   <style:text-properties fo:color="#000000" style:text-outline="false" style:text-line-through-style="none" fo:font-family="ArialMT" style:font-family-generic="swiss" fo:font-size="16pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:font-family-asian="ArialMT" style:font-family-generic-asian="swiss" style:font-size-asian="16pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-family-complex="ArialMT" style:font-family-generic-complex="swiss" style:font-size-complex="16pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
   </style:style>
   <style:style style:name="T24" style:family="text">
    <style:text-properties fo:font-size="28pt" style:font-size-asian="28pt" style:font-size-complex="28pt"/>
@@ -883,10 +866,10 @@
    <style:text-properties fo:color="#b84747" fo:font-size="28pt" fo:font-weight="bold" style:font-size-asian="28pt" style:font-weight-asian="bold" style:font-size-complex="28pt" style:font-weight-complex="bold"/>
   </style:style>
   <style:style style:name="T26" style:family="text">
-   <style:text-properties style:use-window-font-color="true" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="ArialMT1" fo:font-size="28pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:font-name-asian="ArialMT1" style:font-size-asian="28pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-name-complex="ArialMT1" style:font-size-complex="28pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+   <style:text-properties style:use-window-font-color="true" style:text-outline="false" style:text-line-through-style="none" fo:font-family="ArialMT" style:font-family-generic="swiss" fo:font-size="28pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:font-family-asian="ArialMT" style:font-family-generic-asian="swiss" style:font-size-asian="28pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-family-complex="ArialMT" style:font-family-generic-complex="swiss" style:font-size-complex="28pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
   </style:style>
   <style:style style:name="T27" style:family="text">
-   <style:text-properties fo:color="#b84747" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="ArialMT1" fo:font-size="28pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="bold" style:letter-kerning="true" style:font-name-asian="ArialMT1" style:font-size-asian="28pt" style:font-style-asian="normal" style:font-weight-asian="bold" style:font-name-complex="ArialMT1" style:font-size-complex="28pt" style:font-style-complex="normal" style:font-weight-complex="bold" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+   <style:text-properties fo:color="#b84747" style:text-outline="false" style:text-line-through-style="none" fo:font-family="ArialMT" style:font-family-generic="swiss" fo:font-size="28pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="bold" style:letter-kerning="true" style:font-family-asian="ArialMT" style:font-family-generic-asian="swiss" style:font-size-asian="28pt" style:font-style-asian="normal" style:font-weight-asian="bold" style:font-family-complex="ArialMT" style:font-family-generic-complex="swiss" style:font-size-complex="28pt" style:font-style-complex="normal" style:font-weight-complex="bold" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
   </style:style>
   <style:style style:name="T28" style:family="text">
    <style:text-properties fo:font-size="24pt" fo:font-weight="bold" style:font-size-asian="24pt" style:font-weight-asian="bold" style:font-size-complex="24pt" style:font-weight-complex="bold"/>
@@ -907,19 +890,19 @@
    <style:text-properties fo:color="#b84747" fo:font-size="24pt" fo:text-shadow="1pt 1pt" fo:font-weight="bold" style:font-size-asian="24pt" style:font-weight-asian="bold" style:font-size-complex="24pt" style:font-weight-complex="bold"/>
   </style:style>
   <style:style style:name="T34" style:family="text">
-   <style:text-properties style:font-name="Arial1" fo:font-size="18pt" style:font-size-asian="18pt" style:font-size-complex="18pt"/>
+   <style:text-properties fo:font-family="Arial" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="18pt" style:font-size-asian="18pt" style:font-size-complex="18pt"/>
   </style:style>
   <style:style style:name="T35" style:family="text">
-   <style:text-properties style:use-window-font-color="true" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Arial1" fo:font-size="18pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:font-name-asian="ArialMT1" style:font-size-asian="18pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-name-complex="ArialMT1" style:font-size-complex="18pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+   <style:text-properties style:use-window-font-color="true" style:text-outline="false" style:text-line-through-style="none" fo:font-family="Arial" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="18pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:font-family-asian="ArialMT" style:font-family-generic-asian="swiss" style:font-size-asian="18pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-family-complex="ArialMT" style:font-family-generic-complex="swiss" style:font-size-complex="18pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
   </style:style>
   <style:style style:name="T36" style:family="text">
-   <style:text-properties style:font-name="Arial1" fo:font-size="18pt" style:font-name-asian="ArialMT1" style:font-size-asian="18pt" style:font-name-complex="ArialMT1" style:font-size-complex="18pt"/>
+   <style:text-properties fo:font-family="Arial" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="18pt" style:font-family-asian="ArialMT" style:font-family-generic-asian="swiss" style:font-size-asian="18pt" style:font-family-complex="ArialMT" style:font-family-generic-complex="swiss" style:font-size-complex="18pt"/>
   </style:style>
   <style:style style:name="T37" style:family="text">
-   <style:text-properties fo:color="#000000" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="ArialMT1" fo:font-size="18pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:font-name-asian="ArialMT1" style:font-size-asian="18pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-name-complex="ArialMT1" style:font-size-complex="18pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+   <style:text-properties fo:color="#000000" style:text-outline="false" style:text-line-through-style="none" fo:font-family="ArialMT" style:font-family-generic="swiss" fo:font-size="18pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:font-family-asian="ArialMT" style:font-family-generic-asian="swiss" style:font-size-asian="18pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-family-complex="ArialMT" style:font-family-generic-complex="swiss" style:font-size-complex="18pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
   </style:style>
   <style:style style:name="T38" style:family="text">
-   <style:text-properties fo:color="#000000" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Arial1" fo:font-size="18pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:font-name-asian="ArialMT1" style:font-size-asian="18pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-name-complex="ArialMT1" style:font-size-complex="18pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+   <style:text-properties fo:color="#000000" style:text-outline="false" style:text-line-through-style="none" fo:font-family="Arial" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="18pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:font-family-asian="ArialMT" style:font-family-generic-asian="swiss" style:font-size-asian="18pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-family-complex="ArialMT" style:font-family-generic-complex="swiss" style:font-size-complex="18pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
   </style:style>
   <style:style style:name="T39" style:family="text">
    <style:text-properties fo:font-size="24pt" style:font-size-asian="24pt" style:font-size-complex="24pt"/>
@@ -940,22 +923,22 @@
    <style:text-properties fo:color="#000000" fo:font-size="26pt" fo:font-weight="normal" style:font-size-asian="26pt" style:font-weight-asian="normal" style:font-size-complex="26pt" style:font-weight-complex="normal"/>
   </style:style>
   <style:style style:name="T45" style:family="text">
-   <style:text-properties fo:color="#262626" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Tahoma" fo:font-size="12pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:font-name-asian="Georgia1" style:font-size-asian="12pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-name-complex="Georgia1" style:font-size-complex="12pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+   <style:text-properties fo:color="#262626" style:text-outline="false" style:text-line-through-style="none" fo:font-family="Tahoma" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="12pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:font-family-asian="Georgia" style:font-family-generic-asian="roman" style:font-size-asian="12pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-family-complex="Georgia" style:font-family-generic-complex="roman" style:font-size-complex="12pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
   </style:style>
   <style:style style:name="T46" style:family="text">
-   <style:text-properties fo:color="#262626" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Tahoma" fo:font-size="12pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:font-name-asian="ArialMT1" style:font-size-asian="12pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-name-complex="ArialMT1" style:font-size-complex="12pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+   <style:text-properties fo:color="#262626" style:text-outline="false" style:text-line-through-style="none" fo:font-family="Tahoma" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="12pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:font-family-asian="ArialMT" style:font-family-generic-asian="swiss" style:font-size-asian="12pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-family-complex="ArialMT" style:font-family-generic-complex="swiss" style:font-size-complex="12pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
   </style:style>
   <style:style style:name="T47" style:family="text">
-   <style:text-properties fo:color="#b84747" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Arial" fo:font-size="26pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="bold" style:letter-kerning="true" style:font-name-asian="Arial" style:font-size-asian="26pt" style:font-style-asian="normal" style:font-weight-asian="bold" style:font-name-complex="Arial" style:font-size-complex="26pt" style:font-style-complex="normal" style:font-weight-complex="bold" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+   <style:text-properties fo:color="#b84747" style:text-outline="false" style:text-line-through-style="none" fo:font-family="Arial" style:font-family-generic="roman" style:font-pitch="variable" fo:font-size="26pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="bold" style:letter-kerning="true" style:font-family-asian="Arial" style:font-family-generic-asian="roman" style:font-pitch-asian="variable" style:font-size-asian="26pt" style:font-style-asian="normal" style:font-weight-asian="bold" style:font-family-complex="Arial" style:font-family-generic-complex="roman" style:font-pitch-complex="variable" style:font-size-complex="26pt" style:font-style-complex="normal" style:font-weight-complex="bold" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
   </style:style>
   <style:style style:name="T48" style:family="text">
-   <style:text-properties style:font-name="Arial1" fo:font-size="32pt" style:font-size-asian="32pt" style:font-size-complex="32pt"/>
+   <style:text-properties fo:font-family="Arial" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="32pt" style:font-size-asian="32pt" style:font-size-complex="32pt"/>
   </style:style>
   <style:style style:name="T49" style:family="text">
-   <style:text-properties style:font-name="Arial1" fo:font-size="24pt" style:font-size-asian="24pt" style:font-size-complex="24pt"/>
+   <style:text-properties fo:font-family="Arial" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="24pt" style:font-size-asian="24pt" style:font-size-complex="24pt"/>
   </style:style>
   <style:style style:name="T50" style:family="text">
-   <style:text-properties style:font-name="Arial1" fo:font-size="32pt" fo:font-weight="bold" style:font-size-asian="32pt" style:font-weight-asian="bold" style:font-size-complex="32pt" style:font-weight-complex="bold"/>
+   <style:text-properties fo:font-family="Arial" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="32pt" fo:font-weight="bold" style:font-size-asian="32pt" style:font-weight-asian="bold" style:font-size-complex="32pt" style:font-weight-complex="bold"/>
   </style:style>
   <text:list-style style:name="L1">
    <text:list-level-style-bullet text:level="1" text:bullet-char="●">
@@ -1043,7 +1026,7 @@
   </text:list-style>
   <text:list-style style:name="L3">
    <text:list-level-style-bullet text:level="1" text:bullet-char="●">
-    <style:list-level-properties text:min-label-width="0.6cm"/>
+    <style:list-level-properties/>
     <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
    </text:list-level-style-bullet>
    <text:list-level-style-bullet text:level="2" text:bullet-char="●">
@@ -1095,22 +1078,22 @@
   <style:handout-master presentation:presentation-page-layout-name="AL0T26" style:page-layout-name="PM0" draw:style-name="dp2">
    <draw:frame draw:style-name="gr1" draw:text-style-name="P1" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="0cm" svg:y="0cm" presentation:class="header">
     <draw:text-box>
-     <text:p text:style-name="P1"><text:span text:style-name="T1"><presentation:header/></text:span><presentation:header/></text:p>
+     <text:p text:style-name="P1"><text:span text:style-name="T1"><presentation:header/></text:span><text:span text:style-name="T1"><presentation:header/></text:span><presentation:header/></text:p>
     </draw:text-box>
    </draw:frame>
    <draw:frame draw:style-name="gr1" draw:text-style-name="P2" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="11.886cm" svg:y="0cm" presentation:class="date-time">
     <draw:text-box>
-     <text:p text:style-name="P2"><text:span text:style-name="T1"><presentation:date-time/></text:span><presentation:date-time/></text:p>
+     <text:p text:style-name="P2"><text:span text:style-name="T1"><presentation:date-time/></text:span><text:span text:style-name="T1"><presentation:date-time/></text:span><presentation:date-time/></text:p>
     </draw:text-box>
    </draw:frame>
    <draw:frame draw:style-name="gr2" draw:text-style-name="P1" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="0cm" svg:y="28.215cm" presentation:class="footer">
     <draw:text-box>
-     <text:p text:style-name="P1"><text:span text:style-name="T1"><presentation:footer/></text:span><presentation:footer/></text:p>
+     <text:p text:style-name="P1"><text:span text:style-name="T1"><presentation:footer/></text:span><text:span text:style-name="T1"><presentation:footer/></text:span><presentation:footer/></text:p>
     </draw:text-box>
    </draw:frame>
    <draw:frame draw:style-name="gr2" draw:text-style-name="P2" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="11.886cm" svg:y="28.215cm" presentation:class="page-number">
     <draw:text-box>
-     <text:p text:style-name="P2"><text:span text:style-name="T1"><text:page-number>&lt;numéro&gt;</text:page-number></text:span><text:page-number>&lt;numéro&gt;</text:page-number></text:p>
+     <text:p text:style-name="P2"><text:span text:style-name="T1"><text:page-number>&lt;numéro&gt;</text:page-number></text:span><text:span text:style-name="T1"><text:page-number>&lt;numéro&gt;</text:page-number></text:span><text:page-number>&lt;numéro&gt;</text:page-number></text:p>
     </draw:text-box>
    </draw:frame>
    <draw:page-thumbnail draw:layer="backgroundobjects" svg:width="8.999cm" svg:height="6.749cm" svg:x="1cm" svg:y="2.898cm" draw:page-number="1"/>
@@ -1125,6 +1108,9 @@
     <text:p/>
    </draw:rect>
    <draw:frame presentation:style-name="Standard-title" draw:layer="backgroundobjects" svg:width="23.3cm" svg:height="3.506cm" svg:x="4.2cm" svg:y="0.537cm" presentation:class="title" presentation:placeholder="true">
+    <draw:text-box/>
+   </draw:frame>
+   <draw:frame presentation:style-name="Standard-outline1" draw:layer="backgroundobjects" svg:width="24.639cm" svg:height="12.18cm" svg:x="1.4cm" svg:y="4.914cm" presentation:class="outline" presentation:placeholder="true">
     <draw:text-box/>
    </draw:frame>
    <draw:frame presentation:style-name="Standard-outline1" draw:layer="backgroundobjects" svg:width="25.199cm" svg:height="12.18cm" svg:x="1.4cm" svg:y="4.914cm" presentation:class="outline" presentation:placeholder="true">
@@ -1181,19 +1167,19 @@
    </draw:frame>
    <draw:frame presentation:style-name="pr3" draw:text-style-name="P1" draw:layer="backgroundobjects" svg:width="6.523cm" svg:height="1.448cm" svg:x="1.4cm" svg:y="19.131cm" presentation:class="date-time">
     <draw:text-box>
-     <text:p text:style-name="P1"><text:span text:style-name="T1"><presentation:date-time/></text:span><presentation:date-time/></text:p>
+     <text:p text:style-name="P1"><text:span text:style-name="T1"><presentation:date-time/></text:span><text:span text:style-name="T1"><presentation:date-time/></text:span><presentation:date-time/></text:p>
     </draw:text-box>
    </draw:frame>
    <draw:frame presentation:style-name="pr3" draw:text-style-name="P5" draw:layer="backgroundobjects" svg:width="8.875cm" svg:height="1.448cm" svg:x="9.576cm" svg:y="19.131cm" presentation:class="footer">
     <draw:text-box>
-     <text:p text:style-name="P5"><text:span text:style-name="T3"><text:a xlink:href="http://www.freemedforms.com/" xlink:type="simple">http://www.freemedforms.com/</text:a></text:span><presentation:footer/></text:p>
+     <text:p text:style-name="P5"><text:span text:style-name="T3"><text:a xlink:href="http://www.freemedforms.com/">http://www.freemedforms.com/</text:a></text:span><text:span text:style-name="T1"><presentation:footer/></text:span><presentation:footer/></text:p>
      <text:p text:style-name="P5"><text:span text:style-name="T4">RMLL 2014</text:span></text:p>
      <text:p text:style-name="P5"><text:span text:style-name="T1"><presentation:footer/></text:span></text:p>
     </draw:text-box>
    </draw:frame>
    <draw:frame presentation:style-name="pr3" draw:text-style-name="P2" draw:layer="backgroundobjects" svg:width="6.523cm" svg:height="1.448cm" svg:x="20.076cm" svg:y="19.131cm" presentation:class="page-number">
     <draw:text-box>
-     <text:p text:style-name="P2"><text:span text:style-name="T5"><text:page-number>&lt;numéro&gt;</text:page-number></text:span><text:page-number>&lt;numéro&gt;</text:page-number></text:p>
+     <text:p text:style-name="P2"><text:span text:style-name="T5"><text:page-number>&lt;numéro&gt;</text:page-number></text:span><text:span text:style-name="T1"><text:page-number>&lt;numéro&gt;</text:page-number></text:span><text:page-number>&lt;numéro&gt;</text:page-number></text:p>
     </draw:text-box>
    </draw:frame>
    <draw:frame draw:style-name="gr3" draw:text-style-name="P3" draw:layer="backgroundobjects" svg:width="3.6cm" svg:height="3.405cm" svg:x="0.2cm" svg:y="0.595cm">
@@ -1303,24 +1289,27 @@
     <draw:frame presentation:style-name="Standard-notes" draw:layer="backgroundobjects" svg:width="16.799cm" svg:height="13.364cm" svg:x="2.1cm" svg:y="14.107cm" presentation:class="notes" presentation:placeholder="true">
      <draw:text-box/>
     </draw:frame>
+    <draw:frame presentation:style-name="Standard-notes" draw:layer="backgroundobjects" svg:width="16.799cm" svg:height="13.364cm" svg:x="2.1cm" svg:y="14.107cm" presentation:class="notes" presentation:placeholder="true">
+     <draw:text-box/>
+    </draw:frame>
     <draw:frame presentation:style-name="pr4" draw:text-style-name="P1" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="0cm" svg:y="0cm" presentation:class="header">
      <draw:text-box>
-      <text:p text:style-name="P1"><text:span text:style-name="T1"><presentation:header/></text:span><presentation:header/></text:p>
+      <text:p text:style-name="P1"><text:span text:style-name="T1"><presentation:header/></text:span><text:span text:style-name="T1"><presentation:header/></text:span><presentation:header/></text:p>
      </draw:text-box>
     </draw:frame>
     <draw:frame presentation:style-name="pr4" draw:text-style-name="P2" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="11.886cm" svg:y="0cm" presentation:class="date-time">
      <draw:text-box>
-      <text:p text:style-name="P2"><text:span text:style-name="T1"><presentation:date-time/></text:span><presentation:date-time/></text:p>
+      <text:p text:style-name="P2"><text:span text:style-name="T1"><presentation:date-time/></text:span><text:span text:style-name="T1"><presentation:date-time/></text:span><presentation:date-time/></text:p>
      </draw:text-box>
     </draw:frame>
     <draw:frame presentation:style-name="pr5" draw:text-style-name="P1" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="0cm" svg:y="28.215cm" presentation:class="footer">
      <draw:text-box>
-      <text:p text:style-name="P1"><text:span text:style-name="T1"><presentation:footer/></text:span><presentation:footer/></text:p>
+      <text:p text:style-name="P1"><text:span text:style-name="T1"><presentation:footer/></text:span><text:span text:style-name="T1"><presentation:footer/></text:span><presentation:footer/></text:p>
      </draw:text-box>
     </draw:frame>
     <draw:frame presentation:style-name="pr5" draw:text-style-name="P2" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="11.886cm" svg:y="28.215cm" presentation:class="page-number">
      <draw:text-box>
-      <text:p text:style-name="P2"><text:span text:style-name="T1"><text:page-number>&lt;numéro&gt;</text:page-number></text:span><text:page-number>&lt;numéro&gt;</text:page-number></text:p>
+      <text:p text:style-name="P2"><text:span text:style-name="T1"><text:page-number>&lt;numéro&gt;</text:page-number></text:span><text:span text:style-name="T1"><text:page-number>&lt;numéro&gt;</text:page-number></text:span><text:page-number>&lt;numéro&gt;</text:page-number></text:p>
      </draw:text-box>
     </draw:frame>
    </presentation:notes>
@@ -1335,7 +1324,7 @@
       <text:p>www.freemedforms.com</text:p>
      </draw:text-box>
     </draw:frame>
-    <draw:frame presentation:style-name="pr7" draw:text-style-name="P7" draw:layer="layout" svg:width="25.199cm" svg:height="14.598cm" svg:x="1.801cm" svg:y="5.463cm" presentation:class="subtitle" presentation:user-transformed="true">
+    <draw:frame presentation:style-name="pr7" draw:text-style-name="P7" draw:layer="layout" svg:width="25.199cm" svg:height="16.876cm" svg:x="1.801cm" svg:y="4.324cm" presentation:class="subtitle" presentation:user-transformed="true">
      <draw:text-box>
       <text:p text:style-name="P6"><text:span text:style-name="T6">The FreeMedForms project :</text:span></text:p>
       <text:p text:style-name="P6"><text:span text:style-name="T7">Créez et utilisez votre propre jeu d&apos;interaction médicamenteuses</text:span></text:p>
@@ -1357,7 +1346,7 @@
        <text:p text:style-name="P8"><text:span text:style-name="T10"/></text:p>
        <text:p text:style-name="P8"><text:span text:style-name="T10">I&apos;m Eric Maeker, French physician and developer C + + / Qt I&apos;m the creator and main developer of The FreeMedForms project. The project was started in 2008 from scratch and is now usable in day-to-day practice. <text:s/>FreeMedForms&apos; project applications are now in production in some medical offices.</text:span></text:p>
        <text:p text:style-name="P8"><text:span text:style-name="T11"/></text:p>
-       <text:p text:style-name="P8"><text:span text:style-name="T11">You can find all information about the FreeMedForms project on our main web site: </text:span><text:span text:style-name="T11"><text:a xlink:href="http://www.freemedforms.com/" xlink:type="simple">http://www.freemedforms.com/</text:a></text:span></text:p>
+       <text:p text:style-name="P8"><text:span text:style-name="T11">You can find all information about the FreeMedForms project on our main web site: </text:span><text:span text:style-name="T11"><text:a xlink:href="http://www.freemedforms.com/">http://www.freemedforms.com/</text:a></text:span></text:p>
        <text:p text:style-name="P8"><text:span text:style-name="T11"/></text:p>
        <text:p text:style-name="P8"><text:span text:style-name="T11">I will present you today the FreeDDIManager our drug interaction manager or how you can create and use your own set of interaction within the FreeMedForms applications.</text:span></text:p>
       </draw:text-box>
@@ -1747,7 +1736,7 @@
     <draw:line draw:style-name="gr7" draw:text-style-name="P3" draw:layer="layout" svg:x1="7cm" svg:y1="8.3cm" svg:x2="7.5cm" svg:y2="9.3cm">
      <text:p/>
     </draw:line>
-    <draw:frame draw:style-name="gr8" draw:text-style-name="P17" draw:layer="layout" svg:width="2.17cm" svg:height="1.195cm" svg:x="9.5cm" svg:y="5.6cm">
+    <draw:frame draw:style-name="gr8" draw:text-style-name="P17" draw:layer="layout" svg:width="2.174cm" svg:height="1.195cm" svg:x="9.5cm" svg:y="5.6cm">
      <draw:text-box>
       <text:p><text:span text:style-name="T28">ATC</text:span></text:p>
      </draw:text-box>
@@ -1779,7 +1768,7 @@
     <draw:line draw:style-name="gr7" draw:text-style-name="P3" draw:layer="layout" svg:x1="7.001cm" svg:y1="15.8cm" svg:x2="7.501cm" svg:y2="16.8cm">
      <text:p/>
     </draw:line>
-    <draw:frame draw:style-name="gr8" draw:text-style-name="P17" draw:layer="layout" svg:width="2.17cm" svg:height="1.195cm" svg:x="9.401cm" svg:y="17.7cm">
+    <draw:frame draw:style-name="gr8" draw:text-style-name="P17" draw:layer="layout" svg:width="2.174cm" svg:height="1.195cm" svg:x="9.401cm" svg:y="17.7cm">
      <draw:text-box>
       <text:p><text:span text:style-name="T28">ATC</text:span></text:p>
      </draw:text-box>
@@ -1883,7 +1872,7 @@
       <text:p><text:span text:style-name="T30">Non blocking</text:span></text:p>
      </draw:text-box>
     </draw:frame>
-    <draw:frame draw:style-name="gr14" draw:text-style-name="P17" draw:layer="layout" svg:width="3.338cm" svg:height="1.195cm" draw:transform="rotate (0.519759051243911) translate (13.968cm 8.23cm)">
+    <draw:frame draw:style-name="gr14" draw:text-style-name="P17" draw:layer="layout" svg:width="3.347cm" svg:height="1.195cm" draw:transform="rotate (0.519759051243911) translate (13.968cm 8.23cm)">
      <draw:text-box>
       <text:p><text:span text:style-name="T28">To ATC</text:span></text:p>
      </draw:text-box>
@@ -2149,6 +2138,7 @@
      </draw:text-box>
     </draw:frame>
     <presentation:notes draw:style-name="dp2">
+     <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
      <draw:page-thumbnail draw:style-name="gr4" draw:layer="layout" svg:width="14.848cm" svg:height="11.136cm" svg:x="3.075cm" svg:y="2.257cm" draw:page-number="9" presentation:class="page"/>
      <draw:frame presentation:style-name="pr15" draw:layer="layout" svg:width="16.799cm" svg:height="13.364cm" svg:x="2.1cm" svg:y="14.107cm" presentation:class="notes" presentation:placeholder="true" presentation:user-transformed="true">
       <draw:text-box/>
@@ -2200,9 +2190,12 @@
      </draw:text-box>
     </draw:frame>
     <presentation:notes draw:style-name="dp2">
+     <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
      <draw:page-thumbnail draw:style-name="gr4" draw:layer="layout" svg:width="14.848cm" svg:height="11.136cm" svg:x="3.075cm" svg:y="2.257cm" draw:page-number="10" presentation:class="page"/>
-     <draw:frame presentation:style-name="pr15" draw:layer="layout" svg:width="16.799cm" svg:height="13.364cm" svg:x="2.1cm" svg:y="14.107cm" presentation:class="notes" presentation:placeholder="true" presentation:user-transformed="true">
-      <draw:text-box/>
+     <draw:frame presentation:style-name="pr15" draw:layer="layout" svg:width="16.799cm" svg:height="13.364cm" svg:x="2.1cm" svg:y="14.107cm" presentation:class="notes" presentation:user-transformed="true">
+      <draw:text-box>
+       <text:p>Téléchargement automatique click</text:p>
+      </draw:text-box>
      </draw:frame>
     </presentation:notes>
    </draw:page>
@@ -2213,7 +2206,7 @@
       <text:p>FreeDDIManager – Workflow<text:line-break/>Preparing drug recognization</text:p>
      </draw:text-box>
     </draw:frame>
-    <draw:frame presentation:style-name="pr23" draw:layer="layout" svg:width="25.199cm" svg:height="14.505cm" svg:x="1.4cm" svg:y="4.914cm" presentation:class="outline" presentation:user-transformed="true">
+    <draw:frame presentation:style-name="pr24" draw:layer="layout" svg:width="25.199cm" svg:height="14.505cm" svg:x="1.4cm" svg:y="4.914cm" presentation:class="outline" presentation:user-transformed="true">
      <draw:text-box>
       <text:list text:style-name="L2">
        <text:list-item>
@@ -2251,9 +2244,17 @@
      </draw:text-box>
     </draw:frame>
     <presentation:notes draw:style-name="dp2">
+     <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
      <draw:page-thumbnail draw:style-name="gr4" draw:layer="layout" svg:width="14.848cm" svg:height="11.136cm" svg:x="3.075cm" svg:y="2.257cm" draw:page-number="11" presentation:class="page"/>
-     <draw:frame presentation:style-name="pr15" draw:layer="layout" svg:width="16.799cm" svg:height="13.364cm" svg:x="2.1cm" svg:y="14.107cm" presentation:class="notes" presentation:placeholder="true" presentation:user-transformed="true">
-      <draw:text-box/>
+     <draw:frame presentation:style-name="pr15" draw:layer="layout" svg:width="16.799cm" svg:height="13.364cm" svg:x="2.001cm" svg:y="14.036cm" presentation:class="notes" presentation:user-transformed="true">
+      <draw:text-box>
+       <text:p>Sera explicité dans la vidéo.</text:p>
+       <text:p>component=molecule</text:p>
+       <text:p>interactor=molecule type (atc)</text:p>
+       <text:p><text:s text:c="15"/>= fluindione (pas &apos;atc&apos; pas d&apos;inn)</text:p>
+       <text:p/>
+       <text:p>Interactor p450 : tous les substrats ou tous les inhibiteurs donc : structure est plus parlante</text:p>
+      </draw:text-box>
      </draw:frame>
     </presentation:notes>
    </draw:page>
@@ -2289,9 +2290,14 @@
      </draw:text-box>
     </draw:frame>
     <presentation:notes draw:style-name="dp2">
+     <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
      <draw:page-thumbnail draw:style-name="gr4" draw:layer="layout" svg:width="14.848cm" svg:height="11.136cm" svg:x="3.075cm" svg:y="2.257cm" draw:page-number="12" presentation:class="page"/>
-     <draw:frame presentation:style-name="pr15" draw:layer="layout" svg:width="16.799cm" svg:height="13.364cm" svg:x="2.1cm" svg:y="14.107cm" presentation:class="notes" presentation:placeholder="true" presentation:user-transformed="true">
-      <draw:text-box/>
+     <draw:frame presentation:style-name="pr15" draw:layer="layout" svg:width="16.799cm" svg:height="13.364cm" svg:x="2.1cm" svg:y="14.107cm" presentation:class="notes" presentation:user-transformed="true">
+      <draw:text-box>
+       <text:p>Envoyer article sur algo amazon à eric</text:p>
+       <text:p/>
+       <text:p>Médico/légal : hôpital se retourne contre éditeur de logiciel</text:p>
+      </draw:text-box>
      </draw:frame>
     </presentation:notes>
    </draw:page>
@@ -2318,9 +2324,12 @@
      </draw:text-box>
     </draw:frame>
     <presentation:notes draw:style-name="dp2">
+     <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
      <draw:page-thumbnail draw:style-name="gr4" draw:layer="layout" svg:width="14.848cm" svg:height="11.136cm" svg:x="3.075cm" svg:y="2.257cm" draw:page-number="13" presentation:class="page"/>
-     <draw:frame presentation:style-name="pr15" draw:layer="layout" svg:width="16.799cm" svg:height="13.364cm" svg:x="2.1cm" svg:y="14.107cm" presentation:class="notes" presentation:placeholder="true" presentation:user-transformed="true">
-      <draw:text-box/>
+     <draw:frame presentation:style-name="pr15" draw:layer="layout" svg:width="16.799cm" svg:height="13.364cm" svg:x="2.1cm" svg:y="14.107cm" presentation:class="notes" presentation:user-transformed="true">
+      <draw:text-box>
+       <text:p>Javascript : security risk?</text:p>
+      </draw:text-box>
      </draw:frame>
     </presentation:notes>
    </draw:page>
@@ -2331,7 +2340,7 @@
       <text:p>FreeDDIManager – workflow<text:line-break/>Managing datapacks</text:p>
      </draw:text-box>
     </draw:frame>
-    <draw:frame presentation:style-name="pr24" draw:layer="layout" svg:width="25.199cm" svg:height="13.859cm" svg:x="1.4cm" svg:y="4.914cm" presentation:class="outline" presentation:user-transformed="true">
+    <draw:frame presentation:style-name="pr25" draw:layer="layout" svg:width="25.199cm" svg:height="13.859cm" svg:x="1.4cm" svg:y="4.914cm" presentation:class="outline" presentation:user-transformed="true">
      <draw:text-box>
       <text:list text:style-name="L2">
        <text:list-item>
@@ -2384,12 +2393,13 @@
     </presentation:notes>
    </draw:page>
    <draw:page draw:name="page16" draw:style-name="dp4" draw:master-page-name="Standard" presentation:presentation-page-layout-name="AL2T17">
-    <draw:frame presentation:style-name="pr25" draw:layer="layout" svg:width="18cm" svg:height="3.256cm" svg:x="5cm" svg:y="0.961cm" presentation:class="title" presentation:user-transformed="true">
+    <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
+    <draw:frame presentation:style-name="pr26" draw:layer="layout" svg:width="18cm" svg:height="3.256cm" svg:x="5cm" svg:y="0.961cm" presentation:class="title" presentation:user-transformed="true">
      <draw:text-box>
       <text:p>Alert philosophy [9]</text:p>
      </draw:text-box>
     </draw:frame>
-    <draw:frame presentation:style-name="pr26" draw:text-style-name="P27" draw:layer="layout" svg:width="25.199cm" svg:height="12.151cm" svg:x="1.4cm" svg:y="4.914cm" presentation:class="outline" presentation:user-transformed="true">
+    <draw:frame presentation:style-name="pr27" draw:text-style-name="P27" draw:layer="layout" svg:width="25.199cm" svg:height="12.151cm" svg:x="1.4cm" svg:y="4.914cm" presentation:class="outline" presentation:user-transformed="true">
      <draw:text-box>
       <text:list text:style-name="L2">
        <text:list-item>
@@ -2443,12 +2453,12 @@
     </presentation:notes>
    </draw:page>
    <draw:page draw:name="page17" draw:style-name="dp4" draw:master-page-name="Standard" presentation:presentation-page-layout-name="AL2T17">
-    <draw:frame presentation:style-name="pr25" draw:layer="layout" svg:width="18cm" svg:height="3.256cm" svg:x="5cm" svg:y="0.961cm" presentation:class="title" presentation:user-transformed="true">
+    <draw:frame presentation:style-name="pr26" draw:layer="layout" svg:width="18cm" svg:height="3.256cm" svg:x="5cm" svg:y="0.961cm" presentation:class="title" presentation:user-transformed="true">
      <draw:text-box>
       <text:p>Alert philosophy</text:p>
      </draw:text-box>
     </draw:frame>
-    <draw:frame presentation:style-name="pr27" draw:text-style-name="P27" draw:layer="layout" svg:width="25.199cm" svg:height="13.576cm" svg:x="1.4cm" svg:y="4.914cm" presentation:class="outline" presentation:user-transformed="true">
+    <draw:frame presentation:style-name="pr28" draw:text-style-name="P27" draw:layer="layout" svg:width="25.199cm" svg:height="13.576cm" svg:x="1.4cm" svg:y="4.914cm" presentation:class="outline" presentation:user-transformed="true">
      <draw:text-box>
       <text:list text:style-name="L2">
        <text:list-item>
@@ -2502,12 +2512,12 @@
     </presentation:notes>
    </draw:page>
    <draw:page draw:name="page18" draw:style-name="dp4" draw:master-page-name="Standard" presentation:presentation-page-layout-name="AL2T17">
-    <draw:frame presentation:style-name="pr25" draw:layer="layout" svg:width="18cm" svg:height="3.256cm" svg:x="5cm" svg:y="0.961cm" presentation:class="title" presentation:user-transformed="true">
+    <draw:frame presentation:style-name="pr26" draw:layer="layout" svg:width="18cm" svg:height="3.256cm" svg:x="5cm" svg:y="0.961cm" presentation:class="title" presentation:user-transformed="true">
      <draw:text-box>
       <text:p>Alert packs</text:p>
      </draw:text-box>
     </draw:frame>
-    <draw:frame presentation:style-name="pr28" draw:text-style-name="P27" draw:layer="layout" svg:width="25.199cm" svg:height="12.451cm" svg:x="1.4cm" svg:y="4.914cm" presentation:class="outline" presentation:user-transformed="true">
+    <draw:frame presentation:style-name="pr29" draw:text-style-name="P27" draw:layer="layout" svg:width="25.199cm" svg:height="12.451cm" svg:x="1.4cm" svg:y="4.914cm" presentation:class="outline" presentation:user-transformed="true">
      <draw:text-box>
       <text:list text:style-name="L2">
        <text:list-item>
@@ -6775,7 +6785,7 @@
       <text:p>FreeMedForms<text:line-break/>Needs you !</text:p>
      </draw:text-box>
     </draw:frame>
-    <draw:frame presentation:style-name="pr29" draw:text-style-name="P30" draw:layer="layout" svg:width="25.199cm" svg:height="13.739cm" svg:x="1.4cm" svg:y="4.914cm" presentation:class="outline" presentation:user-transformed="true">
+    <draw:frame presentation:style-name="pr30" draw:text-style-name="P30" draw:layer="layout" svg:width="25.199cm" svg:height="13.739cm" svg:x="1.4cm" svg:y="4.914cm" presentation:class="outline" presentation:user-transformed="true">
      <draw:text-box>
       <text:list text:style-name="L2">
        <text:list-item>
@@ -6785,13 +6795,13 @@
         <text:p text:style-name="P9"><text:span text:style-name="T48">Need devs, testers, translators, MD, pharmacists... (and funds)</text:span></text:p>
        </text:list-item>
        <text:list-item>
-        <text:p text:style-name="P9"><text:span text:style-name="T48">Code: GitHub </text:span><text:span text:style-name="T49"><text:a xlink:href="https://github.com/FreeMedForms/freemedforms" xlink:type="simple">https://github.com/FreeMedForms/freemedforms</text:a></text:span></text:p>
+        <text:p text:style-name="P9"><text:span text:style-name="T48">Code: GitHub </text:span><text:span text:style-name="T49"><text:a xlink:href="https://github.com/FreeMedForms/freemedforms">https://github.com/FreeMedForms/freemedforms</text:a></text:span></text:p>
        </text:list-item>
        <text:list-item>
         <text:p text:style-name="P9"><text:span text:style-name="T48">Web site:</text:span></text:p>
         <text:list>
          <text:list-item>
-          <text:p><text:span text:style-name="T50"><text:a xlink:href="http://www.freemedforms.com/" xlink:type="simple">http://www.freemedforms.com/</text:a></text:span></text:p>
+          <text:p><text:span text:style-name="T50"><text:a xlink:href="http://www.freemedforms.com/">http://www.freemedforms.com/</text:a></text:span></text:p>
          </text:list-item>
         </text:list>
        </text:list-item>
@@ -6799,7 +6809,7 @@
         <text:p text:style-name="P9"><text:span text:style-name="T48">Mailing-lists: </text:span></text:p>
         <text:list>
          <text:list-item>
-          <text:p><text:span text:style-name="T50"><text:a xlink:href="mailto:freemedforms@googlegroups.com" xlink:type="simple">freemedforms@googlegroups.com</text:a></text:span></text:p>
+          <text:p><text:span text:style-name="T50"><text:a xlink:href="mailto:freemedforms@googlegroups.com">freemedforms@googlegroups.com</text:a></text:span></text:p>
          </text:list-item>
         </text:list>
        </text:list-item>
