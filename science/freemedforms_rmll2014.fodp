@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:presentation="urn:oasis:names:tc:opendocument:xmlns:presentation:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:smil="urn:oasis:names:tc:opendocument:xmlns:smil-compatible:1.0" xmlns:anim="urn:oasis:names:tc:opendocument:xmlns:animation:1.0" xmlns:rpt="http://openoffice.org/2005/report" xmlns:of="urn:oasis:names:tc:opendocument:xmlns:of:1.2" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:grddl="http://www.w3.org/2003/g/data-view#" xmlns:officeooo="http://openoffice.org/2009/office" xmlns:tableooo="http://openoffice.org/2009/table" xmlns:drawooo="http://openoffice.org/2010/draw" xmlns:calcext="urn:org:documentfoundation:names:experimental:calc:xmlns:calcext:1.0" xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0" xmlns:field="urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0" xmlns:formx="urn:openoffice:names:experimental:ooxml-odf-interop:xmlns:form:1.0" xmlns:css3t="http://www.w3.org/TR/css3-text/" office:version="1.2" office:mimetype="application/vnd.oasis.opendocument.presentation">
- <office:meta><meta:creation-date>2011-01-23T09:45:15</meta:creation-date><meta:editing-duration>P3DT12H54M44S</meta:editing-duration><meta:editing-cycles>394</meta:editing-cycles><dc:date>2014-06-30T17:17:18.558233275</dc:date><meta:generator>LibreOffice/4.2.5.2$Linux_X86_64 LibreOffice_project/420m0$Build-2</meta:generator><meta:print-date>2011-01-29T18:26:49</meta:print-date><dc:title>The FreeMedForms project: structuring patient files, sharing alerts.</dc:title><meta:keyword>RMLL 2013</meta:keyword><dc:creator>Eric Maeker</dc:creator><meta:document-statistic meta:object-count="182"/></office:meta>
+ <office:meta><meta:creation-date>2011-01-23T09:45:15</meta:creation-date><meta:editing-duration>P3DT12H54M44S</meta:editing-duration><meta:editing-cycles>394</meta:editing-cycles><dc:date>2014-06-30T17:17:18.558233275</dc:date><meta:generator>LibreOffice/4.2.5.2$Linux_X86_64 LibreOffice_project/420m0$Build-2</meta:generator><meta:print-date>2011-01-29T18:26:49</meta:print-date><dc:title>The FreeMedForms project: structuring patient files, sharing alerts.</dc:title><meta:keyword>RMLL 2013</meta:keyword><dc:creator>Eric Maeker</dc:creator><meta:document-statistic meta:object-count="184"/></office:meta>
  <office:settings>
   <config:config-item-set config:name="ooo:view-settings">
    <config:config-item config:name="VisibleAreaTop" config:type="int">-321</config:config-item>
    <config:config-item config:name="VisibleAreaLeft" config:type="int">-5292</config:config-item>
-   <config:config-item config:name="VisibleAreaWidth" config:type="int">38565</config:config-item>
-   <config:config-item config:name="VisibleAreaHeight" config:type="int">21608</config:config-item>
+   <config:config-item config:name="VisibleAreaWidth" config:type="int">38564</config:config-item>
+   <config:config-item config:name="VisibleAreaHeight" config:type="int">21607</config:config-item>
    <config:config-item-map-indexed config:name="Views">
     <config:config-item-map-entry>
      <config:config-item config:name="ViewId" config:type="string">view1</config:config-item>
@@ -29,8 +29,8 @@
      <config:config-item config:name="NoColors" config:type="boolean">true</config:config-item>
      <config:config-item config:name="RulerIsVisible" config:type="boolean">false</config:config-item>
      <config:config-item config:name="PageKind" config:type="short">0</config:config-item>
-     <config:config-item config:name="SelectedPage" config:type="short">20</config:config-item>
-     <config:config-item config:name="IsLayerMode" config:type="boolean">true</config:config-item>
+     <config:config-item config:name="SelectedPage" config:type="short">12</config:config-item>
+     <config:config-item config:name="IsLayerMode" config:type="boolean">false</config:config-item>
      <config:config-item config:name="IsDoubleClickTextEdit" config:type="boolean">true</config:config-item>
      <config:config-item config:name="IsClickChangeRotation" config:type="boolean">false</config:config-item>
      <config:config-item config:name="SlidesPerRow" config:type="short">4</config:config-item>
@@ -96,7 +96,7 @@
    <config:config-item config:name="PrintQuality" config:type="int">0</config:config-item>
    <config:config-item config:name="PrinterIndependentLayout" config:type="string">low-resolution</config:config-item>
    <config:config-item config:name="PrinterName" config:type="string">HP-LaserJet-1022</config:config-item>
-   <config:config-item config:name="PrinterSetup" config:type="base64Binary">ogH+/0hQLUxhc2VySmV0LTEwMjIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQ1VQUzpIUC1MYXNlckpldC0xMDIyAAAAAAAAAAAAAAAWAAMAxAAAAAAAAwAEAAhSAAAEdAAASm9iRGF0YSAxCnByaW50ZXI9SFAtTGFzZXJKZXQtMTAyMgpvcmllbnRhdGlvbj1Qb3J0cmFpdApjb3BpZXM9MQpjb2xsYXRlPWZhbHNlCm1hcmdpbmRhanVzdG1lbnQ9MCwwLDAsMApjb2xvcmRlcHRoPTI0CnBzbGV2ZWw9MApwZGZkZXZpY2U9MQpjb2xvcmRldmljZT0wClBQRENvbnRleERhdGEKUGFnZVNpemU6QTQASW5wdXRTbG90OkF1dG8AABIAQ09NUEFUX0RVUExFWF9NT0RFDgBEVVBMRVhfVU5LTk9XTg==</config:config-item>
+   <config:config-item config:name="PrinterSetup" config:type="base64Binary">ogH+/0hQLUxhc2VySmV0LTEwMjIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQ1VQUzpIUC1MYXNlckpldC0xMDIyAAAAAAAAAAAAAAAWAAMAxAAAAAAAAwAEAAhSAAAEdAAASm9iRGF0YSAxCnByaW50ZXI9SFAtTGFzZXJKZXQtMTAyMgpvcmllbnRhdGlvbj1Qb3J0cmFpdApjb3BpZXM9MQpjb2xsYXRlPWZhbHNlCm1hcmdpbmRhanVzdG1lbnQ9MCwwLDAsMApjb2xvcmRlcHRoPTI0CnBzbGV2ZWw9MApwZGZkZXZpY2U9MQpjb2xvcmRldmljZT0wClBQRENvbnRleERhdGEKSW5wdXRTbG90OkF1dG8AUGFnZVNpemU6QTQAABIAQ09NUEFUX0RVUExFWF9NT0RFDgBEVVBMRVhfVU5LTk9XTg==</config:config-item>
    <config:config-item config:name="SaveVersionOnClose" config:type="boolean">false</config:config-item>
    <config:config-item config:name="SlidesPerHandout" config:type="short">6</config:config-item>
    <config:config-item config:name="UpdateFromTemplate" config:type="boolean">true</config:config-item>
@@ -521,60 +521,96 @@
    <style:graphic-properties draw:textarea-horizontal-align="center" draw:textarea-vertical-align="middle"/>
   </style:style>
   <style:style style:name="gr8" style:family="graphic" style:parent-style-name="standard">
-   <style:graphic-properties draw:stroke="none" svg:stroke-color="#000000" draw:fill="none" draw:fill-color="#ffffff" draw:textarea-horizontal-align="left" draw:auto-grow-height="true" draw:auto-grow-width="true" fo:min-height="0cm" fo:min-width="0cm"/>
+   <style:graphic-properties draw:stroke="none" svg:stroke-color="#000000" draw:fill="none" draw:fill-color="#ffffff" draw:textarea-horizontal-align="left" draw:auto-grow-height="true" draw:auto-grow-width="true" fo:min-height="0.945cm" fo:min-width="1.67cm"/>
   </style:style>
   <style:style style:name="gr9" style:family="graphic" style:parent-style-name="standard">
-   <style:graphic-properties draw:fill-color="#ff9966" draw:textarea-horizontal-align="justify" draw:textarea-vertical-align="middle" draw:auto-grow-height="false"/>
+   <style:graphic-properties draw:stroke="none" svg:stroke-color="#000000" draw:fill="none" draw:fill-color="#ffffff" draw:textarea-horizontal-align="left" draw:auto-grow-height="true" draw:auto-grow-width="true" fo:min-height="0.712cm" fo:min-width="5.852cm"/>
   </style:style>
   <style:style style:name="gr10" style:family="graphic" style:parent-style-name="standard">
-   <style:graphic-properties draw:fill-color="#ff0000" draw:textarea-horizontal-align="justify" draw:textarea-vertical-align="middle" draw:auto-grow-height="false"/>
+   <style:graphic-properties draw:fill-color="#ff9966" draw:textarea-horizontal-align="justify" draw:textarea-vertical-align="middle" draw:auto-grow-height="false"/>
   </style:style>
   <style:style style:name="gr11" style:family="graphic" style:parent-style-name="standard">
-   <style:graphic-properties draw:stroke="none" svg:stroke-color="#000000" draw:fill="none" draw:fill-color="#ffffff" draw:textarea-horizontal-align="left" draw:auto-grow-height="true" draw:auto-grow-width="false" fo:min-height="1.198cm" fo:min-width="3.272cm"/>
+   <style:graphic-properties draw:fill-color="#ff0000" draw:textarea-horizontal-align="justify" draw:textarea-vertical-align="middle" draw:auto-grow-height="false"/>
   </style:style>
   <style:style style:name="gr12" style:family="graphic" style:parent-style-name="standard">
-   <style:graphic-properties draw:fill-color="#ffff66" draw:textarea-horizontal-align="center" draw:textarea-vertical-align="middle"/>
+   <style:graphic-properties draw:stroke="none" svg:stroke-color="#000000" draw:fill="none" draw:fill-color="#ffffff" draw:textarea-horizontal-align="left" draw:auto-grow-height="true" draw:auto-grow-width="true" fo:min-height="0.945cm" fo:min-width="3.575cm"/>
   </style:style>
   <style:style style:name="gr13" style:family="graphic" style:parent-style-name="standard">
-   <style:graphic-properties draw:fill-color="#dc2300" draw:textarea-horizontal-align="justify" draw:textarea-vertical-align="middle" draw:auto-grow-height="false"/>
+   <style:graphic-properties draw:stroke="none" svg:stroke-color="#000000" draw:fill="none" draw:fill-color="#ffffff" draw:textarea-horizontal-align="left" draw:auto-grow-height="true" draw:auto-grow-width="true" fo:min-height="0.945cm" fo:min-width="5.361cm"/>
   </style:style>
   <style:style style:name="gr14" style:family="graphic" style:parent-style-name="standard">
-   <style:graphic-properties draw:stroke="none" svg:stroke-color="#000000" draw:fill="none" draw:fill-color="#ffffff" draw:textarea-horizontal-align="left" draw:auto-grow-height="true" draw:auto-grow-width="true" fo:min-height="0.75cm" fo:min-width="0cm"/>
+   <style:graphic-properties draw:stroke="none" svg:stroke-color="#000000" draw:fill="none" draw:fill-color="#ffffff" draw:textarea-horizontal-align="left" draw:auto-grow-height="true" draw:auto-grow-width="true" fo:min-height="0.945cm" fo:min-width="2.838cm"/>
   </style:style>
   <style:style style:name="gr15" style:family="graphic" style:parent-style-name="standard">
-   <style:graphic-properties draw:stroke="none" svg:stroke-color="#000000" draw:fill="none" draw:fill-color="#ffffff" draw:textarea-horizontal-align="left" draw:auto-grow-height="true" draw:auto-grow-width="true" fo:min-height="1.15cm" fo:min-width="4.4cm"/>
+   <style:graphic-properties draw:stroke="none" svg:stroke-color="#000000" draw:fill="none" draw:fill-color="#ffffff" draw:textarea-horizontal-align="left" draw:auto-grow-height="true" draw:auto-grow-width="false" fo:min-height="1.198cm" fo:min-width="3.272cm"/>
   </style:style>
-  <style:style style:name="gr16" style:family="graphic" style:parent-style-name="objectwithoutfill">
-   <style:graphic-properties draw:fill="none" draw:textarea-horizontal-align="center" draw:textarea-vertical-align="middle"/>
+  <style:style style:name="gr16" style:family="graphic" style:parent-style-name="standard">
+   <style:graphic-properties draw:fill-color="#ffff66" draw:textarea-horizontal-align="center" draw:textarea-vertical-align="middle"/>
   </style:style>
   <style:style style:name="gr17" style:family="graphic" style:parent-style-name="standard">
-   <style:graphic-properties svg:stroke-width="0.2cm" draw:marker-start="" draw:marker-start-width="0.6cm" draw:marker-end="Arrow" draw:marker-end-width="0.6cm" draw:textarea-horizontal-align="center" draw:textarea-vertical-align="middle" fo:padding-top="0.225cm" fo:padding-bottom="0.225cm" fo:padding-left="0.35cm" fo:padding-right="0.35cm"/>
+   <style:graphic-properties draw:fill-color="#dc2300" draw:textarea-horizontal-align="justify" draw:textarea-vertical-align="middle" draw:auto-grow-height="false"/>
   </style:style>
   <style:style style:name="gr18" style:family="graphic" style:parent-style-name="standard">
-   <style:graphic-properties draw:stroke="none" svg:stroke-color="#000000" draw:fill="none" draw:fill-color="#ffffff" draw:textarea-horizontal-align="left" draw:auto-grow-height="true" draw:auto-grow-width="false" fo:min-height="3.75cm" fo:min-width="7.5cm"/>
+   <style:graphic-properties draw:stroke="none" svg:stroke-color="#000000" draw:fill="none" draw:fill-color="#ffffff" draw:textarea-horizontal-align="left" draw:auto-grow-height="true" draw:auto-grow-width="true" fo:min-height="0.75cm" fo:min-width="3.842cm"/>
   </style:style>
   <style:style style:name="gr19" style:family="graphic" style:parent-style-name="standard">
-   <style:graphic-properties draw:stroke="none" svg:stroke-color="#000000" draw:fill="none" draw:fill-color="#ffffff" draw:textarea-horizontal-align="left" draw:auto-grow-height="true" draw:auto-grow-width="false" fo:min-height="1.75cm" fo:min-width="8.407cm"/>
+   <style:graphic-properties draw:stroke="none" svg:stroke-color="#000000" draw:fill="none" draw:fill-color="#ffffff" draw:textarea-horizontal-align="left" draw:auto-grow-height="true" draw:auto-grow-width="true" fo:min-height="1.15cm" fo:min-width="4.544cm"/>
   </style:style>
-  <style:style style:name="gr20" style:family="graphic" style:parent-style-name="standard">
-   <style:graphic-properties svg:stroke-width="0.1cm" draw:marker-start-width="0.45cm" draw:marker-end-width="0.45cm" draw:textarea-horizontal-align="center" draw:textarea-vertical-align="middle" fo:padding-top="0.175cm" fo:padding-bottom="0.175cm" fo:padding-left="0.3cm" fo:padding-right="0.3cm"/>
+  <style:style style:name="gr20" style:family="graphic" style:parent-style-name="objectwithoutfill">
+   <style:graphic-properties draw:fill="none" draw:textarea-horizontal-align="center" draw:textarea-vertical-align="middle"/>
   </style:style>
   <style:style style:name="gr21" style:family="graphic" style:parent-style-name="standard">
-   <style:graphic-properties svg:stroke-width="0.1cm" draw:marker-start-width="0.45cm" draw:marker-end="Arrow" draw:marker-end-width="0.45cm" draw:textarea-horizontal-align="center" draw:textarea-vertical-align="middle" fo:padding-top="0.175cm" fo:padding-bottom="0.175cm" fo:padding-left="0.3cm" fo:padding-right="0.3cm"/>
+   <style:graphic-properties svg:stroke-width="0.2cm" draw:marker-start="" draw:marker-start-width="0.6cm" draw:marker-end="Arrow" draw:marker-end-width="0.6cm" draw:textarea-horizontal-align="center" draw:textarea-vertical-align="middle" fo:padding-top="0.225cm" fo:padding-bottom="0.225cm" fo:padding-left="0.35cm" fo:padding-right="0.35cm"/>
   </style:style>
   <style:style style:name="gr22" style:family="graphic" style:parent-style-name="standard">
-   <style:graphic-properties draw:stroke="none" draw:fill-color="#ff0000" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:min-height="0.749cm" fo:min-width="0.499cm"/>
+   <style:graphic-properties draw:stroke="none" svg:stroke-color="#000000" draw:fill="none" draw:fill-color="#ffffff" draw:textarea-horizontal-align="left" draw:auto-grow-height="true" draw:auto-grow-width="true" fo:min-height="0.712cm" fo:min-width="1.391cm"/>
   </style:style>
   <style:style style:name="gr23" style:family="graphic" style:parent-style-name="standard">
-   <style:graphic-properties draw:stroke="none" draw:fill-color="#ff0000" draw:opacity="20%" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:min-height="0.749cm" fo:min-width="0.499cm" draw:shadow-opacity="20%"/>
+   <style:graphic-properties draw:stroke="none" svg:stroke-color="#000000" draw:fill="none" draw:fill-color="#ffffff" draw:textarea-horizontal-align="left" draw:auto-grow-height="true" draw:auto-grow-width="true" fo:min-height="0.945cm" fo:min-width="6.162cm"/>
   </style:style>
   <style:style style:name="gr24" style:family="graphic" style:parent-style-name="standard">
-   <style:graphic-properties draw:stroke="none" svg:stroke-color="#000000" draw:fill="none" draw:fill-color="#ffffff" draw:auto-grow-height="true" draw:auto-grow-width="false" fo:max-height="0cm" fo:min-height="1.457cm"/>
+   <style:graphic-properties draw:stroke="none" svg:stroke-color="#000000" draw:fill="none" draw:fill-color="#ffffff" draw:textarea-horizontal-align="left" draw:auto-grow-height="true" draw:auto-grow-width="true" fo:min-height="0.945cm" fo:min-width="5.408cm"/>
   </style:style>
   <style:style style:name="gr25" style:family="graphic" style:parent-style-name="standard">
-   <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-horizontal-align="center" draw:textarea-vertical-align="middle" draw:color-mode="standard" draw:luminance="0%" draw:contrast="0%" draw:gamma="100%" draw:red="0%" draw:green="0%" draw:blue="0%" fo:clip="rect(0cm, 0cm, 0cm, 0cm)" draw:image-opacity="100%" style:mirror="none"/>
+   <style:graphic-properties draw:stroke="none" svg:stroke-color="#000000" draw:fill="none" draw:fill-color="#ffffff" draw:textarea-horizontal-align="left" draw:auto-grow-height="true" draw:auto-grow-width="true" fo:min-height="0.945cm" fo:min-width="6.716cm"/>
   </style:style>
   <style:style style:name="gr26" style:family="graphic" style:parent-style-name="standard">
+   <style:graphic-properties draw:stroke="none" svg:stroke-color="#000000" draw:fill="none" draw:fill-color="#ffffff" draw:textarea-horizontal-align="left" draw:auto-grow-height="true" draw:auto-grow-width="true" fo:min-height="0.945cm" fo:min-width="6.301cm"/>
+  </style:style>
+  <style:style style:name="gr27" style:family="graphic" style:parent-style-name="standard">
+   <style:graphic-properties draw:stroke="none" svg:stroke-color="#000000" draw:fill="none" draw:fill-color="#ffffff" draw:textarea-horizontal-align="left" draw:auto-grow-height="true" draw:auto-grow-width="false" fo:min-height="4.978cm" fo:min-width="7.5cm"/>
+  </style:style>
+  <style:style style:name="gr28" style:family="graphic" style:parent-style-name="standard">
+   <style:graphic-properties draw:stroke="none" svg:stroke-color="#000000" draw:fill="none" draw:fill-color="#ffffff" draw:textarea-horizontal-align="left" draw:auto-grow-height="true" draw:auto-grow-width="false" fo:min-height="1.75cm" fo:min-width="8.407cm"/>
+  </style:style>
+  <style:style style:name="gr29" style:family="graphic" style:parent-style-name="standard">
+   <style:graphic-properties draw:stroke="none" svg:stroke-color="#000000" draw:fill="none" draw:fill-color="#ffffff" draw:textarea-horizontal-align="left" draw:auto-grow-height="true" draw:auto-grow-width="true" fo:min-height="2.845cm" fo:min-width="5.281cm"/>
+  </style:style>
+  <style:style style:name="gr30" style:family="graphic" style:parent-style-name="standard">
+   <style:graphic-properties svg:stroke-width="0.1cm" draw:marker-start-width="0.45cm" draw:marker-end-width="0.45cm" draw:textarea-horizontal-align="center" draw:textarea-vertical-align="middle" fo:padding-top="0.175cm" fo:padding-bottom="0.175cm" fo:padding-left="0.3cm" fo:padding-right="0.3cm"/>
+  </style:style>
+  <style:style style:name="gr31" style:family="graphic" style:parent-style-name="standard">
+   <style:graphic-properties svg:stroke-width="0.1cm" draw:marker-start-width="0.45cm" draw:marker-end="Arrow" draw:marker-end-width="0.45cm" draw:textarea-horizontal-align="center" draw:textarea-vertical-align="middle" fo:padding-top="0.175cm" fo:padding-bottom="0.175cm" fo:padding-left="0.3cm" fo:padding-right="0.3cm"/>
+  </style:style>
+  <style:style style:name="gr32" style:family="graphic" style:parent-style-name="standard">
+   <style:graphic-properties draw:stroke="none" draw:fill-color="#ff0000" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:min-height="0.749cm" fo:min-width="0.499cm"/>
+  </style:style>
+  <style:style style:name="gr33" style:family="graphic" style:parent-style-name="standard">
+   <style:graphic-properties draw:stroke="none" svg:stroke-color="#000000" draw:fill="none" draw:fill-color="#ffffff" draw:textarea-horizontal-align="left" draw:auto-grow-height="true" draw:auto-grow-width="true" fo:min-height="1.423cm" fo:min-width="5.814cm"/>
+  </style:style>
+  <style:style style:name="gr34" style:family="graphic" style:parent-style-name="standard">
+   <style:graphic-properties draw:stroke="none" draw:fill-color="#ff0000" draw:opacity="20%" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:min-height="0.749cm" fo:min-width="0.499cm" draw:shadow-opacity="20%"/>
+  </style:style>
+  <style:style style:name="gr35" style:family="graphic" style:parent-style-name="standard">
+   <style:graphic-properties draw:stroke="none" svg:stroke-color="#000000" draw:fill="none" draw:fill-color="#ffffff" draw:textarea-horizontal-align="left" draw:auto-grow-height="true" draw:auto-grow-width="true" fo:min-height="0.712cm" fo:min-width="4.866cm"/>
+  </style:style>
+  <style:style style:name="gr36" style:family="graphic" style:parent-style-name="standard">
+   <style:graphic-properties draw:stroke="none" svg:stroke-color="#000000" draw:fill="none" draw:fill-color="#ffffff" draw:auto-grow-height="true" draw:auto-grow-width="false" fo:max-height="0cm" fo:min-height="1.737cm"/>
+  </style:style>
+  <style:style style:name="gr37" style:family="graphic" style:parent-style-name="standard">
+   <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-horizontal-align="center" draw:textarea-vertical-align="middle" draw:color-mode="standard" draw:luminance="0%" draw:contrast="0%" draw:gamma="100%" draw:red="0%" draw:green="0%" draw:blue="0%" fo:clip="rect(0cm, 0cm, 0cm, 0cm)" draw:image-opacity="100%" style:mirror="none"/>
+  </style:style>
+  <style:style style:name="gr38" style:family="graphic" style:parent-style-name="standard">
    <style:graphic-properties draw:stroke="none" svg:stroke-color="#000000" draw:fill="none" draw:fill-color="#ffffff" draw:textarea-horizontal-align="left" draw:auto-grow-height="true" draw:auto-grow-width="false" fo:min-height="0.649cm" fo:min-width="22.5cm"/>
   </style:style>
   <style:style style:name="pr1" style:family="presentation" style:parent-style-name="Standard-backgroundobjects">
@@ -596,13 +632,13 @@
    <style:graphic-properties draw:auto-grow-height="true" fo:min-height="3.507cm"/>
   </style:style>
   <style:style style:name="pr7" style:family="presentation" style:parent-style-name="Standard-subtitle">
-   <style:graphic-properties draw:fill-color="#ffffff" fo:min-height="12.5cm"/>
+   <style:graphic-properties draw:fill-color="#ffffff" fo:min-height="14.598cm"/>
   </style:style>
   <style:style style:name="pr8" style:family="presentation" style:parent-style-name="Standard-notes">
-   <style:graphic-properties draw:fill-color="#ffffff" draw:auto-grow-height="true" fo:min-height="13.365cm"/>
+   <style:graphic-properties draw:fill-color="#ffffff" draw:auto-grow-height="true" fo:min-height="15.132cm"/>
   </style:style>
   <style:style style:name="pr9" style:family="presentation" style:parent-style-name="Standard-outline1">
-   <style:graphic-properties draw:auto-grow-height="true" fo:min-height="13.586cm"/>
+   <style:graphic-properties draw:auto-grow-height="true" fo:min-height="14.013cm"/>
   </style:style>
   <style:style style:name="pr10" style:family="presentation" style:parent-style-name="Standard-notes">
    <style:graphic-properties draw:fill-color="#ffffff" fo:min-height="13.114cm"/>
@@ -610,29 +646,59 @@
   <style:style style:name="pr11" style:family="presentation" style:parent-style-name="Standard-outline1">
    <style:graphic-properties draw:auto-grow-height="true" fo:min-height="10.586cm"/>
   </style:style>
-  <style:style style:name="pr12" style:family="presentation" style:parent-style-name="Standard-title">
+  <style:style style:name="pr12" style:family="presentation" style:parent-style-name="Standard-notes">
+   <style:graphic-properties draw:fill-color="#ffffff" fo:min-height="13.38cm"/>
+  </style:style>
+  <style:style style:name="pr13" style:family="presentation" style:parent-style-name="Standard-title">
    <style:graphic-properties fo:min-height="3.506cm"/>
   </style:style>
-  <style:style style:name="pr13" style:family="presentation" style:parent-style-name="Standard-outline1">
+  <style:style style:name="pr14" style:family="presentation" style:parent-style-name="Standard-outline1">
    <style:graphic-properties fo:min-height="13.859cm"/>
   </style:style>
-  <style:style style:name="pr14" style:family="presentation" style:parent-style-name="Standard-notes">
+  <style:style style:name="pr15" style:family="presentation" style:parent-style-name="Standard-notes">
    <style:graphic-properties draw:fill-color="#ffffff" fo:min-height="13.364cm"/>
   </style:style>
-  <style:style style:name="pr15" style:family="presentation" style:parent-style-name="Standard-title">
+  <style:style style:name="pr16" style:family="presentation" style:parent-style-name="Standard-outline1">
+   <style:graphic-properties draw:auto-grow-height="true" fo:min-height="14.005cm"/>
+  </style:style>
+  <style:style style:name="pr17" style:family="presentation" style:parent-style-name="Standard-notes">
+   <style:graphic-properties draw:fill-color="#ffffff" fo:min-height="15.726cm"/>
+  </style:style>
+  <style:style style:name="pr18" style:family="presentation" style:parent-style-name="Standard-outline1">
+   <style:graphic-properties draw:auto-grow-height="true" fo:min-height="13.141cm"/>
+  </style:style>
+  <style:style style:name="pr19" style:family="presentation" style:parent-style-name="Standard-notes">
+   <style:graphic-properties draw:fill-color="#ffffff" fo:min-height="14.167cm"/>
+  </style:style>
+  <style:style style:name="pr20" style:family="presentation" style:parent-style-name="Standard-notes">
+   <style:graphic-properties draw:fill-color="#ffffff" fo:min-height="15.877cm"/>
+  </style:style>
+  <style:style style:name="pr21" style:family="presentation" style:parent-style-name="Standard-title">
    <style:graphic-properties draw:auto-grow-height="true" fo:min-height="3.506cm"/>
   </style:style>
-  <style:style style:name="pr16" style:family="presentation" style:parent-style-name="Standard-outline1">
+  <style:style style:name="pr22" style:family="presentation" style:parent-style-name="Standard-outline1">
    <style:graphic-properties draw:auto-grow-height="true" fo:min-height="14.086cm"/>
   </style:style>
-  <style:style style:name="pr17" style:family="presentation" style:parent-style-name="Standard-outline1">
+  <style:style style:name="pr23" style:family="presentation" style:parent-style-name="Standard-outline1">
+   <style:graphic-properties fo:min-height="14.232cm"/>
+  </style:style>
+  <style:style style:name="pr24" style:family="presentation" style:parent-style-name="Standard-outline1">
    <style:graphic-properties draw:auto-grow-height="true" fo:min-height="13.859cm"/>
   </style:style>
-  <style:style style:name="pr18" style:family="presentation" style:parent-style-name="Standard-title">
+  <style:style style:name="pr25" style:family="presentation" style:parent-style-name="Standard-title">
    <style:graphic-properties fo:min-height="3.256cm"/>
   </style:style>
-  <style:style style:name="pr19" style:family="presentation" style:parent-style-name="Standard-outline1">
-   <style:graphic-properties fo:min-height="6.36cm"/>
+  <style:style style:name="pr26" style:family="presentation" style:parent-style-name="Standard-outline1">
+   <style:graphic-properties fo:min-height="12.151cm"/>
+  </style:style>
+  <style:style style:name="pr27" style:family="presentation" style:parent-style-name="Standard-outline1">
+   <style:graphic-properties fo:min-height="13.576cm"/>
+  </style:style>
+  <style:style style:name="pr28" style:family="presentation" style:parent-style-name="Standard-outline1">
+   <style:graphic-properties fo:min-height="12.451cm"/>
+  </style:style>
+  <style:style style:name="pr29" style:family="presentation" style:parent-style-name="Standard-outline1">
+   <style:graphic-properties draw:auto-grow-height="true" fo:min-height="13.739cm"/>
   </style:style>
   <style:style style:name="P1" style:family="paragraph">
    <style:text-properties fo:font-size="14pt" style:font-size-asian="14pt" style:font-size-complex="14pt"/>
@@ -1029,22 +1095,22 @@
   <style:handout-master presentation:presentation-page-layout-name="AL0T26" style:page-layout-name="PM0" draw:style-name="dp2">
    <draw:frame draw:style-name="gr1" draw:text-style-name="P1" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="0cm" svg:y="0cm" presentation:class="header">
     <draw:text-box>
-     <text:p text:style-name="P1"><text:span text:style-name="T1"><presentation:header/></text:span></text:p>
+     <text:p text:style-name="P1"><text:span text:style-name="T1"><presentation:header/></text:span><presentation:header/></text:p>
     </draw:text-box>
    </draw:frame>
    <draw:frame draw:style-name="gr1" draw:text-style-name="P2" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="11.886cm" svg:y="0cm" presentation:class="date-time">
     <draw:text-box>
-     <text:p text:style-name="P2"><text:span text:style-name="T1"><presentation:date-time/></text:span></text:p>
+     <text:p text:style-name="P2"><text:span text:style-name="T1"><presentation:date-time/></text:span><presentation:date-time/></text:p>
     </draw:text-box>
    </draw:frame>
    <draw:frame draw:style-name="gr2" draw:text-style-name="P1" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="0cm" svg:y="28.215cm" presentation:class="footer">
     <draw:text-box>
-     <text:p text:style-name="P1"><text:span text:style-name="T1"><presentation:footer/></text:span></text:p>
+     <text:p text:style-name="P1"><text:span text:style-name="T1"><presentation:footer/></text:span><presentation:footer/></text:p>
     </draw:text-box>
    </draw:frame>
    <draw:frame draw:style-name="gr2" draw:text-style-name="P2" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="11.886cm" svg:y="28.215cm" presentation:class="page-number">
     <draw:text-box>
-     <text:p text:style-name="P2"><text:span text:style-name="T1"><text:page-number>&lt;numéro&gt;</text:page-number></text:span></text:p>
+     <text:p text:style-name="P2"><text:span text:style-name="T1"><text:page-number>&lt;numéro&gt;</text:page-number></text:span><text:page-number>&lt;numéro&gt;</text:page-number></text:p>
     </draw:text-box>
    </draw:frame>
    <draw:page-thumbnail draw:layer="backgroundobjects" svg:width="8.999cm" svg:height="6.749cm" svg:x="1cm" svg:y="2.898cm" draw:page-number="1"/>
@@ -1059,6 +1125,9 @@
     <text:p/>
    </draw:rect>
    <draw:frame presentation:style-name="Standard-title" draw:layer="backgroundobjects" svg:width="23.3cm" svg:height="3.506cm" svg:x="4.2cm" svg:y="0.537cm" presentation:class="title" presentation:placeholder="true">
+    <draw:text-box/>
+   </draw:frame>
+   <draw:frame presentation:style-name="Standard-outline1" draw:layer="backgroundobjects" svg:width="25.199cm" svg:height="12.18cm" svg:x="1.4cm" svg:y="4.914cm" presentation:class="outline" presentation:placeholder="true">
     <draw:text-box/>
    </draw:frame>
    <draw:frame presentation:style-name="pr2" draw:layer="backgroundobjects" svg:width="25.199cm" svg:height="13.859cm" svg:x="1.4cm" svg:y="4.914cm" presentation:class="outline">
@@ -1112,19 +1181,19 @@
    </draw:frame>
    <draw:frame presentation:style-name="pr3" draw:text-style-name="P1" draw:layer="backgroundobjects" svg:width="6.523cm" svg:height="1.448cm" svg:x="1.4cm" svg:y="19.131cm" presentation:class="date-time">
     <draw:text-box>
-     <text:p text:style-name="P1"><text:span text:style-name="T1"><presentation:date-time/></text:span></text:p>
+     <text:p text:style-name="P1"><text:span text:style-name="T1"><presentation:date-time/></text:span><presentation:date-time/></text:p>
     </draw:text-box>
    </draw:frame>
    <draw:frame presentation:style-name="pr3" draw:text-style-name="P5" draw:layer="backgroundobjects" svg:width="8.875cm" svg:height="1.448cm" svg:x="9.576cm" svg:y="19.131cm" presentation:class="footer">
     <draw:text-box>
-     <text:p text:style-name="P5"><text:span text:style-name="T3"><text:a xlink:href="http://www.freemedforms.com/" xlink:type="simple">http://www.freemedforms.com/</text:a></text:span></text:p>
+     <text:p text:style-name="P5"><text:span text:style-name="T3"><text:a xlink:href="http://www.freemedforms.com/" xlink:type="simple">http://www.freemedforms.com/</text:a></text:span><presentation:footer/></text:p>
      <text:p text:style-name="P5"><text:span text:style-name="T4">RMLL 2014</text:span></text:p>
      <text:p text:style-name="P5"><text:span text:style-name="T1"><presentation:footer/></text:span></text:p>
     </draw:text-box>
    </draw:frame>
    <draw:frame presentation:style-name="pr3" draw:text-style-name="P2" draw:layer="backgroundobjects" svg:width="6.523cm" svg:height="1.448cm" svg:x="20.076cm" svg:y="19.131cm" presentation:class="page-number">
     <draw:text-box>
-     <text:p text:style-name="P2"><text:span text:style-name="T5"><text:page-number>&lt;numéro&gt;</text:page-number></text:span></text:p>
+     <text:p text:style-name="P2"><text:span text:style-name="T5"><text:page-number>&lt;numéro&gt;</text:page-number></text:span><text:page-number>&lt;numéro&gt;</text:page-number></text:p>
     </draw:text-box>
    </draw:frame>
    <draw:frame draw:style-name="gr3" draw:text-style-name="P3" draw:layer="backgroundobjects" svg:width="3.6cm" svg:height="3.405cm" svg:x="0.2cm" svg:y="0.595cm">
@@ -1231,24 +1300,27 @@
     <draw:frame presentation:style-name="Standard-notes" draw:layer="backgroundobjects" svg:width="16.799cm" svg:height="13.364cm" svg:x="2.1cm" svg:y="14.107cm" presentation:class="notes" presentation:placeholder="true">
      <draw:text-box/>
     </draw:frame>
+    <draw:frame presentation:style-name="Standard-notes" draw:layer="backgroundobjects" svg:width="16.799cm" svg:height="13.364cm" svg:x="2.1cm" svg:y="14.107cm" presentation:class="notes" presentation:placeholder="true">
+     <draw:text-box/>
+    </draw:frame>
     <draw:frame presentation:style-name="pr4" draw:text-style-name="P1" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="0cm" svg:y="0cm" presentation:class="header">
      <draw:text-box>
-      <text:p text:style-name="P1"><text:span text:style-name="T1"><presentation:header/></text:span></text:p>
+      <text:p text:style-name="P1"><text:span text:style-name="T1"><presentation:header/></text:span><presentation:header/></text:p>
      </draw:text-box>
     </draw:frame>
     <draw:frame presentation:style-name="pr4" draw:text-style-name="P2" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="11.886cm" svg:y="0cm" presentation:class="date-time">
      <draw:text-box>
-      <text:p text:style-name="P2"><text:span text:style-name="T1"><presentation:date-time/></text:span></text:p>
+      <text:p text:style-name="P2"><text:span text:style-name="T1"><presentation:date-time/></text:span><presentation:date-time/></text:p>
      </draw:text-box>
     </draw:frame>
     <draw:frame presentation:style-name="pr5" draw:text-style-name="P1" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="0cm" svg:y="28.215cm" presentation:class="footer">
      <draw:text-box>
-      <text:p text:style-name="P1"><text:span text:style-name="T1"><presentation:footer/></text:span></text:p>
+      <text:p text:style-name="P1"><text:span text:style-name="T1"><presentation:footer/></text:span><presentation:footer/></text:p>
      </draw:text-box>
     </draw:frame>
     <draw:frame presentation:style-name="pr5" draw:text-style-name="P2" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="11.886cm" svg:y="28.215cm" presentation:class="page-number">
      <draw:text-box>
-      <text:p text:style-name="P2"><text:span text:style-name="T1"><text:page-number>&lt;numéro&gt;</text:page-number></text:span></text:p>
+      <text:p text:style-name="P2"><text:span text:style-name="T1"><text:page-number>&lt;numéro&gt;</text:page-number></text:span><text:page-number>&lt;numéro&gt;</text:page-number></text:p>
      </draw:text-box>
     </draw:frame>
    </presentation:notes>
@@ -1467,7 +1539,7 @@
     </draw:frame>
     <presentation:notes draw:style-name="dp2">
      <draw:page-thumbnail draw:style-name="gr4" draw:layer="layout" svg:width="14.848cm" svg:height="11.136cm" svg:x="3.075cm" svg:y="2.257cm" draw:page-number="3" presentation:class="page"/>
-     <draw:frame presentation:style-name="pr10" draw:text-style-name="P11" draw:layer="layout" svg:width="16.799cm" svg:height="13.38cm" svg:x="2.1cm" svg:y="14.107cm" presentation:class="notes" presentation:user-transformed="true">
+     <draw:frame presentation:style-name="pr12" draw:text-style-name="P11" draw:layer="layout" svg:width="16.799cm" svg:height="13.38cm" svg:x="2.1cm" svg:y="14.107cm" presentation:class="notes" presentation:user-transformed="true">
       <draw:text-box>
        <text:p><text:span text:style-name="T16">The project is coded in C++ with Qt libraries and a massive usage of the model/view/controller architecture. The code is documented using Doxygen.</text:span></text:p>
        <text:p><text:span text:style-name="T16"/></text:p>
@@ -1484,12 +1556,12 @@
    </draw:page>
    <draw:page draw:name="page4" draw:style-name="dp4" draw:master-page-name="Standard" presentation:presentation-page-layout-name="AL2T17">
     <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
-    <draw:frame presentation:style-name="pr12" draw:layer="layout" svg:width="23.3cm" svg:height="3.506cm" svg:x="4.2cm" svg:y="0.537cm" presentation:class="title">
+    <draw:frame presentation:style-name="pr13" draw:layer="layout" svg:width="23.3cm" svg:height="3.506cm" svg:x="4.2cm" svg:y="0.537cm" presentation:class="title" presentation:user-transformed="true">
      <draw:text-box>
       <text:p>Some classifications to understand drug interaction</text:p>
      </draw:text-box>
     </draw:frame>
-    <draw:frame presentation:style-name="pr13" draw:text-style-name="P12" draw:layer="layout" svg:width="25.199cm" svg:height="13.859cm" svg:x="1.401cm" svg:y="4.8cm" presentation:class="outline" presentation:user-transformed="true">
+    <draw:frame presentation:style-name="pr14" draw:text-style-name="P12" draw:layer="layout" svg:width="25.199cm" svg:height="13.859cm" svg:x="1.401cm" svg:y="4.8cm" presentation:class="outline" presentation:user-transformed="true">
      <draw:text-box>
       <text:list text:style-name="L2">
        <text:list-item>
@@ -1524,7 +1596,7 @@
     </draw:frame>
     <presentation:notes draw:style-name="dp2">
      <draw:page-thumbnail draw:style-name="gr4" draw:layer="layout" svg:width="14.848cm" svg:height="11.136cm" svg:x="3.075cm" svg:y="2.257cm" draw:page-number="4" presentation:class="page"/>
-     <draw:frame presentation:style-name="pr14" draw:layer="layout" svg:width="16.799cm" svg:height="13.364cm" svg:x="2.1cm" svg:y="14.107cm" presentation:class="notes" presentation:placeholder="true">
+     <draw:frame presentation:style-name="pr15" draw:layer="layout" svg:width="16.799cm" svg:height="13.364cm" svg:x="2.1cm" svg:y="14.107cm" presentation:class="notes" presentation:placeholder="true" presentation:user-transformed="true">
       <draw:text-box/>
      </draw:frame>
     </presentation:notes>
@@ -1536,7 +1608,7 @@
       <text:p>What is a drug interaction ?</text:p>
      </draw:text-box>
     </draw:frame>
-    <draw:frame presentation:style-name="pr9" draw:text-style-name="P13" draw:layer="layout" svg:width="25.199cm" svg:height="14.005cm" svg:x="1.4cm" svg:y="4.914cm" presentation:class="outline" presentation:user-transformed="true">
+    <draw:frame presentation:style-name="pr16" draw:text-style-name="P13" draw:layer="layout" svg:width="25.199cm" svg:height="14.005cm" svg:x="1.4cm" svg:y="4.914cm" presentation:class="outline" presentation:user-transformed="true">
      <draw:text-box>
       <text:list text:style-name="L2">
        <text:list-item>
@@ -1567,7 +1639,7 @@
     </draw:frame>
     <presentation:notes draw:style-name="dp2">
      <draw:page-thumbnail draw:style-name="gr4" draw:layer="layout" svg:width="14.848cm" svg:height="11.136cm" svg:x="3.075cm" svg:y="2.257cm" draw:page-number="5" presentation:class="page"/>
-     <draw:frame presentation:style-name="pr10" draw:text-style-name="P14" draw:layer="layout" svg:width="16.799cm" svg:height="15.726cm" svg:x="2.1cm" svg:y="14.107cm" presentation:class="notes" presentation:user-transformed="true">
+     <draw:frame presentation:style-name="pr17" draw:text-style-name="P14" draw:layer="layout" svg:width="16.799cm" svg:height="15.726cm" svg:x="2.1cm" svg:y="14.107cm" presentation:class="notes" presentation:user-transformed="true">
       <draw:text-box>
        <text:p><text:span text:style-name="T21">Here are some definition and abbreviations widely used</text:span></text:p>
        <text:p><text:span text:style-name="T21"/></text:p>
@@ -1596,7 +1668,7 @@
       <text:p>Drug-drug interactions</text:p>
      </draw:text-box>
     </draw:frame>
-    <draw:frame presentation:style-name="pr11" draw:text-style-name="P15" draw:layer="layout" svg:width="25.199cm" svg:height="13.141cm" svg:x="1.4cm" svg:y="4.914cm" presentation:class="outline" presentation:user-transformed="true">
+    <draw:frame presentation:style-name="pr18" draw:text-style-name="P15" draw:layer="layout" svg:width="25.199cm" svg:height="13.141cm" svg:x="1.4cm" svg:y="4.914cm" presentation:class="outline" presentation:user-transformed="true">
      <draw:text-box>
       <text:list text:style-name="L2">
        <text:list-item>
@@ -1635,7 +1707,7 @@
     </draw:frame>
     <presentation:notes draw:style-name="dp2">
      <draw:page-thumbnail draw:style-name="gr4" draw:layer="layout" svg:width="14.848cm" svg:height="11.136cm" svg:x="3.075cm" svg:y="2.257cm" draw:page-number="6" presentation:class="page"/>
-     <draw:frame presentation:style-name="pr10" draw:text-style-name="P11" draw:layer="layout" svg:width="16.799cm" svg:height="14.167cm" svg:x="2.1cm" svg:y="14.107cm" presentation:class="notes" presentation:user-transformed="true">
+     <draw:frame presentation:style-name="pr19" draw:text-style-name="P11" draw:layer="layout" svg:width="16.799cm" svg:height="14.167cm" svg:x="2.1cm" svg:y="14.107cm" presentation:class="notes" presentation:user-transformed="true">
       <draw:text-box>
        <text:p><text:span text:style-name="T16">When FreeMedForms was started a special attention was paid to DDI management. We identified many sources freely available and compiled them into one unique database.</text:span></text:p>
        <text:p><text:span text:style-name="T16"/></text:p>
@@ -1680,17 +1752,17 @@
       <text:p><text:span text:style-name="T28">ATC</text:span></text:p>
      </draw:text-box>
     </draw:frame>
-    <draw:frame draw:style-name="gr8" draw:text-style-name="P18" draw:layer="layout" svg:width="6.352cm" svg:height="0.962cm" svg:x="7.6cm" svg:y="6.7cm">
+    <draw:frame draw:style-name="gr9" draw:text-style-name="P18" draw:layer="layout" svg:width="6.352cm" svg:height="0.962cm" svg:x="7.6cm" svg:y="6.7cm">
      <draw:text-box>
       <text:p><text:span text:style-name="T29">Active substance 1.1</text:span></text:p>
      </draw:text-box>
     </draw:frame>
-    <draw:frame draw:style-name="gr8" draw:text-style-name="P18" draw:layer="layout" svg:width="6.352cm" svg:height="0.962cm" svg:x="7.539cm" svg:y="7.8cm">
+    <draw:frame draw:style-name="gr9" draw:text-style-name="P18" draw:layer="layout" svg:width="6.352cm" svg:height="0.962cm" svg:x="7.539cm" svg:y="7.8cm">
      <draw:text-box>
       <text:p><text:span text:style-name="T29">Active substance 1.2</text:span></text:p>
      </draw:text-box>
     </draw:frame>
-    <draw:frame draw:style-name="gr8" draw:text-style-name="P18" draw:layer="layout" svg:width="6.352cm" svg:height="0.962cm" svg:x="7.539cm" svg:y="8.838cm">
+    <draw:frame draw:style-name="gr9" draw:text-style-name="P18" draw:layer="layout" svg:width="6.352cm" svg:height="0.962cm" svg:x="7.539cm" svg:y="8.838cm">
      <draw:text-box>
       <text:p><text:span text:style-name="T29">Active substance 1.3</text:span></text:p>
      </draw:text-box>
@@ -1712,22 +1784,22 @@
       <text:p><text:span text:style-name="T28">ATC</text:span></text:p>
      </draw:text-box>
     </draw:frame>
-    <draw:frame draw:style-name="gr8" draw:text-style-name="P18" draw:layer="layout" svg:width="6.352cm" svg:height="0.962cm" svg:x="7.601cm" svg:y="14.2cm">
+    <draw:frame draw:style-name="gr9" draw:text-style-name="P18" draw:layer="layout" svg:width="6.352cm" svg:height="0.962cm" svg:x="7.601cm" svg:y="14.2cm">
      <draw:text-box>
       <text:p><text:span text:style-name="T29">Active substance 2.1</text:span></text:p>
      </draw:text-box>
     </draw:frame>
-    <draw:frame draw:style-name="gr8" draw:text-style-name="P18" draw:layer="layout" svg:width="6.352cm" svg:height="0.962cm" svg:x="7.54cm" svg:y="15.3cm">
+    <draw:frame draw:style-name="gr9" draw:text-style-name="P18" draw:layer="layout" svg:width="6.352cm" svg:height="0.962cm" svg:x="7.54cm" svg:y="15.3cm">
      <draw:text-box>
       <text:p><text:span text:style-name="T29">Active substance 2.2</text:span></text:p>
      </draw:text-box>
     </draw:frame>
-    <draw:frame draw:style-name="gr8" draw:text-style-name="P18" draw:layer="layout" svg:width="6.352cm" svg:height="0.962cm" svg:x="7.54cm" svg:y="16.338cm">
+    <draw:frame draw:style-name="gr9" draw:text-style-name="P18" draw:layer="layout" svg:width="6.352cm" svg:height="0.962cm" svg:x="7.54cm" svg:y="16.338cm">
      <draw:text-box>
       <text:p><text:span text:style-name="T29">Active substance 2.3</text:span></text:p>
      </draw:text-box>
     </draw:frame>
-    <draw:custom-shape draw:style-name="gr9" draw:text-style-name="P19" draw:layer="layout" svg:width="9cm" svg:height="5cm" svg:x="13cm" svg:y="9.5cm">
+    <draw:custom-shape draw:style-name="gr10" draw:text-style-name="P19" draw:layer="layout" svg:width="9cm" svg:height="5cm" svg:x="13cm" svg:y="9.5cm">
      <text:p text:style-name="P3"><text:span text:style-name="T30">DDI Engine</text:span></text:p>
      <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 0 10800 10800 21600 21600 10800" draw:text-areas="5400 5400 16200 16200" draw:type="diamond" draw:enhanced-path="M 10800 0 L 21600 10800 10800 21600 0 10800 10800 0 Z N"/>
     </draw:custom-shape>
@@ -1755,7 +1827,7 @@
     <draw:line draw:style-name="gr7" draw:text-style-name="P3" draw:layer="layout" svg:x1="24cm" svg:y1="14cm" svg:x2="22cm" svg:y2="12cm">
      <text:p/>
     </draw:line>
-    <draw:custom-shape draw:style-name="gr10" draw:text-style-name="P3" draw:layer="layout" svg:width="2.5cm" svg:height="2.5cm" svg:x="24cm" svg:y="8.5cm">
+    <draw:custom-shape draw:style-name="gr11" draw:text-style-name="P3" draw:layer="layout" svg:width="2.5cm" svg:height="2.5cm" svg:x="24cm" svg:y="8.5cm">
      <text:p/>
      <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:text-areas="3163 3163 18437 18437" draw:type="forbidden" draw:modifiers="2700" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z B ?f0 ?f0 ?f1 ?f1 ?f9 ?f10 ?f11 ?f12 Z B ?f0 ?f0 ?f1 ?f1 ?f13 ?f14 ?f15 ?f16 Z N">
       <draw:equation draw:name="f0" draw:formula="$0 "/>
@@ -1778,7 +1850,7 @@
       <draw:handle draw:handle-position="$0 10800" draw:handle-range-x-minimum="0" draw:handle-range-x-maximum="7200"/>
      </draw:enhanced-geometry>
     </draw:custom-shape>
-    <draw:custom-shape draw:style-name="gr10" draw:text-style-name="P3" draw:layer="layout" svg:width="2.5cm" svg:height="2.5cm" svg:x="24cm" svg:y="13cm">
+    <draw:custom-shape draw:style-name="gr11" draw:text-style-name="P3" draw:layer="layout" svg:width="2.5cm" svg:height="2.5cm" svg:x="24cm" svg:y="13cm">
      <text:p/>
      <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:text-areas="3163 3163 18437 18437" draw:type="forbidden" draw:modifiers="2700" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z B ?f0 ?f0 ?f1 ?f1 ?f9 ?f10 ?f11 ?f12 Z B ?f0 ?f0 ?f1 ?f1 ?f13 ?f14 ?f15 ?f16 Z N">
       <draw:equation draw:name="f0" draw:formula="$0 "/>
@@ -1801,22 +1873,22 @@
       <draw:handle draw:handle-position="$0 10800" draw:handle-range-x-minimum="0" draw:handle-range-x-maximum="7200"/>
      </draw:enhanced-geometry>
     </draw:custom-shape>
-    <draw:frame draw:style-name="gr8" draw:text-style-name="P20" draw:layer="layout" svg:width="4.075cm" svg:height="1.195cm" svg:x="23.5cm" svg:y="7.2cm">
+    <draw:frame draw:style-name="gr12" draw:text-style-name="P20" draw:layer="layout" svg:width="4.075cm" svg:height="1.195cm" svg:x="23.5cm" svg:y="7.2cm">
      <draw:text-box>
       <text:p><text:span text:style-name="T30">Blocking</text:span></text:p>
      </draw:text-box>
     </draw:frame>
-    <draw:frame draw:style-name="gr8" draw:text-style-name="P20" draw:layer="layout" svg:width="5.861cm" svg:height="1.195cm" svg:x="22.2cm" svg:y="15.7cm">
+    <draw:frame draw:style-name="gr13" draw:text-style-name="P20" draw:layer="layout" svg:width="5.861cm" svg:height="1.195cm" svg:x="22.2cm" svg:y="15.7cm">
      <draw:text-box>
       <text:p><text:span text:style-name="T30">Non blocking</text:span></text:p>
      </draw:text-box>
     </draw:frame>
-    <draw:frame draw:style-name="gr8" draw:text-style-name="P17" draw:layer="layout" svg:width="3.338cm" svg:height="1.195cm" draw:transform="rotate (0.519759051243911) translate (13.968cm 8.23cm)">
+    <draw:frame draw:style-name="gr14" draw:text-style-name="P17" draw:layer="layout" svg:width="3.338cm" svg:height="1.195cm" draw:transform="rotate (0.519759051243911) translate (13.968cm 8.23cm)">
      <draw:text-box>
       <text:p><text:span text:style-name="T28">To ATC</text:span></text:p>
      </draw:text-box>
     </draw:frame>
-    <draw:frame draw:style-name="gr11" draw:text-style-name="P17" draw:layer="layout" svg:width="4.065cm" svg:height="1.448cm" draw:transform="rotate (-0.575260521457331) translate (14.656cm 15.288cm)">
+    <draw:frame draw:style-name="gr15" draw:text-style-name="P17" draw:layer="layout" svg:width="4.065cm" svg:height="1.448cm" draw:transform="rotate (-0.575260521457331) translate (14.656cm 15.288cm)">
      <draw:text-box>
       <text:p><text:span text:style-name="T28">To ATC</text:span></text:p>
      </draw:text-box>
@@ -1827,7 +1899,7 @@
     <draw:line draw:style-name="gr7" draw:text-style-name="P3" draw:layer="layout" svg:x1="17.5cm" svg:y1="18.3cm" svg:x2="11.5cm" svg:y2="18.3cm">
      <text:p/>
     </draw:line>
-    <draw:ellipse draw:style-name="gr12" draw:text-style-name="P19" draw:layer="layout" svg:width="7.3cm" svg:height="2.5cm" svg:x="0.7cm" svg:y="10.8cm">
+    <draw:ellipse draw:style-name="gr16" draw:text-style-name="P19" draw:layer="layout" svg:width="7.3cm" svg:height="2.5cm" svg:x="0.7cm" svg:y="10.8cm">
      <text:p text:style-name="P3"><text:span text:style-name="T30">Drug Database</text:span></text:p>
     </draw:ellipse>
     <draw:line draw:style-name="gr7" draw:text-style-name="P3" draw:layer="layout" svg:x1="5.5cm" svg:y1="6.3cm" svg:x2="9.5cm" svg:y2="6.3cm">
@@ -1836,7 +1908,7 @@
     <draw:line draw:style-name="gr7" draw:text-style-name="P3" draw:layer="layout" svg:x1="5.5cm" svg:y1="18.3cm" svg:x2="9.5cm" svg:y2="18.3cm">
      <text:p/>
     </draw:line>
-    <draw:custom-shape draw:style-name="gr13" draw:text-style-name="P21" draw:layer="layout" svg:width="2cm" svg:height="2cm" svg:x="24.3cm" svg:y="17cm">
+    <draw:custom-shape draw:style-name="gr17" draw:text-style-name="P21" draw:layer="layout" svg:width="2cm" svg:height="2cm" svg:x="24.3cm" svg:y="17cm">
      <text:p text:style-name="P3"><text:span text:style-name="T31">!</text:span></text:p>
      <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 ?f1 10800 0 21600 10800 21600 21600 21600 ?f7 10800" draw:text-areas="?f1 10800 ?f2 18000 ?f3 7200 ?f4 21600" draw:type="isosceles-triangle" draw:modifiers="10800" draw:enhanced-path="M ?f0 0 L 21600 21600 0 21600 Z N">
       <draw:equation draw:name="f0" draw:formula="$0 "/>
@@ -1850,25 +1922,25 @@
       <draw:handle draw:handle-position="$0 top" draw:handle-range-x-minimum="0" draw:handle-range-x-maximum="21600"/>
      </draw:enhanced-geometry>
     </draw:custom-shape>
-    <draw:frame draw:style-name="gr14" draw:text-style-name="P22" draw:layer="layout" svg:width="4.342cm" svg:height="1cm" svg:x="23.1cm" svg:y="19cm">
+    <draw:frame draw:style-name="gr18" draw:text-style-name="P22" draw:layer="layout" svg:width="4.342cm" svg:height="1cm" svg:x="23.1cm" svg:y="19cm">
      <draw:text-box>
       <text:p><text:span text:style-name="T32">Fatigue Alert</text:span></text:p>
      </draw:text-box>
     </draw:frame>
-    <draw:frame draw:style-name="gr15" draw:text-style-name="P23" draw:layer="layout" svg:width="5.044cm" svg:height="1.4cm" svg:x="22.8cm" svg:y="11.4cm">
+    <draw:frame draw:style-name="gr19" draw:text-style-name="P23" draw:layer="layout" svg:width="5.044cm" svg:height="1.4cm" svg:x="22.8cm" svg:y="11.4cm">
      <draw:text-box>
       <text:p><text:span text:style-name="T33">REAL TIME</text:span></text:p>
      </draw:text-box>
     </draw:frame>
-    <draw:line draw:style-name="gr16" draw:text-style-name="P3" draw:layer="layout" svg:x1="4.2cm" svg:y1="10.6cm" svg:x2="4.2cm" svg:y2="7.8cm">
+    <draw:line draw:style-name="gr20" draw:text-style-name="P3" draw:layer="layout" svg:x1="4.2cm" svg:y1="10.6cm" svg:x2="4.2cm" svg:y2="7.8cm">
      <text:p/>
     </draw:line>
-    <draw:line draw:style-name="gr16" draw:text-style-name="P3" draw:layer="layout" svg:x1="4.2cm" svg:y1="13.6cm" svg:x2="4.2cm" svg:y2="16.6cm">
+    <draw:line draw:style-name="gr20" draw:text-style-name="P3" draw:layer="layout" svg:x1="4.2cm" svg:y1="13.6cm" svg:x2="4.2cm" svg:y2="16.6cm">
      <text:p/>
     </draw:line>
     <presentation:notes draw:style-name="dp2">
      <draw:page-thumbnail draw:style-name="gr4" draw:layer="layout" svg:width="14.848cm" svg:height="11.136cm" svg:x="3.075cm" svg:y="2.257cm" draw:page-number="7" presentation:class="page"/>
-     <draw:frame presentation:style-name="pr10" draw:text-style-name="P24" draw:layer="layout" svg:width="16.799cm" svg:height="15.877cm" svg:x="2.1cm" svg:y="14.107cm" presentation:class="notes" presentation:user-transformed="true">
+     <draw:frame presentation:style-name="pr20" draw:text-style-name="P24" draw:layer="layout" svg:width="16.799cm" svg:height="15.877cm" svg:x="2.1cm" svg:y="14.107cm" presentation:class="notes" presentation:user-transformed="true">
       <draw:text-box>
        <text:p><text:span text:style-name="T34">The interaction engine analyzes all combinations of drugs per couple. Each molecular component is analyzed after being linked to an internationally recognized coding system and persistent over time called ATC (which means </text:span><text:span text:style-name="T35">Anatomical Therapeutic Chemical). The ATC classification is owned by the World Health Organization.</text:span></text:p>
        <text:p><text:span text:style-name="T36"/></text:p>
@@ -1888,48 +1960,48 @@
       <text:p>Timing of the alert system</text:p>
      </draw:text-box>
     </draw:frame>
-    <draw:line draw:style-name="gr17" draw:text-style-name="P3" draw:layer="layout" svg:x1="2cm" svg:y1="9.8cm" svg:x2="25.5cm" svg:y2="9.8cm">
+    <draw:line draw:style-name="gr21" draw:text-style-name="P3" draw:layer="layout" svg:x1="2cm" svg:y1="9.8cm" svg:x2="25.5cm" svg:y2="9.8cm">
      <text:p/>
     </draw:line>
-    <draw:frame draw:style-name="gr8" draw:text-style-name="P18" draw:layer="layout" svg:width="1.891cm" svg:height="0.962cm" svg:x="25.4cm" svg:y="9.4cm">
+    <draw:frame draw:style-name="gr22" draw:text-style-name="P18" draw:layer="layout" svg:width="1.891cm" svg:height="0.962cm" svg:x="25.4cm" svg:y="9.4cm">
      <draw:text-box>
       <text:p><text:span text:style-name="T29">Time</text:span></text:p>
      </draw:text-box>
     </draw:frame>
-    <draw:frame draw:style-name="gr8" draw:text-style-name="P25" draw:layer="layout" svg:width="6.662cm" svg:height="1.195cm" svg:x="0.2cm" svg:y="5.768cm">
+    <draw:frame draw:style-name="gr23" draw:text-style-name="P25" draw:layer="layout" svg:width="6.662cm" svg:height="1.195cm" svg:x="0.2cm" svg:y="5.768cm">
      <draw:text-box>
       <text:p><text:span text:style-name="T39">Searching drugs</text:span></text:p>
      </draw:text-box>
     </draw:frame>
-    <draw:frame draw:style-name="gr8" draw:text-style-name="P25" draw:layer="layout" svg:width="5.908cm" svg:height="1.195cm" svg:x="7.4cm" svg:y="4.905cm">
+    <draw:frame draw:style-name="gr24" draw:text-style-name="P25" draw:layer="layout" svg:width="5.908cm" svg:height="1.195cm" svg:x="7.4cm" svg:y="4.905cm">
      <draw:text-box>
       <text:p><text:span text:style-name="T39">Drug selection</text:span></text:p>
      </draw:text-box>
     </draw:frame>
-    <draw:frame draw:style-name="gr8" draw:text-style-name="P25" draw:layer="layout" svg:width="7.216cm" svg:height="1.195cm" svg:x="17.5cm" svg:y="4.905cm">
+    <draw:frame draw:style-name="gr25" draw:text-style-name="P25" draw:layer="layout" svg:width="7.216cm" svg:height="1.195cm" svg:x="17.5cm" svg:y="4.905cm">
      <draw:text-box>
       <text:p><text:span text:style-name="T39">Dosage validation</text:span></text:p>
      </draw:text-box>
     </draw:frame>
-    <draw:frame draw:style-name="gr8" draw:text-style-name="P25" draw:layer="layout" svg:width="6.801cm" svg:height="1.195cm" svg:x="9.8cm" svg:y="6.7cm">
+    <draw:frame draw:style-name="gr26" draw:text-style-name="P25" draw:layer="layout" svg:width="6.801cm" svg:height="1.195cm" svg:x="9.8cm" svg:y="6.7cm">
      <draw:text-box>
       <text:p><text:span text:style-name="T39">Dose processing</text:span></text:p>
      </draw:text-box>
     </draw:frame>
-    <draw:frame draw:style-name="gr18" draw:text-style-name="P18" draw:layer="layout" svg:width="10cm" svg:height="5.228cm" svg:x="7.1cm" svg:y="12.7cm">
+    <draw:frame draw:style-name="gr27" draw:text-style-name="P18" draw:layer="layout" svg:width="10cm" svg:height="5.228cm" svg:x="7.1cm" svg:y="12.7cm">
      <draw:text-box>
       <text:p><text:span text:style-name="T29">* DDI &amp; PIM not dose-related: processed</text:span></text:p>
       <text:p><text:span text:style-name="T29">* DDI &amp; PIM dose-related: noticed in some special cases or if prescription is only a selection of drugs (w/o dosing)</text:span></text:p>
       <text:p><text:span text:style-name="T29">* Management of route</text:span></text:p>
      </draw:text-box>
     </draw:frame>
-    <draw:frame draw:style-name="gr19" draw:text-style-name="P18" draw:layer="layout" svg:width="8.5cm" svg:height="2cm" svg:x="17.5cm" svg:y="12.7cm">
+    <draw:frame draw:style-name="gr28" draw:text-style-name="P18" draw:layer="layout" svg:width="8.5cm" svg:height="2cm" svg:x="17.5cm" svg:y="12.7cm">
      <draw:text-box>
       <text:p><text:span text:style-name="T29">DDI &amp; PIM dose-related <text:s/></text:span></text:p>
       <text:p><text:span text:style-name="T29">processed and noticed</text:span></text:p>
      </draw:text-box>
     </draw:frame>
-    <draw:frame draw:style-name="gr8" draw:text-style-name="P18" draw:layer="layout" svg:width="5.781cm" svg:height="3.095cm" svg:x="0.5cm" svg:y="12.7cm">
+    <draw:frame draw:style-name="gr29" draw:text-style-name="P18" draw:layer="layout" svg:width="5.781cm" svg:height="3.095cm" svg:x="0.5cm" svg:y="12.7cm">
      <draw:text-box>
       <text:p><text:span text:style-name="T29">Drugs allergies</text:span></text:p>
       <text:p><text:span text:style-name="T29">Drugs intolerances</text:span></text:p>
@@ -1937,77 +2009,77 @@
       <text:p><text:span text:style-name="T29">Noticed</text:span></text:p>
      </draw:text-box>
     </draw:frame>
-    <draw:line draw:style-name="gr20" draw:text-style-name="P3" draw:layer="layout" svg:x1="7.9cm" svg:y1="7cm" svg:x2="7.9cm" svg:y2="10.5cm">
+    <draw:line draw:style-name="gr30" draw:text-style-name="P3" draw:layer="layout" svg:x1="7.9cm" svg:y1="7cm" svg:x2="7.9cm" svg:y2="10.5cm">
      <text:p/>
     </draw:line>
-    <draw:line draw:style-name="gr21" draw:text-style-name="P3" draw:layer="layout" svg:x1="7.3cm" svg:y1="11.2cm" svg:x2="5.8cm" svg:y2="11.2cm">
+    <draw:line draw:style-name="gr31" draw:text-style-name="P3" draw:layer="layout" svg:x1="7.3cm" svg:y1="11.2cm" svg:x2="5.8cm" svg:y2="11.2cm">
      <text:p/>
     </draw:line>
-    <draw:line draw:style-name="gr21" draw:text-style-name="P3" draw:layer="layout" svg:x1="8.5cm" svg:y1="11.2cm" svg:x2="10cm" svg:y2="11.2cm">
+    <draw:line draw:style-name="gr31" draw:text-style-name="P3" draw:layer="layout" svg:x1="8.5cm" svg:y1="11.2cm" svg:x2="10cm" svg:y2="11.2cm">
      <text:p/>
     </draw:line>
-    <draw:custom-shape draw:style-name="gr22" draw:text-style-name="P3" draw:layer="layout" svg:width="1cm" svg:height="1cm" svg:x="7.4cm" svg:y="10.7cm">
+    <draw:custom-shape draw:style-name="gr32" draw:text-style-name="P3" draw:layer="layout" svg:width="1cm" svg:height="1cm" svg:x="7.4cm" svg:y="10.7cm">
      <text:p/>
      <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:text-areas="6722 8256 14878 15460" draw:type="star5" draw:enhanced-path="M 10797 0 L 8278 8256 0 8256 6722 13405 4198 21600 10797 16580 17401 21600 14878 13405 21600 8256 13321 8256 10797 0 Z N"/>
     </draw:custom-shape>
-    <draw:line draw:style-name="gr20" draw:text-style-name="P3" draw:layer="layout" svg:x1="18cm" svg:y1="7cm" svg:x2="18cm" svg:y2="10.5cm">
+    <draw:line draw:style-name="gr30" draw:text-style-name="P3" draw:layer="layout" svg:x1="18cm" svg:y1="7cm" svg:x2="18cm" svg:y2="10.5cm">
      <text:p/>
     </draw:line>
-    <draw:line draw:style-name="gr21" draw:text-style-name="P3" draw:layer="layout" svg:x1="18cm" svg:y1="12.1cm" svg:x2="5.5cm" svg:y2="12.1cm">
+    <draw:line draw:style-name="gr31" draw:text-style-name="P3" draw:layer="layout" svg:x1="18cm" svg:y1="12.1cm" svg:x2="5.5cm" svg:y2="12.1cm">
      <text:p/>
     </draw:line>
-    <draw:line draw:style-name="gr21" draw:text-style-name="P3" draw:layer="layout" svg:x1="18.6cm" svg:y1="11.2cm" svg:x2="20.1cm" svg:y2="11.2cm">
+    <draw:line draw:style-name="gr31" draw:text-style-name="P3" draw:layer="layout" svg:x1="18.6cm" svg:y1="11.2cm" svg:x2="20.1cm" svg:y2="11.2cm">
      <text:p/>
     </draw:line>
-    <draw:custom-shape draw:style-name="gr22" draw:text-style-name="P3" draw:layer="layout" svg:width="1cm" svg:height="1cm" svg:x="17.5cm" svg:y="10.7cm">
+    <draw:custom-shape draw:style-name="gr32" draw:text-style-name="P3" draw:layer="layout" svg:width="1cm" svg:height="1cm" svg:x="17.5cm" svg:y="10.7cm">
      <text:p/>
      <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:text-areas="6722 8256 14878 15460" draw:type="star5" draw:enhanced-path="M 10797 0 L 8278 8256 0 8256 6722 13405 4198 21600 10797 16580 17401 21600 14878 13405 21600 8256 13321 8256 10797 0 Z N"/>
     </draw:custom-shape>
-    <draw:custom-shape draw:style-name="gr22" draw:text-style-name="P3" draw:layer="layout" svg:width="1cm" svg:height="1cm" svg:x="20.5cm" svg:y="17.7cm">
+    <draw:custom-shape draw:style-name="gr32" draw:text-style-name="P3" draw:layer="layout" svg:width="1cm" svg:height="1cm" svg:x="20.5cm" svg:y="17.7cm">
      <text:p/>
      <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:text-areas="6722 8256 14878 15460" draw:type="star5" draw:enhanced-path="M 10797 0 L 8278 8256 0 8256 6722 13405 4198 21600 10797 16580 17401 21600 14878 13405 21600 8256 13321 8256 10797 0 Z N"/>
     </draw:custom-shape>
-    <draw:frame draw:style-name="gr8" draw:text-style-name="P18" draw:layer="layout" svg:width="6.314cm" svg:height="1.673cm" svg:x="21.4cm" svg:y="17.523cm">
+    <draw:frame draw:style-name="gr33" draw:text-style-name="P18" draw:layer="layout" svg:width="6.314cm" svg:height="1.673cm" svg:x="21.4cm" svg:y="17.523cm">
      <draw:text-box>
       <text:p><text:span text:style-name="T29">Blocking alert</text:span></text:p>
       <text:p><text:span text:style-name="T29">And Alert processing</text:span></text:p>
      </draw:text-box>
     </draw:frame>
-    <draw:line draw:style-name="gr20" draw:text-style-name="P3" draw:layer="layout" svg:x1="18cm" svg:y1="11.6cm" svg:x2="18cm" svg:y2="12.1cm">
+    <draw:line draw:style-name="gr30" draw:text-style-name="P3" draw:layer="layout" svg:x1="18cm" svg:y1="11.6cm" svg:x2="18cm" svg:y2="12.1cm">
      <text:p/>
     </draw:line>
-    <draw:line draw:style-name="gr21" draw:text-style-name="P3" draw:layer="layout" svg:x1="17.3cm" svg:y1="11.2cm" svg:x2="15.8cm" svg:y2="11.2cm">
+    <draw:line draw:style-name="gr31" draw:text-style-name="P3" draw:layer="layout" svg:x1="17.3cm" svg:y1="11.2cm" svg:x2="15.8cm" svg:y2="11.2cm">
      <text:p/>
     </draw:line>
-    <draw:custom-shape draw:style-name="gr23" draw:text-style-name="P3" draw:layer="layout" svg:width="1cm" svg:height="1cm" svg:x="10cm" svg:y="8.5cm">
+    <draw:custom-shape draw:style-name="gr34" draw:text-style-name="P3" draw:layer="layout" svg:width="1cm" svg:height="1cm" svg:x="10cm" svg:y="8.5cm">
      <text:p/>
      <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:text-areas="6722 8256 14878 15460" draw:type="star5" draw:enhanced-path="M 10797 0 L 8278 8256 0 8256 6722 13405 4198 21600 10797 16580 17401 21600 14878 13405 21600 8256 13321 8256 10797 0 Z N"/>
     </draw:custom-shape>
-    <draw:custom-shape draw:style-name="gr23" draw:text-style-name="P3" draw:layer="layout" svg:width="1cm" svg:height="1cm" svg:x="11cm" svg:y="8.5cm">
+    <draw:custom-shape draw:style-name="gr34" draw:text-style-name="P3" draw:layer="layout" svg:width="1cm" svg:height="1cm" svg:x="11cm" svg:y="8.5cm">
      <text:p/>
      <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:text-areas="6722 8256 14878 15460" draw:type="star5" draw:enhanced-path="M 10797 0 L 8278 8256 0 8256 6722 13405 4198 21600 10797 16580 17401 21600 14878 13405 21600 8256 13321 8256 10797 0 Z N"/>
     </draw:custom-shape>
-    <draw:custom-shape draw:style-name="gr23" draw:text-style-name="P3" draw:layer="layout" svg:width="1cm" svg:height="1cm" svg:x="12cm" svg:y="8.5cm">
+    <draw:custom-shape draw:style-name="gr34" draw:text-style-name="P3" draw:layer="layout" svg:width="1cm" svg:height="1cm" svg:x="12cm" svg:y="8.5cm">
      <text:p/>
      <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:text-areas="6722 8256 14878 15460" draw:type="star5" draw:enhanced-path="M 10797 0 L 8278 8256 0 8256 6722 13405 4198 21600 10797 16580 17401 21600 14878 13405 21600 8256 13321 8256 10797 0 Z N"/>
     </draw:custom-shape>
-    <draw:custom-shape draw:style-name="gr23" draw:text-style-name="P3" draw:layer="layout" svg:width="1cm" svg:height="1cm" svg:x="13cm" svg:y="8.5cm">
+    <draw:custom-shape draw:style-name="gr34" draw:text-style-name="P3" draw:layer="layout" svg:width="1cm" svg:height="1cm" svg:x="13cm" svg:y="8.5cm">
      <text:p/>
      <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:text-areas="6722 8256 14878 15460" draw:type="star5" draw:enhanced-path="M 10797 0 L 8278 8256 0 8256 6722 13405 4198 21600 10797 16580 17401 21600 14878 13405 21600 8256 13321 8256 10797 0 Z N"/>
     </draw:custom-shape>
-    <draw:custom-shape draw:style-name="gr23" draw:text-style-name="P3" draw:layer="layout" svg:width="1cm" svg:height="1cm" svg:x="14cm" svg:y="8.5cm">
+    <draw:custom-shape draw:style-name="gr34" draw:text-style-name="P3" draw:layer="layout" svg:width="1cm" svg:height="1cm" svg:x="14cm" svg:y="8.5cm">
      <text:p/>
      <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:text-areas="6722 8256 14878 15460" draw:type="star5" draw:enhanced-path="M 10797 0 L 8278 8256 0 8256 6722 13405 4198 21600 10797 16580 17401 21600 14878 13405 21600 8256 13321 8256 10797 0 Z N"/>
     </draw:custom-shape>
-    <draw:custom-shape draw:style-name="gr23" draw:text-style-name="P3" draw:layer="layout" svg:width="1cm" svg:height="1cm" svg:x="15cm" svg:y="8.5cm">
+    <draw:custom-shape draw:style-name="gr34" draw:text-style-name="P3" draw:layer="layout" svg:width="1cm" svg:height="1cm" svg:x="15cm" svg:y="8.5cm">
      <text:p/>
      <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:text-areas="6722 8256 14878 15460" draw:type="star5" draw:enhanced-path="M 10797 0 L 8278 8256 0 8256 6722 13405 4198 21600 10797 16580 17401 21600 14878 13405 21600 8256 13321 8256 10797 0 Z N"/>
     </draw:custom-shape>
-    <draw:custom-shape draw:style-name="gr23" draw:text-style-name="P3" draw:layer="layout" svg:width="1cm" svg:height="1cm" svg:x="20.5cm" svg:y="19.5cm">
+    <draw:custom-shape draw:style-name="gr34" draw:text-style-name="P3" draw:layer="layout" svg:width="1cm" svg:height="1cm" svg:x="20.5cm" svg:y="19.5cm">
      <text:p/>
      <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:text-areas="6722 8256 14878 15460" draw:type="star5" draw:enhanced-path="M 10797 0 L 8278 8256 0 8256 6722 13405 4198 21600 10797 16580 17401 21600 14878 13405 21600 8256 13321 8256 10797 0 Z N"/>
     </draw:custom-shape>
-    <draw:frame draw:style-name="gr8" draw:text-style-name="P18" draw:layer="layout" svg:width="5.366cm" svg:height="0.962cm" svg:x="21.33cm" svg:y="19.538cm">
+    <draw:frame draw:style-name="gr35" draw:text-style-name="P18" draw:layer="layout" svg:width="5.366cm" svg:height="0.962cm" svg:x="21.33cm" svg:y="19.538cm">
      <draw:text-box>
       <text:p><text:span text:style-name="T29">Informative alerts</text:span></text:p>
      </draw:text-box>
@@ -2029,12 +2101,12 @@
    </draw:page>
    <draw:page draw:name="page9" draw:style-name="dp4" draw:master-page-name="Standard" presentation:presentation-page-layout-name="AL2T17">
     <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
-    <draw:frame presentation:style-name="pr15" draw:layer="layout" svg:width="23.3cm" svg:height="3.506cm" svg:x="4.2cm" svg:y="0.537cm" presentation:class="title">
+    <draw:frame presentation:style-name="pr21" draw:layer="layout" svg:width="23.3cm" svg:height="3.506cm" svg:x="4.2cm" svg:y="0.537cm" presentation:class="title" presentation:user-transformed="true">
      <draw:text-box>
       <text:p>FreeDDIManager</text:p>
      </draw:text-box>
     </draw:frame>
-    <draw:frame presentation:style-name="pr16" draw:text-style-name="P25" draw:layer="layout" svg:width="25.199cm" svg:height="14.086cm" svg:x="1.4cm" svg:y="4.914cm" presentation:class="outline" presentation:user-transformed="true">
+    <draw:frame presentation:style-name="pr22" draw:text-style-name="P25" draw:layer="layout" svg:width="25.199cm" svg:height="14.086cm" svg:x="1.4cm" svg:y="4.914cm" presentation:class="outline" presentation:user-transformed="true">
      <draw:text-box>
       <text:list text:style-name="L2">
        <text:list-item>
@@ -2055,7 +2127,7 @@
         <text:p><text:span text:style-name="T40">Current status</text:span></text:p>
         <text:list>
          <text:list-item>
-          <text:p><text:span text:style-name="T39">Beta version, some features still missing, but mainly usable</text:span></text:p>
+          <text:p><text:span text:style-name="T39">Beta version, some features still missing, mainly usable</text:span></text:p>
          </text:list-item>
          <text:list-item>
           <text:p><text:span text:style-name="T39">All FreeMedForms drug database are created by FreeDDIManager </text:span></text:p>
@@ -2069,7 +2141,7 @@
           <text:p><text:span text:style-name="T39">Include javascript in drug interaction management (eg VKA management : a lab-drug interaction model)</text:span></text:p>
          </text:list-item>
          <text:list-item>
-          <text:p><text:span text:style-name="T39">Create a server to ease the data sharing between teams</text:span></text:p>
+          <text:p><text:span text:style-name="T39">Create a server-app communication to ease data sharing </text:span></text:p>
          </text:list-item>
         </text:list>
        </text:list-item>
@@ -2078,19 +2150,19 @@
     </draw:frame>
     <presentation:notes draw:style-name="dp2">
      <draw:page-thumbnail draw:style-name="gr4" draw:layer="layout" svg:width="14.848cm" svg:height="11.136cm" svg:x="3.075cm" svg:y="2.257cm" draw:page-number="9" presentation:class="page"/>
-     <draw:frame presentation:style-name="pr14" draw:layer="layout" svg:width="16.799cm" svg:height="13.364cm" svg:x="2.1cm" svg:y="14.107cm" presentation:class="notes" presentation:placeholder="true">
+     <draw:frame presentation:style-name="pr15" draw:layer="layout" svg:width="16.799cm" svg:height="13.364cm" svg:x="2.1cm" svg:y="14.107cm" presentation:class="notes" presentation:placeholder="true" presentation:user-transformed="true">
       <draw:text-box/>
      </draw:frame>
     </presentation:notes>
    </draw:page>
    <draw:page draw:name="page10" draw:style-name="dp4" draw:master-page-name="Standard" presentation:presentation-page-layout-name="AL2T17">
     <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
-    <draw:frame presentation:style-name="pr12" draw:layer="layout" svg:width="23.3cm" svg:height="3.506cm" svg:x="4.2cm" svg:y="0.537cm" presentation:class="title">
+    <draw:frame presentation:style-name="pr13" draw:layer="layout" svg:width="23.3cm" svg:height="3.506cm" svg:x="4.2cm" svg:y="0.537cm" presentation:class="title" presentation:user-transformed="true">
      <draw:text-box>
       <text:p>FreeDDIManager – Workflow<text:line-break/>Drugs database part</text:p>
      </draw:text-box>
     </draw:frame>
-    <draw:frame presentation:style-name="pr13" draw:layer="layout" svg:width="25.199cm" svg:height="14.232cm" svg:x="1.4cm" svg:y="4.914cm" presentation:class="outline" presentation:user-transformed="true">
+    <draw:frame presentation:style-name="pr23" draw:layer="layout" svg:width="25.199cm" svg:height="14.232cm" svg:x="1.4cm" svg:y="4.914cm" presentation:class="outline" presentation:user-transformed="true">
      <draw:text-box>
       <text:list text:style-name="L2">
        <text:list-item>
@@ -2129,46 +2201,46 @@
     </draw:frame>
     <presentation:notes draw:style-name="dp2">
      <draw:page-thumbnail draw:style-name="gr4" draw:layer="layout" svg:width="14.848cm" svg:height="11.136cm" svg:x="3.075cm" svg:y="2.257cm" draw:page-number="10" presentation:class="page"/>
-     <draw:frame presentation:style-name="pr14" draw:layer="layout" svg:width="16.799cm" svg:height="13.364cm" svg:x="2.1cm" svg:y="14.107cm" presentation:class="notes" presentation:placeholder="true">
+     <draw:frame presentation:style-name="pr15" draw:layer="layout" svg:width="16.799cm" svg:height="13.364cm" svg:x="2.1cm" svg:y="14.107cm" presentation:class="notes" presentation:placeholder="true" presentation:user-transformed="true">
       <draw:text-box/>
      </draw:frame>
     </presentation:notes>
    </draw:page>
    <draw:page draw:name="page11" draw:style-name="dp4" draw:master-page-name="Standard" presentation:presentation-page-layout-name="AL2T17">
     <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
-    <draw:frame presentation:style-name="pr12" draw:layer="layout" svg:width="23.3cm" svg:height="3.506cm" svg:x="4.2cm" svg:y="0.537cm" presentation:class="title">
+    <draw:frame presentation:style-name="pr13" draw:layer="layout" svg:width="23.3cm" svg:height="3.506cm" svg:x="4.2cm" svg:y="0.537cm" presentation:class="title" presentation:user-transformed="true">
      <draw:text-box>
       <text:p>FreeDDIManager – Workflow<text:line-break/>Preparing drug recognization</text:p>
      </draw:text-box>
     </draw:frame>
-    <draw:frame presentation:style-name="pr13" draw:layer="layout" svg:width="25.199cm" svg:height="14.232cm" svg:x="1.4cm" svg:y="4.914cm" presentation:class="outline" presentation:user-transformed="true">
+    <draw:frame presentation:style-name="pr23" draw:layer="layout" svg:width="25.199cm" svg:height="14.505cm" svg:x="1.4cm" svg:y="4.914cm" presentation:class="outline" presentation:user-transformed="true">
      <draw:text-box>
       <text:list text:style-name="L2">
        <text:list-item>
         <text:p>Edit ATC classification (not required)</text:p>
-        <text:p/>
        </text:list-item>
        <text:list-item>
-        <text:p>Edit interactors</text:p>
+        <text:p>Edit drug interactors</text:p>
         <text:list>
          <text:list-item>
-          <text:p>Can be ATC codes</text:p>
+          <text:p>Interactors database is independant of the drug database</text:p>
          </text:list-item>
          <text:list-item>
-          <text:p>Or you can create your own (even class of components)</text:p>
+          <text:p>One interactor can be an ATC code, a drug component or a class/group of ATC/interactors/classes</text:p>
          </text:list-item>
         </text:list>
-        <text:p/>
        </text:list-item>
        <text:list-item>
         <text:p>Edit all drug components</text:p>
         <text:list>
          <text:list-item>
-          <text:p>Link with an ATC code</text:p>
+          <text:p>Extract all drug components</text:p>
          </text:list-item>
          <text:list-item>
-          <text:p>Check and review, comment</text:p>
-          <text:p/>
+          <text:p>Link with an interactor or an ATC code (partially by-hand)</text:p>
+         </text:list-item>
+         <text:list-item>
+          <text:p>Check, review and comments are done by-hand </text:p>
          </text:list-item>
         </text:list>
        </text:list-item>
@@ -2180,65 +2252,86 @@
     </draw:frame>
     <presentation:notes draw:style-name="dp2">
      <draw:page-thumbnail draw:style-name="gr4" draw:layer="layout" svg:width="14.848cm" svg:height="11.136cm" svg:x="3.075cm" svg:y="2.257cm" draw:page-number="11" presentation:class="page"/>
-     <draw:frame presentation:style-name="pr14" draw:layer="layout" svg:width="16.799cm" svg:height="13.364cm" svg:x="2.1cm" svg:y="14.107cm" presentation:class="notes" presentation:placeholder="true">
+     <draw:frame presentation:style-name="pr15" draw:layer="layout" svg:width="16.799cm" svg:height="13.364cm" svg:x="2.1cm" svg:y="14.107cm" presentation:class="notes" presentation:placeholder="true" presentation:user-transformed="true">
       <draw:text-box/>
      </draw:frame>
     </presentation:notes>
    </draw:page>
    <draw:page draw:name="page12" draw:style-name="dp4" draw:master-page-name="Standard" presentation:presentation-page-layout-name="AL2T17">
     <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
-    <draw:frame presentation:style-name="pr12" draw:layer="layout" svg:width="23.3cm" svg:height="3.506cm" svg:x="4.2cm" svg:y="0.537cm" presentation:class="title" presentation:user-transformed="true">
+    <draw:frame presentation:style-name="pr13" draw:layer="layout" svg:width="23.3cm" svg:height="3.506cm" svg:x="4.2cm" svg:y="0.537cm" presentation:class="title" presentation:user-transformed="true">
      <draw:text-box>
       <text:p>FreeDDIManager – Create a DDI</text:p>
      </draw:text-box>
     </draw:frame>
-    <draw:frame presentation:style-name="pr13" draw:layer="layout" svg:width="25.199cm" svg:height="13.859cm" svg:x="1.4cm" svg:y="4.914cm" presentation:class="outline">
+    <draw:frame presentation:style-name="pr14" draw:layer="layout" svg:width="25.199cm" svg:height="13.859cm" svg:x="1.4cm" svg:y="4.914cm" presentation:class="outline" presentation:user-transformed="true">
      <draw:text-box>
       <text:list text:style-name="L2">
-       <text:list-header>
-        <text:p>First – second interacting interactor</text:p>
-       </text:list-header>
+       <text:list-item>
+        <text:p>Drug-drug interactions are currently limited to two interactors interactions</text:p>
+       </text:list-item>
+       <text:list-item>
+        <text:p>DDI are defined using a risk model, a preventive/management message and bibliographic references (using pubmed.org)</text:p>
+       </text:list-item>
+       <text:list-item>
+        <text:p>DDI must be checked and reviewed by-hand</text:p>
+       </text:list-item>
+       <text:list-item>
+        <text:p>The FreeMedForms community wants to create a free and open source DDI database usable in any country</text:p>
+       </text:list-item>
+       <text:list-item>
+        <text:p>We created an « Interaction Committee »</text:p>
+       </text:list-item>
+       <text:list-item>
+        <text:p>Legal and medico-legal issues are not yet clearly defined and solved.</text:p>
+       </text:list-item>
       </text:list>
      </draw:text-box>
     </draw:frame>
     <presentation:notes draw:style-name="dp2">
      <draw:page-thumbnail draw:style-name="gr4" draw:layer="layout" svg:width="14.848cm" svg:height="11.136cm" svg:x="3.075cm" svg:y="2.257cm" draw:page-number="12" presentation:class="page"/>
-     <draw:frame presentation:style-name="pr14" draw:layer="layout" svg:width="16.799cm" svg:height="13.364cm" svg:x="2.1cm" svg:y="14.107cm" presentation:class="notes" presentation:placeholder="true">
+     <draw:frame presentation:style-name="pr15" draw:layer="layout" svg:width="16.799cm" svg:height="13.364cm" svg:x="2.1cm" svg:y="14.107cm" presentation:class="notes" presentation:placeholder="true" presentation:user-transformed="true">
       <draw:text-box/>
      </draw:frame>
     </presentation:notes>
    </draw:page>
    <draw:page draw:name="page13" draw:style-name="dp4" draw:master-page-name="Standard" presentation:presentation-page-layout-name="AL2T17">
     <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
-    <draw:frame presentation:style-name="pr12" draw:layer="layout" svg:width="23.3cm" svg:height="3.506cm" svg:x="4.2cm" svg:y="0.537cm" presentation:class="title">
+    <draw:frame presentation:style-name="pr13" draw:layer="layout" svg:width="23.3cm" svg:height="3.506cm" svg:x="4.2cm" svg:y="0.537cm" presentation:class="title" presentation:user-transformed="true">
      <draw:text-box>
       <text:p>FreeDDIManager – Futur devs</text:p>
      </draw:text-box>
     </draw:frame>
-    <draw:frame presentation:style-name="pr13" draw:layer="layout" svg:width="25.199cm" svg:height="13.859cm" svg:x="1.4cm" svg:y="4.914cm" presentation:class="outline">
+    <draw:frame presentation:style-name="pr14" draw:layer="layout" svg:width="25.199cm" svg:height="13.859cm" svg:x="1.4cm" svg:y="4.914cm" presentation:class="outline" presentation:user-transformed="true">
      <draw:text-box>
       <text:list text:style-name="L2">
        <text:list-item>
-        <text:p>Ajout scripts pour protocoles thérapeutiques ou process d&apos;alerte à des moments données de la prescription</text:p>
+        <text:p>Some interactions or labtest-drug interaction needs some processing</text:p>
+       </text:list-item>
+       <text:list-item>
+        <text:p>Management of interaction javascript in the interaction engines</text:p>
+       </text:list-item>
+       <text:list-item>
+        <text:p>See roadmap of the VKA plugin</text:p>
        </text:list-item>
       </text:list>
      </draw:text-box>
     </draw:frame>
     <presentation:notes draw:style-name="dp2">
      <draw:page-thumbnail draw:style-name="gr4" draw:layer="layout" svg:width="14.848cm" svg:height="11.136cm" svg:x="3.075cm" svg:y="2.257cm" draw:page-number="13" presentation:class="page"/>
-     <draw:frame presentation:style-name="pr14" draw:layer="layout" svg:width="16.799cm" svg:height="13.364cm" svg:x="2.1cm" svg:y="14.107cm" presentation:class="notes" presentation:placeholder="true">
+     <draw:frame presentation:style-name="pr15" draw:layer="layout" svg:width="16.799cm" svg:height="13.364cm" svg:x="2.1cm" svg:y="14.107cm" presentation:class="notes" presentation:placeholder="true" presentation:user-transformed="true">
       <draw:text-box/>
      </draw:frame>
     </presentation:notes>
    </draw:page>
    <draw:page draw:name="page14" draw:style-name="dp4" draw:master-page-name="Standard" presentation:presentation-page-layout-name="AL2T17">
     <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
-    <draw:frame presentation:style-name="pr15" draw:layer="layout" svg:width="23.3cm" svg:height="3.506cm" svg:x="4.2cm" svg:y="0.537cm" presentation:class="title">
+    <draw:frame presentation:style-name="pr21" draw:layer="layout" svg:width="23.3cm" svg:height="3.506cm" svg:x="4.2cm" svg:y="0.537cm" presentation:class="title" presentation:user-transformed="true">
      <draw:text-box>
       <text:p>FreeDDIManager – workflow<text:line-break/>Managing datapacks</text:p>
      </draw:text-box>
     </draw:frame>
-    <draw:frame presentation:style-name="pr17" draw:layer="layout" svg:width="25.199cm" svg:height="13.859cm" svg:x="1.4cm" svg:y="4.914cm" presentation:class="outline">
+    <draw:frame presentation:style-name="pr24" draw:layer="layout" svg:width="25.199cm" svg:height="13.859cm" svg:x="1.4cm" svg:y="4.914cm" presentation:class="outline" presentation:user-transformed="true">
      <draw:text-box>
       <text:list text:style-name="L2">
        <text:list-item>
@@ -2255,7 +2348,7 @@
     </draw:frame>
     <presentation:notes draw:style-name="dp2">
      <draw:page-thumbnail draw:style-name="gr4" draw:layer="layout" svg:width="14.848cm" svg:height="11.136cm" svg:x="3.075cm" svg:y="2.257cm" draw:page-number="14" presentation:class="page"/>
-     <draw:frame presentation:style-name="pr14" draw:layer="layout" svg:width="16.799cm" svg:height="13.364cm" svg:x="2.1cm" svg:y="14.107cm" presentation:class="notes" presentation:placeholder="true">
+     <draw:frame presentation:style-name="pr15" draw:layer="layout" svg:width="16.799cm" svg:height="13.364cm" svg:x="2.1cm" svg:y="14.107cm" presentation:class="notes" presentation:placeholder="true" presentation:user-transformed="true">
       <draw:text-box/>
      </draw:frame>
     </presentation:notes>
@@ -2267,12 +2360,12 @@
       <text:p>Alert management</text:p>
      </draw:text-box>
     </draw:frame>
-    <draw:frame draw:style-name="gr24" draw:text-style-name="P26" draw:layer="layout" svg:width="15.24cm" svg:height="1.987cm" draw:transform="rotate (1.57515964992488) translate (1.013cm 20.249cm)">
+    <draw:frame draw:style-name="gr36" draw:text-style-name="P26" draw:layer="layout" svg:width="15.24cm" svg:height="1.987cm" draw:transform="rotate (1.57515964992488) translate (1.013cm 20.249cm)">
      <draw:text-box>
       <text:p text:style-name="P3"><text:span text:style-name="T41">Some philosophy ?</text:span></text:p>
      </draw:text-box>
     </draw:frame>
-    <draw:frame draw:style-name="gr25" draw:text-style-name="P3" draw:layer="layout" svg:width="14cm" svg:height="14cm" svg:x="7cm" svg:y="4.5cm">
+    <draw:frame draw:style-name="gr37" draw:text-style-name="P3" draw:layer="layout" svg:width="14cm" svg:height="14cm" svg:x="7cm" svg:y="4.5cm">
      <draw:image xlink:href="">
       <text:p/>
      </draw:image>
@@ -2291,13 +2384,12 @@
     </presentation:notes>
    </draw:page>
    <draw:page draw:name="page16" draw:style-name="dp4" draw:master-page-name="Standard" presentation:presentation-page-layout-name="AL2T17">
-    <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
-    <draw:frame presentation:style-name="pr18" draw:layer="layout" svg:width="18cm" svg:height="3.256cm" svg:x="5cm" svg:y="0.961cm" presentation:class="title" presentation:user-transformed="true">
+    <draw:frame presentation:style-name="pr25" draw:layer="layout" svg:width="18cm" svg:height="3.256cm" svg:x="5cm" svg:y="0.961cm" presentation:class="title" presentation:user-transformed="true">
      <draw:text-box>
       <text:p>Alert philosophy [9]</text:p>
      </draw:text-box>
     </draw:frame>
-    <draw:frame presentation:style-name="pr19" draw:text-style-name="P27" draw:layer="layout" svg:width="25.199cm" svg:height="12.151cm" svg:x="1.4cm" svg:y="4.914cm" presentation:class="outline" presentation:user-transformed="true">
+    <draw:frame presentation:style-name="pr26" draw:text-style-name="P27" draw:layer="layout" svg:width="25.199cm" svg:height="12.151cm" svg:x="1.4cm" svg:y="4.914cm" presentation:class="outline" presentation:user-transformed="true">
      <draw:text-box>
       <text:list text:style-name="L2">
        <text:list-item>
@@ -2329,14 +2421,14 @@
       </text:list>
      </draw:text-box>
     </draw:frame>
-    <draw:frame draw:style-name="gr26" draw:text-style-name="P28" draw:layer="layout" svg:width="25cm" svg:height="0.899cm" svg:x="1.5cm" svg:y="18.201cm">
+    <draw:frame draw:style-name="gr38" draw:text-style-name="P28" draw:layer="layout" svg:width="25cm" svg:height="0.899cm" svg:x="1.5cm" svg:y="18.201cm">
      <draw:text-box>
       <text:p><text:span text:style-name="T45">[9]: </text:span><text:span text:style-name="T46">J Am Med Inform Assoc. 2010 Sep-Oct;17(5):493-501.</text:span><text:span text:style-name="T45"> </text:span></text:p>
      </draw:text-box>
     </draw:frame>
     <presentation:notes draw:style-name="dp2">
      <draw:page-thumbnail draw:style-name="gr4" draw:layer="layout" svg:width="14.848cm" svg:height="11.136cm" svg:x="3.075cm" svg:y="2.257cm" draw:page-number="16" presentation:class="page"/>
-     <draw:frame presentation:style-name="pr10" draw:text-style-name="P29" draw:layer="layout" svg:width="16.799cm" svg:height="13.114cm" svg:x="2.1cm" svg:y="14.107cm" presentation:class="notes">
+     <draw:frame presentation:style-name="pr10" draw:text-style-name="P29" draw:layer="layout" svg:width="16.799cm" svg:height="13.114cm" svg:x="2.1cm" svg:y="14.107cm" presentation:class="notes" presentation:user-transformed="true">
       <draw:text-box>
        <text:p text:style-name="P8"><text:span text:style-name="T11">We defined two system of alert: one blocking and one non-blocking.</text:span></text:p>
        <text:p text:style-name="P8"><text:span text:style-name="T11"/></text:p>
@@ -2351,13 +2443,12 @@
     </presentation:notes>
    </draw:page>
    <draw:page draw:name="page17" draw:style-name="dp4" draw:master-page-name="Standard" presentation:presentation-page-layout-name="AL2T17">
-    <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
-    <draw:frame presentation:style-name="pr18" draw:layer="layout" svg:width="18cm" svg:height="3.256cm" svg:x="5cm" svg:y="0.961cm" presentation:class="title" presentation:user-transformed="true">
+    <draw:frame presentation:style-name="pr25" draw:layer="layout" svg:width="18cm" svg:height="3.256cm" svg:x="5cm" svg:y="0.961cm" presentation:class="title" presentation:user-transformed="true">
      <draw:text-box>
       <text:p>Alert philosophy</text:p>
      </draw:text-box>
     </draw:frame>
-    <draw:frame presentation:style-name="pr19" draw:text-style-name="P27" draw:layer="layout" svg:width="25.199cm" svg:height="13.576cm" svg:x="1.4cm" svg:y="4.914cm" presentation:class="outline" presentation:user-transformed="true">
+    <draw:frame presentation:style-name="pr27" draw:text-style-name="P27" draw:layer="layout" svg:width="25.199cm" svg:height="13.576cm" svg:x="1.4cm" svg:y="4.914cm" presentation:class="outline" presentation:user-transformed="true">
      <draw:text-box>
       <text:list text:style-name="L2">
        <text:list-item>
@@ -2411,13 +2502,12 @@
     </presentation:notes>
    </draw:page>
    <draw:page draw:name="page18" draw:style-name="dp4" draw:master-page-name="Standard" presentation:presentation-page-layout-name="AL2T17">
-    <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
-    <draw:frame presentation:style-name="pr18" draw:layer="layout" svg:width="18cm" svg:height="3.256cm" svg:x="5cm" svg:y="0.961cm" presentation:class="title" presentation:user-transformed="true">
+    <draw:frame presentation:style-name="pr25" draw:layer="layout" svg:width="18cm" svg:height="3.256cm" svg:x="5cm" svg:y="0.961cm" presentation:class="title" presentation:user-transformed="true">
      <draw:text-box>
       <text:p>Alert packs</text:p>
      </draw:text-box>
     </draw:frame>
-    <draw:frame presentation:style-name="pr19" draw:text-style-name="P27" draw:layer="layout" svg:width="25.199cm" svg:height="12.451cm" svg:x="1.4cm" svg:y="4.914cm" presentation:class="outline" presentation:user-transformed="true">
+    <draw:frame presentation:style-name="pr28" draw:text-style-name="P27" draw:layer="layout" svg:width="25.199cm" svg:height="12.451cm" svg:x="1.4cm" svg:y="4.914cm" presentation:class="outline" presentation:user-transformed="true">
      <draw:text-box>
       <text:list text:style-name="L2">
        <text:list-item>
@@ -2459,7 +2549,7 @@
     </draw:frame>
     <presentation:notes draw:style-name="dp2">
      <draw:page-thumbnail draw:style-name="gr4" draw:layer="layout" svg:width="14.848cm" svg:height="11.136cm" svg:x="3.075cm" svg:y="2.257cm" draw:page-number="18" presentation:class="page"/>
-     <draw:frame presentation:style-name="pr10" draw:text-style-name="P29" draw:layer="layout" svg:width="16.799cm" svg:height="13.114cm" svg:x="2.1cm" svg:y="14.107cm" presentation:class="notes">
+     <draw:frame presentation:style-name="pr10" draw:text-style-name="P29" draw:layer="layout" svg:width="16.799cm" svg:height="13.114cm" svg:x="2.1cm" svg:y="14.107cm" presentation:class="notes" presentation:user-transformed="true">
       <draw:text-box>
        <text:p text:style-name="P8"><text:span text:style-name="T11">Alerts can be shared between users or group of users using our datapack server. Alerts are then grouped into alert-packs.</text:span></text:p>
        <text:p text:style-name="P8"><text:span text:style-name="T11"/></text:p>
@@ -2469,8 +2559,7 @@
     </presentation:notes>
    </draw:page>
    <draw:page draw:name="page19" draw:style-name="dp4" draw:master-page-name="Standard" presentation:presentation-page-layout-name="AL2T17">
-    <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
-    <draw:frame draw:style-name="gr25" draw:text-style-name="P3" draw:layer="layout" svg:width="16.161cm" svg:height="19.799cm" svg:x="-0.4cm" svg:y="1cm">
+    <draw:frame draw:style-name="gr37" draw:text-style-name="P3" draw:layer="layout" svg:width="16.161cm" svg:height="19.799cm" svg:x="-0.4cm" svg:y="1cm">
      <draw:image xlink:href="">
       <office:binary-data>iVBORw0KGgoAAAANSUhEUgAAAh4AAAKfCAYAAAAhL8E3AAAXM2lDQ1BJQ0MgUHJvZmlsZQAA
        WIW1WQdQVM2Tn7eZZZe0y5JzzjnnnLNEUVhyzkGCJMmgBAVRgoICoghGQARFUBFUJKioGFBE
@@ -3726,7 +3815,7 @@
       <text:p/>
      </draw:image>
     </draw:frame>
-    <draw:frame draw:style-name="gr25" draw:text-style-name="P3" draw:layer="layout" svg:width="12cm" svg:height="6.14cm" svg:x="15.4cm" svg:y="6.46cm">
+    <draw:frame draw:style-name="gr37" draw:text-style-name="P3" draw:layer="layout" svg:width="12cm" svg:height="6.14cm" svg:x="15.4cm" svg:y="6.46cm">
      <draw:image xlink:href="">
       <office:binary-data>iVBORw0KGgoAAAANSUhEUgAAAagAAADhCAIAAAAS8LaHAAAXM2lDQ1BJQ0MgUHJvZmlsZQAA
        WIW1WQdQVM2Tn7eZZZe0y5JzzjnnnLNEUVhyzkGCJMmgBAVRgoICoghGQARFUBFUJKioGFBE
@@ -4237,7 +4326,7 @@
       <text:p/>
      </draw:image>
     </draw:frame>
-    <draw:frame draw:style-name="gr25" draw:text-style-name="P3" draw:layer="layout" svg:width="12cm" svg:height="6.21cm" svg:x="15.4cm" svg:y="12.99cm">
+    <draw:frame draw:style-name="gr37" draw:text-style-name="P3" draw:layer="layout" svg:width="12cm" svg:height="6.21cm" svg:x="15.4cm" svg:y="12.99cm">
      <draw:image xlink:href="">
       <office:binary-data>iVBORw0KGgoAAAANSUhEUgAAAakAAADcCAIAAABF1snKAAAXM2lDQ1BJQ0MgUHJvZmlsZQAA
        WIW1WQdQVM2Tn7eZZZe0y5JzzjnnnLNEUVhyzkGCJMmgBAVRgoICoghGQARFUBFUJKioGFBE
@@ -4599,14 +4688,13 @@
     </draw:frame>
     <presentation:notes draw:style-name="dp2">
      <draw:page-thumbnail draw:style-name="gr4" draw:layer="layout" svg:width="14.848cm" svg:height="11.136cm" svg:x="3.075cm" svg:y="2.257cm" draw:page-number="19" presentation:class="page"/>
-     <draw:frame presentation:style-name="pr14" draw:text-style-name="P11" draw:layer="layout" svg:width="16.799cm" svg:height="13.364cm" svg:x="2.1cm" svg:y="14.107cm" presentation:class="notes" presentation:placeholder="true">
+     <draw:frame presentation:style-name="pr15" draw:text-style-name="P11" draw:layer="layout" svg:width="16.799cm" svg:height="13.364cm" svg:x="2.1cm" svg:y="14.107cm" presentation:class="notes" presentation:placeholder="true" presentation:user-transformed="true">
       <draw:text-box/>
      </draw:frame>
     </presentation:notes>
    </draw:page>
    <draw:page draw:name="page20" draw:style-name="dp4" draw:master-page-name="Standard" presentation:presentation-page-layout-name="AL2T17">
-    <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
-    <draw:frame draw:style-name="gr25" draw:text-style-name="P3" draw:layer="layout" svg:width="15.73cm" svg:height="6.665cm" svg:x="5.57cm" svg:y="0.4cm">
+    <draw:frame draw:style-name="gr37" draw:text-style-name="P3" draw:layer="layout" svg:width="15.73cm" svg:height="6.665cm" svg:x="5.57cm" svg:y="0.4cm">
      <draw:image xlink:href="">
       <office:binary-data>iVBORw0KGgoAAAANSUhEUgAAAb4AAAC9CAIAAABDDI+kAAAXM2lDQ1BJQ0MgUHJvZmlsZQAA
        WIW1WQdQVM2Tn7eZZZe0y5JzzjnnnLNEUVhyzkGCJMmgBAVRgoICoghGQARFUBFUJKioGFBE
@@ -5546,7 +5634,7 @@
       <text:p/>
      </draw:image>
     </draw:frame>
-    <draw:frame draw:style-name="gr25" draw:text-style-name="P3" draw:layer="layout" svg:width="21.762cm" svg:height="12.803cm" svg:x="2.838cm" svg:y="8cm">
+    <draw:frame draw:style-name="gr37" draw:text-style-name="P3" draw:layer="layout" svg:width="21.762cm" svg:height="12.803cm" svg:x="2.838cm" svg:y="8cm">
      <draw:image xlink:href="">
       <office:binary-data>iVBORw0KGgoAAAANSUhEUgAAAmkAAAFrCAIAAAAFM4kTAAAXM2lDQ1BJQ0MgUHJvZmlsZQAA
        WIW1WQdQVM2Tn7eZZZe0y5JzzjnnnLNEUVhyzkGCJMmgBAVRgoICoghGQARFUBFUJKioGFBE
@@ -6676,19 +6764,18 @@
     </draw:frame>
     <presentation:notes draw:style-name="dp2">
      <draw:page-thumbnail draw:style-name="gr4" draw:layer="layout" svg:width="14.848cm" svg:height="11.136cm" svg:x="3.075cm" svg:y="2.257cm" draw:page-number="20" presentation:class="page"/>
-     <draw:frame presentation:style-name="pr14" draw:text-style-name="P11" draw:layer="layout" svg:width="16.799cm" svg:height="13.364cm" svg:x="2.1cm" svg:y="14.107cm" presentation:class="notes" presentation:placeholder="true">
+     <draw:frame presentation:style-name="pr15" draw:text-style-name="P11" draw:layer="layout" svg:width="16.799cm" svg:height="13.364cm" svg:x="2.1cm" svg:y="14.107cm" presentation:class="notes" presentation:placeholder="true" presentation:user-transformed="true">
       <draw:text-box/>
      </draw:frame>
     </presentation:notes>
    </draw:page>
    <draw:page draw:name="page21" draw:style-name="dp4" draw:master-page-name="Standard" presentation:presentation-page-layout-name="AL2T17">
-    <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
     <draw:frame presentation:style-name="pr6" draw:layer="layout" svg:width="18cm" svg:height="3.507cm" svg:x="5cm" svg:y="0.837cm" presentation:class="title" presentation:user-transformed="true">
      <draw:text-box>
       <text:p>FreeMedForms<text:line-break/>Needs you !</text:p>
      </draw:text-box>
     </draw:frame>
-    <draw:frame presentation:style-name="pr9" draw:text-style-name="P30" draw:layer="layout" svg:width="25.199cm" svg:height="13.739cm" svg:x="1.4cm" svg:y="4.914cm" presentation:class="outline" presentation:user-transformed="true">
+    <draw:frame presentation:style-name="pr29" draw:text-style-name="P30" draw:layer="layout" svg:width="25.199cm" svg:height="13.739cm" svg:x="1.4cm" svg:y="4.914cm" presentation:class="outline" presentation:user-transformed="true">
      <draw:text-box>
       <text:list text:style-name="L2">
        <text:list-item>
@@ -6724,7 +6811,7 @@
     </draw:frame>
     <presentation:notes draw:style-name="dp2">
      <draw:page-thumbnail draw:style-name="gr4" draw:layer="layout" svg:width="14.848cm" svg:height="11.136cm" svg:x="3.075cm" svg:y="2.257cm" draw:page-number="21" presentation:class="page"/>
-     <draw:frame presentation:style-name="pr10" draw:text-style-name="P11" draw:layer="layout" svg:width="16.799cm" svg:height="13.114cm" svg:x="2.1cm" svg:y="14.107cm" presentation:class="notes" presentation:placeholder="true">
+     <draw:frame presentation:style-name="pr10" draw:text-style-name="P11" draw:layer="layout" svg:width="16.799cm" svg:height="13.114cm" svg:x="2.1cm" svg:y="14.107cm" presentation:class="notes" presentation:placeholder="true" presentation:user-transformed="true">
       <draw:text-box/>
      </draw:frame>
     </presentation:notes>
