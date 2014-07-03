@@ -116,7 +116,7 @@ Some useful and sometimes problematic classifications
 
 ### Notes
 ?Eric why do you say problematic?
-
+our software inclusion/exclusion dag/star Asterisque prend en charge l'intégralité du cahier des charges de la CIM10
 !
 
 ### ![FreeMedForms logo](img/logo.png) What is a drug interaction?
