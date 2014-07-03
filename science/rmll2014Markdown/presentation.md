@@ -93,6 +93,8 @@ The project is coded in C++ with Qt libraries and a massive usage of the model/v
 
 Applications are built with shared libraries and plugins. They are available for Linux, Mac, and Windows. The FreeBSD port should require some code adaptations.
 
+bsd (r pass)
+
 The roadmap and the issue reporting are available on our wiki web site and Google Code.
 
 We are using SQLite and/or MySQL (MariaDB) for the databases.
