@@ -70,23 +70,14 @@
        <item row="2" column="0">
         <widget class="QTabWidget" name="tabWidget">
          <property name="currentIndex">
-          <number>1</number>
+          <number>0</number>
          </property>
          <widget class="QWidget" name="riskTab">
           <attribute name="title">
            <string>Risk, Management</string>
           </attribute>
           <layout class="QGridLayout" name="gridLayout_4">
-           <property name="leftMargin">
-            <number>5</number>
-           </property>
-           <property name="topMargin">
-            <number>5</number>
-           </property>
-           <property name="rightMargin">
-            <number>5</number>
-           </property>
-           <property name="bottomMargin">
+           <property name="margin">
             <number>5</number>
            </property>
            <property name="spacing">
@@ -101,16 +92,7 @@
               <string>Risk</string>
              </property>
              <layout class="QGridLayout" name="gridLayout_3">
-              <property name="leftMargin">
-               <number>5</number>
-              </property>
-              <property name="topMargin">
-               <number>5</number>
-              </property>
-              <property name="rightMargin">
-               <number>5</number>
-              </property>
-              <property name="bottomMargin">
+              <property name="margin">
                <number>5</number>
               </property>
               <property name="spacing">
@@ -180,16 +162,7 @@
               <string>Management</string>
              </property>
              <layout class="QGridLayout" name="gridLayout_2">
-              <property name="leftMargin">
-               <number>5</number>
-              </property>
-              <property name="topMargin">
-               <number>5</number>
-              </property>
-              <property name="rightMargin">
-               <number>5</number>
-              </property>
-              <property name="bottomMargin">
+              <property name="margin">
                <number>5</number>
               </property>
               <property name="spacing">
@@ -449,12 +422,19 @@
           <layout class="QGridLayout" name="gridLayout_10">
            <item row="0" column="0">
             <widget class="QGroupBox" name="groupBox_3">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
              <property name="title">
               <string>Formalized risk</string>
              </property>
              <layout class="QGridLayout" name="gridLayout_8">
               <item row="0" column="0">
-               <widget class="QTableView" name="formRiskTableView"/>
+               <widget class="QTableView" name="formRiskTableView">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+               </widget>
               </item>
              </layout>
             </widget>
@@ -491,16 +471,7 @@
           <string>General information</string>
          </property>
          <layout class="QGridLayout" name="gridLayout">
-          <property name="leftMargin">
-           <number>5</number>
-          </property>
-          <property name="topMargin">
-           <number>5</number>
-          </property>
-          <property name="rightMargin">
-           <number>5</number>
-          </property>
-          <property name="bottomMargin">
+          <property name="margin">
            <number>5</number>
           </property>
           <property name="spacing">
@@ -508,6 +479,9 @@
           </property>
           <item row="2" column="0">
            <widget class="QComboBox" name="comboLevel">
+            <property name="toolTip">
+             <string>Interaction level of risk</string>
+            </property>
             <property name="sizeAdjustPolicy">
              <enum>QComboBox::AdjustToContents</enum>
             </property>
@@ -563,6 +537,9 @@
               <pointsize>12</pointsize>
              </font>
             </property>
+            <property name="toolTip">
+             <string>Overview of the interaction</string>
+            </property>
             <property name="textInteractionFlags">
              <set>Qt::LinksAccessibleByKeyboard|Qt::LinksAccessibleByMouse|Qt::TextBrowserInteraction|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
             </property>
@@ -595,6 +572,9 @@
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
+            <property name="toolTip">
+             <string>Date of creation</string>
+            </property>
             <property name="displayFormat">
              <string>dd/MM/yyyy</string>
             </property>
@@ -615,6 +595,9 @@
           </item>
           <item row="3" column="1">
            <widget class="QDateEdit" name="updatedOn">
+            <property name="toolTip">
+             <string>Last update</string>
+            </property>
             <property name="displayFormat">
              <string>dd/MM/yyyy</string>
             </property>
@@ -627,6 +610,9 @@
               <width>0</width>
               <height>22</height>
              </size>
+            </property>
+            <property name="toolTip">
+             <string>If checked, the interaction was reviewed by a member of the team</string>
             </property>
             <property name="text">
              <string>Reviewed</string>
