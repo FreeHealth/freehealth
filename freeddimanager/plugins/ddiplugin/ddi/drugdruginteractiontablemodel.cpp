@@ -642,7 +642,7 @@ QString DrugDrugInteractionTableModel::humanReadableDrugDrugInteractionOverView(
     int riskCol, managementCol;
     riskCol = RiskEn;
     managementCol = ManagementEn;
-    if (QLocale().Language == QLocale::French) {
+    if (QLocale().language() == QLocale::French) {
         riskCol = RiskFr;
         managementCol = ManagementFr;
     }
