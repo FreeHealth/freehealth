@@ -5,13 +5,25 @@
 -- Managing paths
   . Currently needs access to the code source path (extracted from git), but will be release with a full set of free data.
   . Define output path & user language
+    . Database output path
+    . Datapack server output path
+    . Temp path (not cleaned to avoid massive usage of network/CPU)
 
 -- ATC
+  . Full classification, regularly updated
+  . You can edit labels and validity of codes
+  . Add and remove ATC codes
+  . Usually users do not need to edit this classification as it will be fully shared.
 
 -- Interactors
+  . Interactors can be a simple ATC code or drug component, but also be a groupment of these.
+  . Only interactors and ATC codes are used to compute interaction
+  . Warn duplicates
 
 -- DDI
-
+  . DDI are defined using two interactors. You can not define DDI directly using ATC codes or drug component name.
+  . You can set the level of risk and text of the alert and text for the management of the interaction.
+  . The FreeMedForms community wants to include for each DDI links to scientific publications currently exclusively using pubmed.org referenced papers.
 
 
 -- Drug database creation w/o interaction data
