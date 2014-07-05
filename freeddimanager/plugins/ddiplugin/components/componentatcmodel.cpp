@@ -62,6 +62,7 @@ using namespace Internal;
 
 static inline DDI::DDICore *ddiCore() {return DDI::DDICore::instance();}
 static inline DDI::Internal::DDIDatabase &ddiBase()  { return DDI::DDICore::instance()->database(); }
+static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 
 namespace DDI {
 namespace Internal {
@@ -346,6 +347,10 @@ ComponentAtcModel::~ComponentAtcModel()
     d = 0;
 }
 
+/**
+ * The model must be initialized before any usage in views.
+ * Returns \e true if initialization succeeded, otherwise \e false.
+ */
 bool ComponentAtcModel::initialize()
 {
     // Fetch all row from the sql model
@@ -355,6 +360,7 @@ bool ComponentAtcModel::initialize()
     return true;
 }
 
+/** If the Interaction database changed, update the content of the model */
 bool ComponentAtcModel::onDdiDatabaseChanged()
 {
     delete d->_sql;
@@ -487,6 +493,9 @@ QVariant ComponentAtcModel::data(const QModelIndex &index, int role) const
             lines << QString("&nbsp;&nbsp;%1").arg(suggestedFull.join("<br>&nbsp;&nbsp;"));
         }
         return lines.join("<br>");
+    } else if (role == Qt::DecorationRole) {
+        if (index.column() == FancyButton)
+            return theme()->icon(Core::Constants::ICONHELP);
     }
     return QVariant();
 }
