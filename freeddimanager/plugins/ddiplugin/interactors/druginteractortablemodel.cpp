@@ -194,8 +194,31 @@ QVariant DrugInteractorTableModel::data(const QModelIndex &index, int role) cons
     if (role == Qt::DisplayRole || role == Qt::EditRole) {
         int sql = d->sqlColumn(index);
         QModelIndex sqlIndex = d->_sql->index(index.row(), sql);
-        return d->_sql->data(sqlIndex, role);
+        QVariant value = d->_sql->data(sqlIndex, role);
+        // If it is a langage value -> test if a value is defined or switch to another language
+        if ((sql == Constants::INTERACTOR_FR
+                || sql == Constants::INTERACTOR_EN
+                || sql == Constants::INTERACTOR_DE)
+                && value.toString().isEmpty()) {
+            QModelIndex testIndex = d->_sql->index(index.row(), Constants::INTERACTOR_FR);
+            QVariant test = d->_sql->data(testIndex, role);
+            if (!test.toString().isEmpty())
+                return test;
 
+            testIndex = d->_sql->index(index.row(), Constants::INTERACTOR_EN);
+            test = d->_sql->data(testIndex, role);
+            if (!test.toString().isEmpty())
+                return test;
+
+            testIndex = d->_sql->index(index.row(), Constants::INTERACTOR_DE);
+            test = d->_sql->data(testIndex, role);
+            if (!test.toString().isEmpty())
+                return test;
+
+            testIndex = d->_sql->index(index.row(), Constants::INTERACTOR_UID);
+            return d->_sql->data(testIndex, role);
+        }
+        return value;
     } else if (role == Qt::FontRole) {
         QModelIndex sqlIndex = d->_sql->index(index.row(), Constants::INTERACTOR_ISCLASS);
         if (d->_sql->data(sqlIndex).toBool()) {
