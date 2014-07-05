@@ -1,0 +1,35 @@
+-- General presentation
+  . Code is Qt/C++ using XML, SQLite, MVC, unit-testing
+  . Left bar to ease navigation between available modes
+
+-- Managing paths
+  . Currently needs access to the code source path (extracted from git), but will be release with a full set of free data.
+  . Define output path & user language
+
+-- ATC
+
+-- Interactors
+
+-- DDI
+
+
+
+-- Drug database creation w/o interaction data
+
+-- Adding interaction data
+
+    -- Components to interactors
+
+    -- Drugs db with interaction data
+
+
+-- FreeMedForms Datapacks
+
+    -- Generating
+
+    -- Sharing
+
+
+-- Example of the FreeMedForms EMR using DDI / allergies / intolerances...
+
+
