@@ -29,7 +29,6 @@
 #include <coreplugin/isettings.h>
 #include <coreplugin/icommandline.h>
 #include <coreplugin/constants.h>
-#include <coreplugin/translators.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/filemanager.h>
 #include <coreplugin/constants_icons.h>
@@ -359,6 +358,7 @@ void MainWindow::readSettings()
     fileManager()->getRecentFilesFromSettings();
     fileManager()->getMaximumRecentFilesFromSettings();
     fileManager()->setCurrentFile(QString::null);
+    switchToCurrentUserLanguage();
     Utils::StyleHelper::setBaseColor(Utils::StyleHelper::DEFAULT_BASE_COLOR);
     modeManager()->activateMode(settings()->value(::S_LASTACTIVEMODE, DDI::Constants::MODE_ATC).toString());
 }
