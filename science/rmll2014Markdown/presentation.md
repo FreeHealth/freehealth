@@ -212,23 +212,6 @@ So we had to define a strong alert philosophy.
 
 !
 
-### ![FreeMedForms logo](img/logoddi.png) Timing of the alert system
-
-![slide 8 timing of the alert system](img/slide8-timing-of-the-alert-system.png)
-
-- - -
-- - -
-- - -
-
-###Notes
-The timing of the alert system is really important too.
-
-Practitioner may have to be warned of interactions before he selects drugs, during the selection and when the dosing of the drug is completed.
-
-This short diagram shows the different phases of the alert computation and their emergence.
-
-!
-
 ### ![FreeMedForms logo](img/logoddi.png) Free DDI Manager
 * __Motivation__
  * Allow users to __create__ their own drug interaction set
@@ -316,30 +299,10 @@ Interactor linked to cytochrom P450: all substrate or all inhibitors
 * FreeMedForms community wants to create a free and open source DDI database usable in any country
 * We created an «Interaction Committee»
 * Legal and medico-legal issues are not yet clearly defined and solved.
-- - -
-- - -
-- - -
-- - -
-- - -
-- - -
+
 ###Notes
 
 Tu devrais écrire ton texte.
-
-!
-
-### ![FreeMedForms logo](img/logoddi.png) Interactions Committee
-
-* Shah et al. 2006: "high user acceptance of ambulatory computerized prescribing alerts when using a selective knowledge base and minimizing workflow interruptions"
-* commercial knowledge bases
- * highly inclusive
- * emphasis on breadth of coverage, not on clinical relevancy or severity of adverse events
- * conflits of interests: directly or indirectly owned by pharmaceutical industry
-
-###Notes
-
-Tu devrais écrire ton texte. Ce que tu dis peut compléter la diapo, tu n'es pas forcé de lire la diapo.
-Attention, sans ton texte tu risques de bafouiller...
 
 !
 
@@ -361,23 +324,6 @@ Attention, sans ton texte tu risques de bafouiller...
 
 !
 
-### ![FreeMedForms logo](img/logoddi.png) FreeDDIManager – Future devs
-
-* Some interactions or labtest-drug interaction needs some processing
-* Management of interaction javascript in the interaction engines
-* See roadmap of the VKA plugin
-- - -
-- - -
-- - -
-- - -
-- - -
-- - -
-
-###Notes
-
-Rédiges ton texte
-
-!
 
 ### ![FreeMedForms logo](img/logoddi.png) Free DDI Manager workflow: manage datapacks
 
@@ -399,45 +345,21 @@ A full documentation is available on our website.
 
 !
 
+### ![FreeMedForms logo](img/logoddi.png) FreeDDIManager – Future devs
 
-### ![FreeMedForms logo](img/logoddi.png) Alert philosophy
-
-* Two kinds of alerts:
- * __Non-blocking__ → icon and tooltip
- * __Blocking__ → blocking dialog, require user action
-* Alert system provides three levels: low, medium, high
-* And an infinite number of __categories__ (DDI, PIM, drug
-duplication, dose checking, allergies, intolerances...)
-* __Threshold__ of alerts can be adapted by the user for each
-type of alerts
-* Alerts can be __dynamic__ (using scripting)
-* We do our best to avoid alert fatigue
-
-- - -
-- - -
-- - -
+* Include scripting in interaction processing
+ * See roadmap of the VKA plugin (labtest-drug interaction)
+* Include pregnancy data
+ * Australian governmental data
+* Include dose / renal failure
+ * dosing.de
+* Finish PIMs implementation
 
 ###Notes
 
-Last year, Eric presented the alert system of the FreeMedForms project at the LSM in Brussels. The video is available.
-
-We defined two systems of alert: one blocking and one non-blocking.
-
-The non-blocking alert is represented by and icon and tooltips in views. While the blocking alerts are blocking dialogs that needs user validation to proceed. Both alerts present minimal and sufficient information. At any time users can access (to) full alert information.
-
-The alert system provides three levels of risk : low medium and high. And each alert can be classified in an inifinite number of categories.
-
-The threshold of each type of alert can be adapted by the user in the user preferences.
-
-###References
-
-* Phansalkar, S., J. Edworthy, E. Hellier, D. L. Seger, A. Schedlbauer, A. J. Avery, and D. W. Bates. “A Review of Human Factors Principles for the Design and Implementation of Medication Safety Alerts in Clinical Information Systems.” Journal of the American Medical Informatics Association 17, no. 5 (September 6, 2010): 493–501. doi:10.1136/jamia.2010.005264.
-
-###Notes
-
+Rédiges ton texte
 
 !
-
 
 ### ![FreeMedForms logo](img/logoddi.png) FreeMedForms needs you!
 * A great community
