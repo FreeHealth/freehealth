@@ -79,21 +79,21 @@ The project is supported by the Debian Med team and also the FedoraMedical and O
 
 ### ![FreeMedForms logo](img/logo.png) The FreeMedForms project
 
-* GNU/Linux, MacOs X, Win32, Win64, (FreeBSD)
-* C++ using Digia's Qt libs
+* __GNU/Linux, FreeBSD, MacOs X, Win32, Win64__
+* C++ using Digia's __Qt__ libs
 * documented using Doxygen
-* massive usage of MVC architecture
-* Built using dynamic libraries with plugins architecture
-* database: SQLite and/or MySQL
+* massive usage of MVC architecture and __unit-tests__
+* Built using dynamic libraries with __plugins architecture__
+* database: SQLite and/or MySQL/MariaDb
 
 - - -
 - - -
 - - -
 
 ### Notes
-The project is coded in C++ with Qt libraries and a massive usage of the model/view/controller architecture. The code is documented using Doxygen.
+The project is coded in C++ with Qt libraries and a massive usage of the model/view/controller architecture. The code is documented using Doxygen. Many unit-tests are available and code safety is regularly checked before any release.
 
-Applications are built with shared libraries and plugins. They are available for Linux, Mac, and Windows. The FreeBSD port should require some code adaptations (rpath and some user path issues).
+Applications are built with shared libraries and plugins. They are available for Linux, Mac, FreeBSD and Windows.
 
 The roadmap and the issue reporting are available on our wiki web site and Google Code / GitHub.
 
