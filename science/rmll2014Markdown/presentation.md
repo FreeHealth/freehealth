@@ -246,7 +246,7 @@ This short diagram shows the different phases of the alert computation and their
 - - -
 ###Notes
 We want to ease the creation, the contributions and sharing of DDI very easy inside the FreeMedForms project. Some tools were tested but none was really efficient.
-The FreeDDIManager was created to answer to this need. We chose to write a hard-coded application instead of a webportal as all our applications are still hard-coded. There are roadmap to swich to a webapp design.
+The FreeDDIManager was created to answer to this need. We chose to write a hard-coded application instead of a webportal as all our applications are still hard-coded. There are _no__ roadmap to swich to a webapp design.
 Currently, FreeDDIManager is in beta stage. We already use it to create and update our drugs related datapack server.
 
 In a near future, we plan to include javascript inside DDI definition to allow users to access to any other database, to access patient data and interact with user.
@@ -271,7 +271,7 @@ In a near future, we plan to include javascript inside DDI definition to allow u
 ###Notes
 
 In order to create our drug database, we found free drugs databases published by governmental structures for the folowing countries : France, USA, Canada, South-Africa, belgium and portugal. These drug databases can be automatically processed using FreeDDIManager without any user configuration.
-Raw source are processed for the needs of the FreeMedForms database scheme.
+Raw sources are processed for the needs of the FreeMedForms database scheme.
 
 
 !
@@ -324,6 +324,8 @@ Interactor linked to cytochrom P450: all substrate or all inhibitors
 - - -
 ###Notes
 
+Tu devrais écrire ton texte.
+
 !
 
 ### ![FreeMedForms logo](img/logoddi.png) Interactions Committee
@@ -333,14 +335,29 @@ Interactor linked to cytochrom P450: all substrate or all inhibitors
  * highly inclusive
  * emphasis on breadth of coverage, not on clinical relevancy or severity of adverse events
  * conflits of interests: directly or indirectly owned by pharmaceutical industry
-* FMF Interactions Committee
- * review interactions
- * classify: relevance to setting, severity
- * Evidence Based Interactions: references (PubMed), levels of evidence (A,B,C,D)
- * at first focused on outpatient setting
- * lobby academic, governmental, institutional interactions committees
-  * publish under free licenses
-  * use & contribute to Free DDI Manager
+
+###Notes
+
+Tu devrais écrire ton texte. Ce que tu dis peut compléter la diapo, tu n'es pas forcé de lire la diapo.
+Attention, sans ton texte tu risques de bafouiller...
+
+!
+
+### ![FreeMedForms logo](img/logoddi.png) Interactions Committee
+
+* Maintain a drug interaction database
+ * Free and open source
+ * 100% Independant
+ * Community driven
+* Review drug interactions
+* Evidence Based Interactions: references (PubMed), Summary of Product Characteristics
+* Lobby academic, governmental, institutional interactions committees
+ * use & contribute to FreeDDIManager
+
+###Notes
+
+Tu devrais écrire ton texte. Ce que tu dis peut compléter la diapo, tu n'es pas forcé de lire la diapo.
+Attention, sans ton texte tu risques de bafouiller...
 
 !
 
@@ -358,16 +375,16 @@ Interactor linked to cytochrom P450: all substrate or all inhibitors
 
 ###Notes
 
-Does JavaScript pose a security risk?
+Rédiges ton texte
 
 !
 
 ### ![FreeMedForms logo](img/logoddi.png) Free DDI Manager workflow: manage datapacks
 
-* Create a datapack
-* Upload a datapack
-* Share a datapack
-
+* Create a datapack and a "datapack server"
+* Upload Packs
+* Share server configuration
+* Users only have to configure your server and select Packs to install
 - - -
 - - -
 - - -
@@ -416,60 +433,16 @@ The threshold of each type of alert can be adapted by the user in the user prefe
 
 * Phansalkar, S., J. Edworthy, E. Hellier, D. L. Seger, A. Schedlbauer, A. J. Avery, and D. W. Bates. “A Review of Human Factors Principles for the Design and Implementation of Medication Safety Alerts in Clinical Information Systems.” Journal of the American Medical Informatics Association 17, no. 5 (September 6, 2010): 493–501. doi:10.1136/jamia.2010.005264.
 
-!
-
-
-### ![FreeMedForms logo](img/logoddi.png) Alert philosophy
-* __related to__
- * One or all users
- * Application (update notification, backup reminder)
- * One patient
- * All patients (eg: for medical prevention, cancer screening)
-* « __one shot alerts__ » or « __cycling alerts__ »
-* defined validity period
-* edited by user or not
-* __validated__ / __overriden__ & __commented__ by user
-* scripted
-
-- - -
-- - -
-- - -
 ###Notes
-Alerts can be related to different types of attendees.
 
-They can be cycling or not, with a validity period defined or not.
-
-The validation method can include a user comment in case of the user override the alert.
-
-Alerts can be dynamic using their script system.
 
 !
 
-### ![FreeMedForms logo](img/logoddi.png) Alert packs
-* Alerts can be shared via __alert packs__
-* Alert packs are shared via the __datapack manager__
-* Alert packs must contain
- * packdescription.xml (datapack description file)
- * All XML alerts
-* When the user install an alert pack
- * All alerts are saved
- * All alerts are checked
- * All alerts are executed (if required)
-* This is really useful to share medical prevention alerts
-
-- - -
-- - -
-- - -
-###Notes
-Alerts can be shared between users or group of users through our datapack server. Alerts are then grouped into alert-packs.
-
-A full documentation is about to be released on our main web site.
-
-!
 
 ### ![FreeMedForms logo](img/logoddi.png) FreeMedForms needs you!
 * A great community
-* Non-profit association -> official support
+* __Non-profit association__ -> official support
+ * http://asso.freemedforms.com 
 * __Wanted__: devs, testers, translators, medical doctors, pharmacists, articles, reviews, retweets
 * Unfunded... __$__, __€__, __฿__ welcome by the registered not-for-profit association
 * Code on GitHub <https://github.com/FreeMedForms/freemedforms>
@@ -493,6 +466,10 @@ A french non-profit association was created in january 2013 with the unique obje
 * [4]
 * [5]
 * FreeMedForms complete bibliograpical references freely available on our Zotero group: https://www.zotero.org/groups/freemedforms
+
+###Notes
+
+Si tu ajoutes des références il en faudrait sur les interactions médicamenteuses et en particulier sur l'anamlyse du contenu des bases du commerce. Cf article espagnol. Je l'ai pas sous la main...
 
 !
 
