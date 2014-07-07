@@ -24,9 +24,9 @@ Hello,
 
 Please, let me begin  with a very special thanks and congratulations to the organizers of this event and for their work. I'm really impressed by what benevolent women and men have done for this Libre Software Meeting.  I would also like to thank them for allowing us to present our work today. 
 
-I'm Jérôme Pinguet. I used FreeMedForms for a few months in a medical practice where the EMR was not up-to-date and didn't have a Drug-Drug Interactions checker. I then started to contribute to the project. I'm currently writing my MD thesis about the efficiency of clinical decision support systems to reduce anticoagulant related adverse events.
+I'm Jérôme Pinguet. I used FreeMedForms for a few months in a medical practice. My previous EMR was not up-to-date and didn't have a Drug-Drug Interactions checker. I'm an active contributor to the project. I'm currently writing my MD thesis about the efficiency of clinical decision support systems to reduce anticoagulant related adverse events.
 
-Eric Maeker, french physician, C + + / Qt developer, is the creator and main developer of FreeMedForms. The project started from scratch in 2008 and is now usable in day-to-day practice.  FreeMedForms project applications are now in production in medical offices.
+Eric Maeker is a french physician, C + + / Qt developer, and is the creator and main developer of FreeMedForms.
 
 You can find more information about the FreeMedForms project on our web site: http://www.freemedforms.com/
 
@@ -47,7 +47,7 @@ Today I will present FreeDDIManager, our drug interactions manager. It allows yo
 - - -
 - - -
 ###Notes
-FreeMedForms is a suite of medical applications regrouping an Electronic Medical Record manager, a prescriber, some clinical coding assistants. More apps are on the way.
+FreeMedForms is a suite of medical applications regrouping an Electronic Medical Record manager, a prescriber assistant, some clinical coding assistants. More apps are on the way.
 All applications are free, open source and released under the GPLv3 licence.
 
 !
@@ -71,9 +71,11 @@ All applications are free, open source and released under the GPLv3 licence.
 ###Notes
 The project is driven by a community of medical doctors and computer workers and was created on the pulse of a french team.
 
-All applications are free, open source and released under the GPLv3 licence.
+All contributor must declare his/her conflict of interests. Contributors that are not totally independant of the pharmaceutical industry and/or the proprietary socftware industry will not be able to join our team.
 
-The project is supported by the Debian Med team and also the FedoraMedical and OpenSuse Medical teams.
+All the FreeMedForms community want to thank the Debian Med team that supports our project. Thanks to this help, FreeMedForms is fully available in the official stable repository since a long time. Eric is now an active member of the Debian Med team.
+
+The project is also supported by the FedoraMedical and OpenSuse Medical teams.
 
 !
 
@@ -91,9 +93,13 @@ The project is supported by the Debian Med team and also the FedoraMedical and O
 - - -
 
 ### Notes
-The project is coded in C++ with Qt libraries and a massive usage of the model/view/controller architecture. The code is documented using Doxygen. Many unit-tests are available and code safety is regularly checked before any release.
+All applications are available for Linux, Mac, FreeBSD and Windows.
 
-Applications are built with shared libraries and plugins. They are available for Linux, Mac, FreeBSD and Windows.
+The project is coded in C++ with Qt libraries and a massive usage of the model/view/controller architecture. The code is documented using Doxygen. 
+
+__Many unit-tests are available and code safety is regularly checked before any release__.
+
+Applications are built using shared libraries and plugins architecture which allow us to easily add/remove new functionalities.
 
 The roadmap and the issue reporting are available on our wiki web site and Google Code / GitHub.
 
@@ -126,7 +132,7 @@ The FreeMedForms project can manage some internationally defined classifications
 ### ![FreeMedForms logo](img/logo.png) What is a drug interaction?
 * a drug can interact with:
  * another drug: __drug-drug interaction__ __DDI__ 
- * patient's conditions:
+ * patient's conditions: __patient-drug interaction__
   * disease, allergy, renal filtration, age
 * food: __food-drug interactions__ __FDI__
 * lab-drug interactions when interacts with lab tests
@@ -156,7 +162,8 @@ Problem: drug-lab interaction is used in many articles with the meaning of "atte
 !
 
 ### ![FreeMedForms logo](img/logo.png) Drug interactions
-* drug interaction can be enough to create severe even fatal adverse events
+* __drug interaction can be enough to create severe even fatal adverse events__
+
 * __Always growing__
  * Number of marketed drug
  * Number of known drug interactions
@@ -175,8 +182,6 @@ Problem: drug-lab interaction is used in many articles with the meaning of "atte
 A drug interaction can be enough to cause severe and even fatal adverse effects. 
 
 The number of marketted drugs is always growing, as the number of prescribed drugs per patient. Our knowledge of the potential interactions is also each year more acute. The number of possible interactions is quickly growing: computerized processing of interactions is a much needed tool to help practitioners in their day-to-day practice.
-
-??Use elderly persons instead of older people?? -> "elderly" (not elderly people) is the MeSH term for old people.
 
 When FreeMedForms was started a special attention was paid to DDI management. We identified non-conflicting sources freely available and compiled them into one unique database.
 
@@ -234,7 +239,11 @@ This short diagram shows the different phases of the alert computation and their
 - - -
 - - -
 ###Notes
-?? can we break this slide into 3 slides ??
+We want to ease the creation, the contributions and sharing of DDI very easy inside the FreeMedForms project. Some tools were tested but none was really efficient.
+The FreeDDIManager was created to answer to this need. We chose to write a hard-coded application instead of a webportal as all our applications are still hard-coded. There are roadmap to swich to a webapp design.
+Currently, FreeDDIManager is in beta stage. We already use it to create and update our drugs related datapack server.
+
+In a near futur, we plan to include javascript inside DDI definition to allow users to access to any other database, to access patient data and interact with user.
 
 !
 
@@ -255,7 +264,8 @@ This short diagram shows the different phases of the alert computation and their
 - - -
 ###Notes
 
-We found free drug database published by governmental structures for the folowing countries : France, USA, Canada, South-Africa, belgium and portugal. These drug databases can be automatically processed using FreeDDIManager. 
+In order to create our drug database, we found free drugs databases published by governmental structures for the folowing countries : France, USA, Canada, South-Africa, belgium and portugal. These drug databases can be automatically processed using FreeDDIManager without any user configuration.
+Raw source are processed for the needs of the FreeMedForms database scheme.
 
 
 !
@@ -275,6 +285,14 @@ We found free drug database published by governmental structures for the folowin
 - - -
 - - -
 ###Notes
+
+The workflow of drug database creation includes needs:
+- a full ATC classification (that will be released with the release version)
+- a definition of interactors. An interactor can be a unique ATC or multiple ATC codes, it can be a component name, or a groupment of interactors.
+- You will also need all the drug components of your database and you will need to link them to an ATC code or an interactor.
+- this work must done by hand and we developed tools to help community in this process.
+- All data created with FreeDDIManager can be shared between users.
+
 
 This slide will become clearer after watching the video  
 component = molecule  
@@ -331,26 +349,15 @@ Does JavaScript pose a security risk?
 - - -
 ###Notes
 
-!
+FreeMedForms project DataPack management is a quite easy and fast process to add functionalities to any applications of the project.
+Datapacks represent pure data, patient forms, scripts, binaries and many other potential.
+FreeDDIManager allow you to create in some mouse-clicks a datapack server. A server can be a local path or a remote server. When the server is built, you just have to send to your users the URL of the server and their login information.
+Application can manage as many server as you want and correctly manages dependencies between packs, application version limitations, pack version, pack update...
 
-### ![FreeMedForms logo](img/logo.png) Alert management
-
-####Alert philosophy
-- - -
-- - -
-- - -
-- - -
-- - -
-- - -
-###Notes
-
-It is always difficult to alert medical practitioners using a software.
-
-Many alerts are overriden or totally ignored.
-
-We tried to build a performant system, fully configurable to avoid this problem.
+A full documentation is available on our website.
 
 !
+
 
 ### ![FreeMedForms logo](img/logo.png) Alert philosophy
 
@@ -371,6 +378,8 @@ type of alerts
 
 ###Notes
 
+Last year, Eric presented the alert system of the FreeMedForms project at the LSM in Brussels. The video is available.
+
 We defined two systems of alert: one blocking and one non-blocking.
 
 The non-blocking alert is represented by and icon and tooltips in views. While the blocking alerts are blocking dialogs that needs user validation to proceed. Both alerts present minimal and sufficient information. At any time users can access (to) full alert information.
@@ -385,6 +394,7 @@ The threshold of each type of alert can be adapted by the user in the user prefe
 
 !
 
+<<<<<<< HEAD
 ### ![FreeMedForms logo](img/logo.png) Alert philosophy
 * __related to__
  * One or all users
@@ -435,7 +445,7 @@ A full documentation is about to be released on our main web site.
 
 ### ![FreeMedForms logo](img/logo.png) FreeMedForms needs you!
 * A great community
-* A big project
+* Non-profit association -> official support
 * __Wanted__: devs, testers, translators, medical doctors, pharmacists, articles, reviews, retweets
 * Unfunded... __$__, __€__, __฿__ welcome by the registered not-for-profit association
 * Code on GitHub <https://github.com/FreeMedForms/freemedforms>
@@ -446,7 +456,8 @@ A full documentation is about to be released on our main web site.
 - - -
 - - -
 ###Notes
-??Should we talk about the association??i
+
+A french non-profit association was created in january 2013 with the unique objective to support the FreeMedForms community. The association is unique provider of the official support of the suite.
 
 !
 
@@ -467,13 +478,10 @@ A full documentation is about to be released on our main web site.
 * Eric says "Kisses to my wife and children (who support my devs...)"
 * Jerome says: "Thank you Eric for coding so fast and so well, thanks to the international FMF community for your contributions and for sticking with us despite our bad english! :)"
 
-!
+Now I will present a short video of the FreeDDIManager. You will see how easy it is to build and share your own set of interactions.
 
-### ![FreeMedForms logo](img/logo.png)Interactions... with you!
-##We would like to hear from you now!
-* mistakes?
-* critics?
-* questions?
-* contributions?
+Thank you.
+
+!
 
 ###I'll be around today & available for discussion or meeting: Email/XMPP/Jabber/GPG: jerome@jerome.cc +33611770269

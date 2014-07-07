@@ -187,8 +187,6 @@ bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
         modeManager()->addAction(cmd->action(), 10);
 
         // Create a backup of the current database
-        Core::Id bkp_group(Core::Constants::G_FILE_SAVE);
-        // View database report
         a = new QAction(this);
         a->setObjectName("aMainWinBackUpDatabase");
         a->setIcon(theme()->icon(Core::Constants::ICONDATABASE));

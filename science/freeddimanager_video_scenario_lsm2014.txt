@@ -1,46 +1,96 @@
 -- General presentation
-  . Code is Qt/C++ using XML, SQLite, MVC, unit-testing
-  . Left bar to ease navigation between available modes
+  . This video was presented at the fifteen Libre Software Meeting 2014 in Montpellier.
+   . FreeDDIManager is the application of the FreeMedForms project that manages drugs and drug interactions databases.
+  . This manager is totally independant of any other application of the project and it can be easily used to create database for any our applications.
+  . The user interface is quite basic, with on the left a navigation bar and on the right the content of the selected mode.
 
 -- Managing paths
-  . Currently needs access to the code source path (extracted from git), but will be release with a full set of free data.
-  . Define output path & user language
+  . When you start for the first time the manager, you need to define its working path.
+  . You can note that the debugging version needs access to the code source path. The release version will include all required files.
+  . You can define all path in the preferences.
     . Database output path
     . Datapack server output path
     . Temp path (not cleaned to avoid massive usage of network/CPU)
 
 -- ATC
-  . Full classification, regularly updated
-  . You can edit labels and validity of codes
-  . Add and remove ATC codes
-  . Usually users do not need to edit this classification as it will be fully shared.
+  . Now let's see how we can manage the WHO ATC classification.
+  . The manager includes the full classification, regularly updated.
+  . You can edit all labels and codes. You can also define the validity of each item.
+  . You can add or remove items.
+  . But usually, there are no need to edit this classification as it will be fully shared.
 
 -- Interactors
-  . Interactors can be a simple ATC code or drug component, but also be a groupment of these.
-  . Only interactors and ATC codes are used to compute interaction
-  . Warn duplicates
+  . I nteraction engines mainly work using ATC codes and interactors. 
+  . Interactors can represent a simple ATC code or a drug component, but it can also be a groupment of these.
+  . You can there manage your interactors. 
+  . all actions are grouped in a toolbar at the upper part of the interface,
+  . unique indetifer, source reference, date of creation and update are at the top of the editor.
+  . You can set the validity of any interactor, check it as reviewed, mark it as a class interactor (which means that it represent a groupment of interactors). You can also define if you want interaction engine to alert duplication of this interactor.
+  . You can then define labels and children or related ATC code.
+  . You can add extra-information about the interactor and comments.
 
 -- DDI
-  . DDI are defined using two interactors. You can not define DDI directly using ATC codes or drug component name.
-  . You can set the level of risk and text of the alert and text for the management of the interaction.
-  . The FreeMedForms community wants to include for each DDI links to scientific publications currently exclusively using pubmed.org referenced papers.
+  . Now let's see how we can manage DDI. 
+  . DDI are defined using two interactors (as previously defined). 
+  . You can not define DDI directly using ATC codes or drug component name.
+  . Actions are at the upper part as usual. Here you can search for interactions.
+  . The list of DDI is presented here. 
+  . For any DDI, a basic review is available in this text box.
+  . You can set the level of risk, date of creation and update, add text for the alert itself and text to help practitioner to manage the interaction.
+  . Futur development will take into account dose and routes related interactions.
+  . The FreeMedForms community wants to include for each DDI as many links as possible to scientific publications currently exclusively using pubmed.org referenced papers.
 
 
 -- Drug database creation w/o interaction data
+  . At any time, you can create a free drug database including all marketed drugs for available countries.
+  . Select any Free drug database, then click on download. 
+  . When finished, select all jobs required to prepare the database and click on "Start Job" and the bottom of the interface. 
+  . Information about the output file is detailled here.
+  . If you want to edit the database or datapack information, just click on "See datapack description file" or "See datapack description file".
+  . Once the database is created, you can then edit all unique drug components extracted from this database.
 
--- Adding interaction data
 
-    -- Components to interactors
+-- Adding non-free data (interaction, Summary of Product Characteristics)
+  . If you want to create full database with interaction data, you need to edit the component list of your drug database.
+  . We currently call these database "non-free" as the interaction data used in the project are not yet 100% free. 
+
+    -- Link components to interactors
+      . So, after the first step of the drug database creation, you will have all drug components without any ATC link.
+      . The manager will suggest some links.
+      . You will have to link and review all components to ATC codes or interactors.
+      . This part of the job is the biggest one and define the confidence index of the drug database for interaction checking. 
+      . At the upper part of the interface, you will find the drug component database selector.
+      . You can see here the french database completion.
+      . Some tools are available to help you : a dokuwiki page creator for unreviewed component, an search dialog for ATC codes, quick links to google search, and some other websites.
+      . If you want more information about this workflow please refer to our online documentation or ask our mailing list.
 
     -- Drugs db with interaction data
+      . When all the work is done with interactors, interactions and component linking, you can then compute your database.
+      . The release version will be available with the full ATC classification only. 
+      . The FreeMedForms community will include some user inside the Interaction Committee. 
+      . Only member of this committee will have full access to our data. 
 
+
+-- Share
+  . You can share your work with your team.
+  . An assitant will be included to help you, the code is beeing written as I speak.
+  . You can use your database, stored in your preferred path to share your interaction data.
+  . Just open your database path, find and share the ddimanager.db file.
 
 -- FreeMedForms Datapacks
+  . To share computed drug database with or w/o interaction data, you can use our DataPack processing.
+  . DataPacks represent set of data that can be included in any FreeMedForms application.
+  . DataPacks are stored in a DataPack server (which can be a local path or remote server).
 
     -- Generating
+      . There is a datapack server creation assistant.
+      . Select the path where your datapacks are beeing created (just live as is).
+      . Click on "Screen path" and then you should have all found Pack that can be included on your server.
+      . Select your Pack, define the output path of the server and click on "Create server".
+      . If you want to use this functionality, you must read our full documentation.
 
     -- Sharing
-
+      . The next part is to configure your newly created server inside FreeMedForms application. 
 
 -- Example of the FreeMedForms EMR using DDI / allergies / intolerances...
 

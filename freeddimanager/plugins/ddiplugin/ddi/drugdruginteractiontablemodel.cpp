@@ -638,6 +638,14 @@ QString DrugDrugInteractionTableModel::humanReadableDrugDrugInteractionOverView(
     else
         indent.append("/!\\ ");
 
+    // Get the risk and management text according to the current language
+    int riskCol, managementCol;
+    riskCol = RiskEn;
+    managementCol = ManagementEn;
+    if (QLocale().language() == QLocale::French) {
+        riskCol = RiskFr;
+        managementCol = ManagementFr;
+    }
     tmp += QString("<b>%1 / %2</b><br />"
                    "<b>%3</b><br />"
                    "<span style='%4'>%5</span><br />"
@@ -649,11 +657,11 @@ QString DrugDrugInteractionTableModel::humanReadableDrugDrugInteractionOverView(
             .arg(hasError?"font-weight: 600; color: darkred;":"color: gray")
             .arg(indent + errors.join(QString("<br>%1").arg(indent)))
             .arg(tr("Risk"))
-            .arg(data(index(row, RiskFr)).toString())
+            .arg(data(index(row, riskCol)).toString())
             .arg(tr("Management"))
-            .arg(data(index(row, ManagementFr)).toString());
+            .arg(data(index(row, managementCol)).toString());
 
-    // dose related ?
+    // TODO: dose related ?
     //    QString dose;
     //    if (ddi->firstInteractorDose().data(DrugDrugInteractionDose::UsesFrom).toBool()) {
     //        dose += QString("<br />* From: %1 %2 %3 <br />")

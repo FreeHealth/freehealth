@@ -26,26 +26,26 @@
     <description lang="fr">Données thérapeutiques françaises pour FreeMedForms (sans interactions)</description>
     <description lang="xx">French pharmaceutical data for FreeMedForms (without interactions)</description>
 
-    <htmldescription lang="fr">&lt;p>
+    <htmldescription lang="xx">&lt;p>
       La base de données thérapeutique française est construite sur la base
       des données publiées par l'AFSSAPS. Vous y trouverez tous les médicaments
-      commercialisés en France.&lt;br />
-      &lt;br />
+      commercialisés en France.&lt;br>
+      &lt;br>
       L'utilisation de cette base de données est soumise à une restriction de licence
-      par biais du copyright de l'AFSSAPS.&lt;br />
-      &lt;br />
-      Cette base de données ne permet pas le calcul des interactions médicamenteuses&lt;br />
+      par biais du copyright de l'AFSSAPS.&lt;br>
+      &lt;br>
+      Cette base de données ne permet pas le calcul des interactions médicamenteuses&lt;br>
       &lt;/p>
     </htmldescription>
 
     <htmldescription lang="xx">&lt;p>
       The french pharmaceutical drug database is build upon AFSSAPS' data.
-      You will find all available and marketed drugs for France.&lt;br />
-      &lt;br />
+      You will find all available and marketed drugs for France.&lt;br>
+      &lt;br>
       You can use the database according to the limiting license of the data which
-      are copyrighted by the AFSSAPS.&lt;br />
-      &lt;br />
-      Data for drug interaction engines are not included in this database.&lt;br />
+      are copyrighted by the AFSSAPS.&lt;br>
+      &lt;br>
+      Data for drug interaction engines are not included in this database.&lt;br>
       &lt;/p>
     </htmldescription>
 
