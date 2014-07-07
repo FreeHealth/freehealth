@@ -24,7 +24,7 @@ Hello,
 
 Please, let me begin  with a very special thanks and congratulations to the organizers of this event and for their work. I'm really impressed by what benevolent women and men have done for this Libre Software Meeting.  I would also like to thank them for allowing us to present our work today. 
 
-I'm Jérôme Pinguet ...
+I'm Jérôme Pinguet. I used FreeMedForms for a few months in a medical practice where the EMR was not up-to-date and didn't have a Drug-Drug Interactions checker. I then started to contribute to the project. I'm currently writing my MD thesis about the efficiency of clinical decision support systems to reduce anticoagulant related adverse events.
 
 Eric Maeker, french physician, C + + / Qt developer, is the creator and main developer of FreeMedForms. The project started from scratch in 2008 and is now usable in day-to-day practice.  FreeMedForms project applications are now in production in medical offices.
 
@@ -228,7 +228,7 @@ This short diagram shows the different phases of the alert computation and their
  * All FreeMedForms drug databases are created by Free DDI Manager
 * Future developments
  * Include javascript in drug interaction management (eg anticoagulant management: a lab-drug interaction model)
- * create a server to facilitate data sharing between teams
+ * create a server to facilitate data sharing
 
 - - -
 - - -
@@ -261,13 +261,14 @@ We found free drug database published by governmental structures for the folowin
 !
 
 ### ![FreeMedForms logo](img/logo.png) Free DDI Manager workflow: prepare drug recognization
+
 * Edit ATC classification (not required)
 * Edit interactors
- * Can be ATC codes
- * Or you can create your own (even class of components)
+ * Interactors database is independant of the drug database
+ * 1 interactor can be 1 ATC code, drug component, class/group of ATC/interactors/classes
 * Edit all drug components
- * Link with an ATC code
- * Check and review, comment
+ * Link with an interactor or ATC code (partially by hand)
+ * Check,review, comments: done by hand
 * data can be shared between users
 - - -
 - - -
@@ -275,11 +276,25 @@ We found free drug database published by governmental structures for the folowin
 - - -
 ###Notes
 
+This slide will become clearer after watching the video  
+component = molecule  
+interactor = molecule type (ATC)
+eg fluindione (main long term anticoagulant in France): no ATC, no INN
+Interactor linked to cytochrom P450: all substrate or all inhibitors
+
 !
 
 ### ![FreeMedForms logo](img/logo.png) Free DDI Manager workflow: create a DDI
-First – second interacting interactor
 
+* Drug-drug interactions are currently limited to 2 interactors interactions
+* DDI are defined using a risk model, a preventive/management message and bibliographic references from PubMed.org
+* DDI must be checked and reviewed by hand
+* FreeMedForms community wants to create a free and open source DDI database usable in any country
+* We created an «Interaction Committee»
+* Legal and medico-legal issues are not yet clearly defined and solved.
+- - -
+- - -
+- - -
 - - -
 - - -
 - - -
@@ -288,14 +303,20 @@ First – second interacting interactor
 !
 
 ### ![FreeMedForms logo](img/logo.png) FreeDDIManager – Futur devs
-Ajout scripts pour protocoles thérapeutiques ou
-process d'alerte à des moments donnés de la
-prescription
 
+* Some interactions or labtest-drug interaction needs some processing
+* Management of interaction javascript in the interaction engines
+* See roadmap of the VKA plugin
 - - -
 - - -
 - - -
+- - -
+- - -
+- - -
+
 ###Notes
+
+Does JavaScript pose a security risk?
 
 !
 
@@ -315,7 +336,9 @@ prescription
 ### ![FreeMedForms logo](img/logo.png) Alert management
 
 ####Alert philosophy
-
+- - -
+- - -
+- - -
 - - -
 - - -
 - - -
@@ -427,6 +450,17 @@ A full documentation is about to be released on our main web site.
 
 !
 
+### ![FreeMedForms logo](img/logo.png)References
+
+* [1]
+* [2]
+* [3]
+* [4]
+* [5]
+
+!
+
+
 ### ![FreeMedForms logo](img/logo.png)Thank you!
 
 * Thank you for listening
@@ -442,4 +476,4 @@ A full documentation is about to be released on our main web site.
 * questions?
 * contributions?
 
-###I'll be around today & available for discussion or meeting: Email/XMPP/Jabber/GPG: jerome@jerome.cc
+###I'll be around today & available for discussion or meeting: Email/XMPP/Jabber/GPG: jerome@jerome.cc +33611770269
