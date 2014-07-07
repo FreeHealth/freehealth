@@ -22,7 +22,9 @@ Create and use your own set of drug interactions
 
 Hello,
 
-Please, let me begin  with a very special thanks and congratulations to the organizers of this event and for their work. I'm really impressed by what benevolent women and men have done for this Libre Software Meeting.  I would also like to thank them for allowing me to present our work today. 
+Please, let me begin  with a very special thanks and congratulations to the organizers of this event and for their work. I'm really impressed by what benevolent women and men have done for this Libre Software Meeting.  I would also like to thank them for allowing us to present our work today. 
+
+I'm Jérôme Pinguet. I used FreeMedForms for a few months in a medical practice where the EMR was not up-to-date and didn't have a Drug-Drug Interactions checker. I then started to contribute to the project. I'm currently writing my MD thesis about the efficiency of clinical decision support systems to reduce anticoagulant related adverse events.
 
 Eric Maeker, french physician, C + + / Qt developer, is the creator and main developer of FreeMedForms. The project started from scratch in 2008 and is now usable in day-to-day practice.  FreeMedForms project applications are now in production in medical offices.
 
@@ -77,25 +79,23 @@ The project is supported by the Debian Med team and also the FedoraMedical and O
 
 ### ![FreeMedForms logo](img/logo.png) The FreeMedForms project
 
-* GNU/Linux, MacOs X, Win32, Win64, (FreeBSD)
-* C++ using Digia's Qt libs
+* __GNU/Linux, FreeBSD, MacOs X, Win32, Win64__
+* C++ using Digia's __Qt__ libs
 * documented using Doxygen
-* massive usage of MVC architecture
-* Built using dynamic libraries with plugins architecture
-* database: SQLite and/or MySQL
+* massive usage of MVC architecture and __unit-tests__
+* Built using dynamic libraries with __plugins architecture__
+* database: SQLite and/or MySQL/MariaDb
 
 - - -
 - - -
 - - -
 
 ### Notes
-The project is coded in C++ with Qt libraries and a massive usage of the model/view/controller architecture. The code is documented using Doxygen.
+The project is coded in C++ with Qt libraries and a massive usage of the model/view/controller architecture. The code is documented using Doxygen. Many unit-tests are available and code safety is regularly checked before any release.
 
-Applications are built with shared libraries and plugins. They are available for Linux, Mac, and Windows. The FreeBSD port should require some code adaptations.
+Applications are built with shared libraries and plugins. They are available for Linux, Mac, FreeBSD and Windows.
 
-bsd (r pass)
-
-The roadmap and the issue reporting are available on our wiki web site and Google Code.
+The roadmap and the issue reporting are available on our wiki web site and Google Code / GitHub.
 
 We are using SQLite and/or MySQL (MariaDB) for the databases.
 
@@ -117,8 +117,10 @@ Some useful and sometimes problematic classifications
 - - -
 
 ### Notes
-?Eric why do you say problematic?
-our software inclusion/exclusion dag/star Asterisque prend en charge l'intégralité du cahier des charges de la CIM10
+The FreeMedForms project can manage some internationally defined classifications :
+. For drugs we use the ATC which is copyrighted and owned by WHO. It defines INN for drug component and/or drugs (association for eg).
+. For disease, we currently use the ICD version 10. Our implementation of the ICD10 is respectfull of thecomplete specifications of this classification like dag/star coding, diagnosis inclusion/exclusion.
+
 !
 
 ### ![FreeMedForms logo](img/logo.png) What is a drug interaction?
@@ -142,31 +144,25 @@ Here are some definition and abbreviations widely used
 
 Drug can interact with multiple source:
 - it can interact with another drug creating a DDI.
+- it can also interacts with patient condition like drug allergy or intolerance, chronic or acute active diseases, age, renal filtration, weight, body surface...
+- some drugs must be screened using labtests (like INR / AVK, digoxin...) defining labtest-drug interaction
+- some drugs should not be used or be used with caution with elderlies (old people) defining PIM
 
 ??Shouldn't we use drug/disease & drug/allergy??
 And reverse lab-drug to drug-lab interaction ?
 Problem: drug-lab interaction is used in many articles with the meaning of "attempt to prescribe a molecule contraindicated in renal insufficiency and recent low clearance lab test result --> alert" and the way you present it might refer to "drugs that have an effect on laboratory tests such as increasing or lowering K+" or even "drug interaction with chemical reactant used in a lab test procedure"
 
-- or with some patient's physiologic states creating drug allergies, intolerances. But it can also interact with patient's chronic or acute diseases, his renal ability to filter and to secrete the drug. 
-- Also so drug should not be used with elderlies (old people) we call these : PIM
-- finally drug can interact with food (and especially with alcohol)
-
-A drug interaction can be enough to cause severe and even fatal adverse effects. As more drugs are added to the list each year, the number of possible interactions is quickly growing: computerized processing of interactions is a much needed tool to help medical practitioners.
-
-We use these international classifications:
-- ICDv10 licensed by the World Health Organization to classify diseases
-- ATC to classify drugs. The ATC defines, for some drugs, their INN.
 
 !
 
-### ![FreeMedForms logo](img/logo.png) Drug-drug interactions
-* DDI can be enough to create severe even fatal adverse events
+### ![FreeMedForms logo](img/logo.png) Drug interactions
+* drug interaction can be enough to create severe even fatal adverse events
 * __Always growing__
  * Number of marketed drug
  * Number of known drug interactions
  * Number of prescribed drugs
  * Preventive treatment
-* __Older people are at increased risk__
+* __Elderly are at increased risk__
  * many diseases means many therapies
  * many diseases means altered physiology
 
@@ -176,13 +172,15 @@ We use these international classifications:
 - - -
 ###Notes
 
-??Use elderly persons instead of older people??
-When FreeMedForms was started a special attention was paid to DDI management. We identified many sources freely available and compiled them into one unique database.
+A drug interaction can be enough to cause severe and even fatal adverse effects. 
 
-We also found governemental drug databases that are compiled in the same database (using our tool FreeToolBox). We have processed databses from France, USA, Canada, Belgium, South Africa, Portugal and Brazil. Some of them are still in developement
-??Which ones are still in development??
+The number of marketted drugs is always growing, as the number of prescribed drugs per patient. Our knowledge of the potential interactions is also each year more acute. The number of possible interactions is quickly growing: computerized processing of interactions is a much needed tool to help practitioners in their day-to-day practice.
 
-This work was the starting point of FreeDiams. FreeDiams is the FreeMedForms prescriber built as a standalone application. FreeDiams can communicate with external EMRs through XML exchange files.
+??Use elderly persons instead of older people?? -> "elderly" (not elderly people) is the MeSH term for old people.
+
+When FreeMedForms was started a special attention was paid to DDI management. We identified non-conflicting sources freely available and compiled them into one unique database.
+
+This work was the starting point of FreeDiams in 2008. FreeDiams is the FreeMedForms prescriber built as a standalone application. FreeDiams can communicate with external EMRs through XML exchange files.
 
 !
 
@@ -230,7 +228,7 @@ This short diagram shows the different phases of the alert computation and their
  * All FreeMedForms drug databases are created by Free DDI Manager
 * Future developments
  * Include javascript in drug interaction management (eg anticoagulant management: a lab-drug interaction model)
- * create a server to facilitate data sharing between teams
+ * create a server to facilitate data sharing
 
 - - -
 - - -
@@ -257,16 +255,20 @@ This short diagram shows the different phases of the alert computation and their
 - - -
 ###Notes
 
+We found free drug database published by governmental structures for the folowing countries : France, USA, Canada, South-Africa, belgium and portugal. These drug databases can be automatically processed using FreeDDIManager. 
+
+
 !
 
 ### ![FreeMedForms logo](img/logo.png) Free DDI Manager workflow: prepare drug recognization
+
 * Edit ATC classification (not required)
 * Edit interactors
- * Can be ATC codes
- * Or you can create your own (even class of components)
+ * Interactors database is independant of the drug database
+ * 1 interactor can be 1 ATC code, drug component, class/group of ATC/interactors/classes
 * Edit all drug components
- * Link with an ATC code
- * Check and review, comment
+ * Link with an interactor or ATC code (partially by hand)
+ * Check,review, comments: done by hand
 * data can be shared between users
 - - -
 - - -
@@ -274,11 +276,25 @@ This short diagram shows the different phases of the alert computation and their
 - - -
 ###Notes
 
+This slide will become clearer after watching the video  
+component = molecule  
+interactor = molecule type (ATC)
+eg fluindione (main long term anticoagulant in France): no ATC, no INN
+Interactor linked to cytochrom P450: all substrate or all inhibitors
+
 !
 
 ### ![FreeMedForms logo](img/logo.png) Free DDI Manager workflow: create a DDI
-First – second interacting interactor
 
+* Drug-drug interactions are currently limited to 2 interactors interactions
+* DDI are defined using a risk model, a preventive/management message and bibliographic references from PubMed.org
+* DDI must be checked and reviewed by hand
+* FreeMedForms community wants to create a free and open source DDI database usable in any country
+* We created an «Interaction Committee»
+* Legal and medico-legal issues are not yet clearly defined and solved.
+- - -
+- - -
+- - -
 - - -
 - - -
 - - -
@@ -287,14 +303,20 @@ First – second interacting interactor
 !
 
 ### ![FreeMedForms logo](img/logo.png) FreeDDIManager – Futur devs
-Ajout scripts pour protocoles thérapeutiques ou
-process d'alerte à des moments donnés de la
-prescription
 
+* Some interactions or labtest-drug interaction needs some processing
+* Management of interaction javascript in the interaction engines
+* See roadmap of the VKA plugin
 - - -
 - - -
 - - -
+- - -
+- - -
+- - -
+
 ###Notes
+
+Does JavaScript pose a security risk?
 
 !
 
@@ -314,7 +336,9 @@ prescription
 ### ![FreeMedForms logo](img/logo.png) Alert management
 
 ####Alert philosophy
-
+- - -
+- - -
+- - -
 - - -
 - - -
 - - -
@@ -426,6 +450,17 @@ A full documentation is about to be released on our main web site.
 
 !
 
+### ![FreeMedForms logo](img/logo.png)References
+
+* [1]
+* [2]
+* [3]
+* [4]
+* [5]
+
+!
+
+
 ### ![FreeMedForms logo](img/logo.png)Thank you!
 
 * Thank you for listening
@@ -441,4 +476,4 @@ A full documentation is about to be released on our main web site.
 * questions?
 * contributions?
 
-###I'll be around today & available for discussion or meeting: Email/XMPP/Jabber/GPG: jerome@jerome.cc
+###I'll be around today & available for discussion or meeting: Email/XMPP/Jabber/GPG: jerome@jerome.cc +33611770269
