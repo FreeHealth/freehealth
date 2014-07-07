@@ -1,6 +1,6 @@
-### ![FreeMedForms logo](img/logo.png)The FreeMedForms project <http://www.freemedforms.com>
+### ![FreeMedForms logo](img/logofmf.png)The FreeMedForms project <http://www.freemedforms.com>
 
-### Free DDI Manager app
+###![Free DDI Manager logo](img/logoddi.png) Free DDI Manager app
 
 Create and use your own set of drug interactions
 
@@ -34,7 +34,7 @@ Today I will present FreeDDIManager, our drug interactions manager. It allows yo
 
 !
 
-### ![FreeMedForms logo](img/logo.png) The FreeMedForms project
+### ![FreeMedForms logo](img/logoddi.png) The FreeMedForms project
 
 * a suite of medical applications
   * Electronic Medical Record
@@ -52,7 +52,7 @@ All applications are free, open source and released under the GPLv3 licence.
 
 !
 
-### ![FreeMedForms logo](img/logo.png) The FreeMedForms community
+### ![FreeMedForms logo](img/logoddi.png) The FreeMedForms community
 * not-for-profit community
   * medical doctors
   * computer workers/scientists
@@ -79,7 +79,7 @@ The project is also supported by the FedoraMedical and OpenSuse Medical teams.
 
 !
 
-### ![FreeMedForms logo](img/logo.png) The FreeMedForms project
+### ![FreeMedForms logo](img/logoddi.png) The FreeMedForms project
 
 * __GNU/Linux, FreeBSD, MacOs X, Win32, Win64__
 * C++ using Digia's __Qt__ libs
@@ -107,7 +107,7 @@ We are using SQLite and/or MySQL (MariaDB) for the databases.
 
 !
 
-### ![FreeMedForms logo](img/logo.png) Classifications to understand drug interactions
+### ![FreeMedForms logo](img/logoddi.png) Classifications to understand drug interactions
 
 Some useful and sometimes problematic classifications  
 
@@ -129,7 +129,7 @@ The FreeMedForms project can manage some internationally defined classifications
 
 !
 
-### ![FreeMedForms logo](img/logo.png) What is a drug interaction?
+### ![FreeMedForms logo](img/logoddi.png) What is a drug interaction?
 * a drug can interact with:
  * another drug: __drug-drug interaction__ __DDI__ 
  * patient's conditions: __patient-drug interaction__
@@ -161,7 +161,7 @@ Problem: drug-lab interaction is used in many articles with the meaning of "atte
 
 !
 
-### ![FreeMedForms logo](img/logo.png) Drug interactions
+### ![FreeMedForms logo](img/logoddi.png) Drug interactions
 * __drug interaction can be enough to create severe even fatal adverse events__
 
 * __Always growing__
@@ -189,7 +189,7 @@ This work was the starting point of FreeDiams in 2008. FreeDiams is the FreeMedF
 
 !
 
-### ![FreeMedForms logo](img/logo.png) Drug Interactions alert system
+### ![FreeMedForms logo](img/logoddi.png) Drug Interactions alert system
 
 ![slide 7 drug interactions alert system](img/slide7-drug-interactions-alert-system.png)
 - - -
@@ -206,7 +206,7 @@ So we had to define a strong alert philosophy.
 
 !
 
-### ![FreeMedForms logo](img/logo.png) Timing of the alert system
+### ![FreeMedForms logo](img/logoddi.png) Timing of the alert system
 
 ![slide 8 timing of the alert system](img/slide8-timing-of-the-alert-system.png)
 
@@ -223,7 +223,7 @@ This short diagram shows the different phases of the alert computation and their
 
 !
 
-### ![FreeMedForms logo](img/logo.png) Free DDI Manager
+### ![FreeMedForms logo](img/logoddi.png) Free DDI Manager
 * __Motivation__
  * Allow users to __create__ their own drug interaction set
  * Allow users to __share__ their own drug interaction set
@@ -243,11 +243,11 @@ We want to ease the creation, the contributions and sharing of DDI very easy ins
 The FreeDDIManager was created to answer to this need. We chose to write a hard-coded application instead of a webportal as all our applications are still hard-coded. There are roadmap to swich to a webapp design.
 Currently, FreeDDIManager is in beta stage. We already use it to create and update our drugs related datapack server.
 
-In a near futur, we plan to include javascript inside DDI definition to allow users to access to any other database, to access patient data and interact with user.
+In a near future, we plan to include javascript inside DDI definition to allow users to access to any other database, to access patient data and interact with user.
 
 !
 
-### ![FreeMedForms logo](img/logo.png) Free DDI Manager workflow: drug database
+### ![FreeMedForms logo](img/logoddi.png) Free DDI Manager workflow: drug database
 
 * This part allow users to prepare any drug database
 * Get drug database raw source
@@ -270,7 +270,7 @@ Raw source are processed for the needs of the FreeMedForms database scheme.
 
 !
 
-### ![FreeMedForms logo](img/logo.png) Free DDI Manager workflow: prepare drug recognization
+### ![FreeMedForms logo](img/logoddi.png) Free DDI Manager workflow: prepare drug recognization
 
 * Edit ATC classification (not required)
 * Edit interactors
@@ -302,7 +302,7 @@ Interactor linked to cytochrom P450: all substrate or all inhibitors
 
 !
 
-### ![FreeMedForms logo](img/logo.png) Free DDI Manager workflow: create a DDI
+### ![FreeMedForms logo](img/logoddi.png) Free DDI Manager workflow: create a DDI
 
 * Drug-drug interactions are currently limited to 2 interactors interactions
 * DDI are defined using a risk model, a preventive/management message and bibliographic references from PubMed.org
@@ -320,7 +320,25 @@ Interactor linked to cytochrom P450: all substrate or all inhibitors
 
 !
 
-### ![FreeMedForms logo](img/logo.png) FreeDDIManager – Futur devs
+### ![FreeMedForms logo](img/logoddi.png) Interactions Committee
+
+* Shah et al. 2006: "high user acceptance of ambulatory computerized prescribing alerts when using a selective knowledge base and minimizing workflow interruptions"
+* commercial knowledge bases
+ * highly inclusive
+ * emphasis on breadth of coverage, not on clinical relevancy or severity of adverse events
+ * conflits of interests: developped by editors directly or indirectly owned by pharmaceutical industry
+* FMF Interactions Committee
+ * review
+ * classify: relevance to setting, severity
+ * reference (PubMed)
+ * at first focused on outpatient setting
+ * lobby academic, governmental, institutional interactions committees
+  * publish under free licenses
+  * use & contribute to Free DDI Manager
+
+!
+
+### ![FreeMedForms logo](img/logoddi.png) FreeDDIManager – Future devs
 
 * Some interactions or labtest-drug interaction needs some processing
 * Management of interaction javascript in the interaction engines
@@ -338,7 +356,7 @@ Does JavaScript pose a security risk?
 
 !
 
-### ![FreeMedForms logo](img/logo.png) Free DDI Manager workflow: manage datapacks
+### ![FreeMedForms logo](img/logoddi.png) Free DDI Manager workflow: manage datapacks
 
 * Create a datapack
 * Upload a datapack
@@ -359,7 +377,7 @@ A full documentation is available on our website.
 !
 
 
-### ![FreeMedForms logo](img/logo.png) Alert philosophy
+### ![FreeMedForms logo](img/logoddi.png) Alert philosophy
 
 * Two kinds of alerts:
  * __Non-blocking__ → icon and tooltip
@@ -394,8 +412,8 @@ The threshold of each type of alert can be adapted by the user in the user prefe
 
 !
 
-<<<<<<< HEAD
-### ![FreeMedForms logo](img/logo.png) Alert philosophy
+
+### ![FreeMedForms logo](img/logoddi.png) Alert philosophy
 * __related to__
  * One or all users
  * Application (update notification, backup reminder)
@@ -421,7 +439,7 @@ Alerts can be dynamic using their script system.
 
 !
 
-### ![FreeMedForms logo](img/logo.png) Alert packs
+### ![FreeMedForms logo](img/logoddi.png) Alert packs
 * Alerts can be shared via __alert packs__
 * Alert packs are shared via the __datapack manager__
 * Alert packs must contain
@@ -443,7 +461,7 @@ A full documentation is about to be released on our main web site.
 
 !
 
-### ![FreeMedForms logo](img/logo.png) FreeMedForms needs you!
+### ![FreeMedForms logo](img/logoddi.png) FreeMedForms needs you!
 * A great community
 * Non-profit association -> official support
 * __Wanted__: devs, testers, translators, medical doctors, pharmacists, articles, reviews, retweets
@@ -461,18 +479,19 @@ A french non-profit association was created in january 2013 with the unique obje
 
 !
 
-### ![FreeMedForms logo](img/logo.png)References
+### ![FreeMedForms logo](img/logoddi.png)References
 
 * [1]
-* [2]
-* [3]
+* [2] Phansalkar, S., J. Edworthy, E. Hellier, D. L. Seger, A. Schedlbauer, A. J. Avery, and D. W. Bates. “A Review of Human Factors Principles for the Design and Implementation of Medication Safety Alerts in Clinical Information Systems.” Journal of the American Medical Informatics Association 17, no. 5 (September 6, 2010): 493–501. doi:10.1136/jamia.2010.005264
+* [3] 
 * [4]
 * [5]
+* FreeMedForms complete bibliograpical references freely available on our Zotero group: https://www.zotero.org/groups/freemedforms
 
 !
 
 
-### ![FreeMedForms logo](img/logo.png)Thank you!
+### ![FreeMedForms logo](img/logoddi.png)Thank you!
 
 * Thank you for listening
 * Eric says "Kisses to my wife and children (who support my devs...)"
