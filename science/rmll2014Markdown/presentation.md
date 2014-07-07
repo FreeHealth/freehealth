@@ -246,7 +246,7 @@ This short diagram shows the different phases of the alert computation and their
 - - -
 ###Notes
 We want to ease the creation, the contributions and sharing of DDI very easy inside the FreeMedForms project. Some tools were tested but none was really efficient.
-The FreeDDIManager was created to answer to this need. We chose to write a hard-coded application instead of a webportal as all our applications are still hard-coded. There are _no__ roadmap to swich to a webapp design.
+The FreeDDIManager was created to answer to this need. We chose to write a hard-coded application instead of a webportal as all our applications are still hard-coded. There are __no__ roadmap to swich to a webapp design.
 Currently, FreeDDIManager is in beta stage. We already use it to create and update our drugs related datapack server.
 
 In a near future, we plan to include javascript inside DDI definition to allow users to access to any other database, to access patient data and interact with user.
