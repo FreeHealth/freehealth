@@ -1,6 +1,6 @@
 ### ![FreeMedForms logo](img/logofmf.png)The FreeMedForms project <http://www.freemedforms.com>
 
-###![Free DDI Manager logo](img/logoddi.png) Free DDI Manager app
+###![Free DDI Manager logo](img/logoddi-big.png) Free DDI Manager app
 
 Create and use your own set of drug interactions
 
@@ -112,7 +112,7 @@ We are using SQLite and/or MySQL (MariaDB) for the databases.
 Some useful and sometimes problematic classifications  
 
 * Drugs
- * ATC Anatomical Therapeutical classification
+ * ATC Anatomical Therapeutical Chemical classification
  * INN International Non-Proprietary Name
 
 * Diseases
@@ -130,12 +130,17 @@ The FreeMedForms project can manage some internationally defined classifications
 !
 
 ### ![FreeMedForms logo](img/logoddi.png) What is a drug interaction?
-* a drug can interact with:
- * another drug: __drug-drug interaction__ __DDI__ 
- * patient's conditions: __patient-drug interaction__
-  * disease, allergy, renal filtration, age
-* food: __food-drug interactions__ __FDI__
-* lab-drug interactions when interacts with lab tests
+
+A drug can interact with  
+
+* another drug: __drug-drug interaction__ (__DDI__) 
+* patient's conditions: __patient-drug interaction__
+ * acute or chronic disease
+ * allergy, intolerance
+ * renal filtration
+ * age
+* food & alcohol: __food-drug interactions__ (__FDI__)
+* labtest-drug interactions: drug efficiency monitored by lab tests
 * Potentially Inappropriate Medications __PIM__ specific interactions regarding elderly
 
 - - -
@@ -162,11 +167,12 @@ Problem: drug-lab interaction is used in many articles with the meaning of "atte
 !
 
 ### ![FreeMedForms logo](img/logoddi.png) Drug interactions
-* __drug interaction can be enough to create severe even fatal adverse events__
+
+__Drug interactions create severe even fatal adverse events__
 
 * __Always growing__
- * Number of marketed drug
- * Number of known drug interactions
+ * Number of marketed drugs
+ * Number of known drugs interactions
  * Number of prescribed drugs
  * Preventive treatment
 * __Elderly are at increased risk__
@@ -326,11 +332,11 @@ Interactor linked to cytochrom P450: all substrate or all inhibitors
 * commercial knowledge bases
  * highly inclusive
  * emphasis on breadth of coverage, not on clinical relevancy or severity of adverse events
- * conflits of interests: developped by editors directly or indirectly owned by pharmaceutical industry
+ * conflits of interests: directly or indirectly owned by pharmaceutical industry
 * FMF Interactions Committee
- * review
+ * review interactions
  * classify: relevance to setting, severity
- * reference (PubMed)
+ * Evidence Based Interactions: references (PubMed), levels of evidence (A,B,C,D)
  * at first focused on outpatient setting
  * lobby academic, governmental, institutional interactions committees
   * publish under free licenses
