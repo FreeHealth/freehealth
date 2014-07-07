@@ -421,7 +421,7 @@ Alerts can be dynamic using their script system.
  * All alerts are saved
  * All alerts are checked
  * All alerts are executed (if required)
-*This is really useful to share medical prevention alerts
+* This is really useful to share medical prevention alerts
 
 - - -
 - - -
