@@ -349,26 +349,15 @@ Does JavaScript pose a security risk?
 - - -
 ###Notes
 
-!
+FreeMedForms project DataPack management is a quite easy and fast process to add functionalities to any applications of the project.
+Datapacks represent pure data, patient forms, scripts, binaries and many other potential.
+FreeDDIManager allow you to create in some mouse-clicks a datapack server. A server can be a local path or a remote server. When the server is built, you just have to send to your users the URL of the server and their login information.
+Application can manage as many server as you want and correctly manages dependencies between packs, application version limitations, pack version, pack update...
 
-### ![FreeMedForms logo](img/logo.png) Alert management
-
-####Alert philosophy
-- - -
-- - -
-- - -
-- - -
-- - -
-- - -
-###Notes
-
-It is always difficult to alert medical practitioners using a software.
-
-Many alerts are overriden or totally ignored.
-
-We tried to build a performant system, fully configurable to avoid this problem.
+A full documentation is available on our website.
 
 !
+
 
 ### ![FreeMedForms logo](img/logo.png) Alert philosophy
 
@@ -389,6 +378,8 @@ type of alerts
 
 ###Notes
 
+Last year, Eric presented the alert system of the FreeMedForms project at the LSM in Brussels. The video is available.
+
 We defined two systems of alert: one blocking and one non-blocking.
 
 The non-blocking alert is represented by and icon and tooltips in views. While the blocking alerts are blocking dialogs that needs user validation to proceed. Both alerts present minimal and sufficient information. At any time users can access (to) full alert information.
@@ -403,57 +394,9 @@ The threshold of each type of alert can be adapted by the user in the user prefe
 
 !
 
-### ![FreeMedForms logo](img/logo.png) Alert philosophy
-* __related to__
- * One or all users
- * Application (update notification, backup reminder)
- * One patient
- * All patients (eg: for medical prevention, cancer screening)
-* « __one shot alerts__ » or « __cycling alerts__ »
-* defined validity period
-* edited by user or not
-* __validated__ / __overriden__ & __commented__ by user
-* scripted
-
-- - -
-- - -
-- - -
-###Notes
-Alerts can be related to different types of attendees.
-
-They can be cycling or not, with a validity period defined or not.
-
-The validation method can include a user comment in case of the user override the alert.
-
-Alerts can be dynamic using their script system.
-
-!
-
-### ![FreeMedForms logo](img/logo.png) Alert packs
-* Alerts can be shared via __alert packs__
-* Alert packs are shared via the __datapack manager__
-* Alert packs must contain
- * packdescription.xml (datapack description file)
- * All XML alerts
-* When the user install an alert pack
- * All alerts are saved
- * All alerts are checked
- * All alerts are executed (if required)
-*This is really useful to share medical prevention alerts
-
-- - -
-- - -
-- - -
-###Notes
-Alerts can be shared between users or group of users through our datapack server. Alerts are then grouped into alert-packs.
-
-A full documentation is about to be released on our main web site.
-
-!
-
 ### ![FreeMedForms logo](img/logo.png) FreeMedForms needs you!
 * A great community
-* A big project
+* Non-profit association -> official support
 * __Wanted__: devs, testers, translators, medical doctors, pharmacists, articles, reviews, retweets
 * Unfunded... __$__, __€__, __฿__ welcome by the registered not-for-profit association
 * Code on GitHub <https://github.com/FreeMedForms/freemedforms>
@@ -464,7 +407,8 @@ A full documentation is about to be released on our main web site.
 - - -
 - - -
 ###Notes
-??Should we talk about the association??i
+
+A french non-profit association was created in january 2013 with the unique objective to support the FreeMedForms community. The association is unique provider of the official support of the suite.
 
 !
 
@@ -485,13 +429,10 @@ A full documentation is about to be released on our main web site.
 * Eric says "Kisses to my wife and children (who support my devs...)"
 * Jerome says: "Thank you Eric for coding so fast and so well, thanks to the international FMF community for your contributions and for sticking with us despite our bad english! :)"
 
-!
+Now I will present a short video of the FreeDDIManager. You will see how easy it is to build and share your own set of interactions.
 
-### ![FreeMedForms logo](img/logo.png)Interactions... with you!
-##We would like to hear from you now!
-* mistakes?
-* critics?
-* questions?
-* contributions?
+Thank you.
+
+!
 
 ###I'll be around today & available for discussion or meeting: Email/XMPP/Jabber/GPG: jerome@jerome.cc +33611770269
