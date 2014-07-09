@@ -295,11 +295,11 @@ QString Pack::dataTypeName() const
  * create the DataPack::PackDescription and the DataPack::PackDependencies
  * related to this pack.
 */
-void Pack::fromXmlFile(const QString &absFileName)
+bool Pack::fromXmlFile(const QString &absFileName)
 {
     m_OriginalFileName = absFileName;
 //    qWarning() << "PackFromXml" << absFileName;
-    readXml(Utils::readTextFile(absFileName, Utils::DontWarnUser));
+    return readXml(Utils::readTextFile(absFileName, Utils::DontWarnUser));
 }
 
 /**
@@ -307,20 +307,23 @@ void Pack::fromXmlFile(const QString &absFileName)
  * create the DataPack::PackDescription and the DataPack::PackDependencies
  * related to this pack.
 */
-void Pack::readXml(const QString &fullPackConfigXml)
+bool Pack::readXml(const QString &fullPackConfigXml)
 {
     QDomDocument doc;
     QString error;
     int line, col;
     if (!doc.setContent(fullPackConfigXml, &error, &line, &col)) {
         LOG_ERROR_FOR("DataPack::Pack", tkTr(Trans::Constants::ERROR_1_LINE_2_COLUMN_3).arg(error).arg(line).arg(col));
-        return;
+        return false;
     }
     QDomElement root = doc.firstChildElement(::TAG_ROOT);
     QDomElement descr = root.firstChildElement(::TAG_PACKDESCRIPTION);
     QDomElement dep = root.firstChildElement(::TAG_PACKDEPENDENCIES);
-    m_descr.fromDomElement(descr);
-    m_depends.fromDomElement(dep);
+    if (!m_descr.fromDomElement(descr))
+        return false;
+    if (!m_depends.fromDomElement(dep))
+        return false;
+    return true;
 }
 
 /** Return the XML code corresponding to this pack */

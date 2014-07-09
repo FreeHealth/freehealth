@@ -97,14 +97,14 @@ public:
     bool isSha1Checked() const;
     bool isMd5Checked() const;
 
-    void fromXmlFile(const QString &absFileName);
+    bool fromXmlFile(const QString &absFileName);
     QString toXml() const;
 
     bool operator==(const Pack &other) const;
     bool operator!=(const Pack &other) const {return (!operator==(other));}
 
 private:
-    void readXml(const QString &fullPackConfigXml);
+    bool readXml(const QString &fullPackConfigXml);
 
 private:
     QString m_OriginalFileName;
