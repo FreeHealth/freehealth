@@ -339,6 +339,8 @@ private Q_SLOTS:
         }
     }
 
+    // TODO: write test for PackCreationQueue::queueToServer()
+
     void cleanupTestCase()
     {
         // Clear the temp dir
