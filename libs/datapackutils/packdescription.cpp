@@ -25,6 +25,7 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #include "packdescription.h"
+#include "constants.h"
 
 #include <utils/log.h>
 
@@ -190,6 +191,19 @@ PackDescription::PackDescription() :
     addNonTranslatableExtraData(Sha1, "sha1");
     addNonTranslatableExtraData(DataType, "datatype");
     addNonTranslatableExtraData(InstalledFiles, "instfiles");
+}
+
+/** Returns \e true is the Pack content is a Free content
+ * (according to Debian Free Software Guidelines - DFSG)
+ * \sa https://www.debian.org/social_contract
+ */
+bool PackDescription::isFreeContent() const
+{
+    const QString &vendor = data(Vendor).toString();
+    if (vendor == Constants::SERVER_COMMUNITY_FREE ||
+            vendor == Constants::SERVER_ASSO_FREE)
+        return true;
+    return false;
 }
 
 bool PackDescription::setData(const int ref, const QVariant &value, const QString &lang)
