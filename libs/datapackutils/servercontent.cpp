@@ -61,10 +61,17 @@ void ServerContent::clear()
     m_PackFileNames.clear();
 }
 
-/** Add a Pack description file without any checking */
+/**
+ * Add a Pack description file without any checking.
+ * Returns \e true if the \e fileName was correctly included or
+ * \e false if \e fileName was already in the list.
+ */
 bool ServerContent::addPackRelativeFileName(const QString &fileName)
 {
+    if (m_PackFileNames.contains(fileName))
+        return false;
     m_PackFileNames.append(fileName);
+    return true;
 }
 
 /** Read a XML file */
@@ -103,7 +110,7 @@ bool ServerContent::fromDomElement(const QDomElement &root)
 }
 
 /** Server content to XML */
-bool ServerContent::toXml(QDomElement *root, QDomDocument *doc)
+bool ServerContent::toXml(QDomElement *root, QDomDocument *doc) const
 {
     QDomElement content = doc->createElement(::TAG_SERVERCONTENT);
     if (!root)
@@ -117,4 +124,18 @@ bool ServerContent::toXml(QDomElement *root, QDomDocument *doc)
         content.appendChild(p);
     }
     return true;
+}
+
+/**
+ * Server content to XML. The XML code does not include any xml header or
+ * document type.
+ */
+QString ServerContent::toXml() const
+{
+    QDomDocument doc;
+    if (!toXml(0, &doc)) {
+        LOG_ERROR_FOR("ServerContent", "Wrong XML");
+        return QString::null;
+    }
+    return doc.toString(2);
 }

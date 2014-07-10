@@ -33,6 +33,7 @@
 #include <datapackutils/server.h>
 #include <datapackutils/servercreation/packcreationqueue.h>
 #include <datapackutils/constants.h>
+#include <datapackutils/servercontent.h>
 
 #include <QDebug>
 #include <QTest>
@@ -186,6 +187,31 @@ private Q_SLOTS:
         queue2.fromXmlFile(fileName);
         QVERIFY(queue == queue2);
         QVERIFY(QFile(fileName).remove() == true);
+    }
+
+    void testServerContentXml()
+    {
+        DataPack::ServerContent content;
+        QVERIFY(content.packDescriptionFileNames().isEmpty() == true);
+        QVERIFY(content.addPackRelativeFileName("Content1") == true);
+        QVERIFY(content.addPackRelativeFileName("Content2") == true);
+        QVERIFY(content.addPackRelativeFileName("Content3") == true);
+        QVERIFY(content.addPackRelativeFileName("Content3") == false);
+        QStringList test;
+        test << "Content1" << "Content2" << "Content3";
+        QVERIFY(content.packDescriptionFileNames().count() == 3);
+        QVERIFY(content.packDescriptionFileNames() == test);
+
+        // From/ToXML
+        DataPack::ServerContent content2;
+        content2.fromXml(content.toXml());
+        QVERIFY(content2.packDescriptionFileNames().count() == 3);
+        QVERIFY(content2.packDescriptionFileNames() == test);
+
+        content.clear();
+        QVERIFY(content.packDescriptionFileNames().isEmpty() == true);
+        content2.clear();
+        QVERIFY(content2.packDescriptionFileNames().isEmpty() == true);
     }
 
     void cleanupTestCase()

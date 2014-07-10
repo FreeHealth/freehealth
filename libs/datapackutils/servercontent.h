@@ -56,7 +56,8 @@ public:
 
     bool fromXml(const QString &xml);
     bool fromDomElement(const QDomElement &root);
-    bool toXml(QDomElement *root, QDomDocument *doc);
+    bool toXml(QDomElement *root, QDomDocument *doc) const;
+    QString toXml() const;
 
 private:
     QStringList m_PackFileNames;
