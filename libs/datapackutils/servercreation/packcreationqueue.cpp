@@ -25,6 +25,9 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #include "packcreationqueue.h"
+#include <datapackutils/pack.h>
+#include <datapackutils/servercontent.h>
+#include <datapackutils/constants.h>
 
 #include <utils/log.h>
 #include <utils/global.h>
@@ -138,6 +141,12 @@ bool PackCreationQueue::checkValidity(const RequestedPackCreation &request) cons
     return true;
 }
 
+/** Returns \e true if queue is empty */
+bool PackCreationQueue::isEmpty() const
+{
+    return _queue.isEmpty();
+}
+
 /** Add a Pack creation request in the queue */
 bool PackCreationQueue::addToQueue(const RequestedPackCreation &request)
 {
@@ -159,7 +168,7 @@ bool PackCreationQueue::addToQueue(const RequestedPackCreation &request)
  * DataPack::Pack description XML file. Note that the \e absPath
  * \b must \b be \b an \b absolute \b path.
  */
-bool PackCreationQueue::containsPackDescriptionFile(const QString &absPath)
+bool PackCreationQueue::containsPackDescriptionFile(const QString &absPath) const
 {
     foreach(const RequestedPackCreation &request, _queue) {
         if (request.descriptionFilePath == absPath)
@@ -169,11 +178,13 @@ bool PackCreationQueue::containsPackDescriptionFile(const QString &absPath)
 }
 
 /**
- * Prepare the zipped file \e absZipeFileName with all the content of the datapack. \n
- * \warning the zipped file must not already exists, otherwise will return \e false
+ * Prepare the zipped file \e absZipFileName with all
+ * the content of the datapack. \n
+ * \warning the zipped file must not already exists,
+ * otherwise will return \e false
  * \warning: Pack content must be defined relatively to pack description file and can not start with \b ../
  */
-bool PackCreationQueue::createZippedContent(const RequestedPackCreation &request, const QString &absZipFileName)
+bool PackCreationQueue::createZippedContent(const RequestedPackCreation &request, const QString &absZipFileName) const
 {
     if (absZipFileName.isEmpty()) {
         LOG_ERROR_FOR("PackCreationQueue", "Empty file name");
@@ -428,6 +439,168 @@ bool PackCreationQueue::saveToXmlFile(const QString &absFile, bool useRelativePa
 
     return false;
 }
+
+static QString getVendor(const QString &serverUid)
+{
+    if (serverUid == Constants::SERVER_COMMUNITY_FREE)
+        return "community";
+    else if (serverUid == Constants::SERVER_COMMUNITY_NONFREE)
+        return "community";
+    else if (serverUid == Constants::SERVER_ASSO_FREE)
+        return "asso";
+    else if (serverUid == Constants::SERVER_ASSO_NONFREE)
+        return "asso";
+    return serverUid;
+}
+
+/**
+ * You must ensure that the server output path is empty to avoid conflicts.
+ * \sa createZippedContent()
+ */
+bool PackCreationQueue::queueToServer(const QString &serverAbsPath) const
+{
+    // Queue is empty -> error
+    if (_queue.isEmpty()) {
+        LOG_ERROR_FOR("PackCreationQueue", "No Pack selected/found for server creation");
+        return false;
+    }
+
+    // Create server output path.
+    // Structure of server path is
+    // "free"
+    //   +- <vendor> ("community" or "asso")
+    //        +- <version>
+    //             +- serverconf.zip
+    //             +- <PackName>
+    //                   +- pack-files.{xml,zip}
+    //   +- <vendor> ("community" or "asso")
+    //        +- <version>
+    //             +- serverconf.zip
+    //             +- <PackName>
+    //                   +- pack-files.{xml,zip}
+    // "nonfree"
+    //   +- <vendor> ("community" or "asso")
+    //        +- <version>
+    //             +- serverconf.zip
+    //             +- <PackName>
+    //                   +- pack-files.{xml,zip}
+    //   +- <vendor> ("community" or "asso")
+    //        +- <version>
+    //             +- serverconf.zip
+    //             +- <PackName>
+    //                   +- pack-files.{xml,zip}
+
+    // TEST
+    QString queueXmlFile = serverAbsPath + "/queue.xml";
+    if (!saveToXmlFile(queueXmlFile, false)) {
+        LOG_ERROR_FOR("PackCreationQueue", QString("Unable to save queue: %1").arg(queueXmlFile));
+        return false;
+    } else {
+        LOG_FOR("PackCreationQueue", QString("File Created: %1").arg(queueXmlFile));
+    }
+    // END TEST
+
+    // Create the internal queue zipcontent and update the Pack description files
+    QList<Pack> packs;
+    QDir serverdir(serverAbsPath);
+    ServerContent serverContent;
+
+    foreach(const RequestedPackCreation &request, _queue) {
+        Pack pack;
+        if (!pack.fromXmlFile(request.descriptionFilePath)) {
+            LOG_ERROR_FOR("PackCreationQueue", QString("Pack description file can not be read: %1").arg(request.descriptionFilePath));
+            return false;
+        }
+        PackDescription descr = pack.description();
+
+        QString packPath = QString("%1/%2/%3/%4/%5")
+                .arg(serverAbsPath)
+                .arg(request.serverUid.contains("nonfree", Qt::CaseInsensitive)?"nonfree":"free")
+                .arg(getVendor(request.serverUid))
+                .arg(qApp->applicationVersion())
+                .arg(descr.data(PackDescription::Uuid).toString());
+        QString zipFile = QString("%1/%2.zip")
+                .arg(packPath)
+                .arg(descr.data(PackDescription::Uuid).toString());
+
+        if (!createZippedContent(request, zipFile)) {
+            LOG_ERROR_FOR("PackCreationQueue", QString("Unable to create server zipped content"));
+            return false;
+        }
+
+        // Update Pack description
+        descr.setData(PackDescription::FreeMedFormsCompatVersion, qApp->applicationVersion());
+        descr.setData(PackDescription::FreeDiamsCompatVersion, qApp->applicationVersion());
+        descr.setData(PackDescription::FreeAccountCompatVersion, qApp->applicationVersion());
+        descr.setData(PackDescription::LastModificationDate, QDateTime::currentDateTime().toString(Qt::ISODate));
+        descr.setData(PackDescription::Size, QFileInfo(zipFile).size());
+        descr.setData(PackDescription::Md5, Utils::fileMd5(zipFile));
+        descr.setData(PackDescription::Sha1, Utils::fileSha1(zipFile));
+        pack.setPackDescription(descr);
+
+        // Save Pack description inside the server tree next to the zip file
+        QString packDescriptionOutputFileName = QString("%1/%2").arg(packPath).arg(Constants::PACKDESCRIPTION_FILENAME);
+        if (!Utils::saveStringToFile(pack.toXml(), packDescriptionOutputFileName, Utils::Overwrite, Utils::DontWarnUser)) {
+            LOG_ERROR_FOR("PackCreationQueue", QString("Unable to save Pack description file: %1").arg(packDescriptionOutputFileName));
+            return false;
+        }
+
+        // Update server config file
+        serverContent.addPackRelativeFileName(serverdir.relativeFilePath(packDescriptionOutputFileName));
+
+        // Store the pack into the internal list
+        packs << pack;
+    }
+
+    //    ServerDescription descr;
+    //    descr.fromXmlFile(server.originalDescriptionFileAbsolutePath());
+    //    descr.setData(DataPack::ServerDescription::LastModificationDate, QDate::currentDate());
+    //    if (server.autoVersion()) {
+    //        descr.setData(DataPack::ServerDescription::Version, qApp->applicationVersion());
+    //        descr.setData(DataPack::ServerDescription::FreeMedFormsCompatVersion, qApp->applicationVersion());
+    //        descr.setData(DataPack::ServerDescription::FreeDiamsCompatVersion, qApp->applicationVersion());
+    //        descr.setData(DataPack::ServerDescription::FreeAccountCompatVersion, qApp->applicationVersion());
+    //    }
+    //    // Find final tag of the server description
+    //    QString xml = descr.toXml();
+    //    int start = xml.indexOf("</DataPackServer>");
+    //    xml.insert(start, serverContent);
+    //    if (!Utils::saveStringToFile(xml, server.outputServerAbsolutePath() + "/server.conf.xml", Utils::Overwrite, Utils::DontWarnUser)) {
+    //        LOG_ERROR("Unable to save server configuration file");
+    //        return false;
+    //    }
+
+    //    // Zip XML files
+    //    // Create a tmp server only with XML files
+    //    QString tmp = settings()->path(Core::ISettings::ApplicationTempPath) + QDir::separator() + QUuid::createUuid().toString().remove("-").remove("{").remove("}");
+    //    Utils::checkDir(tmp, true, objectName());
+    //    QDir serverdir(server.outputServerAbsolutePath());
+    //    // Get files from versionned server
+    //    QFileInfoList list = Utils::getFiles(serverPath, "*.xml");
+    //    bool serverFileIncluded = false;
+    //    foreach(const QFileInfo &info, list) {
+    //        // compute server relative path
+    //        QString tmpFile = tmp + QDir::separator() + serverdir.relativeFilePath(info.absoluteFilePath());
+    //        Utils::checkDir(QFileInfo(tmpFile).absolutePath(), true, objectName());
+    //        QFile(info.absoluteFilePath()).copy(tmpFile);
+    //        if (info.baseName()=="server.conf.xml")
+    //            serverFileIncluded = true;
+    //    }
+    //    if (!serverFileIncluded) {
+    //        // compute server relative path
+    //        QString tmpFile = tmp + "/server.conf.xml";
+    //        QFile(server.outputServerAbsolutePath() + "/server.conf.xml").copy(tmpFile);
+    //    }
+    //    if (!JlCompress::compressDir(server.outputServerAbsolutePath() + "/serverconf.zip", tmp))
+    //        LOG_ERROR("Unable to zip config files");
+    //    Utils::removeDirRecursively(tmp, 0);
+
+    //    // TODO: should we clean the zipped xml files?
+    //    return true;
+    //}
+    return true;
+}
+
 
 /** Returns a relative path of \e absPath from the pack description file path */
 QString RequestedPackCreation::relativePathFromDescriptionPath(const QString &absPath) const

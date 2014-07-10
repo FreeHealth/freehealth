@@ -119,6 +119,7 @@ public:
         _insertedPackCreationQueueUids.clear();
         _packDescriptionFilesIncluded.clear();
         _packItems.clear();
+        _queues.clear();
     }
 
     // Return cached item corresponding to the serverUid \e uid
@@ -315,8 +316,11 @@ public:
             }
 
             // Create the queue branch
-            if (!packCreationQueueToItem(queue))
+            if (!packCreationQueueToItem(queue)) {
                 LOG_ERROR_FOR(q, QString("Unable to create the queue branch: %1").arg(info.absoluteFilePath()));
+                continue;
+            }
+            _queues << queue;
         }
         return true;
     }
@@ -325,6 +329,7 @@ public:
     QHash<QString, QStandardItem *> _serversUidToItem; //, _screeningPathToItem;
     QHash<QString, QStandardItem *> _insertedPackCreationQueueUids;  // Key: queue.uid()
     QHash<QString, QStandardItem *> _packItems; // Key: absPathDescriptionFile
+    QList<PackCreationQueue> _queues;
 
     QStringList _screenedAbsPath;
     QStringList _packDescriptionFilesIncluded;
@@ -452,12 +457,31 @@ bool PackCreationModel::addScreeningPath(const QString &screeningAbsPath)
     return d->screenPath(screeningAbsPath);
 }
 
+/**
+ * Creates a DataPack server using the checked Packs in the model.
+ * The server will be created inside the path \e absOutputPath.
+ * Returns \e true is all goes fine.
+ */
 bool PackCreationModel::createDataPackServerWithCheckedPacks(const QString &absOutputPath)
 {
-    // Create server output path (version/vendor/pack/files.{xml,zip})
     // Create a single internal queue with all requested packs
-    // Create the internal queue zipcontent
-    // Create the server using the internal queue
+    PackCreationQueue internalQueue;
+    foreach(const QString &packDescPath, getCheckedPacks()) {
+        // Find the related Request inside all queues of the model
+        foreach(const PackCreationQueue &queue, d->_queues) {
+            foreach(const RequestedPackCreation &request, queue.queue()) {
+                if (request.descriptionFilePath == packDescPath) {
+                    if (!internalQueue.addToQueue(request)) {
+                        LOG_ERROR("unable to add request to queue");
+                    }
+                    break;
+                }
+            }
+        }
+    }
+
+    // Create the server using the queue
+    return internalQueue.queueToServer(absOutputPath);
 }
 
 int PackCreationModel::totalNumberOfPacksFound() const
@@ -467,8 +491,9 @@ int PackCreationModel::totalNumberOfPacksFound() const
 
 /**
  * Returns all checked pack description file absolute path.\n
- * If you want to create packs, please be sure to create the pack content using the
- * DataPack::PackCreationQueue::createZippedContent() before.
+ * If you want to create packs, please be sure to create the pack
+ * content using the DataPack::PackCreationQueue::createZippedContent()
+ * before, or use the createDataPackServerWithCheckedPacks().
  */
 QStringList PackCreationModel::getCheckedPacks() const
 {

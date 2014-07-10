@@ -71,17 +71,21 @@ public:
     bool checkValidity(const RequestedPackCreation &request) const;
 
     // Queue management
+    bool isEmpty() const;
     bool addToQueue(const RequestedPackCreation &request);
     const QList<RequestedPackCreation> &queue() const {return _queue;}
 
     // Datapack content creation
-    bool containsPackDescriptionFile(const QString &absPath);
-    bool createZippedContent(const RequestedPackCreation &request, const QString &absZipFileName);
+    bool containsPackDescriptionFile(const QString &absPath) const;
+    bool createZippedContent(const RequestedPackCreation &request, const QString &absZipFileName) const;
 
     // XML import/export
     QString sourceAbsolutePathFile() const;
     bool fromXmlFile(const QString &absFile);
     bool saveToXmlFile(const QString &absFile, bool useRelativePath = false) const;
+
+    // DataPack Server Creation
+    bool queueToServer(const QString &serverAbsPath) const;
 
     // Equality checking
     bool operator==(const PackCreationQueue &other) const;
