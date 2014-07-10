@@ -61,6 +61,13 @@ void ServerContent::clear()
     m_PackFileNames.clear();
 }
 
+/** Add a Pack description file without any checking */
+bool ServerContent::addPackRelativeFileName(const QString &fileName)
+{
+    m_PackFileNames.append(fileName);
+}
+
+/** Read a XML file */
 bool ServerContent::fromXml(const QString &xml)
 {
     m_PackFileNames.clear();
@@ -75,6 +82,10 @@ bool ServerContent::fromXml(const QString &xml)
     return fromDomElement(root);
 }
 
+/**
+ * Read from a XML file using a QDomElement pointing to the server content
+ * \e root tag. Read Pack are \b appended.
+ */
 bool ServerContent::fromDomElement(const QDomElement &root)
 {
     if (root.tagName().compare(::TAG_SERVERCONTENT, Qt::CaseInsensitive)!=0) {
@@ -91,6 +102,7 @@ bool ServerContent::fromDomElement(const QDomElement &root)
     return true;
 }
 
+/** Server content to XML */
 bool ServerContent::toXml(QDomElement *root, QDomDocument *doc)
 {
     QDomElement content = doc->createElement(::TAG_SERVERCONTENT);
