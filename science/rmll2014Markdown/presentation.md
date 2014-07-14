@@ -118,12 +118,6 @@ __Drug interactions create severe even fatal adverse events__
  * Beta version, some features still missing, but mainly usable
  * All FreeMedForms drug databases are created by Free DDI Manager
 
-* __Future developments__
- * Include JavaScript inside DDI definitions  
- -> eg anticoagulant management with AVK Plugin: a lab-drug interaction model)  
- -> see roadmap of AVK Plugin for details  
- * create a server to facilitate data sharing
-
 !
 
 ### ![FreeMedForms logo](img/logoddi.png) Free DDI Manager workflow: drug database
@@ -163,6 +157,8 @@ This part allows users to prepare any drug database
 * We created an «Interactions Committee»
 * Legal and medico-legal issues are not yet clearly defined and solved.
 
+
+
 !
 
 ### ![FreeMedForms logo](img/logoddi.png) Interactions Committee
@@ -173,10 +169,11 @@ This part allows users to prepare any drug database
  * emphasis on breadth of coverage, not on clinical relevance or severity of adverse events
  * conflicts of interests: often directly or indirectly owned by pharmaceutical industry
 * FMF Interactions Committee
+ * Free & open source
+ * 100% independent
  * review interactions
  * classify: relevance to setting, severity
- * Evidence Based Interactions: references (PubMed), levels of evidence
- * at first focused on outpatient setting
+ * Evidence Based Interactions: references (PubMed), levels of evidence, Summary of Product Characteristics
  * lobby academic, governmental, institutional interactions committees:  
    -> publish under free licenses!  
    -> use & contribute to Free DDI Manager!
@@ -185,12 +182,12 @@ This part allows users to prepare any drug database
 
 ### ![FreeMedForms logo](img/logoddi.png) Free DDI Manager workflow: manage datapacks
 
-* Create a datapack
-* Upload a datapack
-* Share a datapack
+* Create a datapack and a "datapack server"
+* Upload Packs
+* Share server configuration
+* Users only have to configure your server and select Packs to install
 
 !
-
 
 ### ![FreeMedForms logo](img/logoddi.png) Alert philosophy[1]
 
@@ -224,6 +221,7 @@ type of alerts
 !
 
 ### ![FreeMedForms logo](img/logoddi.png) Alert packs
+
 * Alerts can be shared via __alert packs__
 * Alert packs are shared via the __datapack manager__
 * Alert packs must contain
@@ -237,9 +235,22 @@ type of alerts
 
 !
 
+### ![FreeMedForms logo](img/logoddi.png) Future developments
+
+* Include scripting in interaction processing
+ * See roadmap of the VKA plugin (labtest-drug interaction)
+* Include pregnancy data
+ * Australian governmental data
+* Include dose / renal failure
+ * dosing.de
+* Finish PIMs implementation
+
+!
+
 ### ![FreeMedForms logo](img/logoddi.png) FreeMedForms needs you!
 * A great community
-* Non-profit association -> official support
+* __Non-profit association__ -> official support
+ * http://asso.freemedforms.com 
 * __Wanted__: devs, testers, translators, medical doctors, pharmacists, articles, reviews, retweets
 * Unfunded... __$__, __€__, __฿__ welcome by the registered not-for-profit association
 * Code on GitHub <https://github.com/FreeMedForms/freemedforms>
@@ -254,6 +265,10 @@ type of alerts
 * [2] Shah, Nidhi R, Andrew C Seger, Diane L Seger, Julie M Fiskio, Gilad J Kuperman, Barry Blumenfeld, Elaine G Recklet, David W Bates, and Tejal K Gandhi. “Improving Acceptance of Computerized Prescribing Alerts in Ambulatory Care.” Journal of the American Medical Informatics Association: JAMIA 13, no. 1 (February 2006): 5–11. doi:10.1197/jamia.M1868.
 * FreeMedForms complete bibliograpical references freely available on our Zotero group: https://www.zotero.org/groups/freemedforms
 
+###Notes
+
+Si tu ajoutes des références il en faudrait sur les interactions médicamenteuses et en particulier sur l'anamlyse du contenu des bases du commerce. Cf article espagnol. Je l'ai pas sous la main...
+
 !
 
 
@@ -265,6 +280,3 @@ type of alerts
 
 Now I will present a short video of the FreeDDIManager. You will see how easy it is to build and share your own set of interactions.
 
-####I'll be around later today (__after__ rms conf) & available for discussion or meeting
-* Email/XMPP/Jabber/GPG: jerome@jerome.cc
-* mobile +33 6 11 77 02 69
