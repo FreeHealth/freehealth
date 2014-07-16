@@ -240,9 +240,11 @@ type of alerts
 * Include scripting in interaction processing
  * See roadmap of the VKA plugin (labtest-drug interaction)
 * Include pregnancy data
- * Australian governmental data
+ * [Australian governmental data](http://www.tga.gov.au/hp/medicines-pregnancy.htm)   
+   http://www.tga.gov.au/hp/medicines-pregnancy.htm
 * Include dose / renal failure
- * dosing.de
+ * [dosing.de](http://dosing.de)  
+   https://dosing.de
 * Finish PIMs implementation
 
 !
@@ -255,7 +257,7 @@ type of alerts
 * Unfunded... __$__, __€__, __฿__ welcome by the registered not-for-profit association
 * Code on GitHub <https://github.com/FreeMedForms/freemedforms>
 * Web <http://www.freemedforms.com>
-* Mailing List <freemedforms@googlegroups.com>
+* Mailing List [freemedforms@googlegroups.com](https://groups.google.com/forum/#!forum/freemedforms)
 
 !
 
@@ -265,12 +267,7 @@ type of alerts
 * [2] Shah, Nidhi R, Andrew C Seger, Diane L Seger, Julie M Fiskio, Gilad J Kuperman, Barry Blumenfeld, Elaine G Recklet, David W Bates, and Tejal K Gandhi. “Improving Acceptance of Computerized Prescribing Alerts in Ambulatory Care.” Journal of the American Medical Informatics Association: JAMIA 13, no. 1 (February 2006): 5–11. doi:10.1197/jamia.M1868.
 * FreeMedForms complete bibliograpical references freely available on our Zotero group: https://www.zotero.org/groups/freemedforms
 
-###Notes
-
-Si tu ajoutes des références il en faudrait sur les interactions médicamenteuses et en particulier sur l'anamlyse du contenu des bases du commerce. Cf article espagnol. Je l'ai pas sous la main...
-
 !
-
 
 ### ![FreeMedForms logo](img/logoddi.png)Thank you!
 
@@ -278,5 +275,9 @@ Si tu ajoutes des références il en faudrait sur les interactions médicamenteu
 * Eric says "Kisses to my wife and children (who support my devs...)"
 * Jerome says: "Thank you Eric for coding so fast & well, thanks to the FMF community for your contributions and for sticking with us despite our bad english! :)"
 
-Now I will present a short video of the FreeDDIManager. You will see how easy it is to build and share your own set of interactions.
+Now I will present a short video of the FreeDDIManager.
+
+[FreeDDIManager video presentation](https://www.youtube.com/watch?v=LgmfcmyCrSU "Free DDI Manager video") https://www.youtube.com/watch?v=LgmfcmyCrSU
+
+You will see how easy it is to build and share your own set of interactions.
 
