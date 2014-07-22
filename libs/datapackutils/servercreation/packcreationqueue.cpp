@@ -158,6 +158,15 @@ bool PackCreationQueue::addToQueue(const RequestedPackCreation &request)
     return true;
 }
 
+/** Add a PackCreationQueue to this object */
+PackCreationQueue& PackCreationQueue::operator+=(const PackCreationQueue& add)
+{
+    foreach(const RequestedPackCreation &request, add.queue()) {
+        // TODO: manage error when adding requests
+        addToQueue(request);
+    }
+    return *this;
+}
 /**
  * \fn const QList<RequestedPackCreation> &PackCreationQueue::queue() const
  * Returns the current queue of the object

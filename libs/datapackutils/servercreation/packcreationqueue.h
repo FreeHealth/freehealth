@@ -74,6 +74,7 @@ public:
     bool isEmpty() const;
     bool addToQueue(const RequestedPackCreation &request);
     const QList<RequestedPackCreation> &queue() const {return _queue;}
+    PackCreationQueue& operator+=(const PackCreationQueue& add);
 
     // Datapack content creation
     bool containsPackDescriptionFile(const QString &absPath) const;
