@@ -24,8 +24,14 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
+/**
+ * \class DataPack::PackServerCreator
+ * Manage Datapack server creation using DataPack::PackCreationQueue
+ */
+
 #include "packservercreator.h"
 #include <datapackutils/pack.h>
+#include <datapackutils/serverdescription.h>
 #include <datapackutils/servercontent.h>
 #include <datapackutils/constants.h>
 
@@ -58,11 +64,27 @@ static QString getVendor(const QString &serverUid)
 }
 } // anonymous namespace
 
-PackServerCreator::PackServerCreator()
-{}
+PackServerCreator::PackServerCreator() :
+    _autoVersionning(true)
+{
+}
 
 PackServerCreator::~PackServerCreator()
 {}
+
+/**
+ * Set all server description file default path starting from the
+ * specified \e rootPath (which should correspond to
+ * {Application_Resources}/{datapack_description}.
+ */
+void PackServerCreator::useDefaultPathForServerDescriptionFiles(const QString &rootPath)
+{
+    // Insert default values
+    _serverUid_DescrFile.insert(Constants::SERVER_COMMUNITY_FREE, QDir::cleanPath(QString("%1/servers/free/community/server.conf.xml").arg(rootPath)));
+    _serverUid_DescrFile.insert(Constants::SERVER_COMMUNITY_NONFREE, QDir::cleanPath(QString("%1/servers/nonfree/community/server.conf.xml").arg(rootPath)));
+    _serverUid_DescrFile.insert(Constants::SERVER_ASSO_FREE, QDir::cleanPath(QString("%1/servers/free/asso/server.conf.xml").arg(rootPath)));
+    _serverUid_DescrFile.insert(Constants::SERVER_ASSO_NONFREE, QDir::cleanPath(QString("%1/servers/nonfree/asso/server.conf.xml").arg(rootPath)));
+}
 
 /** Add a new queue to this server */
 bool PackServerCreator::addPackCreationQueue(const PackCreationQueue &queue)
@@ -131,8 +153,8 @@ bool PackServerCreator::createServer(const QString &serverAbsPath) const
     // END TEST
 
     // Create the internal queue zipcontent and update the Pack description files
-    QList<*Pack> packs;
-    QHash<QString, *ServerContent> serverContent;
+    QList<Pack*> packs;
+    QHash<QString, ServerContent*> serverContent;
 
     foreach(const RequestedPackCreation &request, _queue.queue()) {
         Pack *pack = new Pack;
@@ -189,23 +211,42 @@ bool PackServerCreator::createServer(const QString &serverAbsPath) const
         packs << pack;
     }
 
-    //    ServerDescription descr;
-    //    descr.fromXmlFile(server.originalDescriptionFileAbsolutePath());
-    //    descr.setData(DataPack::ServerDescription::LastModificationDate, QDate::currentDate());
-    //    if (server.autoVersion()) {
-    //        descr.setData(DataPack::ServerDescription::Version, qApp->applicationVersion());
-    //        descr.setData(DataPack::ServerDescription::FreeMedFormsCompatVersion, qApp->applicationVersion());
-    //        descr.setData(DataPack::ServerDescription::FreeDiamsCompatVersion, qApp->applicationVersion());
-    //        descr.setData(DataPack::ServerDescription::FreeAccountCompatVersion, qApp->applicationVersion());
-    //    }
-    //    // Find final tag of the server description
-    //    QString xml = descr.toXml();
-    //    int start = xml.indexOf("</DataPackServer>");
-    //    xml.insert(start, serverContent);
-    //    if (!Utils::saveStringToFile(xml, server.outputServerAbsolutePath() + "/server.conf.xml", Utils::Overwrite, Utils::DontWarnUser)) {
-    //        LOG_ERROR("Unable to save server configuration file");
-    //        return false;
-    //    }
+    foreach(const QString &serverUid, serverContent.uniqueKeys()) {
+        ServerDescription descr;
+        if (!descr.fromXmlFile(_serverUid_DescrFile.value(serverUid))) {
+            LOG_ERROR_FOR("PackServerCreator", QString("Unable to read XML file: %1").arg(_serverUid_DescrFile.value(serverUid)));
+            return false;
+        }
+        descr.setData(DataPack::ServerDescription::LastModificationDate, QDate::currentDate());
+        if (autoVersionning()) {
+            descr.setData(DataPack::ServerDescription::Version, qApp->applicationVersion());
+            descr.setData(DataPack::ServerDescription::FreeMedFormsCompatVersion, qApp->applicationVersion());
+            descr.setData(DataPack::ServerDescription::FreeDiamsCompatVersion, qApp->applicationVersion());
+            descr.setData(DataPack::ServerDescription::FreeAccountCompatVersion, qApp->applicationVersion());
+        }
+
+        // Find final tag of the server description
+        QString xml = descr.toXml();
+        int start = xml.indexOf(QString("</%1>").arg(descr.rootTag()));
+        xml.insert(start, serverContent.value(serverUid)->toXml());
+
+        // Get the server root path
+        QString serverRootPath = QString("%1/%2/%3/%4")
+                .arg(serverAbsPath)
+                .arg(serverUid.contains("nonfree", Qt::CaseInsensitive)?"nonfree":"free")
+                .arg(getVendor(serverUid))
+                .arg(qApp->applicationVersion());
+
+        // Create the server.conf.xml file
+        if (!Utils::saveStringToFile(xml,serverRootPath + "/server.conf.xml", Utils::Overwrite, Utils::DontWarnUser)) {
+            LOG_ERROR_FOR("PackServerCreator", "Unable to save server configuration file");
+            return false;
+        }
+
+        // Create a Zip file with all XML file (server+pack config)
+        //QFileInfoList list = Utils::getFiles(serverPath, "*.xml");
+    }
+
 
     //    // Zip XML files
     //    // Create a tmp server only with XML files

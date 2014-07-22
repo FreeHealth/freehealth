@@ -49,6 +49,8 @@ public:
     ~ServerCreationWidget();
 
     void setDefaultScreeningPath(const QString &absPath);
+    bool setDefaultPathForServerDescriptionFiles(const QString &absPath);
+
     bool addScreeningPath(const QString &absPath);
     int numberOfCheckedPacks() const;
 

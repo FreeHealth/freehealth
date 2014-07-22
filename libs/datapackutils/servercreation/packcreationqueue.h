@@ -85,9 +85,6 @@ public:
     bool fromXmlFile(const QString &absFile);
     bool saveToXmlFile(const QString &absFile, bool useRelativePath = false) const;
 
-    // DataPack Server Creation
-    bool queueToServer(const QString &serverAbsPath) const;
-
     // Equality checking
     bool operator==(const PackCreationQueue &other) const;
     bool operator!=(const PackCreationQueue &other) const {return (!operator==(other));}

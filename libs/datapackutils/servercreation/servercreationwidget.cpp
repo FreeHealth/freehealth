@@ -30,10 +30,16 @@
  * XML datapack queue files. \n
  * User can add screening path, select packs to add to the server,
  * set the server output path and create it.
+ *
+ * You can set the default screening path with setDefaultScreeningPath().
+ * For a full automated server creation, set the path to the server
+ * description files (which is by default {ApplicationResources/datapack_description})
+ * using setDefaultPathForServerDescriptionFiles()
  */
 
 #include "servercreationwidget.h"
 #include "packcreationmodel.h"
+#include "packservercreator.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
@@ -127,7 +133,7 @@ ServerCreationWidget::ServerCreationWidget(QWidget *parent) :
     d->createModel();
     d->createActions();
 
-    connect(d->ui->screePathButton, SIGNAL(clicked()), this, SLOT(onAddScreeningPathButtonClicked()));
+    connect(d->ui->screenPathButton, SIGNAL(clicked()), this, SLOT(onAddScreeningPathButtonClicked()));
     connect(d->_packCreationModel, SIGNAL(layoutChanged()), this, SLOT(updateTotalNumberOfPacks()));
     connect(d->ui->createServer, SIGNAL(clicked()), this, SLOT(onCreateServerRequested()));
     retranslate();
@@ -148,6 +154,22 @@ void ServerCreationWidget::setDefaultScreeningPath(const QString &absPath)
 {
     d->ui->screeningPath->setInitialBrowsePathBackup(absPath);
     d->ui->screeningPath->setPath(absPath);
+}
+
+/**
+ * Set the path to the server description files
+ * (which is by default {ApplicationResources/datapack_description})
+ * using setDefaultPathForServerDescriptionFiles()
+ * \sa PackServerCreator::setServerDescriptionFilePath()
+ */
+bool ServerCreationWidget::setDefaultPathForServerDescriptionFiles(const QString &absPath)
+{
+    d->ui->serverDescrPath->setPath(QString::null);
+    if (QDir(absPath).exists()) {
+        d->ui->serverDescrPath->setPath(absPath);
+        return true;
+    }
+    return false;
 }
 
 /**
@@ -183,10 +205,26 @@ void ServerCreationWidget::setDefaultServerOutputPath(const QString &absPath)
  */
 bool ServerCreationWidget::onCreateServerRequested()
 {
-    qDebug() << "SERVER CREATION";
+    QProgressDialog *prog = new QProgressDialog(this);
+    QString title = tr("Creating Datapack Server\n%1").arg(d->ui->serverPath->path());
+    prog->setLabelText(title);
+    prog->setRange(0, 10);
+    prog->show();
+    title += "\n\n";
+    int i = 0;
+    prog->setValue(i);
 
+    prog->setLabelText(QString("%1* Checking data").arg(title));
+    // Path to server description files
+    if (d->ui->serverDescrPath->path().isEmpty()) {
+        delete prog;
+        Utils::warningMessageBox(tr("Wrong server description file path"),
+                                 tr("Please set a valid server description path."));
+        return false;
+    }
     // No output path -> error
     if (!d->ui->serverPath->isValid()) {
+        delete prog;
         Utils::warningMessageBox(tr("Wrong server output path"),
                                  tr("Please set a valid server output path. \n"
                                     "The path must be created with read/write "
@@ -196,18 +234,40 @@ bool ServerCreationWidget::onCreateServerRequested()
 
     // No Packs -> error
     if (numberOfCheckedPacks() == 0) {
+        delete prog;
         Utils::warningMessageBox(tr("No Pack selected"),
                                  tr("No Pack selected. Please select all "
                                     "Packs you want to include in the server."));
         return false;
     }
 
-    // Create the server
-    if (!d->_packCreationModel->createDataPackServerWithCheckedPacks(d->ui->serverPath->path())) {
+    // Get the Queue for the server creation
+    prog->setValue(++i);
+    prog->setLabelText(QString("%1* Generating queue").arg(title));
+    PackCreationQueue queue = d->_packCreationModel->generateQueueForServerCreation();
+    PackServerCreator serverCreator;
+    serverCreator.useDefaultPathForServerDescriptionFiles(d->ui->serverDescrPath->path());
+    if (!serverCreator.addPackCreationQueue(queue)) {
+        delete prog;
+        LOG_ERROR("Unable to add the queue");
+        return false;
+    }
+
+    prog->setValue(++i);
+    prog->setLabelText(QString("%1* Creating server").arg(title));
+    if (!serverCreator.createServer(d->ui->serverPath->path())) {
+        delete prog;
         Utils::warningMessageBox(tr("Error"),
                                  tr("An error occured when trying to create the server."));
         return false;
     }
+
+    delete prog;
+
+    Utils::informativeMessageBox(tr("Server created"),
+                             tr("The datapack server was correctly "
+                                "created within the following path:\n"
+                                "%1").arg(d->ui->serverPath->path()));
     return true;
 }
 
@@ -223,11 +283,13 @@ bool ServerCreationWidget::onAddScreeningPathButtonClicked()
     return false;
 }
 
+/** Update the UI with the total number of available Packs found by the model */
 void ServerCreationWidget::updateTotalNumberOfPacks()
 {
     d->ui->numberOfQueues->setText(QString::number(d->_packCreationModel->totalNumberOfPacksFound()));
 }
 
+/** Re translate the UI */
 void ServerCreationWidget::retranslate()
 {
     d->aGroupByServer->setText(tr("Group by server"));

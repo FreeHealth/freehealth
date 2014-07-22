@@ -457,33 +457,7 @@ bool PackCreationModel::addScreeningPath(const QString &screeningAbsPath)
     return d->screenPath(screeningAbsPath);
 }
 
-/**
- * Creates a DataPack server using the checked Packs in the model.
- * The server will be created inside the path \e absOutputPath.
- * Returns \e true is all goes fine.
- */
-bool PackCreationModel::createDataPackServerWithCheckedPacks(const QString &absOutputPath)
-{
-    // Create a single internal queue with all requested packs
-    PackCreationQueue internalQueue;
-    foreach(const QString &packDescPath, getCheckedPacks()) {
-        // Find the related Request inside all queues of the model
-        foreach(const PackCreationQueue &queue, d->_queues) {
-            foreach(const RequestedPackCreation &request, queue.queue()) {
-                if (request.descriptionFilePath == packDescPath) {
-                    if (!internalQueue.addToQueue(request)) {
-                        LOG_ERROR("unable to add request to queue");
-                    }
-                    break;
-                }
-            }
-        }
-    }
-
-    // Create the server using the queue
-    return internalQueue.queueToServer(absOutputPath);
-}
-
+/** Returns the number of requested Packs found in all Queues */
 int PackCreationModel::totalNumberOfPacksFound() const
 {
     return d->_packItems.count();
@@ -493,7 +467,7 @@ int PackCreationModel::totalNumberOfPacksFound() const
  * Returns all checked pack description file absolute path.\n
  * If you want to create packs, please be sure to create the pack
  * content using the DataPack::PackCreationQueue::createZippedContent()
- * before, or use the createDataPackServerWithCheckedPacks().
+ * before.
  */
 QStringList PackCreationModel::getCheckedPacks() const
 {
@@ -505,4 +479,28 @@ QStringList PackCreationModel::getCheckedPacks() const
             list << i.key();
     }
     return list;
+}
+
+/**
+ * Creates a PackCreationQueue with all the selected Packs.
+ * \sa PackServerCreator::addPackCreationQueue()
+ * \sa PackCreationQueue::createZippedContent()
+ */
+PackCreationQueue &PackCreationModel::generateQueueForServerCreation() const
+{
+    PackCreationQueue *internalQueue = new PackCreationQueue;
+    foreach(const QString &packDescPath, getCheckedPacks()) {
+        // Find the related Request inside all queues of the model
+        foreach(const PackCreationQueue &queue, d->_queues) {
+            foreach(const RequestedPackCreation &request, queue.queue()) {
+                if (request.descriptionFilePath == packDescPath) {
+                    if (!internalQueue->addToQueue(request)) {
+                        LOG_ERROR("unable to add request to queue");
+                    }
+                    break;
+                }
+            }
+        }
+    }
+    return *internalQueue;
 }

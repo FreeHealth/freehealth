@@ -45,7 +45,7 @@
        </widget>
       </item>
       <item row="1" column="2">
-       <widget class="QPushButton" name="screePathButton">
+       <widget class="QPushButton" name="screenPathButton">
         <property name="text">
          <string>screen this path</string>
         </property>
@@ -77,18 +77,31 @@
       <string>Please select the path where the DataPack server will be created</string>
      </property>
      <property name="title">
-      <string>DataPack server path</string>
+      <string>Server</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_2">
-      <item row="0" column="0">
+      <item row="2" column="0">
        <widget class="QLabel" name="selectServerPathLabel">
         <property name="text">
          <string>Please select the path where the DataPack server will be created</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="0">
+      <item row="3" column="0">
        <widget class="Utils::PathChooser" name="serverPath" native="true"/>
+      </item>
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_2">
+        <property name="toolTip">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This path should contains all server description files. The dir should look like:&lt;/p&gt;&lt;p&gt;- rootPath&lt;/p&gt;&lt;p&gt;    +- free&lt;/p&gt;&lt;p&gt;    |      +- asso&lt;/p&gt;&lt;p&gt;    |      +- community&lt;/p&gt;&lt;p&gt;    +- nonfree&lt;/p&gt;&lt;p&gt;           +- asso&lt;/p&gt;&lt;p&gt;           +- community&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+        <property name="text">
+         <string>Please select the root path to server description files</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="Utils::PathChooser" name="serverDescrPath" native="true"/>
       </item>
      </layout>
     </widget>

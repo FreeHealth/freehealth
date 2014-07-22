@@ -47,14 +47,19 @@ public:
     explicit PackServerCreator();
     ~PackServerCreator();
 
+    void useDefaultPathForServerDescriptionFiles(const QString &rootPath);
     bool addPackCreationQueue(const PackCreationQueue &queue);
     bool setServerDescriptionFilePath(const QString &serverUid, const QString &descrAbsFileName);
+
+    void setAutoVersionning(const bool enable) {_autoVersionning = enable;}
+    bool autoVersionning() const {return _autoVersionning;}
 
     bool createServer(const QString &serverAbsPath) const;
 
 private:
     PackCreationQueue _queue;
     QHash<QString, QString> _serverUid_DescrFile;
+    bool _autoVersionning;
 };
 
 } // namespace DataPack
