@@ -61,6 +61,11 @@ void ServerContent::clear()
     m_PackFileNames.clear();
 }
 
+bool ServerContent::isEmpty() const
+{
+    return m_PackFileNames.isEmpty();
+}
+
 /**
  * Add a Pack description file without any checking.
  * Returns \e true if the \e fileName was correctly included or

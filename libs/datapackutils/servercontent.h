@@ -50,6 +50,7 @@ public:
     ServerContent();
 
     void clear();
+    bool isEmpty() const;
 
     const QStringList &packDescriptionFileNames() const {return m_PackFileNames;}
     bool addPackRelativeFileName(const QString &fileName);
