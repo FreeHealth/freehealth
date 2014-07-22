@@ -129,6 +129,7 @@ ServerCreationWidget::ServerCreationWidget(QWidget *parent) :
 
     connect(d->ui->screePathButton, SIGNAL(clicked()), this, SLOT(onAddScreeningPathButtonClicked()));
     connect(d->_packCreationModel, SIGNAL(layoutChanged()), this, SLOT(updateTotalNumberOfPacks()));
+    connect(d->ui->createServer, SIGNAL(clicked()), this, SLOT(onCreateServerRequested()));
     retranslate();
 }
 
@@ -182,6 +183,9 @@ void ServerCreationWidget::setDefaultServerOutputPath(const QString &absPath)
  */
 bool ServerCreationWidget::onCreateServerRequested()
 {
+    qDebug() << "SERVER CREATION";
+
+    // No output path -> error
     if (!d->ui->serverPath->isValid()) {
         Utils::warningMessageBox(tr("Wrong server output path"),
                                  tr("Please set a valid server output path. \n"
@@ -189,16 +193,25 @@ bool ServerCreationWidget::onCreateServerRequested()
                                     "rights on."));
         return false;
     }
+
+    // No Packs -> error
     if (numberOfCheckedPacks() == 0) {
         Utils::warningMessageBox(tr("No Pack selected"),
                                  tr("No Pack selected. Please select all "
                                     "Packs you want to include in the server."));
         return false;
     }
-    // d->_packCreationModel;
-    return false;
+
+    // Create the server
+    if (!d->_packCreationModel->createDataPackServerWithCheckedPacks(d->ui->serverPath->path())) {
+        Utils::warningMessageBox(tr("Error"),
+                                 tr("An error occured when trying to create the server."));
+        return false;
+    }
+    return true;
 }
 
+/** When user click on "Screen Path", adds the path to the model */
 bool ServerCreationWidget::onAddScreeningPathButtonClicked()
 {
     if (d->ui->screeningPath->isValid()) {
