@@ -39,6 +39,7 @@
 #include <utils/global.h>
 #include <translationutils/constants.h>
 #include <translationutils/trans_msgerror.h>
+#include <quazip/JlCompress.h>
 
 #include <QString>
 #include <QDir>
@@ -244,38 +245,33 @@ bool PackServerCreator::createServer(const QString &serverAbsPath) const
         }
 
         // Create a Zip file with all XML file (server+pack config)
-        //QFileInfoList list = Utils::getFiles(serverPath, "*.xml");
+        // Create a tmp server with XML files only
+        QString tmp = QString("%1/packserver_%2/").arg(QDir::tempPath()).arg(Utils::createUid());
+        if (!Utils::checkDir(tmp, true, "PackServerCreator")) {
+            LOG_ERROR_FOR("PackServerCreator", "Unable to create temp path");
+            return false;
+        }
+        QDir serverdir(serverRootPath);
+        // Get files from versionned server
+        QFileInfoList list = Utils::getFiles(serverRootPath, "*.xml");
+        bool serverFileIncluded = false;
+        foreach(const QFileInfo &info, list) {
+            // compute server relative path
+            QString tmpFile = tmp + QDir::separator() + serverdir.relativeFilePath(info.absoluteFilePath());
+            Utils::checkDir(QFileInfo(tmpFile).absolutePath(), true, "PackServerCreator");
+            QFile(info.absoluteFilePath()).copy(tmpFile);
+            if (info.baseName()=="server.conf.xml")
+                serverFileIncluded = true;
+        }
+        if (!serverFileIncluded) {
+            // compute server relative path
+            QString tmpFile = tmp + "/server.conf.xml";
+            QFile(serverRootPath + "/server.conf.xml").copy(tmpFile);
+        }
+        if (!JlCompress::compressDir(serverRootPath + "/serverconf.zip", tmp))
+            LOG_ERROR_FOR("PackServerCreator", "Unable to zip config files");
+        Utils::removeDirRecursively(tmp, 0);
     }
-
-
-    //    // Zip XML files
-    //    // Create a tmp server only with XML files
-    //    QString tmp = settings()->path(Core::ISettings::ApplicationTempPath) + QDir::separator() + QUuid::createUuid().toString().remove("-").remove("{").remove("}");
-    //    Utils::checkDir(tmp, true, objectName());
-    //    QDir serverdir(server.outputServerAbsolutePath());
-    //    // Get files from versionned server
-    //    QFileInfoList list = Utils::getFiles(serverPath, "*.xml");
-    //    bool serverFileIncluded = false;
-    //    foreach(const QFileInfo &info, list) {
-    //        // compute server relative path
-    //        QString tmpFile = tmp + QDir::separator() + serverdir.relativeFilePath(info.absoluteFilePath());
-    //        Utils::checkDir(QFileInfo(tmpFile).absolutePath(), true, objectName());
-    //        QFile(info.absoluteFilePath()).copy(tmpFile);
-    //        if (info.baseName()=="server.conf.xml")
-    //            serverFileIncluded = true;
-    //    }
-    //    if (!serverFileIncluded) {
-    //        // compute server relative path
-    //        QString tmpFile = tmp + "/server.conf.xml";
-    //        QFile(server.outputServerAbsolutePath() + "/server.conf.xml").copy(tmpFile);
-    //    }
-    //    if (!JlCompress::compressDir(server.outputServerAbsolutePath() + "/serverconf.zip", tmp))
-    //        LOG_ERROR("Unable to zip config files");
-    //    Utils::removeDirRecursively(tmp, 0);
-
-    //    // TODO: should we clean the zipped xml files?
-    //    return true;
-    //}
 
     qDeleteAll(serverContent);
     serverContent.clear();

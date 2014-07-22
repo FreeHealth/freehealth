@@ -212,9 +212,9 @@ bool ServerCreationWidget::onCreateServerRequested()
     prog->show();
     title += "\n\n";
     int i = 0;
-    prog->setValue(i);
 
     prog->setLabelText(QString("%1* Checking data").arg(title));
+    prog->setValue(i);
     // Path to server description files
     if (d->ui->serverDescrPath->path().isEmpty()) {
         delete prog;
@@ -242,8 +242,8 @@ bool ServerCreationWidget::onCreateServerRequested()
     }
 
     // Get the Queue for the server creation
-    prog->setValue(++i);
     prog->setLabelText(QString("%1* Generating queue").arg(title));
+    prog->setValue(++i);
     PackCreationQueue queue = d->_packCreationModel->generateQueueForServerCreation();
     PackServerCreator serverCreator;
     serverCreator.useDefaultPathForServerDescriptionFiles(d->ui->serverDescrPath->path());
@@ -253,8 +253,8 @@ bool ServerCreationWidget::onCreateServerRequested()
         return false;
     }
 
-    prog->setValue(++i);
     prog->setLabelText(QString("%1* Creating server").arg(title));
+    prog->setValue(++i);
     if (!serverCreator.createServer(d->ui->serverPath->path())) {
         delete prog;
         Utils::warningMessageBox(tr("Error"),
