@@ -39,7 +39,8 @@ HEADERS += datapack_exporter.h \
     widgets/packwizard.h \
     servercreation/packcreationqueue.h \
     servercreation/packcreationmodel.h \
-    servercreation/servercreationwidget.h
+    servercreation/servercreationwidget.h \
+    servercreation/packservercreator.h
 
 SOURCES += \
     servermanager.cpp \
@@ -66,7 +67,8 @@ SOURCES += \
     ipackmanager.cpp \
     servercreation/packcreationqueue.cpp \
     servercreation/packcreationmodel.cpp \
-    servercreation/servercreationwidget.cpp
+    servercreation/servercreationwidget.cpp \
+    servercreation/packservercreator.cpp
 
 FORMS += \
     widgets/serverpackeditor.ui \
