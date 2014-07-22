@@ -96,6 +96,8 @@ public:
     virtual ~GenericDescription();
 
     void setRootTag(const QString &rootTag);
+    QString rootTag() const;
+
     void setSourceFileName(const QString &absFileName);
     QString sourceFileName() const;
 

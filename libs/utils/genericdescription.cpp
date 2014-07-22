@@ -138,6 +138,12 @@ void GenericDescription::setRootTag(const QString &rootTag)
         m_RootTag = XML_ROOT_TAG;
 }
 
+/** Returns the XML Root Tag for the description block. */
+QString GenericDescription::rootTag() const
+{
+    return m_RootTag;
+}
+
 /** Define the absolute path to the source file used to create this description. */
 void GenericDescription::setSourceFileName(const QString &absFileName)
 {
