@@ -367,6 +367,7 @@ QString DatabaseConnector::forSettings() const
     tmp << QString::number(d->m_Port);
     tmp << QString::number(d->m_Driver);
     tmp << d->m_GlobalDatabasePrefix;
+    tmp << absPathToSqliteReadWriteDatabase();
     if (CryptSerialization)
         return Utils::crypt(tmp.join(SEPARATOR));
     return tmp.join(SEPARATOR);
@@ -397,6 +398,8 @@ void DatabaseConnector::fromSettings(const QString &value)
     d->m_DriverIsValid = d->testDriver(d->m_Driver);
     if (vals.count() > 5)
         d->m_GlobalDatabasePrefix = vals[5];
+    if (vals.count() > 6)
+        setAbsPathToReadWriteSqliteDatabase(vals[6]);
 }
 
 DatabaseConnector &DatabaseConnector::operator=(const DatabaseConnector &in)

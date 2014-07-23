@@ -75,6 +75,16 @@ private slots:
             Utils::DatabaseConnector connector2;
             connector2.fromSettings(connector.forSettings());
             QVERIFY(connector.forSettings() == connector2.forSettings());
+            QVERIFY(connector.driver() == connector2.driver());
+            QVERIFY(connector.host() == connector2.host());
+            QVERIFY(connector.port() == connector2.port());
+            // QVERIFY(connector.absPathToSqliteReadOnlyDatabase() == connector2.absPathToSqliteReadOnlyDatabase());
+            QVERIFY(connector.absPathToSqliteReadWriteDatabase() == connector2.absPathToSqliteReadWriteDatabase());
+            QVERIFY(connector.accessMode() == connector2.accessMode());
+            QVERIFY(connector.isDriverValid() == connector2.isDriverValid());
+            QVERIFY(connector.useExactFile() == connector2.useExactFile());
+            QVERIFY(connector.globalDatabasePrefix() == connector2.globalDatabasePrefix());
+
 #ifdef WITH_LOGINANDPASSWORD_CACHING
             QVERIFY(connector.clearLog() == connector2.clearLog());
             QVERIFY(connector.clearPass() == connector2.clearPass());
