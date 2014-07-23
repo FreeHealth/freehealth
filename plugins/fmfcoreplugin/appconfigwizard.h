@@ -33,6 +33,7 @@
 #include <QWizard>
 #include <QLineEdit>
 #include <QPushButton>
+#include <QGridLayout>
 
 QT_BEGIN_NAMESPACE
 class QLabel;
@@ -173,6 +174,7 @@ private:
     Utils::PathChooser *_sqlitePath;
     QLineEdit *_prefix;
     QPushButton *_createBaseButton;
+    QGridLayout *layout;
     bool _completed;
 };
 

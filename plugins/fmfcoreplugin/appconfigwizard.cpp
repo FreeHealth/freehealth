@@ -657,13 +657,6 @@ CoreDatabaseCreationPage::CoreDatabaseCreationPage(QWidget *parent) :
     layout->addWidget(_prefixLbl, 2, 0, 1, 2);
     layout->addWidget(_prefix, 3, 1);
 
-    if (field(::FIELD_TYPEOFINSTALL).toInt() == 0) { // No server
-        _sqlitePathLbl = new QLabel(this);
-        _sqlitePath = new Utils::PathChooser(this);
-        layout->addWidget(_sqlitePathLbl, 10, 0, 1, 2);
-        layout->addWidget(_sqlitePath, 11, 1);
-    }
-
     _createBaseButton = new QPushButton(this);
     connect(_createBaseButton, SIGNAL(clicked()), this, SLOT(startDbCreation()));
     layout->addWidget(_createBaseButton, 20, 1);
@@ -678,6 +671,12 @@ CoreDatabaseCreationPage::CoreDatabaseCreationPage(QWidget *parent) :
 
 void CoreDatabaseCreationPage::initializePage()
 {
+    if (field(::FIELD_TYPEOFINSTALL).toInt() == 0) { // SQLite
+        _sqlitePathLbl = new QLabel(this);
+        _sqlitePath = new Utils::PathChooser(this);
+        layout->addWidget(_sqlitePathLbl, 10, 0, 1, 2);
+        layout->addWidget(_sqlitePath, 11, 1);
+    }
 }
 
 void CoreDatabaseCreationPage::startDbCreation()
@@ -688,8 +687,10 @@ void CoreDatabaseCreationPage::startDbCreation()
     _progressBar->setValue(0);
 
     Utils::DatabaseConnector c = settings()->databaseConnector();
-    if (!_sqlitePath->path().isEmpty())
-        c.setAbsPathToReadWriteSqliteDatabase(_sqlitePath->path());
+    if (field(::FIELD_TYPEOFINSTALL).toInt() == 0) { // SQLite
+        if (!_sqlitePath->path().isEmpty())
+            c.setAbsPathToReadWriteSqliteDatabase(_sqlitePath->path());
+    }
     if (!_prefix->text().isEmpty())
         c.setGlobalDatabasePrefix(_prefix->text());
     settings()->setDatabaseConnector(c);
