@@ -265,6 +265,9 @@ public:
     virtual QSqlDatabase database() const;
     virtual QString connectionName() const;
     static QString createUid();
+    static QString sqliteFileName(const QString &connectionName,
+                                  const QString &nonPrefixedDbName,
+                                  const Utils::DatabaseConnector &connector);
 
     // Grants
     Grants grants(const QString &connectionName) const;

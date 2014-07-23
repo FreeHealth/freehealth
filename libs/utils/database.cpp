@@ -329,21 +329,29 @@ Database::~Database()
  * stays unchanged.\n
  * You can add a general prefix to all your database (whatever is the driver)
  * using setDatabasePrefix(). This prefix will be applied to any Utils::Database
- * object created.\n Output looks like: {generalprefix}{fmf_}{DbName}.
+ * object created.\n Output looks like: {generalprefix}{fmf_}{DbName}. \n
+ * This only affects read-write database.
  */
 QString Database::prefixedDatabaseName(AvailableDrivers driver, const QString &dbName)
 {
     QString toReturn = dbName;
-
-    // MySQL / MariaDB / PostGre -> add "fmf_"
-    if ((driver==MySQL || driver==PostSQL)
-            && !toReturn.startsWith("fmf_"))
-        toReturn.prepend("fmf_");
-
-    // Append general prefix whatever is the driver
-    if (!_prefix.isEmpty() && !toReturn.startsWith(_prefix))
-        toReturn.prepend(_prefix);
-
+    // Append global prefix whatever is the driver
+    if (!_prefix.isEmpty()) {
+        if (!toReturn.startsWith(_prefix)) {
+            // Prepend MySQL / MariaDB / PostGre prefix if required
+            if ((driver==MySQL || driver==PostSQL)
+                    && !toReturn.startsWith("fmf_"))
+                toReturn.prepend("fmf_");
+            // Prepend global prefix
+            toReturn.prepend(_prefix);
+        }
+    } else {
+        // No global prefix
+        // MySQL / MariaDB / PostGre -> add "fmf_"
+        if ((driver==MySQL || driver==PostSQL)
+                && !toReturn.startsWith("fmf_"))
+            toReturn.prepend("fmf_");
+    }
     return toReturn;
 }
 
@@ -627,6 +635,42 @@ QSqlDatabase Database::database() const
 }
 
 /**
+ * Returns the absolute filename of the QSLite database
+ * according to its options & app options.
+ * \note unit-tested
+ */
+QString Database::sqliteFileName(const QString &connectionName,
+                                 const QString &nonPrefixedDbName,
+                                 const Utils::DatabaseConnector &connector)
+{
+    QString fileName;
+    if (connector.accessMode()==DatabaseConnector::ReadOnly) {
+        if (connector.useExactFile())
+            fileName = QString("%1/%2")
+                    .arg(connector.absPathToSqliteReadOnlyDatabase())
+                    .arg(nonPrefixedDbName);
+        else
+            fileName = QString("%1/%2/%3")
+                    .arg(connector.absPathToSqliteReadOnlyDatabase())
+                    .arg(connectionName)
+                    .arg(nonPrefixedDbName);
+    } else if (connector.accessMode()==DatabaseConnector::ReadWrite) {
+        if (connector.useExactFile())
+            fileName = QString("%1/%2")
+                    .arg(connector.absPathToSqliteReadWriteDatabase())
+                    .arg(nonPrefixedDbName);
+        else
+            fileName = QString("%1/%2/%3")
+                    .arg(connector.absPathToSqliteReadWriteDatabase())
+                    .arg(connectionName)
+                    .arg(prefixedDatabaseName(connector.driver(), nonPrefixedDbName));
+    }
+    if (!fileName.endsWith(".db"))
+        fileName += ".db";
+    return QDir::cleanPath(fileName);
+}
+
+/**
    Create the connection to the database.
   If database does not exist, according to the \e createOption, createDatabase() is called.
   An error is returned if :
@@ -675,21 +719,10 @@ bool Database::createConnection(const QString &connectionName, const QString &no
     QSqlDatabase DB;
 
     // Construct SQLite database fileName
-    QString fileName;
-    if (connector.accessMode()==DatabaseConnector::ReadOnly) {
-        if (connector.useExactFile())
-            fileName = QDir::cleanPath(connector.absPathToSqliteReadOnlyDatabase() + QDir::separator() + dbName);
-        else
-            fileName = QDir::cleanPath(connector.absPathToSqliteReadOnlyDatabase() + QDir::separator() + connectionName + QDir::separator() + dbName);
-    } else if (connector.accessMode()==DatabaseConnector::ReadWrite) {
-        if (connector.useExactFile())
-            fileName = QDir::cleanPath(connector.absPathToSqliteReadWriteDatabase() + QDir::separator() + dbName);
-        else
-            fileName = QDir::cleanPath(connector.absPathToSqliteReadWriteDatabase() + QDir::separator() + connectionName + QDir::separator() + dbName);
-    }
-    if (!fileName.endsWith(".db")) {
-        fileName += ".db";
-    }
+    QString fileName = sqliteFileName(connectionName, nonPrefixedDbName, connector);
+
+    qDebug() << "**************************" << fileName << connector;
+
     QFileInfo sqliteFileInfo(fileName);
 
     qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
@@ -702,7 +735,12 @@ bool Database::createConnection(const QString &connectionName, const QString &no
         {
             if (sqliteFileInfo.exists()) {
                 QFile f(sqliteFileInfo.absoluteFilePath());
-                if (!f.rename(sqliteFileInfo.absolutePath() + QDir::separator() + sqliteFileInfo.baseName() + "-bkup" + QDateTime::currentDateTime().toString("yyyyMMddhhMMss") + "." + sqliteFileInfo.completeSuffix()))
+                QString newName = QString("%1/%2-bkup-%3.%4")
+                        .arg(sqliteFileInfo.absolutePath())
+                        .arg(sqliteFileInfo.baseName())
+                        .arg(QDateTime::currentDateTime().toString("yyyyMMddhhMMss"))
+                        .arg(sqliteFileInfo.completeSuffix());
+                if (!f.rename(newName))
                     LOG_ERROR_FOR("Database", "Unable to rename file.");
             }
             break;
@@ -733,9 +771,8 @@ bool Database::createConnection(const QString &connectionName, const QString &no
         }
         createOption = CreateDatabase;
     }
-    if (QSqlDatabase::contains("__DB_DELETOR" + connectionName)) {
+    if (QSqlDatabase::contains("__DB_DELETOR" + connectionName))
         QSqlDatabase::removeDatabase("__DB_DELETOR" + connectionName);
-    }
 
     // check server connection
     qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
@@ -932,8 +969,6 @@ bool Database::createConnection(const QString &connectionName, const QString &no
 
     return toReturn;
 }
-
-
 
 bool Database::createDatabase(const QString &connectionName , const QString &prefixedDbName,
                             const Utils::DatabaseConnector &connector,
