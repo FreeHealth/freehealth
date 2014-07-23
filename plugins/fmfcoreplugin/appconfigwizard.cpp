@@ -41,9 +41,10 @@
 #include <utils/log.h>
 #include <utils/global.h>
 #include <utils/updatechecker.h>
-#include <utils/widgets/languagecombobox.h>
 #include <utils/database.h>
 #include <utils/databaseconnector.h>
+#include <utils/widgets/languagecombobox.h>
+#include <utils/widgets/pathchooser.h>
 
 #include <translationutils/constants.h>
 #include <translationutils/trans_database.h>
@@ -249,6 +250,7 @@ void CoreConfigPage::retranslate()
     installCombo->clear();
     installCombo->addItem(theme()->icon(Constants::ICONCOMPUTER), tr("Single computer"));
     if (QSqlDatabase::drivers().contains("QMYSQL")) {
+        // FIXME: test if mysql-client/mysql-server is available on this machine
         installCombo->addItem(theme()->icon(Constants::ICONNETWORK), tr("Network (as client)"));
         installCombo->addItem(theme()->icon(Constants::ICONNETWORK), tr("Network (as server)"));
     }
@@ -636,31 +638,62 @@ void ServerConfigPage::changeEvent(QEvent *e)
 CoreDatabaseCreationPage::CoreDatabaseCreationPage(QWidget *parent) :
     QWizardPage(parent),
     _progressBar(0),
+    _prefixLbl(0),
+    _sqlitePathLbl(0),
+    _sqlitePath(0),
+    _prefix(0),
+    _createBaseButton(0),
     _completed(false)
 {
-    QGridLayout *l = new QGridLayout(this);
-    setLayout(l);
+    QGridLayout *layout = new QGridLayout(this);
+    layout->setVerticalSpacing(30);
+    setLayout(layout);
 
     // TODO: add database general prefix
     // TODO: for SQLite config, add database location (by default in user resources path, but this should be updated)
     // TODO: add a "Create databases" button, page will be competed & validated when db are created
+    _prefixLbl = new QLabel(this);
+    _prefix = new QLineEdit(this);
+    layout->addWidget(_prefixLbl, 2, 0, 1, 2);
+    layout->addWidget(_prefix, 3, 1);
+
+    if (field(::FIELD_TYPEOFINSTALL).toInt() == 0) { // No server
+        _sqlitePathLbl = new QLabel(this);
+        _sqlitePath = new Utils::PathChooser(this);
+        layout->addWidget(_sqlitePathLbl, 10, 0, 1, 2);
+        layout->addWidget(_sqlitePath, 11, 1);
+    }
+
+    _createBaseButton = new QPushButton(this);
+    connect(_createBaseButton, SIGNAL(clicked()), this, SLOT(startDbCreation()));
+    layout->addWidget(_createBaseButton, 20, 1);
 
     _progressBar = new QProgressBar(this);
-    l->addWidget(_progressBar);
+    _progressBar->setRange(0, 1);
+    _progressBar->setValue(0);
+    layout->addWidget(_progressBar, 25, 1);
 
     retranslate();
 }
 
 void CoreDatabaseCreationPage::initializePage()
 {
-    _progressBar->setRange(0, 0);
-    _progressBar->setValue(0);
-    // request creation after the page is shown
-    QTimer::singleShot(100, this, SLOT(startDbCreation()));
 }
 
 void CoreDatabaseCreationPage::startDbCreation()
 {
+    if (_completed)
+        return;
+    _progressBar->setRange(0, 0);
+    _progressBar->setValue(0);
+
+    Utils::DatabaseConnector c = settings()->databaseConnector();
+    if (!_sqlitePath->path().isEmpty())
+        c.setAbsPathToReadWriteSqliteDatabase(_sqlitePath->path());
+    if (!_prefix->text().isEmpty())
+        c.setGlobalDatabasePrefix(_prefix->text());
+    settings()->setDatabaseConnector(c);
+
     Core::ICore::instance()->requestFirstRunDatabaseCreation();
     _completed = true;
     Q_EMIT completeChanged();
@@ -688,6 +721,13 @@ void CoreDatabaseCreationPage::retranslate()
 {
     setTitle(tr("Preparing databases"));
     setSubTitle(tr("Preparing databases. Please wait..."));
+    _prefixLbl->setText(tr("Use this prefix for all databases<br><i>&nbsp;&nbsp;Optional, you can safely leave this editor empty</i>"));
+    _prefix->setToolTip(tr("If you define a global prefix, all database will be named {YourPrefix}{DatabaseName} for all configuration."));
+    _createBaseButton->setText(tr("Create all database"));
+    if (_sqlitePathLbl)
+        _sqlitePathLbl->setText(tr("Select the path where to store your personal databases<br><i>&nbsp;&nbsp;Optional, you can safely leave this editor empty</i>"));
+    if (_sqlitePath)
+        _sqlitePath->setToolTip(tr("You can store your local personal database anywhere you want, just select a path."));
 }
 
 void CoreDatabaseCreationPage::changeEvent(QEvent *e)

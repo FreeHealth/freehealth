@@ -31,6 +31,8 @@
 #include <QWidget>
 #include <QWizardPage>
 #include <QWizard>
+#include <QLineEdit>
+#include <QPushButton>
 
 QT_BEGIN_NAMESPACE
 class QLabel;
@@ -40,13 +42,14 @@ QT_END_NAMESPACE
 
 /**
  * \file appconfigwizard.h
- * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.7.6
- * \date 28 Jun 2012
+ * \author Eric Maeker
+ * \version 0.10.0
+ * \date 22 Jul 2014
 */
 
 namespace Utils {
-    class LanguageComboBox;
+class LanguageComboBox;
+class PathChooser;
 }
 
 namespace Core {
@@ -166,6 +169,10 @@ private:
 
 private:
     QProgressBar *_progressBar;
+    QLabel *_prefixLbl, *_sqlitePathLbl;
+    Utils::PathChooser *_sqlitePath;
+    QLineEdit *_prefix;
+    QPushButton *_createBaseButton;
     bool _completed;
 };
 
