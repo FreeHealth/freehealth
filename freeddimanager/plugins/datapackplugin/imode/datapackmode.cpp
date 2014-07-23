@@ -75,7 +75,9 @@ DataPackMode::DataPackMode(QObject *parent) :
     // Populate UI with default path
     _widget->setDefaultScreeningPath(settings()->value(Core::Constants::S_DATAPACK_SERVER_OUTPUT_PATH).toString());
     _widget->setDefaultServerOutputPath(settings()->value(Core::Constants::S_FILEOUTPUT_PATH).toString());
-
+    _widget->setDefaultPathForServerDescriptionFiles(QString("%1/%2")
+                                                     .arg(settings()->value(Core::Constants::S_GITFILES_PATH).toString())
+                                                     .arg("global_resources/datapack_description"));
     setWidget(_widget);
 }
 
