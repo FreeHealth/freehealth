@@ -62,6 +62,7 @@
 #include <QApplication>
 #include <QSplashScreen>
 #include <QClipboard>
+#include <QDesktopWidget>
 
 #include "ui_useridentifier.h"
 
@@ -116,7 +117,7 @@ UserIdentifier::UserIdentifier(QWidget *parent) :
 
     adjustSize();
     layout()->setSizeConstraint(QLayout::SetFixedSize);
-    Utils::centerWidget(this);
+    Utils::centerWidget(this, qApp->desktop());
 }
 
 void UserIdentifier::done(int result)
