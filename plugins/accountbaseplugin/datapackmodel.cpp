@@ -126,11 +126,11 @@ bool DatapackBase::initialize()
             LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Constants::DATAPACK_ACCOUNTANCY).arg(database().lastError().text()));
         } else {
             qDebug() << __FILE__ << QString::number(__LINE__) << " !database().isOpen() "   ;
-            LOG(tkTr(Trans::Constants::CONNECTED_TO_DATABASE_1_DRIVER_2).arg(database().connectionName()).arg(database().driverName()));
+            LOG(tkTr(Trans::Constants::CONNECTED_TO_DATABASE_1_DRIVER_2).arg(database().databaseName()).arg(database().driverName()));
         }
     } else {
         qDebug() << __FILE__ << QString::number(__LINE__) << " database().isOpen() "   ;
-        LOG(tkTr(Trans::Constants::CONNECTED_TO_DATABASE_1_DRIVER_2).arg(database().connectionName()).arg(database().driverName()));
+        LOG(tkTr(Trans::Constants::CONNECTED_TO_DATABASE_1_DRIVER_2).arg(database().databaseName()).arg(database().driverName()));
     }
 
     // Code optionnel de vérification de la base

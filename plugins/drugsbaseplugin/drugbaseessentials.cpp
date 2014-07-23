@@ -412,10 +412,10 @@ bool DrugBaseEssentials::initialize(const QString &pathToDb, bool createIfNotExi
         if (!database().open()) {
             LOG_ERROR_FOR("DrugBaseEssentials",tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(connectionName()).arg(database().lastError().text()));
         } else {
-            LOG_FOR("DrugBaseEssentials",tkTr(Trans::Constants::CONNECTED_TO_DATABASE_1_DRIVER_2).arg(database().connectionName()).arg(database().driverName()));
+            LOG_FOR("DrugBaseEssentials",tkTr(Trans::Constants::CONNECTED_TO_DATABASE_1_DRIVER_2).arg(database().databaseName()).arg(database().driverName()));
         }
     } else {
-        LOG_FOR("DrugBaseEssentials", tkTr(Trans::Constants::CONNECTED_TO_DATABASE_1_DRIVER_2).arg(database().connectionName()).arg(database().driverName()));
+        LOG_FOR("DrugBaseEssentials", tkTr(Trans::Constants::CONNECTED_TO_DATABASE_1_DRIVER_2).arg(database().databaseName()).arg(database().driverName()));
     }
 
     if (!checkDatabaseScheme()) {

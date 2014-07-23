@@ -335,7 +335,7 @@ bool IcdDatabase::initialize()
          if (!database().open()) {
              LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Constants::DB_NAME).arg(database().lastError().text()));
          } else { // db successfully opened
-             LOG(tkTr(Trans::Constants::CONNECTED_TO_DATABASE_1_DRIVER_2).arg(database().connectionName()).arg(database().driverName()));
+             LOG(tkTr(Trans::Constants::CONNECTED_TO_DATABASE_1_DRIVER_2).arg(database().databaseName()).arg(database().driverName()));
 
              // check database scheme
              if (!checkDatabaseScheme()) {
@@ -343,7 +343,7 @@ bool IcdDatabase::initialize()
              }
          }
      } else {
-         LOG(tkTr(Trans::Constants::CONNECTED_TO_DATABASE_1_DRIVER_2).arg(database().connectionName()).arg(database().driverName()));
+         LOG(tkTr(Trans::Constants::CONNECTED_TO_DATABASE_1_DRIVER_2).arg(database().databaseName()).arg(database().driverName()));
      }
 
      if (!d->m_DownloadAndPopulate)

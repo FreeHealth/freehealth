@@ -316,10 +316,10 @@ bool ProtocolsBase::initialize()
         if (!dosageDb.open()) {
             LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Dosages::Constants::DB_DOSAGES_NAME).arg(dosageDb.lastError().text()));
         } else {
-            LOG(tkTr(Trans::Constants::CONNECTED_TO_DATABASE_1_DRIVER_2).arg(dosageDb.connectionName()).arg(dosageDb.driverName()));
+            LOG(tkTr(Trans::Constants::CONNECTED_TO_DATABASE_1_DRIVER_2).arg(dosageDb.databaseName()).arg(dosageDb.driverName()));
         }
     } else {
-        LOG(tkTr(Trans::Constants::CONNECTED_TO_DATABASE_1_DRIVER_2).arg(dosageDb.connectionName()).arg(dosageDb.driverName()));
+        LOG(tkTr(Trans::Constants::CONNECTED_TO_DATABASE_1_DRIVER_2).arg(dosageDb.databaseName()).arg(dosageDb.driverName()));
     }
 
     checkDosageDatabaseVersion();
