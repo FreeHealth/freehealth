@@ -1,7 +1,7 @@
 -- /***************************************************************************
 --  *  The FreeMedForms project is a set of free, open source medical         *
 -- *  applications.                                                           *
---  *  (C) 2008-2011 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
+--  *  (C) 2008-2014 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
 --  *  All rights reserved.                                                   *
 --  *                                                                         *
 --  *  This program is free software: you can redistribute it and/or modify   *
@@ -26,8 +26,8 @@
 -- /**
 --  * \file global_resources/sql/server_config/config.sql
 --  * \author Eric MAEKER, MD <eric.maeker@free.fr>
---  * \version 0.7.5
---  * \date 21 Jun 2012
+--  * \version 0.10.0
+--  * \date 22 Jul 2014
 --  */
 
 -- /**
@@ -47,10 +47,10 @@
 CREATE USER 'fmf_admin' IDENTIFIED BY 'fmf_admin';
 
 GRANT CREATE USER, GRANT OPTION, RELOAD, SHOW DATABASES ON *.* TO 'fmf_admin'@'%' IDENTIFIED BY 'fmf_admin';
-GRANT SELECT, UPDATE, INSERT, DELETE, CREATE, DROP, ALTER, INDEX, GRANT OPTION ON `fmf\_%`.* TO 'fmf_admin'@'%' IDENTIFIED BY 'fmf_admin';
+GRANT SELECT, UPDATE, INSERT, DELETE, CREATE, DROP, ALTER, INDEX, GRANT OPTION ON `%fmf\_%`.* TO 'fmf_admin'@'%' IDENTIFIED BY 'fmf_admin';
 
 GRANT CREATE USER, GRANT OPTION, RELOAD, SHOW DATABASES ON *.* TO 'fmf_admin'@'localhost' IDENTIFIED BY 'fmf_admin';
-GRANT SELECT, UPDATE, INSERT, DELETE, CREATE, DROP, ALTER, INDEX, GRANT OPTION ON `fmf\_%`.* TO 'fmf_admin'@'localhost' IDENTIFIED BY 'fmf_admin';
+GRANT SELECT, UPDATE, INSERT, DELETE, CREATE, DROP, ALTER, INDEX, GRANT OPTION ON `%fmf\_%`.* TO 'fmf_admin'@'localhost' IDENTIFIED BY 'fmf_admin';
 
 GRANT SELECT, UPDATE, INSERT, DELETE, CREATE ON `mysql`.`user` TO 'fmf_admin'@'localhost' IDENTIFIED BY 'fmf_admin';
 GRANT SELECT, UPDATE, INSERT, DELETE, CREATE ON `mysql`.`user` TO 'fmf_admin'@'%' IDENTIFIED BY 'fmf_admin';

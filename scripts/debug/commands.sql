@@ -8,7 +8,7 @@ SELECT '### LOCALHOST ANONYMOUS USER';\n
 SELECT mysql.user.Host, mysql.user.User, mysql.user.Password FROM mysql.user WHERE (mysql.user.User is null and mysql.user.Host='localhost');\n
 SELECT ' ';\n
 SELECT '### FMF_ DATABASES';\n
-SHOW DATABASES LIKE 'fmf_%';\n
+SHOW DATABASES LIKE '%fmf_%';\n
 SELECT ' ';\n
 SELECT '### ALL DATABASES';\n
 SHOW DATABASES;\n
@@ -19,4 +19,4 @@ SELECT ' ';\n
 SELECT '### MYSQL USERS FOR FMF';\n
 SELECT DISTINCT mysql.user.User, mysql.user.Host FROM mysql.db
 JOIN mysql.user on mysql.user.User=mysql.db.User
-WHERE mysql.db.Db='fmf\_%';
+WHERE mysql.db.Db='%fmf\_%';

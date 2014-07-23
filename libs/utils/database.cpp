@@ -454,7 +454,7 @@ bool Database::createMySQLUser(const QString &log, const QString &password,
     }
     QString udb = userDatabases;
     if (udb.isEmpty()) {
-        udb = "fmf\\_%";
+        udb = "%fmf\\_%";
     }
     LOG_FOR("Database", QString("Trying to create MySQL user: %1\n"
                                 "       on host: %2(%3)\n"
