@@ -105,6 +105,30 @@ private slots:
         QVERIFY(Utils::Database::sqliteFileName(connection, db, c) == expected);
     }
 
+    void test_schemeBuilder()
+    {
+//        Utils::Database d;
+//        // Test with memory SQLite db
+//        d.addTable(0,  "t0");
+//        d.addTable(1,  "t1");
+
+//        d.addField(0, 0, "f0", Utils::Database::FieldIsUniquePrimaryKey);
+//        d.addField(0, 1, "f1", Utils::Database::FieldIsUUID);
+//        d.addField(0, 2, "f2", Utils::Database::FieldIsBoolean);
+//        d.addField(0, 3, "f3", Utils::Database::FieldIsLongText);
+//        d.addField(0, 4, "f4", Utils::Database::FieldIsShortText);
+//        d.addIndex(0, 0);
+//        d.addIndex(0, 1);
+//        d.addIndex(0, 2);
+
+//        d.addField(1, 0, "f1.0", Utils::Database::FieldIsUniquePrimaryKey);
+//        d.addField(1, 1, "f1.1", Utils::Database::FieldIsUUID);
+
+//        d.createTables();
+
+//        // Test with real mysql db
+    }
+
     void cleanupTestCase()
     {
     }
