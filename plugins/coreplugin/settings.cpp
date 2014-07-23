@@ -1200,22 +1200,35 @@ Utils::DatabaseConnector SettingsPrivate::databaseConnector() const
     return m_DbConnector;
 }
 
-/** Define all server connection's params. Params are automatically saved into the settings file. */
+/**
+ * Define all server connection's params.
+ * Params are automatically saved into the settings file.
+ * Params are automatically transmitted to static objects of the application.
+ */
 void SettingsPrivate::setDatabaseConnector(Utils::DatabaseConnector &dbConnector)
 {
     m_DbConnector = dbConnector;
     m_DbConnector.setAbsPathToReadOnlySqliteDatabase(path(Core::ISettings::ReadOnlyDatabasesPath));
-    // m_DbConnector.setAbsPathToReadWriteSqliteDatabase(path(Core::ISettings::ReadWriteDatabasesPath));
+    // Inform Utils::Database static member for any database prefix
+    Utils::Database::setDatabasePrefix(m_DbConnector.globalDatabasePrefix());
     writeDatabaseConnector();
 }
 
+/**
+ * Reads all server connection's params.
+ * Params are automatically transmitted to static objects of the application.
+ */
 void SettingsPrivate::readDatabaseConnector()
 {
     m_DbConnector.fromSettings(m_NetworkSettings->value(S_DATABASECONNECTOR).toString());
     m_DbConnector.setAbsPathToReadOnlySqliteDatabase(path(Core::ISettings::ReadOnlyDatabasesPath));
-    // m_DbConnector.setAbsPathToReadWriteSqliteDatabase(path(Core::ISettings::ReadWriteDatabasesPath));
+    // Inform Utils::Database static member for any database prefix
+    Utils::Database::setDatabasePrefix(m_DbConnector.globalDatabasePrefix());
 }
 
+/**
+ * Save all server connection's params in a settings file.
+ */
 void SettingsPrivate::writeDatabaseConnector()
 {
     m_NetworkSettings->setValue(S_DATABASECONNECTOR, m_DbConnector.forSettings());
