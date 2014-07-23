@@ -288,9 +288,12 @@ public:
 private:
     Database *q;
 };
-}
-}
+} // namespace Internal
+} // namespace Utils
 
+QString Utils::Database::_prefix;
+
+/** Log to console all available drivers for database management */
 void Database::logAvailableDrivers()
 {
     QString tmp;
@@ -303,7 +306,7 @@ void Database::logAvailableDrivers()
     LOG_FOR("Database", QString("Available drivers: %1").arg(QSqlDatabase::drivers().join(" ; ")));
 }
 
-
+/** CTor (no default values) */
 Database::Database() :
     d_database(new DatabasePrivate(this))
 {
@@ -320,22 +323,28 @@ Database::~Database()
 //------------------------------- Managing Databases files and connections -------------------------------
 //--------------------------------------------------------------------------------------------------------
 /**
- * All MySQL database used in with this code in prefxed with  \e fmf_.
+ * All MySQL database used with this code are prefixed with  \e fmf_.
  * This member check that the database name starts with \e fmf_ or adds it
  * and return the corrected database name. For SQLite, the database name
- * stays unchanged
+ * stays unchanged.\n
+ * You can add a general prefix to all your database (whatever is the driver)
+ * using setDatabasePrefix(). This prefix will be applied to any Utils::Database
+ * object created.\n Output looks like: {generalprefix}{fmf_}{DbName}.
  */
-QString Database::prefixedDatabaseName(AvailableDrivers driver, const QString &dbName) const
+QString Database::prefixedDatabaseName(AvailableDrivers driver, const QString &dbName)
 {
-    if (driver==SQLite) {
-        return dbName;
-    }
-    if (driver==MySQL || driver==PostSQL) {
-        if (dbName.startsWith("fmf_"))
-            return dbName;
-        return "fmf_" + dbName;
-    }
-    return dbName;
+    QString toReturn = dbName;
+
+    // MySQL / MariaDB / PostGre -> add "fmf_"
+    if ((driver==MySQL || driver==PostSQL)
+            && !toReturn.startsWith("fmf_"))
+        toReturn.prepend("fmf_");
+
+    // Append general prefix whatever is the driver
+    if (!_prefix.isEmpty() && !toReturn.startsWith(_prefix))
+        toReturn.prepend(_prefix);
+
+    return toReturn;
 }
 
 /**

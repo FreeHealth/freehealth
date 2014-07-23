@@ -252,7 +252,8 @@ public:
                                 CreationOption /*createOption*/
                                ) { return false; }
 
-    virtual QString prefixedDatabaseName(AvailableDrivers driver, const QString &dbName) const;
+    static void setDatabasePrefix(const QString &prefix) {_prefix = prefix;}
+    static QString prefixedDatabaseName(AvailableDrivers driver, const QString &dbName);
 
     // MySQL Specific members
     virtual bool createMySQLDatabase(const QString &dbName);
@@ -362,6 +363,7 @@ protected:
 
 private:
     Internal::DatabasePrivate *d_database;
+    static QString _prefix;
 };
 
 }
