@@ -114,7 +114,9 @@ public:
         return true;
     }
 
-    QString m_ClearLog, m_ClearPass, m_HostName, m_AbsPathToReadOnlySQLiteDb, m_AbsPathToReadWriteSQLiteDb;
+    QString m_ClearLog, m_ClearPass, m_HostName;
+    QString m_AbsPathToReadOnlySQLiteDb, m_AbsPathToReadWriteSQLiteDb;
+    QString m_GlobalDatabasePrefix;
     int m_Port;
     bool m_DriverIsValid, m_UseExactFile;
     Database::AvailableDrivers m_Driver;
@@ -125,7 +127,7 @@ public:
 
 /** Construct an empty invalid connector. */
 DatabaseConnector::DatabaseConnector() :
-        d(new DatabaseConnectorPrivate)
+    d(new DatabaseConnectorPrivate)
 {
     d->m_Port = -1;
     d->m_Driver = Database::SQLite;
@@ -134,7 +136,7 @@ DatabaseConnector::DatabaseConnector() :
 }
 
 DatabaseConnector::DatabaseConnector(const QString &clearLog, const QString &clearPass, const QString &hostName, const int port) :
-        d(new DatabaseConnectorPrivate)
+    d(new DatabaseConnectorPrivate)
 {
     d->m_ClearLog = clearLog;
     d->m_ClearPass = clearPass;
@@ -146,7 +148,7 @@ DatabaseConnector::DatabaseConnector(const QString &clearLog, const QString &cle
 }
 
 DatabaseConnector::DatabaseConnector(const QString &clearLog, const QString &clearPass) :
-        d(new DatabaseConnectorPrivate)
+    d(new DatabaseConnectorPrivate)
 {
     d->m_ClearLog = clearLog;
     d->m_ClearPass = clearPass;
@@ -211,6 +213,16 @@ void DatabaseConnector::setSqliteUsesExactFile(bool exactFile)
     d->m_UseExactFile = exactFile;
 }
 
+/**
+ * You can set a global prefix to database name using \e prefix.
+ * \sa Utils::Database::setDatabasePrefix()
+ * \sa Utils::Database::prefixedDatabaseName()
+ */
+void DatabaseConnector::setGlobalDatabasePrefix(const QString &prefix)
+{
+    d->m_GlobalDatabasePrefix = prefix;
+}
+
 /** Clear the internal data. Resulting connector is invalid */
 void DatabaseConnector::clear()
 {
@@ -223,6 +235,7 @@ void DatabaseConnector::clear()
     d->m_AbsPathToReadOnlySQLiteDb.clear();
     d->m_AbsPathToReadWriteSQLiteDb.clear();
     d->m_AccessMode = ReadWrite;
+    d->m_GlobalDatabasePrefix.clear();
 }
 
 /**
@@ -326,6 +339,15 @@ bool DatabaseConnector::useExactFile() const
 }
 
 /**
+ * Returns the global database prefix
+ * \sa setGlobalDatabasePrefix()
+ */
+QString DatabaseConnector::globalDatabasePrefix() const
+{
+    return d->m_GlobalDatabasePrefix;
+}
+
+/**
  * Serialize the object to a string suitable for the settings storing. \n
  * NOTE: We have a compilation option: \e WITH_LOGINANDPASSWORD_CACHING.
  * When this DEFINE is activated, the login & the password are not stored in the
@@ -334,20 +356,20 @@ bool DatabaseConnector::useExactFile() const
  */
 QString DatabaseConnector::forSettings() const
 {
-    QString tmp;
+    QStringList tmp;
 #ifdef WITH_LOGINANDPASSWORD_CACHING
-    tmp = d->m_ClearLog + QString(SEPARATOR);
-    tmp += d->m_ClearPass + QString(SEPARATOR);
+    tmp << d->m_ClearLog;
+    tmp << d->m_ClearPass;
 #else
-    tmp = QString(SEPARATOR);
-    tmp += QString(SEPARATOR);
+    tmp << QString(SEPARATOR);
 #endif
-    tmp += d->m_HostName + QString(SEPARATOR);
-    tmp += QString::number(d->m_Port) + QString(SEPARATOR);
-    tmp += QString::number(d->m_Driver);
+    tmp << d->m_HostName;
+    tmp << QString::number(d->m_Port);
+    tmp << QString::number(d->m_Driver);
+    tmp << d->m_GlobalDatabasePrefix;
     if (CryptSerialization)
-        return Utils::crypt(tmp);
-    return tmp;
+        return Utils::crypt(tmp.join(SEPARATOR));
+    return tmp.join(SEPARATOR);
 }
 
 /**
@@ -363,17 +385,18 @@ void DatabaseConnector::fromSettings(const QString &value)
     else
         tmp = value;
     QStringList vals = tmp.split(SEPARATOR);
-    if (vals.count() != 5) {
-        LOG_ERROR_FOR("DatabaseConnector", "Decrypt error");
-        clear();
+    if (vals.count() < 5) {
+        // LOG_ERROR_FOR("DatabaseConnector", "Unable to decrypt connector settings value");
         return;
     }
-    d->m_ClearLog = vals.at(0);
-    d->m_ClearPass = vals.at(1);
-    d->m_HostName = vals.at(2);
-    d->m_Port = vals.at(3).toInt();
-    d->m_Driver = Utils::Database::AvailableDrivers(vals.at(4).toInt());
+    d->m_ClearLog = vals[0];
+    d->m_ClearPass = vals[1];
+    d->m_HostName = vals[2];
+    d->m_Port = vals[3].toInt();
+    d->m_Driver = Utils::Database::AvailableDrivers(vals[4].toInt());
     d->m_DriverIsValid = d->testDriver(d->m_Driver);
+    if (vals.count() > 5)
+        d->m_GlobalDatabasePrefix = vals[5];
 }
 
 DatabaseConnector &DatabaseConnector::operator=(const DatabaseConnector &in)
@@ -390,6 +413,7 @@ DatabaseConnector &DatabaseConnector::operator=(const DatabaseConnector &in)
     d->m_AbsPathToReadOnlySQLiteDb = in.d->m_AbsPathToReadOnlySQLiteDb;
     d->m_AbsPathToReadWriteSQLiteDb = in.d->m_AbsPathToReadWriteSQLiteDb;
     d->m_AccessMode = in.d->m_AccessMode;
+    d->m_GlobalDatabasePrefix = in.d->m_GlobalDatabasePrefix;
     return *this;
 }
 
@@ -405,7 +429,8 @@ bool DatabaseConnector::operator==(const DatabaseConnector &other) const
         d->m_HostName==other.d->m_HostName &&
         d->m_AbsPathToReadOnlySQLiteDb==other.d->m_AbsPathToReadOnlySQLiteDb &&
         d->m_AbsPathToReadWriteSQLiteDb==other.d->m_AbsPathToReadWriteSQLiteDb &&
-        d->m_Port==other.d->m_Port) {
+        d->m_Port==other.d->m_Port &&
+        d->m_GlobalDatabasePrefix==other.d->m_GlobalDatabasePrefix) {
         return true;
     }
     return false;
@@ -428,13 +453,15 @@ QString DatabaseConnector::toString() const
                         "Pass:%2; "
                         "%6:%3; "
                         "Port:%4; "
-                        "Driver:%5")
+                        "Driver:%5; "
+                        "Prefix: %7")
             .arg(clearLog())
             .arg(clearPass().length())
             .arg(host())
             .arg(port())
             .arg(dr)
-            .arg((driver()==Utils::Database::SQLite)?"FileName":"HostName");
+            .arg((driver()==Utils::Database::SQLite)?"FileName":"HostName")
+            .arg(d->m_GlobalDatabasePrefix);
 
     if (accessMode() == Utils::DatabaseConnector::ReadWrite)
         t += "; RW";

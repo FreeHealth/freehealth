@@ -58,7 +58,6 @@ private slots:
         for(int i = 0; i < loop; ++i) {
             Utils::DatabaseConnector connector;
             QVERIFY(connector.isValid() == false);
-
             connector.setDriver(Utils::Database::SQLite);
             connector.setClearLog(r.randomName());
             connector.setClearPass(r.randomString(r.randomInt(10,20)));
@@ -67,6 +66,7 @@ private slots:
             connector.setAbsPathToReadOnlySqliteDatabase(r.randomString(r.randomInt(10,20)));
             connector.setAbsPathToReadWriteSqliteDatabase(r.randomString(r.randomInt(10,20)));
             connector.setAccessMode(Utils::DatabaseConnector::ReadWrite);
+            connector.setGlobalDatabasePrefix(r.randomString(r.randomInt(10,20)));
 
             // Test settings serialization
             // We have a compilation option defined WITH_LOGINANDPASSWORD_CACHING
@@ -109,6 +109,7 @@ private slots:
             QVERIFY(connector2.accessMode() == Utils::DatabaseConnector::ReadWrite);
             QVERIFY(connector2.isDriverValid() == true);
             QVERIFY(connector2.isValid() == false);
+            QVERIFY(connector2.globalDatabasePrefix().isEmpty());
 
             // Test operator==()
             connector2.setDriver(connector.driver());
@@ -119,13 +120,18 @@ private slots:
             connector2.setAbsPathToReadOnlySqliteDatabase(connector.absPathToSqliteReadOnlyDatabase());
             connector2.setAbsPathToReadWriteSqliteDatabase(connector.absPathToSqliteReadWriteDatabase());
             connector2.setAccessMode(connector.accessMode());
+            connector2.setGlobalDatabasePrefix(connector.globalDatabasePrefix());
             QVERIFY(connector == connector2);
 
             // Test operator=()
             connector2.clear();
             connector2 = connector;
             QVERIFY(connector == connector2);
+
         }
+
+        // TODO: Test old version (without globalprefix)
+        // connector.fromSettings("Njg3NzExNjY3NzBkNzQ3OTZhMTU1ODM3NzcwZDFi");
     }
 
     void cleanupTestCase()
