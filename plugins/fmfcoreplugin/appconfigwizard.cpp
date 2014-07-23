@@ -641,6 +641,10 @@ CoreDatabaseCreationPage::CoreDatabaseCreationPage(QWidget *parent) :
     QGridLayout *l = new QGridLayout(this);
     setLayout(l);
 
+    // TODO: add database general prefix
+    // TODO: for SQLite config, add database location (by default in user resources path, but this should be updated)
+    // TODO: add a "Create databases" button, page will be competed & validated when db are created
+
     _progressBar = new QProgressBar(this);
     l->addWidget(_progressBar);
 
