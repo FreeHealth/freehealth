@@ -93,7 +93,7 @@
       <item row="0" column="0">
        <widget class="QLabel" name="label_2">
         <property name="toolTip">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This path should contains all server description files. The dir should look like:&lt;/p&gt;&lt;p&gt;- rootPath&lt;/p&gt;&lt;p&gt;    +- free&lt;/p&gt;&lt;p&gt;    |      +- asso&lt;/p&gt;&lt;p&gt;    |      +- community&lt;/p&gt;&lt;p&gt;    +- nonfree&lt;/p&gt;&lt;p&gt;           +- asso&lt;/p&gt;&lt;p&gt;           +- community&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This path should contains all server description files. The dir should look like:&lt;/p&gt;&lt;p&gt;- rootPath&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;+-&amp;nbsp;free&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;|&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;+-&amp;nbsp;asso&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;|&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;+-&amp;nbsp;community&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;+-&amp;nbsp;nonfree&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;+-&amp;nbsp;asso&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;+-&amp;nbsp;community&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
         <property name="text">
          <string>Please select the root path to server description files</string>
