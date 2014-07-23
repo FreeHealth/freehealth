@@ -1306,16 +1306,12 @@ void centerWidget(QWidget *win, QWidget *reference)
                 break;
             }
         }
-        if (win) {
+        if (win)
             reference = win;
-            center = reference->rect().center() + reference->pos();
-        } else {
+        else
             reference = qApp->desktop();
-            center = reference->rect().center();
-        }
-    } else {
-        center = reference->rect().center() + reference->pos();
     }
+    center = reference->rect().center() + reference->pos();
     QRect rect = win->rect();
     rect.moveCenter(center);
     win->move(rect.topLeft());
