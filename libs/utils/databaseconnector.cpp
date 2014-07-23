@@ -451,27 +451,23 @@ QString DatabaseConnector::toString() const
     }
     dr.append(QString("%1").arg(isDriverValid()?"(Ok)":"(**Invalid**)"));
 
-    QString t = QString("DatabaseConnector("
+    QString t = QString("DatabaseConnector(-%9-; "
                         "Log:%1; "
                         "Pass:%2; "
                         "%6:%3; "
                         "Port:%4; "
                         "Driver:%5; "
-                        "Prefix: %7")
+                        "Prefix: %7; "
+                        "ExactFileName: %8")
             .arg(clearLog())
             .arg(clearPass().length())
             .arg(host())
             .arg(port())
             .arg(dr)
             .arg((driver()==Utils::Database::SQLite)?"FileName":"HostName")
-            .arg(d->m_GlobalDatabasePrefix);
-
-    if (accessMode() == Utils::DatabaseConnector::ReadWrite)
-        t += "; RW";
-    else
-        t += "; RO";
-    if (useExactFile())
-        t += "; ExactFile";
+            .arg(d->m_GlobalDatabasePrefix)
+            .arg(d->m_UseExactFile?"true":"false")
+            .arg((accessMode()==Utils::DatabaseConnector::ReadWrite)?"RW":"RO");
 
     if (driver()==Database::SQLite) {
         if (!absPathToSqliteReadOnlyDatabase().isEmpty())
