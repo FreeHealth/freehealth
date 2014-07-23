@@ -25,6 +25,7 @@
  ***************************************************************************/
 #include <utils/global.h>
 #include <utils/database.h>
+#include <utils/databaseconnector.h>
 
 #include "../../autotest.h"
 
@@ -55,6 +56,53 @@ private slots:
         QVERIFY(Utils::Database::prefixedDatabaseName(Utils::Database::MySQL, "DbName") == "pref_fmf_DbName");
         QVERIFY(Utils::Database::prefixedDatabaseName(Utils::Database::PostSQL, "DbName") == "pref_fmf_DbName");
         QVERIFY(Utils::Database::prefixedDatabaseName(Utils::Database::SQLite, "DbName") == "pref_DbName");
+        Utils::Database::setDatabasePrefix(QString::null);
+    }
+
+    void test_sqliteFileName()
+    {
+        QString roPath = "RO/";
+        QString rwPath = "RW/";
+        QString globPref = "globPref";
+        QString connectorPref = "c_Pref";
+        QString connection = "_C_";
+        QString db = "_Db_";
+        QString expected;
+
+        Utils::DatabaseConnector c;
+        c.setDriver(Utils::Database::SQLite);
+        c.setAbsPathToReadOnlySqliteDatabase(roPath);
+        c.setAbsPathToReadWriteSqliteDatabase(rwPath);
+        c.setGlobalDatabasePrefix(connectorPref);
+        Utils::Database::setDatabasePrefix(globPref);
+
+        //  RO
+        c.setAccessMode(Utils::DatabaseConnector::ReadOnly);
+        c.setSqliteUsesExactFile(false);
+        // not exact file: RO path + connection + dbName {.db}
+        expected = QDir::cleanPath(QString("%1/%2/%3.db").arg(roPath).arg(connection).arg(db));
+        QVERIFY(Utils::Database::sqliteFileName(connection, db, c) == expected);
+        c.setSqliteUsesExactFile(true);
+        // exact file: RO path + dbName {.db}
+        expected = QDir::cleanPath(QString("%1/%2.db").arg(roPath).arg(db));
+        QVERIFY(Utils::Database::sqliteFileName(connection, db, c) == expected);
+
+        //  RW
+        c.setAccessMode(Utils::DatabaseConnector::ReadWrite);
+        c.setSqliteUsesExactFile(false);
+        // not exact file: RW path + connection + {prefix}dbName {.db}
+        expected = QDir::cleanPath(QString("%1/%2/%3%4.db").arg(rwPath).arg(connection).arg(globPref).arg(db));
+        QVERIFY(Utils::Database::sqliteFileName(connection, db, c) == expected);
+        c.setSqliteUsesExactFile(true);
+        // exact file: RW path + dbName {.db}
+        expected = QDir::cleanPath(QString("%1/%2.db").arg(rwPath).arg(db));
+        QVERIFY(Utils::Database::sqliteFileName(connection, db, c) == expected);
+
+        Utils::Database::setDatabasePrefix(QString::null);
+        c.setSqliteUsesExactFile(false);
+        // not exact file: RW path + connection + {prefix}dbName {.db}
+        expected = QDir::cleanPath(QString("%1/%2/%3.db").arg(rwPath).arg(connection).arg(db));
+        QVERIFY(Utils::Database::sqliteFileName(connection, db, c) == expected);
     }
 
     void cleanupTestCase()
