@@ -1209,6 +1209,8 @@ void SettingsPrivate::setDatabaseConnector(Utils::DatabaseConnector &dbConnector
 {
     m_DbConnector = dbConnector;
     m_DbConnector.setAbsPathToReadOnlySqliteDatabase(path(Core::ISettings::ReadOnlyDatabasesPath));
+    if (m_DbConnector.absPathToSqliteReadWriteDatabase().isEmpty())
+        m_DbConnector.setAbsPathToReadWriteSqliteDatabase(path(Core::ISettings::ReadWriteDatabasesPath));
     // Inform Utils::Database static member for any database prefix
     Utils::Database::setDatabasePrefix(m_DbConnector.globalDatabasePrefix());
     writeDatabaseConnector();
@@ -1222,6 +1224,8 @@ void SettingsPrivate::readDatabaseConnector()
 {
     m_DbConnector.fromSettings(m_NetworkSettings->value(S_DATABASECONNECTOR).toString());
     m_DbConnector.setAbsPathToReadOnlySqliteDatabase(path(Core::ISettings::ReadOnlyDatabasesPath));
+    if (m_DbConnector.absPathToSqliteReadWriteDatabase().isEmpty())
+        m_DbConnector.setAbsPathToReadWriteSqliteDatabase(path(Core::ISettings::ReadWriteDatabasesPath));
     // Inform Utils::Database static member for any database prefix
     Utils::Database::setDatabasePrefix(m_DbConnector.globalDatabasePrefix());
 }
