@@ -499,7 +499,7 @@ HprimIntegratorMode::HprimIntegratorMode(QObject *parent) :
 {
     setEnabled(true);
     setDisplayName(tr("HPRIM"));
-    setIcon(theme()->icon(Core::Constants::ICONDOCTOR));
+    setIcon(theme()->icon(Core::Constants::ICONHPRIM));
     setPriority(Core::Constants::P_MODE_TOOLS);
     setId("HprimIntegratorMode");
     setType("HprimIntegratorMode");

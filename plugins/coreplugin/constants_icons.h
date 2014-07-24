@@ -254,6 +254,8 @@ const char * const  ICONLABTEST       = "labtest.png";
 const char * const ICONMEDIAPAUSE     = "media-playback-pause.png";
 const char * const ICONMEDIASTART     = "media-playback-start.png";
 
+const char * const  ICONHPRIM         = "hprim.png";
+
 }  // end Constants
 } // end Core
 
