@@ -649,9 +649,6 @@ CoreDatabaseCreationPage::CoreDatabaseCreationPage(QWidget *parent) :
     layout->setVerticalSpacing(30);
     setLayout(layout);
 
-    // TODO: add database general prefix
-    // TODO: for SQLite config, add database location (by default in user resources path, but this should be updated)
-    // TODO: add a "Create databases" button, page will be competed & validated when db are created
     _prefixLbl = new QLabel(this);
     _prefix = new QLineEdit(this);
     layout->addWidget(_prefixLbl, 2, 0, 1, 2);
@@ -674,6 +671,7 @@ void CoreDatabaseCreationPage::initializePage()
     if (field(::FIELD_TYPEOFINSTALL).toInt() == 0) { // SQLite
         _sqlitePathLbl = new QLabel(this);
         _sqlitePath = new Utils::PathChooser(this);
+        _sqlitePath->setExpectedKind(Utils::PathChooser::Directory);
         layout->addWidget(_sqlitePathLbl, 10, 0, 1, 2);
         layout->addWidget(_sqlitePath, 11, 1);
     }
