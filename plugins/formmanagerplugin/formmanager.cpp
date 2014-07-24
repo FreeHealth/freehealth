@@ -859,6 +859,10 @@ QString FormManager::extractFormFileToTmpPath(const QString &formUid, const QStr
 QString FormManager::formPrintHtmlOutput(Form::FormMain *formMain)
 {
     QString out;
+
+    // FIXME: same code for export/print, add a param to the member like an enumerator (Print/Export...)
+    // FIXME: For each FormMain children get the HTML output
+
     // If a print mask is available, create tokens for the form
     if (!formMain->spec()->value(Form::FormItemSpec::Spec_HtmlPrintMask).toString().isEmpty()) {
         out = formMain->spec()->value(Form::FormItemSpec::Spec_HtmlPrintMask).toString();
