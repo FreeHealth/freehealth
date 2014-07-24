@@ -27,9 +27,11 @@
       <updateversion from="0.8.4" to="0.9.1">
         <text lang="fr">
         Ajout du sous-formulaire: Données socio-démographiques
+        Amélioration du formulaire de la personne de confiance
         </text>
         <text lang="xx">
         Adding sociodemgraphics subform
+        Improvements of the trusted person subform
         </text>
       </updateversion>
       <updateversion from="0.8.2" to="0.8.4">
@@ -379,7 +381,23 @@
             <tooltip lang="xx">Semicolon separated list</tooltip>
             <tooltip lang="fr">Liste séparée par un point-virgule</tooltip>
             <options>DontPrintEmptyValues</options>
-            <patientdata>Mails</patientdata>
+          </Item>
+
+          <Item type="button" name="SendMailButton">
+            <uilink widget="trustedSendMail"/>
+            <label lang="xx">Send mail</label>
+            <label lang="fr">Envoyer un courriel</label>
+            <icon>__theme__/mail_new.png</icon>
+            <script>
+              <onclicked>
+              freemedforms.forms.namespaceInUse = "Subs::Tools::TrustedPerson::";
+              var address = freemedforms.forms.item("Mail");
+              if (address.isValid) {
+                  if (address.currentText != "")
+                      freemedforms.tools.openUrl("mailto:" + address.currentText);
+              }
+              </onclicked>
+            </script>
           </Item>
 
           <Item type="shorttext" name="Tels">
@@ -389,7 +407,6 @@
             <tooltip lang="xx">Semicolon separated list</tooltip>
             <tooltip lang="fr">Liste séparée par un point-virgule</tooltip>
             <options>DontPrintEmptyValues</options>
-            <patientdata>Tels</patientdata>
           </Item>
 
           <Item type="shorttext" name="MobileTel">
@@ -399,7 +416,15 @@
             <tooltip lang="xx">Inform the mobile phone number</tooltip>
             <tooltip lang="fr">Renseignez le numéro de téléphone mobile</tooltip>
             <options>DontPrintEmptyValues</options>
-            <patientdata>MobilePhone</patientdata>
+          </Item>
+
+          <Item type="shorttext" name="Relation">
+            <uilink label="relationLbl" widget="relation"/>
+            <label lang="xx">Family relationships</label>
+            <label lang="fr">Lien de parenté</label>
+            <tooltip lang="xx">Relationship can be outside the family sphere</tooltip>
+            <tooltip lang="fr">Les liens peuvent être extérieur à la famille</tooltip>
+            <options>DontPrintEmptyValues</options>
           </Item>
 
         </Item>

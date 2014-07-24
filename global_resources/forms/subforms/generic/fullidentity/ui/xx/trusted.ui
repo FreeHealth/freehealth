@@ -19,16 +19,6 @@
    </item>
    <item row="1" column="0">
     <layout class="QGridLayout" name="gridLayout">
-     <item row="0" column="0">
-      <widget class="QLabel" name="mailLabel">
-       <property name="text">
-        <string>Mail</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="1">
-      <widget class="QLineEdit" name="mail"/>
-     </item>
      <item row="1" column="0">
       <widget class="QLabel" name="telLabel">
        <property name="text">
@@ -36,8 +26,18 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="1">
-      <widget class="QLineEdit" name="tel"/>
+     <item row="0" column="1">
+      <widget class="QLineEdit" name="mail"/>
+     </item>
+     <item row="0" column="0">
+      <widget class="QLabel" name="mailLabel">
+       <property name="text">
+        <string>Mail</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QLineEdit" name="mobile"/>
      </item>
      <item row="2" column="0">
       <widget class="QLabel" name="mobileLabel">
@@ -46,8 +46,25 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="1">
-      <widget class="QLineEdit" name="mobile"/>
+     <item row="0" column="2">
+      <widget class="QPushButton" name="trustedSendMail">
+       <property name="text">
+        <string>Send mail</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QLineEdit" name="tel"/>
+     </item>
+     <item row="3" column="0">
+      <widget class="QLabel" name="relationLbl">
+       <property name="text">
+        <string>Relation</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <widget class="QLineEdit" name="relation"/>
      </item>
     </layout>
    </item>

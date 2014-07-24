@@ -72,11 +72,13 @@
 
     <div class="episodeContent">
         <div class="textContainer">
-            <div class="textContent">{{~Form.Data.Print.Subs::Tools::TrustedPerson::Identity~}}</div>
+            <div class="textContent">
+            {{~Form.Data.Print.Subs::Tools::TrustedPerson::Identity~}}
+            {{<br>{{~Form.Label.Subs::Tools::TrustedPerson::Relation~: }}~Form.Data.Print.Subs::Tools::TrustedPerson::Relation~}}</div>
             <div class="contactContainer">
-                {{<span id="contactTels">Tels: ~Form.Data.Item.Subs::Tools::TrustedPerson::Tels~</span><br />}}
-                {{<span id="contactMobile">Mobile: ~Form.Data.Item.Subs::Tools::TrustedPerson::MobileTel~</span><br />}}
-                {{<span id="contactMails">Mails: ~Form.Data.Item.Subs::Tools::TrustedPerson::Mail~</span><br />}}
+                {{<span id="contactTels">{{~Form.Label.Subs::Tools::TrustedPerson::Tels~: }}~Form.Data.Item.Subs::Tools::TrustedPerson::Tels~</span><br />}}
+                {{<span id="contactMobile">{{~Form.Label.Subs::Tools::TrustedPerson::MobileTel~: }}~Form.Data.Item.Subs::Tools::TrustedPerson::MobileTel~</span><br />}}
+                {{<span id="contactMails">{{~Form.Label.Subs::Tools::TrustedPerson::Mail~: }}~Form.Data.Item.Subs::Tools::TrustedPerson::Mail~</span><br />}}
             </div> <!-- contactContainer -->
         </div> <!-- textContainer -->
     </div> <!-- episodeContent -->

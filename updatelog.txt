@@ -48,6 +48,8 @@ The FreeMedForms project
   * HPRIM integrator
     * Correcting wrong file encoding
   * Forms
+    * Adding socio-demographics subform to the identity form
+    * Trusted person: send Mail button added, family relationship
   * Debian specific
   * Under the hood
     * Multi-job compilation corrected (for libs)
