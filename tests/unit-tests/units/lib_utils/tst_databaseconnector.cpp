@@ -141,7 +141,10 @@ private slots:
         }
 
         // TODO: Test old version (without globalprefix)
+        // Utils::DatabaseConnector connector;
         // connector.fromSettings("Njg3NzExNjY3NzBkNzQ3OTZhMTU1ODM3NzcwZDFi");
+        // connector.fromSettings("Njg3NzExNjY3NzBkNDc1NjMzNTkwNTAwNTg0NDVmNjYyMzUwNzYwNzUzNTM3NDZmNGM1NTM2MTYwZDYzNmU2YTAzMmE3NDZmNGM=");
+        // qDebug() << connector;
     }
 
     void cleanupTestCase()
