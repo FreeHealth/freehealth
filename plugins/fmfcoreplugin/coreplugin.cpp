@@ -26,9 +26,11 @@
  ***************************************************************************/
 #include "coreplugin.h"
 #include "coreimpl.h"
+#include "sqlitedatabasepathpreferences.h"
 
-#include <extensionsystem/pluginmanager.h>
 #include <utils/log.h>
+#include <utils/databaseconnector.h>
+#include <extensionsystem/pluginmanager.h>
 
 #include <fmfcoreplugin/appaboutpage.h>
 #include <coreplugin/icore.h>
@@ -47,6 +49,7 @@ using namespace Core;
 using namespace Internal;
 
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
+static inline Core::ISettings *settings() { return Core::ICore::instance()->settings(); }
 static inline void messageSplash(const QString &s) {theme()->messageSplashScreen(s); }
 
 CorePlugin::CorePlugin() :
@@ -118,6 +121,10 @@ void CorePlugin::extensionsInitialized()
     m_CoreImpl->settings()->sync();
 
     m_CoreImpl->extensionsInitialized();
+
+    // Add preference page
+    if (settings()->databaseConnector().driver() == Utils::Database::SQLite)
+        this->addAutoReleasedObject(new SqliteDatabasePathPage(this));
 }
 
 void CorePlugin::remoteArgument(const QString& arg)

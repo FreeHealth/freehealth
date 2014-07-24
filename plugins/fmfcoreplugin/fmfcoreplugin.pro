@@ -12,16 +12,21 @@ HEADERS += coreplugin.h \
     coreimpl.h \
     commandlineparser.h \
     appaboutpage.h \
-    appconfigwizard.h
+    appconfigwizard.h \
+    sqlitedatabasepathpreferences.h
 
 SOURCES += coreplugin.cpp \
     coreimpl.cpp \
     appaboutpage.cpp \
     appconfigwizard.cpp \
-    commandlineparser.cpp
+    commandlineparser.cpp \
+    sqlitedatabasepathpreferences.cpp
 
 # include translations
 TRANSLATION_NAME = fmfcore
 include($${SOURCES_ROOT_PATH}/buildspecs/translations.pri)
 
 OTHER_FILES = Core.pluginspec
+
+FORMS += \
+    sqlitedatabasepathpreferences.ui
