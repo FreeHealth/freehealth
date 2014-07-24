@@ -8,6 +8,7 @@ The FreeMedForms project
     * HPRIM importation: trying to correct wrong char encoding
     * Allow users to define a global database prefix (for sqlite and MySQL)
     * Allow users to define the path where to store their personal SQLite database
+    * Allow users to change the path where are stored their personal SQLite database
   * FreeDDIManager
     * First release
   * Build process
