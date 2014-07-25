@@ -2314,7 +2314,7 @@ QString createUid()
 }
 
 /**
- * Destructive string encryption using SHA1 logarythm.
+ * Destructive string encryption using SHA1 algorithm.
  * The output is base64 encoded.
  */
 QString cryptPassword(const QString &toCrypt)
