@@ -645,7 +645,7 @@ CoreDatabaseCreationPage::CoreDatabaseCreationPage(QWidget *parent) :
     _createBaseButton(0),
     _completed(false)
 {
-    QGridLayout *layout = new QGridLayout(this);
+    layout = new QGridLayout(this);
     layout->setVerticalSpacing(30);
     setLayout(layout);
 
