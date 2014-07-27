@@ -2321,6 +2321,7 @@ QString cryptPassword(const QString &toCrypt)
 {
     // FIXME: How to improve the paswword security (currently using SHA1)
     // NOTE: Hash methods > SHA1 was introduced in Qt5
+    // SEE: Issue 366
     QCryptographicHash crypter(QCryptographicHash::Sha1);
     crypter.addData(toCrypt.toUtf8());
     return crypter.result().toBase64();
@@ -2335,7 +2336,7 @@ QString loginForSQL(const QString &log)
 /** Decrypt a crypted login. */
 QString loginFromSQL(const QVariant &sql)
 {
-    return QByteArray::fromBase64( sql.toByteArray() );
+    return QByteArray::fromBase64(sql.toByteArray());
 }
 
 /** Decrypt a crypted login. */
