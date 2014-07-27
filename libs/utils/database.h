@@ -151,16 +151,18 @@ public:
         FieldIsInteger,
         FieldIsLongInteger,
         FieldIsUnsignedInteger,
-        FieldIsUnsignedLongInteger,  // does not correctly works on SQLite, needs testing with MySQL
-        FieldIsLongText,
-        FieldIsShortText,
+        FieldIsUnsignedLongInteger, // unsigned bigint
+                                    // TODO: FieldIsUnsignedLongInteger does not correctly works on SQLite, needs testing with MySQL
+        FieldIsLongText,            // varchar(2000)
+        FieldIsShortText,           // varchar(200)
         FieldIsOneChar,
-        FieldIsLanguageText,
+        FieldIsLanguageText,        // varchar(2)
         FieldIsDate,
         FieldIsTime,
         FieldIsDateTime,
-        FieldIsBlob,
-        FieldIsUUID,
+        FieldIsBlob,                // SQLite: 1,000,000,000 max size
+                                    // MySQL:  4Go max size
+        FieldIsUUID,                // varchar(32) (see Utils::createUid())
         FieldIsBoolean,
         FieldIsUniquePrimaryKey,
         FieldIsReal
