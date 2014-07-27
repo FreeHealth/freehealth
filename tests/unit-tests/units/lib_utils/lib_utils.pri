@@ -1,5 +1,6 @@
 SOURCES += \
 #    $${PWD}/testhtmlcontent.cpp \
+    \
     $${PWD}/tst_html.cpp \
     $${PWD}/os_config.cpp \
     $${PWD}/tst_fileaccess.cpp \
@@ -14,7 +15,8 @@ SOURCES += \
     $${PWD}/tst_databasecsvimport.cpp \
     $${PWD}/tst_genericdescription.cpp \
     $${PWD}/tst_databaseconnector.cpp \
-    $${PWD}/tst_dircopy.cpp
+    $${PWD}/tst_dircopy.cpp \
+    $${PWD}/tst_passwordhashing.cpp
 
 #HEADERS += \
 #    $${PWD}/testhtmlcontent.h
