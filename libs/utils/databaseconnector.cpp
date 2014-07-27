@@ -301,7 +301,8 @@ QString DatabaseConnector::cryptedPass() const
 {
     if (d->m_ClearPass.isEmpty())
         return QString::null;
-    return Utils::cryptPassword(d->m_ClearPass);
+    Utils::PasswordCrypter crypter;
+    return crypter.cryptPassword(d->m_ClearPass);
 }
 
 QString DatabaseConnector::host() const

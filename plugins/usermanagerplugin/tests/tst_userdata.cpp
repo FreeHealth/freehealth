@@ -36,6 +36,7 @@
 #include <utils/log.h>
 #include <utils/global.h>
 #include <utils/randomizer.h>
+#include <utils/passwordandlogin.h>
 
 #include <QTest>
 #include <QSignalSpy>
@@ -127,12 +128,13 @@ void UserManagerPlugin::test_userdata_basics()
     // Test non editable object
     data.setEditable(false);
     QCOMPARE(data.isEditable(), false);
+    Utils::PasswordCrypter crypter;
     for(int i=0; i < Constants::USER_MaxParam; ++i) {
         QVariant control;
         switch (i) {
         case Constants::USER_ID: control = -1; break;
         case Constants::USER_UUID: control = data.uuid(); break;
-        case Constants::USER_PASSWORD: control = Utils::cryptPassword(""); break;
+        case Constants::USER_PASSWORD: control = crypter.cryptPassword(""); break;
         case Constants::USER_ISVIRTUAL: control = false; break;
         case Constants::USER_LOCKER: control = false; break;
         default: break;

@@ -167,6 +167,7 @@ QString UserIdentifier::password() const
 /** FreeMedForms crypted password (the crypt algorythm is destructive). */
 QString UserIdentifier::cryptedPassword() const
 {
-    return Utils::cryptPassword(m_ui->loginWidget->password());
+    Utils::PasswordCrypter crypter;
+    return crypter.cryptPassword(m_ui->loginWidget->password());
 }
 

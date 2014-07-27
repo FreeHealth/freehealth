@@ -71,6 +71,7 @@
 #include <utils/global.h>
 #include <utils/log.h>
 #include <utils/serializer.h>
+#include <utils/passwordandlogin.h>
 
 #include <translationutils/constants.h>
 #include <translationutils/trans_current.h>
@@ -526,6 +527,7 @@ public:
     int m_PersonalLkId;
     QString m_LkIdsToString, m_ClearPassword;
     bool m_PasswordChanged;
+    Utils::PasswordCrypter crypter;
 };
 
 }  // End Internal
@@ -556,7 +558,7 @@ UserData::UserData() :
     setRights(USER_ROLE_DOSAGES, Core::IUser::NoRights);
     setRights(USER_ROLE_PARAMEDICAL, Core::IUser::NoRights);
     setRights(USER_ROLE_ADMINISTRATIVE, Core::IUser::NoRights);
-    setCryptedPassword(Utils::cryptPassword(""));
+    setCryptedPassword(d->crypter.cryptPassword(""));
     setLocker(false);
     createUuid();
     d->m_IsNull = true;
@@ -591,7 +593,7 @@ UserData::UserData(const QString & uuid)
     setRights(USER_ROLE_DOSAGES, Core::IUser::NoRights);
     setRights(USER_ROLE_PARAMEDICAL, Core::IUser::NoRights);
     setRights(USER_ROLE_ADMINISTRATIVE, Core::IUser::NoRights);
-    setCryptedPassword(Utils::cryptPassword(""));
+    setCryptedPassword(d->crypter.cryptPassword(""));
     setLocker(false);
     d->m_IsNull = true;
     d->m_IsCurrent = false;
@@ -880,8 +882,8 @@ void UserData::setClearPassword(const QString &val)
     d->m_ClearPassword = val;
     d->m_PasswordChanged = true;
     // Sync cryptedPassword
-    if (Utils::cryptPassword(val) != cryptedPassword()) {
-        setCryptedPassword(Utils::cryptPassword(val));
+    if (d->crypter.cryptPassword(val) != cryptedPassword()) {
+        setCryptedPassword(d->crypter.cryptPassword(val));
     }
 }
 
@@ -935,6 +937,10 @@ void UserData::addLoginToHistory()
     setModified(true);
 }
 
+QString UserData::decryptedLogin() const
+{
+    return Utils::loginFromSQL(value(Table_USERS, USER_LOGIN));
+}
 
 //--------------------------------------------------------------------------------------------------------
 //------------------------------------------------ Getters -----------------------------------------------

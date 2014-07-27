@@ -60,6 +60,7 @@
 
 #include <utils/log.h>
 #include <utils/global.h>
+#include <utils/passwordandlogin.h>
 #include <utils/databaseconnector.h>
 
 #include <translationutils/constants.h>
@@ -471,12 +472,12 @@ bool UserBase::checkLogin(const QString &clearLogin, const QString &clearPasswor
     DB.transaction();
 
     // Try to get the user uuid and cache it
+    Utils::PasswordCrypter crypter;
     QList<int> list;
     list << USER_UUID << USER_LOGIN << USER_PASSWORD;
     QHash<int, QString> where;
     where.insert(USER_LOGIN, QString("='%1'").arg(Utils::loginForSQL(clearLogin)));
-    // FIXME: How to improve the paswword security (currently using SHA1)
-    where.insert(USER_PASSWORD, QString("='%1'").arg(Utils::cryptPassword(clearPassword)));
+    where.insert(USER_PASSWORD, QString("='%1'").arg(crypter.cryptPassword(clearPassword)));
     QString req = select(Table_USERS, list, where);
     QSqlQuery query(DB);
     if (query.exec(req)) {
@@ -1479,11 +1480,12 @@ bool UserBase::changeUserPassword(UserData *user, const QString &newClearPasswor
     DB.transaction();
 
     // update FreeMedForms password
+    Utils::PasswordCrypter crypter;
     QHash<int, QString> where;
     where.insert(USER_UUID, QString("='%1'").arg(user->uuid()));
     QSqlQuery query(DB);
     query.prepare(prepareUpdateQuery(Table_USERS, USER_PASSWORD, where));
-    query.bindValue(0, Utils::cryptPassword(newClearPassword));
+    query.bindValue(0, crypter.cryptPassword(newClearPassword));
     if (!query.exec()) {
         LOG_QUERY_ERROR(query);
         query.finish();

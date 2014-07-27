@@ -76,6 +76,7 @@
 
 #include <utils/log.h>
 #include <utils/global.h>
+#include <utils/passwordandlogin.h>
 #include <translationutils/constanttranslations.h>
 #include <extensionsystem/pluginmanager.h>
 
@@ -187,6 +188,7 @@ public:
     QList<IUserWizardPage*> m_ExtraPages;
     static QHash<int, QString> m_Papers;
     static QHash<int, int> m_Rights;
+    Utils::PasswordCrypter crypter;
 
 private:
 //    UserCreatorWizard *q;
@@ -372,7 +374,7 @@ void UserCreatorWizard::done(int r)
     d->m_User->setValidity(1);
     d->m_User->setLogin64(Utils::loginForSQL(field("Login").toString()));
     d->m_User->setClearPassword(field("Password").toString());
-    d->m_User->setCryptedPassword(Utils::cryptPassword(field("Password").toString()));
+    d->m_User->setCryptedPassword(d->crypter.cryptPassword(field("Password").toString()));
     d->m_User->setUsualName(field("UsualName"));
     d->m_User->setOtherNames(field("OtherNames"));
     d->m_User->setFirstname(field("Firstname"));

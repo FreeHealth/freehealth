@@ -34,7 +34,6 @@
 #include <printerplugin/textdocumentextra.h>
 
 #include <utils/global.h>
-#include <utils/passwordandlogin.h>
 #include <utils/serializer.h>
 
 #include <QObject>
@@ -213,7 +212,7 @@ public:
     bool    locker() const               { return value(Table_USERS, USER_LOCKER).toBool(); }
     QString login64() const              { return value(Table_USERS, USER_LOGIN).toString(); }
     QString clearLogin() const           { return QString(QByteArray::fromBase64(login64().toUtf8())); }
-    QString decryptedLogin() const       { return Utils::loginFromSQL(value(Table_USERS, USER_LOGIN));  }
+    QString decryptedLogin() const;
     QString cryptedPassword() const      { return value(Table_USERS, USER_PASSWORD).toString(); }
     QDateTime lastLogin() const          { return value(Table_USERS, USER_LASTLOG).toDateTime(); }
     QString fullName() const;

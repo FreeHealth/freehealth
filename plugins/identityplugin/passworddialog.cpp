@@ -142,7 +142,7 @@ QString PasswordDialog::cryptedPassword() const
 {
     if (m_AllIsGood)
         return m_CryptedNewPass;
-    return QString();
+    return QString::null;
 }
 
 /** Returns the clear new password. The dialog must be accepted before. */
@@ -150,7 +150,7 @@ QString PasswordDialog::uncryptedPassword() const
 {
     if (m_AllIsGood)
         return m_ui->newPass->text();
-    return QString();
+    return QString::null;
 }
 
 //bool PasswordDialog::applyChanges(UserModel *model, int userRow) const
@@ -174,15 +174,16 @@ void PasswordDialog::done(int result)
     if (m_ui->newPass->text().size() < 5)
         return;
 
+    Utils::PasswordCrypter crypter;
     if (m_OldCryptedPass.isEmpty()) {
         // Set password mode
         m_AllIsGood = true;
-        m_CryptedNewPass = Utils::cryptPassword(m_ui->newPass->text());
+        m_CryptedNewPass = crypter.cryptPassword(m_ui->newPass->text());
         QDialog::done(result);
     } else {
         // Change password mode
-        const QString &cryptedNewPass = Utils::cryptPassword(m_ui->newPass->text());
-        const QString &oldPass = Utils::cryptPassword(m_ui->oldPass->text());
+        const QString &cryptedNewPass = crypter.cryptPassword(m_ui->newPass->text());
+        const QString &oldPass = crypter.cryptPassword(m_ui->oldPass->text());
 
         if ((oldPass == m_OldCryptedPass) &&
                 (m_ui->newPass->text() == m_ui->newControl->text())) {

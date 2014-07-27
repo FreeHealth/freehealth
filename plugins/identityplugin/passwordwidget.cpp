@@ -91,6 +91,7 @@ public:
 public:
     Ui::PasswordWidget *ui;
     QString _cachedUncryptedPassword, _cachedCryptedPassword;
+    Utils::PasswordCrypter crypter;
 
 private:
     PasswordWidget *q;
@@ -196,7 +197,7 @@ void PasswordWidget::onChangeOrSetPasswordClicked()
     if (!d->_cachedCryptedPassword.isEmpty()) {
         dlg.setOldCryptedPassword(d->_cachedCryptedPassword);
     } else if (!d->_cachedUncryptedPassword.isEmpty()) {
-        dlg.setOldCryptedPassword(Utils::cryptPassword(d->_cachedUncryptedPassword));
+        dlg.setOldCryptedPassword(d->crypter.cryptPassword(d->_cachedUncryptedPassword));
     }
     // Execute dialog
     if (dlg.exec() == QDialog::Accepted) {

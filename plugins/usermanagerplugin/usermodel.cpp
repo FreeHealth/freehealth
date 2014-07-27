@@ -44,8 +44,9 @@
 
 #include <utils/global.h>
 #include <utils/log.h>
-#include <utils/databaseconnector.h>
 #include <utils/randomizer.h>
+#include <utils/passwordandlogin.h>
+#include <utils/databaseconnector.h>
 #include <translationutils/constanttranslations.h>
 
 #include <coreplugin/translators.h>
@@ -497,8 +498,9 @@ bool UserModel::setCurrentUser(const QString &clearLog, const QString &clearPass
         qWarning() << Q_FUNC_INFO << clearLog;
     d->checkNullUser();
 
+    Utils::PasswordCrypter crypter;
     QString log64 = Utils::loginForSQL(clearLog);
-    QString cryptpass64 = Utils::cryptPassword(clearPassword);
+    QString cryptpass64 = crypter.cryptPassword(clearPassword);
 
     QList<IUserListener *> listeners = pluginManager()->getObjects<IUserListener>();
 
@@ -857,7 +859,8 @@ bool UserModel::insertRows(int row, int count, const QModelIndex &parent)
             return i;
         }
         newIndex = index(row+i, Core::IUser::Password);
-        if (!d->m_Sql->setData(newIndex, Utils::cryptPassword(""), Qt::EditRole)) {
+        Utils::PasswordCrypter crypter;
+        if (!d->m_Sql->setData(newIndex, crypter.cryptPassword(""), Qt::EditRole)) {
            LOG_ERROR(QString("Can not add user's login into the new user into SQL Table. Row = %1 , UUID = %2 ")
                              .arg(row+i).arg(uuid));
             return i;
