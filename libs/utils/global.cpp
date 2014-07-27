@@ -2319,22 +2319,30 @@ QString createUid()
  */
 QString cryptPassword(const QString &toCrypt)
 {
-    QCryptographicHash crypter( QCryptographicHash::Sha1 );
-    crypter.addData( toCrypt.toUtf8() );
+    // FIXME: How to improve the paswword security (currently using SHA1)
+    // NOTE: Hash methods > SHA1 was introduced in Qt5
+    QCryptographicHash crypter(QCryptographicHash::Sha1);
+    crypter.addData(toCrypt.toUtf8());
     return crypter.result().toBase64();
 }
 
 /** Crypt a clear login. */
 QString loginForSQL(const QString &log)
-{ return log.toUtf8().toBase64(); }
+{
+    return log.toUtf8().toBase64();
+}
 
 /** Decrypt a crypted login. */
 QString loginFromSQL(const QVariant &sql)
-{ return QByteArray::fromBase64( sql.toByteArray() ); }
+{
+    return QByteArray::fromBase64( sql.toByteArray() );
+}
 
 /** Decrypt a crypted login. */
 QString loginFromSQL(const QString &sql)
-{ return QByteArray::fromBase64(sql.toUtf8()); }
+{
+    return QByteArray::fromBase64(sql.toUtf8());
+}
 
 /**
  * Non-destructive string encryption.
