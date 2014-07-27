@@ -370,7 +370,7 @@ QString DatabaseConnector::forSettings() const
     tmp << d->m_GlobalDatabasePrefix;
     tmp << absPathToSqliteReadWriteDatabase();
     if (CryptSerialization)
-        return Utils::crypt(tmp.join(SEPARATOR));
+        return Utils::nonDestructiveEncryption(tmp.join(SEPARATOR));
     return tmp.join(SEPARATOR);
 }
 

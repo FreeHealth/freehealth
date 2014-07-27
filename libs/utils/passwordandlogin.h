@@ -46,7 +46,9 @@ UTILS_EXPORT QString loginFromSQL(const QString &sql);
 
 // Old password crypting members
 UTILS_EXPORT QString cryptPassword(const QString &toCrypt);
-UTILS_EXPORT QByteArray crypt(const QString &text, const QString &key = QString::null);
+
+// Non destructive encryption
+UTILS_EXPORT QByteArray nonDestructiveEncryption(const QString &text, const QString &key = QString::null);
 UTILS_EXPORT QString decrypt(const QByteArray &text, const QString &key = QString::null);
 
 class UTILS_EXPORT PasswordCrypter {

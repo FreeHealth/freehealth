@@ -181,7 +181,7 @@ QString cryptPassword(const QString &toCrypt)
  * Non-destructive string encryption.
  * \sa decrypt()
 */
-QByteArray crypt(const QString &text, const QString &key)
+QByteArray nonDestructiveEncryption(const QString &text, const QString &key)
 {
     QByteArray texteEnBytes = text.toUtf8();
     QString k = key;

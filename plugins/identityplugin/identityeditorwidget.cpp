@@ -486,7 +486,7 @@ public:
         tags.insert(::XML_PROVINCE, ui->zipcodesWidget->stateProvince());
         tags.insert(::XML_COUNTRY, ui->zipcodesWidget->countryIso());
         tags.insert(::XML_ZIPCODE, ui->zipcodesWidget->zipCode());
-        tags.insert(::XML_LOGIN, Utils::crypt(ui->passwordWidget->loginEditor()->text()));
+        tags.insert(::XML_LOGIN, Utils::nonDestructiveEncryption(ui->passwordWidget->loginEditor()->text()));
         tags.insert(::XML_PASSWORD, ui->passwordWidget->cryptedPassword());
         return Utils::createXml("Identity", tags, 2);
     }

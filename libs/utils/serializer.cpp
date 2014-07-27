@@ -430,6 +430,7 @@ const QHash<QString,QString> threeCharKeyHashToHash( const QString & serialized,
     return toReturn;
 }
 
+/** Serialize proxy settings and encrypt them */
 QString serializeProxy(const QNetworkProxy &proxy)
 {
     QStringList s;
@@ -439,10 +440,11 @@ QString serializeProxy(const QNetworkProxy &proxy)
     s << proxy.user();
     s << proxy.password();
     QString t = s.join(::SERIALIZER_SEPARATOR);
-    t = Utils::crypt(t, "ProXySeTtInGs");
+    t = Utils::nonDestructiveEncryption(t, "ProXySeTtInGs");
     return t;
 }
 
+/** De-serialize encrypted proxy settings */
 bool deserializeProxy(const QString &serializedString, QNetworkProxy &proxy)
 {
     QString t = Utils::decrypt(serializedString.toUtf8(), "ProXySeTtInGs");
