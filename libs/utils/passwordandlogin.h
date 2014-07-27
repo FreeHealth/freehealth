@@ -56,22 +56,29 @@ public:
     enum Algorithm {
         SHA1 = 0,
 #if (QT_VERSION >= 0x050000)
-        SHA256,
-        SHA512,
+        SHA256 = 1,
+        SHA512 = 2,
 #endif
 #if (QT_VERSION >= 0x050100)
-        SHA3_256,
-        SHA3_512,
+        SHA3_256 = 3,
+        SHA3_512 = 4,
 #endif
-        ERROR
+#if (QT_VERSION < 0x050000)
+        Default = SHA1,
+#elif (QT_VERSION >= 0x050000 && QT_VERSION < 0x050100)
+        Default = SHA512,
+#else
+        Default = SHA3_512,
+#endif
+        ERROR = -1
     };
 
     PasswordCrypter();
     ~PasswordCrypter();
 
-    QString cryptPassword(const QString &toCrypt, Algorithm algo = SHA1);
+    QString cryptPassword(const QString &toCrypt, Algorithm algo = Default);
     Algorithm extractHashAlgorithm(const QString &cryptedBase64);
-    bool checkPrefix(const QString &cryptedBase64, Algorithm algo = SHA1);
+    bool checkPrefix(const QString &cryptedBase64, Algorithm algo = Default);
     bool checkPassword(const QString &clear, const QString &cryptedBase64);
 
 };
