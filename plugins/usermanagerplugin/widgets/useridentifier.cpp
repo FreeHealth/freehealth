@@ -54,6 +54,7 @@
 #include <coreplugin/itheme.h>
 #include <coreplugin/constants_icons.h>
 
+#include <utils/passwordandlogin.h>
 #include <utils/widgets/loginwidget.h>
 
 #include <usermanagerplugin/usercore.h>

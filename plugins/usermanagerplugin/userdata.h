@@ -34,6 +34,7 @@
 #include <printerplugin/textdocumentextra.h>
 
 #include <utils/global.h>
+#include <utils/passwordandlogin.h>
 #include <utils/serializer.h>
 
 #include <QObject>

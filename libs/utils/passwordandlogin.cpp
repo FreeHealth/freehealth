@@ -1,0 +1,222 @@
+/***************************************************************************
+ *  The FreeMedForms project is a set of free, open source medical         *
+ *  applications.                                                          *
+ *  (C) 2008-2014 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
+ *  All rights reserved.                                                   *
+ *                                                                         *
+ *  This program is free software: you can redistribute it and/or modify   *
+ *  it under the terms of the GNU General Public License as published by   *
+ *  the Free Software Foundation, either version 3 of the License, or      *
+ *  (at your option) any later version.                                    *
+ *                                                                         *
+ *  This program is distributed in the hope that it will be useful,        *
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
+ *  GNU General Public License for more details.                           *
+ *                                                                         *
+ *  You should have received a copy of the GNU General Public License      *
+ *  along with this program (COPYING.FREEMEDFORMS file).                   *
+ *  If not, see <http://www.gnu.org/licenses/>.                            *
+ ***************************************************************************/
+/***************************************************************************
+ *  Main developer: Eric MAEKER, <eric.maeker@gmail.com>                   *
+ *  Contributors:                                                          *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
+ ***************************************************************************/
+#include "passwordandlogin.h"
+
+#include <QCryptographicHash>
+#include <QCoreApplication>
+
+/**
+ * \class Utils::PasswordCrypter
+ * Owns all the intelligence of password crypting.
+ */
+
+namespace Utils {
+
+/** Crypt a clear login. */
+QString loginForSQL(const QString &log)
+{
+    return log.toUtf8().toBase64();
+}
+
+/** Decrypt a crypted login. */
+QString loginFromSQL(const QVariant &sql)
+{
+    return QByteArray::fromBase64(sql.toByteArray());
+}
+
+/** Decrypt a crypted login. */
+QString loginFromSQL(const QString &sql)
+{
+    return QByteArray::fromBase64(sql.toUtf8());
+}
+
+/** Ctor */
+PasswordCrypter::PasswordCrypter()
+{}
+
+/** Dtor */
+PasswordCrypter::~PasswordCrypter()
+{}
+
+/**
+ * Returns a crypted password using a defined algorithm. \n
+ * This method uses destructive encryption. \n
+ * The returned value is base64 encrypted and contains the used alogrithm
+ * followed by the hash eg \e {algorithm}:{hash}. \n
+ * Returns a null string in case of error.
+ */
+QString PasswordCrypter::cryptPassword(const QString &toCrypt, PasswordCrypter::Algorithm algo)
+{
+    if (algo == ERROR)
+        return QString::null;
+    QCryptographicHash::Algorithm qch_algo = QCryptographicHash::Sha1;
+    QString prefix;
+    switch (algo) {
+    case SHA1:
+        break;
+#if (QT_VERSION >= 0x050000)
+    case SHA256:
+        qch_algo = QCryptographicHash::Sha256;
+        prefix = "sha256";
+        break;
+    case SHA512:
+        qch_algo = QCryptographicHash::Sha512;
+        prefix = "sha512";
+        break;
+#endif
+#if (QT_VERSION >= 0x050100)
+    case SHA3_256:
+        qch_algo = QCryptographicHash::Sha3_256;
+        prefix = "sha3-256";
+        break;
+    case SHA3_512:
+        qch_algo = QCryptographicHash::Sha3_512;
+        prefix = "sha3-512";
+        break;
+#endif
+    default: return QString::null;
+    }
+    QByteArray crypt = QCryptographicHash::hash(toCrypt.toUtf8(), qch_algo);
+    if (!prefix.isEmpty())
+        return QString("%1:%2")
+            .arg(prefix)
+            .arg(QString(crypt.toBase64()));
+    return QString(crypt.toBase64());
+}
+
+/**
+ * Extracts the algorithm used to create the hashed password.
+ */
+PasswordCrypter::Algorithm PasswordCrypter::extractHashAlgorithm(const QString &cryptedBase64)
+{
+    QByteArray crypted = QByteArray::fromBase64(cryptedBase64.toAscii());
+    // No prefix -> SHA1
+    if (!crypted.contains(":"))
+        return SHA1;
+    // Compute prefix
+    QString prefix = crypted.left(crypted.indexOf(":"));
+    if (prefix == "sha1")
+        return SHA1;
+#if (QT_VERSION >= 0x050000)
+    else if (prefix == "sha256")
+        return SHA256;
+    else if (prefix == "sha512")
+        return SHA512;
+#endif
+#if (QT_VERSION >= 0x050100)
+    else if (prefix == "sha3-256")
+        return SHA3_256;
+    else if (prefix == "sha3-512")
+        return SHA3_512;
+#endif
+    return ERROR;
+}
+
+/**
+ * Checks the prefix of the crypted password using \e algo.
+ */
+bool PasswordCrypter::checkPrefix(const QString &cryptedBase64, Algorithm algo)
+{
+    if (algo == ERROR)
+        return false;
+    return (extractHashAlgorithm(cryptedBase64) == algo);
+}
+
+/** Checks equality between a clear password \e clear and
+ * a crypted password (in base64 encoding) \e cryptedBase64.
+ * The crypted password must have been created using the
+ * cryptPassword().
+ */
+bool PasswordCrypter::checkPassword(const QString &clear, const QString &cryptedBase64)
+{
+    // Get from base64
+    QByteArray crypted = QByteArray::fromBase64(cryptedBase64.toAscii());
+    // Get the prefixed algorithm
+    if (!crypted.contains(":")) {
+        // SHA1
+        QByteArray cryptClear = QCryptographicHash::hash(clear.toUtf8(), QCryptographicHash::Sha1);
+        return (crypted == cryptClear);
+    }
+    Algorithm algo = extractHashAlgorithm(cryptedBase64);
+    return (cryptPassword(clear, algo).compare(cryptedBase64) == 0);
+}
+
+
+
+/**
+ * Destructive string encryption using SHA1 algorithm.
+ * The output is base64 encoded.
+ */
+QString cryptPassword(const QString &toCrypt)
+{
+    // FIXME: How to improve the paswword security (currently using SHA1)
+    // NOTE: Hash methods > SHA1 was introduced in Qt5
+    // SEE: Issue 366
+    QCryptographicHash crypter(QCryptographicHash::Sha1);
+    crypter.addData(toCrypt.toUtf8());
+    return crypter.result().toBase64();
+}
+
+/**
+ * Non-destructive string encryption.
+ * \sa decrypt()
+*/
+QByteArray crypt(const QString &text, const QString &key)
+{
+    QByteArray texteEnBytes = text.toUtf8();
+    QString k = key;
+    if (key.isEmpty())
+        k = QCryptographicHash::hash(qApp->applicationName().left(qApp->applicationName().indexOf("_d")).toUtf8(), QCryptographicHash::Sha1);
+    QByteArray cle = k.toUtf8().toBase64();
+    QByteArray codeFinal;
+    int tailleCle = cle.length();
+    for (int i = 0; i < texteEnBytes.length(); ++i) {
+        codeFinal += char(texteEnBytes[i] ^ cle[i % tailleCle]);
+    }
+    return codeFinal.toHex().toBase64();
+}
+
+// "MTEwZjI5MGQxODNhNDQwODMzMmI=" "CacaBoudin"
+
+/**
+ * Decrypt a string encrypted with the Utils::crypt() method
+*/
+QString decrypt(const QByteArray &texte, const QString &key)
+{
+    QByteArray texteEnBytes = QByteArray::fromHex(QByteArray::fromBase64(texte));
+    QString k = key;
+    if (key.isEmpty())
+        k = QCryptographicHash::hash(qApp->applicationName().left(qApp->applicationName().indexOf("_d")).toUtf8(), QCryptographicHash::Sha1);
+    QByteArray cle = k.toUtf8().toBase64();
+    QByteArray codeFinal;
+    int tailleCle = cle.length();
+    for (int i = 0; i < texteEnBytes.length(); ++i) {
+        codeFinal += char(texteEnBytes[i] ^ cle[i % tailleCle]);
+    }
+    return codeFinal;
+}
+
+} // namespace Utils

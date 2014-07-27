@@ -38,6 +38,7 @@
 #include <coreplugin/constants_icons.h>
 
 #include <utils/global.h>
+#include <utils/passwordandlogin.h>
 #include <utils/widgets/qbuttonlineedit.h>
 #include <translationutils/constants.h>
 #include <translationutils/trans_database.h>

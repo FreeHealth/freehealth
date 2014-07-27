@@ -208,12 +208,6 @@ UTILS_EXPORT QString testInternetConnection();
 
 // Some database identifiers helpers
 UTILS_EXPORT QString createUid();
-UTILS_EXPORT QString cryptPassword(const QString &toCrypt);
-UTILS_EXPORT QString loginForSQL(const QString &log);
-UTILS_EXPORT QString loginFromSQL(const QVariant &sql);
-UTILS_EXPORT QString loginFromSQL(const QString &sql);
-UTILS_EXPORT QByteArray crypt(const QString &text, const QString &key = QString::null);
-UTILS_EXPORT QString decrypt(const QByteArray &text, const QString &key = QString::null);
 
 // Models
 UTILS_EXPORT void linkSignalsFromFirstModelToSecondModel(QAbstractItemModel *model1, QAbstractItemModel *model2, bool connectDataChanged);

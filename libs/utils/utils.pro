@@ -79,7 +79,8 @@ HEADERS += global_exporter.h \
     widgets/qmenuitemview.h \
     waitforsignal.h \
     hprimparser.h \
-    databasecsvimportator.h
+    databasecsvimportator.h \
+    passwordandlogin.h
 
 SOURCES += global.cpp \
     database.cpp \
@@ -143,7 +144,8 @@ SOURCES += global.cpp \
     widgets/qmenuitemview.cpp \
     waitforsignal.cpp \
     hprimparser.cpp \
-    databasecsvimportator.cpp
+    databasecsvimportator.cpp \
+    passwordandlogin.cpp
 
 #macx {
 #    OBJECTIVE_SOURCES += iconbadgealert.mm

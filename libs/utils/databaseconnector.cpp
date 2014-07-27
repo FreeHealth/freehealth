@@ -42,6 +42,7 @@
 #include "databaseconnector.h"
 #include "global.h"
 #include "log.h"
+#include "passwordandlogin.h"
 
 #include <translationutils/constants.h>
 #include <translationutils/trans_database.h>

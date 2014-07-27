@@ -77,6 +77,7 @@
 
 #include <utils/log.h>
 #include <utils/global.h>
+#include <utils/passwordandlogin.h>
 #include <utils/widgets/uppercasevalidator.h>
 #include <extensionsystem/pluginmanager.h>
 #include <translationutils/constants.h>

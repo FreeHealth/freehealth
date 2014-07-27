@@ -45,7 +45,9 @@
 
 #include <utils/log.h>
 #include <utils/global.h>
+#include <utils/passwordandlogin.h>
 #include <utils/widgets/lineeditechoswitcher.h>
+// FIXME: this header should be avoid
 #include <translationutils/constanttranslations.h>
 
 #include "ui_passworddialog.h"

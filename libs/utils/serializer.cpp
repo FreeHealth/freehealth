@@ -22,6 +22,7 @@
 
 #include <utils/log.h>
 #include <utils/global.h>
+#include <utils/passwordandlogin.h>
 
 #include <QApplication>
 #include <QLatin1Char>
