@@ -65,6 +65,7 @@ private slots:
         {
             // Qt5.0
             QString cryptedPass = crypter.cryptPassword(clearPass, Utils::PasswordCrypter::SHA256);
+
             // Check prefix
             QVERIFY(crypter.checkPrefix(cryptedPass, Utils::PasswordCrypter::SHA1) == false);
             QVERIFY(crypter.checkPrefix(cryptedPass, Utils::PasswordCrypter::SHA256) == true);
@@ -95,19 +96,35 @@ private slots:
         {
             // Qt5.1
             QString cryptedPass = crypter.cryptPassword(clearPass, Utils::PasswordCrypter::SHA3_256);
+
+            // Check prefix
+            QVERIFY(crypter.checkPrefix(cryptedPass, Utils::PasswordCrypter::SHA1) == false);
+            QVERIFY(crypter.checkPrefix(cryptedPass, Utils::PasswordCrypter::SHA256) == false);
+            QVERIFY(crypter.checkPrefix(cryptedPass, Utils::PasswordCrypter::SHA512) == false);
+            QVERIFY(crypter.checkPrefix(cryptedPass, Utils::PasswordCrypter::SHA3_256) == true);
+            QVERIFY(crypter.checkPrefix(cryptedPass, Utils::PasswordCrypter::SHA3_512) == false);
+
+            // Check password equality
             QVERIFY(crypter.checkPassword("Clear", cryptedPass) == false);
             QVERIFY(crypter.checkPassword("CryptMe_CryptMe", cryptedPass) == false);
             QVERIFY(crypter.checkPassword("CryptMe_CryptMe_CryptMe", cryptedPass) == false);
             QVERIFY(crypter.checkPassword(clearPass, cryptedPass) == true);
 
             cryptedPass = crypter.cryptPassword(clearPass, Utils::PasswordCrypter::SHA3_512);
+            // Check prefix
+            QVERIFY(crypter.checkPrefix(cryptedPass, Utils::PasswordCrypter::SHA1) == false);
+            QVERIFY(crypter.checkPrefix(cryptedPass, Utils::PasswordCrypter::SHA256) == false);
+            QVERIFY(crypter.checkPrefix(cryptedPass, Utils::PasswordCrypter::SHA512) == false);
+            QVERIFY(crypter.checkPrefix(cryptedPass, Utils::PasswordCrypter::SHA3_256) == false);
+            QVERIFY(crypter.checkPrefix(cryptedPass, Utils::PasswordCrypter::SHA3_512) == true);
+
+            // Check password equality
             QVERIFY(crypter.checkPassword("Clear", cryptedPass) == false);
             QVERIFY(crypter.checkPassword("CryptMe_CryptMe", cryptedPass) == false);
             QVERIFY(crypter.checkPassword("CryptMe_CryptMe_CryptMe", cryptedPass) == false);
             QVERIFY(crypter.checkPassword(clearPass, cryptedPass) == true);
         }
 #endif
-
 
     void test_passwordHashLength()
     {
@@ -137,16 +154,36 @@ private slots:
 #endif
         }
 
-        // Console output max length
-        qDebug() << "Utils::PasswordCrypter::SHA1     length" << crypter.cryptPassword(clearPass).length();
+        // Utils::PasswordCrypter::SHA1     length 28
+        // Utils::PasswordCrypter::SHA256   length 51
+        // Utils::PasswordCrypter::SHA512   length 95
+        // Utils::PasswordCrypter::SHA3_256 length 53
+        // Utils::PasswordCrypter::SHA3_512 length 97
+    }
+
+    void test_passwordUpdate()
+    {
+        // Here we will test if we can update the code transparently
+        // from the old user password to the new crypter
+        QString clearPass;
+        Utils::Randomizer random;
+        for(int i = 0; i < 100; ++i) {
+            clearPass += random.randomString(1);
+            QString oldPass = Utils::cryptPassword(clearPass);
+
+            // Qt4.8
+            QVERIFY(crypter.checkPassword(clearPass, oldPass));
+
+            // Qt5.0
 #if (QT_VERSION >= 0x050000)
-        qDebug() << "Utils::PasswordCrypter::SHA256   length" << crypter.cryptPassword(clearPass, Utils::PasswordCrypter::SHA256).length();
-        qDebug() << "Utils::PasswordCrypter::SHA512   length" << crypter.cryptPassword(clearPass, Utils::PasswordCrypter::SHA512).length();
+            QVERIFY(crypter.checkPassword(clearPass, oldPass));
 #endif
+
+            // Qt5.1
 #if (QT_VERSION >= 0x050100)
-        qDebug() << "Utils::PasswordCrypter::SHA3_256 length" << crypter.cryptPassword(clearPass, Utils::PasswordCrypter::SHA3_256).length();
-        qDebug() << "Utils::PasswordCrypter::SHA3_512 length" << crypter.cryptPassword(clearPass, Utils::PasswordCrypter::SHA3_512).length();
+            QVERIFY(crypter.checkPassword(clearPass, oldPass));
 #endif
+        }
     }
 
     void cleanupTestCase()

@@ -28,6 +28,8 @@
 #include <QCryptographicHash>
 #include <QCoreApplication>
 
+#include <QDebug>
+
 /**
  * \class Utils::PasswordCrypter
  * Owns all the intelligence of password crypting.
@@ -65,7 +67,7 @@ PasswordCrypter::~PasswordCrypter()
  * Returns a crypted password using a defined algorithm. \n
  * This method uses destructive encryption. \n
  * The returned value is base64 encrypted and contains the used alogrithm
- * followed by the hash eg \e {algorithm}:{hash}. \n
+ * followed by the hash eg \e {algorithm}:{base64(hash)}. \n
  * Returns a null string in case of error.
  */
 QString PasswordCrypter::cryptPassword(const QString &toCrypt, PasswordCrypter::Algorithm algo)
@@ -112,12 +114,11 @@ QString PasswordCrypter::cryptPassword(const QString &toCrypt, PasswordCrypter::
  */
 PasswordCrypter::Algorithm PasswordCrypter::extractHashAlgorithm(const QString &cryptedBase64)
 {
-    QByteArray crypted = QByteArray::fromBase64(cryptedBase64.toAscii());
     // No prefix -> SHA1
-    if (!crypted.contains(":"))
+    if (!cryptedBase64.contains(":"))
         return SHA1;
-    // Compute prefix
-    QString prefix = crypted.left(crypted.indexOf(":"));
+    // Compute prefix (in clear string at the begin of the password)
+    QString prefix = cryptedBase64.left(cryptedBase64.indexOf(":"));
     if (prefix == "sha1")
         return SHA1;
 #if (QT_VERSION >= 0x050000)
@@ -152,19 +153,15 @@ bool PasswordCrypter::checkPrefix(const QString &cryptedBase64, Algorithm algo)
  */
 bool PasswordCrypter::checkPassword(const QString &clear, const QString &cryptedBase64)
 {
-    // Get from base64
-    QByteArray crypted = QByteArray::fromBase64(cryptedBase64.toAscii());
     // Get the prefixed algorithm
-    if (!crypted.contains(":")) {
+    if (!cryptedBase64.contains(":")) {
         // SHA1
-        QByteArray cryptClear = QCryptographicHash::hash(clear.toUtf8(), QCryptographicHash::Sha1);
-        return (crypted == cryptClear);
+        QByteArray cryptClear = QCryptographicHash::hash(clear.toUtf8(), QCryptographicHash::Sha1).toBase64();
+        return (cryptedBase64 == cryptClear);
     }
     Algorithm algo = extractHashAlgorithm(cryptedBase64);
     return (cryptPassword(clear, algo).compare(cryptedBase64) == 0);
 }
-
-
 
 /**
  * Destructive string encryption using SHA1 algorithm.
