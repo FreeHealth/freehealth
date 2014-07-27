@@ -390,6 +390,7 @@ void UserManagerPlugin::createUser()
 /** \brief Change current user is connected to a private action. */
 void UserManagerPlugin::changeCurrentUser()
 {
+    // FIXME: user does not change at all
     Internal::UserIdentifier ident;
     if (ident.exec() == QDialog::Rejected)
         return;
