@@ -141,68 +141,69 @@ private slots:
         }
 #endif
 
-//    void test_passwordHashLength()
-//    {
-//        // UserPlugin::Internal::UserBase uses a 200 chars length field
-//        // Crypted Password must never exceed this length
-//        // We can say that a user password is always < 100 chars (that
-//        // a really high level password)
-//        // FIXME: add a max length in the user password editor
-//        QString clearPass;
-//        Utils::Randomizer random;
-//        for(int i = 0; i < 100; ++i) {
-//            clearPass += random.randomString(1);
+    void test_passwordHashLength()
+    {
+        // UserPlugin::Internal::UserBase uses a 200 chars length field
+        // Crypted Password must never exceed this length
+        // We can say that a user password is always < 100 chars (that
+        // a really high level password)
+        // FIXME: add a max length in the user password editor
+        QString clearPass;
+        Utils::Randomizer random;
+        for(int i = 0; i < 100; ++i) {
+            clearPass += random.randomString(1);
 
-//            // Qt4.8
-//            QVERIFY(crypter.cryptPassword(clearPass).length() < 200);
+            // Qt4.8
+            QVERIFY(crypter.cryptPassword(clearPass).length() < 200);
 
-//            // Qt5.0
-//#if (QT_VERSION >= 0x050000)
-//            QVERIFY(crypter.cryptPassword(clearPass, Utils::PasswordCrypter::SHA256).length() < 200);
-//            QVERIFY(crypter.cryptPassword(clearPass, Utils::PasswordCrypter::SHA512).length() < 200);
-//#endif
+            // Qt5.0
+#if (QT_VERSION >= 0x050000)
+            QVERIFY(crypter.cryptPassword(clearPass, Utils::PasswordCrypter::SHA256).length() < 200);
+            QVERIFY(crypter.cryptPassword(clearPass, Utils::PasswordCrypter::SHA512).length() < 200);
+#endif
 
-//            // Qt5.1
-//#if (QT_VERSION >= 0x050100)
-//            QVERIFY(crypter.cryptPassword(clearPass, Utils::PasswordCrypter::SHA3_256).length() < 200);
-//            QVERIFY(crypter.cryptPassword(clearPass, Utils::PasswordCrypter::SHA3_512).length() < 200);
-//#endif
-//        }
+            // Qt5.1
+#if (QT_VERSION >= 0x050100)
+            QVERIFY(crypter.cryptPassword(clearPass, Utils::PasswordCrypter::SHA3_256).length() < 200);
+            QVERIFY(crypter.cryptPassword(clearPass, Utils::PasswordCrypter::SHA3_512).length() < 200);
+#endif
+        }
 
-//        // Utils::PasswordCrypter::SHA1     length 28
-//        // Utils::PasswordCrypter::SHA256   length 51
-//        // Utils::PasswordCrypter::SHA512   length 95
-//        // Utils::PasswordCrypter::SHA3_256 length 53
-//        // Utils::PasswordCrypter::SHA3_512 length 97
-//    }
+        // Utils::PasswordCrypter::SHA1     length 28
+        // Utils::PasswordCrypter::SHA256   length 51
+        // Utils::PasswordCrypter::SHA512   length 95
+        // Utils::PasswordCrypter::SHA3_256 length 53
+        // Utils::PasswordCrypter::SHA3_512 length 97
+    }
 
-//    void test_passwordUpdate()
-//    {
-//        // Here we will test if we can update the code transparently
-//        // from the old user password to the new crypter
+    void test_passwordUpdate()
+    {
+        // Here we will test if we can update the code transparently
+        // from the old user password to the new crypter
 
-//        // FIXME: write unit-tests for QString DatabaseConnector::cryptedPass() const (from old to new)
+        // FIXME: write unit-tests for QString DatabaseConnector::cryptedPass() const (from old to new)
+        // FIXME: test bool UserModel::setCurrentUser(const QString &clearLog, const QString &clearPassword, bool refreshCache, bool checkPrefValidity)
 
-//        QString clearPass;
-//        Utils::Randomizer random;
-//        for(int i = 0; i < 100; ++i) {
-//            clearPass += random.randomString(1);
-//            QString oldPass = Utils::cryptPassword(clearPass);
+        QString clearPass;
+        Utils::Randomizer random;
+        for(int i = 0; i < 100; ++i) {
+            clearPass += random.randomString(1);
+            QString oldPass = Utils::cryptPassword(clearPass);
 
-//            // Qt4.8
-//            QVERIFY(crypter.checkPassword(clearPass, oldPass));
+            // Qt4.8
+            QVERIFY(crypter.checkPassword(clearPass, oldPass));
 
-//            // Qt5.0
-//#if (QT_VERSION >= 0x050000)
-//            QVERIFY(crypter.checkPassword(clearPass, oldPass));
-//#endif
+            // Qt5.0
+#if (QT_VERSION >= 0x050000)
+            QVERIFY(crypter.checkPassword(clearPass, oldPass));
+#endif
 
-//            // Qt5.1
-//#if (QT_VERSION >= 0x050100)
-//            QVERIFY(crypter.checkPassword(clearPass, oldPass));
-//#endif
-//        }
-//    }
+            // Qt5.1
+#if (QT_VERSION >= 0x050100)
+            QVERIFY(crypter.checkPassword(clearPass, oldPass));
+#endif
+        }
+    }
 
     void cleanupTestCase()
     {
