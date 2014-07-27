@@ -475,6 +475,7 @@ bool UserBase::checkLogin(const QString &clearLogin, const QString &clearPasswor
     list << USER_UUID << USER_LOGIN << USER_PASSWORD;
     QHash<int, QString> where;
     where.insert(USER_LOGIN, QString("='%1'").arg(Utils::loginForSQL(clearLogin)));
+    // FIXME: How to improve the paswword security (currently using SHA1)
     where.insert(USER_PASSWORD, QString("='%1'").arg(Utils::cryptPassword(clearPassword)));
     QString req = select(Table_USERS, list, where);
     QSqlQuery query(DB);
