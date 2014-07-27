@@ -71,6 +71,7 @@
 #include <translationutils/trans_titles.h>
 #include <translationutils/trans_user.h>
 #include <translationutils/trans_menu.h>
+#include <translationutils/trans_current.h>
 
 #include <extensionsystem/pluginmanager.h>
 
@@ -403,6 +404,15 @@ void UserManagerPlugin::changeCurrentUser()
         c.setClearLog(log);
         c.setClearPass(pass);
         settings()->setDatabaseConnector(c);
+    }
+    // Set current user into UserModel
+    if (!userModel()->setCurrentUser(log, pass)) {
+        LOG("Unable to set UserModel current user.");
+        Utils::warningMessageBox(tr("Unable to change current user"),
+                                 tr("An error occured when trying to change "
+                                    "the current user. %1")
+                                 .arg(tkTr(Trans::Constants::CONTACT_DEV_TEAM)));
+        return;
     }
     modeManager()->activateMode(Core::Constants::MODE_PATIENT_SEARCH);
     Utils::informativeMessageBox(tkTr(Trans::Constants::CONNECTED_AS_1)
