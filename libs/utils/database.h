@@ -283,6 +283,9 @@ public:
     virtual void addIndex(const Utils::Field &field, const QString &name = QString::null);
 
     virtual bool checkDatabaseScheme();
+    virtual bool checkVersion(const Field &field, const QString &expectedVersion);
+    virtual QString getVersion(const Field &field)const ;
+    virtual bool setVersion(const Field &field, const QString &version);
 
     virtual QString fieldName(const int &tableref, const int &fieldref) const;
     virtual Field field(const int &tableref, const int &fieldref) const;

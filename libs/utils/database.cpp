@@ -1160,6 +1160,79 @@ bool Database::checkDatabaseScheme()
 }
 
 /**
+ * Check the current version of the database using
+ * the specified \e field and comparing the database value
+ * to the \e expectedVersion.\n
+ * Returns \e true if the database version is the expected one.
+ * \sa getVersion(), setVersion()
+ */
+bool Database::checkVersion(const Field &field, const QString &expectedVersion)
+{
+    return (getVersion(field).compare(expectedVersion)==0);
+}
+
+/**
+ * Returns the current version of the database using
+ * the specified \e field.\n
+ * \sa getVersion(), setVersion()
+ */
+QString Database::getVersion(const Field &field) const
+{
+    QSqlDatabase DB = database();
+    if (!connectedDatabase(DB, __LINE__))
+        return QString::null;
+    DB.transaction();
+    QString value;
+    QSqlQuery query(DB);
+    if (query.exec(select(field.table, field.field))) {
+        if (query.next())
+            value = query.value(0).toString();
+    }
+    DB.commit();
+    return value;
+}
+
+/**
+ * Set the database version to \e version using the field
+ * \e field.
+ * \warning The table containing this field will be totally
+ * deleted and a new row will be inserted with the new version value.
+ * \sa getVersion(), setVersion()
+ */
+bool Database::setVersion(const Field &field, const QString &version)
+{
+    QSqlDatabase DB = database();
+    if (!connectedDatabase(DB, __LINE__)) {
+        return false;
+    }
+    DB.transaction();
+    QSqlQuery query(DB);
+
+    // Delete all values in the version table
+    query.prepare(prepareDeleteQuery(field.table));
+    if (!query.exec()) {
+        LOG_QUERY_ERROR_FOR("Database", query);
+        query.finish();
+        DB.rollback();
+        return false;
+    }
+
+    // Insert a new row with the new version
+    query.prepare(prepareInsertQuery(field.table));
+    FieldList fields = this->fields(field.table);
+    foreach(const Field f, fields)
+        query.bindValue(f.field, QVariant());
+    query.bindValue(field.field, version);
+    if (!query.exec()) {
+        LOG_QUERY_ERROR_FOR("Database", query);
+        DB.rollback();
+        return false;
+    }
+    DB.commit();
+    return true;
+}
+
+/**
     Return the field name for the table \e tableref field \e fieldref
    \sa addField()
 */
