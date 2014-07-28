@@ -254,6 +254,8 @@ QString UserBase::getCurrentVersion() const
     return QString::null;
 }
 
+// FIXME: update the userbase version number including the Qt version in use (because of password encryption method updating)
+
 /** Return true if the userbase is the last version (database is updated by this member if needed) */
 bool UserBase::checkDatabaseVersion()
 {
