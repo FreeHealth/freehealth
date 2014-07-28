@@ -269,7 +269,8 @@ public:
     static QString createUid();
     static QString sqliteFileName(const QString &connectionName,
                                   const QString &nonPrefixedDbName,
-                                  const Utils::DatabaseConnector &connector);
+                                  const Utils::DatabaseConnector &connector,
+                                  bool addGlobalPrefix = true);
 
     // Grants
     Grants grants(const QString &connectionName) const;
@@ -292,6 +293,7 @@ public:
 
     virtual QStringList fieldNames(const int &tableref) const;
     virtual QStringList fieldNamesSql(const int &tableref) const;
+    virtual TypeOfField typeOfField(const int tableref, const int fieldref) const;
     virtual FieldList fields(const int tableref) const;
 
     virtual QString table(const int &tableref) const;

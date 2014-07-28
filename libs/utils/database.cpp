@@ -641,7 +641,8 @@ QSqlDatabase Database::database() const
  */
 QString Database::sqliteFileName(const QString &connectionName,
                                  const QString &nonPrefixedDbName,
-                                 const Utils::DatabaseConnector &connector)
+                                 const Utils::DatabaseConnector &connector,
+                                 bool addGlobalPrefix)
 {
     QString fileName;
     if (connector.accessMode()==DatabaseConnector::ReadOnly) {
@@ -655,15 +656,23 @@ QString Database::sqliteFileName(const QString &connectionName,
                     .arg(connectionName)
                     .arg(nonPrefixedDbName);
     } else if (connector.accessMode()==DatabaseConnector::ReadWrite) {
-        if (connector.useExactFile())
+        if (connector.useExactFile()) {
             fileName = QString("%1/%2")
                     .arg(connector.absPathToSqliteReadWriteDatabase())
                     .arg(nonPrefixedDbName);
-        else
-            fileName = QString("%1/%2/%3")
-                    .arg(connector.absPathToSqliteReadWriteDatabase())
-                    .arg(connectionName)
-                    .arg(prefixedDatabaseName(connector.driver(), nonPrefixedDbName));
+        } else {
+            if (addGlobalPrefix) {
+                fileName = QString("%1/%2/%3")
+                        .arg(connector.absPathToSqliteReadWriteDatabase())
+                        .arg(connectionName)
+                        .arg(prefixedDatabaseName(connector.driver(), nonPrefixedDbName));
+            } else {
+                fileName = QString("%1/%2/%3")
+                        .arg(connector.absPathToSqliteReadWriteDatabase())
+                        .arg(connectionName)
+                        .arg(nonPrefixedDbName);
+            }
+        }
     }
     if (!fileName.endsWith(".db"))
         fileName += ".db";
@@ -671,18 +680,21 @@ QString Database::sqliteFileName(const QString &connectionName,
 }
 
 /**
-   Create the connection to the database.
-  If database does not exist, according to the \e createOption, createDatabase() is called.
-  An error is returned if :
-  - Driver is not available
-  - Can not connect to server (wrong host/log/pass)
-  - Can not create database is it doesn't exists and user asked to create it
-  - Can not read database if asked to be readable
-  - Can not write in database if asked to be writable
-  \param connectionName = name of the connect
-  \param connector = Utils::DatabaseConnector = connection params
-  \param createOption = what to do if the database does not exist.
-*/
+ * Create the connection to the database.
+ * If database does not exist, according to the \e createOption,
+ * createDatabase() is called.
+ *
+ * An error is returned if :
+ * - Driver is not available
+ * - Can not connect to server (wrong host/log/pass)
+ * - Can not create database is it doesn't exists and user asked to create it
+ * - Can not read database if asked to be readable
+ * - Can not write in database if asked to be writable
+ *
+ * \param connectionName = name of the connect
+ * \param connector = Utils::DatabaseConnector = connection params
+ * \param createOption = what to do if the database does not exist.
+ */
 bool Database::createConnection(const QString &connectionName, const QString &nonPrefixedDbName,
                                 const Utils::DatabaseConnector &connector,
                                 CreationOption createOption
@@ -926,8 +938,12 @@ bool Database::createConnection(const QString &connectionName, const QString &no
     {
     case SQLite :
     {
-        DB = QSqlDatabase::addDatabase("QSQLITE", connectionName);
+        DB = QSqlDatabase::database(connectionName);
         DB.setDatabaseName(sqliteFileInfo.absoluteFilePath());
+        if (!DB.isOpen()) {
+            LOG_ERROR_FOR("Database", "Unable to open database");
+            return false;
+        }
         break;
     }
     case MySQL :
@@ -937,11 +953,7 @@ bool Database::createConnection(const QString &connectionName, const QString &no
     case PostSQL :
         // TODO: manage PostGre SQL
         return false;
-        break;
     }
-
-    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
-    DB.open();
 
     qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     if (WarnLogMessages)
@@ -950,8 +962,10 @@ bool Database::createConnection(const QString &connectionName, const QString &no
 
     // test connection
     if (!DB.isOpen()) {
-        LOG_ERROR_FOR("Database", tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(prefixedDbName, DB.lastError().text()));
-        toReturn = false;
+        if (!DB.open()) {
+            LOG_ERROR_FOR("Database", tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(prefixedDbName, DB.lastError().text()));
+            toReturn = false;
+        }
     } else {
         if (WarnLogMessages)
             LOG_FOR("Database", tkTr(Trans::Constants::CONNECTED_TO_DATABASE_1_DRIVER_2).arg(prefixedDbName).arg(DB.driverName()));
@@ -965,6 +979,9 @@ bool Database::createConnection(const QString &connectionName, const QString &no
     return toReturn;
 }
 
+/**
+ * Creates the database
+ */
 bool Database::createDatabase(const QString &connectionName , const QString &prefixedDbName,
                             const Utils::DatabaseConnector &connector,
                             CreationOption createOption
@@ -989,8 +1006,10 @@ bool Database::createDatabase(const QString &connectionName , const QString &pre
     }
 }
 
-
-/**  Returns the connectionName in use */
+/**
+ * Returns the connection name in use
+ * \note unit-test available
+*/
 QString Database::connectionName() const
 {
     return d_database->m_ConnectionName;
@@ -1048,29 +1067,45 @@ Database::Grants Database::getConnectionGrants(const QString &connectionName) //
 }
 
 
-/**  Set connectionName to \e c */
-void Database::setConnectionName(const QString & c)
+/**
+ * Set connectionName to \e c
+ * \note unit-test available
+ */
+void Database::setConnectionName(const QString &c)
 { d_database->m_ConnectionName = c; }
 
-/**  Define the driver to use */
+/**
+ * Define the driver to use
+ * \note unit-test available (SQLite only)
+ */
 void Database::setDriver(const Database::AvailableDrivers drv)
 { d_database->m_Driver = drv; }
 
+/**
+ * Returns the current driver of the database
+ * \note unit-test available (SQLite only)
+ */
 Database::AvailableDrivers Database::driver() const
 { return d_database->m_Driver; }
 
-/**  Add a table \e name to the database scheme with the index \e ref */
+/**
+ * Add a table \e name to the database scheme with the index \e ref.
+ * \note Unit-test available.
+ */
 int Database::addTable(const int & ref, const QString & name)
 {
     d_database->m_Tables.insert(ref, name);
     return d_database->m_Tables.key(name);
 }
 
-/**  Add a field \e name to the database scheme with the index \e fieldref into table indexed \e tableref.\n
-    The field is a type \e type and get the default value \e defaultValue.\n
-    Please take care that \e name can not exceed 50 chars.
-    \sa createTables(), createTable()
-*/
+/**
+ * Add a field \e name to the database scheme with the
+ * index \e fieldref into table indexed \e tableref.\n
+ * The field is a type \e type and get the default value \e defaultValue.\n
+ * Please take care that \e name can not exceed 50 chars.
+ * \sa createTables(), createTable()
+ * \note Unit-test available.
+ */
 int Database::addField(const int & tableref, const int & fieldref, const QString & name, TypeOfField type, const QString & defaultValue)
 {
     Q_ASSERT_X(name.length() < 50, "Database", "Name of field can not exceed 50 chars");
@@ -1082,22 +1117,30 @@ int Database::addField(const int & tableref, const int & fieldref, const QString
     return d_database->fieldFromIndex(ref);
 }
 
-/**  Add a primary key reference to \e tableref \e fieldref.
-    \sa createTables(), createTable(), addField(), addTable()
-*/
+/**
+ * Add a primary key reference to \e tableref \e fieldref.
+ * \sa createTables(), createTable(), addField(), addTable()
+ * \note obsolete?
+ */
 void Database::addPrimaryKey(const int &tableref, const int &fieldref)
 {
     d_database->m_PrimKeys.insertMulti(tableref, fieldref);
 }
 
-/** Create an index on the specified \e tableRef, \e fieldRef, named \e name. If \e name is not specified a unique name is created. */
+/**
+ * Create an index on the specified \e tableRef, \e fieldRef, named \e name.
+ * If \e name is not specified a unique name is created.
+ */
 void Database::addIndex(const int &tableref, const int &fieldref, const QString &name)
 {
     Utils::Field f = this->field(tableref, fieldref);
     addIndex(f, name);
 }
 
-/** Create an index on the specified \e field, named \e name. If \e name is not specified a unique name is created. */
+/**
+ * Create an index on the specified \e field, named \e name.
+ * If \e name is not specified a unique name is created.
+ */
 void Database::addIndex(const Utils::Field &field, const QString &name)
 {
     Internal::DbIndex index;
@@ -1114,7 +1157,8 @@ void Database::addIndex(const Utils::Field &field, const QString &name)
 }
 
 /**
- * Verify that the dynamically scheme passed is corresponding to the real database scheme.
+ * Verify that the dynamically scheme passed is corresponding to the
+ * real database scheme.
  * Creates its own transaction.
 */
 bool Database::checkDatabaseScheme()
@@ -1233,9 +1277,10 @@ bool Database::setVersion(const Field &field, const QString &version)
 }
 
 /**
-    Return the field name for the table \e tableref field \e fieldref
-   \sa addField()
-*/
+ * Return the field name for the table \e tableref field \e fieldref
+ * \sa addField()
+ * \note Unit-test available.
+ */
 QString Database::fieldName(const int &tableref, const int &fieldref) const
 {
     if (!d_database->m_Tables.contains(tableref))
@@ -1249,9 +1294,11 @@ QString Database::fieldName(const int &tableref, const int &fieldref) const
 }
 
 /**
-    Return a complete reference to a field for the table \e tableref field \e fieldref
-   \sa addField()
-*/
+ * Return a complete reference to a field for the
+ * table \e tableref field \e fieldref
+ * \sa addField()
+ * \note Unit-test available.
+ */
 Field Database::field(const int &tableref, const int &fieldref) const
 {
     Field ret;
@@ -1259,10 +1306,14 @@ Field Database::field(const int &tableref, const int &fieldref) const
     ret.field = fieldref;
     ret.tableName = table(tableref);
     ret.fieldName = fieldName(tableref, fieldref);
+    ret.type = typeOfField(tableref, fieldref);
     return ret;
 }
 
-/**  Return all fields of a table as \e FieldList */
+/**
+ * Returns all fields of a table as \e FieldList
+ * \note Unit-test available.
+ */
 FieldList Database::fields(const int tableref) const
 {
     FieldList fields;
@@ -1272,7 +1323,10 @@ FieldList Database::fields(const int tableref) const
     return fields;
 }
 
-/**  Return all fields name of a table */
+/**
+ * Return all fields name of a table
+ * \note Unit-test available.
+ */
 QStringList Database::fieldNames(const int &tableref) const
 {
     if (!d_database->m_Tables.contains(tableref))
@@ -1289,11 +1343,11 @@ QStringList Database::fieldNames(const int &tableref) const
 }
 
 /**
- * Return all fields names of a table by a sql query and not according to tableref.
- * This permits to test the real number of fields of the sql table regarding to code table
- * references.
- * Creates its own transaction.
- * @author Pierre-Marie Desombre
+ * Return all fields names of a table by a sql query and
+ * not according to tableref.
+ * This permits to test the real number of fields of the
+ * sql table regarding to code table references. \n
+ * \note Creates its own transaction.
 */
 QStringList Database::fieldNamesSql(const int &tableref) const
 {
@@ -1332,11 +1386,30 @@ QStringList Database::fieldNamesSql(const int &tableref) const
     return fieldNamesList;
 }
 
-QString Database::table(const int & tableref) const
+/**
+ * Returns the type of field TypeOfField registered
+ * when using addField()
+ * \note Unit-test available.
+ */
+Database::TypeOfField Database::typeOfField(const int tableref, const int fieldref) const
+{
+    int ref = d_database->index(tableref, fieldref);
+    return Database::TypeOfField(d_database->m_TypeOfField.value(ref , FieldUndefined));
+}
+
+/**
+ * Returns the table name for \e tableref
+ * \note Unit-test available.
+ */
+QString Database::table(const int &tableref) const
 {
     return d_database->m_Tables.value(tableref, QString());
 }
 
+/**
+ * Returns all tables registered with addTable()
+ * \note Unit-test available.
+ */
 QStringList Database::tables() const
 {
     return d_database->m_Tables.values();
