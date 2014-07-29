@@ -120,7 +120,7 @@ private:
 
     // privates retreivers
     UserData *getUser(const QHash<int, QString> &conditions) const;
-
+    QString databaseAndQtVersion() const;
 
 private:
     bool m_initialized;
