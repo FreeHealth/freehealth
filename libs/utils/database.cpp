@@ -1232,6 +1232,7 @@ QString Database::getVersion(const Field &field) const
         if (query.next())
             value = query.value(0).toString();
     }
+    query.finish();
     DB.commit();
     return value;
 }
@@ -1269,9 +1270,11 @@ bool Database::setVersion(const Field &field, const QString &version)
     query.bindValue(field.field, version);
     if (!query.exec()) {
         LOG_QUERY_ERROR_FOR("Database", query);
+        query.finish();
         DB.rollback();
         return false;
     }
+    query.finish();
     DB.commit();
     return true;
 }
