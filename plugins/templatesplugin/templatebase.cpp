@@ -88,25 +88,13 @@ public:
 
     void checkDatabaseVersion()
     {
-        QSqlDatabase DB = QSqlDatabase::database(Constants::DB_TEMPLATES_NAME);
-        if (!connectDatabase(DB, __LINE__)) {
-            return;
-        }
-        DB.transaction();
-        QSqlQuery query(DB);
-        QString version;
-        if (query.exec(q->select(Constants::Table_Version, QList<int>() << Constants::VERSION_ACTUAL))) {
-            if (query.next())
-                version = query.value(0).toString();
-        } else {
-            LOG_QUERY_ERROR_FOR(q, query);
-            query.finish();
-            DB.rollback();
-            return;
-        }
-        query.finish();
+        QString version = q->getVersion(Utils::Field(Constants::Table_Version, Constants::VERSION_ACTUAL));
         bool updateVersionNumber = false;
         if (version=="0.3.0") {
+            QSqlDatabase DB = QSqlDatabase::database(Constants::DB_TEMPLATES_NAME);
+            if (!connectDatabase(DB, __LINE__)) {
+                return;
+            }
             // Update database schema to 0.4.0
             // MySQL server connection starts here, so no update needed for MySQL database
 
@@ -168,18 +156,8 @@ public:
         }
 
         if (updateVersionNumber) {
-            query.prepare(q->prepareUpdateQuery(Constants::Table_Version, Constants::VERSION_ACTUAL));
-            query.bindValue(0, Constants::DB_ACTUAL_VERSION);
-            if (!query.exec()) {
-                LOG_QUERY_ERROR_FOR(q, query);
-                query.finish();
-                DB.rollback();
-                return;
-            }
-            query.finish();
+            q->setVersion(Utils::Field(Constants::Table_Version, Constants::VERSION_ACTUAL), Constants::DB_ACTUAL_VERSION);
         }
-        query.finish();
-        DB.commit();
     }
 
 public:
@@ -319,6 +297,9 @@ bool TemplateBase::createDatabase(const QString &connectionName , const QString 
     LOG(tkTr(Trans::Constants::TRYING_TO_CREATE_1_PLACE_2)
         .arg(dbName).arg(pathOrHostName));
 
+    setConnectionName(connectionName);
+    setDriver(driver);
+
     // create an empty database and connect
     QSqlDatabase DB;
     if (driver == SQLite) {
@@ -329,7 +310,6 @@ bool TemplateBase::createDatabase(const QString &connectionName , const QString 
         DB.setDatabaseName(QDir::cleanPath(pathOrHostName + QDir::separator() + dbName));
         if (!DB.open())
             LOG(tkTr(Trans::Constants::DATABASE_1_CANNOT_BE_CREATED_ERROR_2).arg(dbName).arg(DB.lastError().text()));
-        setDriver(Utils::Database::SQLite);
     }
     else if (driver == MySQL) {
         DB = QSqlDatabase::database(connectionName);
@@ -369,12 +349,8 @@ bool TemplateBase::createDatabase(const QString &connectionName , const QString 
                                      tkTr(Trans::Constants::CONTACT_DEV_TEAM));
             return false;
         }
-        setDriver(Utils::Database::MySQL);
     }
 
-    // create db structure
-    // before we need to inform Utils::Database of the connectionName to use
-    setConnectionName(connectionName);
 
     if (createTables()) {
         LOG(tkTr(Trans::Constants::DATABASE_1_CORRECTLY_CREATED).arg(dbName));
@@ -395,19 +371,10 @@ bool TemplateBase::createDatabase(const QString &connectionName , const QString 
         return false;
     }
 
-    // inform the version
-    DB.transaction();
-    QSqlQuery query(DB);
-    query.prepare(prepareInsertQuery(Constants::Table_Version));
-    query.bindValue(Constants::VERSION_ACTUAL, Constants::DB_ACTUAL_VERSION);
-    if (!query.exec()) {
-        LOG_QUERY_ERROR(query);
-        query.finish();
-        DB.rollback();
-        return false;
+    // Add version number
+    if (!setVersion(Utils::Field(Constants::Table_Version, Constants::VERSION_ACTUAL), Constants::DB_ACTUAL_VERSION)) {
+        LOG_ERROR_FOR("TemplateBase", "Unable to set version");
     }
-    query.finish();
-    DB.commit();
     return true;
 }
 

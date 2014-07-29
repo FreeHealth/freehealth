@@ -47,8 +47,6 @@ public:
     void forceFullDatabaseRefreshing();
     bool initialize(const QString &pathToDb, bool createIfNotExists = false);
 
-    void setVersion(const QString &version);
-    QString version() const;
     bool checkDatabaseVersion() const;
 
     int getSourceId(const QString &drugsDbUid);

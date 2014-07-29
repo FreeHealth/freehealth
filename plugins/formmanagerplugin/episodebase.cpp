@@ -313,7 +313,9 @@ bool EpisodeBase::createDatabase(const QString &connectionName , const QString &
     }
 
     // Add version number
-    setCurrentDatabaseVersion(Constants::DB_ACTUALVERSION);
+    if (!setVersion(Utils::Field(Constants::Table_VERSION, Constants::VERSION_TEXT), Constants::DB_ACTUALVERSION)) {
+        LOG_ERROR_FOR("EpisodeBase", "Unable to set version");
+    }
     populateWithDefaultValues();
 
     return true;
@@ -326,61 +328,14 @@ void EpisodeBase::populateWithDefaultValues()
     setGenericPatientFormFile(QString("%1/%2").arg(Core::Constants::TAG_APPLICATION_COMPLETEFORMS_PATH).arg(Core::Constants::S_DEF_PATIENTFORMS_FILENAME));
 }
 
-bool EpisodeBase::setCurrentDatabaseVersion(const QString &version)
-{
-    QSqlDatabase DB = QSqlDatabase::database(DB_NAME);
-    if (!connectDatabase(DB, __LINE__))
-        return false;
-    DB.transaction();
-    QSqlQuery query(DB);
-    query.prepare(prepareDeleteQuery(Table_VERSION));
-    if (!query.exec()) {
-        LOG_QUERY_ERROR(query);
-        query.finish();
-        DB.rollback();
-        return false;
-    }
-    query.finish();
-    DB.commit();
-    query.prepare(prepareInsertQuery(Table_VERSION));
-    query.bindValue(VERSION_TEXT, version);
-    if (!query.exec()) {
-        LOG_QUERY_ERROR(query);
-        query.finish();
-        DB.rollback();
-        return false;
-    }
-    query.finish();
-    DB.commit();
-    return true;
-}
-
-QString EpisodeBase::currentDatabaseVersion()
-{
-    QSqlDatabase DB = QSqlDatabase::database(DB_NAME);
-    if (!connectDatabase(DB, __LINE__))
-        return QString::null;
-    DB.transaction();
-    QString version;
-    QSqlQuery query(DB);
-    if (query.exec(select(Constants::Table_VERSION, Constants::VERSION_TEXT))) {
-        if (query.next()) {
-            version = query.value(0).toString();
-        }
-    } else {
-        LOG_QUERY_ERROR(query);
-        query.finish();
-        DB.rollback();
-        return QString::null;
-    }
-    query.finish();
-    DB.commit();
-    return version;
-}
-
+/**
+ * Checks the current version of the database.
+ * Returns \e true if the version is the lastest one.
+ */
 bool EpisodeBase::checkDatabaseVersion()
 {
-    QString currentVersion = currentDatabaseVersion();
+    Utils::Field vField(Constants::Table_VERSION, Constants::VERSION_TEXT);
+    QString currentVersion = getVersion(vField);
     // Updates from 0.1
     if (currentVersion == "0.1") {
         if (!alterTableForNewField(Constants::Table_EPISODES, Constants::EPISODES_PRIORITY))
@@ -390,7 +345,7 @@ bool EpisodeBase::checkDatabaseVersion()
             .arg(Constants::DB_ACTUALVERSION));
     }
     // Update the database version
-    return setCurrentDatabaseVersion(Constants::DB_ACTUALVERSION);
+    return setVersion(vField, Constants::DB_ACTUALVERSION);
 }
 
 void EpisodeBase::onCoreDatabaseServerChanged()
@@ -411,9 +366,10 @@ void EpisodeBase::onCoreFirstRunCreationRequested()
 }
 
 /**
-  Store the central patient form file into the database.
-  This Form File will be used for all patient as central form. Some sub-forms can then be added.
-*/
+ * Store the central patient form file into the database.
+ * This Form File will be used for all patient as central form.
+ * Some sub-forms can then be added.
+ */
 bool EpisodeBase::setGenericPatientFormFile(const QString &absPathOrUid)
 {
     QSqlDatabase DB = QSqlDatabase::database(DB_NAME);
@@ -460,8 +416,9 @@ bool EpisodeBase::setGenericPatientFormFile(const QString &absPathOrUid)
 }
 
 /**
-  Return the central patient form file into the database.
-  This Form File will be used for all patient as central form. Some sub-forms can then be added.
+ * Return the central patient form file into the database.
+ * This Form File will be used for all patient as central form.
+ * Some sub-forms can then be added.
 */
 QString EpisodeBase::getGenericFormFile()
 {

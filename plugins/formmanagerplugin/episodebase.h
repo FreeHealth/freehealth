@@ -163,8 +163,6 @@ private:
                           CreationOption createOption
                          );
     void populateWithDefaultValues();
-    bool setCurrentDatabaseVersion(const QString &version);
-    QString currentDatabaseVersion();
     bool checkDatabaseVersion();
 
     // Episodes

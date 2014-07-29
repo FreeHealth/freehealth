@@ -1430,18 +1430,9 @@ bool AccountBase::createDatabase(const QString &connectionName ,
     }
 
     // Add version number
-    DB.transaction();
-    QSqlQuery query(DB);
-    query.prepare(prepareInsertQuery(Constants::Table_VERSION));
-    query.bindValue(Constants::VERSION_ACTUAL, Constants::DB_VERSION_NUMBER);
-    if (!query.exec()) {
-        LOG_QUERY_ERROR(query);
-        query.finish();
-        DB.commit();
-        return false;
+    if (!setVersion(Utils::Field(Constants::Table_VERSION, Constants::VERSION_ACTUAL), Constants::DB_VERSION_NUMBER)) {
+        LOG_ERROR_FOR("AccountBase", "Unable to set version");
     }
-    query.finish();
-    DB.rollback();
     return true;
 }
 
@@ -1463,24 +1454,7 @@ void AccountBase::onCoreFirstRunCreationRequested()
 
 //bool AccountBase::checkIfIsFirstVersion()
 //{
-//    QSqlDatabase DB = QSqlDatabase::database(Constants::DB_ACCOUNTANCY);
-//    if (!connectDatabase(DB, __LINE__))
-//        return false;
-//    QVariant version;
-//    DB.transaction();
-//    QSqlQuery qy(DB);
-//    QString req = select(Constants::Table_VERSION, Constants::VERSION_ACTUAL);//QString("SELECT %1 FROM %2").arg("ACTUAL","VERSION");
-//    if (!qy.exec(req)) {
-//        LOG_QUERY_ERROR(qy);
-//        qy.finish();
-//        DB.rollback();
-//        return false;
-//    }
-//    while (qy.next()) {
-//        version = qy.value(0);
-//    }
-//    qy.finish();
-//    DB.commit();
+//    QString version = getVersion(Utils::Field(Constants::Table_VERSION, Constants::VERSION_ACTUAL));
 //    if (version == QVariant("0.1")) {
 //        LOG(QString("VERSION == 0.1"));
 //        return true;
@@ -1488,107 +1462,8 @@ void AccountBase::onCoreFirstRunCreationRequested()
 //    return false;
 //}
 
-//QString AccountBase::checkAndReplaceVersionNumber()
-//{
-//    QSqlDatabase DB = QSqlDatabase::database(Constants::DB_ACCOUNTANCY);
-//    if (!connectDatabase(DB, __LINE__))
-//        return 0;
-//    // if (versionHasChanged())
-//    // {
-//    DB.transaction();
-//    QSqlQuery qy(DB);
-//    /*QString req = QString("INSERT INTO %1 (%2) VALUES ('%3')")
-//                       .arg("VERSION","ACTUAL",QString(Constants::VERSION_ACTUAL));*/
-//    qy.prepare(prepareInsertQuery(Constants::Table_VERSION));
-//    qy.bindValue(Constants::VERSION_ACTUAL, Constants::DB_VERSION_NUMBER);
-
-//    if (!qy.exec()) {
-//        LOG_QUERY_ERROR(qy);
-//        qy.finish();
-//        DB.rollback();
-//        return QString(qy.lastError().text());
-//    }
-//    qy.finish();
-//    DB.commit();
-//    return QString(Constants::DB_VERSION_NUMBER);
-//    //   }
-//}
-
 //bool AccountBase::versionHasChanged()
 //{
-//    QSqlDatabase DB = QSqlDatabase::database(Constants::DB_ACCOUNTANCY);
-//    if (!connectDatabase(DB, __LINE__))
-//        return 0;
-//    QString version;
-//    DB.transaction();
-//    QSqlQuery qy(DB);
-//    QString req = select(Constants::Table_VERSION, Constants::VERSION_ACTUAL);//QString("SELECT %1 FROM %2").arg("ACTUAL","VERSION");
-//    if (!qy.exec(req)) {
-//        LOG_QUERY_ERROR(qy);
-//        return false;
-//    }
-//    while (qy.next()) {
-//        version = qy.value(0).toString();
-//    }
-//    qy.finish();
-//    DB.commit();
-//    if (!version.contains(QString(Constants::DB_VERSION_NUMBER))) {
-//        return true;
-//    }
-//    return false;
-//}
-
-//bool AccountBase::checkIfVersionBeforeThirdVersion()
-//{
-//    QString version;
-//    QSqlDatabase DB = QSqlDatabase::database(Constants::DB_ACCOUNTANCY);
-//    if (!connectDatabase(DB, __LINE__))
-//        return false;
-//    DB.transaction();
-//    QSqlQuery qy(DB);
-//    QString req = select(Constants::Table_VERSION, Constants::VERSION_ACTUAL);//QString("SELECT %1 FROM %2").arg("ACTUAL","VERSION");
-//    if (!qy.exec(req))  {
-//        LOG_QUERY_ERROR(qy);
-//        DB.rollback();
-//        return false;
-//    }
-//    while (qy.next())  {
-//        version = qy.value(0).toString();
-//    }
-//    qy.finish();
-//    DB.commit();
-//    double versionDouble = version.toDouble();
-//    if (versionDouble == 0.0) {
-//        LOG("Alter field PATIENT_NAME: Error conversion of double");
-//    }
-//    if (versionDouble < 0.3) {
-//        return true;
-//    }
-//    return false;
-//}
-
-//bool AccountBase::alterFieldPatientNameIntToVarchar()
-//{
-//    QSqlDatabase DB = QSqlDatabase::database(Constants::DB_ACCOUNTANCY);
-//    if (!connectDatabase(DB, __LINE__))
-//        return false;
-//    QString tableName = table(AccountDB::Constants::Table_Account);
-//    QString fieldPatientName    = fieldName(AccountDB::Constants::Table_Account,AccountDB::Constants::ACCOUNT_PATIENT_NAME);
-//    QString fieldPatientUuid = fieldName(AccountDB::Constants::Table_Account,AccountDB::Constants::ACCOUNT_PATIENT_UID);
-//    if (WarnDebugMessage)
-//    qDebug() << __FILE__ << QString::number(__LINE__) << " table + fielName ="
-//    << tableName+" + "+fieldPatientName  ;
-//    DB.transaction();
-//    QSqlQuery qy(DB);
-//    QString req = QString("ALTER TABLE %1 MODIFY %2 varchar(2000) NULL , MODIFY %3 varchar(200) NULL ;")
-//                         .arg(tableName,fieldPatientName,fieldPatientUuid);
-//    if (!qy.exec(req)) {
-//        LOG_QUERY_ERROR(qy);
-//        qy.finish();
-//        DB.rollback();
-//        return false;
-//    }
-//    qy.finish();
-//    DB.commit();
-//    return true;
+//    QString version = getVersion(Utils::Field(Constants::Table_VERSION, Constants::VERSION_ACTUAL));
+//    return (version != Constants::DB_VERSION_NUMBER);
 //}

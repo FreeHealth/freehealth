@@ -291,7 +291,7 @@ void UserManagerPlugin::test_userbase_test_with_virtualuser()
 
     QCOMPARE(userCore().userBase()->checkDatabaseVersion(), true);
     QCOMPARE(userCore().userBase()->checkDatabaseScheme(), true);
-    QCOMPARE(userCore().userBase()->getCurrentVersion(), QString(Constants::USER_DB_VERSION));
+    QCOMPARE(userCore().userBase()->getVersion(Utils::Field(Constants::Table_INFORMATION, Constants::INFO_VERSION)), QString(Constants::USER_DB_VERSION));
 
     // Test with virtual user
     UserData data;

@@ -71,7 +71,6 @@ public:
     bool isInitialized() const;
     bool checkDatabaseVersion();
     bool isNewlyCreated() const;
-    QString getCurrentVersion() const;
 
     bool createDefaultUser();
     bool createVirtualUser(const QString &uid, const QString &name, const QString &firstName, int title, int gender,

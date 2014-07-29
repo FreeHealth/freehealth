@@ -209,6 +209,9 @@ bool PmhBase::createDatabase(const QString &connectionName , const QString &dbNa
     if (connectionName != Constants::DB_NAME)
         return false;
 
+    setConnectionName(connectionName);
+    setDriver(driver);
+
     LOG(tkTr(Trans::Constants::TRYING_TO_CREATE_1_PLACE_2).arg(dbName).arg(pathOrHostName));
 
     // create an empty database and connect
@@ -220,7 +223,6 @@ bool PmhBase::createDatabase(const QString &connectionName , const QString &dbNa
                 LOG(tkTr(Trans::Constants::_1_ISNOT_AVAILABLE_CANNOTBE_CREATED).arg(pathOrHostName));
         DB.setDatabaseName(QDir::cleanPath(pathOrHostName + QDir::separator() + dbName));
         DB.open();
-        setDriver(Utils::Database::SQLite);
     }
     else if (driver == MySQL) {
         DB = QSqlDatabase::database(connectionName);
@@ -255,12 +257,7 @@ bool PmhBase::createDatabase(const QString &connectionName , const QString &dbNa
         if (QSqlDatabase::connectionNames().contains("__PMH_CREATOR"))
             QSqlDatabase::removeDatabase("__PMH_CREATOR");
         DB.open();
-        setDriver(Utils::Database::MySQL);
     }
-
-    // create db structure
-    // before we need to inform Utils::Database of the connectionName to use
-    setConnectionName(connectionName);
 
     if (createTables()) {
         LOG(tkTr(Trans::Constants::DATABASE_1_CORRECTLY_CREATED).arg(dbName));
@@ -269,6 +266,12 @@ bool PmhBase::createDatabase(const QString &connectionName , const QString &dbNa
                          .arg(dbName, DB.lastError().text()));
         return false;
     }
+
+    // TODO: add database versionning
+//    // Add version number
+//    if (!setVersion(Utils::Field(Constants::Table_VERSION, Constants::VERSION_TEXT), Constants::DB_ACTUALVERSION)) {
+//        LOG_ERROR_FOR("PmhBase", "Unable to set version");
+//    }
 
     return true;
 }

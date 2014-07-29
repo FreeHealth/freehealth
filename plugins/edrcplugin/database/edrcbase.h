@@ -74,7 +74,7 @@ private:
                         CreationOption createOption);
 
 protected:
-    bool setVersion(const QString &version);
+    bool setVersion(const Utils::Field &field, const QString &version);
     bool checkDatabaseVersion() const;
 
 public:

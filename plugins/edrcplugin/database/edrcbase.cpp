@@ -212,11 +212,15 @@ bool DrcDatabase::initialize(bool createIfNotExists, const QString &absPathToCsv
     }
 
     if (!checkDatabaseVersion()) {
-        LOG_ERROR_FOR("DrcDatabase", QString("Wrong database version. Db: %1; Current: %2")
-                      .arg(version()).arg(Constants::DB_VERSION));
+        LOG_ERROR_FOR("DrcDatabase",
+                      QString("Wrong database version. Db: %1; Current: %2")
+                      .arg(getVersion(Utils::Field(Constants::Table_Version, Constants::VERSION_TEXT)))
+                      .arg(Constants::DB_VERSION));
         return false;
     } else {
-        LOG_FOR("DrcDatabase", QString("Using database version " + version()));
+        LOG_FOR("DrcDatabase",
+                QString("Using database version: %1")
+                .arg(getVersion(Utils::Field(Constants::Table_Version, Constants::VERSION_TEXT)));
     }
 
     _initialized = true;
@@ -224,8 +228,9 @@ bool DrcDatabase::initialize(bool createIfNotExists, const QString &absPathToCsv
 }
 
 /** Set the version of the database and return true in case of success */
-bool DrcDatabase::setVersion(const QString &version)
+bool DrcDatabase::setVersion(const Utils::Field &field, const QString &version)
 {
+    Q_UNUSED(field);
     QSqlDatabase DB = QSqlDatabase::database(connectionName());
     if (!connectDatabase(DB, __FILE__, __LINE__))
         return false;
@@ -236,32 +241,15 @@ bool DrcDatabase::setVersion(const QString &version)
     query.bindValue(Constants::VERSION_DATE, QDate::currentDate().toString(Qt::ISODate));
     if (!query.exec()) {
         LOG_QUERY_ERROR_FOR("DrcDatabase", query);
+        return false;
     }
     return true;
-}
-
-/** Return the current version of the database */
-QString DrcDatabase::version() const
-{
-    QSqlDatabase DB = QSqlDatabase::database(connectionName());
-    if (!connectDatabase(DB, __FILE__, __LINE__))
-        return QString::null;
-    QSqlQuery query(DB);
-    query.prepare(select(Constants::Table_Version));
-    if (!query.exec()) {
-        LOG_QUERY_ERROR_FOR("DrcDatabase", query);
-    } else {
-        if (query.next()) {
-            return query.value(Constants::VERSION_TEXT).toString();
-        }
-    }
-    return QString::null;
 }
 
 /** Check the current version (must be the last avaialble one) */
 bool DrcDatabase::checkDatabaseVersion() const
 {
-    return (version()==Constants::DB_VERSION);
+    return (getVersion(Utils::Field(Constants::Table_Version, Constants::VERSION_TEXT))==Constants::DB_VERSION);
 }
 
 /**
@@ -317,7 +305,7 @@ bool DrcDatabase::createDatabase(const QString &connection, const QString &prefi
         return false;
     }
 
-    setVersion(Constants::DB_VERSION);
+    setVersion(Utils::Field(), Constants::DB_VERSION);
 
     // Populate database with the csv files
     QList<int> tables;

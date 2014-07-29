@@ -532,20 +532,10 @@ bool AlertBase::createDatabase(const QString &connectionName , const QString &db
         return false;
     }
 
-    // inform the version
-    DB = database();
-    DB.transaction();
-    QSqlQuery query(database());
-    query.prepare(prepareInsertQuery(Constants::Table_ALERT_VERSION));
-    query.bindValue(Constants::VERSION_TEXT, Constants::DB_ACTUALVERSION);
-    if (!query.exec()) {
-        LOG_QUERY_ERROR(query);
-        query.finish();
-        DB.rollback();
-        return false;
+    // Add version number
+    if (!setVersion(Utils::Field(Constants::Table_ALERT_VERSION, Constants::VERSION_TEXT), Constants::DB_ACTUALVERSION)) {
+        LOG_ERROR_FOR("AlertBase", "Unable to set version");
     }
-    query.finish();
-    DB.commit();
 
     return true;
 }

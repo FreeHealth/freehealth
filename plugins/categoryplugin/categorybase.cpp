@@ -253,15 +253,8 @@ bool CategoryBase::createDatabase(const QString &connectionName , const QString 
     }
 
     // Add version number
-    DB.commit();
-    QSqlQuery query(DB);
-    query.prepare(prepareInsertQuery(Constants::Table_VERSION));
-    query.bindValue(Constants::VERSION_TEXT, Constants::DB_ACTUALVERSION);
-    if (!query.exec()) {
-        LOG_QUERY_ERROR(query);
-        query.finish();
-        DB.rollback();
-        return false;
+    if (!setVersion(Utils::Field(Constants::Table_VERSION, Constants::VERSION_TEXT), Constants::DB_ACTUALVERSION)) {
+        LOG_ERROR_FOR("CategoryBase", "Unable to set version");
     }
 
     return true;

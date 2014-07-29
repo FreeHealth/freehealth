@@ -31,15 +31,16 @@
 */
 
 /**
- \class Agenda::AgendaBase
- \brief Management of all database access for the agendas.
- Database schema:
-    - CALENDAR, USERCALENDARS: each user can own multiple calendars. Table USERCALENDARS
-    list all calendars own by users. Where as CALENDAR contains all needed information to
-    manage calendars.
-    - EVENTS, CYCLINGEVENTS, COMMON: management of agenda events.
-    - USER_WORKINGTIME: management of users availabilities, vacancies...
-    - VERSION : contains the actual version of the database
+ * \class Agenda::AgendaBase
+ * \brief Management of all database access for the agendas.
+ * Database schema:
+ * - CALENDAR, USERCALENDARS: each user can own multiple calendars.
+ *   Table USERCALENDARS list all calendars own by users.
+ *   Where as CALENDAR contains all needed information to
+ *   manage calendars.
+ * - EVENTS, CYCLINGEVENTS, COMMON: management of agenda events.
+ * - USER_WORKINGTIME: management of users availabilities, vacancies...
+ * - VERSION : contains the actual version of the database
 */
 
 #include "agendabase.h"
@@ -453,19 +454,10 @@ bool AgendaBase::createDatabase(const QString &connectionName, const QString &db
         return false;
     }
 
-    // Table INFORMATION
-    DB.transaction();
-    QSqlQuery query(DB);
-    query.prepare(prepareInsertQuery(Constants::Table_VERSION));
-    query.bindValue(Constants::VERSION_ACTUAL, Constants::DB_VERSION);
-    if (!query.exec()) {
-        LOG_QUERY_ERROR(query);
-        query.finish();
-        DB.rollback();
-        return false;
+    // Add version number
+    if (!setVersion(Utils::Field(Constants::Table_VERSION, Constants::VERSION_ACTUAL), Constants::DB_VERSION)) {
+        LOG_ERROR_FOR("AgendaBase", "Unable to set version");
     }
-    query.finish();
-    DB.commit();
 
     // database is readable/writable
     LOG(tkTr(Trans::Constants::DATABASE_1_CORRECTLY_CREATED).arg(pathOrHostName + QDir::separator() + dbName));
@@ -491,7 +483,11 @@ void AgendaBase::onCoreFirstRunCreationRequested()
 }
 
 
-/** Creates an return an empty Agenda::UserCalendar pointer. Agenda::DayAvailability are added all days. The calendar is not defines as the default one. */
+/**
+ * Creates an return an empty Agenda::UserCalendar pointer.
+ * Agenda::DayAvailability are added all days. The calendar
+ * is not defines as the default one.
+ */
 Agenda::UserCalendar *AgendaBase::createEmptyCalendar(const QString &userUid)
 {
     Agenda::UserCalendar *u = new Agenda::UserCalendar;
@@ -512,7 +508,10 @@ Agenda::UserCalendar *AgendaBase::createEmptyCalendar(const QString &userUid)
     return u;
 }
 
-/** Return true if the user \e userUid has recorded calendar(s) in the database. */
+/**
+ * Return true if the user \e userUid has recorded calendar(s)
+ * in the database.
+ */
 bool AgendaBase::hasCalendar(const QString &userUuid)
 {
     QSqlDatabase DB = QSqlDatabase::database(Constants::DB_NAME);
@@ -541,7 +540,11 @@ bool AgendaBase::hasCalendar(const QString &userUuid)
     return false;
 }
 
-/** Retreive all calendars of the user (own calendars and delegated ones) defined by its uuid \e userUuid. If the \e userUuid is empty, retrieve all calendars of the currently connected user. */
+/**
+ * Retreive all calendars of the user (own calendars and delegated ones)
+ * defined by its uuid \e userUuid. If the \e userUuid is empty, retrieve
+ * all calendars of the currently connected user.
+ */
 QList<Agenda::UserCalendar *> AgendaBase::getUserCalendars(const QString &userUuid)
 {
     QList<Agenda::UserCalendar *> toReturn;
@@ -692,7 +695,11 @@ QList<Agenda::UserCalendar *> AgendaBase::getUserCalendars(const QString &userUu
     return toReturn;
 }
 
-/** Save the user's calendar availabilities for the specified \e calendar to database. The \e calendar is modified during this process (ids are set if needed). */
+/**
+ * Save the user's calendar availabilities for the specified \e calendar
+ * to database. The \e calendar is modified during this process
+ * (ids are set if needed).
+ */
 bool AgendaBase::saveCalendarAvailabilities(Agenda::UserCalendar *calendar)
 {
     if (calendar->data(Constants::Db_CalId).isNull() ||
@@ -722,7 +729,7 @@ bool AgendaBase::saveCalendarAvailabilities(Agenda::UserCalendar *calendar)
     } else {
         LOG_QUERY_ERROR(query);
         query.finish();
-        database().rollback();
+        DB.rollback();
         return false;
     }
     query.finish();
@@ -738,7 +745,7 @@ bool AgendaBase::saveCalendarAvailabilities(Agenda::UserCalendar *calendar)
             }
         } else {
             LOG_QUERY_ERROR(query);
-            database().rollback();
+            DB.rollback();
             query.finish();
             return false;
         }
@@ -768,7 +775,7 @@ bool AgendaBase::saveCalendarAvailabilities(Agenda::UserCalendar *calendar)
         if (!query.exec(this->prepareDeleteQuery(Constants::Table_TIMERANGE, where))) {
             LOG_QUERY_ERROR(query);
             query.finish();
-            database().rollback();
+            DB.rollback();
             return false;
         }
         query.finish();
@@ -805,7 +812,7 @@ bool AgendaBase::saveCalendarAvailabilities(Agenda::UserCalendar *calendar)
         if (!query.exec()) {
             LOG_QUERY_ERROR(query);
             query.finish();
-            database().rollback();
+            DB.rollback();
             return false;
         }
         int avId = query.lastInsertId().toInt();
@@ -836,7 +843,7 @@ bool AgendaBase::saveCalendarAvailabilities(Agenda::UserCalendar *calendar)
             if (!query.exec()) {
                 LOG_QUERY_ERROR(query);
                 query.finish();
-                database().rollback();
+                DB.rollback();
                 return false;
             }
             query.finish();
@@ -850,7 +857,11 @@ bool AgendaBase::saveCalendarAvailabilities(Agenda::UserCalendar *calendar)
     return true;
 }
 
-/** Save the user's calendar Agenda::IUserCalendar \e calendar to database. The \e calendar is modified during this process (ids are set if needed). */
+/**
+ * Save the user's calendar Agenda::IUserCalendar \e calendar
+ * to database. The \e calendar is modified during this process
+ * (ids are set if needed).
+ */
 bool AgendaBase::saveUserCalendar(Agenda::UserCalendar *calendar)
 {
     if (!calendar->isModified())
@@ -981,7 +992,10 @@ bool AgendaBase::saveUserCalendar(Agenda::UserCalendar *calendar)
     return true;
 }
 
-/** Retrieve all events from database according to the Agenda::CalendarEventQuery \e calQuery. */
+/**
+ * Retrieve all events from database according to the
+ * Agenda::CalendarEventQuery \e calQuery.
+ */
 QList<Appointment *> AgendaBase::getCalendarEvents(const CalendarEventQuery &calQuery)
 {
     QList<Appointment *> toReturn;
@@ -1118,7 +1132,10 @@ QList<Appointment *> AgendaBase::getCalendarEvents(const CalendarEventQuery &cal
     return toReturn;
 }
 
-/** Save or update the common part of events and set the commonId() in the event */
+/**
+ * Save or update the common part of events and set the commonId()
+ * in the event
+ */
 bool AgendaBase::saveCommonEvent(Appointment *event)
 {
     QSqlDatabase DB = QSqlDatabase::database(Constants::DB_NAME);
@@ -1204,7 +1221,10 @@ bool AgendaBase::saveCommonEvent(Appointment *event)
     return true;
 }
 
-/** Save the peoples related to an \e Calendar::CalendarPeople \e people inherited class. */
+/**
+ * Save the peoples related to an \e Calendar::CalendarPeople
+ * \e people inherited class.
+ */
 bool AgendaBase::saveRelatedPeoples(RelatedEventFor relatedTo, const int eventOrCalendarId, const Calendar::CalendarPeople *peopleClass)
 {
     if (eventOrCalendarId == -1) {

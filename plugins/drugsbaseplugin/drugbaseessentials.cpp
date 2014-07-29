@@ -423,11 +423,17 @@ bool DrugBaseEssentials::initialize(const QString &pathToDb, bool createIfNotExi
         return false;
     }
 
+    Utils::Field versionField(Constants::Table_CURRENTVERSION, Constants::CURRENTVERSION_NUMBER);
     if (!checkDatabaseVersion()) {
-        LOG_ERROR_FOR("DrugBaseEssentials", QString("Wrong database version. Db: %1; Current: %2").arg(version()).arg(::CURRENTVERSION));
+        LOG_ERROR_FOR("DrugBaseEssentials",
+                      QString("Wrong database version. Db: %1; Current: %2")
+                      .arg(getVersion(versionField))
+                      .arg(::CURRENTVERSION));
         return false;
     } else {
-        LOG_FOR("DrugBaseEssentials", QString("Using drug database version " + version()));
+        LOG_FOR("DrugBaseEssentials",
+                QString("Using drug database version: %1")
+                .arg(getVersion(versionField)));
     }
 
     // Improve speed when creating the drug database
@@ -439,52 +445,12 @@ bool DrugBaseEssentials::initialize(const QString &pathToDb, bool createIfNotExi
 }
 
 /**
- * Define the version of the database (this version will be stored inside the database). \n
- * We use this version to differentiate database scheme evolutions, not
- * The whole application evolution.
- */
-void DrugBaseEssentials::setVersion(const QString &version)
-{
-    QSqlDatabase DB = QSqlDatabase::database(connectionName());
-    if (!connectDatabase(DB, __FILE__, __LINE__))
-        return;
-    executeSQL(prepareDeleteQuery(Constants::Table_CURRENTVERSION, QHash<int,QString>()), DB);
-    QSqlQuery query(DB);
-    query.prepare(prepareInsertQuery(Constants::Table_CURRENTVERSION));
-    query.bindValue(Constants::CURRENTVERSION_ID, QVariant());
-    query.bindValue(Constants::CURRENTVERSION_NUMBER, version);
-    if (!query.exec()) {
-        LOG_QUERY_ERROR_FOR("DrugBaseEssentials", query);
-    }
-}
-
-/**
- * Returns the version of the database.
- * \sa setVersion()
- */
-QString DrugBaseEssentials::version() const
-{
-    QSqlDatabase DB = QSqlDatabase::database(connectionName());
-    if (!connectDatabase(DB, __FILE__, __LINE__))
-        return QString();
-    QSqlQuery query(DB);
-    query.prepare(select(Constants::Table_CURRENTVERSION));
-    if (!query.exec()) {
-        LOG_QUERY_ERROR_FOR("DrugBaseEssentials", query);
-    } else {
-        if (query.next()) {
-            return query.value(Constants::CURRENTVERSION_NUMBER).toString();
-        }
-    }
-    return QString();
-}
-
-/**
  * Check if the scheme database version is the latest one according to this code.
  */
 bool DrugBaseEssentials::checkDatabaseVersion() const
 {
-    return (version()==::CURRENTVERSION);
+    Utils::Field versionField(Constants::Table_CURRENTVERSION, Constants::CURRENTVERSION_NUMBER);
+    return (getVersion(versionField)==::CURRENTVERSION);
 }
 
 /**
@@ -579,7 +545,8 @@ bool DrugBaseEssentials::createDatabase(const QString &connection, const QString
         return false;
     }
 
-    setVersion(::CURRENTVERSION);
+    if (!setVersion(Utils::Field(Constants::Table_CURRENTVERSION, Constants::CURRENTVERSION_NUMBER), ::CURRENTVERSION))
+        LOG_ERROR_FOR("DrugBaseEssentials", "Unable to set version");
 
     // database is readable/writable
     LOG_FOR("DrugBaseEssentials", tkTr(Trans::Constants::DATABASE_1_CORRECTLY_CREATED).arg(pathOrHostName + QDir::separator() + prefixedDbName));

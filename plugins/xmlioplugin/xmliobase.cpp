@@ -270,17 +270,10 @@ bool XmlIOBase::createDatabase(const QString &connectionName , const QString &db
         return false;
     }
 
-    // Table INFORMATION
-    DB.transaction();
-    QSqlQuery query(DB);
-    query.prepare(prepareInsertQuery(Constants::Table_VERSION));
-    query.bindValue(Constants::VERSION_ACTUAL, Constants::DB_VERSION);
-    if (!query.exec()) {
-        LOG_QUERY_ERROR(query);
-        DB.rollback();
+    // Add version number
+    if (!setVersion(Utils::Field(Constants::Table_VERSION, Constants::VERSION_ACTUAL), Constants::DB_VERSION)) {
+        LOG_ERROR_FOR("XmlIOBase", "Unable to set version");
     }
-    query.finish();
-    DB.commit();
 
     // database is readable/writable
     LOG(tkTr(Trans::Constants::DATABASE_1_CORRECTLY_CREATED).arg(pathOrHostName + QDir::separator() + dbName));

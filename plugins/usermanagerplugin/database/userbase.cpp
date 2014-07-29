@@ -236,26 +236,6 @@ bool UserBase::isNewlyCreated() const
     return m_IsNewlyCreated;
 }
 
-/** Return the current version of the database */
-QString UserBase::getCurrentVersion() const
-{
-    QSqlDatabase DB = QSqlDatabase::database(Constants::USER_DB_CONNECTION);
-    if (!connectDatabase(DB, __LINE__)) {
-        return QString::null;
-    }
-    DB.transaction();
-    QSqlQuery query(DB);
-
-    if (query.exec(select(Constants::Table_INFORMATION, Constants::INFO_VERSION))) {
-        if (query.next())
-            return query.value(0).toString();
-    }
-    DB.commit();
-    return QString::null;
-}
-
-// FIXME: update the userbase version number including the Qt version in use (because of password encryption method updating)
-
 /** Return true if the userbase is the last version (database is updated by this member if needed) */
 bool UserBase::checkDatabaseVersion()
 {
@@ -810,22 +790,14 @@ bool UserBase::createDatabase(const QString &connectionName , const QString &dbN
 
     // add general administrator
     createDefaultUser();
-
-    // Table INFORMATION
     qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
-    DB.transaction();
-    QSqlQuery query(DB);
-    query.prepare(prepareInsertQuery(Constants::Table_INFORMATION));
-    query.bindValue(Constants::INFO_VERSION, Constants::USER_DB_VERSION);
-    query.bindValue(Constants::INFO_MAX_LKID, 1);
-    if (!query.exec()) {
-        LOG_QUERY_ERROR(query);
-        DB.rollback();
+
+    // Add version number
+    // FIXME: tag version number with the Qt version (needed for password hashing)
+    if (!setVersion(Utils::Field(Constants::Table_INFORMATION, Constants::INFO_VERSION), Constants::USER_DB_VERSION)) {
+        LOG_ERROR_FOR("UserBase", "Unable to set version");
     }
-    DB.commit();
-    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
 
-    // database is readable/writable
     LOG(tkTr(Trans::Constants::DATABASE_1_CORRECTLY_CREATED).arg(pathOrHostName + QDir::separator() + dbName));
 
     m_IsNewlyCreated = true;
@@ -1620,7 +1592,7 @@ void UserBase::toTreeWidget(QTreeWidget *tree) const
     where.clear();
     where.insert(Constants::USER_ISVIRTUAL, QString("=1"));
     new QTreeWidgetItem(db, QStringList() << "Number of virtual users" << QString::number(count(Constants::Table_USERS, Constants::USER_ID, getWhereClause(Constants::Table_USERS, where))));
-    new QTreeWidgetItem(db, QStringList() << "Database version" << getCurrentVersion());
+    new QTreeWidgetItem(db, QStringList() << "Database version" << getVersion(Utils::Field(Constants::Table_INFORMATION, Constants::INFO_VERSION)));
     if (isInitialized()) {
         new QTreeWidgetItem(db, QStringList() << "Database" << "initialized");
     } else {
