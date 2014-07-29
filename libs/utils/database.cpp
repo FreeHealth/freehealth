@@ -938,11 +938,18 @@ bool Database::createConnection(const QString &connectionName, const QString &no
     {
     case SQLite :
     {
-        DB = QSqlDatabase::database(connectionName);
-        DB.setDatabaseName(sqliteFileInfo.absoluteFilePath());
+        // Get the SQL database
+        if (QSqlDatabase::connectionNames().contains(connectionName)) {
+            DB = QSqlDatabase::database(connectionName);
+        } else {
+            DB = QSqlDatabase::addDatabase("QSQLITE", connectionName);
+            DB.setDatabaseName(sqliteFileInfo.absoluteFilePath());
+        }
         if (!DB.isOpen()) {
-            LOG_ERROR_FOR("Database", "Unable to open database");
-            return false;
+            if (!DB.open()) {
+                LOG_ERROR_FOR("Database", "Unable to open database");
+                return false;
+            }
         }
         break;
     }
