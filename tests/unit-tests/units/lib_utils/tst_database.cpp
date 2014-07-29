@@ -27,6 +27,7 @@
 #include <utils/database.h>
 #include <utils/databaseconnector.h>
 #include <utils/log.h>
+#include <utils/randomizer.h>
 
 #include "../../autotest.h"
 
@@ -194,6 +195,7 @@ private slots:
         // Test with memory SQLite db
         db.addTable(0,  "t0");
         db.addTable(1,  "t1");
+        db.addTable(2,  "Version");
 
         db.addField(0, 0, "f0", Utils::Database::FieldIsUniquePrimaryKey);
         db.addField(0, 1, "f1", Utils::Database::FieldIsUUID);
@@ -208,10 +210,12 @@ private slots:
         db.addField(1, 0, "f1.0", Utils::Database::FieldIsUniquePrimaryKey);
         db.addField(1, 1, "f1.1", Utils::Database::FieldIsReal);
 
+        db.addField(2, 0, "version", Utils::Database::FieldIsShortText);
+
         QVERIFY(db.table(0) == "t0");
         QVERIFY(db.table(1) == "t1");
         QStringList tables;
-        tables << "t0" << "t1";
+        tables << "t0" << "t1" << "Version";
         QVERIFY(db.tables().count() == tables.count());
         // FIXME: using QHash can lead to non correctly sorted list
 
@@ -419,6 +423,35 @@ private slots:
                 QVERIFY(query.value(5).toDateTime() == newDt);
             }
             QVERIFY(n == 1);
+        }
+    }
+
+    void test_versionning()
+    {
+        Utils::Randomizer random;
+        QString v = random.randomVersionNumber();
+        Utils::Field vField(2,0);
+        QVERIFY(db.setVersion(vField, v) == true);
+        QVERIFY(db.checkVersion(vField, v) == true);
+        for(int i = 0; i < loop; ++i) {
+            QString wrong = v;
+            while (wrong == v) {
+                wrong = random.randomVersionNumber();
+            }
+            QVERIFY(db.checkVersion(vField, wrong) == false);
+        }
+        QString newV = v;
+        while (newV == v) {
+            newV = random.randomVersionNumber();
+        }
+        QVERIFY(db.setVersion(vField, newV) == true);
+        QVERIFY(db.checkVersion(vField, newV) == true);
+        for(int i = 0; i < loop; ++i) {
+            QString wrong = newV;
+            while (wrong == newV) {
+                wrong = random.randomVersionNumber();
+            }
+            QVERIFY(db.checkVersion(vField, wrong) == false);
         }
     }
 
