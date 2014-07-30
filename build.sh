@@ -5,12 +5,14 @@
 # This script helps on the compilation on unices machines
 #
 
-SCRIPT_VERSION=1.1-1348434279  # see date "+%s"
+SCRIPT_VERSION=1.2-1406739164 # see date "+%s"
 
-DEBUG_BUILD_COMMANDS=0  # set to 1 to only debug commands (no commands are executed)
+DEBUG_BUILD_COMMANDS=1  # set to 1 to only debug commands (no commands are executed)
 
-BUNDLE_NAME=""
+LOWERED_BUNDLE_NAME=""
+CAMELCASE_BUNDLE_NAME=""
 PROJECT_VERSION=""
+QT_VERSION=""
 TEST=""
 TRANS=""
 CLEAN=""
@@ -43,7 +45,9 @@ showHelp()
     echo "Usage : $SCRIPT_NAME -txch -dri -s <qt.spec> -b <AppToBuild>"
     echo
     echo "Options :"
-    echo "  -b  Application name (freemedforms, freediams, freeaccount, freeicd, freepad, freetoolbox)"
+    echo "  -b  Application name in CamelCase. Values can be:"
+    echo "      FreeMedForms, FreeDiams, FreeDDIManager, FreeToolBox"
+    echo "      FreeICD, FreeDRC, FreePad..."
     echo "  -d  Build a debug 'no-install' version (default)"
     echo "  -r  Build a release version and install it:"
     echo "        1. Clean build path"
@@ -69,8 +73,8 @@ showHelp()
 testDependencies()
 {
     # TODO: this code only works with debian distros, include other distro
-    # DEPENDENCIES_QT5=""
-    DEPENDENCIES_QT4="libqt4-dev libxext-dev" # libquazip0-dev not in wheezy
+    # DEPENDENCIES_QT5="qt5-default qt5-qmake"
+    DEPENDENCIES_QT4="libqt4-dev libxext-dev" # libquazip-dev not in wheezy
     DEPENDENCIES_WEBCAM=""
     if [[ "$WEBCAM" == "y" ]]; then
         DEPENDENCIES_WEBCAM="libopencv-core-dev libopencv-highgui-dev libopencv-objdetect-dev"
@@ -98,6 +102,27 @@ createLogFile()
     echo "Log file created on: `date "+%Y.%m.%d %H:%M %N"`" > $LOG_FILE
 }
 
+detectQtVersion()
+{
+    QT_VERSION=`qmake -query "QT_VERSION"  | cut -d . -s -f1`
+    echo >> $LOG_FILE
+    echo "* Qt information" >> $LOG_FILE
+    echo "  Version: `qmake -query \"QT_VERSION\"`" >> $LOG_FILE
+    echo "  Installed in `qmake -query \"QT_INSTALL_PREFIX\"`" >> $LOG_FILE
+    echo "  Resources can be found in the following locations:" >> $LOG_FILE
+    echo "    Documentation: `qmake -query \"QT_INSTALL_DOCS\"`" >> $LOG_FILE
+    echo "    Header files: `qmake -query \"QT_INSTALL_HEADERS\"`" >> $LOG_FILE
+    echo "    Libraries: `qmake -query \"QT_INSTALL_LIBS\"`" >> $LOG_FILE
+    echo "    Binary files (executables): `qmake -query \"QT_INSTALL_BINS\"`" >> $LOG_FILE
+    echo "    Plugins: `qmake -query \"QT_INSTALL_PLUGINS\"`" >> $LOG_FILE
+    echo "    Data files: `qmake -query \"QT_INSTALL_DATA\"`" >> $LOG_FILE
+    echo "    Translation files: `qmake -query \"QT_INSTALL_TRANSLATIONS\"`" >> $LOG_FILE
+    echo "    Settings: `qmake -query \"QT_INSTALL_SETTINGS\"`" >> $LOG_FILE
+    echo "    Examples: `qmake -query \"QT_INSTALL_EXAMPLES\"`" >> $LOG_FILE
+    echo "    Demonstrations: `qmake -query \"QT_INSTALL_DEMOS\"`" >> $LOG_FILE
+    echo >> $LOG_FILE
+}
+
 detectSpec()
 {
     echo "* Guessing spec file"
@@ -123,24 +148,34 @@ detectGit()
     return $TEST_GIT
 }
 
+# Run a specific bash command, test its result and add a message to the logfile
+# $1: The command
+runCommand()
+{
+    COMMAND=$1
+    if [[ "$DEBUG_BUILD_COMMANDS" == 1 ]]; then
+        echo "# $COMMAND" >> $LOG_FILE
+        echo "# $COMMAND"
+    else
+        EXEC=`$COMMAND`
+        EXEC=$?
+        if [[ ! $EXEC == 0 ]]; then
+            echo "[ERROR]: # $COMMAND" >> $LOG_FILE
+            return 123
+        else
+            echo "[Ok]: $COMMAND" >> $LOG_FILE
+       fi
+    fi
+}
+
 gitPull()
 {
     # zenity progress feature
     echo "0"; sleep 1
     echo "# Updating your local source copy" ; sleep 1
     if [[ "$GIT_PULL" == "y" ]]; then
-        echo "    cd $SCRIPT_PATH; git pull"
-        if [[  "$DEBUG_BUILD_COMMANDS" == 1 ]]; then
-            echo "# cd $SCRIPT_PATH && git pull"; sleep 5
-        else
-            MAKE_STEP=`cd $SCRIPT_PATH && git pull`
-            MAKE_STEP=$?
-            if [[ ! $MAKE_STEP == 0 ]]; then
-                return 123
-            else
-                echo "        Source updated"
-           fi
-        fi
+        echo "* Updating your local git repo" >> $LOG_FILE
+        runCommand "cd $SCRIPT_PATH; git pull"
     fi
 }
 
@@ -150,31 +185,25 @@ makeClean()
     echo "10"; sleep 1
     echo "# Cleaning build path" ; sleep 1
     if [[ "$CLEAN" == "y" ]]; then
-        echo "* Cleaning build path"
-        echo "# rm -rf $SCRIPT_PATH/bin/$BUNDLE_NAME &&\nrm -rf $SCRIPT_PATH/build"; >> $LOG_FILE
-        if [[  "$DEBUG_BUILD_COMMANDS" == 1 ]]; then
-            echo "# rm -rf $SCRIPT_PATH/bin/$BUNDLE_NAME &&\nrm -rf $SCRIPT_PATH/build"; sleep 5
-        else
-            MAKE_STEP=`rm -rf $SCRIPT_PATH/bin/$BUNDLE_NAME && rm -rf $SCRIPT_PATH/build >> $LOG_FILE`
-            MAKE_STEP=$?
-            if [[ ! $MAKE_STEP == 0 ]]; then
-                return 123
-            else
-                echo "        Cleaned"
-           fi
+        echo "* Cleaning build path" >> $LOG_FILE
+        if [[ -z $LOWERED_BUNDLE_NAME ]]; then
+            LOWERED_BUNDLE_NAME="*"
+            CAMELCASE_BUNDLE_NAME="*"
         fi
-        if [[  "$DEBUG_BUILD_COMMANDS" == 1 ]]; then
-            echo "# find . -type f -name Makefile -delete"; sleep 5
-        else
-            MAKE_STEP=`find . -type f -name Makefile -delete >> $LOG_FILE`
-            MAKE_STEP=$?
-            if [[ ! $MAKE_STEP == 0 ]]; then
-                return 123
-            else
-                echo "        Cleaned"
-           fi
+        # Remove all (path/files)
+        #   bin/freeddimanager_Qt4_linux-gpp-64
+        #   build/Qt4_linux-gpp/FreeDDIManager
+        #   Makefile
+        #   .qmake.cache
+        runCommand "rm -rf $SCRIPT_PATH/bin/"$LOWERED_BUNDLE_NAME"_Qt"$QT_VERSION"_*"
+        runCommand "rm -rf $SCRIPT_PATH/build/Qt"$QT_VERSION"_*/"$CAMELCASE_BUNDLE_NAME
+        runCommand "find . -type f -name \"Makefile*\" -delete"
+        runCommand "find . -type f -name \".qmake.cache\" -delete"
+        echo >> $LOG_FILE
+        if [[ "$LOWERED_BUNDLE_NAME" == "*" ]]; then
+            LOWERED_BUNDLE_NAME=""
+            CAMELCASE_BUNDLE_NAME=""
         fi
-
     fi
     return 0
 }
@@ -185,27 +214,15 @@ createTranslations()
     echo "20"; sleep 1
     echo "# Creation translations" ; sleep 1
     if [ "$TRANS" == "y" ]; then
-        echo "* Creating translations"
-            echo "# lrelease ./global_resources/translations/*.ts" >> $LOG_FILE
-        if [[  "$DEBUG_BUILD_COMMANDS" == 1 ]]; then
-             echo "# lrelease ./global_resources/translations/*.ts" ; sleep 5
-        else
-            MAKE_STEP=`lrelease ./global_resources/translations/*.ts >> $LOG_FILE`
-            MAKE_STEP=$?
-            if [[ ! $MAKE_STEP == 0 ]]; then
-                echo "* ERROR: lrelease step wrong ***"
-                return 123
-            else
-                echo "        Translations created"
-            fi
-        fi
+        echo "* Creating translations" >> $LOG_FILE
+        runCommand "lrelease ./global_resources/translations/*.ts"
     fi
     return 0
 }
 
 qmakeCommand()
 {
-    # TODO: update this part using the optionalplugins.pri? manage libquazip0-dev build
+    # TODO: update this part using the buildspec/optionalplugins.pri manage libquazip0-dev build
     # zenity progress feature
     echo "30"; sleep 1
     echo -e "# Preparing the build:\nrunning qmake" ; sleep 1
@@ -220,20 +237,8 @@ qmakeCommand()
         QMAKE_CONFIG="$QMAKE_CONFIG CONFIG+=\"$EXTRAPLUGS\""
     fi
 
-    echo "* qmake $BUNDLE_NAME.pro -r $QMAKE_CONFIG $SPEC"
-    echo "# qmake $BUNDLE_NAME.pro -r $QMAKE_CONFIG $SPEC" >> $LOG_FILE
-    if [[  "$DEBUG_BUILD_COMMANDS" == 1 ]]; then
-        echo "# qmake $BUNDLE_NAME.pro -r\n$QMAKE_CONFIG\n$SPEC" ; sleep 5
-    else
-        MAKE_STEP=`qmake $BUNDLE_NAME.pro -r $QMAKE_CONFIG $SPEC`
-        MAKE_STEP=$?
-        if [[ ! $MAKE_STEP == 0 ]]; then
-            echo "* ERROR: qmake step wrong ***"
-            return 123
-        else
-            echo "        qmake correctly done"
-        fi
-    fi
+    echo "* qmake $LOWERED_BUNDLE_NAME.pro -r $QMAKE_CONFIG $SPEC"
+    runCommand "qmake $LOWERED_BUNDLE_NAME.pro -r $QMAKE_CONFIG $SPEC"
     return 0
 }
 
@@ -242,20 +247,7 @@ makeCommand()
     # zenity progress feature
     echo "40"; sleep 1
     echo "# Building the application (make step)" ; sleep 1
-    echo "# make $MAKE_OPTS"
-    echo "# make $MAKE_OPTS" >> $LOG_FILE
-    if [[  "$DEBUG_BUILD_COMMANDS" == 1 ]]; then
-        echo "# make $MAKE_OPTS"  ; sleep 5
-    else
-        MAKE_STEP=`make $MAKE_OPTS`
-        MAKE_STEP=$?
-        if [[ ! $MAKE_STEP == 0 ]]; then
-            echo "* ERROR: make step wrong ***"
-            return 123
-        else
-            echo "        make correctly done"
-        fi
-    fi
+    runCommand "make $MAKE_OPTS"
     return 0
 }
 
@@ -264,25 +256,15 @@ makeInstallCommand()
     # zenity progress feature
     echo "70"; sleep 1
     echo "# Installing applications" ; sleep 1
-    echo "# make install" >> $LOG_FILE
     if [[ "$BUILD" != "debug" ]]; then
-        echo "* make install"
-        if [[  "$DEBUG_BUILD_COMMANDS" == 1 ]]; then
-             echo "# make install"  ; sleep 5
-        else
-             MAKE_STEP=`make install`
-             MAKE_STEP=$?
-             if [[ ! $MAKE_STEP == 0 ]]; then
-                 echo "* ERROR: make install step wrong ***"
-                 return 123
-             else
-                 echo "        make install correctly done"
-            fi
-        fi
+        echo "# make install" >> $LOG_FILE
+        runCommand "make install"
     fi
     return 0
 }
 
+# FIXME: path is buggy (include Qt version and spec filename)
+# Note that in spec filename we should replace "+" with "g"
 finalMessage()
 {
     # zenity progress feature
@@ -290,23 +272,22 @@ finalMessage()
     echo "# Compilation completed (with or without error)" ; sleep 1
     if [[ $OSTYPE == linux-gnu ]]; then
         echo "*** Start application with:"
-        echo "./bin/"$BUNDLE_NAME"/"$BUNDLE_NAME"_debug --config=../global_resources/"$BUNDLE_NAME"_config.ini"
+        echo "./bin/"$LOWERED_BUNDLE_NAME"/"$LOWERED_BUNDLE_NAME"_debug --config=../global_resources/"$LOWERED_BUNDLE_NAME"_config.ini"
     elif [[ $OSTYPE == darwin* ]]; then
         echo "*** Start application with:"
-        echo "./bin/"$BUNDLE_NAME"/"$BUNDLE_NAME"_debug.app/Contents/MacOs/"$BUNDLE_NAME"_debug --config=../../../../../global_resources/"$BUNDLE_NAME"_config.ini"
+        echo "./bin/"$LOWERED_BUNDLE_NAME"/"$LOWERED_BUNDLE_NAME"_debug.app/Contents/MacOs/"$LOWERED_BUNDLE_NAME"_debug --config=../../../../../global_resources/"$LOWERED_BUNDLE_NAME"_config.ini"
     elif [[ $OSTYPE == freebsd ]]; then
         echo "*** Start application with:"
-        echo "./bin/"$BUNDLE_NAME"/"$BUNDLE_NAME"_debug --config=../../global_resources/"$BUNDLE_NAME"_config.ini"
+        echo "./bin/"$LOWERED_BUNDLE_NAME"/"$LOWERED_BUNDLE_NAME"_debug --config=../../global_resources/"$LOWERED_BUNDLE_NAME"_config.ini"
     fi
     return 0
 }
 
 build()
 {
-    createLogFile
-    echo "Starting build: application=$BUNDLE_NAME" >> $LOG_FILE
+    echo "Starting build: application=$LOWERED_BUNDLE_NAME" >> $LOG_FILE
     # No bundle name -> Error
-    if [[ "$BUNDLE_NAME" == "" ]]; then
+    if [[ "$LOWERED_BUNDLE_NAME" == "" ]]; then
         echo "*** ERROR: you must define the application with the -b param. See help -h."
         echo "*** ERROR: you must define the application with the -b param. See help -h." >> $LOG_FILE
         return 123;
@@ -330,16 +311,16 @@ build()
     if [[ "$BUILD" != "debug" ]]; then
         MSG="RELEASE mode"
     fi
-    echo "*** Building application in $MSG: $BUNDLE_NAME ($BUILD) ***"
+    echo "*** Building application in $MSG: $LOWERED_BUNDLE_NAME ($BUILD) ***"
     if [[ "$BUILD" != "debug" ]]; then
         if [[ $OSTYPE == darwin* ]]; then
             # Switch to mac_release.sh
             if [[  "$DEBUG_BUILD_COMMANDS" == 1 ]]; then
-                echo "# cd scripts\n./mac_release.sh -b $BUNDLE_NAME\nreturn 0"
+                echo "# cd scripts\n./mac_release.sh -b $LOWERED_BUNDLE_NAME\nreturn 0"
             else
                 cd scripts
-                echo "  **** -> switching to: scripts/mac_release.sh -b $BUNDLE_NAME"
-                ./mac_release.sh -b $BUNDLE_NAME
+                echo "  **** -> switching to: scripts/mac_release.sh -b $LOWERED_BUNDLE_NAME"
+                ./mac_release.sh -b $LOWERED_BUNDLE_NAME
                 return $?
             fi
         fi
@@ -350,8 +331,8 @@ build()
       cd ./tests
   fi
 
-  if [[ ! -e $BUNDLE_NAME ]]; then
-      echo "* ERROR: Application does not exist: $BUNDLE_NAME"
+  if [[ ! -e $LOWERED_BUNDLE_NAME ]]; then
+      echo "* ERROR: Application does not exist: $LOWERED_BUNDLE_NAME"
       echo "*** ERROR: Application does not exist." >> $LOG_FILE
       return 123
   fi
@@ -368,10 +349,10 @@ build()
       return 123;
   fi
 
-  echo "# Entering $BUNDLE_NAME"; sleep 1
-  cd $BUNDLE_NAME
+  echo "# Entering $LOWERED_BUNDLE_NAME"; sleep 1
+  cd $LOWERED_BUNDLE_NAME
   if [[ "$?" != 0 ]]; then
-      echo "*** ERROR: entering $BUNDLE_NAME." >> $LOG_FILE
+      echo "*** ERROR: entering $LOWERED_BUNDLE_NAME." >> $LOG_FILE
       return 123;
   fi
 
@@ -414,30 +395,30 @@ launchApplication()
         echo "* Launch the application"
         if [[ "$BUILD" == "debug" ]]; then
             if [[ $OSTYPE == linux-gnu ]]; then
-                echo "    Launch $BUNDLE_NAME (debug_without_install, linux)"
-                $SCRIPT_PATH/bin/$BUNDLE_NAME/$BUNDLE_NAME_debug --config=../../global_resources/$BUNDLE_NAME_config.ini
+                echo "    Launch $LOWERED_BUNDLE_NAME (debug_without_install, linux)"
+                $SCRIPT_PATH/bin/$LOWERED_BUNDLE_NAME/$LOWERED_BUNDLE_NAME_debug --config=../../global_resources/$LOWERED_BUNDLE_NAME_config.ini
             elif [[ $OSTYPE == darwin* ]]; then
-                echo "    Launch $BUNDLE_NAME (debug_without_install, MacOs)"
-                $SCRIPT_PATH/bin/$BUNDLE_NAME/$BUNDLE_NAME_debug.app/Contents/MacOs/$BUNDLE_NAME_debug --config=../../../../../global_resources/$BUNDLE_NAME_config.ini
+                echo "    Launch $LOWERED_BUNDLE_NAME (debug_without_install, MacOs)"
+                $SCRIPT_PATH/bin/$LOWERED_BUNDLE_NAME/$LOWERED_BUNDLE_NAME_debug.app/Contents/MacOs/$LOWERED_BUNDLE_NAME_debug --config=../../../../../global_resources/$LOWERED_BUNDLE_NAME_config.ini
             elif [[ $OSTYPE == freebsd ]]; then
-                echo "    Launch $BUNDLE_NAME (debug_without_install, freebsd)"
-                $SCRIPT_PATH/bin/$BUNDLE_NAME/$BUNDLE_NAME_debug --config=../../global_resources/$BUNDLE_NAME_config.ini
+                echo "    Launch $LOWERED_BUNDLE_NAME (debug_without_install, freebsd)"
+                $SCRIPT_PATH/bin/$LOWERED_BUNDLE_NAME/$LOWERED_BUNDLE_NAME_debug --config=../../global_resources/$LOWERED_BUNDLE_NAME_config.ini
             fi
         elif [[ "$BUILD" == "linuxintegrated" ]]; then
             if [[ $OSTYPE == linux-gnu ]]; then
-                echo "    Launch $BUNDLE_NAME (release, linux integrated)"
-               $BUNDLE_NAME
+                echo "    Launch $LOWERED_BUNDLE_NAME (release, linux integrated)"
+               $LOWERED_BUNDLE_NAME
             elif [[ $OSTYPE == freebsd ]]; then
-                echo "    Launch $BUNDLE_NAME (release, freebsd, linux integrated)"
-                $BUNDLE_NAME
+                echo "    Launch $LOWERED_BUNDLE_NAME (release, freebsd, linux integrated)"
+                $LOWERED_BUNDLE_NAME
             fi
         elif [[ "$BUILD" == "release" ]]; then
             if [[ $OSTYPE == linux-gnu ]]; then
-                echo "    Launch $BUNDLE_NAME (release, linux , bundled)"
-                $SCRIP_PATH/packages/linux/$BUNDLE_NAME/$BUNDLE_NAME
+                echo "    Launch $LOWERED_BUNDLE_NAME (release, linux , bundled)"
+                $SCRIP_PATH/packages/linux/$LOWERED_BUNDLE_NAME/$LOWERED_BUNDLE_NAME
             elif [[ $OSTYPE == freebsd ]]; then
-                echo "    Launch $BUNDLE_NAME (release, freebsd, bundled)"
-                $SCRIP_PATH/packages/freebsd/$BUNDLE_NAME/$BUNDLE_NAME
+                echo "    Launch $LOWERED_BUNDLE_NAME (release, freebsd, bundled)"
+                $SCRIP_PATH/packages/freebsd/$LOWERED_BUNDLE_NAME/$LOWERED_BUNDLE_NAME
             fi
         fi
     fi
@@ -446,7 +427,6 @@ launchApplication()
 #########################################################################################
 ## Analyse options
 #########################################################################################
-detectSpec
 while getopts "hdrRijcxtwab:" option
 do
   case $option in
@@ -475,11 +455,10 @@ do
     ;;
     a) ALERT="y"
     ;;
-    b) BUNDLE_NAME=`echo "$OPTARG" | sed y/ABCDEFGHIJKLMNOPQRSTUVWXYZ/abcdefghijklmnopqrstuvwxyz/`
+    b) LOWERED_BUNDLE_NAME=`echo "$OPTARG" | sed y/ABCDEFGHIJKLMNOPQRSTUVWXYZ/abcdefghijklmnopqrstuvwxyz/`
+       CAMELCASE_BUNDLE_NAME=$OPTARG
   esac
 done
-
-testDependencies
 
 #########################################################################################
 ## Zenity dialogs
@@ -514,14 +493,14 @@ zenityBuild()
     echo "$TEST"
     if [[ $(expr "$TEST" : ".*\*\*\* ERROR.*") -eq 0 ]]; then
         if [[ "$NOTIFY" == "y" ]]; then
-            $ZENITY --notification --window-icon="info" --text="$BUNDLE_NAME build finished without error" &
+            $ZENITY --notification --window-icon="info" --text="$LOWERED_BUNDLE_NAME build finished without error" &
         fi
-        echo "* Build finished without error: $BUNDLE_NAME"
+        echo "* Build finished without error: $LOWERED_BUNDLE_NAME"
     else
         if [[ "$NOTIFY" == "y" ]]; then
-            $ZENITY --notification --window-icon="warning" --text="WARNING: $BUNDLE_NAME build uncomplete" &
+            $ZENITY --notification --window-icon="warning" --text="WARNING: $LOWERED_BUNDLE_NAME build uncomplete" &
         fi
-        echo "* Build UNCOMPLETE: $BUNDLE_NAME"
+        echo "* Build UNCOMPLETE: $LOWERED_BUNDLE_NAME"
         return 123
     fi
 
@@ -576,6 +555,7 @@ firstPage()
             --radiolist --column "Select" --column "Project"  \
             `[ $(expr "$CONFIG" : ".*FreeMedForms.*") -ne 0 ] && echo 'True' ||  echo 'False'` "FreeMedForms"  \
             `[ $(expr "$CONFIG" : ".*FreeDiams.*") -ne 0 ] && echo 'True' ||  echo 'False'` "FreeDiams"  \
+            `[ $(expr "$CONFIG" : ".*FreeDDIManager.*") -ne 0 ] && echo 'True' ||  echo 'False'` "FreeDDIManager"  \
             `[ $(expr "$CONFIG" : ".*FreeAccount.*") -ne 0 ] && echo 'True' ||  echo 'False'` "FreeAccount"  \
             `[ $(expr "$CONFIG" : ".*FreePad.*") -ne 0 ] && echo 'True' ||  echo 'False'` "FreePad"  \
             `[ $(expr "$CONFIG" : ".*FreePort.*") -ne 0 ] && echo 'True' ||  echo 'False'` "FreePort"  \
@@ -651,10 +631,11 @@ zenityConfigToBuildSystem()
     elif [[ $(expr "$CONFIG" : ".*Release_Linux_Integrated.*") -ne 0 ]]; then
         BUILD="linuxintegrated"
     fi
-    BUNDLE_NAME=`echo ${CONFIG%%;*} | tr [:upper:] [:lower:]`
+    CAMELCASE_BUNDLE_NAME=`echo ${CONFIG%%;*}`
+    LOWERED_BUNDLE_NAME=`echo $CAMELCASE_BUNDLE_NAME | tr [:upper:] [:lower:]`
 
     echo "* Zenity build system"
-    echo "    Bundle: $BUNDLE_NAME ; $BUILD"
+    echo "    Bundle: $CAMELCASE_BUNDLE_NAME ($LOWERED_BUNDLE_NAME) ; $BUILD"
     echo "    Clean: $CLEAN"
     echo "    Translations: $TRANS"
     echo "    Parallel: $MAKE_OPTS"
@@ -695,19 +676,31 @@ startZenityDialog()
 #########################################################################################
 ## Start build process
 #########################################################################################
-if [[ -z $BUILD || -z $BUNDLE_NAME ]]; then
-    if [[ -f $ZENITY ]]; then
-        echo "* No command line params: starting zenity configuration"
-        startZenityDialog
+createLogFile
+detectQtVersion
+
+if [[ -z $BUILD || -z $LOWERED_BUNDLE_NAME ]]; then
+    if [[ -z $CLEAN ]]; then
+        if [[ -f $ZENITY ]]; then
+            echo "* No command line params: starting zenity configuration"
+            startZenityDialog
+        fi
+    else
+        # Clean only command
+        makeClean
+        exit 0
     fi
 fi
 
+# Run the build commands
+testDependencies
+detectSpec
 build
 if [[ "$?" == 0 ]]; then
-    echo "* Build finished without error: $BUNDLE_NAME"
+    echo "* Build finished without error: $LOWERED_BUNDLE_NAME"
     launchApplication
 else
-    echo "* Build UNCOMPLETE: $BUNDLE_NAME"
+    echo "* Build UNCOMPLETE: $LOWERED_BUNDLE_NAME"
 fi
 
 exit 0
