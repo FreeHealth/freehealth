@@ -1,13 +1,13 @@
 #!/bin/bash
 # This script is part of FreeMedForms project : http://www.freemedforms.com
-# (c) 2008 - 2012  Eric MAEKER, MD
+# (c) 2008 - 2014  Eric MAEKER, MD
 #
 # This script helps on the compilation on unices machines
 #
 
 SCRIPT_VERSION=1.2-1406739164 # see date "+%s"
 
-DEBUG_BUILD_COMMANDS=1  # set to 1 to only debug commands (no commands are executed)
+DEBUG_BUILD_COMMANDS=0  # set to 1 to only debug commands (no commands are executed)
 
 LOWERED_BUNDLE_NAME=""
 CAMELCASE_BUNDLE_NAME=""
@@ -63,6 +63,7 @@ showHelp()
     echo "  -c  Make clean before compiling"
     echo "  -s  Use the specified spec file (default spec: $SPEC)"
     echo "  -R  Run application after the build"
+    echo "  -X  Debug commands to console during a dry run"
     echo "  -h  Show this help"
     echo
 }
@@ -427,7 +428,7 @@ launchApplication()
 #########################################################################################
 ## Analyse options
 #########################################################################################
-while getopts "hdrRijcxtwab:" option
+while getopts "hdrRijcxXtwab:" option
 do
   case $option in
     h) showHelp
@@ -457,6 +458,8 @@ do
     ;;
     b) LOWERED_BUNDLE_NAME=`echo "$OPTARG" | sed y/ABCDEFGHIJKLMNOPQRSTUVWXYZ/abcdefghijklmnopqrstuvwxyz/`
        CAMELCASE_BUNDLE_NAME=$OPTARG
+    ;;
+    X) DEBUG_BUILD_COMMANDS=1
   esac
 done
 
