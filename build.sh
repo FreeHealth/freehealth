@@ -28,6 +28,7 @@ ZENITY="zenity"
 SHOW_ZENITY_PROGRESS="y"  # y / n
 LOG_FILE=""
 GIT_PULL=""
+SLEEP_TIME=0
 SCRIPT_NAME=`basename $0`
 if [ "`echo $0 | cut -c1`" = "/" ]; then
   SCRIPT_PATH=`dirname $0`
@@ -127,18 +128,14 @@ detectQtVersion()
 detectSpec()
 {
     echo "* Guessing spec file"
-    if [[ $OSTYPE == linux-gnu ]]; then
-      SPEC="linux-g++"
-      echo "    Linux OS detected; setting qmake spec to "$SPEC
-    elif [[ $OSTYPE == darwin* ]]; then
-      SPEC="macx-g++"
-      echo "    Mac OS detected; setting qmake spec to "$SPEC
-    elif [[ $OSTYPE == freebsd ]]; then
-      SPEC="linux-g++"
-      echo "    FreeBSD OS detected; setting qmake spec to "$SPEC
-    else
-      echo "    Unknow OS"
+    SPEC_PATH=`qmake -query "QT_INSTALL_DATA"`
+    SPEC_PATH=$SPEC_PATH"/mkspecs"
+    SPEC=`ls -al $SPEC_PATH/default | sed "s/^.*default -> //"`
+    if [[ -z $SPEC ]]; then
+        echo "ERROR: no default spec detected"
     fi
+    echo "Default qmake spec: "$SPEC
+    echo "* Default qmake spec: "$SPEC >> $LOG_FILE
     return 0
 }
 
@@ -172,8 +169,8 @@ runCommand()
 gitPull()
 {
     # zenity progress feature
-    echo "0"; sleep 1
-    echo "# Updating your local source copy" ; sleep 1
+    echo "0"; sleep $SLEEP_TIME
+    echo "# Updating your local source copy" ; sleep $SLEEP_TIME
     if [[ "$GIT_PULL" == "y" ]]; then
         echo "* Updating your local git repo" >> $LOG_FILE
         runCommand "cd $SCRIPT_PATH; git pull"
@@ -183,10 +180,11 @@ gitPull()
 makeClean()
 {
     # zenity progress feature
-    echo "10"; sleep 1
-    echo "# Cleaning build path" ; sleep 1
+    echo "10"; sleep $SLEEP_TIME
+    echo "# Cleaning build path" ; sleep $SLEEP_TIME
     if [[ "$CLEAN" == "y" ]]; then
         echo "* Cleaning build path" >> $LOG_FILE
+        SPEC_FOR_PATH=`echo $SPEC | sed y/+/p/`
         if [[ -z $LOWERED_BUNDLE_NAME ]]; then
             LOWERED_BUNDLE_NAME="*"
             CAMELCASE_BUNDLE_NAME="*"
@@ -196,8 +194,8 @@ makeClean()
         #   build/Qt4_linux-gpp/FreeDDIManager
         #   Makefile
         #   .qmake.cache
-        runCommand "rm -rf $SCRIPT_PATH/bin/"$LOWERED_BUNDLE_NAME"_Qt"$QT_VERSION"_*"
-        runCommand "rm -rf $SCRIPT_PATH/build/Qt"$QT_VERSION"_*/"$CAMELCASE_BUNDLE_NAME
+        runCommand "rm -rf $SCRIPT_PATH/bin/"$LOWERED_BUNDLE_NAME"_Qt"$QT_VERSION"_"$SPEC_FOR_PATH
+        runCommand "rm -rf $SCRIPT_PATH/build/Qt"$QT_VERSION"_"$SPEC_FOR_PATH"/"$CAMELCASE_BUNDLE_NAME
         runCommand "find . -type f -name \"Makefile*\" -delete"
         runCommand "find . -type f -name \".qmake.cache\" -delete"
         echo >> $LOG_FILE
@@ -212,8 +210,8 @@ makeClean()
 createTranslations()
 {
     # zenity progress feature
-    echo "20"; sleep 1
-    echo "# Creation translations" ; sleep 1
+    echo "20"; sleep $SLEEP_TIME
+    echo "# Creation translations" ; sleep $SLEEP_TIME
     if [ "$TRANS" == "y" ]; then
         echo "* Creating translations" >> $LOG_FILE
         runCommand "lrelease ./global_resources/translations/*.ts"
@@ -225,8 +223,8 @@ qmakeCommand()
 {
     # TODO: update this part using the buildspec/optionalplugins.pri manage libquazip0-dev build
     # zenity progress feature
-    echo "30"; sleep 1
-    echo -e "# Preparing the build:\nrunning qmake" ; sleep 1
+    echo "30"; sleep $SLEEP_TIME
+    echo -e "# Preparing the build:\nrunning qmake" ; sleep $SLEEP_TIME
     EXTRAPLUGS=""
     if [[ "$WEBCAM" == "y" ]]; then
         EXTRAPLUGS="with-webcam"
@@ -237,17 +235,15 @@ qmakeCommand()
     if [[ "$EXTRAPLUGS" != "" ]]; then
         QMAKE_CONFIG="$QMAKE_CONFIG CONFIG+=\"$EXTRAPLUGS\""
     fi
-
-    echo "* qmake $LOWERED_BUNDLE_NAME.pro -r $QMAKE_CONFIG $SPEC"
-    runCommand "qmake $LOWERED_BUNDLE_NAME.pro -r $QMAKE_CONFIG $SPEC"
+    runCommand "qmake $LOWERED_BUNDLE_NAME.pro -r $QMAKE_CONFIG -spec $SPEC"
     return 0
 }
 
 makeCommand()
 {
     # zenity progress feature
-    echo "40"; sleep 1
-    echo "# Building the application (make step)" ; sleep 1
+    echo "40"; sleep $SLEEP_TIME
+    echo "# Building the application (make step)" ; sleep $SLEEP_TIME
     runCommand "make $MAKE_OPTS"
     return 0
 }
@@ -255,8 +251,8 @@ makeCommand()
 makeInstallCommand()
 {
     # zenity progress feature
-    echo "70"; sleep 1
-    echo "# Installing applications" ; sleep 1
+    echo "70"; sleep $SLEEP_TIME
+    echo "# Installing applications" ; sleep $SLEEP_TIME
     if [[ "$BUILD" != "debug" ]]; then
         echo "# make install" >> $LOG_FILE
         runCommand "make install"
@@ -264,22 +260,22 @@ makeInstallCommand()
     return 0
 }
 
-# FIXME: path is buggy (include Qt version and spec filename)
-# Note that in spec filename we should replace "+" with "g"
 finalMessage()
 {
     # zenity progress feature
-    echo "90"; sleep 1
-    echo "# Compilation completed (with or without error)" ; sleep 1
+    echo "90"; sleep $SLEEP_TIME
+    echo "# Compilation completed (with or without error)" ; sleep $SLEEP_TIME
+    SPEC_FOR_PATH=`echo $SPEC | sed y/+/p/`
+    BINPATH=$SCRIPT_PATH"/bin/"$LOWERED_BUNDLE_NAME"_Qt"$QT_VERSION"_"$SPEC_FOR_PATH
     if [[ $OSTYPE == linux-gnu ]]; then
         echo "*** Start application with:"
-        echo "./bin/"$LOWERED_BUNDLE_NAME"/"$LOWERED_BUNDLE_NAME"_debug --config=../global_resources/"$LOWERED_BUNDLE_NAME"_config.ini"
+        echo $BINPATH"/"$LOWERED_BUNDLE_NAME"_debug --config=../global_resources/"$LOWERED_BUNDLE_NAME"_config.ini"
     elif [[ $OSTYPE == darwin* ]]; then
         echo "*** Start application with:"
-        echo "./bin/"$LOWERED_BUNDLE_NAME"/"$LOWERED_BUNDLE_NAME"_debug.app/Contents/MacOs/"$LOWERED_BUNDLE_NAME"_debug --config=../../../../../global_resources/"$LOWERED_BUNDLE_NAME"_config.ini"
+        echo $BINPATH"/"$LOWERED_BUNDLE_NAME"/"$LOWERED_BUNDLE_NAME"_debug.app/Contents/MacOs/"$LOWERED_BUNDLE_NAME"_debug --config=../../../../../global_resources/"$LOWERED_BUNDLE_NAME"_config.ini"
     elif [[ $OSTYPE == freebsd ]]; then
         echo "*** Start application with:"
-        echo "./bin/"$LOWERED_BUNDLE_NAME"/"$LOWERED_BUNDLE_NAME"_debug --config=../../global_resources/"$LOWERED_BUNDLE_NAME"_config.ini"
+        echo $BINPATH"/"$LOWERED_BUNDLE_NAME"/"$LOWERED_BUNDLE_NAME"_debug --config=../../global_resources/"$LOWERED_BUNDLE_NAME"_config.ini"
     fi
     return 0
 }
@@ -301,11 +297,6 @@ build()
         QMAKE_CONFIG="CONFIG-=debug CONFIG+=release"
     elif [[  "$BUILD" == "linuxintegrated" ]]; then
         QMAKE_CONFIG="CONFIG-=debug CONFIG+=release CONFIG+=LINUX_INTEGRATED"
-    fi
-
-    # Check the spec
-    if [ ! -e $SPEC ]; then
-        SPEC="-spec "$SPEC
     fi
 
     MSG="DEBUG mode"
@@ -350,7 +341,7 @@ build()
       return 123;
   fi
 
-  echo "# Entering $LOWERED_BUNDLE_NAME"; sleep 1
+  echo "# Entering $LOWERED_BUNDLE_NAME"; sleep $SLEEP_TIME
   cd $LOWERED_BUNDLE_NAME
   if [[ "$?" != 0 ]]; then
       echo "*** ERROR: entering $LOWERED_BUNDLE_NAME." >> $LOG_FILE
@@ -394,16 +385,20 @@ launchApplication()
 {
     if [[ "$RUN" == "y" ]]; then
         echo "* Launch the application"
+
+        SPEC_FOR_PATH=`echo $SPEC | sed y/+/p/`
+        BINPATH=$SCRIPT_PATH"/bin/"$LOWERED_BUNDLE_NAME"_Qt"$QT_VERSION"_"$SPEC_FOR_PATH
+
         if [[ "$BUILD" == "debug" ]]; then
             if [[ $OSTYPE == linux-gnu ]]; then
                 echo "    Launch $LOWERED_BUNDLE_NAME (debug_without_install, linux)"
-                $SCRIPT_PATH/bin/$LOWERED_BUNDLE_NAME/$LOWERED_BUNDLE_NAME_debug --config=../../global_resources/$LOWERED_BUNDLE_NAME_config.ini
+                $BINPATH"/"$LOWERED_BUNDLE_NAME_debug --config=../../global_resources/$LOWERED_BUNDLE_NAME_config.ini
             elif [[ $OSTYPE == darwin* ]]; then
                 echo "    Launch $LOWERED_BUNDLE_NAME (debug_without_install, MacOs)"
-                $SCRIPT_PATH/bin/$LOWERED_BUNDLE_NAME/$LOWERED_BUNDLE_NAME_debug.app/Contents/MacOs/$LOWERED_BUNDLE_NAME_debug --config=../../../../../global_resources/$LOWERED_BUNDLE_NAME_config.ini
+                $BINPATH/$LOWERED_BUNDLE_NAME_debug.app/Contents/MacOs/$LOWERED_BUNDLE_NAME_debug --config=../../../../../global_resources/$LOWERED_BUNDLE_NAME_config.ini
             elif [[ $OSTYPE == freebsd ]]; then
                 echo "    Launch $LOWERED_BUNDLE_NAME (debug_without_install, freebsd)"
-                $SCRIPT_PATH/bin/$LOWERED_BUNDLE_NAME/$LOWERED_BUNDLE_NAME_debug --config=../../global_resources/$LOWERED_BUNDLE_NAME_config.ini
+                $BINPATH/$LOWERED_BUNDLE_NAME_debug --config=../../global_resources/$LOWERED_BUNDLE_NAME_config.ini
             fi
         elif [[ "$BUILD" == "linuxintegrated" ]]; then
             if [[ $OSTYPE == linux-gnu ]]; then
@@ -614,6 +609,7 @@ zenityConfigToBuildSystem()
 {
     echo "* CONFIG: $CONFIG"
     SPEC=`echo ${CONFIG##*;}`
+    SLEEP_TIME=1
     # Options
     CLEAN="`[ $(expr "$CONFIG" : ".*Clean_build_path.*") -ne 0 ] && echo 'y' || echo 'n'`"
     WEBCAM="`[ $(expr "$CONFIG" : ".*Build_WebCam_plugin.*") -ne 0 ] && echo 'y' || echo 'n'`"
