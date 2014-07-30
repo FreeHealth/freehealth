@@ -221,7 +221,7 @@ createTranslations()
 
 qmakeCommand()
 {
-    # TODO: update this part using the buildspec/optionalplugins.pri manage libquazip0-dev build
+    # FIXME: update this part using the buildspec/optionalplugins.pri
     # zenity progress feature
     echo "30"; sleep $SLEEP_TIME
     echo -e "# Preparing the build:\nrunning qmake" ; sleep $SLEEP_TIME
