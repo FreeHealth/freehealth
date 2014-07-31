@@ -56,6 +56,7 @@ contains(FREEMEDFORMS,1){
     # *                                 PadTools Plugin                                     *
     # ***************************************************************************************
     # Uncomment the following line to build the plugin
+    # FIXME: PadTools is not optional anymore
      CONFIG *= with-pad
     # ***************************************************************************************
 
