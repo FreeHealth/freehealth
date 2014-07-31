@@ -67,6 +67,7 @@ showHelp()
     echo "  -s  Use the specified spec file (default spec: $SPEC)"
     echo "  -R  Run application after the build"
     echo "  -z  Don't show zenity progress bar (useful for debugging from console)"
+    echo "  -l  Create a build log (nothing will be printed in the console)"
 #    echo "  -X  Debug commands to console during a dry run"
     echo "  -h  Show this help"
     echo
@@ -98,14 +99,15 @@ testDependencies()
     fi
 }
 
-#createLogFile()
-#{
-#    LOG_FILE="./build_`date "+%s"`.log"
-#    echo "* Creating build log: $LOG_FILE"
-#    rm -rf $LOG_FILE
-#    touch $LOG_FILE
-#    echo "Log file created on: `date "+%Y.%m.%d %H:%M %N"`" > $LOG_FILE
-#}
+createLogFile()
+{
+    LOG_FILE="$SCRIPT_PATH/build/build_`date "+%s"`.log"
+    echo "Log file: "$LOG_FILE
+    exec 3>&1 4>&2
+    trap 'exec 2>&4 1>&3' 0 1 2 3
+    exec 1>$LOG_FILE 2>&1
+    # Everything below will go to the file 'log.out':
+}
 
 detectQtVersion()
 {
@@ -431,10 +433,7 @@ launchApplication()
 #########################################################################################
 ## Analyse options
 #########################################################################################
-#createLogFile
-detectQtVersion
-
-while getopts "hdrRijcxXtzb:p:" option
+while getopts "hdrRijlcxXtzb:p:" option
 do
   case $option in
     h) showHelp
@@ -477,6 +476,7 @@ do
             echo "[ERROR] Requested optional plugin is not valid: " $OPTARG 
         }
     ;;
+    l) createLogFile
   esac
 done
 
@@ -501,9 +501,6 @@ zenityBuild()
 {
     loadConfig
     zenityConfigToBuildSystem
-
-echo $SHOW_ZENITY_PROGRESS
-
     if [[ "$SHOW_ZENITY_PROGRESS" == "n" ]]; then
         build
     else
@@ -714,6 +711,7 @@ startZenityDialog()
 #########################################################################################
 ## Start build process
 #########################################################################################
+detectQtVersion
 
 # No bundle name provided -> error unless user requested a clear command
 if [[ -z $BUILD || -z $LOWERED_BUNDLE_NAME ]]; then
