@@ -5,30 +5,36 @@
 # This script helps on the compilation on unices machines
 #
 
-SCRIPT_VERSION=1.2-1406739164 # see date "+%s"
+SCRIPT_VERSION=1.3-1406796656 # see date "+%s"
+DEBUG_BUILD_COMMANDS=0    # set to 1 to only debug commands (no commands are executed)
+LOWERED_BUNDLE_NAME=""    # Application to build (lower case)
+CAMELCASE_BUNDLE_NAME=""  # Application to build (camel case)
+PROJECT_VERSION=""        # Contains the building project version (automatically detected)
+QT_VERSION=""             # Contains the default Qt version (automatically detected)
+TEST=""                   # y/n. Build a "test" application
+TRANS=""                  # y / n. If "y" -> process translations files
+CLEAN=""                  # y / n. If "y" -> make clean
+SPEC=""                   # qmake spec file to use (automatically detected)
+BUILD="debug"             # Type of build: debug, release, linuxintegrated
+QMAKE_CONFIG=""           #
+MAKE_OPTS="-j4"           # make options (by default: multi-jobs build)
+MAKE_QUAZIP=""            # 
+RUN=""                    #
+ZENITY="zenity"           # GUI dialog to use (kdialog/zenity)
+SHOW_ZENITY_PROGRESS="y"  # y / n
+LOG_FILE=""               # Log filename
+GIT_PULL=""               # y / n (if "y" a git pull command will be executed)
+SLEEP_TIME=0              # Sleep time for zenity progress bar
+REQUESTED_PLUGINS=""      # This var will store the optional plugins requested by the user
+AVAILABLE_OPTIONAL_PLUGINS="account agenda alert feedback pad pmh webcam edrc"
+AVAILABLE_CAMELCASE_APPS="FreeMedForms FreeDiams FreePad FreeDRC FreeDDIManager FreeICD"
+RUNNING_ZENITY=0          # 0 / 1 (when zenity is used => set to 1)
 
-DEBUG_BUILD_COMMANDS=0  # set to 1 to only debug commands (no commands are executed)
-
-LOWERED_BUNDLE_NAME=""
-CAMELCASE_BUNDLE_NAME=""
-PROJECT_VERSION=""
-QT_VERSION=""
-TEST=""
-TRANS=""
-CLEAN=""
+# OBSOLETE
 WEBCAM=""
 ALERT=""
-SPEC=""
-BUILD="debug"
-QMAKE_CONFIG=""
-MAKE_OPTS="-j4"
-MAKE_QUAZIP=""
-RUN=""
-ZENITY="zenity"
-SHOW_ZENITY_PROGRESS="y"  # y / n
-LOG_FILE=""
-GIT_PULL=""
-SLEEP_TIME=0
+# END OBSOLETE
+
 SCRIPT_NAME=`basename $0`
 if [ "`echo $0 | cut -c1`" = "/" ]; then
   SCRIPT_PATH=`dirname $0`
@@ -55,9 +61,10 @@ showHelp()
     echo "        2. Create translations"
     echo "        3. Compile application"
     echo "        4. Install application"
-    echo "  -i  with 'linux integrated' configuration (release mode only) same as -ri"
-    echo "  -w  build the webcam plugin (requires libopencv-dev)"
-    echo "  -a  build the alert plugin"
+    echo "  -i  with 'linux integrated' configuration (release mode) same as -ri"
+    echo "  -p  optional plugins to include (separated with a space char)"
+    echo "      Select plugins within the following list:"
+    echo $AVAILABLE_OPTIONAL_PLUGINS | tr " " "\n" | sed 's/^/        - /'
     echo "  -j  Parallel compilation (number of jobs: equivalent to make -jX)"
     echo "  -t  Create translations"
     echo "  -x  Create a test project (in the test path)"
@@ -127,14 +134,13 @@ detectQtVersion()
 
 detectSpec()
 {
-    echo "* Guessing spec file"
     SPEC_PATH=`qmake -query "QT_INSTALL_DATA"`
     SPEC_PATH=$SPEC_PATH"/mkspecs"
     SPEC=`ls -al $SPEC_PATH/default | sed "s/^.*default -> //"`
     if [[ -z $SPEC ]]; then
         echo "ERROR: no default spec detected"
     fi
-    echo "Default qmake spec: "$SPEC
+    echo "* Default qmake spec: "$SPEC
     echo "* Default qmake spec: "$SPEC >> $LOG_FILE
     return 0
 }
@@ -146,44 +152,65 @@ detectGit()
     return $TEST_GIT
 }
 
+# Test if $1 is a valid plugin (registered in the AVAILABLE_OPTIONAL_PLUGINS var)
+isPlugin()
+{
+    echo $AVAILABLE_OPTIONAL_PLUGINS | grep -F -q -w "$1";
+}
+
+# Test if $1 is a valid application name (registered in the AVAILABLE_CAMELCASE_APPS var)
+isValidCamelCaseApplication()
+{
+    echo $AVAILABLE_CAMELCASE_APPS | grep -F -q -w "$1";
+}
+
 # Run a specific bash command, test its result and add a message to the logfile
 # $1: The command
 runCommand()
 {
     COMMAND=$1
     if [[ "$DEBUG_BUILD_COMMANDS" == 1 ]]; then
-        echo "# $COMMAND" >> $LOG_FILE
-        echo "# $COMMAND"
+        echo "    [Ok] $COMMAND" >> $LOG_FILE
+        echo "    [Ok] $COMMAND"
     else
         EXEC=`$COMMAND`
         EXEC=$?
         if [[ ! $EXEC == 0 ]]; then
-            echo "[ERROR]: # $COMMAND" >> $LOG_FILE
+            echo "    [ERROR] # $COMMAND" >> $LOG_FILE
             return 123
         else
-            echo "[Ok]: $COMMAND" >> $LOG_FILE
+            echo "    [Ok] $COMMAND" >> $LOG_FILE
        fi
     fi
+    return 0
+}
+
+# Update zenity progress dialog. This will also add the message to the log file & console
+# $1: percent
+# $2: message
+updateZenityProgress()
+{
+    [[ $RUNNING_ZENITY == 1 ]] && {
+        echo "$1"
+        echo "# $2"
+        sleep $SLEEP_TIME
+    }
+    echo "* $2" >> $LOG_FILE
+    echo "* $2"
 }
 
 gitPull()
 {
-    # zenity progress feature
-    echo "0"; sleep $SLEEP_TIME
-    echo "# Updating your local source copy" ; sleep $SLEEP_TIME
+    updateZenityProgress 0 "Updating your local git repo"
     if [[ "$GIT_PULL" == "y" ]]; then
-        echo "* Updating your local git repo" >> $LOG_FILE
         runCommand "cd $SCRIPT_PATH; git pull"
     fi
 }
 
 makeClean()
 {
-    # zenity progress feature
-    echo "10"; sleep $SLEEP_TIME
-    echo "# Cleaning build path" ; sleep $SLEEP_TIME
+    updateZenityProgress 10 "Cleaning build path"
     if [[ "$CLEAN" == "y" ]]; then
-        echo "* Cleaning build path" >> $LOG_FILE
         SPEC_FOR_PATH=`echo $SPEC | sed y/+/p/`
         if [[ -z $LOWERED_BUNDLE_NAME ]]; then
             LOWERED_BUNDLE_NAME="*"
@@ -194,10 +221,10 @@ makeClean()
         #   build/Qt4_linux-gpp/FreeDDIManager
         #   Makefile
         #   .qmake.cache
-        runCommand "rm -rf $SCRIPT_PATH/bin/"$LOWERED_BUNDLE_NAME"_Qt"$QT_VERSION"_"$SPEC_FOR_PATH
-        runCommand "rm -rf $SCRIPT_PATH/build/Qt"$QT_VERSION"_"$SPEC_FOR_PATH"/"$CAMELCASE_BUNDLE_NAME
-        runCommand "find . -type f -name \"Makefile*\" -delete"
-        runCommand "find . -type f -name \".qmake.cache\" -delete"
+        runCommand "rm -rf $SCRIPT_PATH/bin/"$LOWERED_BUNDLE_NAME"_Qt"$QT_VERSION"_"$SPEC_FOR_PATH || return 1
+        runCommand "rm -rf $SCRIPT_PATH/build/Qt"$QT_VERSION"_"$SPEC_FOR_PATH"/"$CAMELCASE_BUNDLE_NAME || return 1
+        runCommand "find . -type f -name \"Makefile*\" -delete" || return 1
+        runCommand "find . -type f -name \".qmake.cache\" -delete" || return 1
         echo >> $LOG_FILE
         if [[ "$LOWERED_BUNDLE_NAME" == "*" ]]; then
             LOWERED_BUNDLE_NAME=""
@@ -209,12 +236,9 @@ makeClean()
 
 createTranslations()
 {
-    # zenity progress feature
-    echo "20"; sleep $SLEEP_TIME
-    echo "# Creation translations" ; sleep $SLEEP_TIME
+    updateZenityProgress 20 "Creation translations"
     if [ "$TRANS" == "y" ]; then
-        echo "* Creating translations" >> $LOG_FILE
-        runCommand "lrelease ./global_resources/translations/*.ts"
+        runCommand "lrelease ./global_resources/translations/*.ts" || return 1
     fi
     return 0
 }
@@ -222,9 +246,10 @@ createTranslations()
 qmakeCommand()
 {
     # FIXME: update this part using the buildspec/optionalplugins.pri
-    # zenity progress feature
-    echo "30"; sleep $SLEEP_TIME
-    echo -e "# Preparing the build:\nrunning qmake" ; sleep $SLEEP_TIME
+    updateZenityProgress 30 "Preparing the build: qmake"
+
+    # Use sed to modify all extra plugins
+
     EXTRAPLUGS=""
     if [[ "$WEBCAM" == "y" ]]; then
         EXTRAPLUGS="with-webcam"
@@ -235,36 +260,29 @@ qmakeCommand()
     if [[ "$EXTRAPLUGS" != "" ]]; then
         QMAKE_CONFIG="$QMAKE_CONFIG CONFIG+=\"$EXTRAPLUGS\""
     fi
-    runCommand "qmake $LOWERED_BUNDLE_NAME.pro -r $QMAKE_CONFIG -spec $SPEC"
+    runCommand "qmake $LOWERED_BUNDLE_NAME.pro -r $QMAKE_CONFIG -spec $SPEC" || return 1
     return 0
 }
 
 makeCommand()
 {
-    # zenity progress feature
-    echo "40"; sleep $SLEEP_TIME
-    echo "# Building the application (make step)" ; sleep $SLEEP_TIME
-    runCommand "make $MAKE_OPTS"
+    updateZenityProgress 40 "Preparing the build: make"
+    runCommand "make $MAKE_OPTS" || return 1
     return 0
 }
 
 makeInstallCommand()
 {
-    # zenity progress feature
-    echo "70"; sleep $SLEEP_TIME
-    echo "# Installing applications" ; sleep $SLEEP_TIME
     if [[ "$BUILD" != "debug" ]]; then
-        echo "# make install" >> $LOG_FILE
-        runCommand "make install"
+        runCommand "make install" || return 1
     fi
     return 0
 }
 
 finalMessage()
 {
-    # zenity progress feature
-    echo "90"; sleep $SLEEP_TIME
-    echo "# Compilation completed (with or without error)" ; sleep $SLEEP_TIME
+    updateZenityProgress 90 "End of compilation"
+    echo
     SPEC_FOR_PATH=`echo $SPEC | sed y/+/p/`
     BINPATH=$SCRIPT_PATH"/bin/"$LOWERED_BUNDLE_NAME"_Qt"$QT_VERSION"_"$SPEC_FOR_PATH
     if [[ $OSTYPE == linux-gnu ]]; then
@@ -282,8 +300,6 @@ finalMessage()
 
 build()
 {
-    echo "Starting build: application=$LOWERED_BUNDLE_NAME" >> $LOG_FILE
-    # No bundle name -> Error
     if [[ "$LOWERED_BUNDLE_NAME" == "" ]]; then
         echo "*** ERROR: you must define the application with the -b param. See help -h."
         echo "*** ERROR: you must define the application with the -b param. See help -h." >> $LOG_FILE
@@ -291,11 +307,11 @@ build()
     fi
 
     # Create the qmake configuration
-    if [[  "$BUILD" == "debug" ]]; then
+    if [[ "$BUILD" == "debug" ]]; then
         QMAKE_CONFIG="CONFIG+=debug CONFIG-=release CONFIG+=debug_without_install"
-    elif [[  "$BUILD" == "release" ]]; then
+    elif [[ "$BUILD" == "release" ]]; then
         QMAKE_CONFIG="CONFIG-=debug CONFIG+=release"
-    elif [[  "$BUILD" == "linuxintegrated" ]]; then
+    elif [[ "$BUILD" == "linuxintegrated" ]]; then
         QMAKE_CONFIG="CONFIG-=debug CONFIG+=release CONFIG+=LINUX_INTEGRATED"
     fi
 
@@ -303,7 +319,8 @@ build()
     if [[ "$BUILD" != "debug" ]]; then
         MSG="RELEASE mode"
     fi
-    echo "*** Building application in $MSG: $LOWERED_BUNDLE_NAME ($BUILD) ***"
+
+    updateZenityProgress 0 "Building application in $MSG: $LOWERED_BUNDLE_NAME ($BUILD)"
     if [[ "$BUILD" != "debug" ]]; then
         if [[ $OSTYPE == darwin* ]]; then
             # Switch to mac_release.sh
@@ -329,55 +346,24 @@ build()
       return 123
   fi
 
-  makeClean
-  if [[ "$?" != 0 ]]; then
-      echo "*** ERROR: make clean." >> $LOG_FILE
-      return 123;
-  fi
+  makeClean || return 100;
 
-  createTranslations
-  if [[ "$?" != 0 ]]; then
-      echo "*** ERROR: make translations." >> $LOG_FILE
-      return 123;
-  fi
+  createTranslations || return 101;
 
-  echo "# Entering $LOWERED_BUNDLE_NAME"; sleep $SLEEP_TIME
-  cd $LOWERED_BUNDLE_NAME
-  if [[ "$?" != 0 ]]; then
-      echo "*** ERROR: entering $LOWERED_BUNDLE_NAME." >> $LOG_FILE
-      return 123;
-  fi
+  updateZenityProgress 0 "Entering $LOWERED_BUNDLE_NAME"
+  cd $LOWERED_BUNDLE_NAME || return 102;
 
-  qmakeCommand
-  if [[ "$?" != 0 ]]; then
-      echo "*** ERROR: qmake." >> $LOG_FILE
-      return 123;
-  fi
+  qmakeCommand || return 103;
 
-  makeCommand
-  if [[ "$?" != 0 ]]; then
-      echo "*** ERROR: make." >> $LOG_FILE
-      return 123;
-  fi
+  makeCommand || return 104;
 
-  makeInstallCommand
-  if [[ "$?" != 0 ]]; then
-      echo "*** ERROR: make install." >> $LOG_FILE
-      return 123;
-  fi
+  makeInstallCommand || return 105;
 
-  echo "# Entering $SCRIPT_PATH"
-  cd $SCRIPT_PATH
-  if [[ "$?" != 0 ]]; then
-      echo "*** ERROR: entering $SCRIPT_PATH." >> $LOG_FILE
-      return 123;
-  fi
+  updateZenityProgress 90 "Entering $SCRIPT_PATH"
+  cd $SCRIPT_PATH || return 106;
 
-  finalMessage
-  if [[ "$?" != 0 ]]; then
-      echo "*** ERROR: unable to display final message." >> $LOG_FILE
-      return 123;
-  fi
+  finalMessage || return 107;
+
   return 0
 }
 
@@ -423,7 +409,10 @@ launchApplication()
 #########################################################################################
 ## Analyse options
 #########################################################################################
-while getopts "hdrRijcxXtwab:" option
+createLogFile
+detectQtVersion
+
+while getopts "hdrRijcxXtwab:p:" option
 do
   case $option in
     h) showHelp
@@ -455,6 +444,17 @@ do
        CAMELCASE_BUNDLE_NAME=$OPTARG
     ;;
     X) DEBUG_BUILD_COMMANDS=1
+    ;;
+    p)
+        isPlugin $OPTARG && {
+            echo "* Adding optional plugin: " $OPTARG
+            echo "[Ok] Adding optional plugin: " $OPTARG >> $LOG_FILE 
+            REQUESTED_PLUGINS=$REQUESTED_PLUGINS" "$OPTARG
+        } || {
+            echo "* Requested optional plugin is not valid: " $OPTARG
+            echo "[ERROR] Requested optional plugin is not valid: " $OPTARG >> $LOG_FILE 
+        }
+    ;;
   esac
 done
 
@@ -675,13 +675,13 @@ startZenityDialog()
 #########################################################################################
 ## Start build process
 #########################################################################################
-createLogFile
-detectQtVersion
 
+# No bundle name provided -> error unless user requested a clear command
 if [[ -z $BUILD || -z $LOWERED_BUNDLE_NAME ]]; then
     if [[ -z $CLEAN ]]; then
         if [[ -f $ZENITY ]]; then
             echo "* No command line params: starting zenity configuration"
+            RUNNING_ZENITY=1
             startZenityDialog
         fi
     else
@@ -689,6 +689,14 @@ if [[ -z $BUILD || -z $LOWERED_BUNDLE_NAME ]]; then
         makeClean
         exit 0
     fi
+fi
+
+if [[ -z $TEST ]]; then
+    isValidCamelCaseApplication $CAMELCASE_BUNDLE_NAME || {
+        echo "Application $CAMELCASE_BUNDLE_NAME does not exists in this project"
+        echo "Application $CAMELCASE_BUNDLE_NAME does not exists in this project" >> $LOG_FILE
+        exit 321;
+    }
 fi
 
 # Run the build commands
