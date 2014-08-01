@@ -468,13 +468,14 @@ do
     ;;
     X) DEBUG_BUILD_COMMANDS=1
     ;;
-    p)
-        isPlugin $OPTARG && {
-            echo "* Adding optional plugin: " $OPTARG
-            REQUESTED_PLUGINS=$REQUESTED_PLUGINS" "$OPTARG
-        } || {
-            echo "[ERROR] Requested optional plugin is not valid: " $OPTARG 
-        }
+    p) for PLUG in $OPTARG; do
+           isPlugin $PLUG && {
+               echo "* Adding optional plugin: " $PLUG
+               REQUESTED_PLUGINS=$REQUESTED_PLUGINS" "$PLUG
+           } || {
+               echo "[ERROR] Requested optional plugin is not valid: " $PLUG 
+           }
+       done
     ;;
     l) createLogFile
   esac
