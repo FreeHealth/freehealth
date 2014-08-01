@@ -166,12 +166,19 @@
 using namespace Form;
 using namespace Trans::ConstantTranslations;
 
-/** Construct a default query: complete forms, from database, get screenshots */
+/**
+ * Construct a default query:
+ * complete forms,
+ * get all available forms & descriptions from database
+ * do not force local files reading,
+ * do not exclude gender specific forms,
+ * (include user doc)
+ */
 FormIOQuery::FormIOQuery() :
     m_type(CompleteForms),
     m_ForceFile(false),
-    m_AllForms(false),
-    m_AllDescr(false),
+    m_AllForms(true),
+    m_AllDescr(true),
     m_ExcludeGenderSpecific(false),
     m_includeUserDoc(true)
 {

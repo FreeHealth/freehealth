@@ -80,7 +80,9 @@ FORMS += formfilesselectorwidget.ui \
 OTHER_FILES = FormManager.pluginspec
 
 equals(TEST, 1){
-    SOURCES += tests/tst_formitem.cpp
+    SOURCES += \
+        tests/tst_formitem.cpp \
+        tests/tst_formmanager.cpp
 }
 
 # include translations

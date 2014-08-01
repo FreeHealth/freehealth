@@ -24,8 +24,8 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef FORM_MANAGER_TPLUGIN_H
-#define FORM_MANAGER_TPLUGIN_H
+#ifndef FORM_MANAGER_IPLUGIN_H
+#define FORM_MANAGER_IPLUGIN_H
 
 #include <extensionsystem/iplugin.h>
 
@@ -34,8 +34,8 @@
 /**
  * \file formmanagerplugin.h
  * \author Eric Maeker
- * \version 0.0.0
- * \date 02 Sept 2013
+ * \version 0.10.0
+ * \date 01 Aug 2014
 */
 
 namespace Form {
@@ -65,6 +65,9 @@ private Q_SLOTS:
 #ifdef WITH_TESTS
     void initTestCase();
     void test_formcore_initialization();
+    void test_FormManager_initialization();
+    void test_FormIOQuery();
+    void test_FormIO_object();
     void cleanupTestCase();
 #endif
 
@@ -79,4 +82,4 @@ private:
 }
 }
 
-#endif  // End FORM_MANAGER_TPLUGIN_H
+#endif  // End FORM_MANAGER_IPLUGIN_H
