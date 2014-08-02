@@ -33,13 +33,14 @@
   Extract the major, minor and debug versions. Extract the alpha version.\n
   The version string must be formatted as follow: \n
       - major.minor.debug
-      - major.minor.debug~alpha
-      - major.minor.debug~alphaalpha_nb
-      - major.minor.debug~beta
-      - major.minor.debug~betabeta_nb
-      - major.minor.debug~RC
-      - major.minor.debug~RCrc_nb
+      - major.minor.debug-alpha
+      - major.minor.debug-alphaalpha_nb
+      - major.minor.debug-beta
+      - major.minor.debug-betabeta_nb
+      - major.minor.debug-RC
+      - major.minor.debug-RCrc_nb
  * \note Unit-test available (see: tests/auto/auto.pro)
+ * \sa http://semver.org/
 */
 
 using namespace Utils;
