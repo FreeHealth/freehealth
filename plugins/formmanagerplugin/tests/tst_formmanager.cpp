@@ -31,6 +31,7 @@
 
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
+#include <coreplugin/constants_tokensandsettings.h>
 
 #include <utils/log.h>
 #include <utils/global.h>
@@ -38,6 +39,8 @@
 #include <extensionsystem/pluginmanager.h>
 
 #include <QDir>
+#include <QFileInfo>
+#include <QPixmap>
 #include <QTest>
 #include <QSignalSpy>
 
@@ -50,6 +53,18 @@ static inline ExtensionSystem::PluginManager *pluginManager() { return Extension
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline Form::FormCore &formCore() {return Form::FormCore::instance();}
 // static inline Form::Internal::EpisodeBase *episodeBase() {return Form::Internal::EpisodeBase::instance();}
+
+// Get the XML FormIO object from the object pool
+static inline Form::IFormIO *_xmlIo()
+{
+    Form::IFormIO *xmlIo = 0;
+    QList<Form::IFormIO *> list = pluginManager()->getObjects<Form::IFormIO>();
+    foreach(Form::IFormIO *io, list) {
+        if (io->name() == "XmlFormIO")
+            xmlIo = io;
+    }
+    return xmlIo;
+}
 
 void FormManagerPlugin::test_FormManager_initialization()
 {
@@ -68,8 +83,8 @@ void FormManagerPlugin::test_FormIOQuery()
     QVERIFY(query.authors().isEmpty());
     QVERIFY(query.formUuid().isEmpty());
     QVERIFY(query.forceFileReading() == false);
-    QVERIFY(query.getAllAvailableForms() == true);
-    QVERIFY(query.getAllAvailableFormDescriptions() == true);
+    QVERIFY(query.getAllAvailableForms() == false);
+    QVERIFY(query.getAllAvailableFormDescriptions() == false);
 
     // Test setters/getters
     query.setTypeOfForms(Form::FormIOQuery::CompleteForms);
@@ -125,14 +140,14 @@ void FormManagerPlugin::test_FormIO_object()
     QVERIFY(list.count() >= 1);
 
     // Test that the XML IO plugin is correctly created and available
-    Form::IFormIO *xmlIo = 0;
+    Form::IFormIO *xmlIo = _xmlIo();
     foreach(Form::IFormIO *io, list) {
         if (io->name() == "XmlFormIO")
             xmlIo = io;
     }
     QVERIFY(xmlIo != 0);
 
-    // TODO: test getFormFileDescriptions()
+    // Test getFormFileDescriptions()
     QDir completeFormsDir(settings()->path(Core::ISettings::CompleteFormsPath));
     QVERIFY(completeFormsDir.exists() == true);
     QDir subFormsDir(settings()->path(Core::ISettings::SubFormsPath));
@@ -145,21 +160,62 @@ void FormManagerPlugin::test_FormIO_object()
 
     // Check using the XML internal database
     Form::FormIOQuery query;
+    query.setTypeOfForms(Form::FormIOQuery::CompleteForms);
     QList<Form::FormIODescription*> completeDescriptions = xmlIo->getFormFileDescriptions(query);
+    //    foreach(Form::FormIODescription *desc, completeDescriptions) {
+    //        qDebug() << desc->data(Form::FormIODescription::UuidOrAbsPath) << desc->data(Form::FormIODescription::Uuid);
+    //    }
+    query.setTypeOfForms(Form::FormIOQuery::SubForms);
     QList<Form::FormIODescription*> subDescriptions = xmlIo->getFormFileDescriptions(query);
-
-    qDebug() << "countComplete" << countComplete << "countSub" << countSub;
-    qDebug() << "completeFromQuery" << completeDescriptions.count()
-             << "subFromQuery" << subDescriptions.count();
-
+    //    foreach(Form::FormIODescription *desc, subDescriptions) {
+    //        qDebug() << desc->data(Form::FormIODescription::UuidOrAbsPath) << desc->data(Form::FormIODescription::Uuid);
+    //    }
     QVERIFY(completeDescriptions.count() == countComplete);
     QVERIFY(subDescriptions.count() == countSub);
 
     // query.setForceFileReading(true);
 
     // TODO: test loadAllRootForms()
-    // TODO: test screenShots() with a known central form
-    // TODO: test extractFileToTmpPath()
     // TODO: test availableUpdates() with user central forms
     // TODO: test availableUpdates() with user subforms
 }
+
+void FormManagerPlugin::test_FormIO_screenshots()
+{
+    Form::IFormIO *xmlIo = _xmlIo();
+
+    // Get all local shots for any forms
+    // Currently (v0.9.1) all shots are saved in PNG format
+    QHash<QString, int> uidCount;
+    QFileInfoList files = Utils::getFiles(QDir(settings()->path(Core::ISettings::CompleteFormsPath)), "*.png");
+    foreach(const QFileInfo &file, files) {
+        QString fileName = file.absoluteFilePath();
+        fileName.replace(settings()->path(Core::ISettings::CompleteFormsPath), Core::Constants::TAG_APPLICATION_COMPLETEFORMS_PATH);
+
+        // Eg: fileName == __completeForms__/gp_basic1/shots/fr/1patientfiles-fr.png
+        //     Uid  = __completeForms__/gp_basic1
+        //     Shot = fr/1patientfiles-fr.png
+
+        // extract formUid from fileName
+        int splitAt = fileName.indexOf("/", fileName.indexOf("/") + 1);
+        QString uid = fileName.left(splitAt);
+        QString shot = fileName.mid(fileName.indexOf("shots/", splitAt) + 6);
+        qDebug() << uid << shot;
+        QVERIFY(xmlIo->screenShot(uid, shot).size() == QPixmap(file.absoluteFilePath()).size());
+        // QString ioPix = Utils::pixmapToBase64(xmlIo->screenShot(uid, shot));
+        // QString filePix = Utils::pixmapToBase64(QPixmap(file.absoluteFilePath()));
+        // TODO: this is false with some shots only??? QVERIFY(ioPix == filePix);
+
+        // Count all uid shots
+        uidCount.insert(uid, uidCount.value(uid)+1);
+    }
+
+    // Test Form::IFormIO::screenShots() with a known central form
+    foreach(const QString &uid, uidCount.keys()) {
+        const QList<QPixmap> &pix = xmlIo->screenShots(uid);
+        QVERIFY(pix.count() == uidCount.value(uid));
+    }
+
+}
+
+// TODO: test extractFileToTmpPath()

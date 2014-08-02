@@ -68,6 +68,7 @@ private Q_SLOTS:
     void test_FormManager_initialization();
     void test_FormIOQuery();
     void test_FormIO_object();
+    void test_FormIO_screenshots();
     void cleanupTestCase();
 #endif
 
