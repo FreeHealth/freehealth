@@ -76,7 +76,10 @@ public:
         PmhCategories,
         ExtraFiles,
         PdfFile,
-        CssFile
+        CssFile,
+        TxtFile,
+        RtfFile,
+        QmlFile
     };
 
     // Constructor

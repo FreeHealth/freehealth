@@ -71,6 +71,7 @@ static inline XmlFormContentReader *reader() {return XmlFormContentReader::insta
 static inline Core::ICommandLine *commandLine()  { return Core::ICore::instance()->commandLine(); }
 static inline Category::CategoryCore *categoryCore() {return  Category::CategoryCore::instance();}
 
+namespace {
 static inline bool connectedDatabase(QSqlDatabase &db, int line)
 {
     if (!db.isOpen()) {
@@ -91,6 +92,17 @@ static inline QString normalizedFormUid(const QString &formUid)
     }
     return newUid;
 }
+
+// This struct is used in saveForm()
+struct FormFile {
+    FormFile(const QString &fileExtension, const QString &subDir, const XmlForms::Internal::XmlIOBase::TypeOfContent content) :
+        _fileExt(fileExtension), _subDir(subDir), _content(content)
+    {}
+
+    QString _fileExt, _subDir;
+    XmlForms::Internal::XmlIOBase::TypeOfContent _content;
+};
+} // anonymous namespace
 
 // Initializing static data
 XmlIOBase *XmlIOBase::m_Instance = 0;
@@ -775,40 +787,26 @@ bool XmlIOBase::saveForm(XmlFormName &form)
         }
     }
 
-    // Save scripts
-    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
-    if (!saveFiles(form, "scripts", "js", XmlIOBase::ScriptFile)) {
-        LOG_ERROR("Unable to save script files");
-        database().rollback();
-        _transaction = false;
-        return false;
-    }
-
-    // Save uis
-    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
-    if (!saveFiles(form, "ui", "ui", XmlIOBase::UiFile)) {
-        LOG_ERROR("Unable to save UI files");
-        database().rollback();
-        _transaction = false;
-        return false;
-    }
-    // Save qml
-//    saveFiles(form, "qml", "qml", XmlIOBase::QmlFile);
-
-    // Save html && css
-    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
-    if (!saveFiles(form, "html", "html", XmlIOBase::HtmlFile)) {
-        LOG_ERROR("Unable to save HTML files");
-        database().rollback();
-        _transaction = false;
-        return false;
-    }
-    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
-    if (!saveFiles(form, "html", "css", XmlIOBase::HtmlFile)) {
-        LOG_ERROR("Unable to save HTML files");
-        database().rollback();
-        _transaction = false;
-        return false;
+    // Save files
+    QList<FormFile> files;
+    files << FormFile("js", "scripts", XmlIOBase::ScriptFile);
+    files << FormFile("ui", "ui", XmlIOBase::UiFile);
+    files << FormFile("qml", "qml", XmlIOBase::QmlFile);
+    files << FormFile("html", "html", XmlIOBase::HtmlFile);
+    files << FormFile("htm", "html", XmlIOBase::HtmlFile);
+    files << FormFile("css", "html", XmlIOBase::CssFile);
+    files << FormFile("pdf", "pdf", XmlIOBase::PdfFile);
+//    files << FormFile("txt", "scripts", XmlIOBase::ScriptFile);
+//    files << FormFile("rtf", "scripts", XmlIOBase::ScriptFile);
+    foreach(const FormFile &file, files) {
+        qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
+        if (!saveFiles(form, file._subDir, file._fileExt, file._content)) {
+            LOG_ERROR(QString("Unable to save %1(*.%2) files")
+                      .arg(file._subDir).arg(file._fileExt));
+            database().rollback();
+            _transaction = false;
+            return false;
+        }
     }
 
     // Save screenshots
