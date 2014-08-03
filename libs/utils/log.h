@@ -109,6 +109,7 @@ public:
 
     static void muteConsoleWarnings();
     static void muteObjectConsoleWarnings(const QString &objectName);
+    static void unmuteObjectConsoleWarnings(const QString &objectName);
 
     static void addMessage( const QObject * o, const QString & msg, bool forceWarning = false );
     static void addMessage( const QString & object, const QString & msg, bool forceWarning = false );

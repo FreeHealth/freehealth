@@ -121,7 +121,13 @@ void Log::muteConsoleWarnings()
 void Log::muteObjectConsoleWarnings(const QString &objectName)
 {
     if (!m_MutedObjects.contains(objectName, Qt::CaseInsensitive))
-            m_MutedObjects << objectName;
+            m_MutedObjects << objectName.toLower();
+}
+
+/** \sa Utils::Log::muteObjectConsoleWarnings() */
+void Log::unmuteObjectConsoleWarnings(const QString &objectName)
+{
+    m_MutedObjects.removeAll(objectName.toLower());
 }
 
 void Log::addMessage(const QString &object, const QString &msg, bool forceWarning)
