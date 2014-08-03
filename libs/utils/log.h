@@ -96,7 +96,7 @@ public:
 
 class UTILS_EXPORT Log
 {
-    static void addData( const QString &o, const QString &m, const QDateTime &d, const int t );
+    static void addData(const QString &o, const QString &m, const QDateTime &d, const int t);
 
 public:
     static void logCompilationConfiguration();
@@ -108,6 +108,7 @@ public:
     static bool debugFileInOutProcess() {return m_logFileInOut;}
 
     static void muteConsoleWarnings();
+    static void muteObjectConsoleWarnings(const QString &objectName);
 
     static void addMessage( const QObject * o, const QString & msg, bool forceWarning = false );
     static void addMessage( const QString & object, const QString & msg, bool forceWarning = false );
@@ -142,6 +143,7 @@ public:
 
 private:
     static QList<LogData> m_Messages;
+    static QStringList m_MutedObjects;
     static bool m_HasError;
     static bool m_MuteConsole;
     static bool m_logFileInOut, m_debugPlugins;

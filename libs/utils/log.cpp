@@ -64,6 +64,7 @@ bool Log::m_HasError = false;
 bool Log::m_MuteConsole = false;
 bool Log::m_logFileInOut = false;
 bool Log::m_debugPlugins = false;
+QStringList Log::m_MutedObjects;
 
 /**
  * \fn bool Utils::Log::setDebugFileInOutProcess(bool debug)
@@ -106,17 +107,33 @@ void Log::addData(const QString &o, const QString &m, const QDateTime &d, const 
         m_HasError=true;
 }
 
+/**
+ * Mute all console warning/debug
+ */
 void Log::muteConsoleWarnings()
-{ m_MuteConsole=true; }
+{
+    m_MuteConsole=true;
+}
+
+/**
+ * Mute all console output for the specified \e objectName (case insensitive)
+ */
+void Log::muteObjectConsoleWarnings(const QString &objectName)
+{
+    if (!m_MutedObjects.contains(objectName, Qt::CaseInsensitive))
+            m_MutedObjects << objectName;
+}
 
 void Log::addMessage(const QString &object, const QString &msg, bool forceWarning)
 {
-    if (!m_MuteConsole || forceWarning) {
+    if (!m_MuteConsole
+            || forceWarning
+            || !m_MutedObjects.contains(object, Qt::CaseInsensitive)) {
         QString m = lineWrapString(msg, 90-26);
         m = indentString(m, 26).mid(26);
         qDebug() << QString("%1 %2")
-                      .arg(object.leftJustified(25, QChar(' ')))
-                      .arg(m);
+                    .arg(object.leftJustified(25, QChar(' ')))
+                    .arg(m);
     }
     addData(object, msg, QDateTime::currentDateTime(), LogData::Message);
 }
@@ -129,7 +146,9 @@ void Log::addMessages(const QString &o, const QStringList &msg, bool forceWarnin
 
 void Log::addError(const QString &object, const QString &err, const QString &file, const int line, bool forceWarning)
 {
-    if (!m_MuteConsole || forceWarning) {
+    if (!m_MuteConsole
+            || forceWarning
+            || !m_MutedObjects.contains(object, Qt::CaseInsensitive)) {
         QString e = QString("** ERROR(%1:%2) ** %3")
                 .arg(QFileInfo(file).fileName()).arg(line).arg(err);
         e = lineWrapString(e, 90-26);
