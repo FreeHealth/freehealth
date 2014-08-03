@@ -67,8 +67,10 @@ private Q_SLOTS:
     void test_formcore_initialization();
     void test_FormManager_initialization();
     void test_FormIOQuery();
-    void test_FormIO_object();
+    void test_FormIO_queryFromDatabase();
+    void test_FormIO_queryFromLocal();
     void test_FormIO_screenshots();
+    void test_FormIO_userForms();
     void cleanupTestCase();
 #endif
 

@@ -155,7 +155,6 @@ XmlFormContentReader::~XmlFormContentReader()
 /** Clear internal cache */
 void XmlFormContentReader::clearCache()
 {
-    m_ReadableForms.clear();
     m_DomDocFormCache.clear();
     m_ActualForm = 0;
 }
@@ -171,18 +170,21 @@ void XmlFormContentReader::refreshPluginFactories()
     }
 }
 
-/** Return true is formUid is already tested and present in cache */
-bool XmlFormContentReader::isInCache(const QString &formUid) const
+/** Return \e true is \e formAbsPath is already tested and present in cache */
+bool XmlFormContentReader::isInCache(const QString &formAbsPath) const
 {
-    return m_ReadableForms.contains(formUid);
+    return m_DomDocFormCache.contains(formAbsPath);
 }
 
-/** Return the cached readable QDomDocument from the cache system or 0 if the \e formuid is not present in cache. */
-QDomDocument *XmlFormContentReader::fromCache(const QString &formUid) const
+/**
+ * Return the cached readable QDomDocument from the cache system
+ * or 0 if the \e formAbsPath is not present in cache.
+ * \sa XmlForms::Internal::XmlFormName
+ */
+QDomDocument *XmlFormContentReader::fromCache(const QString &formAbsPath) const
 {
-    if (m_DomDocFormCache.contains(formUid))
-        return m_DomDocFormCache[formUid];
-//    qWarning() << "NOT IN CACHE" << formUid << m_DomDocFormCache.keys();
+    if (m_DomDocFormCache.contains(formAbsPath))
+        return m_DomDocFormCache[formAbsPath];
     return 0;
 }
 
@@ -267,13 +269,9 @@ bool XmlFormContentReader::checkFileContent(const QString &formUidOrFullAbsPath,
     return ok;
 }
 
-static void setPathToDescription(QString path, Form::FormIODescription *desc)
-{
-    path.replace(settings()->path(Core::ISettings::CompleteFormsPath), Core::Constants::TAG_APPLICATION_COMPLETEFORMS_PATH);
-    path.replace(settings()->path(Core::ISettings::SubFormsPath), Core::Constants::TAG_APPLICATION_SUBFORMS_PATH);
-    desc->setData(Form::FormIODescription::UuidOrAbsPath, path);
-}
-
+/**
+ * When updating forms, users can add field equivalences from version to version.
+ */
 QMultiHash<QString, QString> XmlFormContentReader::readUuidEquivalence(const QDomDocument *doc) const
 {
     QMultiHash<QString, QString> oldToNew;
@@ -293,36 +291,35 @@ QMultiHash<QString, QString> XmlFormContentReader::readUuidEquivalence(const QDo
 }
 
 /** Return the Form::FormIODescription according to the XML QDomElement \e xmlDescr. The \e xmlDescr must point to the first description tag of the document. */
-Form::FormIODescription *XmlFormContentReader::readXmlDescription(const QDomElement &xmlDescr, const QString &formUid)
+Form::FormIODescription *XmlFormContentReader::readXmlDescription(const QDomElement &xmlDescr, const XmlFormName &form)
 {
     Form::FormIODescription *ioDesc = new Form::FormIODescription;
     ioDesc->setRootTag(Constants::TAG_FORM_DESCRIPTION);
     ioDesc->fromDomElement(xmlDescr);
-    setPathToDescription(formUid, ioDesc);
+    ioDesc->setData(Form::FormIODescription::UuidOrAbsPath, form.uid);
     return ioDesc;
 }
 
 /** Return the Form description. Call this member just after the checkFormFileContent() so that the form xml content will be cached */
-Form::FormIODescription *XmlFormContentReader::readFileInformation(const QString &formUidOrFullAbsPath, const Form::FormIOQuery &query)
+Form::FormIODescription *XmlFormContentReader::readFileInformation(const XmlFormName &form, const Form::FormIOQuery &query)
 {
     Form::FormIODescription *toReturn = 0;
     // Get the QDomDocument from cache
-    QDomDocument *doc = m_DomDocFormCache[formUidOrFullAbsPath];
+    QDomDocument *doc = m_DomDocFormCache[form.absFileName];
     if (!doc) {
-        LOG_ERROR_FOR("XmlFormContentReader", "No document in cache call canReadForm before. Form: " + formUidOrFullAbsPath);
+        LOG_ERROR_FOR("XmlFormContentReader", "No document in cache call canReadForm before. Form: " + form.uid);
         return toReturn;
     }
 
     // get from cache and read description
     QDomElement root = doc->documentElement();
     root = root.firstChildElement(Constants::TAG_FORM_DESCRIPTION);
-    toReturn = readXmlDescription(root, formUidOrFullAbsPath);
+    toReturn = readXmlDescription(root, form);
 
     // has screenshots?
-    XmlFormName form(formUidOrFullAbsPath);
     if (query.forceFileReading()) {
         // Get from local files
-        QString shotPath = form.absPath + QDir::separator() + "shots" + QDir::separator();
+        QString shotPath = QString("%1/shots/").arg(form.absPath);
         QStringList lang;
         lang << QLocale().name().left(2).toLower() << "en" << "xx" << "all";
         bool found = false;

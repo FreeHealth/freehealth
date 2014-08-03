@@ -72,8 +72,8 @@ public:
 
     void refreshPluginFactories();
 
-    bool isInCache(const QString &formUid) const;
-    QDomDocument *fromCache(const QString &formUid) const;
+    bool isInCache(const QString &formAbsPath) const;
+    QDomDocument *fromCache(const QString &formAbsPath) const;
 
     void warnXmlReadError(bool muteUserWarnings, const QString &file, const QString &msg, const int line = -1, const int col = -1) const;
 
@@ -82,8 +82,8 @@ public:
     bool checkFileContent(const QString &formUidOrFullAbsPath, const QString &contents) const;
 
     QMultiHash<QString, QString> readUuidEquivalence(const QDomDocument *doc) const;
-    Form::FormIODescription *readXmlDescription(const QDomElement &xmlDescr, const QString &formUid);
-    Form::FormIODescription *readFileInformation(const QString &formUidOrFullAbsPath, const Form::FormIOQuery &query = Form::FormIOQuery());
+    Form::FormIODescription *readXmlDescription(const QDomElement &xmlDescr, const XmlFormName &form);
+    Form::FormIODescription *readFileInformation(const XmlFormName &form, const Form::FormIOQuery &query = Form::FormIOQuery());
 
     QList<Form::FormIODescription *> getFormFileDescriptions(const Form::FormIOQuery &query);
 
@@ -109,7 +109,6 @@ private:
     Form::FormMain *m_ActualForm;
 
     // Caching some data for speed improvements
-    mutable QHash<QString, bool> m_ReadableForms;
     mutable QCache<QString, QDomDocument> m_DomDocFormCache;
 
     // XML helpers

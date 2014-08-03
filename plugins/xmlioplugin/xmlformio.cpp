@@ -73,10 +73,11 @@ static inline Internal::XmlIOBase *base() {return Internal::XmlIOBase::instance(
 
 static inline XmlFormName &formName(const QString &uuid, QHash<QString, XmlFormName> &cache)
 {
-    if (!cache.contains(uuid)) {
-        cache.insert(uuid, XmlFormName(uuid));
+    XmlFormName form(uuid);
+    if (!cache.contains(form.uid)) {
+        cache.insert(form.uid, form);
     }
-    return cache[uuid];
+    return cache[form.uid];
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -221,7 +222,7 @@ QList<Form::FormIODescription *> XmlFormIO::getFormFileDescriptions(const Form::
             checkFormIODescription(toReturn, query, this);
             return toReturn;
         }
-        for(int i=0; i<toReturn.count(); ++i) {
+        for(int i=0; i < toReturn.count(); ++i) {
             includedUids << toReturn.at(i)->data(Form::FormIODescription::UuidOrAbsPath).toString();
         }
     }
@@ -232,7 +233,7 @@ QList<Form::FormIODescription *> XmlFormIO::getFormFileDescriptions(const Form::
         XmlFormName &form = formName(query.formUuid(), m_FormNames);
 //        XmlFormName form(query.formUuid());
         if (canReadForms(query)) {
-            Form::FormIODescription *desc = reader()->readFileInformation(form.absFileName, query);
+            Form::FormIODescription *desc = reader()->readFileInformation(form, query);
             if (desc) {
                 desc->setData(Form::FormIODescription::IsCompleteForm, true);
                 const Form::IFormIO *const_iformio = qobject_cast<const Form::IFormIO*>(this);
@@ -262,7 +263,7 @@ QList<Form::FormIODescription *> XmlFormIO::getFormFileDescriptions(const Form::
                     continue;
 
                 if (canReadForms(fileName)) {
-                    Form::FormIODescription *desc = reader()->readFileInformation(fileName);
+                    Form::FormIODescription *desc = reader()->readFileInformation(form);
                     if (desc) {
                         desc->setData(Form::FormIODescription::IsCompleteForm, true);
                         toReturn.append(desc);
@@ -287,7 +288,7 @@ QList<Form::FormIODescription *> XmlFormIO::getFormFileDescriptions(const Form::
                     continue;
 
                 if (canReadForms(fileName)) {
-                    Form::FormIODescription *desc = reader()->readFileInformation(fileName);
+                    Form::FormIODescription *desc = reader()->readFileInformation(form);
                     if (desc) {
                         desc->setData(Form::FormIODescription::IsSubForm, true);
                         toReturn.append(desc);
@@ -495,13 +496,19 @@ bool XmlFormIO::checkDatabaseFormFileForUpdates() const
 
     // Test all database forms for an update and populate a list
     // iterate through all FormIO descriptions in database
+    QStringList checkedFormUid;
     foreach(Form::FormIODescription *dbDescription, dbDescriptionList) {
+        QString dbFormUid = dbDescription->data(Form::FormIODescription::UuidOrAbsPath).toString();
+        if (checkedFormUid.contains(dbFormUid))
+            continue;
+        checkedFormUid.append(dbFormUid);
+
         qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
         qDeleteAll(fileDescriptionList);
         fileDescriptionList.clear();
 
         Form::FormIOQuery query;
-        query.setFormUuid(dbDescription->data(Form::FormIODescription::UuidOrAbsPath).toString());
+        query.setFormUuid(dbFormUid);
         query.setForceFileReading(true);
 
         // get actual version number of a form in database
@@ -510,7 +517,6 @@ bool XmlFormIO::checkDatabaseFormFileForUpdates() const
         // get file description list of that form and iterate through this list
         fileDescriptionList = getFormFileDescriptions(query);
         foreach(Form::FormIODescription *fileDescription, fileDescriptionList) {
-
             // check version number of forms in the file
             Utils::VersionNumber fileVersion(fileDescription->data(Form::FormIODescription::Version).toString());
 
