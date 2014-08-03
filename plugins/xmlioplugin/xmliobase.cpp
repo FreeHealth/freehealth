@@ -383,21 +383,36 @@ QList<Form::FormIODescription *> XmlIOBase::getFormDescription(const Form::FormI
     gets << Utils::Field(Constants::Table_FORM_CONTENT, Constants::FORMCONTENT_CONTENT);
     Utils::JoinList joins;
     joins << Utils::Join(Constants::Table_FORMS, Constants::FORM_ID, Constants::Table_FORM_CONTENT, Constants::FORMCONTENT_FORM_ID);
-    Utils::FieldList conds;
+
+    Utils::FieldList conds, uid;
+    // Get FormUid conditions
     if (formQuery.getAllAvailableFormDescriptions()) {
-        conds << Utils::Field(Constants::Table_FORMS, Constants::FORM_UUID, QString("like '%'"));
+        uid << Utils::Field(Constants::Table_FORMS, Constants::FORM_UUID,
+                            QString("like '%'"));
     } else {
         if (formQuery.typeOfForms() & Form::FormIOQuery::CompleteForms) {
-            conds << Utils::Field(Constants::Table_FORMS, Constants::FORM_UUID, QString("like '%1%'").arg(Core::Constants::TAG_APPLICATION_COMPLETEFORMS_PATH));
+            uid << Utils::Field(Constants::Table_FORMS, Constants::FORM_UUID,
+                                QString("like '%1%'").arg(Core::Constants::TAG_APPLICATION_COMPLETEFORMS_PATH));
+            uid << Utils::Field(Constants::Table_FORMS, Constants::FORM_UUID,
+                                QString("like '%1%'").arg(Core::Constants::TAG_APPLICATION_USER_COMPLETEFORMS_PATH));
+            uid << Utils::Field(Constants::Table_FORMS, Constants::FORM_UUID,
+                                QString("like '%1%'").arg(Core::Constants::TAG_DATAPACK_COMPLETEFORMS_PATH));
         }
         if (formQuery.typeOfForms() & Form::FormIOQuery::SubForms) {
-            conds << Utils::Field(Constants::Table_FORMS, Constants::FORM_UUID, QString("like '%1%'").arg(Core::Constants::TAG_APPLICATION_SUBFORMS_PATH));
+            uid << Utils::Field(Constants::Table_FORMS, Constants::FORM_UUID,
+                                QString("like '%1%'").arg(Core::Constants::TAG_APPLICATION_SUBFORMS_PATH));
+            uid << Utils::Field(Constants::Table_FORMS, Constants::FORM_UUID,
+                                QString("like '%1%'").arg(Core::Constants::TAG_APPLICATION_USER_SUBFORMS_PATH));
+            uid << Utils::Field(Constants::Table_FORMS, Constants::FORM_UUID,
+                                QString("like '%1%'").arg(Core::Constants::TAG_DATAPACK_SUBFORMS_PATH));
         }
     }
     conds << Utils::Field(Constants::Table_FORM_CONTENT, Constants::FORMCONTENT_TYPE, QString("='%1'").arg(Description));
     conds << Utils::Field(Constants::Table_FORM_CONTENT, Constants::FORMCONTENT_ISVALID, QString("=1"));
-
-    QString req = select(gets, joins, conds);
+    QString where = QString(" WHERE %1 AND %2")
+            .arg(getWhereClause(conds))
+            .arg(getWhereClause(uid, Utils::Database::OR));
+    QString req = select(gets, joins) + where;
     if (query.exec(req)) {
         while (query.next()) {
             QDomDocument doc;
