@@ -129,8 +129,10 @@
  * - icon files
  */
 
-/** \fn virtual bool Form::IFormIO::saveForm(QObject *treeRoot) = 0;
-  * Not yet implemented.
+/** \fn virtual bool Form::IFormIO::saveForm(const QString &uuidOrAbsPath) = 0;
+  * Requires the IO plugin to save the form \e uuidOrAbsPath to its
+  * internal database (if it manages a database). \n
+  * Returns \e true if the process succeeded
 */
 
 /** \fn virtual QString Form::IFormIO::lastError() const = 0;

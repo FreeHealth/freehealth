@@ -177,7 +177,7 @@ public:
 
     virtual QString extractFileToTmpPath(const QString &uuidOrAbsPath, const QString &name) const = 0;
 
-    virtual bool saveForm(QObject *treeRoot) = 0;
+    virtual bool saveForm(const QString &uuidOrAbsPath) = 0;
 
     virtual QString lastError() const = 0;
 

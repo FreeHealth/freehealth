@@ -83,7 +83,7 @@ public:
 
     QString extractFileToTmpPath(const QString &uuidOrAbsPath, const QString &name) const;
 
-    bool saveForm(QObject *treeRoot) { Q_UNUSED(treeRoot); return true; }
+    bool saveForm(const QString &uuidOrAbsPath);
 
     QString lastError() const {return m_Error.join("\n");}
 

@@ -440,6 +440,12 @@ QString XmlFormIO::extractFileToTmpPath(const QString &uuidOrAbsPath, const QStr
     return output;
 }
 
+bool XmlFormIO::saveForm(const QString &uuidOrAbsPath)
+{
+    XmlFormName form(uuidOrAbsPath);
+    return base()->saveForm(form);
+}
+
 void XmlFormIO::checkForUpdates() const
 {
     reader()->clearCache();
