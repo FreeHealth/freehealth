@@ -214,6 +214,7 @@ void DrugsBasePlugin::test_drugsio_xmloutput()
 
 void DrugsBasePlugin::test_prescriptionTokens()
 {
+#ifdef WITH_PAD
     // PrescriptionToken objects are created by DrugsIO object during its initialization
     // We just have to overwrite the prescription token drugsmodel & the model row
     // in order to make some tests
@@ -263,6 +264,7 @@ void DrugsBasePlugin::test_prescriptionTokens()
     }
 
     delete model;
+#endif
 }
 
 // Tests:
