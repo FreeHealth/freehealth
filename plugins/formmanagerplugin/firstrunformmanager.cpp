@@ -45,7 +45,8 @@ static inline ExtensionSystem::PluginManager *pluginManager() { return Extension
 static inline Core::ISettings *settings() { return Core::ICore::instance()->settings(); }
 
 FirstRunFormManagerWizardPage::FirstRunFormManagerWizardPage(QWidget *parent) :
-        QWizardPage(parent), selector(0)//, m_Wizard(parent)
+    QWizardPage(parent),
+    selector(0)//, m_Wizard(parent)
 {
 }
 
