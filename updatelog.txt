@@ -36,6 +36,7 @@ The FreeMedForms project
       * Check: correctly returns the printing values instead of the label on print demand
       * Radio: correctly returns the printing values instead of the label on print demand
     * User password encryption gets stronger
+    * Correcting insertion of user forms (complete forms and subforms)
   * FreeDiams
     * Correctly select user language at startup
     * Correctly define the default print-to-PDF-cache path in the user documents path
