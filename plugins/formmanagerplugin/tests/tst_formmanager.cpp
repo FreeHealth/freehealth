@@ -180,8 +180,8 @@ void FormManagerPlugin::test_FormIO_queryFromDatabase()
     // We use >= because if we run this unit-tests many times
     // we have created many userForms and included them into the database
     // without removing them
-//    QVERIFY(completeDescriptions.count() >= countComplete);
-//    QVERIFY(subDescriptions.count() >= countSub);
+    QVERIFY(completeDescriptions.count() >= countComplete);
+    QVERIFY(subDescriptions.count() >= countSub);
 }
 
 void FormManagerPlugin::test_FormIO_queryFromLocal()
@@ -241,7 +241,7 @@ void FormManagerPlugin::test_FormIO_queryFromLocal()
     int found = 0;
     foreach(Form::FormIODescription *desc, localCompleteDescriptions) {
         QString local = desc->data(Form::FormIODescription::UuidOrAbsPath).toString();
-        qDebug() << local;
+        // qDebug() << local;
         foreach(Form::FormIODescription *dbDesc, dbCompleteDescriptions) {
             QString db = dbDesc->data(Form::FormIODescription::UuidOrAbsPath).toString();
             if (db == local) {
@@ -256,7 +256,7 @@ void FormManagerPlugin::test_FormIO_queryFromLocal()
     found = 0;
     foreach(Form::FormIODescription *desc, localSubDescriptions) {
         QString local = desc->data(Form::FormIODescription::UuidOrAbsPath).toString();
-        qDebug() << local;
+        // qDebug() << local;
         foreach(Form::FormIODescription *dbDesc, dbSubDescriptions) {
             QString db = dbDesc->data(Form::FormIODescription::UuidOrAbsPath).toString();
             if (db == local) {
@@ -377,8 +377,9 @@ void FormManagerPlugin::test_FormIO_userForms()
     //        qDebug() << desc->data(Form::FormIODescription::UuidOrAbsPath) << desc->data(Form::FormIODescription::Uuid);
     //    }
     QVERIFY(completeDescriptions.count() == (previousCompleteCount+1));
-    //QVERIFY(subDescriptions.count() == (previousSubCount+1));
+//    QVERIFY(subDescriptions.count() == (previousSubCount+1));
 
+    // TODO: now test with a UserSubForm creation
 
     // Unmute XML* logs
     Utils::Log::unmuteObjectConsoleWarnings("XmlFormIO");
