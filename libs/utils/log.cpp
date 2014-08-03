@@ -126,9 +126,8 @@ void Log::muteObjectConsoleWarnings(const QString &objectName)
 
 void Log::addMessage(const QString &object, const QString &msg, bool forceWarning)
 {
-    if (!m_MuteConsole
-            || forceWarning
-            || !m_MutedObjects.contains(object, Qt::CaseInsensitive)) {
+    bool mute = m_MuteConsole || m_MutedObjects.contains(object, Qt::CaseInsensitive);
+    if (!mute || forceWarning) {
         QString m = lineWrapString(msg, 90-26);
         m = indentString(m, 26).mid(26);
         qDebug() << QString("%1 %2")
@@ -146,9 +145,8 @@ void Log::addMessages(const QString &o, const QStringList &msg, bool forceWarnin
 
 void Log::addError(const QString &object, const QString &err, const QString &file, const int line, bool forceWarning)
 {
-    if (!m_MuteConsole
-            || forceWarning
-            || !m_MutedObjects.contains(object, Qt::CaseInsensitive)) {
+    bool mute = m_MuteConsole || m_MutedObjects.contains(object, Qt::CaseInsensitive);
+    if (!mute || forceWarning) {
         QString e = QString("** ERROR(%1:%2) ** %3")
                 .arg(QFileInfo(file).fileName()).arg(line).arg(err);
         e = lineWrapString(e, 90-26);
