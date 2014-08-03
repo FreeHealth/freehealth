@@ -41,12 +41,18 @@ using namespace Internal;
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 
 XmlFormName::XmlFormName() :
-    isValid(false), isAvailableFromDatabase(false), dbId(-1)
+    isValid(false),
+    isAvailableFromDatabase(false),
+    dbId(-1)
 {
 }
 
 XmlFormName::XmlFormName(const QString &_uid) :
-    isValid(false), isAvailableFromDatabase(false), uid(_uid), absFileName(_uid), dbId(-1)
+    isValid(false),
+    isAvailableFromDatabase(false),
+    uid(_uid),
+    absFileName(_uid),
+    dbId(-1)
 {
     if (uid.endsWith(".xml", Qt::CaseInsensitive)) {
         int begin = uid.lastIndexOf("/");
@@ -76,7 +82,7 @@ XmlFormName::XmlFormName(const QString &_uid) :
         uid.replace(settings()->path(Core::ISettings::SubFormsPath), Core::Constants::TAG_APPLICATION_SUBFORMS_PATH);
 
         uid.replace(settings()->path(Core::ISettings::UserCompleteFormsPath), Core::Constants::TAG_APPLICATION_USER_COMPLETEFORMS_PATH);
-        uid.replace(settings()->path(Core::ISettings::SubFormsPath), Core::Constants::TAG_APPLICATION_USER_SUBFORMS_PATH);
+        uid.replace(settings()->path(Core::ISettings::UserSubFormsPath), Core::Constants::TAG_APPLICATION_USER_SUBFORMS_PATH);
 
         uid.replace(settings()->path(Core::ISettings::BundleResourcesPath), Core::Constants::TAG_APPLICATION_RESOURCES_PATH);
     }
@@ -110,7 +116,7 @@ bool XmlFormName::operator==(const XmlFormName &other) const
 QDebug XmlForms::Internal::operator<<(QDebug dbg, const XmlFormName &c)
 {
     dbg.nospace() << "XmlFormName(Valid:" << c.isValid
-                  << "Uid: " << c.uid
+                  << "; Uid: " << c.uid
                   << "; Mode: " << c.modeName
                   << "; File: " << c.absFileName
                   << "; AbsPath: " << c.absPath

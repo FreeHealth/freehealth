@@ -34,6 +34,11 @@ with-alerts{
     OTHER_FILES = XmlIO.pluginspec
 }
 
+equals(TEST, 1){
+    SOURCES += \
+        tests/tst_xmlformname.cpp
+}
+
 # include translations
 TRANSLATION_NAME = xmlio
 include($${SOURCES_ROOT_PATH}/buildspecs/translations.pri)

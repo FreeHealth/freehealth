@@ -24,8 +24,8 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef XMLIOTPLUGIN_H
-#define XMLIOTPLUGIN_H
+#ifndef XMLIO_IPLUGIN_H
+#define XMLIO_IPLUGIN_H
 
 #include <extensionsystem/iplugin.h>
 
@@ -59,6 +59,12 @@ public:
 private Q_SLOTS:
     void showDatabaseInformation();
 
+#ifdef WITH_TESTS
+    void initTestCase();
+    void test_XmlFormName();
+    void cleanupTestCase();
+#endif
+
 private:
     Internal::XmlFormContentReader *m_XmlReader;
     Internal::XmlFormIO *m_FormIo;
@@ -67,4 +73,4 @@ private:
 }  // namespace Internal
 }  // namespace XmlForms
 
-#endif  // End XMLIOTPLUGIN_H
+#endif  // End XMLIO_IPLUGIN_H
