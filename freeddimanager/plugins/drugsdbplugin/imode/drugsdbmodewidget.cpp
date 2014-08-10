@@ -94,6 +94,8 @@ public:
     {
     }
 
+    // Get all available database creator objects from the pool
+    // and construct the trees (free/nonfree)
     void updateAvailableDatabase()
     {
         // Update available database listWidget
@@ -182,6 +184,7 @@ DrugsDbModeWidget::DrugsDbModeWidget(QWidget *parent) :
     d->ui->progressBar->hide();
 
     d->ui->downloadSPC->hide();
+    d->ui->sourceSelector->hide();
     // TODO: connect(d->ui->downloadSPC, SIGNAL(clicked()), this, SLOT(downloadFinished()));
 
     connect(d->ui->seeDbDescription, SIGNAL(clicked()), this, SLOT(onSeeDatabaseDescriptionFileRequested()));

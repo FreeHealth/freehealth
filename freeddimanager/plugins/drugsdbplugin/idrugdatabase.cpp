@@ -94,7 +94,8 @@ IDrugDatabase::IDrugDatabase(QObject *parent) :
     _lang("en"),
     _sid(-1),
     _databasePopulator(0),
-    _country(QLocale::AnyCountry)
+    _country(QLocale::AnyCountry),
+    _manualSourceDownload(false)
 {
     setObjectName("FreeDDIManager::IDrugDatabase");
     _outputFileName = "master.db";
@@ -142,13 +143,22 @@ void IDrugDatabase::setOutputFileName(const QString &fileName)
 
 /**
  * Define one URL for the automatic downloading process.
- * If you define this URL, the URL will be automatically downloaded during the step processing.
+ * If you define this URL, the URL will be automatically
+ * downloaded during the step processing.
  * Otherwise you can overload the downloadFiles().
+ * URL should point to the drugs database raw source.
  */
 void IDrugDatabase::setDownloadUrl(const QString &url)
 {
     _downloadingUrl = url;
 }
+
+/**
+ * \fn void IDrugDatabase::DrugsDb::Internal::setManualSourceDownload(const bool state)
+ * Set the manual source download. User will have to download
+ * the drugs database raw source by-hand using a given URL.
+ * \sa setDownloadUrl()
+ */
 
 /** Define the absolute path to the finalization SQL script to execute. This is obsolete. */
 void IDrugDatabase::setFinalizationScript(const QString &absPath)

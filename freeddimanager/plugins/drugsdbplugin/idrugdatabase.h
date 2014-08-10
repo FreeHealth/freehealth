@@ -104,6 +104,7 @@ public:
     void setConnectionName(const QString &connection);
     void setOutputFileName(const QString &fileName);
     void setDownloadUrl(const QString &url);
+    void setManualSourceDownload(const bool state) {_manualSourceDownload = state;}
     void setFinalizationScript(const QString &absPath);
     void setDatabaseDescriptionFile(const QString &absPath);
     void setDatapackDescriptionFile(const QString &absPath);
@@ -210,6 +211,7 @@ private:
     DrugDatabasePopulator *_databasePopulator;
     QStringList _finalReport;
     QLocale::Country _country;
+    bool _manualSourceDownload;
 };
 
 }  // namespace Internal
