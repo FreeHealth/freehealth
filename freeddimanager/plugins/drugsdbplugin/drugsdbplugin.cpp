@@ -30,6 +30,7 @@
 #include <drugsdbplugin/countries/za/southafricandrugsdatabase.h>
 #include <drugsdbplugin/countries/ca/canadiandrugsdatabase.h>
 #include <drugsdbplugin/countries/us/fdadrugsdatabase.h>
+#include <drugsdbplugin/countries/be/belgishdrugsdatabase.h>
 
 #include <coreplugin/icore.h>
 #include <coreplugin/translators.h>
@@ -44,6 +45,19 @@
 
 using namespace DrugsDb;
 using namespace Internal;
+
+// This is a dirty code reproducer for drug database registration
+// used in initialize()
+#define REGISTER_DB(objectName) \
+    base = new objectName(this); \
+    _mode->registerDrugDatabase(base); \
+    _databases.append(base); \
+    \
+    base = new objectName(this); \
+    base->setLicenseType(IDrugDatabase::NonFree); \
+    base->setServerOwner(IDrugDatabase::FrenchAssociation); \
+    _mode->registerDrugDatabase(base); \
+    _databases.append(base);
 
 /**
  * The core IPlugin object manages:
@@ -79,49 +93,24 @@ bool DrugsDbPlugin::initialize(const QStringList &arguments, QString *errorMessa
     // Create the database creator
     IDrugDatabase *base = 0;
 
-    // French drugs databases (Free & NonFree)
-    base = new FrDrugDatabase(this);
-    _mode->registerDrugDatabase(base);
-    _databases.append(base);
+    // Because of the macro code we need to add this line to
+    // avoid a compilation warning.
+    Q_UNUSED(base);
 
-    base = new FrDrugDatabase(this);
-    base->setLicenseType(IDrugDatabase::NonFree);
-    base->setServerOwner(IDrugDatabase::FrenchAssociation);
-    _mode->registerDrugDatabase(base);
-    _databases.append(base);
+    // French drugs databases (Free & NonFree)
+    REGISTER_DB(FrDrugDatabase);
 
     // South-African drugs databases (Free & NonFree)
-    base = new ZaDrugDatabase(this);
-    _mode->registerDrugDatabase(base);
-    _databases.append(base);
-
-    base = new ZaDrugDatabase(this);
-    base->setLicenseType(IDrugDatabase::NonFree);
-    base->setServerOwner(IDrugDatabase::FrenchAssociation);
-    _mode->registerDrugDatabase(base);
-    _databases.append(base);
+    REGISTER_DB(ZaDrugDatabase);
 
     // Canadian drugs databases (Free & NonFree)
-    base = new CaDrugDatabase(this);
-    _mode->registerDrugDatabase(base);
-    _databases.append(base);
-
-    base = new CaDrugDatabase(this);
-    base->setLicenseType(IDrugDatabase::NonFree);
-    base->setServerOwner(IDrugDatabase::FrenchAssociation);
-    _mode->registerDrugDatabase(base);
-    _databases.append(base);
+    REGISTER_DB(CaDrugDatabase);
 
     // USA drugs databases (Free & NonFree)
-    base = new FdaDrugDatabase(this);
-    _mode->registerDrugDatabase(base);
-    _databases.append(base);
+    REGISTER_DB(FdaDrugDatabase);
 
-    base = new FdaDrugDatabase(this);
-    base->setLicenseType(IDrugDatabase::NonFree);
-    base->setServerOwner(IDrugDatabase::FrenchAssociation);
-    _mode->registerDrugDatabase(base);
-    _databases.append(base);
+    // Belgium drugs databases (Free & NonFree)
+    REGISTER_DB(BeDrugDatatabaseStep);
 
     // add plugin info page
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
