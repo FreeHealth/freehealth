@@ -59,8 +59,9 @@
 
 #include <QDebug>
 
-// For your tests, you can limit the number of drugs computed and inserted into the database
-// using this debugging enum. Set to -1 if you want all drugs to be processed
+// For your tests, you can limit the number of drugs computed
+// and inserted into the database using this debugging enum.
+// Set to -1 if you want all drugs to be processed
 enum { LimitDrugsTo = -1 };
 
 using namespace DrugsDb;
@@ -68,7 +69,7 @@ using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
 namespace {
-const char* const FRENCH_RPC_LINK           = "http://agence-prd.ansm.sante.fr/php/ecodex/rcp/R%1.htm"; // 2+2+3
+const char* const FRENCH_RPC_LINK = "http://agence-prd.ansm.sante.fr/php/ecodex/rcp/R%1.htm"; // 2+2+3
 }
 
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
