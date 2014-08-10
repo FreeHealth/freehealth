@@ -24,78 +24,40 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef BELGISHDRUGSDATABASE_H
-#define BELGISHDRUGSDATABASE_H
+#ifndef DDIMANAGER_DRUGSDB_INTERNAL_BELGISHDRUGSDATABASE_H
+#define DDIMANAGER_DRUGSDB_INTERNAL_BELGISHDRUGSDATABASE_H
 
-#include <drugsdb/idrugdatabasestep.h>
-#include <coreplugin/itoolpage.h>
-#include <coreplugin/ftb_constants.h>
+#include <drugsdbplugin/idrugdatabase.h>
 
-#include <QWidget>
+/**
+ * \file belguishdrugsdatabase.h
+ * \author Eric Maeker
+ * \version 0.10.0
+ * \date 09 Aug 2014
+*/
 
-namespace DrugsDB {
+namespace DrugsDb {
 namespace Internal {
-class BeDrugDatabaseStep;
+class BeDrugDatatabaseStep;
 
-class FreeBeDrugsDatabasePage : public Core::IToolPage
-{
-    Q_OBJECT
-public:
-    explicit FreeBeDrugsDatabasePage(QObject *parent = 0);
-    ~FreeBeDrugsDatabasePage();
-
-    virtual QString id() const {return "FreeBeDrugsDatabasePage";}
-    virtual QString name() const;
-    virtual QString category() const;
-    virtual QIcon icon() const {return QIcon();}
-
-    // widget will be deleted after the show
-    virtual QWidget *createPage(QWidget *parent = 0);
-
-private:
-    BeDrugDatabaseStep *_step;
-};
-
-class NonFreeBeDrugsDatabasePage : public Core::IToolPage
-{
-    Q_OBJECT
-public:
-    explicit NonFreeBeDrugsDatabasePage(QObject *parent = 0);
-    ~NonFreeBeDrugsDatabasePage();
-
-    virtual QString id() const {return "NonFreeBeDrugsDatabasePage";}
-    virtual QString name() const;
-    virtual QString category() const;
-    virtual QIcon icon() const {return QIcon();}
-
-    // widget will be deleted after the show
-    virtual QWidget *createPage(QWidget *parent = 0);
-
-private:
-    BeDrugDatabaseStep *_step;
-};
-
-class BeDrugDatabaseStep : public DrugsDB::Internal::IDrugDatabaseStep
+class BeDrugDatatabaseStep : public DrugsDb::Internal::IDrugDatabase
 {
     Q_OBJECT
 
 public:
-    BeDrugDatabaseStep(QObject *parent = 0);
-    ~BeDrugDatabaseStep();
+    BeDrugDatatabaseStep(QObject *parent = 0);
+    ~BeDrugDatatabaseStep();
 
     QString id() const {return "BeDrugDatatabaseStep";}
-    Steps stepNumber() const {return Core::IFullReleaseStep::DrugsDatabase;}
     void setLicenseType(LicenseType type);
-    QString tmpDatabaseAbsPath();
 
-    bool startDownload();
     bool process();
     QString processMessage() const;
 
     bool unzipFiles();
     bool prepareData();
     bool populateDatabase();
-    bool linkMolecules();
+//    bool linkDrugsComponentsAndDrugInteractors();
 
     QStringList errors() const {return m_Errors;}
 
@@ -105,6 +67,6 @@ private:
 };
 
 }  //  namespace Internal
-}  //  namespace DrugsDB
+}  //  namespace DrugsDb
 
-#endif // BELGISHDRUGSDATABASE_H
+#endif // DDIMANAGER_DRUGSDB_INTERNAL_BELGISHDRUGSDATABASE_H

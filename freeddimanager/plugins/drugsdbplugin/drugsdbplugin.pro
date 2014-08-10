@@ -19,7 +19,7 @@ HEADERS += \
     imode/drugsdbmodewidget.h \
     drugdatabasedescription.h \
     idrugdatabase.h \
-#    countries/be/belgishdrugsdatabase.h \
+    countries/be/belgishdrugsdatabase.h \
     countries/ca/canadiandrugsdatabase.h \
     countries/fr/frenchdrugsdatabasecreator.h \
 #    countries/pt/portuguesedrugsdatabase.h \
@@ -38,7 +38,7 @@ SOURCES += \
     drug.cpp \
     drugdatabasedescription.cpp \
     idrugdatabase.cpp \
-#    countries/be/belgishdrugsdatabase.cpp \
+    countries/be/belgishdrugsdatabase.cpp \
     countries/ca/canadiandrugsdatabase.cpp \
     countries/fr/frenchdrugsdatabasecreator.cpp \
 #    countries/pt/portuguesedrugsdatabase.cpp \
