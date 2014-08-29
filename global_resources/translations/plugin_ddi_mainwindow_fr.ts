@@ -6,37 +6,37 @@
     <message>
         <location filename="../../freeddimanager/plugins/mainwindowplugin/mainwindowpreferenceswidget.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../freeddimanager/plugins/mainwindowplugin/mainwindowpreferenceswidget.ui" line="20"/>
         <source>Update checking</source>
-        <translation type="unfinished"></translation>
+        <translation>Vérification des mises à jour</translation>
     </message>
     <message>
         <location filename="../../freeddimanager/plugins/mainwindowplugin/mainwindowpreferenceswidget.ui" line="28"/>
         <source>At startup</source>
-        <translation type="unfinished"></translation>
+        <translation>Au démarrage</translation>
     </message>
     <message>
         <location filename="../../freeddimanager/plugins/mainwindowplugin/mainwindowpreferenceswidget.ui" line="33"/>
         <source>Each weeks</source>
-        <translation type="unfinished"></translation>
+        <translation>Toutes les semaines</translation>
     </message>
     <message>
         <location filename="../../freeddimanager/plugins/mainwindowplugin/mainwindowpreferenceswidget.ui" line="38"/>
         <source>Each months</source>
-        <translation type="unfinished"></translation>
+        <translation>Tous les mois</translation>
     </message>
     <message>
         <location filename="../../freeddimanager/plugins/mainwindowplugin/mainwindowpreferenceswidget.ui" line="43"/>
         <source>Each quarters</source>
-        <translation type="unfinished"></translation>
+        <translation>Tous les trimestres</translation>
     </message>
     <message>
         <location filename="../../freeddimanager/plugins/mainwindowplugin/mainwindowpreferenceswidget.ui" line="48"/>
         <source>Never (on user&apos;s demand)</source>
-        <translation type="unfinished"></translation>
+        <translation>Jamais (à la demande)</translation>
     </message>
 </context>
 <context>
@@ -44,23 +44,23 @@
     <message>
         <location filename="../../freeddimanager/plugins/mainwindowplugin/mainwindow.cpp" line="121"/>
         <source>Creating Main Window</source>
-        <translation type="unfinished"></translation>
+        <translation>Création de la fenêtre principale</translation>
     </message>
     <message>
         <location filename="../../freeddimanager/plugins/mainwindowplugin/mainwindow.cpp" line="341"/>
         <source>Unable to save database</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossible de sauvegarder la base de données</translation>
     </message>
     <message>
         <location filename="../../freeddimanager/plugins/mainwindowplugin/mainwindow.cpp" line="342"/>
         <source>An error occured when trying to backup the current database.
 Please, try again.</source>
-        <translation type="unfinished"></translation>
+        <translation>Une erreur est survenue lors de la tentative de sauvegarde de la base de données actuelle. Veuillez essayer une nouvelle fois.</translation>
     </message>
     <message>
         <location filename="../../freeddimanager/plugins/mainwindowplugin/mainwindow.cpp" line="348"/>
         <source>The database was correctly backuped to the following location:</source>
-        <translation type="unfinished"></translation>
+        <translation>La base de données a été correctement sauvegardée dans le répertoire suivant :</translation>
     </message>
 </context>
 </TS>

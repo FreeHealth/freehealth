@@ -230,12 +230,12 @@
     <message>
         <location filename="../../freeddimanager/plugins/ddiplugin/components/componentatcmodel.cpp" line="628"/>
         <source>Validity</source>
-        <translation type="unfinished"></translation>
+        <translation>Validité</translation>
     </message>
     <message>
         <location filename="../../freeddimanager/plugins/ddiplugin/components/componentatcmodel.cpp" line="630"/>
         <source>Reviewed</source>
-        <translation type="unfinished">Revu</translation>
+        <translation>Revu</translation>
     </message>
     <message>
         <location filename="../../freeddimanager/plugins/ddiplugin/components/componentatcmodel.cpp" line="632"/>
@@ -250,32 +250,32 @@
     <message>
         <location filename="../../freeddimanager/plugins/ddiplugin/components/componentatcmodel.cpp" line="636"/>
         <source>Date of creation</source>
-        <translation type="unfinished">Date de création</translation>
+        <translation>Date de création</translation>
     </message>
     <message>
         <location filename="../../freeddimanager/plugins/ddiplugin/components/componentatcmodel.cpp" line="638"/>
         <source>Date of update</source>
-        <translation type="unfinished">Date de mise à jour</translation>
+        <translation>Date de mise à jour</translation>
     </message>
     <message>
         <location filename="../../freeddimanager/plugins/ddiplugin/components/componentatcmodel.cpp" line="653"/>
         <source>Total: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Total : %1</translation>
     </message>
     <message>
         <location filename="../../freeddimanager/plugins/ddiplugin/components/componentatcmodel.cpp" line="671"/>
         <source>+Atc: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>+Atc : %1</translation>
     </message>
     <message>
         <location filename="../../freeddimanager/plugins/ddiplugin/components/componentatcmodel.cpp" line="679"/>
         <source>-Atc+Sugg: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>-Atc+Sugg : %1</translation>
     </message>
     <message>
         <location filename="../../freeddimanager/plugins/ddiplugin/components/componentatcmodel.cpp" line="688"/>
         <source>Reviewed: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Revus : %1</translation>
     </message>
 </context>
 <context>
@@ -283,17 +283,17 @@
     <message>
         <location filename="../../freeddimanager/plugins/ddiplugin/ddicore.cpp" line="229"/>
         <source>Unable to open selected database: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossible de sélectionner la base de données : %1</translation>
     </message>
     <message>
         <location filename="../../freeddimanager/plugins/ddiplugin/ddicore.cpp" line="234"/>
         <source>Unable to access selected database: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossible d&apos;accéder à la base de données : %1</translation>
     </message>
     <message>
         <location filename="../../freeddimanager/plugins/ddiplugin/ddicore.cpp" line="241"/>
         <source>An error occured when initializing the selected database: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Une erreur est survenue lors de l&apos;initialisation de la base de données sélectionnée : %1</translation>
     </message>
 </context>
 <context>
@@ -376,17 +376,17 @@
     <message>
         <location filename="../../freeddimanager/plugins/ddiplugin/ddi/drugdruginteractioneditorwidget.ui" line="483"/>
         <source>Interaction level of risk</source>
-        <translation type="unfinished"></translation>
+        <translation>Niveau de risque de l&apos;interaction</translation>
     </message>
     <message>
         <location filename="../../freeddimanager/plugins/ddiplugin/ddi/drugdruginteractioneditorwidget.ui" line="541"/>
         <source>Overview of the interaction</source>
-        <translation type="unfinished"></translation>
+        <translation>Aperçu de l&apos;interaction</translation>
     </message>
     <message>
         <location filename="../../freeddimanager/plugins/ddiplugin/ddi/drugdruginteractioneditorwidget.ui" line="576"/>
         <source>Date of creation</source>
-        <translation type="unfinished">Date de création</translation>
+        <translation>Date de création</translation>
     </message>
     <message>
         <location filename="../../freeddimanager/plugins/ddiplugin/ddi/drugdruginteractioneditorwidget.ui" line="579"/>
@@ -397,12 +397,12 @@
     <message>
         <location filename="../../freeddimanager/plugins/ddiplugin/ddi/drugdruginteractioneditorwidget.ui" line="599"/>
         <source>Last update</source>
-        <translation type="unfinished">Dernière mise à jour</translation>
+        <translation>Dernière mise à jour</translation>
     </message>
     <message>
         <location filename="../../freeddimanager/plugins/ddiplugin/ddi/drugdruginteractioneditorwidget.ui" line="615"/>
         <source>If checked, the interaction was reviewed by a member of the team</source>
-        <translation type="unfinished"></translation>
+        <translation>Si coché, l&apos;interaction a été revue par un membre de l&apos;équipe</translation>
     </message>
     <message>
         <location filename="../../freeddimanager/plugins/ddiplugin/ddi/drugdruginteractioneditorwidget.ui" line="618"/>
@@ -901,7 +901,7 @@
     <message>
         <location filename="../../freeddimanager/plugins/ddiplugin/components/componentatceditorwidget.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../freeddimanager/plugins/ddiplugin/components/componentatceditorwidget.ui" line="26"/>
@@ -931,12 +931,12 @@
     <message>
         <location filename="../../freeddimanager/plugins/ddiplugin/components/componentatceditorwidget.ui" line="62"/>
         <source>Load file</source>
-        <translation type="unfinished"></translation>
+        <translation>Ouvrir un fichier</translation>
     </message>
     <message>
         <location filename="../../freeddimanager/plugins/ddiplugin/components/componentatceditorwidget.ui" line="69"/>
         <source>Save file</source>
-        <translation type="unfinished"></translation>
+        <translation>Sauvegarder</translation>
     </message>
     <message>
         <location filename="../../freeddimanager/plugins/ddiplugin/components/componentatceditorwidget.ui" line="80"/>
@@ -976,17 +976,17 @@
     <message>
         <location filename="../../freeddimanager/plugins/ddiplugin/components/componentatceditorwidget.cpp" line="245"/>
         <source>Open the ATC search dialog</source>
-        <translation type="unfinished">Ouvrir le dialogue de recherche de code ATC</translation>
+        <translation>Ouvrir le dialogue de recherche de code ATC</translation>
     </message>
     <message>
         <location filename="../../freeddimanager/plugins/ddiplugin/components/componentatceditorwidget.cpp" line="470"/>
         <source>Select a dir to save wiki content</source>
-        <translation type="unfinished"></translation>
+        <translation>Sélectionnez le répertoire où sauvegarder le contenu du wiki</translation>
     </message>
     <message>
         <location filename="../../freeddimanager/plugins/ddiplugin/components/componentatceditorwidget.cpp" line="494"/>
         <source>Unreviewed component(s)</source>
-        <translation type="unfinished"></translation>
+        <translation>Composant(s) non revu(s)</translation>
     </message>
     <message>
         <location filename="../../freeddimanager/plugins/ddiplugin/components/componentatceditorwidget.cpp" line="496"/>
@@ -1020,7 +1020,7 @@
     <message>
         <location filename="../../freeddimanager/plugins/ddiplugin/components/componentatcmode.cpp" line="66"/>
         <source>Components</source>
-        <translation type="unfinished"></translation>
+        <translation>Composants</translation>
     </message>
 </context>
 <context>
@@ -1028,7 +1028,7 @@
     <message>
         <location filename="../../freeddimanager/plugins/ddiplugin/ddiplugin.cpp" line="151"/>
         <source>Change local database</source>
-        <translation type="unfinished"></translation>
+        <translation>Changer de base de données locale</translation>
     </message>
 </context>
 <context>
@@ -1123,7 +1123,7 @@
     <message>
         <location filename="../../freeddimanager/plugins/ddiplugin/interactors/interactoreditorwidget.ui" line="269"/>
         <source>Valid</source>
-        <translation type="unfinished"></translation>
+        <translation>Valide</translation>
     </message>
     <message>
         <location filename="../../freeddimanager/plugins/ddiplugin/interactors/interactoreditorwidget.ui" line="276"/>
@@ -1154,44 +1154,44 @@
     <message>
         <location filename="../../freeddimanager/plugins/ddiplugin/server/servermanagerwidget.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../freeddimanager/plugins/ddiplugin/server/servermanagerwidget.ui" line="24"/>
         <source>Interactors</source>
-        <translation type="unfinished"></translation>
+        <translation>Interacteurs</translation>
     </message>
     <message>
         <location filename="../../freeddimanager/plugins/ddiplugin/server/servermanagerwidget.ui" line="36"/>
         <location filename="../../freeddimanager/plugins/ddiplugin/server/servermanagerwidget.ui" line="81"/>
         <source>New</source>
-        <translation type="unfinished"></translation>
+        <translation>Nouveau</translation>
     </message>
     <message>
         <location filename="../../freeddimanager/plugins/ddiplugin/server/servermanagerwidget.ui" line="55"/>
         <location filename="../../freeddimanager/plugins/ddiplugin/server/servermanagerwidget.ui" line="100"/>
         <source>Updated</source>
-        <translation type="unfinished"></translation>
+        <translation>Mis à jour</translation>
     </message>
     <message>
         <location filename="../../freeddimanager/plugins/ddiplugin/server/servermanagerwidget.ui" line="69"/>
         <source>DDI</source>
-        <translation type="unfinished"></translation>
+        <translation>Interaction</translation>
     </message>
     <message>
         <location filename="../../freeddimanager/plugins/ddiplugin/server/servermanagerwidget.cpp" line="146"/>
         <source>Send to the FreeMedForms server</source>
-        <translation type="unfinished"></translation>
+        <translation>Envoyer à l&apos;équipe de FreeMedForms</translation>
     </message>
     <message>
         <location filename="../../freeddimanager/plugins/ddiplugin/server/servermanagerwidget.cpp" line="147"/>
         <source>Print your proposals</source>
-        <translation type="unfinished"></translation>
+        <translation>Imprimer votre proposition</translation>
     </message>
     <message>
         <location filename="../../freeddimanager/plugins/ddiplugin/server/servermanagerwidget.cpp" line="148"/>
         <source>Help</source>
-        <translation type="unfinished"></translation>
+        <translation>Aide</translation>
     </message>
 </context>
 <context>
@@ -1224,12 +1224,12 @@
     <message>
         <location filename="../../freeddimanager/plugins/ddiplugin/atc/searchatcindatabasedialog.ui" line="78"/>
         <source>You can select more than one code</source>
-        <translation type="unfinished"></translation>
+        <translation>Vous pouvez sélectionner plusieurs codes</translation>
     </message>
     <message>
         <location filename="../../freeddimanager/plugins/ddiplugin/atc/searchatcindatabasedialog.cpp" line="75"/>
         <source>Search ATC code</source>
-        <translation type="unfinished"></translation>
+        <translation>Chercher un code ATC</translation>
     </message>
 </context>
 <context>

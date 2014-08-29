@@ -72,7 +72,7 @@ requires an authentication</source>
     <message>
         <location filename="../../libs/datapackutils/serverengines/localserverengine.cpp" line="90"/>
         <source>Server configuration can be downloaded. Path: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>La configuration du serveur ne peut être téléchargé. Chemin : %1</translation>
     </message>
     <message>
         <location filename="../../libs/datapackutils/serverengines/localserverengine.cpp" line="115"/>
@@ -252,57 +252,57 @@ requires an authentication</source>
     <message>
         <location filename="../../libs/datapackutils/widgets/serverconfigurationdialog.ui" line="14"/>
         <source>Dialog</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../libs/datapackutils/widgets/serverconfigurationdialog.ui" line="32"/>
         <source>Datapack server editor</source>
-        <translation type="unfinished">Editeur de serveur</translation>
+        <translation>Editeur de serveur</translation>
     </message>
     <message>
         <location filename="../../libs/datapackutils/widgets/serverconfigurationdialog.ui" line="49"/>
         <source>Server params</source>
-        <translation type="unfinished">Paramètres du serveur</translation>
+        <translation>Paramètres du serveur</translation>
     </message>
     <message>
         <location filename="../../libs/datapackutils/widgets/serverconfigurationdialog.ui" line="55"/>
         <source>Server type</source>
-        <translation type="unfinished">Type de serveur</translation>
+        <translation>Type de serveur</translation>
     </message>
     <message>
         <location filename="../../libs/datapackutils/widgets/serverconfigurationdialog.ui" line="62"/>
         <source>Server URL</source>
-        <translation type="unfinished">Adresse du serveur</translation>
+        <translation>Adresse du serveur</translation>
     </message>
     <message>
         <location filename="../../libs/datapackutils/widgets/serverconfigurationdialog.ui" line="72"/>
         <source>Select</source>
-        <translation type="unfinished">Sélectionnez</translation>
+        <translation>Sélectionnez</translation>
     </message>
     <message>
         <location filename="../../libs/datapackutils/widgets/serverconfigurationdialog.ui" line="85"/>
         <source>User params</source>
-        <translation type="unfinished">Paramètres utilisateur</translation>
+        <translation>Paramètres utilisateur</translation>
     </message>
     <message>
         <location filename="../../libs/datapackutils/widgets/serverconfigurationdialog.ui" line="91"/>
         <source>Login</source>
-        <translation type="unfinished">Identifiant</translation>
+        <translation>Identifiant</translation>
     </message>
     <message>
         <location filename="../../libs/datapackutils/widgets/serverconfigurationdialog.ui" line="98"/>
         <source>Password</source>
-        <translation type="unfinished">Mot de passe</translation>
+        <translation>Mot de passe</translation>
     </message>
     <message>
         <location filename="../../libs/datapackutils/widgets/serverconfigurationdialog.ui" line="114"/>
         <source>Update checking</source>
-        <translation type="unfinished">Recherche de mise à jour</translation>
+        <translation>Recherche de mise à jour</translation>
     </message>
     <message>
         <location filename="../../libs/datapackutils/widgets/serverconfigurationdialog.ui" line="120"/>
         <source>Check for update</source>
-        <translation type="unfinished">Vérifier les mises à jour</translation>
+        <translation>Vérifier les mises à jour</translation>
     </message>
 </context>
 <context>
@@ -323,53 +323,53 @@ requires an authentication</source>
     <message>
         <location filename="../../libs/datapackutils/widgets/serverconfigurationdialog.cpp" line="95"/>
         <source>Default FreeMedForms server (mirror)</source>
-        <translation type="unfinished">Serveur par défaut de FreeMedForms (miroir)</translation>
+        <translation>Serveur par défaut de FreeMedForms (miroir)</translation>
     </message>
     <message>
         <location filename="../../libs/datapackutils/widgets/serverconfigurationdialog.cpp" line="96"/>
         <source>Local file</source>
-        <translation type="unfinished">Fichiers locaux</translation>
+        <translation>Fichiers locaux</translation>
     </message>
     <message>
         <location filename="../../libs/datapackutils/widgets/serverconfigurationdialog.cpp" line="97"/>
         <source>HTTP (standard mode)</source>
-        <translation type="unfinished">HTTP (mode standard)</translation>
+        <translation>HTTP (mode standard)</translation>
     </message>
     <message>
         <location filename="../../libs/datapackutils/widgets/serverconfigurationdialog.cpp" line="98"/>
         <source>FTP (standard mode)</source>
-        <translation type="unfinished">FTP (mode standard)</translation>
+        <translation>FTP (mode standard)</translation>
     </message>
     <message>
         <location filename="../../libs/datapackutils/widgets/serverconfigurationdialog.cpp" line="99"/>
         <source>Protected HTTP with zipped content</source>
-        <translation type="unfinished">HTTP protégé avec contenu zippé</translation>
+        <translation>HTTP protégé avec contenu zippé</translation>
     </message>
     <message>
         <location filename="../../libs/datapackutils/widgets/serverconfigurationdialog.cpp" line="100"/>
         <source>Protected HTTP non-zipped</source>
-        <translation type="unfinished">HTTP protégé contenu non-zippé</translation>
+        <translation>HTTP protégé contenu non-zippé</translation>
     </message>
     <message>
         <location filename="../../libs/datapackutils/widgets/serverconfigurationdialog.cpp" line="101"/>
         <source>FTP with zipped content</source>
-        <translation type="unfinished">FTP compressé</translation>
+        <translation>FTP compressé</translation>
     </message>
     <message>
         <location filename="../../libs/datapackutils/widgets/serverconfigurationdialog.cpp" line="135"/>
         <source>Select datapack local path</source>
-        <translation type="unfinished">Sélectionnez un répertoire avec des paquets de données</translation>
+        <translation>Sélectionnez un répertoire avec des paquets de données</translation>
     </message>
     <message>
         <location filename="../../libs/datapackutils/widgets/serverconfigurationdialog.cpp" line="160"/>
         <location filename="../../libs/datapackutils/widgets/serverconfigurationdialog.cpp" line="163"/>
         <source>Wrong server URL</source>
-        <translation type="unfinished"></translation>
+        <translation>Mauvaise adresse URL de serveur</translation>
     </message>
     <message>
         <location filename="../../libs/datapackutils/widgets/serverconfigurationdialog.cpp" line="161"/>
         <source>Unable to set the URL to the server. Please check your server configuration.</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossible de l&apos;URL du serveur. Veuillez vérifier votre configuration.</translation>
     </message>
 </context>
 <context>
@@ -377,38 +377,38 @@ requires an authentication</source>
     <message>
         <location filename="../../libs/datapackutils/servercreation/servercreationwidget.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../libs/datapackutils/servercreation/servercreationwidget.ui" line="20"/>
         <source>Search for datapacks</source>
-        <translation type="unfinished"></translation>
+        <translation>Cherchez des paquets de données</translation>
     </message>
     <message>
         <location filename="../../libs/datapackutils/servercreation/servercreationwidget.ui" line="43"/>
         <source>Number of available DataPack Creation Queues files found</source>
-        <translation type="unfinished"></translation>
+        <translation>Nombre de paquets de données disponible dans les files d&apos;attente trouvées</translation>
     </message>
     <message>
         <location filename="../../libs/datapackutils/servercreation/servercreationwidget.ui" line="50"/>
         <source>screen this path</source>
-        <translation type="unfinished"></translation>
+        <translation>analyser ce répertoire</translation>
     </message>
     <message>
         <location filename="../../libs/datapackutils/servercreation/servercreationwidget.ui" line="67"/>
         <source>Select and add queue screening path</source>
-        <translation type="unfinished"></translation>
+        <translation>Sélectionnez et ajoutez des chemins à analyser</translation>
     </message>
     <message>
         <location filename="../../libs/datapackutils/servercreation/servercreationwidget.ui" line="77"/>
         <location filename="../../libs/datapackutils/servercreation/servercreationwidget.ui" line="86"/>
         <source>Please select the path where the DataPack server will be created</source>
-        <translation type="unfinished"></translation>
+        <translation>Veuillez sélectionner le répertoire où le serveur de paquet de données va être créé</translation>
     </message>
     <message>
         <location filename="../../libs/datapackutils/servercreation/servercreationwidget.ui" line="80"/>
         <source>Server</source>
-        <translation type="unfinished"></translation>
+        <translation>Serveur</translation>
     </message>
     <message>
         <location filename="../../libs/datapackutils/servercreation/servercreationwidget.ui" line="96"/>
@@ -423,23 +423,24 @@ requires an authentication</source>
     <message>
         <location filename="../../libs/datapackutils/servercreation/servercreationwidget.ui" line="112"/>
         <source>Actions</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../libs/datapackutils/servercreation/servercreationwidget.ui" line="118"/>
         <source>Create the server</source>
-        <translation type="unfinished"></translation>
+        <translation>Créez le serveur</translation>
     </message>
     <message>
         <location filename="../../libs/datapackutils/servercreation/servercreationwidget.ui" line="128"/>
         <source>Upload server files</source>
-        <translation type="unfinished"></translation>
+        <translation>Téléversez les fichiers du serveur</translation>
     </message>
     <message>
         <location filename="../../libs/datapackutils/servercreation/servercreationwidget.cpp" line="209"/>
         <source>Creating Datapack Server
 %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Serveur en cours de création
+%1</translation>
     </message>
     <message>
         <location filename="../../libs/datapackutils/servercreation/servercreationwidget.cpp" line="221"/>
@@ -465,43 +466,44 @@ The path must be created with read/write rights on.</source>
     <message>
         <location filename="../../libs/datapackutils/servercreation/servercreationwidget.cpp" line="238"/>
         <source>No Pack selected</source>
-        <translation type="unfinished"></translation>
+        <translation>Pas de paquet sélectionné</translation>
     </message>
     <message>
         <location filename="../../libs/datapackutils/servercreation/servercreationwidget.cpp" line="239"/>
         <source>No Pack selected. Please select all Packs you want to include in the server.</source>
-        <translation type="unfinished"></translation>
+        <translation>Pas de paquet sélectionné. Veuillez sélectionner au moins un paquet à inclure dans le serveur.</translation>
     </message>
     <message>
         <location filename="../../libs/datapackutils/servercreation/servercreationwidget.cpp" line="260"/>
         <source>Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Erreur</translation>
     </message>
     <message>
         <location filename="../../libs/datapackutils/servercreation/servercreationwidget.cpp" line="261"/>
         <source>An error occured when trying to create the server.</source>
-        <translation type="unfinished"></translation>
+        <translation>Une erreur est survenue lors de la création du serveur.</translation>
     </message>
     <message>
         <location filename="../../libs/datapackutils/servercreation/servercreationwidget.cpp" line="267"/>
         <source>Server created</source>
-        <translation type="unfinished"></translation>
+        <translation>Serveur créé</translation>
     </message>
     <message>
         <location filename="../../libs/datapackutils/servercreation/servercreationwidget.cpp" line="268"/>
         <source>The datapack server was correctly created within the following path:
 %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Le serveur de paquet des données a été correctement créé dans le répertoire :
+%1</translation>
     </message>
     <message>
         <location filename="../../libs/datapackutils/servercreation/servercreationwidget.cpp" line="295"/>
         <source>Group by server</source>
-        <translation type="unfinished"></translation>
+        <translation>Groupez par serveur</translation>
     </message>
     <message>
         <location filename="../../libs/datapackutils/servercreation/servercreationwidget.cpp" line="296"/>
         <source>Group by queue</source>
-        <translation type="unfinished"></translation>
+        <translation>Groupez par file d&apos;attente</translation>
     </message>
 </context>
 <context>

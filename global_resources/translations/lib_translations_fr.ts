@@ -2738,35 +2738,35 @@ Text Align Justify shortcut key : Mac specific</extracomment>
     </message>
     <message>
         <source>Queue</source>
-        <translation type="unfinished"></translation>
+        <translation>File d&apos;attente</translation>
     </message>
     <message>
         <source>Queues</source>
-        <translation type="unfinished"></translation>
+        <translation>Files d&apos;attente</translation>
     </message>
     <message>
         <source>Queue(s)</source>
-        <translation type="unfinished"></translation>
+        <translation>File(s) d&apos;attente</translation>
     </message>
     <message>
         <source>%1: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 : %2</translation>
     </message>
     <message>
         <source>No item</source>
-        <translation type="unfinished"></translation>
+        <translation>Pas d&apos;élément</translation>
     </message>
     <message>
         <source>Database</source>
-        <translation type="unfinished"></translation>
+        <translation>Base de données</translation>
     </message>
     <message>
         <source>Host</source>
-        <translation type="unfinished"></translation>
+        <translation>Hôte</translation>
     </message>
     <message>
         <source>Port</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 </TS>
