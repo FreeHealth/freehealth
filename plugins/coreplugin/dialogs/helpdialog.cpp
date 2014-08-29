@@ -56,13 +56,17 @@
 #include <QDir>
 #include <QHeaderView>
 #include <QSplitter>
+#include <QLabel>
+#include <QVBoxLayout>
+#include <QDialogButtonBox>
 
 #include <QDebug>
-
 
 using namespace Core;
 using namespace Core::Internal;
 using namespace Trans::ConstantTranslations;
+
+static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 
 namespace Core {
 namespace Internal {
@@ -71,6 +75,7 @@ const char * const INDEX_FILENAME = "toc.html";
 class HelpDialogPrivate
 {
 public:
+    // FIXME: all this is dead code: see Ctor fixme note
     HelpDialogPrivate(QDialog *dlg) :
             m_Browser(0), m_TocBrowser(0), q(dlg)
     {
@@ -144,7 +149,7 @@ public:
 
     void populateTree()
     {
-        QDir dir(Core::ICore::instance()->settings()->path(ISettings::DocumentationPath));
+        QDir dir(settings()->path(ISettings::DocumentationPath));
         QStringList files = dir.entryList(QStringList() << "*.htm" << "*.html", QDir::Files | QDir::Readable);
         m_Tree->clear();
         foreach(const QString &f, files) {
@@ -178,51 +183,69 @@ public:
 
 /** \brief Construct a help dialog pointing to the \e page */
 HelpDialog::HelpDialog(const QString &page, QWidget *parent) :
-        QDialog(parent), d(0)
+    QDialog(parent),
+    d(0)
 {
     setObjectName("HelpDialog");
     setAttribute(Qt::WA_DeleteOnClose);
- #if QT_VERSION < 0x040700
-//    setAttribute(Qt::WA_GroupLeader);
-#endif
 
-    // Create dialog
-    d = new HelpDialogPrivate(this);
-//    setWindowFlags(Qt::Window | Qt::CustomizeWindowHint | Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint | Qt::WindowMinMaxButtonsHint);
-    Q_ASSERT(d);
-    d->retranslate();
-    d->createConnections();
+    // FIXME: as dokuwiki offline exporter is off, we can not provide local documentation
+    // We need to fix the dokuwiki exporter (including JS sources / DFSG) and the current code
+    QVBoxLayout *layout = new QVBoxLayout(this);
+    setLayout(layout);
+    QLabel *lbl = new QLabel(tr("<center>Documentation is available on line only.</center>"), this);
+    QLabel *lblLink = new QLabel(QString("<center><a href='%1'>%1</a></center>").arg(settings()->path(Core::ISettings::WebSiteUrl)));
+    QDialogButtonBox *but = new QDialogButtonBox(QDialogButtonBox::Ok, this);
+    connect(but, SIGNAL(accepted()), this, SLOT(accept()));
+    layout->addWidget(lbl);
+    layout->addWidget(lblLink);
+    layout->addWidget(but);
+    setWindowTitle(tkTr(Trans::Constants::HELP_TEXT));
 
-    // Load pages to browsers
-    d->m_Browser->setSearchPaths(QStringList() << Core::ICore::instance()->settings()->path(ISettings::DocumentationPath));
-//    d->m_TocBrowser->setSearchPaths(QStringList() << Core::ICore::instance()->settings()->path(ISettings::DocumentationPath));
-    d->m_Browser->setSource(QString(INDEX_FILENAME));
-    if (QFileInfo(Core::ICore::instance()->settings()->path(ISettings::DocumentationPath) + QDir::separator() + page).exists()) {
-        if (page!="index.html" && page!="index.htm" && (!page.isEmpty()))
-            d->m_Browser->setSource(page);
-    }
-//    d->m_TocBrowser->setSource(QString(TOC_FILENAME));
+//    // Create dialog
+//    d = new HelpDialogPrivate(this);
+////    setWindowFlags(Qt::Window | Qt::CustomizeWindowHint | Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint | Qt::WindowMinMaxButtonsHint);
+//    Q_ASSERT(d);
+//    d->retranslate();
+//    d->createConnections();
 
-    // create the layout
-    QGridLayout *layout = new QGridLayout(this);
-    layout->setMargin(0);
-    layout->setSpacing(0);
-    layout->addWidget(d->m_ToolBar);//,0,0,1,2);
-    Utils::MiniSplitter *split = new Utils::MiniSplitter(this);
-//    split->addWidget(d->m_Tree);
-//    split->addWidget(d->m_TocBrowser);
-    split->addWidget(d->m_Browser);
-    layout->addWidget(split);
-//    layout->addWidget(d->m_Tree,1,0);
+//    // Load pages to browsers
+//    d->m_Browser->setSearchPaths(QStringList() << settings()->path(ISettings::DocumentationPath));
+////    d->m_TocBrowser->setSearchPaths(QStringList() << settings()->path(ISettings::DocumentationPath));
 
-    // set icons
-    Core::ITheme *theme = Core::ICore::instance()->theme();
-    setWindowIcon(theme->icon(Constants::ICONHELP));
-//    d->populateTree();
-    updateWindowTitle();
+//    // Set default index
+//    d->m_Browser->setSource(QString(INDEX_FILENAME));
+////    d->m_TocBrowser->setSource(QString(TOC_FILENAME));
+
+//    // Find local page
+//    if (!page.isEmpty()) {
+//        QString fullPagePath = QString("%1/%2").arg(settings()->path(ISettings::DocumentationPath)).arg(page);
+//        if (QFileInfo(fullPagePath).exists()) {
+//            if (page!="index.html" && page!="index.htm" && (!page.isEmpty()))
+//                d->m_Browser->setSource(page);
+//        }
+//    }
+
+//    // create the layout
+//    QGridLayout *layout = new QGridLayout(this);
+//    layout->setMargin(0);
+//    layout->setSpacing(0);
+//    layout->addWidget(d->m_ToolBar);//,0,0,1,2);
+//    Utils::MiniSplitter *split = new Utils::MiniSplitter(this);
+////    split->addWidget(d->m_Tree);
+////    split->addWidget(d->m_TocBrowser);
+//    split->addWidget(d->m_Browser);
+//    layout->addWidget(split);
+////    layout->addWidget(d->m_Tree,1,0);
+
+//    // set icons
+//    Core::ITheme *theme = Core::ICore::instance()->theme();
+//    setWindowIcon(theme->icon(Constants::ICONHELP));
+////    d->populateTree();
+//    updateWindowTitle();
 
     // resize and center windows
-    Utils::resizeAndCenter(this);
+    //Utils::resizeAndCenter(this);
 }
 
 /** \brief Creates a new help browser */
@@ -233,7 +256,10 @@ void HelpDialog::showPage(const QString &page)
 }
 
 /** \brief Creates a new help browser starting on the documentation index file */
-void HelpDialog::showIndex() { showPage(QString(::INDEX_FILENAME)); }
+void HelpDialog::showIndex()
+{
+    showPage(QString(::INDEX_FILENAME));
+}
 
 /** \brief Slot called when text browser source changes --> update the window title. */
 void HelpDialog::updateWindowTitle()
@@ -248,6 +274,8 @@ void HelpDialog::updateWindowTitle()
 /** \brief Slot called for full screen toogler. */
 void HelpDialog::fullScreen()
 {
+    // FIXME: see Ctor fixme
+    return;
     Utils::setFullScreen(this, !this->isFullScreen());
 }
 

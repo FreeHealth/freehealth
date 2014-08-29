@@ -36,9 +36,9 @@ QT_END_NAMESPACE
 
 /**
  * \file helpdialog.h
- * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.5.0
- * \date 17 Oct 2010
+ * \author Eric Maeker
+ * \version 0.9.0
+ * \date 29 Aug 2014
 */
 
 namespace Core {
