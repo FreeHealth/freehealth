@@ -1,50 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="fr_FR">
+<TS version="2.0" language="fr_FR">
 <context>
     <name>Database</name>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="659"/>
+        <location filename="../../libs/utils/database.cpp" line="722"/>
         <source>WARNING: %1 database already in use</source>
         <translation>ATTENTION: base de données %1 déjà en cours d&apos;utilisation</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="813"/>
+        <location filename="../../libs/utils/database.cpp" line="866"/>
         <source>ERROR: Database `%1` is not readable. Path: %2</source>
         <translation>ERREUR: base de données %1 n&apos;est pas lisible. Chemin %2</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="824"/>
+        <location filename="../../libs/utils/database.cpp" line="877"/>
         <source>ERROR: Database %1 is not readable. Host: %2</source>
         <translation>ERREUR: base de données %1 n&apos;est pas lisible. Hôte %2</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="833"/>
+        <location filename="../../libs/utils/database.cpp" line="886"/>
         <source>ERROR: Database %1 is not readable. Path: %2</source>
         <translation>ERREUR: base de données %1 n&apos;est pas lisible. Chemin : %2</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="862"/>
+        <location filename="../../libs/utils/database.cpp" line="915"/>
         <source>ERROR: Database %1 is not writable. Path: %2.</source>
         <translation>ERREUR: base de données %1 n&apos;est pas inscriptible. Chemin : %2.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="907"/>
+        <location filename="../../libs/utils/database.cpp" line="967"/>
         <source>INFO: database %1 connection = %2</source>
         <translation>INFO : base de données %1 connexion %2</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="1103"/>
+        <location filename="../../libs/utils/database.cpp" line="1193"/>
         <source>Database Scheme Error: wrong number of fields for table %1</source>
         <translation>Schema de base erroné : mauvais nombre de champs dans la table %1</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="1112"/>
+        <location filename="../../libs/utils/database.cpp" line="1202"/>
         <source>Database Scheme Error: field number %1 differs: %2 instead of %3 in table %4</source>
         <translation>Schema de base erroné : champs numéro %1 différe : %2 au lieu de %3 dans la table %4</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="2182"/>
+        <location filename="../../libs/utils/database.cpp" line="2377"/>
         <source>Can not create table %1</source>
         <translation>Impossible de créer la table %1</translation>
     </message>
@@ -61,7 +61,7 @@
 <context>
     <name>Log</name>
     <message>
-        <location filename="../../libs/utils/log.cpp" line="154"/>
+        <location filename="../../libs/utils/log.cpp" line="180"/>
         <source>SQL Error: 
      * %1
      * %2
@@ -69,22 +69,17 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/log.cpp" line="174"/>
-        <source>%1: %2 - Database: %3, Host: %4, Port: %5, User:%6, Pass:%7</source>
-        <translation>%1 : %2 - Erreur SQL : pilote %3,hôte %4, port %5, Utilisateur %6, Pass %7</translation>
-    </message>
-    <message>
-        <location filename="../../libs/utils/log.cpp" line="188"/>
+        <location filename="../../libs/utils/log.cpp" line="216"/>
         <source>%1 ms: %2</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/log.cpp" line="261"/>
+        <location filename="../../libs/utils/log.cpp" line="289"/>
         <source>Unable to save %1: Error %2</source>
         <translation>Impossible de sauvegarder %1 : Erreur %2</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/log.cpp" line="291"/>
+        <location filename="../../libs/utils/log.cpp" line="319"/>
         <source>*****  Registered Errors  *****
 </source>
         <translation>*****  Erreurs engistrées  *****
@@ -112,9 +107,9 @@
 <context>
     <name>Serializer</name>
     <message>
-        <location filename="../../libs/utils/serializer.cpp" line="285"/>
-        <location filename="../../libs/utils/serializer.cpp" line="346"/>
-        <location filename="../../libs/utils/serializer.cpp" line="404"/>
+        <location filename="../../libs/utils/serializer.cpp" line="286"/>
+        <location filename="../../libs/utils/serializer.cpp" line="347"/>
+        <location filename="../../libs/utils/serializer.cpp" line="405"/>
         <source>Can not deserialize to QHash.</source>
         <translation>Impossible de désérialiser le QHash.</translation>
     </message>
@@ -212,17 +207,17 @@
         <translation>&lt;b&gt;Avant d&apos;utiliser ce logiciel, vous devez accepter les termes de la licence.&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="1333"/>
+        <location filename="../../libs/utils/global.cpp" line="1329"/>
         <source>%1 is now in fullScreen Mode.</source>
         <translation>%1 est mode plein écran.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="1338"/>
+        <location filename="../../libs/utils/global.cpp" line="1334"/>
         <source>%1 is now in non fullScreen Mode.</source>
         <translation>%1 n&apos;est plus en mode plein écran.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="2242"/>
+        <location filename="../../libs/utils/global.cpp" line="2238"/>
         <source>Token replacement error (%1). Wrong number of parentheses.</source>
         <translation>Erreur lors du remplacement du repère (%1). Nombre incorrect de parenthèses.</translation>
     </message>

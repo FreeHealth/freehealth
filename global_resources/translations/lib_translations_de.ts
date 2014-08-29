@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="de_DE">
+<TS version="2.0" language="de_DE">
 <context>
     <name>tkConstants</name>
     <message>
@@ -2759,6 +2759,18 @@ Text Align Justify shortcut key : Mac specific</extracomment>
     </message>
     <message>
         <source>No item</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Database</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Host</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Port</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

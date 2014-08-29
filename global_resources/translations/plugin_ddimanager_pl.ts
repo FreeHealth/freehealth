@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="pl_PL">
+<TS version="2.0" language="pl_PL">
 <context>
     <name>DDI::AtcCollectionEditorWidget</name>
     <message>
@@ -193,87 +193,87 @@
 <context>
     <name>DDI::ComponentAtcModel</name>
     <message>
-        <location filename="../../freeddimanager/plugins/ddiplugin/components/componentatcmodel.cpp" line="482"/>
+        <location filename="../../freeddimanager/plugins/ddiplugin/components/componentatcmodel.cpp" line="488"/>
         <source>Linked ATC codes:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freeddimanager/plugins/ddiplugin/components/componentatcmodel.cpp" line="486"/>
+        <location filename="../../freeddimanager/plugins/ddiplugin/components/componentatcmodel.cpp" line="492"/>
         <source>Suggested ATC codes:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freeddimanager/plugins/ddiplugin/components/componentatcmodel.cpp" line="609"/>
+        <location filename="../../freeddimanager/plugins/ddiplugin/components/componentatcmodel.cpp" line="618"/>
         <source>Drugs database Uid1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freeddimanager/plugins/ddiplugin/components/componentatcmodel.cpp" line="611"/>
+        <location filename="../../freeddimanager/plugins/ddiplugin/components/componentatcmodel.cpp" line="620"/>
         <source>Drugs database Uid2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freeddimanager/plugins/ddiplugin/components/componentatcmodel.cpp" line="613"/>
+        <location filename="../../freeddimanager/plugins/ddiplugin/components/componentatcmodel.cpp" line="622"/>
         <source>Component name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freeddimanager/plugins/ddiplugin/components/componentatcmodel.cpp" line="615"/>
+        <location filename="../../freeddimanager/plugins/ddiplugin/components/componentatcmodel.cpp" line="624"/>
         <source>ATC code</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freeddimanager/plugins/ddiplugin/components/componentatcmodel.cpp" line="617"/>
+        <location filename="../../freeddimanager/plugins/ddiplugin/components/componentatcmodel.cpp" line="626"/>
         <source>Suggested ATC code</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freeddimanager/plugins/ddiplugin/components/componentatcmodel.cpp" line="619"/>
+        <location filename="../../freeddimanager/plugins/ddiplugin/components/componentatcmodel.cpp" line="628"/>
         <source>Validity</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freeddimanager/plugins/ddiplugin/components/componentatcmodel.cpp" line="621"/>
+        <location filename="../../freeddimanager/plugins/ddiplugin/components/componentatcmodel.cpp" line="630"/>
         <source>Reviewed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freeddimanager/plugins/ddiplugin/components/componentatcmodel.cpp" line="623"/>
+        <location filename="../../freeddimanager/plugins/ddiplugin/components/componentatcmodel.cpp" line="632"/>
         <source>Reviewers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freeddimanager/plugins/ddiplugin/components/componentatcmodel.cpp" line="625"/>
+        <location filename="../../freeddimanager/plugins/ddiplugin/components/componentatcmodel.cpp" line="634"/>
         <source>Comments</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freeddimanager/plugins/ddiplugin/components/componentatcmodel.cpp" line="627"/>
+        <location filename="../../freeddimanager/plugins/ddiplugin/components/componentatcmodel.cpp" line="636"/>
         <source>Date of creation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freeddimanager/plugins/ddiplugin/components/componentatcmodel.cpp" line="629"/>
+        <location filename="../../freeddimanager/plugins/ddiplugin/components/componentatcmodel.cpp" line="638"/>
         <source>Date of update</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freeddimanager/plugins/ddiplugin/components/componentatcmodel.cpp" line="644"/>
+        <location filename="../../freeddimanager/plugins/ddiplugin/components/componentatcmodel.cpp" line="653"/>
         <source>Total: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freeddimanager/plugins/ddiplugin/components/componentatcmodel.cpp" line="662"/>
+        <location filename="../../freeddimanager/plugins/ddiplugin/components/componentatcmodel.cpp" line="671"/>
         <source>+Atc: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freeddimanager/plugins/ddiplugin/components/componentatcmodel.cpp" line="670"/>
+        <location filename="../../freeddimanager/plugins/ddiplugin/components/componentatcmodel.cpp" line="679"/>
         <source>-Atc+Sugg: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freeddimanager/plugins/ddiplugin/components/componentatcmodel.cpp" line="679"/>
+        <location filename="../../freeddimanager/plugins/ddiplugin/components/componentatcmodel.cpp" line="688"/>
         <source>Reviewed: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -322,65 +322,90 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freeddimanager/plugins/ddiplugin/ddi/drugdruginteractioneditorwidget.ui" line="101"/>
+        <location filename="../../freeddimanager/plugins/ddiplugin/ddi/drugdruginteractioneditorwidget.ui" line="92"/>
         <source>Risk</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freeddimanager/plugins/ddiplugin/ddi/drugdruginteractioneditorwidget.ui" line="180"/>
+        <location filename="../../freeddimanager/plugins/ddiplugin/ddi/drugdruginteractioneditorwidget.ui" line="162"/>
         <source>Management</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freeddimanager/plugins/ddiplugin/ddi/drugdruginteractioneditorwidget.ui" line="250"/>
+        <location filename="../../freeddimanager/plugins/ddiplugin/ddi/drugdruginteractioneditorwidget.ui" line="223"/>
         <source>Routes/Doses</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freeddimanager/plugins/ddiplugin/ddi/drugdruginteractioneditorwidget.ui" line="289"/>
-        <location filename="../../freeddimanager/plugins/ddiplugin/ddi/drugdruginteractioneditorwidget.ui" line="368"/>
+        <location filename="../../freeddimanager/plugins/ddiplugin/ddi/drugdruginteractioneditorwidget.ui" line="262"/>
+        <location filename="../../freeddimanager/plugins/ddiplugin/ddi/drugdruginteractioneditorwidget.ui" line="341"/>
         <source>From</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freeddimanager/plugins/ddiplugin/ddi/drugdruginteractioneditorwidget.ui" line="317"/>
-        <location filename="../../freeddimanager/plugins/ddiplugin/ddi/drugdruginteractioneditorwidget.ui" line="396"/>
+        <location filename="../../freeddimanager/plugins/ddiplugin/ddi/drugdruginteractioneditorwidget.ui" line="290"/>
+        <location filename="../../freeddimanager/plugins/ddiplugin/ddi/drugdruginteractioneditorwidget.ui" line="369"/>
         <source>To</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freeddimanager/plugins/ddiplugin/ddi/drugdruginteractioneditorwidget.ui" line="447"/>
+        <location filename="../../freeddimanager/plugins/ddiplugin/ddi/drugdruginteractioneditorwidget.ui" line="420"/>
         <source>Science</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freeddimanager/plugins/ddiplugin/ddi/drugdruginteractioneditorwidget.ui" line="453"/>
+        <location filename="../../freeddimanager/plugins/ddiplugin/ddi/drugdruginteractioneditorwidget.ui" line="429"/>
         <source>Formalized risk</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freeddimanager/plugins/ddiplugin/ddi/drugdruginteractioneditorwidget.ui" line="465"/>
+        <location filename="../../freeddimanager/plugins/ddiplugin/ddi/drugdruginteractioneditorwidget.ui" line="445"/>
         <source>Bibliography</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freeddimanager/plugins/ddiplugin/ddi/drugdruginteractioneditorwidget.ui" line="478"/>
+        <location filename="../../freeddimanager/plugins/ddiplugin/ddi/drugdruginteractioneditorwidget.ui" line="458"/>
         <source>Comment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freeddimanager/plugins/ddiplugin/ddi/drugdruginteractioneditorwidget.ui" line="491"/>
+        <location filename="../../freeddimanager/plugins/ddiplugin/ddi/drugdruginteractioneditorwidget.ui" line="471"/>
         <source>General information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freeddimanager/plugins/ddiplugin/ddi/drugdruginteractioneditorwidget.ui" line="599"/>
-        <location filename="../../freeddimanager/plugins/ddiplugin/ddi/drugdruginteractioneditorwidget.ui" line="619"/>
+        <location filename="../../freeddimanager/plugins/ddiplugin/ddi/drugdruginteractioneditorwidget.ui" line="483"/>
+        <source>Interaction level of risk</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../freeddimanager/plugins/ddiplugin/ddi/drugdruginteractioneditorwidget.ui" line="541"/>
+        <source>Overview of the interaction</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../freeddimanager/plugins/ddiplugin/ddi/drugdruginteractioneditorwidget.ui" line="576"/>
+        <source>Date of creation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../freeddimanager/plugins/ddiplugin/ddi/drugdruginteractioneditorwidget.ui" line="579"/>
+        <location filename="../../freeddimanager/plugins/ddiplugin/ddi/drugdruginteractioneditorwidget.ui" line="602"/>
         <source>dd/MM/yyyy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freeddimanager/plugins/ddiplugin/ddi/drugdruginteractioneditorwidget.ui" line="632"/>
+        <location filename="../../freeddimanager/plugins/ddiplugin/ddi/drugdruginteractioneditorwidget.ui" line="599"/>
+        <source>Last update</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../freeddimanager/plugins/ddiplugin/ddi/drugdruginteractioneditorwidget.ui" line="615"/>
+        <source>If checked, the interaction was reviewed by a member of the team</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../freeddimanager/plugins/ddiplugin/ddi/drugdruginteractioneditorwidget.ui" line="618"/>
         <source>Reviewed</source>
         <translation type="unfinished"></translation>
     </message>
@@ -458,17 +483,17 @@
 <context>
     <name>DDI::DrugDrugInteractionTableModel</name>
     <message>
-        <location filename="../../freeddimanager/plugins/ddiplugin/ddi/drugdruginteractiontablemodel.cpp" line="651"/>
+        <location filename="../../freeddimanager/plugins/ddiplugin/ddi/drugdruginteractiontablemodel.cpp" line="659"/>
         <source>Risk</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freeddimanager/plugins/ddiplugin/ddi/drugdruginteractiontablemodel.cpp" line="653"/>
+        <location filename="../../freeddimanager/plugins/ddiplugin/ddi/drugdruginteractiontablemodel.cpp" line="661"/>
         <source>Management</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freeddimanager/plugins/ddiplugin/ddi/drugdruginteractiontablemodel.cpp" line="711"/>
+        <location filename="../../freeddimanager/plugins/ddiplugin/ddi/drugdruginteractiontablemodel.cpp" line="719"/>
         <source>Bibliography:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -516,112 +541,112 @@
 <context>
     <name>DDI::DrugInteractorTableModel</name>
     <message>
-        <location filename="../../freeddimanager/plugins/ddiplugin/interactors/druginteractortablemodel.cpp" line="341"/>
+        <location filename="../../freeddimanager/plugins/ddiplugin/interactors/druginteractortablemodel.cpp" line="364"/>
         <source>Id</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freeddimanager/plugins/ddiplugin/interactors/druginteractortablemodel.cpp" line="342"/>
+        <location filename="../../freeddimanager/plugins/ddiplugin/interactors/druginteractortablemodel.cpp" line="365"/>
         <source>Uuid</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freeddimanager/plugins/ddiplugin/interactors/druginteractortablemodel.cpp" line="343"/>
+        <location filename="../../freeddimanager/plugins/ddiplugin/interactors/druginteractortablemodel.cpp" line="366"/>
         <source>Is valid</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freeddimanager/plugins/ddiplugin/interactors/druginteractortablemodel.cpp" line="344"/>
+        <location filename="../../freeddimanager/plugins/ddiplugin/interactors/druginteractortablemodel.cpp" line="367"/>
         <source>Is interaction class</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freeddimanager/plugins/ddiplugin/interactors/druginteractortablemodel.cpp" line="345"/>
+        <location filename="../../freeddimanager/plugins/ddiplugin/interactors/druginteractortablemodel.cpp" line="368"/>
         <source>Is reviewed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freeddimanager/plugins/ddiplugin/interactors/druginteractortablemodel.cpp" line="346"/>
+        <location filename="../../freeddimanager/plugins/ddiplugin/interactors/druginteractortablemodel.cpp" line="369"/>
         <source>Is auto-found</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freeddimanager/plugins/ddiplugin/interactors/druginteractortablemodel.cpp" line="347"/>
+        <location filename="../../freeddimanager/plugins/ddiplugin/interactors/druginteractortablemodel.cpp" line="370"/>
         <source>DoNotWarnDuplicated</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freeddimanager/plugins/ddiplugin/interactors/druginteractortablemodel.cpp" line="348"/>
+        <location filename="../../freeddimanager/plugins/ddiplugin/interactors/druginteractortablemodel.cpp" line="371"/>
         <source>Translated label</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freeddimanager/plugins/ddiplugin/interactors/druginteractortablemodel.cpp" line="349"/>
+        <location filename="../../freeddimanager/plugins/ddiplugin/interactors/druginteractortablemodel.cpp" line="372"/>
         <source>English label</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freeddimanager/plugins/ddiplugin/interactors/druginteractortablemodel.cpp" line="350"/>
+        <location filename="../../freeddimanager/plugins/ddiplugin/interactors/druginteractortablemodel.cpp" line="373"/>
         <source>French label</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freeddimanager/plugins/ddiplugin/interactors/druginteractortablemodel.cpp" line="351"/>
+        <location filename="../../freeddimanager/plugins/ddiplugin/interactors/druginteractortablemodel.cpp" line="374"/>
         <source>Deustch label</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freeddimanager/plugins/ddiplugin/interactors/druginteractortablemodel.cpp" line="352"/>
+        <location filename="../../freeddimanager/plugins/ddiplugin/interactors/druginteractortablemodel.cpp" line="375"/>
         <source>Class information (french)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freeddimanager/plugins/ddiplugin/interactors/druginteractortablemodel.cpp" line="353"/>
+        <location filename="../../freeddimanager/plugins/ddiplugin/interactors/druginteractortablemodel.cpp" line="376"/>
         <source>Class information (english)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freeddimanager/plugins/ddiplugin/interactors/druginteractortablemodel.cpp" line="354"/>
+        <location filename="../../freeddimanager/plugins/ddiplugin/interactors/druginteractortablemodel.cpp" line="377"/>
         <source>Class information (deustch)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freeddimanager/plugins/ddiplugin/interactors/druginteractortablemodel.cpp" line="355"/>
+        <location filename="../../freeddimanager/plugins/ddiplugin/interactors/druginteractortablemodel.cpp" line="378"/>
         <source>ATC codes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freeddimanager/plugins/ddiplugin/interactors/druginteractortablemodel.cpp" line="356"/>
+        <location filename="../../freeddimanager/plugins/ddiplugin/interactors/druginteractortablemodel.cpp" line="379"/>
         <source>Date of creation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freeddimanager/plugins/ddiplugin/interactors/druginteractortablemodel.cpp" line="357"/>
+        <location filename="../../freeddimanager/plugins/ddiplugin/interactors/druginteractortablemodel.cpp" line="380"/>
         <source>Date of update</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freeddimanager/plugins/ddiplugin/interactors/druginteractortablemodel.cpp" line="358"/>
+        <location filename="../../freeddimanager/plugins/ddiplugin/interactors/druginteractortablemodel.cpp" line="381"/>
         <source>Date of review</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freeddimanager/plugins/ddiplugin/interactors/druginteractortablemodel.cpp" line="359"/>
+        <location filename="../../freeddimanager/plugins/ddiplugin/interactors/druginteractortablemodel.cpp" line="382"/>
         <source>PMID</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freeddimanager/plugins/ddiplugin/interactors/druginteractortablemodel.cpp" line="360"/>
+        <location filename="../../freeddimanager/plugins/ddiplugin/interactors/druginteractortablemodel.cpp" line="383"/>
         <source>Children</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freeddimanager/plugins/ddiplugin/interactors/druginteractortablemodel.cpp" line="361"/>
+        <location filename="../../freeddimanager/plugins/ddiplugin/interactors/druginteractortablemodel.cpp" line="384"/>
         <source>Reference</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freeddimanager/plugins/ddiplugin/interactors/druginteractortablemodel.cpp" line="362"/>
+        <location filename="../../freeddimanager/plugins/ddiplugin/interactors/druginteractortablemodel.cpp" line="385"/>
         <source>Comment</source>
         <translation type="unfinished"></translation>
     </message>

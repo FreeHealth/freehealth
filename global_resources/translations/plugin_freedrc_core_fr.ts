@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="fr_FR">
+<TS version="2.0" language="fr_FR">
 <context>
     <name>CommandLine</name>
     <message>
@@ -17,6 +17,13 @@
     <message>
         <source>You are running a new version of %1, you need to renew the licence agreement.</source>
         <translation>Vous utilisez une nouvelle version de %1, vous devez renouveler votre accord de license.</translation>
+    </message>
+</context>
+<context>
+    <name>Core::HelpDialog</name>
+    <message>
+        <source>&lt;center&gt;Documentation is available on line only.&lt;/center&gt;</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

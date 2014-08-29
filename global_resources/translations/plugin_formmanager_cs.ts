@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="cs_CZ">
+<TS version="2.0" language="cs_CZ">
 <context>
     <name>Form::EpisodeModel</name>
     <message>
@@ -99,27 +99,27 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formmanager.cpp" line="1007"/>
+        <location filename="../../plugins/formmanagerplugin/formmanager.cpp" line="1011"/>
         <source>Form: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formmanager.cpp" line="1008"/>
+        <location filename="../../plugins/formmanagerplugin/formmanager.cpp" line="1012"/>
         <source>New version: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formmanager.cpp" line="1009"/>
+        <location filename="../../plugins/formmanagerplugin/formmanager.cpp" line="1013"/>
         <source>Database version: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formmanager.cpp" line="1019"/>
+        <location filename="../../plugins/formmanagerplugin/formmanager.cpp" line="1023"/>
         <source>Form update detected.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formmanager.cpp" line="1020"/>
+        <location filename="../../plugins/formmanagerplugin/formmanager.cpp" line="1024"/>
         <source>A form update has been detected. Do you want to update the forms?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -224,7 +224,7 @@ Do you really want to remove the current episode?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/episodebase.cpp" line="388"/>
+        <location filename="../../plugins/formmanagerplugin/episodebase.cpp" line="343"/>
         <source>Episode database updated from version %1 to version: %2</source>
         <translation type="unfinished"></translation>
     </message>
@@ -232,32 +232,32 @@ Do you really want to remove the current episode?</source>
 <context>
     <name>Form::Internal::FirstRunFormManagerWizardPage</name>
     <message>
-        <location filename="../../plugins/formmanagerplugin/firstrunformmanager.cpp" line="54"/>
+        <location filename="../../plugins/formmanagerplugin/firstrunformmanager.cpp" line="55"/>
         <source>General patient form selection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/firstrunformmanager.cpp" line="55"/>
+        <location filename="../../plugins/formmanagerplugin/firstrunformmanager.cpp" line="56"/>
         <source>You can define your own patient form file, or use the default one. All patients will have the same (central) form.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/firstrunformmanager.cpp" line="62"/>
+        <location filename="../../plugins/formmanagerplugin/firstrunformmanager.cpp" line="63"/>
         <source>Reading available forms</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/firstrunformmanager.cpp" line="62"/>
+        <location filename="../../plugins/formmanagerplugin/firstrunformmanager.cpp" line="63"/>
         <source>Please wait</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/firstrunformmanager.cpp" line="95"/>
+        <location filename="../../plugins/formmanagerplugin/firstrunformmanager.cpp" line="96"/>
         <source>Please one (and only one) form for your default patient file.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/firstrunformmanager.cpp" line="96"/>
+        <location filename="../../plugins/formmanagerplugin/firstrunformmanager.cpp" line="97"/>
         <source>You must select one file to be used by default.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -460,17 +460,17 @@ Do you really want to remove the current episode?</source>
 <context>
     <name>FormIODescription</name>
     <message>
-        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="208"/>
+        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="217"/>
         <source>Complete form</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="210"/>
+        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="219"/>
         <source>Sub-form</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="212"/>
+        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="221"/>
         <source>Page only</source>
         <translation type="unfinished"></translation>
     </message>
@@ -553,19 +553,19 @@ Do you really want to remove the current episode?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="254"/>
-        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="281"/>
+        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="263"/>
+        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="290"/>
         <source>Creation date</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="256"/>
-        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="283"/>
+        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="265"/>
+        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="292"/>
         <source>Last modification date</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="294"/>
+        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="303"/>
         <source>ScreenShots are available.</source>
         <translation type="unfinished"></translation>
     </message>

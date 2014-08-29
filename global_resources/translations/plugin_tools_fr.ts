@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="fr_FR">
+<TS version="2.0" language="fr_FR">
 <context>
     <name>Tools</name>
     <message>
@@ -247,12 +247,12 @@ Une par ligne</translation>
 </context>
 <context>
     <name>Tools::Internal::FspPrinterPreferencesWidget</name>
-    <message>
+    <message utf8="true">
         <location filename="../../plugins/toolsplugin/fsp/fspprinterpreferences.ui" line="30"/>
         <source>Cerfa par défaut</source>
         <translation></translation>
     </message>
-    <message>
+    <message utf8="true">
         <location filename="../../plugins/toolsplugin/fsp/fspprinterpreferences.ui" line="36"/>
         <source>Utiliser ce CERFA par défaut</source>
         <translation></translation>

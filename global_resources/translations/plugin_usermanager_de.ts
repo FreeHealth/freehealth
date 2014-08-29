@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="de_DE">
+<TS version="2.0" language="de_DE">
 <context>
     <name>UserBase</name>
     <message>
@@ -315,6 +315,14 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Using command line user identifiants: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unable to change current user</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>An error occured when trying to change the current user. %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

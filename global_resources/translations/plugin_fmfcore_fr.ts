@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="fr_FR">
+<TS version="2.0" language="fr_FR">
 <context>
     <name>Core::AppConfigWizard</name>
     <message>
@@ -84,6 +84,26 @@ Sélectionnez votre langage préféré et le type d&apos;installation.</translat
         <source>Preparing databases. Please wait...</source>
         <translation>Préparation des bases de données. Veuillez patienter...</translation>
     </message>
+    <message>
+        <source>Use this prefix for all databases&lt;br&gt;&lt;i&gt;&amp;nbsp;&amp;nbsp;Optional, you can safely leave this editor empty&lt;/i&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>If you define a global prefix, all database will be named {YourPrefix}{DatabaseName} for all configuration.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Create all database</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select the path where to store your personal databases&lt;br&gt;&lt;i&gt;&amp;nbsp;&amp;nbsp;Optional, you can safely leave this editor empty&lt;/i&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You can store your local personal database anywhere you want, just select a path.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Core::EndConfigPage</name>
@@ -126,6 +146,13 @@ Sélectionnez votre langage préféré et le type d&apos;installation.</translat
     <message>
         <source>You can clean and recreate all your databases. Select the option above. If you select the clean option, all databases will be erased with &lt;b&gt;definitive data loss&lt;/b&gt;.</source>
         <translation>Vous pouvez effacer et recréer toutes vos bases de données. Sélectionnez l&apos;option ci-dessous. Si vous sélectionnez cette option, toutes vos bases de données seront effacées avec &lt;b&gt;une perte définitive des données&lt;/b&gt;.</translation>
+    </message>
+</context>
+<context>
+    <name>Core::HelpDialog</name>
+    <message>
+        <source>&lt;center&gt;Documentation is available on line only.&lt;/center&gt;</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -646,6 +673,43 @@ Sélectionnez votre langage préféré et le type d&apos;installation.</translat
     <message>
         <source>title</source>
         <translation>titre</translation>
+    </message>
+</context>
+<context>
+    <name>Core::Internal::SqliteDatabasePathPage</name>
+    <message>
+        <source>Database path</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Core::Internal::SqliteDatabasePathWidget</name>
+    <message>
+        <source>Form</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>When configured as single computer mode, you can move your personal database anywhere you want. If you change this value, you will have to restart the application.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move database</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select a path</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Database moved</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>All your database are now moved to:
+%1
+
+&lt;b&gt;You must restart the application.&lt;/b&gt;</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

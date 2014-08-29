@@ -1,50 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="ru_RU">
+<TS version="2.0" language="ru_RU">
 <context>
     <name>Database</name>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="659"/>
+        <location filename="../../libs/utils/database.cpp" line="722"/>
         <source>WARNING: %1 database already in use</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="813"/>
+        <location filename="../../libs/utils/database.cpp" line="866"/>
         <source>ERROR: Database `%1` is not readable. Path: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="824"/>
+        <location filename="../../libs/utils/database.cpp" line="877"/>
         <source>ERROR: Database %1 is not readable. Host: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="833"/>
+        <location filename="../../libs/utils/database.cpp" line="886"/>
         <source>ERROR: Database %1 is not readable. Path: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="862"/>
+        <location filename="../../libs/utils/database.cpp" line="915"/>
         <source>ERROR: Database %1 is not writable. Path: %2.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="907"/>
+        <location filename="../../libs/utils/database.cpp" line="967"/>
         <source>INFO: database %1 connection = %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="1103"/>
+        <location filename="../../libs/utils/database.cpp" line="1193"/>
         <source>Database Scheme Error: wrong number of fields for table %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="1112"/>
+        <location filename="../../libs/utils/database.cpp" line="1202"/>
         <source>Database Scheme Error: field number %1 differs: %2 instead of %3 in table %4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="2182"/>
+        <location filename="../../libs/utils/database.cpp" line="2377"/>
         <source>Can not create table %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -61,7 +61,7 @@
 <context>
     <name>Log</name>
     <message>
-        <location filename="../../libs/utils/log.cpp" line="154"/>
+        <location filename="../../libs/utils/log.cpp" line="180"/>
         <source>SQL Error: 
      * %1
      * %2
@@ -69,22 +69,17 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/log.cpp" line="174"/>
-        <source>%1: %2 - Database: %3, Host: %4, Port: %5, User:%6, Pass:%7</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/utils/log.cpp" line="188"/>
+        <location filename="../../libs/utils/log.cpp" line="216"/>
         <source>%1 ms: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/log.cpp" line="261"/>
+        <location filename="../../libs/utils/log.cpp" line="289"/>
         <source>Unable to save %1: Error %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/log.cpp" line="291"/>
+        <location filename="../../libs/utils/log.cpp" line="319"/>
         <source>*****  Registered Errors  *****
 </source>
         <translation type="unfinished"></translation>
@@ -111,9 +106,9 @@
 <context>
     <name>Serializer</name>
     <message>
-        <location filename="../../libs/utils/serializer.cpp" line="285"/>
-        <location filename="../../libs/utils/serializer.cpp" line="346"/>
-        <location filename="../../libs/utils/serializer.cpp" line="404"/>
+        <location filename="../../libs/utils/serializer.cpp" line="286"/>
+        <location filename="../../libs/utils/serializer.cpp" line="347"/>
+        <location filename="../../libs/utils/serializer.cpp" line="405"/>
         <source>Can not deserialize to QHash.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -211,17 +206,17 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="1333"/>
+        <location filename="../../libs/utils/global.cpp" line="1329"/>
         <source>%1 is now in fullScreen Mode.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="1338"/>
+        <location filename="../../libs/utils/global.cpp" line="1334"/>
         <source>%1 is now in non fullScreen Mode.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="2242"/>
+        <location filename="../../libs/utils/global.cpp" line="2238"/>
         <source>Token replacement error (%1). Wrong number of parentheses.</source>
         <translation type="unfinished"></translation>
     </message>

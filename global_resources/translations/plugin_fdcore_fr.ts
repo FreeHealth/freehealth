@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="fr_FR">
+<TS version="2.0" language="fr_FR">
 <context>
     <name>CommandLine</name>
     <message>
@@ -44,6 +44,13 @@
     </message>
     <message>
         <source>With the new version some preferences should be outdated. Answering yes will allow FreeDiams to update your personnal preferences.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Core::HelpDialog</name>
+    <message>
+        <source>&lt;center&gt;Documentation is available on line only.&lt;/center&gt;</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

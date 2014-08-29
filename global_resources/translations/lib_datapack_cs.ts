@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="cs_CZ">
+<TS version="2.0" language="cs_CZ">
 <context>
     <name>DataPack::Internal::HttpServerEngine</name>
     <message>
@@ -369,6 +369,138 @@ requires an authentication</source>
     <message>
         <location filename="../../libs/datapackutils/widgets/serverconfigurationdialog.cpp" line="161"/>
         <source>Unable to set the URL to the server. Please check your server configuration.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>DataPack::ServerCreationWidget</name>
+    <message>
+        <location filename="../../libs/datapackutils/servercreation/servercreationwidget.ui" line="14"/>
+        <source>Form</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/datapackutils/servercreation/servercreationwidget.ui" line="20"/>
+        <source>Search for datapacks</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/datapackutils/servercreation/servercreationwidget.ui" line="43"/>
+        <source>Number of available DataPack Creation Queues files found</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/datapackutils/servercreation/servercreationwidget.ui" line="50"/>
+        <source>screen this path</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/datapackutils/servercreation/servercreationwidget.ui" line="67"/>
+        <source>Select and add queue screening path</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/datapackutils/servercreation/servercreationwidget.ui" line="77"/>
+        <location filename="../../libs/datapackutils/servercreation/servercreationwidget.ui" line="86"/>
+        <source>Please select the path where the DataPack server will be created</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/datapackutils/servercreation/servercreationwidget.ui" line="80"/>
+        <source>Server</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/datapackutils/servercreation/servercreationwidget.ui" line="96"/>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This path should contains all server description files. The dir should look like:&lt;/p&gt;&lt;p&gt;- rootPath&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;+-&amp;nbsp;free&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;|&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;+-&amp;nbsp;asso&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;|&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;+-&amp;nbsp;community&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;+-&amp;nbsp;nonfree&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;+-&amp;nbsp;asso&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;+-&amp;nbsp;community&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/datapackutils/servercreation/servercreationwidget.ui" line="99"/>
+        <source>Please select the root path to server description files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/datapackutils/servercreation/servercreationwidget.ui" line="112"/>
+        <source>Actions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/datapackutils/servercreation/servercreationwidget.ui" line="118"/>
+        <source>Create the server</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/datapackutils/servercreation/servercreationwidget.ui" line="128"/>
+        <source>Upload server files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/datapackutils/servercreation/servercreationwidget.cpp" line="209"/>
+        <source>Creating Datapack Server
+%1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/datapackutils/servercreation/servercreationwidget.cpp" line="221"/>
+        <source>Wrong server description file path</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/datapackutils/servercreation/servercreationwidget.cpp" line="222"/>
+        <source>Please set a valid server description path.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/datapackutils/servercreation/servercreationwidget.cpp" line="228"/>
+        <source>Wrong server output path</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/datapackutils/servercreation/servercreationwidget.cpp" line="229"/>
+        <source>Please set a valid server output path. 
+The path must be created with read/write rights on.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/datapackutils/servercreation/servercreationwidget.cpp" line="238"/>
+        <source>No Pack selected</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/datapackutils/servercreation/servercreationwidget.cpp" line="239"/>
+        <source>No Pack selected. Please select all Packs you want to include in the server.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/datapackutils/servercreation/servercreationwidget.cpp" line="260"/>
+        <source>Error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/datapackutils/servercreation/servercreationwidget.cpp" line="261"/>
+        <source>An error occured when trying to create the server.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/datapackutils/servercreation/servercreationwidget.cpp" line="267"/>
+        <source>Server created</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/datapackutils/servercreation/servercreationwidget.cpp" line="268"/>
+        <source>The datapack server was correctly created within the following path:
+%1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/datapackutils/servercreation/servercreationwidget.cpp" line="295"/>
+        <source>Group by server</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/datapackutils/servercreation/servercreationwidget.cpp" line="296"/>
+        <source>Group by queue</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

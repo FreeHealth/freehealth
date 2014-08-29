@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="ru_RU">
+<TS version="2.0" language="ru_RU">
 <context>
     <name>CommandLine</name>
     <message>
@@ -20,6 +20,14 @@
     <message>
         <location filename="../../freeddimanager/plugins/coreplugin/coreimpl.cpp" line="223"/>
         <source>You are running a new version of %1, you need to renew the licence agreement.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Core::HelpDialog</name>
+    <message>
+        <location filename="../../plugins/coreplugin/dialogs/helpdialog.cpp" line="193"/>
+        <source>&lt;center&gt;Documentation is available on line only.&lt;/center&gt;</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
