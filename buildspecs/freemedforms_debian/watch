@@ -1,5 +1,0 @@
-version=3
-# rather using the redirector
-# http://googlecode.debian.net/p/freemedforms/freemedforms_(.+)\.orig\.tar\.gz
-opts="uversionmangle=s/%7E/~/" \
-  http://googlecode.debian.net/p/freemedforms/freemedformsfullsources-(.+)\.tgz
