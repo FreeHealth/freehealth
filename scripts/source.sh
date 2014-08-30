@@ -20,7 +20,7 @@
 # *  If not, see <http://www.gnu.org/licenses/>.                            *
 # ***************************************************************************/
 #/***************************************************************************
-# *   Main developers : Eric MAEKER, <eric.maeker@gmail.com>                *
+# *  Main developers : Eric MAEKER, <eric.maeker@gmail.com>                 *
 # *  Contributors:                                                          *
 # *       NAME <MAIL@ADDRESS.COM>                                           *
 # *       NAME <MAIL@ADDRESS.COM>                                           *
@@ -31,6 +31,7 @@ GIT_REVISION=""
 PROJECT_VERSION=""
 PACKPATH=""
 SOURCES_ROOT_PATH=""
+SED_INPLACE="-ibkup" # on macos change to "-i bkup"
 
 # Some path definition
 SCRIPT_NAME=`basename $0`
@@ -43,6 +44,10 @@ SOURCES_ROOT_PATH=$SCRIPT_PATH"/../"
 
 # get version number of the project
 PROJECT_VERSION=`cat $SOURCES_ROOT_PATH/buildspecs/projectversion.pri | grep "PACKAGE_VERSION" -m 1 | cut -d = -s -f2 | tr -d ' '`
+
+# file naming
+ZIP_FILENAME="freemedforms-project_$PROJECT_VERSION.orig.tar.gz"
+PARENT_PATH="freemedforms-project-$PROJECT_VERSION"
 
 showHelp()
 {
@@ -228,7 +233,7 @@ global_resources/datapacks/appinstalled/edrc_ro/readme.txt
 createSource()
 {
     # create sources tmp path
-    PACKPATH=$SCRIPT_PATH/freemedforms-$PROJECT_VERSION
+    PACKPATH=$SCRIPT_PATH/$PARENT_PATH
     if [ -e $PACKPATH ]; then
         rm -R $PACKPATH
     fi
@@ -260,18 +265,18 @@ createSource()
         # ISS files are latin1, sed can generate error on utf8 system working on latin1 files
         # So convert the charset, sed the file, convert the charset
         iconv -f latin1 -t utf-8 $f > $f.utf8
-        sed -i "bkup" 's#__version__#'$PROJECT_VERSION'#' $f.utf8
+        sed $SED_INPLACE 's#__version__#'$PROJECT_VERSION'#' $f.utf8
         iconv -f utf-8 -t latin1 $f.utf8 > $f
         rm $f
         rm $f.utf8
-        # sed -i "bkup" 's#__version__#'$PROJECT_VERSION'#' $f
+        # sed $SED_INPLACE 's#__version__#'$PROJECT_VERSION'#' $f
     done
     rm *.*bkup
     echo "   * DEFINING *.BAT FILES APP VERSION"
     cd $PACKPATH/scripts
     FILES=`find ./ -type f -name '*.bat'`
     for f in $FILES; do
-        sed -i "bkup" 's#__version__#'$PROJECT_VERSION'#'
+        sed $SED_INPLACE 's#__version__#'$PROJECT_VERSION'#'
     done
     rm *.*bkup
 
@@ -281,23 +286,23 @@ createSource()
     NON_ALPHABETA_PROJECT_VERSION=`echo $PROJECT_VERSION | tr '~' '.' | tr '-' '.' | cut -d"." -f1,2,3`
     for f in $FILES; do
         # compatVersion="0.6.0"
-        sed -i "bkup" 's#compatVersion=\".*\"#compatVersion=\"'$NON_ALPHABETA_PROJECT_VERSION'\"#' $f
+        sed $SED_INPLACE 's#compatVersion=\".*\"#compatVersion=\"'$NON_ALPHABETA_PROJECT_VERSION'\"#' $f
         rm $f"bkup"
         # version="0.6.0"
-        sed -i "bkup" 's#version=\".*\" #version=\"'$NON_ALPHABETA_PROJECT_VERSION'\" #' $f
+        sed $SED_INPLACE 's#version=\".*\" #version=\"'$NON_ALPHABETA_PROJECT_VERSION'\" #' $f
         rm $f"bkup"
-        sed -i "bkup" 's#version=\".*\"/>#version=\"'$NON_ALPHABETA_PROJECT_VERSION'\"/>#' $f
+        sed $SED_INPLACE 's#version=\".*\"/>#version=\"'$NON_ALPHABETA_PROJECT_VERSION'\"/>#' $f
         rm $f"bkup"
     done
 
     echo "   * ADDING LIBRARY VERSION NUMBER"
     cd $PACKPATH/libs
-    find . -type f -name '*.pro' -exec sed -i bkup 's/# VERSION=1.0.0/!win32:{VERSION='$NON_ALPHABETA_PROJECT_VERSION'}/' {} \;
+    find . -type f -name '*.pro' -exec sed $SED_INPLACE 's/# VERSION=1.0.0/!win32:{VERSION='$NON_ALPHABETA_PROJECT_VERSION'}/' {} \;
     find . -type f -name '*.probkup' -exec rm {} \;
 
     echo "   * REMOVING TEST VERSION IN FORMS"
     cd $PACKPATH/global_resources/forms
-    find . -type f -name '*.xml' -exec sed -i bkup 's#<version>test</version>#<version>'$NON_ALPHABETA_PROJECT_VERSION'</version>#' {} \;
+    find . -type f -name '*.xml' -exec sed $SED_INPLACE 's#<version>test</version>#<version>'$NON_ALPHABETA_PROJECT_VERSION'</version>#' {} \;
     find . -type f -name '*.xmlbkup' -exec rm {} \;
 
     # git version is computed in the buildspecs/githash.pri
@@ -305,19 +310,19 @@ createSource()
     # while source package does not include the git logs
     GITHASH=`git rev-parse HEAD`
     echo "   * SETTING GIT revision hash to " $GITHASH
-    sed -i bkup 's/GIT_HASH=.*/GIT_HASH='$GITHASH'/' $PACKPATH/buildspecs/githash.pri
+    sed $SED_INPLACE 's/GIT_HASH=.*/GIT_HASH='$GITHASH'/' $PACKPATH/buildspecs/githash.pri
     rm $PACKPATH/buildspecs/githash.pribkup
 
     echo "**** REPACK SOURCES PACKAGE FROM CREATED DIR ****"
     cd $SCRIPT_PATH
-    tar czf ../freemedformsfullsources-$PROJECT_VERSION.tgz  ./freemedforms-$PROJECT_VERSION
+    tar czf ../$ZIP_FILENAME  ./$PARENT_PATH
 
     echo "**** CLEANING TMP SOURCES PATH ****"
     rm -R $PACKPATH
 
     PWD=`pwd`
 
-    echo "*** Source package successfully created at `pwd`./freemedforms-$PROJECT_VERSION"
+    echo "*** Source package successfully created at `pwd`./$PARENT_PATH"
 }
 
 #########################################################################################
