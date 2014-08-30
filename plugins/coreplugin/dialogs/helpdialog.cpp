@@ -195,7 +195,7 @@ HelpDialog::HelpDialog(const QString &page, QWidget *parent) :
     setLayout(layout);
     QLabel *lbl = new QLabel(tr("<center>Documentation is available on line only.</center>"), this);
     QLabel *lblLink = new QLabel(QString("<center><a href='%1'>%1</a></center>").arg(settings()->path(Core::ISettings::WebSiteUrl)));
-    QDialogButtonBox *but = new QDialogButtonBox(QDialogButtonBox::Ok, this);
+    QDialogButtonBox *but = new QDialogButtonBox(QDialogButtonBox::Ok, Qt::Horizontal, this);
     connect(but, SIGNAL(accepted()), this, SLOT(accept()));
     layout->addWidget(lbl);
     layout->addWidget(lblLink);
