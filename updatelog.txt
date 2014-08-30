@@ -10,7 +10,7 @@ The FreeMedForms project
     * Allow users to define the path where to store their personal SQLite database
     * Allow users to change the path where are stored their personal SQLite database
   * FreeDDIManager
-    * First release
+    * First release (sources only)
   * Build process
   * XML Forms coding
 
@@ -37,9 +37,11 @@ The FreeMedForms project
       * Radio: correctly returns the printing values instead of the label on print demand
     * User password encryption gets stronger
     * Correcting insertion of user forms (complete forms and subforms)
+    * Removed local user manual (due to dokuwiki exporter down - needs a fix)
   * FreeDiams
     * Correctly select user language at startup
     * Correctly define the default print-to-PDF-cache path in the user documents path
+    * Removed local user manual (due to dokuwiki exporter down - needs a fix)
   * FreeDRC
     * First release
     * Correctly define the default print-to-PDF-cache path in the user documents path
@@ -60,7 +62,13 @@ The FreeMedForms project
 ===== Packaging and documentation ====
 
   * Sources
+    * Renamed zip filename
+    * Code compatibility: Qt4.8.x & Qt5.x
+    * Many new unit-tests
   * Packaging
+    * Debian package updated
   * Compilation
+    * build.sh script simplified and updated
   * Documentation
+    * Currently only available online
 
