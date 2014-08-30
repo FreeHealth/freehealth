@@ -88,7 +88,7 @@ public:
 
     void setConnectionName(const QString &name) { m_Name = name; }
 
-    bool retreiveValuesToUpdate() const  {return true;}
+    bool retrieveValuesToUpdate() const  {return true;}
 
     bool updateDatabaseScheme() const
     {
@@ -198,7 +198,7 @@ public:
 
     void setConnectionName(const QString &name) { m_Name = name; }
 
-    bool retreiveValuesToUpdate() const  {return true;}
+    bool retrieveValuesToUpdate() const  {return true;}
 
     bool updateDatabaseScheme() const
     {
@@ -307,7 +307,7 @@ public:
 
     void setConnectionName(const QString &name) { m_Name = name; }
 
-    bool retreiveValuesToUpdate() const  {return true;}
+    bool retrieveValuesToUpdate() const  {return true;}
 
     bool updateDatabaseScheme() const
     {
@@ -412,7 +412,7 @@ public:
 
     void setConnectionName(const QString &name) { m_Name = name; }
 
-    bool retreiveValuesToUpdate() const
+    bool retrieveValuesToUpdate() const
     {
         Q_ASSERT(!m_Name.isEmpty());
         QSqlDatabase db = QSqlDatabase::database(m_Name);
@@ -1004,7 +1004,7 @@ bool VersionUpdater::updateDosageDatabase()
         if (!step)
             break;
         step->setConnectionName(Dosages::Constants::DB_DOSAGES_NAME);
-        if (!step->retreiveValuesToUpdate()) {
+        if (!step->retrieveValuesToUpdate()) {
             Utils::Log::addError("VersionUpdater", QString("Error while updating %1 from %2 to %3: %4")
                                  .arg(Dosages::Constants::DB_DOSAGES_NAME, step->fromVersion(), step->toVersion()),
                                  __FILE__, __LINE__);

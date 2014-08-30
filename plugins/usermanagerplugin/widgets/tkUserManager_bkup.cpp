@@ -240,7 +240,7 @@ tkUserManagerPrivate::tkUserManagerPrivate( QMainWindow * parent )
 
 void tkUserManagerPrivate::analyseCurrentUserRights()
 {
-    // retreive user manager rights from model
+    // retrieve user manager rights from model
     tkUserModel *m = tkUserModel::instance();
     User::UserRights r ( m->data( m->index( m->currentUserIndex().row(), User::UserManagerRights ) ).toInt() );
     // translate to bools

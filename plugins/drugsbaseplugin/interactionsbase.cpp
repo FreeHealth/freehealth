@@ -32,7 +32,7 @@
   Interactions can be managed by interactions(), drugHaveInteraction(), getMaximumTypeOfIAM(), getInteractions(),
   getLastIAMFound() and getAllIAMFound().
   You must always in first call interactions() with the list of drugs to test.
-  Then you can retreive interactions found using the other members.
+  Then you can retrieve interactions found using the other members.
 
   \ingroup freediams drugswidget
 */
@@ -116,7 +116,7 @@ public:
       Retrieve all iam denomination for speed improvments. \n
       Retrieve all iamids from IAM_EXPORT fro speed improvments.\n
     */
-    void retreiveLinkTables()
+    void retrieveLinkTables()
     {
          if ((!m_AtcToMol.isEmpty()) && (!m_ClassToAtcs.isEmpty()))
              return;
@@ -306,7 +306,7 @@ QList<DrugsInteraction *> InteractionsBasePrivate::getInteractionsFromDatabase(c
         return toReturn;
     }
 
-    // else retreive INTERACTION from database
+    // else retrieve INTERACTION from database
     // construct where clause
     QHashWhere where;
     where.insert(IA_ATC1, QString("=%1").arg(_id1));
@@ -461,7 +461,7 @@ bool InteractionsBase::init(bool refreshCache)
                                Utils::Database::ReadOnly, Utils::Database::SQLite);
 
 
-    // retreive interactions into m_InteractionsIDs for speed improvements
+    // retrieve interactions into m_InteractionsIDs for speed improvements
     if (!di->m_DB->database().isOpen())
         if (!di->m_DB->database().open())
             Utils::Log::addError("InteractionsBase", QString("Unable to open database. Error : %1").arg(di->m_DB->database().lastError().text()), __FILE__, __LINE__);
@@ -474,11 +474,11 @@ bool InteractionsBase::init(bool refreshCache)
         while (q.next())
             di->m_InteractionsIDs.insertMulti(q.value(0).toInt(), q.value(1).toInt());
 
-    // retreive links tables for speed improvements
+    // retrieve links tables for speed improvements
     if (refreshCache) {
         di->m_AtcToMol.clear();
     }
-    di->retreiveLinkTables();
+    di->retrieveLinkTables();
 
     di->m_initialized = true;
     return true;

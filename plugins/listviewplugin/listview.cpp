@@ -31,7 +31,7 @@
   * You can reimplement addItem(), removeItem() and on_edit_triggered()
     that are called by buttons and menu (add, remove). \n
 */
-//TODO: There is a problem when including this widget into a QDataWidgetMapper, when this widget loses focus, data are not retreived.
+//TODO: There is a problem when including this widget into a QDataWidgetMapper, when this widget loses focus, data are not retrieved.
 
 #include "listview.h"
 #include "stringlistmodel.h"

@@ -8,7 +8,7 @@
         <translation>Impossible de créer un nouvel UUID d&apos;utilisateur, erreur d&apos;accès à la base de données</translation>
     </message>
     <message>
-        <source>Can not retreive login from the uuid</source>
+        <source>Can not retrieve login from the uuid</source>
         <translation>Impossible de récupérer le login depuis l&apos;UUID</translation>
     </message>
     <message>
@@ -628,7 +628,7 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>UserPlugin::UserModel</name>
     <message>
-        <source>Unable to retreive user into the model using login and password.</source>
+        <source>Unable to retrieve user into the model using login and password.</source>
         <translation>Impossible de récupérer l&apos;utilisateur avec l&apos;identifiant et le mot de passe.</translation>
     </message>
     <message>

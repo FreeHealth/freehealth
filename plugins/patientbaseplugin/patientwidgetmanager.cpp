@@ -164,7 +164,7 @@ PatientActionHandler::PatientActionHandler(QObject *parent) :
 
     Core::ActionContainer *menu = actionManager()->actionContainer(Core::Id(Core::Constants::M_PATIENTS));
     if (!menu) {
-        Utils::warningMessageBox(tr("Fatal Error"), tr("%1: Unable to retreive patients menu.").arg(objectName()));
+        Utils::warningMessageBox(tr("Fatal Error"), tr("%1: Unable to retrieve patients menu.").arg(objectName()));
         return;
     }
     Q_ASSERT(menu);

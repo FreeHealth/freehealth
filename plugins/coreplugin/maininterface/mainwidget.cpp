@@ -314,7 +314,7 @@ void mfMainWidget::addNewFile()
      mfObject * parent = m_FormList.at( item->data( LabelColumn, Qt::UserRole ).toInt() );
      if ( !parent ) return;
 
-     // Ask for a file and retreive the form using mfFormsIO
+     // Ask for a file and retrieve the form using mfFormsIO
      mfIOInterface *ioPlugin = mfCore::pluginsManager()->currentIO();
      if ( !ioPlugin )
      {

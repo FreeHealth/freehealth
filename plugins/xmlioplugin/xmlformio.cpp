@@ -387,7 +387,7 @@ bool XmlFormIO::loadPmhCategories(const QString &uuidOrAbsPath) const
 //    WARN_FUNC << uuidOrAbsPath << form;
 //    pmhCore()->pmhCategoryModel()->setRootFormUid(form.uid);
 //    pmhCore()->pmhCategoryModel()->refreshFromDatabase();
-//    LOG("--------------------------- PMH Category retreived");
+//    LOG("--------------------------- PMH Category retrieved");
     return true;
 }
 

@@ -95,7 +95,7 @@ static inline DrugsDB::IDrug *getDrug()
     using namespace DrugsDB::Constants;
     DrugsDB::IDrug *drug = drugsBase().getDrugByUID("-1");
     if (!drug) {
-        LOG_ERROR_FOR("DrugPosologicSentencePreferences", "Unable to retreive a drug from the database");
+        LOG_ERROR_FOR("DrugPosologicSentencePreferences", "Unable to retrieve a drug from the database");
     } else {
         drug->setPrescriptionValue(Prescription::IntakesFrom, 1);
         drug->setPrescriptionValue(Prescription::IntakesTo, 3);

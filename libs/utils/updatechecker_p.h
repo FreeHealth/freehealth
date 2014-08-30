@@ -54,7 +54,7 @@ public:
     QUrl m_Url;
     QString m_UpdateText;
     QString m_LastVersion;
-    bool m_FileRetreived;
+    bool m_FileRetrieved;
     QPointer<QProgressBar> m_ProgressBar;
 };
 

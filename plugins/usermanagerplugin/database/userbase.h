@@ -78,7 +78,7 @@ public:
                            int medicalRights = 0, int adminRights = 0, int userRights = 0, int agendaRights = 0, int paramedicRights = 0,
                            QLocale::Language lang = QLocale().language());
 
-    // retreivers
+    // retrievers
     UserData *getUserById(const QVariant &_id) const;  // not used
     UserData *getUserByLoginPassword(const QVariant &login, const QVariant &cryptedPassword) const;
     UserData *getUserByUuid(const QString &uuid) const;
@@ -118,7 +118,7 @@ private:
                         CreationOption createOption
                        );
 
-    // privates retreivers
+    // privates retrievers
     UserData *getUser(const QHash<int, QString> &conditions) const;
     QString databaseAndQtVersion() const;
 

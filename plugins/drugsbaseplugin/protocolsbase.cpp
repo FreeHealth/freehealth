@@ -339,7 +339,7 @@ bool ProtocolsBase::createDatabase(const QString &connectionName , const QString
                                CreationOption /*createOption*/
                               )
 {
-    // TODO:  ask user if he wants : 1. an empty dosage base ; 2. to retreive dosages from internet FMF website
+    // TODO:  ask user if he wants : 1. an empty dosage base ; 2. to retrieve dosages from internet FMF website
     if (connectionName != Dosages::Constants::DB_DOSAGES_NAME)
         return false;
 
@@ -362,7 +362,7 @@ bool ProtocolsBase::createDatabase(const QString &connectionName , const QString
         if (!DB.open()) {
             QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL", "__DRUGS__PROTOCOLS__CREATOR");
             db.setHostName(pathOrHostName);
-            // TODO: retreive log/pass
+            // TODO: retrieve log/pass
             db.setUserName(login);
             db.setPassword(pass);
             db.setPort(port);

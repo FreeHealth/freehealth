@@ -8,7 +8,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Can not retreive login from the uuid</source>
+        <source>Can not retrieve login from the uuid</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -620,7 +620,7 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>UserPlugin::UserModel</name>
     <message>
-        <source>Unable to retreive user into the model using login and password.</source>
+        <source>Unable to retrieve user into the model using login and password.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

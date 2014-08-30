@@ -82,7 +82,7 @@ public:
     void check(const QUrl &url);
     void cancel();
 
-    bool fileRetreived();
+    bool fileRetrieved();
     bool hasUpdate();
     QString lastVersion();
     QString updateText();

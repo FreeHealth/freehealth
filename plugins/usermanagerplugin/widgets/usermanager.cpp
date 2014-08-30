@@ -408,7 +408,7 @@ public:
     // The UserManagerModel manages the user rights too (in the filter).
     void analyzeCurrentUserRights()
     {
-        // retreive user manager rights from model
+        // retrieve user manager rights from model
         Core::IUser::UserRights r(userModel()->currentUserData(Core::IUser::ManagerRights).toInt());
         // translate to bools
         m_CanReadOwn = (r & Core::IUser::ReadOwn);

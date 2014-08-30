@@ -62,7 +62,7 @@ public:
 
     virtual void setConnectionName(const QString &name) = 0;
 
-    virtual bool retreiveValuesToUpdate() const = 0;
+    virtual bool retrieveValuesToUpdate() const = 0;
     virtual bool updateDatabaseScheme() const = 0;
     virtual bool saveUpdatedValuesToDatabase() const = 0;
 };

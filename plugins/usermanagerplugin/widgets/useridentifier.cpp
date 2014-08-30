@@ -41,7 +41,7 @@
  *
  * In the other case, the dialog returns \e QDialog::Rejected.
  *
- * You can retreive login(), login64crypt(), password() and cryptedPassword().
+ * You can retrieve login(), login64crypt(), password() and cryptedPassword().
 */
 
 #include "useridentifier.h"

@@ -64,7 +64,7 @@ public:
     virtual bool init(bool refreshCache = false);
     bool isInitialized() const;
     static bool isInteractionDatabaseAvailable() {return m_InteractionsDatabaseAvailable;}
-    virtual const DatabaseInfos *actualDatabaseInformations() const = 0;
+    virtual const DatabaseInfos *actualDatabaseInformation() const = 0;
 
     virtual void logChronos(bool state);
 

@@ -144,7 +144,7 @@ bool mfRecovererThread::saveRecoveryFile( mfObject * mfo )
      // Structure of the file :
      // First line = comment
      // Second line = absoluteFileName of the opened form
-     // All next lines are script to retreive values, addFiles...
+     // All next lines are script to retrieve values, addFiles...
      if ( mfCore::temporaryFile()->open() )
      {
           // Previous version using QTextStream does not work always got an empty string

@@ -177,7 +177,7 @@ public:
     QHash<QString, QString> getAllAtcCodeAndName(const QString &lang)
     {
         QHash<QString, QString> atcCodeToName;
-        LOG_FOR(q, "Getting ATC Informations from the interactions database");
+        LOG_FOR(q, "Getting ATC Information from the interactions database");
         QSqlDatabase db = ddiBase().database();
         if (!db.isOpen()) {
             return atcCodeToName;

@@ -110,7 +110,7 @@ QString Translators::pathToTranslations()
 
 /**
   \brief change the default langage for the application and reload all translators.
-  You can retreive langage using QLocale().name().left(2) anywhere in the program.
+  You can retrieve langage using QLocale().name().left(2) anywhere in the program.
 */
 void Translators::changeLanguage(const QString &lang)
 {

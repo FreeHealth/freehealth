@@ -42,10 +42,10 @@
   isInitialized() alerts you of the state of intialization.
   These two members returns true if all is ok.
 
-  2. Drugs retreiver\n
-  You can retreive drugs using UID ou CIP code via getDrugByUID() and getDrufByCIP().
+  2. Drugs retriever\n
+  You can retrieve drugs using UID ou CIP code via getDrugByUID() and getDrufByCIP().
 
-  3. Dosages retreiver / saver
+  3. Dosages retriever / saver
 
   \todo Manage user rights when creating dosage database
 
@@ -145,7 +145,7 @@ public:
     {
     }
 
-    void retreiveLinkTables()
+    void retrieveLinkTables()
     {
         if (!m_AtcToMol.isEmpty())
             return;
@@ -404,7 +404,7 @@ bool DrugsBase::initialize()
     }
 
     setConnectionName(Constants::DB_DRUGS_NAME);
-    d->retreiveLinkTables();
+    d->retrieveLinkTables();
     d->getSearchEngine();
     d->getInteractingClassTree();
     d->getDrugsSources();
@@ -732,7 +732,7 @@ IDrug *DrugsBase::getDrugByUID(const QVariant &uid1, const QVariant &uid2, const
         }
         // not found ?? --> log error
         if (newUid1.isEmpty() || newUid1=="-1") {
-            LOG_ERROR("Unable to retreive a random drug when uid==-1");
+            LOG_ERROR("Unable to retrieve a random drug when uid==-1");
             LOG_ERROR(QString("    --> Uid1=%1; uid2=%2; uid3= %3; newUid1=%4; newUid2=%5; newUid3=%6; Source:%7")
                       .arg(uid1.toString()).arg(uid2.toString()).arg(uid3.toString())
                       .arg(newUid1).arg(newUid2).arg(newUid3).arg(sourceUid));

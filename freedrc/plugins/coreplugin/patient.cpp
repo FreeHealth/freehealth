@@ -169,7 +169,7 @@ QVariant Patient::data(const QModelIndex &index, int role) const
             {
                 if (has(ref) && (!d->m_Values.value(ref).isNull()))
                     return d->m_Values.value(ref);
-                // If we can not retreive it from command line --> calculate it
+                // If we can not retrieve it from command line --> calculate it
                 // TODO: code here */
 //                if (IPatient::data(YearsOld).toInt()>0) {
 //                    if (has(Creatinine) && has(Gender) && has(Weight)) {

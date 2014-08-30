@@ -346,7 +346,7 @@ void AgendaPlugin::testDatabase()
     q.setDateRangeForCurrentWeek();
     q.setCalendarId(ucal->data(Constants::Db_CalId).toInt());
     QList<Appointment *> list = base().getCalendarEvents(q);
-    qWarning() << "Retreived" << list.count() << "events from the database for user" << ucal->data(Agenda::UserCalendar::UserOwnerUid).toString() << "dateRange" << q.dateStart().toString(Qt::ISODate)<< q.dateEnd().toString(Qt::ISODate) << "in" << chrono.elapsed() << "ms";
+    qWarning() << "Retrieved" << list.count() << "events from the database for user" << ucal->data(Agenda::UserCalendar::UserOwnerUid).toString() << "dateRange" << q.dateStart().toString(Qt::ISODate)<< q.dateEnd().toString(Qt::ISODate) << "in" << chrono.elapsed() << "ms";
 
     qWarning() << "PatientBase count" << numberOfPatients();
 

@@ -138,7 +138,7 @@
     </message>
     <message>
         <location filename="../../plugins/patientbaseplugin/patientwidgetmanager.cpp" line="167"/>
-        <source>%1: Unable to retreive patients menu.</source>
+        <source>%1: Unable to retrieve patients menu.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

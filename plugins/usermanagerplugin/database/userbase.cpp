@@ -32,8 +32,8 @@
  * This class owns a singleton. To instanciate it, use instance(). When instanciate for the first time,
  * the initialize() member is called.
  *
- * 2. Users retreiver\n
- * You can retreive users using getUserByUuid() or using getUserByLoginPassword().
+ * 2. Users retriever\n
+ * You can retrieve users using getUserByUuid() or using getUserByLoginPassword().
  *
  * 3. Users saver\n
  * You can regardless save or update users to database using the unique member : saveUser().
@@ -175,7 +175,7 @@ UserBase::UserBase(QObject *parent) :
     addIndex(Table_USER_LK_ID, LK_LKID);
 
     // information
-    addTable(Table_INFORMATION, "INFORMATIONS");
+    addTable(Table_INFORMATION, "INFORMATION");
     addField(Table_INFORMATION, INFO_VERSION,  "VERSION", FieldIsShortText);
     addField(Table_INFORMATION, INFO_MAX_LKID, "MAX_LK_ID", FieldIsInteger);
 
@@ -311,7 +311,7 @@ void UserBase::onCoreFirstRunCreationRequested()
 }
 
 //--------------------------------------------------------------------------------------------------------
-//------------------------------------------- Data retreivers --------------------------------------------
+//------------------------------------------- Data retrievers --------------------------------------------
 //--------------------------------------------------------------------------------------------------------
 /** Retreive all users data from the users' database. If an error occurs, it returns 0. */
 UserData *UserBase::getUser(const QHash<int, QString> &conditions) const
@@ -416,7 +416,7 @@ UserData *UserBase::getUser(const QHash<int, QString> &conditions) const
 /** Retreive all users data from the users' database. If an error occurs, it returns 0. \sa getUser() */
 UserData *UserBase::getUserById(const QVariant & _id) const
 {
-    // retreive corresponding user
+    // retrieve corresponding user
     // construct the where clause
     QString req = QString("=%1").arg(_id.toInt()) ;
     QHash<int, QString> where;
@@ -428,7 +428,7 @@ UserData *UserBase::getUserById(const QVariant & _id) const
 /** Retreive all users data from the users' database. If an error occurs, it returns 0. \sa getUser() */
 UserData* UserBase::getUserByUuid(const QString & uuid) const
 {
-    // retreive corresponding user
+    // retrieve corresponding user
     // construct the where clause
     QString req = QString("='%1'").arg(uuid) ;
     QHash<int, QString> where;
@@ -443,7 +443,7 @@ UserData* UserBase::getUserByUuid(const QString & uuid) const
  */
 UserData *UserBase::getUserByLoginPassword(const QVariant &login, const QVariant &cryptedPassword) const
 {
-    // retreive corresponding user
+    // retrieve corresponding user
     // construct the where clause
     QHash<int, QString> where;
     where.insert(USER_LOGIN, QString("='%1'").arg(login.toString()));
@@ -655,7 +655,7 @@ QString UserBase::getLogin64(const QString &uuid)
             return var;
         }
     } else {
-        LOG_ERROR(QApplication::translate("UserBase", "Can not retreive login from the uuid"));
+        LOG_ERROR(QApplication::translate("UserBase", "Can not retrieve login from the uuid"));
         LOG_QUERY_ERROR(query);
     }
     query.finish();

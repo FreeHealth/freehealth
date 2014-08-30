@@ -1108,7 +1108,7 @@ bool XmlIOBase::saveContent(const QString &formUid, const QString &xmlContent, c
     where.insert(FORM_UUID, QString("='%1'").arg(normalizedFormUid(formUid)));
     int nb = count(Table_FORMS, FORM_ID, getWhereClause(Table_FORMS, where));
     if (!nb) {
-        // Insert and retreive FormId
+        // Insert and retrieve FormId
         req = prepareInsertQuery(Table_FORMS);
         query.prepare(req);
         query.bindValue(FORM_ID, QVariant());

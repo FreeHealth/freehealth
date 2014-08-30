@@ -11,7 +11,7 @@
     </message>
     <message>
         <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="658"/>
-        <source>Can not retreive login from the uuid</source>
+        <source>Can not retrieve login from the uuid</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -763,7 +763,7 @@ p, li { white-space: pre-wrap; }
     <name>UserPlugin::UserModel</name>
     <message>
         <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="541"/>
-        <source>Unable to retreive user into the model using login and password.</source>
+        <source>Unable to retrieve user into the model using login and password.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

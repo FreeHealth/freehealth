@@ -55,7 +55,7 @@ void AboutBaseWidgetsPlugin::refreshContents()
     QFont f;
     f.setBold(true);
     QTreeWidgetItem *i = 0;
-    i = new QTreeWidgetItem(tree, QStringList() << Trans::ConstantTranslations::tkTr(Trans::Constants::INFORMATIONS));
+    i = new QTreeWidgetItem(tree, QStringList() << Trans::ConstantTranslations::tkTr(Trans::Constants::INFORMATION));
     i->setFont(0,f);
     new QTreeWidgetItem(i, QStringList() << m_Spec->version() );
     new QTreeWidgetItem(i, QStringList() << m_Spec->compatVersion() );

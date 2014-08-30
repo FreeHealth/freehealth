@@ -227,7 +227,7 @@ Configuration::~Configuration()
 
 bool Configuration::applicationIsAMedintuxPlugins() const
 {
-    // retreive command line arguments
+    // retrieve command line arguments
     if (d->m_IsMedintuxPluginsTested)
         return d->m_IsMedintuxPlugins;
 

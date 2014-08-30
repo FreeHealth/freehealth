@@ -749,7 +749,7 @@ EpisodeModel::EpisodeModel(FormMain *rootEmptyForm, QObject *parent) :
 
     // concurrent programming
 //    d->m_GetLastEpisodeWatcher = new QFutureWatcher<void>;
-//    connect(d->m_GetLastEpisodeWatcher, SIGNAL(finished()), this, SLOT(lastEpisodeRetreived()));
+//    connect(d->m_GetLastEpisodeWatcher, SIGNAL(finished()), this, SLOT(lastEpisodeRetrieved()));
 
     init();
 }
@@ -810,7 +810,7 @@ void EpisodeModel::onUserChanged()
 {
     d->m_UserUuid = user()->uuid();
     // TODO: code here
-//    QList<int> ids = episodeBase()->retreivePractionnerLkIds(uuid);
+//    QList<int> ids = episodeBase()->retrievePractionnerLkIds(uuid);
 //    d->m_LkIds.clear();
 //    foreach(int i, ids)
 //        d->m_LkIds.append(QString::number(i) + ",");

@@ -754,7 +754,7 @@ bool DrugsIO::prescriptionFromXml(DrugsDB::DrugsModel *drugModel, const QString 
         xmlDbName = drugsDb.text();
     }
 
-    // retreive the prescription (inside the XML_FULLPRESCRIPTION_TAG tags)
+    // retrieve the prescription (inside the XML_FULLPRESCRIPTION_TAG tags)
     QDomElement fullPrescription = root.firstChildElement(XML_FULLPRESCRIPTION_TAG);
     if (fullPrescription.isNull()) {
         LOG_ERROR_FOR("DrugsIO", tr("Unable to load XML prescription: tag %1 is missing").arg(XML_FULLPRESCRIPTION_TAG));
@@ -854,7 +854,7 @@ bool DrugsIO::loadPrescription(DrugsDB::DrugsModel *drugModel, const QString &fi
     xmlExtraData.clear();
     QString xml = Utils::readTextFile(info.absoluteFilePath());
 
-    // retreive prescription
+    // retrieve prescription
     prescriptionFromXml(drugModel, xml,loader);
 
     // get extraData

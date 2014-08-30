@@ -114,7 +114,7 @@
         <translation>Erreur fatale</translation>
     </message>
     <message>
-        <source>%1: Unable to retreive patients menu.</source>
+        <source>%1: Unable to retrieve patients menu.</source>
         <translation>%1 : impossible de récupérer le menu patients.</translation>
     </message>
     <message>

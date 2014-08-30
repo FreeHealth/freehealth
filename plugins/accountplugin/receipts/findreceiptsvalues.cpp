@@ -132,7 +132,7 @@ findReceiptsValues::findReceiptsValues(QWidget * parent):QDialog(parent)
   //fillListViewValues(comboValue);
 
   connect(ui->comboBoxCategories,SIGNAL(activated(const QString&)),this,SLOT(fillListViewValues(const QString&)));
-  connect(ui->tableViewOfValues,SIGNAL(pressed(const QModelIndex&)),this,SLOT(showInformations(const QModelIndex&)));
+  connect(ui->tableViewOfValues,SIGNAL(pressed(const QModelIndex&)),this,SLOT(showInformation(const QModelIndex&)));
   connect(ui->plusButton,SIGNAL(pressed()),this,SLOT(chooseValue()));
   connect(ui->lessButton,SIGNAL(pressed()),this,SLOT(deleteValue()));
   //connect(ui->listchosenWidget,SIGNAL(itemClicked(QListWidgetItem *)),this,SLOT(supprItemchosen(QListWidgetItem *)));
@@ -221,7 +221,7 @@ void findReceiptsValues::fillListViewValues(const QString & comboItem){
         model->setData(model->index(row,1),a,Qt::EditRole);
         model->submit();
         m_hashExplanations.insert(row,expl);
-        m_otherInformations.insert(row,otherInformation);
+        m_otherInformation.insert(row,otherInformation);
         ++row;
         counterList << row;
         }
@@ -239,7 +239,7 @@ void findReceiptsValues::fillListViewValues(const QString & comboItem){
 
 }
 
-void findReceiptsValues::showInformations(const QModelIndex & index)
+void findReceiptsValues::showInformation(const QModelIndex & index)
 {
     int row = index.row();
     ui->abstractTextEdit->clear();
@@ -614,7 +614,7 @@ QHash<QString,QString> findReceiptsValues::getHashFatherSonFromOthers(const QMod
 {
     QHash<QString,QString> hash;
     int row = index.row();
-    QString othersString = m_otherInformations.value(row);
+    QString othersString = m_otherInformation.value(row);
     othersString.remove("<?xml version=1.0 encoding=ISO-8859-1?>");
     if (WarnDebugMessage)
         qDebug() << __FILE__ << QString::number(__LINE__) << " othersString =" << othersString ;

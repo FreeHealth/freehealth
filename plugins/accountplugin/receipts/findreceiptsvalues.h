@@ -76,7 +76,7 @@ private:
     QSqlDatabase m_db;
     double m_modifier;
     QHash<int,QString> m_hashExplanations;
-    QHash<int,QString> m_otherInformations;
+    QHash<int,QString> m_otherInformation;
     QHash<QString,QString> m_hashValueschosen;
     void initialize();
     void fillComboCategories();
@@ -93,7 +93,7 @@ private Q_SLOTS:
     void chooseValue();
     void deleteValue();
 //    void supprItemchosen(QListWidgetItem * item);
-    void showInformations(const QModelIndex & index);
+    void showInformation(const QModelIndex & index);
     void on_lineEditFilter_textChanged(const QString & text);
     void showNext();
     void setModifSpinBox(QWidget*,QWidget*);

@@ -121,7 +121,7 @@ public:
                 action->setData(url);
                 action->setToolTip(url);
                 m_HelpMenu->addAction(action);
-                q->connect(action, SIGNAL(triggered()), q, SLOT(drugsInformationsRequested()));
+                q->connect(action, SIGNAL(triggered()), q, SLOT(drugsInformationRequested()));
             }
         }
     }

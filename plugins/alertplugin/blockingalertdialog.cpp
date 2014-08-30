@@ -590,7 +590,7 @@ bool BlockingAlertDialog::applyResultToAlerts(QList<AlertItem> &items, const Blo
 /**
  * Run internal unit-tests. \n
  * When testing blocking dialog, if one alert requires user comment
- * on overriding alerts are overriden with a valid user comment "Override this". \n
+ * on overriding alerts are overridden with a valid user comment "Override this". \n
  * In all other cases, alerts are validated.
  */
 void BlockingAlertDialog::test_dialog()

@@ -406,7 +406,7 @@ FspPrinterDialog::FspPrinterDialog(QWidget *parent) :
 
     // Patient
     d->_patientDetailsWidget = new Utils::DetailsWidget(this);
-    d->_patientDetailsWidget->setSummaryText("Informations patient");
+    d->_patientDetailsWidget->setSummaryText("Information patient");
     d->_patientDetailsWidget->setSummaryFontBold(true);
     d->_patientDetailsWidget->setState(Utils::DetailsWidget::Expanded);
     QWidget *pWCont = new QWidget(this);

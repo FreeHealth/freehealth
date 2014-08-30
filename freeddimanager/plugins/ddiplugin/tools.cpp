@@ -622,7 +622,7 @@ int addBibliography(DrugsDB::Internal::DrugBaseEssentials *database, const QStri
         if (query.next()) {
             bib_id = query.value(0).toInt();
         } else {
-            // Create the bib and retreive the bib_id
+            // Create the bib and retrieve the bib_id
 //            QString t = type;
 //            QString l = link;
 //            QString r = reference;

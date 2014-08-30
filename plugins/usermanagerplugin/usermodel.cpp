@@ -538,7 +538,7 @@ bool UserModel::setCurrentUser(const QString &clearLog, const QString &clearPass
         uuid = d->addUserFromDatabase(log64, cryptpass64);
     }
     if (uuid.isEmpty()) {
-        LOG_ERROR(tr("Unable to retreive user into the model using login and password."));
+        LOG_ERROR(tr("Unable to retrieve user into the model using login and password."));
         return false;
     }
 

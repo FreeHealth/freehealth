@@ -1906,7 +1906,7 @@ QString AlertValidation::toXml() const
     QDomDocument doc;
     QDomElement el = doc.createElement(::XML_VALIDATION_ELEMENTTAG);
     el.setAttribute("id", _id);
-    el.setAttribute("overriden", _overridden ? "true" : "false");
+    el.setAttribute("overridden", _overridden ? "true" : "false");
     el.setAttribute("validator", _validator);
     el.setAttribute("comment", _userComment);
     el.setAttribute("dt", _date.toString(Qt::ISODate));
@@ -1948,7 +1948,7 @@ AlertValidation &AlertValidation::fromDomElement(const QDomElement &element)
         return *val;
     if (!element.attribute("id").isEmpty())
         val->setId(element.attribute("id").toInt());
-    val->setOverriden(element.attribute("overriden").compare("true", Qt::CaseInsensitive)==0);
+    val->setOverriden(element.attribute("overridden").compare("true", Qt::CaseInsensitive)==0);
     val->setValidatorUuid(element.attribute("validator"));
     val->setUserComment(element.attribute("comment"));
     val->setValidatedUuid(element.attribute("validated"));

@@ -97,7 +97,7 @@ static inline DrugsDB::IDrug *getDrug(int row)
     using namespace DrugsDB::Constants;
     DrugsDB::IDrug *drug = drugsBase().getDrugByUID("-1", QString::number(row+1));
     if (!drug) {
-        LOG_ERROR_FOR("DrugPosologicSentencePreferences", "Unable to retreive a drug from the database");
+        LOG_ERROR_FOR("DrugPosologicSentencePreferences", "Unable to retrieve a drug from the database");
     } else {
         Utils::Randomizer r;
         // r.setPathToFiles(settings()->path(Core::ISettings::BundleResourcesPath) + "/textfiles/");

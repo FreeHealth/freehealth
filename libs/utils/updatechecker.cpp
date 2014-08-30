@@ -104,7 +104,7 @@ void UpdateCheckerPrivate::onDownloadFinished()
     QString forLog = "";
     m_UpdateText.clear();
     m_LastVersion.clear();
-    m_FileRetreived = true;
+    m_FileRetrieved = true;
 
     // Get last version number from update file
     int idLast = 0;
@@ -251,9 +251,9 @@ bool UpdateChecker::hasUpdate()
 /**
   \brief Returns true if the update file was successfully downloaded
 */
-bool UpdateChecker::fileRetreived()
+bool UpdateChecker::fileRetrieved()
 {
-    return d->m_FileRetreived;
+    return d->m_FileRetrieved;
 }
 
 /** \internal */

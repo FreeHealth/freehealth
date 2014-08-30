@@ -1147,7 +1147,7 @@ QVector<IDrugInteraction *> DrugDrugInteractionEngine::getInteractionsFromDataba
         }
     }
 
-    // else retreive INTERACTION from database
+    // else retrieve INTERACTION from database
     // construct where clause
     QHashWhere where;
     where.insert(Constants::INTERACTIONS_ATC_ID1, QString("=%1").arg(_id1));

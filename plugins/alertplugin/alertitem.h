@@ -218,7 +218,7 @@ public:
     virtual QString userComment() const {return _userComment;}
     virtual void setUserComment(const QString &comment) {_modified=true; _userComment=comment;}
 
-    virtual void setOverriden(bool overriden) {_overridden=overriden;}
+    virtual void setOverriden(bool overridden) {_overridden=overridden;}
     virtual bool isOverriden() const {return _overridden;}
     virtual void setAccepted(bool accepted) {_overridden=!accepted;}
     virtual bool isAccepted() const {return !_overridden;}

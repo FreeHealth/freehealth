@@ -288,7 +288,7 @@ public:
                 m_Tree = 0;
                 m_RootItem = 0;
             }
-            m_ModelDataRetreived = false;
+            m_ModelDataRetrieved = false;
         }
     }
 
@@ -358,7 +358,7 @@ public:
 
     void setupModelData()
     {
-        if (m_ModelDataRetreived)
+        if (m_ModelDataRetrieved)
             return;
 
         if (m_RootItem) {
@@ -462,7 +462,7 @@ public:
         }
         sortItems();
 
-        m_ModelDataRetreived = true;
+        m_ModelDataRetrieved = true;
     }
 
     void saveModelData(const QModelIndex &start = QModelIndex())
@@ -515,7 +515,7 @@ public:
                         t->setModified(false);
                         allInstancesEmitDataChangedFrom(idx);
                     }
-                    // retreive its id
+                    // retrieve its id
                     t->setId(query.lastInsertId().toInt());
                 } else {
                     query.prepare(templateBase()->prepareInsertQuery(Templates::Constants::Table_Categories));
@@ -539,7 +539,7 @@ public:
                         t->setModified(false);
                         allInstancesEmitDataChangedFrom(idx);
                     }
-                    // retreive its id
+                    // retrieve its id
                     t->setId(query.lastInsertId().toInt());
 //                    qWarning() << "created" << t->label() << t->id();
                     // inform children of the id
@@ -664,7 +664,7 @@ public:
 
         if (m_CategoriesToDelete.count()) {
             req.clear();
-            // retreive all its children categories from db
+            // retrieve all its children categories from db
             QVector<int> children;
             for(int i=0; i<m_CategoriesToDelete.count(); ++i) {
                 children << getCategoryChildren(m_CategoriesToDelete.at(i));
@@ -773,14 +773,14 @@ public:
     bool m_ShowOnlyCategories;
     bool m_ReadOnly;
     static TreeItem *m_Tree;
-    static bool m_ModelDataRetreived;
+    static bool m_ModelDataRetrieved;
     static QSet<TemplatesModelPrivate *> m_Handles;
     static QHash<int, TreeItem *> m_IdToCategory;
     static QVector<int> m_TemplatesToDelete, m_CategoriesToDelete;
 };
 
 TreeItem *TemplatesModelPrivate::m_Tree = 0;
-bool TemplatesModelPrivate::m_ModelDataRetreived = false;
+bool TemplatesModelPrivate::m_ModelDataRetrieved = false;
 QSet<TemplatesModelPrivate *> TemplatesModelPrivate::m_Handles;
 QHash<int, TreeItem *> TemplatesModelPrivate::m_IdToCategory;
 QVector<int> TemplatesModelPrivate::m_TemplatesToDelete;
@@ -817,7 +817,7 @@ TemplatesModel::~TemplatesModel()
 void TemplatesModel::onCoreDatabaseServerChanged()
 {
     beginResetModel();
-    d->m_ModelDataRetreived = false;
+    d->m_ModelDataRetrieved = false;
     d->setupModelData();
     endResetModel();
 }

@@ -464,7 +464,7 @@ void DrugSelector::on_InnView_clicked(const QModelIndex &index)
 /** When a user select a drug, this slot is called. The drug is added to the drug history and signals are emitted */
 void DrugSelector::on_drugsView_doubleClicked(const QModelIndex &index)
 {
-    // retreive CIS of drug and emit signal
+    // retrieve CIS of drug and emit signal
     if (!index.isValid())
         return;
 

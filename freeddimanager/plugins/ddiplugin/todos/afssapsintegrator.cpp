@@ -1121,7 +1121,7 @@ void AfssapsLinkerWidget::on_findAtc_clicked()
 //    if (!DrugsDB::Tools::connectDatabase(Core::Constants::IAM_DATABASE_NAME, iamDatabaseAbsPath()))
 //        return;
 
-//    Utils::Log::addMessage("Tools", "Getting ATC Informations from the interactions database");
+//    Utils::Log::addMessage("Tools", "Getting ATC Information from the interactions database");
 
 //    QHash<QString, int> atc_id;
 //    QMultiHash<QString, int> atcName_id;

@@ -28,8 +28,8 @@
  *      - try to find next to the binary a file called \e pathtoconfig.ini which contains the path to the
  *        ini file to use (this feature is used for the USB-Key multi-OS configuration)
  *
- * m_ResourcesPath is protected and can be defined, retreive it using userResourcesPath().\n
- * m_DatabasePath is protected and can be defined, retreive it using databasePath().
+ * m_ResourcesPath is protected and can be defined, retrieve it using userResourcesPath().\n
+ * m_DatabasePath is protected and can be defined, retrieve it using databasePath().
  *
  * The debugging members are used by Core::DebugDialog :
  *     - getTreeWidget() returns a treeWidget containing all values of the QSettings\n
@@ -772,7 +772,7 @@ QString SettingsPrivate::getIniFile(const QString & appName, const QString & fil
         tmpFileName = "config.ini";
 
     // if QApplication args contains "--config=iniFileName.ini" use it if possible
-    // retreive command line arguments
+    // retrieve command line arguments
     // TODO: get the command line args through the Core::ICommandLine?
     QStringList list = QCoreApplication::arguments();
     int index = list.indexOf(QRegExp("--config=*", Qt::CaseSensitive, QRegExp::Wildcard));
