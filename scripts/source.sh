@@ -31,6 +31,7 @@ GIT_REVISION=""
 PROJECT_VERSION=""
 PACKPATH=""
 SOURCES_ROOT_PATH=""
+GPG_KEY="0xB9520933"
 SED_INPLACE="-ibkup" # on macos change to "-i bkup"
 
 # Some path definition
@@ -46,8 +47,9 @@ SOURCES_ROOT_PATH=$SCRIPT_PATH"/../"
 PROJECT_VERSION=`cat $SOURCES_ROOT_PATH/buildspecs/projectversion.pri | grep "PACKAGE_VERSION" -m 1 | cut -d = -s -f2 | tr -d ' '`
 
 # file naming
-ZIP_FILENAME="freemedforms-project_$PROJECT_VERSION.orig.tar.gz"
-PARENT_PATH="freemedforms-project-$PROJECT_VERSION"
+ZIP_FILENAME="freemedforms-project_$PROJECT_VERSION.tgz"
+PARENT_PATH="freemedforms-project-$PROJECT_VERSION" # root dir name in the zipfile
+ZIP_PATH="source_package/"`date "+%F-%s"` # Path where to store the source zip file starting from the RootSourcePath
 
 showHelp()
 {
@@ -285,25 +287,18 @@ createSource()
     FILES=`find ./ -type f -name '*.pluginspec'`
     NON_ALPHABETA_PROJECT_VERSION=`echo $PROJECT_VERSION | tr '~' '.' | tr '-' '.' | cut -d"." -f1,2,3`
     for f in $FILES; do
-        # compatVersion="0.6.0"
         sed $SED_INPLACE 's#compatVersion=\".*\"#compatVersion=\"'$NON_ALPHABETA_PROJECT_VERSION'\"#' $f
-        rm $f"bkup"
-        # version="0.6.0"
         sed $SED_INPLACE 's#version=\".*\" #version=\"'$NON_ALPHABETA_PROJECT_VERSION'\" #' $f
-        rm $f"bkup"
         sed $SED_INPLACE 's#version=\".*\"/>#version=\"'$NON_ALPHABETA_PROJECT_VERSION'\"/>#' $f
-        rm $f"bkup"
     done
 
     echo "   * ADDING LIBRARY VERSION NUMBER"
     cd $PACKPATH/libs
     find . -type f -name '*.pro' -exec sed $SED_INPLACE 's/# VERSION=1.0.0/!win32:{VERSION='$NON_ALPHABETA_PROJECT_VERSION'}/' {} \;
-    find . -type f -name '*.probkup' -exec rm {} \;
 
     echo "   * REMOVING TEST VERSION IN FORMS"
     cd $PACKPATH/global_resources/forms
     find . -type f -name '*.xml' -exec sed $SED_INPLACE 's#<version>test</version>#<version>'$NON_ALPHABETA_PROJECT_VERSION'</version>#' {} \;
-    find . -type f -name '*.xmlbkup' -exec rm {} \;
 
     # git version is computed in the buildspecs/githash.pri
     # but the source package needs a static reference
@@ -311,18 +306,23 @@ createSource()
     GITHASH=`git rev-parse HEAD`
     echo "   * SETTING GIT revision hash to " $GITHASH
     sed $SED_INPLACE 's/GIT_HASH=.*/GIT_HASH='$GITHASH'/' $PACKPATH/buildspecs/githash.pri
-    rm $PACKPATH/buildspecs/githash.pribkup
+
+    # Remove all backup files
+    find . -type f -name '*bkup' -delete
 
     echo "**** REPACK SOURCES PACKAGE FROM CREATED DIR ****"
     cd $SCRIPT_PATH
-    tar czf ../$ZIP_FILENAME  ./$PARENT_PATH
+    mkdir -p ../$ZIP_PATH
+    tar czf ../$ZIP_PATH/$ZIP_FILENAME  ./$PARENT_PATH
+
+    echo "**** SIGNING SOURCE FILE, KEY: $GPG_KEY ****"
+    gpg -u $GPG_KEY --sign --detach-sign -o ../$ZIP_PATH/$ZIP_FILENAME.sig ../$ZIP_PATH/$ZIP_FILENAME
 
     echo "**** CLEANING TMP SOURCES PATH ****"
     rm -R $PACKPATH
 
-    PWD=`pwd`
-
-    echo "*** Source package successfully created at `pwd`./$PARENT_PATH"
+    cd ..
+    echo "*** Source package: `pwd`/$ZIP_PATH/$ZIP_FILENAME"
 }
 
 #########################################################################################
