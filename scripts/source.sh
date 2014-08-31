@@ -47,7 +47,7 @@ SOURCES_ROOT_PATH=$SCRIPT_PATH"/../"
 PROJECT_VERSION=`cat $SOURCES_ROOT_PATH/buildspecs/projectversion.pri | grep "PACKAGE_VERSION" -m 1 | cut -d = -s -f2 | tr -d ' '`
 
 # file naming
-ZIP_FILENAME="freemedforms-project_$PROJECT_VERSION.tgz"
+ZIP_FILENAME="freemedforms-project-src_$PROJECT_VERSION.tgz"
 PARENT_PATH="freemedforms-project-$PROJECT_VERSION" # root dir name in the zipfile
 ZIP_PATH="source_package/"`date "+%F-%s"` # Path where to store the source zip file starting from the RootSourcePath
 
