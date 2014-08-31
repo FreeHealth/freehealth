@@ -2,7 +2,7 @@
 Terminal=false
 Version=1.0
 Type=Application
-Categories=Science;
+Categories=Education;Science;MedicalSoftware;
 Name=FreeToolBox
 GenericName=FreeToolBox
 Comment=FreeMedForms scientific assistant

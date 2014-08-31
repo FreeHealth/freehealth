@@ -2,7 +2,7 @@
 Terminal=false
 Version=1.0
 Type=Application
-Categories=Science;
+Categories=Education;Science;MedicalSoftware;
 Name=FreeDRC
 GenericName=eDRC coding assistant
 Comment=eDRC-SFMG coding assistant

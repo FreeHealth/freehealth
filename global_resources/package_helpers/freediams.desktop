@@ -2,9 +2,10 @@
 Terminal=false
 Version=1.0
 Type=Application
-Categories=Science;
+Categories=Education;Science;MedicalSoftware;
 Name=FreeDiams
 GenericName=Pharmaceutical Drugs Prescriptor
+GenericName[fr]=Assistant de prescription médicamenteuse
 Comment=Pharmaceutical drugs prescriptor assistant
 Comment[fr]=Assistant à la prescription médicamenteuse
 TryExec=freediams
