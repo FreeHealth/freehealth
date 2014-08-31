@@ -220,7 +220,7 @@ bool DrcDatabase::initialize(bool createIfNotExists, const QString &absPathToCsv
     } else {
         LOG_FOR("DrcDatabase",
                 QString("Using database version: %1")
-                .arg(getVersion(Utils::Field(Constants::Table_Version, Constants::VERSION_TEXT)));
+                .arg(getVersion(Utils::Field(Constants::Table_Version, Constants::VERSION_TEXT))));
     }
 
     _initialized = true;
