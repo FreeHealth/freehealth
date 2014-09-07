@@ -1,74 +1,35 @@
 The FreeMedForms project
-0.9.0 -> 0.9.2
+0.9.2 -> 0.9.4 / 1.0.0
 
 ===== News =====
 
   * Forms
   * FreeMedForms
-    * HPRIM importation: trying to correct wrong char encoding
-    * Allow users to define a global database prefix (for sqlite and MySQL)
-    * Allow users to define the path where to store their personal SQLite database
-    * Allow users to change the path where are stored their personal SQLite database
   * FreeDDIManager
-    * First release (sources only)
   * Build process
   * XML Forms coding
 
 ===== Bug correction =====
 
   * All applications
-    * Datapack management: 
-      * Adding a server configuration editor 
   * FreeMedForms
-    * Feedback Plugin is correctly translated
-    * Correctly select user language at startup
-    * Correctly define the default print-to-PDF-cache path in the user documents path
-    * Added a login checker in the user creator dialog
-    * Patient data exportation now includes HTML header and footer
-    * Segfaulting when cancelling the installation wizard before the end
-    * Security issue: clear clipboard when requesting user login and password
-    * HPRIM file model going crazy when path to scan does not exists (eg in crossplatform usage)
-    * Correcting user identification with MySQL
-    * New options for some FormItem:
-      * Radio: compact option
-      * Lists: print separator options
-    * FormItem corrections:
-      * Check: correctly returns the printing values instead of the label on print demand
-      * Radio: correctly returns the printing values instead of the label on print demand
-    * User password encryption gets stronger
-    * Correcting insertion of user forms (complete forms and subforms)
-    * Removed local user manual (due to dokuwiki exporter down - needs a fix)
   * FreeDiams
-    * Correctly select user language at startup
-    * Correctly define the default print-to-PDF-cache path in the user documents path
-    * Removed local user manual (due to dokuwiki exporter down - needs a fix)
   * FreeDRC
-    * First release
-    * Correctly define the default print-to-PDF-cache path in the user documents path
   * FreeToolBox
   * PMHx
   * Agenda:
   * DataPack manager
   * HPRIM integrator
-    * Correcting wrong file encoding
   * Forms
-    * Adding socio-demographics subform to the identity form
-    * Trusted person: send Mail button added, family relationship
   * Debian specific
   * Under the hood
-    * Multi-job compilation corrected (for libs)
   * Various unloggued bug corrected
 
 ===== Packaging and documentation ====
 
   * Sources
-    * Renamed zip filename
-    * Code compatibility: Qt4.8.x & Qt5.x
-    * Many new unit-tests
   * Packaging
-    * Debian package updated
   * Compilation
-    * build.sh script simplified and updated
   * Documentation
     * Currently only available online
 
