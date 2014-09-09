@@ -62,10 +62,10 @@ namespace Calendar {
     /** returns the first date of the view in function of a random date */
     CALENDAR_EXPORT QDate getFirstDateByRandomDate(ViewType viewType, const QDate &randomDate);
 
-    /** returns the bounding days interval for a month. WARNING: days are not necessarily inside the month. */
+    /** returns the bounding days interval for a month. \note days are not necessarily inside the month. */
     CALENDAR_EXPORT QPair<QDate, QDate> getBoundingMonthDaysInterval(int year, int month);
 
-    /** returns the bounding days interval for a month. WARNING: days are not necessarily inside the month.
+    /** returns the bounding days interval for a month. \note days are not necessarily inside the month.
      * Same function as the previous one but with a QDate instead of a year+month.
      */
     CALENDAR_EXPORT QPair<QDate, QDate> getBoundingMonthDaysInterval(const QDate &date);

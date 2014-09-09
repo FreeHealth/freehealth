@@ -43,7 +43,7 @@
 namespace Calendar {
 
 struct CALENDAR_EXPORT People {
-    // WARNING: keep this enum sync with Calendar::AbstractCalendarModel::PeopleType
+    // Keep this enum sync with Calendar::AbstractCalendarModel::PeopleType
     enum TypeOfPeople {
         PeopleAttendee = 0,
         PeopleOwner,

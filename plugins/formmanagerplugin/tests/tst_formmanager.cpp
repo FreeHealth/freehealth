@@ -315,7 +315,7 @@ void FormManagerPlugin::test_FormIO_userForms()
     query.setTypeOfForms(Form::FormIOQuery::SubForms);
     QList<Form::FormIODescription*> subDescriptions = xmlIo->getFormFileDescriptions(query);
     int previousCompleteCount = completeDescriptions.count();
-    int previousSubCount = subDescriptions.count();
+    // int previousSubCount = subDescriptions.count();
 
     // Create a fake form in the user complete forms path
     QDir completeFormsDir(settings()->path(Core::ISettings::CompleteFormsPath));
