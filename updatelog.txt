@@ -13,6 +13,7 @@ The FreeMedForms project
 
   * All applications
   * FreeMedForms
+    * User database: fixing a severe compatibility issue
   * FreeDiams
   * FreeDRC
   * FreeToolBox
