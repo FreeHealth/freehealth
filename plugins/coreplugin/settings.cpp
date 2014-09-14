@@ -101,7 +101,7 @@
 */
 
 /*! \var Core::ISettings::Paths Core::ISettings::ApplicationPath
- * Defines the application path. This path is to be concidered as read-only for the application.
+ * Defines the application path. This path is to be considered as read-only for the application.
  * When this path is defined, some paths are automatically calculated:
      - Core::ISettings::QtFrameWorksPath
      - Core::ISettings::FMFPlugInsPath
@@ -115,7 +115,7 @@
 */
 
 /*! \var Core::ISettings::Paths Core::ISettings::BundleResourcesPath
- * Defines the application bundle resources path. This path is to be concidered as read-only for the application.
+ * Defines the application bundle resources path. This path is to be considered as read-only for the application.
  * When setting this path, some paths are calculated:
      - Core::ISettings::BundleResourcesPath
      - Core::ISettings::ReadOnlyDatabasesPath
@@ -138,7 +138,7 @@
 */
 
 /*! \var Core::ISettings::Paths Core::ISettings::TranslationsPath
- * Defines the translations dictionnaries path.
+ * Defines the translations dictionaries path.
 */
 
 /*! \var Core::ISettings::Paths Core::ISettings::QtPlugInsPath
@@ -187,7 +187,7 @@
 
 /*! \var Core::ISettings::Paths Core::ISettings::DocumentationPath
  * Defines the users' manual path.
- * When the application is build with the LINUX_INTEGRATED config flag, the DocumentationPath is set to <em>/usr/share/doc/ApplicationName-doc/html/</em>.
+ * When the application is built with the LINUX_INTEGRATED config flag, the DocumentationPath is set to <em>/usr/share/doc/ApplicationName-doc/html/</em>.
  * Otherwise it is set inside the Bundle.
 */
 
@@ -200,7 +200,7 @@
 */
 
 /*! \var Core::ISettings::Paths Core::ISettings::DataPackApplicationPath
- * Datapack provided by default with the application are stored in this path.
+ * Datapacks provided by default with the application are stored in this path.
 */
 
 /*! \var Core::ISettings::Paths Core::ISettings::WebSiteUrl
@@ -464,7 +464,7 @@ QString SettingsPrivate::userSettings() const
 
 /**
   \fn QSettings *Core::ISettings::getQSettings()
-  Using this member should be avoid in your code.
+  Using this member should be avoided in your code.
 */
 QSettings *SettingsPrivate::getQSettings()
 {
@@ -748,7 +748,7 @@ QString SettingsPrivate::defaultForm() const
 
 /**
   \fn QString Core::ISettings::getIniFile(const QString & appName, const QString & fileName)
-  \brief Returns the ini file to use the the initialization of QSettings. See constructor.
+  \brief Returns the ini file to use the initialization of QSettings. See constructor.
   Test in this order :
   \li command line --config="/abs/path/to/config.ini" or --config="../relative/path/to/config.ini". If the ini file can be used it is returned.
   \li read the applicationBinaryPath/pathtoconfig.ini and search for the config.ini in the specified file
@@ -807,7 +807,7 @@ QString SettingsPrivate::getIniFile(const QString & appName, const QString & fil
     }
 
     // No config file was passed in the command line
-    // Or the param config file does not exists
+    // Or the param config file does not exist
     // -> try to use read the 'pathtoconfig.ini' inside the bundle
     if (QFile(QString("%1/pathtoconfig.ini").arg(qApp->applicationDirPath())).exists()) {
         QString content = Utils::readTextFile(QString("%1/pathtoconfig.ini").arg(qApp->applicationDirPath()), Utils::DontWarnUser);
@@ -1156,7 +1156,7 @@ QString SettingsPrivate::toString() const
     foreach(const QString &p, paths.keys())
         tmp += "| " + p + " | " + paths[p] + " |\n";
 
-    // add all values of the inifile
+    // add all values of the ini file
 
     tmp += "===== USER INI VALUES =====\n\n";
     tmp += "^ Group ^ Name ^ Value ^\n";
