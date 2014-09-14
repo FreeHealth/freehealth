@@ -175,7 +175,7 @@ UserBase::UserBase(QObject *parent) :
     addIndex(Table_USER_LK_ID, LK_LKID);
 
     // information
-    addTable(Table_INFORMATION, "INFORMATION");
+    addTable(Table_INFORMATION, "INFORMATIONS"); // Keep typo
     addField(Table_INFORMATION, INFO_VERSION,  "VERSION", FieldIsShortText);
     addField(Table_INFORMATION, INFO_MAX_LKID, "MAX_LK_ID", FieldIsInteger);
 
@@ -459,6 +459,7 @@ UserData *UserBase::getUserByLoginPassword(const QVariant &login, const QVariant
  */
 bool UserBase::checkLogin(const QString &clearLogin, const QString &clearPassword)
 {
+    qDebug() << "checkLogin" << clearLogin << clearPassword;
     m_LastUuid.clear();
     m_LastLogin.clear();
     m_LastPass.clear();
@@ -514,14 +515,15 @@ bool UserBase::checkLogin(const QString &clearLogin, const QString &clearPasswor
         return false;
     DB.transaction();
 
-    // Try to get the user uuid and cache it
-    Utils::PasswordCrypter crypter;
+    // Check the user login first
     QList<int> list;
     list << USER_UUID << USER_LOGIN << USER_PASSWORD;
     QHash<int, QString> where;
     where.insert(USER_LOGIN, QString("='%1'").arg(Utils::loginForSQL(clearLogin)));
-    where.insert(USER_PASSWORD, QString("='%1'").arg(crypter.cryptPassword(clearPassword)));
     QString req = select(Table_USERS, list, where);
+
+    qDebug() << req;
+
     QSqlQuery query(DB);
     if (query.exec(req)) {
         if (query.next()) {
@@ -529,7 +531,8 @@ bool UserBase::checkLogin(const QString &clearLogin, const QString &clearPasswor
             m_LastLogin = query.value(1).toString();
             m_LastPass = query.value(2).toString();
         } else {
-            // unknown log/pass couple
+            // unknown loging
+            LOG_ERROR(tr("Login not found: %1").arg(clearLogin));
             query.finish();
             DB.rollback();
             return false;
@@ -538,6 +541,15 @@ bool UserBase::checkLogin(const QString &clearLogin, const QString &clearPasswor
         LOG_QUERY_ERROR(query);
         query.finish();
         DB.rollback();
+        return false;
+    }
+
+    // Check user password using the Utils::PasswordCrypter
+    Utils::PasswordCrypter crypter;
+    if (!crypter.checkPassword(clearPassword, m_LastPass)) {
+        m_LastLogin.clear();
+        m_LastPass.clear();
+        m_LastUuid.clear();
         return false;
     }
 
@@ -635,16 +647,17 @@ QString UserBase::getLogin64(const QString &uuid)
 {
     if (uuid == m_LastUuid)
         return m_LastLogin;
+
     QSqlDatabase DB = QSqlDatabase::database(Constants::USER_DB_CONNECTION);
     if (!connectDatabase(DB, __LINE__)) {
         return QString::null;
     }
     DB.transaction();
+
     // create query
     QHash<int, QString> where;
     where.insert(USER_UUID, QString("='%1'").arg(uuid));
     QString req = select(Table_USERS, USER_LOGIN, where);
-    qWarning() <<  req;
 
     QSqlQuery query(DB);
     if (query.exec(req)) {
@@ -656,6 +669,46 @@ QString UserBase::getLogin64(const QString &uuid)
         }
     } else {
         LOG_ERROR(QApplication::translate("UserBase", "Can not retrieve login from the uuid"));
+        LOG_QUERY_ERROR(query);
+    }
+    query.finish();
+    DB.commit();
+    return QString();
+}
+
+/**
+ * Returns the crypted password stored in the FreeMedForms database
+ * for the user identified with the login \e clearLogin
+ */
+QString UserBase::getCryptedPassword(const QString &clearLogin)
+{
+    // Get from cached data?
+    if (clearLogin == m_LastLogin)
+        return m_LastPass;
+
+    // Connect DB
+    QSqlDatabase DB = QSqlDatabase::database(Constants::USER_DB_CONNECTION);
+    if (!connectDatabase(DB, __LINE__)) {
+        return QString::null;
+    }
+    DB.transaction();
+
+    // Create query
+    QHash<int, QString> where;
+    where.insert(USER_LOGIN, QString("='%1'").arg(Utils::loginForSQL(clearLogin)));
+    QString req = select(Table_USERS, USER_PASSWORD, where);
+
+    QSqlQuery query(DB);
+    if (query.exec(req)) {
+        if (query.next()) {
+            QString var = query.value(0).toString();
+            query.finish();
+            DB.commit();
+            return var;
+        }
+    } else {
+        LOG_ERROR(QApplication::translate("UserBase", "Can not retrieve crypted password from the login %1")
+                  .arg(clearLogin));
         LOG_QUERY_ERROR(query);
     }
     query.finish();

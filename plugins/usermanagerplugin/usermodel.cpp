@@ -500,7 +500,13 @@ bool UserModel::setCurrentUser(const QString &clearLog, const QString &clearPass
 
     Utils::PasswordCrypter crypter;
     QString log64 = Utils::loginForSQL(clearLog);
-    QString cryptpass64 = crypter.cryptPassword(clearPassword);
+    // Get crypted password from database
+    QString cryptpass64 = userBase()->getCryptedPassword(clearLog);
+    // Check password
+    if (!crypter.checkPassword(clearPassword, cryptpass64)) {
+        LOG_ERROR("Wrong password");
+        return false;
+    }
 
     QList<IUserListener *> listeners = pluginManager()->getObjects<IUserListener>();
 

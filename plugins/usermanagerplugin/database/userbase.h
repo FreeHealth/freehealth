@@ -87,6 +87,7 @@ public:
     QString getUuid(const QString &log64, const QString &cryptpass64);
     QString createNewUuid();
     QString getLogin64(const QString &uuid);
+    QString getCryptedPassword(const QString &clearLogin);
     QString getUserDynamicData(const QString &userUid, const QString &dynDataUuid);
 
     // savers

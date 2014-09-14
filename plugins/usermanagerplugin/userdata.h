@@ -213,7 +213,10 @@ public:
     QString login64() const              { return value(Table_USERS, USER_LOGIN).toString(); }
     QString clearLogin() const           { return QString(QByteArray::fromBase64(login64().toUtf8())); }
     QString decryptedLogin() const;
+
+    /** Returns the user password extracted from the database */
     QString cryptedPassword() const      { return value(Table_USERS, USER_PASSWORD).toString(); }
+
     QDateTime lastLogin() const          { return value(Table_USERS, USER_LASTLOG).toDateTime(); }
     QString fullName() const;
     QString title() const;
