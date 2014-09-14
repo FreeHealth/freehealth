@@ -102,11 +102,14 @@ QString PasswordCrypter::cryptPassword(const QString &toCrypt, PasswordCrypter::
     default: return QString::null;
     }
     QByteArray crypt = QCryptographicHash::hash(toCrypt.toUtf8(), qch_algo);
-    if (!prefix.isEmpty())
-        return QString("%1:%2")
+    if (!prefix.isEmpty()) {
+        QString r = QString("%1:%2")
             .arg(prefix)
             .arg(QString(crypt.toBase64()));
-    return QString(crypt.toBase64());
+        return r;
+    }
+    QString r = QString(crypt.toBase64());
+    return r;
 }
 
 /**
@@ -153,14 +156,17 @@ bool PasswordCrypter::checkPrefix(const QString &cryptedBase64, Algorithm algo)
  */
 bool PasswordCrypter::checkPassword(const QString &clear, const QString &cryptedBase64)
 {
+    qDebug() << "--------------- checkPassword";
+
     // Get the prefixed algorithm
-    if (!cryptedBase64.contains(":")) {
-        // SHA1
-        QByteArray cryptClear = QCryptographicHash::hash(clear.toUtf8(), QCryptographicHash::Sha1).toBase64();
-        return (cryptedBase64 == cryptClear);
+    Algorithm algo = SHA1;
+    if (cryptedBase64.contains(":")) {
+        algo = extractHashAlgorithm(cryptedBase64);
     }
-    Algorithm algo = extractHashAlgorithm(cryptedBase64);
-    return (cryptPassword(clear, algo).compare(cryptedBase64) == 0);
+    QString crypted = cryptPassword(clear, algo);
+    qDebug() << "clear" << clear << "cryptedBase64" << cryptedBase64 << crypted;
+
+    return (crypted.compare(cryptedBase64) == 0);
 }
 
 /**
