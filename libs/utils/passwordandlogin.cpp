@@ -156,16 +156,12 @@ bool PasswordCrypter::checkPrefix(const QString &cryptedBase64, Algorithm algo)
  */
 bool PasswordCrypter::checkPassword(const QString &clear, const QString &cryptedBase64)
 {
-    qDebug() << "--------------- checkPassword";
-
     // Get the prefixed algorithm
     Algorithm algo = SHA1;
     if (cryptedBase64.contains(":")) {
         algo = extractHashAlgorithm(cryptedBase64);
     }
     QString crypted = cryptPassword(clear, algo);
-    qDebug() << "clear" << clear << "cryptedBase64" << cryptedBase64 << crypted;
-
     return (crypted.compare(cryptedBase64) == 0);
 }
 
