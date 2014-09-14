@@ -1189,9 +1189,14 @@ bool Database::checkDatabaseScheme()
     foreach(int i, list) {
         qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
         QSqlRecord rec = DB.record(d_database->m_Tables.value(i));
-        if (rec.count() != d_database->m_Tables_Fields.values(i).count()) {
-            LOG_ERROR_FOR("Database", QCoreApplication::translate("Database", "Database Scheme Error: wrong number of fields for table %1")
-                                   .arg(d_database->m_Tables.value(i)));
+        int expected = d_database->m_Tables_Fields.values(i).count();
+        int current = rec.count();
+        if (current != expected) {
+            LOG_ERROR_FOR("Database", QCoreApplication::translate("Database", "Database Scheme Error: wrong number of fields for table %1 (expected: %2; current: %3)")
+                                   .arg(d_database->m_Tables.value(i))
+                          .arg(expected)
+                          .arg(current)
+                          );
             return false;
         }
         QList<int> fields = d_database->m_Tables_Fields.values(i);
