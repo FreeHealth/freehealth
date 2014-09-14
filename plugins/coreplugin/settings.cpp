@@ -383,11 +383,7 @@ SettingsPrivate::SettingsPrivate(QObject *parent, const QString &appName, const 
         res = QDir::cleanPath(res);
         resourcesPath = res + "/";
         setPath(UserResourcesPath, QFileInfo(file).absolutePath());
-
-        if (Utils::isRunningOnMac()) {
-            setPath(BundleResourcesPath, resourcesPath);
-        } else {
-            setPath(BundleResourcesPath, resourcesPath);
+        setPath(BundleResourcesPath, resourcesPath);
         }
     } else {
         // RELEASE OR DEBUG INSTALLED BUILD
