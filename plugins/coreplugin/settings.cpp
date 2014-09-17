@@ -384,7 +384,6 @@ SettingsPrivate::SettingsPrivate(QObject *parent, const QString &appName, const 
         resourcesPath = res + "/";
         setPath(UserResourcesPath, QFileInfo(file).absolutePath());
         setPath(BundleResourcesPath, resourcesPath);
-        }
     } else {
         // RELEASE OR DEBUG INSTALLED BUILD
         if (Utils::isLinuxIntegratedCompilation()) {
