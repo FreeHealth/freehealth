@@ -58,6 +58,9 @@
 
 #include <QStringListModel>
 
+// TODO: this is old fashion code, ui and object class are manually linked inside
+// the widget. Instead, we should use a PmhModel and use a QDataWidgetMapper.
+
 using namespace PMH;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;
@@ -310,7 +313,13 @@ void PmhViewer::onSimpleViewIcdClicked()
         // retrieve selected codes to the PmhEpisodeModel
         d->m_Pmh->episodeModel()->setData(model->index(0, PmhEpisodeModel::IcdXml), dlg.xmlIcdCollection());
         // update the icdCodesLineEdit
-       d->m_IcdLabelModel->setStringList(d->m_Pmh->episodeModel()->index(0, PmhEpisodeModel::IcdLabelStringList).data().toStringList());
+        const QStringList &icdLabels = d->m_Pmh->episodeModel()->index(0, PmhEpisodeModel::IcdLabelStringList).data().toStringList();
+        d->m_IcdLabelModel->setStringList(icdLabels);
+        // if pmh does not have a label -> populate label with ICD labels
+        if (d->m_Pmh->data(PmhData::Label).toString().isEmpty()) {
+            d->m_Pmh->setData(PmhData::Label, icdLabels.join(", "));
+            d->ui->personalLabel->setText(d->m_Pmh->data(PmhData::Label).toString());
+        }
     }
 }
 
