@@ -34,7 +34,6 @@
 #include "icdio.h"
 #include "icdplugin.h"
 
-
 #include <coreplugin/icore.h>
 #include <coreplugin/constants_menus.h>
 #include <coreplugin/constants_tokensandsettings.h>
@@ -44,9 +43,7 @@
 
 #include <utils/log.h>
 #include <utils/global.h>
-
 #include <translationutils/constanttranslations.h>
-
 #include <extensionsystem/pluginmanager.h>
 
 #include "ui_icdcentralwidget.h"
@@ -62,7 +59,6 @@ using namespace Trans::ConstantTranslations;
 static inline Core::ActionManager *actionManager() {return Core::ICore::instance()->actionManager();}
 static inline Core::IDocumentPrinter *printer() {return ExtensionSystem::PluginManager::instance()->getObject<Core::IDocumentPrinter>();}
 static inline ICD::IcdDatabase *icdBase() {return ICD::IcdDatabase::instance();}
-
 
 namespace ICD {
 namespace Internal {
@@ -137,8 +133,7 @@ private:
 }  // End namespace Internal
 }  // End namespace ICD
 
-
-
+/** CTor */
 IcdCentralWidget::IcdCentralWidget(QWidget *parent) :
     IcdContextualWidget(parent),
     ui(new Ui::IcdCentralWidget),
@@ -167,6 +162,7 @@ IcdCentralWidget::IcdCentralWidget(QWidget *parent) :
     ui->collectionLayout->insertWidget(0, d->m_ToolBar);
 }
 
+/** DTor */
 IcdCentralWidget::~IcdCentralWidget()
 {
     delete ui;
@@ -175,6 +171,7 @@ IcdCentralWidget::~IcdCentralWidget()
     d = 0;
 }
 
+/** Internal slot. Called when user dble-click on an ICD code */
 void IcdCentralWidget::onSelectorActivated(const QVariant &SID)
 {
     if (d->m_SelectorMode == SelectorSimpleMode) {

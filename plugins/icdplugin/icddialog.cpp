@@ -29,17 +29,18 @@
 #include "fullicdcodemodel.h"
 #include "icdassociation.h"
 
+#include <utils/global.h>
+
 #include <QGridLayout>
 #include <QDialogButtonBox>
 
 #include <QDebug>
 
-
 using namespace ICD;
 
 IcdDialog::IcdDialog(const QVariant &SID, QWidget *parent) :
-        QDialog(parent),
-        m_View(0)
+    QDialog(parent),
+    m_View(0)
 {
     QGridLayout *lay = new QGridLayout(this);
     setLayout(lay);
@@ -51,6 +52,7 @@ IcdDialog::IcdDialog(const QVariant &SID, QWidget *parent) :
     lay->addWidget(buttonBox, 10, 0);
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+    Utils::resizeAndCenter(this, parent);
 }
 
 void IcdDialog::done(int result)
@@ -58,11 +60,16 @@ void IcdDialog::done(int result)
     QDialog::done(result);
 }
 
+/** Returns \e true is the current selection is valid */
 bool IcdDialog::isSelectionValid() const
 {
     return m_View->icdModel()->isSelectionValid();
 }
 
+/**
+ * Returns \e true if there is only one selected code and if the code
+ * can be used alone (no dag/star).
+ */
 bool IcdDialog::isUniqueCode() const
 {
     // Ask FullIcdModel about the selected code
@@ -70,12 +77,13 @@ bool IcdDialog::isUniqueCode() const
         return false;
     if (!m_View->icdModel())
         return false;
-//    qWarning() << m_View->icdModel()->codeCanBeUsedAlone() <<
-//                  m_View->icdModel()->dagStarModel()->numberOfCheckedItems();
     return (m_View->icdModel()->codeCanBeUsedAlone() &&
             (m_View->icdModel()->dagStarModel()->numberOfCheckedItems()==0));
 }
 
+/**
+ * Returns \e true if selection is an association of codes (dag/star system)
+ */
 bool IcdDialog::isAssociation() const
 {
     if (!m_View)
@@ -87,6 +95,10 @@ bool IcdDialog::isAssociation() const
             (m_View->icdModel()->dagStarModel()->numberOfCheckedItems()>0));
 }
 
+/**
+ * Returns the database SID of one unique code
+ * \sa isAssociation(), isUniqueCode()
+ */
 QVariant IcdDialog::getSidCode() const
 {
     if (isAssociation())
@@ -94,10 +106,14 @@ QVariant IcdDialog::getSidCode() const
     return m_View->icdModel()->getCodeSid();
 }
 
+/**
+ * Returns associated codes (dag/star system)
+ * \sa isAssociation(), isUniqueCode()
+ * \sa ICD::SimpleIcdModel::getCheckedAssociations()
+ */
 QVector<Internal::IcdAssociation> IcdDialog::getAssocation() const
 {
     if (!isAssociation())
         return QVector<Internal::IcdAssociation>();
     return m_View->icdModel()->dagStarModel()->getCheckedAssociations();
 }
-

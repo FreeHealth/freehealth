@@ -36,13 +36,14 @@
 #include "fullicdcodemodel.h"
 #include "icdassociation.h"
 
+#include <utils/global.h>
+
 #include <QGridLayout>
 #include <QDialogButtonBox>
 
 #include <QDebug>
 
 using namespace ICD;
-
 
 IcdCollectionDialog::IcdCollectionDialog(QWidget *parent) :
     QDialog(parent)
@@ -56,7 +57,7 @@ IcdCollectionDialog::IcdCollectionDialog(QWidget *parent) :
     lay->addWidget(buttonBox, 10, 0);
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
-    adjustSize();
+    Utils::resizeAndCenter(this, parent);
 }
 
 IcdCollectionDialog::~IcdCollectionDialog()
