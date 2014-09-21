@@ -13,9 +13,9 @@ just standalone compilation of FreeMedForms plugins.
 
 This project is a free and open source project. A community grows up
 around it. FreeMedForms and derivatives is released under the terms
-of the new BSD License. Some parts of the code are LGPL v2.1.
+of the GPLv3 License. Some parts of the code are LGPL v2.1.
 
-FreeMedForms and Derivatives are coded in C++/Qt4/Qt5 at least.
+FreeMedForms and Derivatives are coded in C++/Qt4.8/Qt5 at least.
 FreeMedForms and Derivatives are available for :
 - MacOs X universal
 - Linux : Ubuntu, Debian, OpenSuse, standalone binary

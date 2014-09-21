@@ -6,7 +6,7 @@ You can find the terms of the license terms here
     http://www.gnu.org/licenses/gpl.html.
 
 Some parts of the code comes from other sources, such as:
-- QtCreator : released under LGPL license: http://qt.nokia.com/
+- QtCreator : released under LGPL license: http://qt-project.org/
 
 Icons and Pixmaps:
 - Bc Tango : Creative Common license: http://tango.freedesktop.org/Tango_Icon_Library

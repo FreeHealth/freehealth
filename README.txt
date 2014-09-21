@@ -13,7 +13,7 @@ FreeMedForms project is a fully open source medical project. It includes:
 - an ICD10 coding assistant: FreeICD
 - a french specific coding assistant: FreeDRC (in partnership with the SMFG)
 
-FreeMedForms and Derivatives are coded in C++/Qt4/Qt5
+FreeMedForms and Derivatives are coded in C++/Qt4.8/Qt5
 
 All FreeMedForms apps are available for:
 - MacOS X universal
