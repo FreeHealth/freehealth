@@ -5,15 +5,14 @@ qt:greaterThan(QT_MAJOR_VERSION, 4) {
 
 TEMPLATE = subdirs
 
-SUBDIRS += translation \
+SUBDIRS += \
     aggregation \
+    translation \
     extension \
     utils \
     medical \
     quazip \
     datapack
-#    medintux
-
 
 LIBSPATH=../../libs
 CONTRIBPATH=../../contrib
