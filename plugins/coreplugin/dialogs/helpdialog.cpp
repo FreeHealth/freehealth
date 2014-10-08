@@ -186,6 +186,7 @@ HelpDialog::HelpDialog(const QString &page, QWidget *parent) :
     QDialog(parent),
     d(0)
 {
+    Q_UNUSED(page);
     setObjectName("HelpDialog");
     setAttribute(Qt::WA_DeleteOnClose);
 
