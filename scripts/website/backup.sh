@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # This script is part of FreeMedForms project : http://www.freemedforms.com
-# (c) 2008 - 2011  Eric MAEKER, MD
+# (c) 2008 - 2014  Eric MAEKER, MD
 #
 
 # paths
@@ -16,7 +16,7 @@ DOKU_PAGES="data/pages"
 DOKU_MEDIAS="data/media"
 DOKU_CONF="conf/local.php conf/users.auth.php"
 DOKU_ATTIC="data/attic"
-DOKU_TEMPLATES="lib/tpl/arctic lib/tpl/typo"
+DOKU_TEMPLATES="lib/tpl"
 
 BACKUP_PATH=$SERVER_PATH"/doku_bkup"
 #BACKUP_PATH="/Users/eric/doku_bkup"
@@ -59,9 +59,6 @@ rotateDir "${BACKUP_PATH}/yearly" "$BACK_FILENAME" "$NB_BACKUPS"
 
 # then create our backup
 cd $DOKU_ROOT_PATH
-sdf=`pwd`
-echo $sdf
-
 tar --exclude=".*" -cjf "${BACK_ABSFILENAME}.tar.bz2" \
 $DOKU_PLUGINS \
 $DOKU_PAGES \
