@@ -46,6 +46,7 @@ const char * const  FREETOOLBOX_SPLASHSCREEN  = "freetoolbox.png";
 const char * const  FREEPAD_SPLASHSCREEN      = "freepad.png";
 const char * const  FREEDRC_SPLASHSCREEN      = "freedrc.png";
 const char * const  FREEDDIMANAGER_SPLASHSCREEN = "freeddimanager.png";
+const char * const  FREEGUARD_SPLASHSCREEN      = "freeguard.png";
 
 // application icons
 const char * const  ICONFREEMEDFORMS   = "freemedforms.png";
@@ -57,6 +58,7 @@ const char * const  ICONFREETOOLBOX    = "freetoolbox.png";
 const char * const  ICONFREEPAD        = "freepad.png";
 const char * const  ICONFREEDRC        = "freedrc.png";
 const char * const  ICONFREEDDIMANAGER = "freeddimanager.png";
+const char * const  ICONFREEGUARD      = "freeguard.png";
 
 // menu File
 const char * const  ICONFILENEW =      "filenew.png";
