@@ -237,10 +237,14 @@ bool EpisodeBase::createDatabase(const QString &connectionName , const QString &
                     TypeOfAccess access, AvailableDrivers driver,
                     const QString & login, const QString & pass,
                     const int port,
-                    CreationOption /*createOption*/
+                    CreationOption createOption
                    )
 {
     Q_UNUSED(access);
+    Q_UNUSED(createOption);
+    // TODO: manage access
+    // TODO: manage createOption
+
     if (connectionName != DB_NAME)
         return false;
 
