@@ -24,52 +24,52 @@
  *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef ACCOUNT_INTERNAL_ACCOUNTCONTEXTUALWIDGET_H
-#define ACCOUNT_INTERNAL_ACCOUNTCONTEXTUALWIDGET_H
+#ifndef GUARD_INTERNAL_GUARDLINE_TIMESLOT_VIEW_H
+#define GUARD_INTERNAL_GUARDLINE_TIMESLOT_VIEW_H
 
 #include <coreplugin/contextmanager/icontext.h>
 #include <QWidget>
 #include <QList>
 
 /**
- * \file accountcontextualwidget.h
+ * \file guradlinetimeslotview.h
  * \author Eric Maeker
- * \version 0.8.0
- * \date
+ * \version 0.10.0
+ * \date 12 Oct 2014
 */
 
-namespace Account {
+namespace Guard {
 namespace Internal {
-class AccountContext;
+class GuardContext;
 
-class AccountContextualWidget : public QWidget
+class GuardLineTimeSlotView : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit AccountContextualWidget(QWidget *parent = 0);
-    ~AccountContextualWidget();
+    explicit GuardLineTimeSlotView(QWidget *parent = 0);
+    ~GuardLineTimeSlotView();
 
     void addContexts(const QList<int> &contexts);
 
 private:
-    AccountContext *m_Context;
+    GuardContext *m_Context;
 };
 
-class AccountContext : public Core::IContext
-{
-    Q_OBJECT
-public:
-    AccountContext(AccountContextualWidget *w) :
-        Core::IContext(w)
-    {
-        setObjectName("AccountContext");
-        setWidget(w);
-    }
-};
+//class GuardContext : public Core::IContext
+//{
+//    Q_OBJECT
+//public:
+//    GuardContext(GuardContextualWidget *w) :
+//        Core::IContext(w)
+//    {
+//        setObjectName("GuardContext");
+//        setWidget(w);
+//    }
+//};
 
 } // namespace Internal
-} // namespace Account
+} // namespace Guard
 
-#endif // ACCOUNT_INTERNAL_ACCOUNTCONTEXTUALWIDGET_H
+#endif // GUARD_INTERNAL_GUARDLINE_TIMESLOT_VIEW_H
 

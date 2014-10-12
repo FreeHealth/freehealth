@@ -24,52 +24,52 @@
  *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef CORE_INTERNAL_CORECONTEXTUALWIDGET_H
-#define CORE_INTERNAL_CORECONTEXTUALWIDGET_H
+#ifndef GUARD_INTERNAL_GUARDLINEVIEW_H
+#define GUARD_INTERNAL_GUARDLINEVIEW_H
 
 #include <coreplugin/contextmanager/icontext.h>
 #include <QWidget>
 #include <QList>
 
 /**
- * \file corecontextualwidget.h
+ * \file guardlineview.h
  * \author Eric Maeker
- * \version 0.8.0
- * \date
+ * \version 0.10.0
+ * \date 12 Oct 2014
 */
 
-namespace Core {
+namespace Guard {
 namespace Internal {
-class CoreContext;
+class GuardContext;
 
-class CoreContextualWidget : public QWidget
+class GuardLineView : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit CoreContextualWidget(QWidget *parent = 0);
-    ~CoreContextualWidget();
+    explicit GuardLineView(QWidget *parent = 0);
+    ~GuardLineView();
 
     void addContexts(const QList<int> &contexts);
 
 private:
-    CoreContext *m_Context;
+    GuardContext *m_Context;
 };
 
-class CoreContext : public Core::IContext
-{
-    Q_OBJECT
-public:
-    CoreContext(CoreContextualWidget *w) :
-        Core::IContext(w)
-    {
-        setObjectName("CoreContext");
-        setWidget(w);
-    }
-};
+//class GuardContext : public Core::IContext
+//{
+//    Q_OBJECT
+//public:
+//    GuardContext(GuardLineView *w) :
+//        Core::IContext(w)
+//    {
+//        setObjectName("GuardContext");
+//        setWidget(w);
+//    }
+//};
 
 } // namespace Internal
-} // namespace Core
+} // namespace Guard
 
-#endif // CORE_INTERNAL_CORECONTEXTUALWIDGET_H
+#endif // GUARD_INTERNAL_GUARDLINEVIEW_H
 

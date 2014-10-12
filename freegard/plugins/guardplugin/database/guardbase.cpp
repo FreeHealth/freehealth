@@ -130,11 +130,14 @@ GuardBase::GuardBase(QObject *parent) :
     // - GuardLineInclusion: links lines to guardians
 
     using namespace Guard::Constants;
-    addTable(Table_Guardian,      "GUARDIAN");
-    addTable(Table_GuardLine,     "GUARDLINE");
-    addTable(Table_GuardianPref,  "GUARDIANPREF");
-    addTable(Table_GuardTable,    "GUARDTABLE");
+    addTable(Table_Guardian,       "GUARDIAN");
+    addTable(Table_GuardLine,      "GUARDLINE");
+    addTable(Table_GuardianPref,   "GUARDIANPREF");
+    addTable(Table_GuardTable,     "GUARDTABLE");
     addTable(Table_GuardLineInclusion, "GUARDLINE_INCL");
+    addTable(Table_GuardLineTimeSlot, "GUARDLINE_SLOTS");
+    addTable(Table_Location,        "LOCATION");
+    addTable(Table_LocationLink,    "LOCATION_LINK");
 
     addTable(Table_VERSION,         "VERSION");
     addField(Table_VERSION, VERSION_TEXT, "TXT", FieldIsShortText);
@@ -147,22 +150,30 @@ GuardBase::GuardBase(QObject *parent) :
     addField(Table_Guardian, GUARDIAN_ACCEPT_MAILS,"MAILS", FieldIsBoolean, "1");
     addField(Table_Guardian, GUARDIAN_MOBILEPHONE, "PHONE", FieldIsShortText);
     addField(Table_Guardian, GUARDIAN_ACCEPT_SMS,  "SMS",   FieldIsBoolean, "1");
+    addField(Table_Guardian, GUARDIAN_GENERALPREF_UID,  "PREF_FAKELINE_UID",   FieldIsUUID); // Links to Table_GuardianPref, GUARDIAN_PREFS_GUARDLINE_UID
+    addField(Table_Guardian, GUARDIAN_LOCATION_FK, "LOCATION_FK", FieldIsLongInteger);
     addIndex(Table_Guardian, GUARDIAN_ID);
     addIndex(Table_Guardian, GUARDIAN_UID);
     addIndex(Table_Guardian, GUARDIAN_FULLNAME);
 
-    addField(Table_GuardLine, GUARDLINE_ID,    "ID",       FieldIsUniquePrimaryKey);
-    addField(Table_GuardLine, GUARDLINE_UID,   "UID",      FieldIsUUID);
-    addField(Table_GuardLine, GUARDLINE_LABEL, "LABEL",    FieldIsShortText);
-    addField(Table_GuardLine, GUARDLINE_SITE,  "SITE",    FieldIsShortText);
-    addField(Table_GuardLine, GUARDLINE_INFO,  "INFO",    FieldIsLongText);
-    addField(Table_GuardLine, GUARDLINE_XML_SCHEME, "XMLSCHEME", FieldIsLongText);
+    addField(Table_GuardLine, GUARDLINE_ID,          "ID",          FieldIsUniquePrimaryKey);
+    addField(Table_GuardLine, GUARDLINE_UID,         "UID",         FieldIsUUID);
+    addField(Table_GuardLine, GUARDLINE_ISVALID,     "ISVALID",     FieldIsBoolean);
+    addField(Table_GuardLine, GUARDLINE_LABEL,       "LABEL",       FieldIsShortText);
+    addField(Table_GuardLine, GUARDLINE_LOCATION,    "LOCATION",    FieldIsShortText);
+    addField(Table_GuardLine, GUARDLINE_INFO,        "INFO",        FieldIsLongText);
+    addField(Table_GuardLine, GUARDLINE_MAILINGLIST, "MAILINGLIST", FieldIsShortText);
+    addField(Table_GuardLine, GUARDLINE_LINESLOT_FK, "TIMESLOT_FK", FieldIsLongInteger);
+    addField(Table_GuardLine, GUARDLINE_PRIORITY,    "PRIOR",       FieldIsOneChar);
+    addField(Table_GuardLine, GUARDLINE_LOCATION_FK, "LOCATION_FK", FieldIsLongInteger);
     addIndex(Table_GuardLine, GUARDLINE_ID);
     addIndex(Table_GuardLine, GUARDLINE_UID);
+    addIndex(Table_GuardLine, GUARDLINE_LINESLOT_FK);
 
     addField(Table_GuardianPref, GUARDIAN_PREFS_ID,            "ID",    FieldIsUniquePrimaryKey);
     addField(Table_GuardianPref, GUARDIAN_PREFS_GUARDIAN_UID,  "G_UID", FieldIsUUID);
     addField(Table_GuardianPref, GUARDIAN_PREFS_GUARDLINE_UID, "GL_UID", FieldIsUUID);
+    addField(Table_GuardianPref, GUARDIAN_PREFS_CONTENT,       "CONTENT", FieldIsLongText);
     addIndex(Table_GuardianPref, GUARDIAN_PREFS_ID);
     addIndex(Table_GuardianPref, GUARDIAN_PREFS_GUARDIAN_UID);
     addIndex(Table_GuardianPref, GUARDIAN_PREFS_GUARDLINE_UID);
@@ -180,13 +191,40 @@ GuardBase::GuardBase(QObject *parent) :
     addIndex(Table_GuardLineInclusion, LINEINCL_LINE_UID);
     addIndex(Table_GuardLineInclusion, LINEINCL_GARDIAN_UID);
 
-    addField(Table_GuardTable, GUARDTABLE_ID,     "ID",    FieldIsUniquePrimaryKey);
-    addField(Table_GuardTable, GUARDTABLE_UID,    "UID", FieldIsUUID);
-    addField(Table_GuardTable, GUARDTABLE_ISVALID, "ISVALID", FieldIsBoolean, "1");
-    addField(Table_GuardTable, GUARDTABLE_STATE,   "STATE", FieldIsShortText);
+    addField(Table_GuardTable, GUARDTABLE_ID,     "ID",         FieldIsUniquePrimaryKey);
+    addField(Table_GuardTable, GUARDTABLE_UID,    "UID",        FieldIsUUID);
+    addField(Table_GuardTable, GUARDTABLE_ISVALID,"ISVALID",    FieldIsBoolean, "1");
+    addField(Table_GuardTable, GUARDTABLE_STATE,  "STATE",      FieldIsTwoChars);
     addIndex(Table_GuardTable, GUARDTABLE_ID);
     addIndex(Table_GuardTable, GUARDTABLE_UID);
     addIndex(Table_GuardTable, GUARDTABLE_STATE);
+
+    addField(Table_GuardLineTimeSlot, LINESLOT_ID,     "ID",    FieldIsUniquePrimaryKey);
+    addField(Table_GuardLineTimeSlot, LINESLOT_ISVALID,"ISVALID", FieldIsBoolean);
+    addField(Table_GuardLineTimeSlot, LINESLOT_FK,     "GUARDLINE_FK", FieldIsLongInteger);
+    addField(Table_GuardLineTimeSlot, LINESLOT_MONDAY, "MONDAY", FieldIsBoolean, "0");
+    addField(Table_GuardLineTimeSlot, LINESLOT_TUESDAY,"TUESDAY", FieldIsBoolean, "0");
+    addField(Table_GuardLineTimeSlot, LINESLOT_WEDNESDAY,"WEDNESDAY", FieldIsBoolean, "0");
+    addField(Table_GuardLineTimeSlot, LINESLOT_THURSDAY, "THURSDAY", FieldIsBoolean, "0");
+    addField(Table_GuardLineTimeSlot, LINESLOT_FRIDAY,   "FRIDAY", FieldIsBoolean, "0");
+    addField(Table_GuardLineTimeSlot, LINESLOT_SATURDAY, "SATURDAY", FieldIsBoolean, "0");
+    addField(Table_GuardLineTimeSlot, LINESLOT_SUNDAY,   "SUNDAY", FieldIsBoolean, "0");
+    addField(Table_GuardLineTimeSlot, LINESLOT_SPECIFIEDDATES,"DATES", FieldIsShortText);
+    addField(Table_GuardLineTimeSlot, LINESLOT_BEGINHOUR,     "BEGINHOUR", FieldIsTime);
+    addField(Table_GuardLineTimeSlot, LINESLOT_ENDHOUR,       "ENDHOUR", FieldIsTime);
+    addField(Table_GuardLineTimeSlot, LINESLOT_PERIOD_TYPE,   "PERIOD_TYPE", FieldIsTwoChars);
+    addField(Table_GuardLineTimeSlot, LINESLOT_PERIOD_INFORMATION, "PERIOD_INFO", FieldIsShortText);
+    addIndex(Table_GuardLineTimeSlot, LINESLOT_ID);
+    addIndex(Table_GuardLineTimeSlot, LINESLOT_FK);
+
+    addField(Table_Location, LOCATION_ID,   "ID", FieldIsUniquePrimaryKey);
+    addField(Table_Location, LOCATION_UID,  "UID", FieldIsUUID);
+    addField(Table_Location, LOCATION_LABEL,"LABEL", FieldIsShortText);
+
+    addField(Table_LocationLink, LOCATIONLINK_FK,   "ID", FieldIsTwoChars);
+    addField(Table_LocationLink, LOCATIONLINK_LOCATION_ID, "LOCATION_ID", FieldIsTwoChars);
+    addIndex(Table_LocationLink, LOCATIONLINK_FK);
+    addIndex(Table_LocationLink, LOCATIONLINK_LOCATION_ID);
 
     // Connect first run database creation requested
     connect(Core::ICore::instance(), SIGNAL(firstRunDatabaseCreation()), this, SLOT(onCoreFirstRunCreationRequested()));
@@ -437,19 +475,3 @@ void GuardBase::onCoreFirstRunCreationRequested()
     disconnect(Core::ICore::instance(), SIGNAL(firstRunDatabaseCreation()), this, SLOT(onCoreFirstRunCreationRequested()));
     initialize();
 }
-
-//bool GuardBase::checkIfIsFirstVersion()
-//{
-//    QString version = getVersion(Utils::Field(Constants::Table_VERSION, Constants::VERSION_ACTUAL));
-//    if (version == QVariant("0.1")) {
-//        LOG(QString("VERSION == 0.1"));
-//        return true;
-//    }
-//    return false;
-//}
-
-//bool GuardBase::versionHasChanged()
-//{
-//    QString version = getVersion(Utils::Field(Constants::Table_VERSION, Constants::VERSION_ACTUAL));
-//    return (version != Constants::DB_VERSION_NUMBER);
-//}

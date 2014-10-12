@@ -47,6 +47,9 @@ const int P_MODE_GUARDIANS   = Core::Constants::FirstModeGroup + Core::Constants
 const int P_MODE_GUARDLINES  = Core::Constants::SecondModeGroup + Core::Constants::FirstModeSubGroup;
 const int P_MODE_GUARDTABLES = Core::Constants::ThirdModeGroup + Core::Constants::FirstModeSubGroup;
 
+// Contexts
+const char * const C_GUARD_PLUGINS = "Guard";
+
 // Options page sortIndex (per categories)
 //const int OPTIONINDEX_MAIN         = 0;
 //const int OPTIONINDEX_PRINT        = 1000;

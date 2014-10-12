@@ -26,49 +26,49 @@
  ***************************************************************************/
 
 /**
- * \class Account::Internal::AccountContextualWidget
- * \brief Contextualized widget for the Account plugin.
+ * \class Guard::Internal::GuardLineTimeSlotView
+ * \brief Contextualized widget for the Guard plugin.
  *
  * This contextualized widget has access to all actions that are added in the particular context of
- * Account (e.g. Account::Constants::C_Account).\n
+ * Guard (e.g. Guard::Constants::C_Guard).\n
  * You can add context identificators to the widget by using the addContexts() method.
  * The context object is automatically removed from the context manager in its destructor
  * (no special code needed).
  * \sa Core::IContext, Core::ContextManager, Core::ICore::contextManager()
  */
 
-#include "accountcontextualwidget.h"
+#include "guardlinetimeslotview.h"
 #include "constants.h"
 
 #include <coreplugin/contextmanager/contextmanager.h>
 #include <coreplugin/icore.h>
 
-using namespace Account;
+using namespace Guard;
 using namespace Internal;
 
 static inline Core::ContextManager *contextManager() { return Core::ICore::instance()->contextManager(); }
 
-AccountContextualWidget::AccountContextualWidget(QWidget *parent) :
+GuardLineTimeSlotView::GuardLineTimeSlotView(QWidget *parent) :
     QWidget(parent),
     m_Context(0)
 {
-    Core::Context context(Constants::C_ACCOUNT_PLUGINS);
-    // Create the context object
-    m_Context = new Internal::AccountContext(this);
-    m_Context->setContext(context);
+//    Core::Context context(Constants::C_GUARD_PLUGINS);
+//    // Create the context object
+//    m_Context = new Internal::GuardContext(this);
+//    m_Context->setContext(context);
 
-    // Send it to the contextual manager
-    contextManager()->addContextObject(m_Context);
+//    // Send it to the contextual manager
+//    contextManager()->addContextObject(m_Context);
 }
 
-AccountContextualWidget::~AccountContextualWidget()
+GuardLineTimeSlotView::~GuardLineTimeSlotView()
 {
-    // Remove contextual object
-    contextManager()->removeContextObject(m_Context);
+//    // Remove contextual object
+//    contextManager()->removeContextObject(m_Context);
 }
 
-void AccountContextualWidget::addContexts(const QList<int> &contexts)
+void GuardLineTimeSlotView::addContexts(const QList<int> &contexts)
 {
-    m_Context->addContext(contexts);
+//    m_Context->addContext(contexts);
 }
 

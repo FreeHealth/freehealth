@@ -50,37 +50,15 @@ namespace Constants {
 //    const char * const DATAPACK_GUARD_FILENAME = "guard_datapack.db";
 
     // Database abstraction
-/**
-    Lignes de gardes    = GUARD_LINES
-    un tour de garde = horaires par jour modulable selon la journée (ex: samedi = 2 tours, semaine = 1 tour)
-    x tours de garde
-    x médecins par tour de garde
-    chaque tour est pondéré par une priorité (remplir d'abord les tours prioritaires)
-    un médecin peut participer pour un période définie à une ligne de guarde
-
-    Médecins:   = GUARDIANS + GUARDIANS_PREFS
-    - dispos et souhaits de dates
-    - regroupement des dates
-    - indispos
-      - ponctuelles
-      - régulières (formations, annivs...)
-    - par tour de garde uniquement
-    - participent à des tours de gardes définis ou tous les tours de garde
-    - peuvent être prioritaires sur certains tours (priorité positive ou négative - eg participe prio aux samedis et peu au dimanches)
-    - peuvent définir pour chaque tours (et pour l'ensemble des tours) un maximum acceptable de présence
-    - accepte d'éffectuer plusieurs tours successifs (si un tour = WE, accepte x we d'affilé ou pas)
-
-    Tableaux de gardes: = GUARDS_PLANS
-    - tableaux préparatoires
-    - tableaux définitifs (non modifiables)
-
-*/
     enum Tables {
         Table_Guardian = 0,
         Table_GuardLine,
+        Table_GuardLineTimeSlot,
         Table_GuardLineInclusion,
         Table_GuardianPref,
         Table_GuardTable,
+        Table_Location,
+        Table_LocationLink,
         Table_VERSION
     };
 
@@ -93,6 +71,8 @@ namespace Constants {
         GUARDIAN_ACCEPT_MAILS,
         GUARDIAN_MOBILEPHONE,
         GUARDIAN_ACCEPT_SMS,
+        GUARDIAN_GENERALPREF_UID,
+        GUARDIAN_LOCATION_FK,
         GUARDIAN_MaxParam
     };
 
@@ -100,17 +80,41 @@ namespace Constants {
         GUARDIAN_PREFS_ID = 0,
         GUARDIAN_PREFS_GUARDIAN_UID,
         GUARDIAN_PREFS_GUARDLINE_UID,
+        GUARDIAN_PREFS_CONTENT,
         GUARDIAN_PREFS_MaxParam
     };
 
     enum TableGuardLine_Fields {
         GUARDLINE_ID = 0,
         GUARDLINE_UID,
+        GUARDLINE_ISVALID,
         GUARDLINE_LABEL,
-        GUARDLINE_SITE,
+        GUARDLINE_LOCATION,
         GUARDLINE_INFO,
-        GUARDLINE_XML_SCHEME,
+        GUARDLINE_MAILINGLIST,
+        GUARDLINE_LINESLOT_FK,
+        GUARDLINE_PRIORITY,
+        GUARDLINE_LOCATION_FK,
         GUARDLINE_MaxParam
+    };
+
+    enum Table_GuardLineTimeSlot_Fields {
+        LINESLOT_ID = 0,
+        LINESLOT_ISVALID,
+        LINESLOT_FK,
+        LINESLOT_MONDAY,
+        LINESLOT_TUESDAY,
+        LINESLOT_WEDNESDAY,
+        LINESLOT_THURSDAY,
+        LINESLOT_FRIDAY,
+        LINESLOT_SATURDAY,
+        LINESLOT_SUNDAY,
+        LINESLOT_SPECIFIEDDATES,
+        LINESLOT_BEGINHOUR,
+        LINESLOT_ENDHOUR,
+        LINESLOT_PERIOD_TYPE,
+        LINESLOT_PERIOD_INFORMATION,
+        LINESLOT_MaxParam
     };
 
     enum TableGuardTable_Fields {
@@ -130,7 +134,21 @@ namespace Constants {
         LINEINCL_MONTH,
         LINEINCL_YEARS,
         LINEINCL_CYCLING_START,
-        LINEINCL_CYCLING_END
+        LINEINCL_CYCLING_END,
+        LINEINCL_MaxParam
+    };
+
+    enum Table_Location_Fields {
+        LOCATION_ID = 0,
+        LOCATION_UID,
+        LOCATION_LABEL,
+        LOCATION_MaxParam
+    };
+
+    enum Table_LocationLink_Fields {
+        LOCATIONLINK_FK = 0,
+        LOCATIONLINK_LOCATION_ID,
+        LOCATIONLINK_MaxParam
     };
 
     enum Table_Version_Fields {

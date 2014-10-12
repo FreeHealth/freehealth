@@ -26,7 +26,7 @@
  ***************************************************************************/
 
 /**
- * \class Core::Internal::CoreContextualWidget
+ * \class Guard::Internal::GuardLineView
  * \brief Contextualized widget for the Core plugin.
  *
  * This contextualized widget has access to all actions that are added in the particular context of
@@ -37,38 +37,38 @@
  * \sa Core::IContext, Core::ContextManager, Core::ICore::contextManager()
  */
 
-#include "corecontextualwidget.h"
+#include "guardlineview.h"
 #include "constants.h"
 
 #include <coreplugin/contextmanager/contextmanager.h>
 #include <coreplugin/icore.h>
 
-using namespace Core;
+using namespace Guard;
 using namespace Internal;
 
 static inline Core::ContextManager *contextManager() { return Core::ICore::instance()->contextManager(); }
 
-CoreContextualWidget::CoreContextualWidget(QWidget *parent) :
+GuardLineView::GuardLineView(QWidget *parent) :
     QWidget(parent),
     m_Context(0)
 {
-    Core::Context context(Constants::C_CORE_PLUGINS);
-    // Create the context object
-    m_Context = new Internal::CoreContext(this);
-    m_Context->setContext(context);
+//    Core::Context context(Constants::C_CORE_PLUGINS);
+//    // Create the context object
+//    m_Context = new Internal::CoreContext(this);
+//    m_Context->setContext(context);
 
-    // Send it to the contextual manager
-    contextManager()->addContextObject(m_Context);
+//    // Send it to the contextual manager
+//    contextManager()->addContextObject(m_Context);
 }
 
-CoreContextualWidget::~CoreContextualWidget()
+GuardLineView::~GuardLineView()
 {
-    // Remove contextual object
-    contextManager()->removeContextObject(m_Context);
+//    // Remove contextual object
+//    contextManager()->removeContextObject(m_Context);
 }
 
-void CoreContextualWidget::addContexts(const QList<int> &contexts)
+void GuardLineView::addContexts(const QList<int> &contexts)
 {
-    m_Context->addContext(contexts);
+//    m_Context->addContext(contexts);
 }
 

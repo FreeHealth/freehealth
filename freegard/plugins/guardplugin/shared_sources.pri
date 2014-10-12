@@ -19,8 +19,8 @@ HEADERS += \
     $${PWD}/modes/guardianmode.h \
     $${PWD}/modes/guardlinemode.h \
     $${PWD}/modes/guardtablemode.h \
-
-
+    $${PWD}/views/guardlinetimeslotview.h \
+    $${PWD}/views/guardlineview.h
 
 SOURCES += $${PWD}/guardplugin.cpp \
     $${PWD}/guardcore.cpp \
@@ -34,7 +34,12 @@ SOURCES += $${PWD}/guardplugin.cpp \
     $${PWD}/modes/guardianmode.cpp \
     $${PWD}/modes/guardlinemode.cpp \
     $${PWD}/modes/guardtablemode.cpp \
+    $${PWD}/views/guardlinetimeslotview.cpp \
+    $${PWD}/views/guardlineview.cpp
 
+FORMS += \
+    $${PWD}/views/guardlinetimeslotview.ui \
+    $${PWD}/views/guardlineview.ui
 
 # include translations
 TRANSLATION_NAME = guard
