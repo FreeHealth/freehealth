@@ -2686,7 +2686,7 @@ QStringList DatabasePrivate::getSQLCreateTable(const int &tableref)
             case Database::FieldIsUUID :
             case Database::FieldIsLongText :
             case Database::FieldIsShortText :
-            case Database::FieldIsLanguageText :
+            case Database::FieldIsTwoChars :
             case Database::FieldIsBlob :
                 fieldLine.append(QString("%1 %2 DEFAULT '%3'")
                                 .arg(fieldName)
@@ -2781,7 +2781,7 @@ QString DatabasePrivate::getTypeOfField(const int &fieldref) const
         case Database::FieldIsShortText :
             toReturn = "varchar(200)";
             break;
-        case Database::FieldIsLanguageText :
+        case Database::FieldIsTwoChars :
             toReturn = "varchar(2)";
             break;
         case Database::FieldIsBlob :

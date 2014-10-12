@@ -156,7 +156,8 @@ public:
         FieldIsLongText,            // varchar(2000)
         FieldIsShortText,           // varchar(200)
         FieldIsOneChar,
-        FieldIsLanguageText,        // varchar(2)
+        FieldIsTwoChars,
+        FieldIsLanguageText = FieldIsTwoChars,
         FieldIsDate,
         FieldIsTime,
         FieldIsDateTime,
