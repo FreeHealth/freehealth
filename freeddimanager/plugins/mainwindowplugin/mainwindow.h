@@ -32,7 +32,7 @@
  * \file mainwindow.h
  * \author Eric Maeker
  * \version 0.10.0
- * \date 09 Oct 2013
+ * \date 09 Oct 2014
 */
 
 namespace Utils {
@@ -44,12 +44,6 @@ class IMode;
 }
 
 namespace MainWin {
-namespace Internal {
-namespace Ui {
-class MainWindow;
-}  // End Ui
-}  // End Internal
-
 class MainWindow: public Core::IMainWindow
 {
     Q_OBJECT
@@ -90,7 +84,6 @@ private Q_SLOTS:
 
 public:
     Utils::FancyTabWidget *m_modeStack;
-    Internal::Ui::MainWindow *ui;
 };
 
 } // End MainWin

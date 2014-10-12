@@ -62,8 +62,6 @@
 #include <translationutils/trans_current.h>
 #include <translationutils/trans_database.h>
 
-#include "ui_mainwindow.h"
-
 #include <QString>
 #include <QTextEdit>
 #include <QTextStream>
@@ -114,8 +112,7 @@ const char* const S_LASTACTIVEMODE = "Mod/LastActive";
 //--------------------------------------- Constructor / Destructor ---------------------------------------
 //--------------------------------------------------------------------------------------------------------
 MainWindow::MainWindow(QWidget *parent) :
-    Core::IMainWindow(parent),
-    ui(0)
+    Core::IMainWindow(parent)
 {
     setObjectName("MainWindow");
     messageSplash(tr("Creating Main Window"));
@@ -287,7 +284,6 @@ void MainWindow::closeEvent(QCloseEvent *event)
 void MainWindow::changeEvent(QEvent *event)
 {
     if (event->type()==QEvent::LanguageChange) {
-//        ui->retranslateUi(this);
         actionManager()->retranslateMenusAndActions();
         refreshPatient();
     }
