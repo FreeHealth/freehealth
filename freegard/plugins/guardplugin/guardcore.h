@@ -19,71 +19,57 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *  Main Developer: Eric MAEKER, <eric.maeker@gmail.com>                   *
+ *  Main Developers:                                                       *
+ *       Eric MAEKER, <eric.maeker@gmail.com>,                             *
  *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef FREEGUARD_PLUGIN_MAINWINDOW_H
-#define FREEGUARD_PLUGIN_MAINWINDOW_H
+#ifndef GUARD_GUARDCORE_H
+#define GUARD_GUARDCORE_H
 
-#include <coreplugin/imainwindow.h>
+#include <QObject>
+#include <guardplugin/guard_exporter.h>
 
 /**
- * \file mainwindow.h
+ * \file guardcore.h
  * \author Eric Maeker
  * \version 0.10.0
  * \date 12 Oct 2014
 */
 
-namespace Utils {
-class FancyTabWidget;
-}
+namespace Guard {
+namespace Internal {
+class GuardCorePrivate;
+class GuardPlugin;
+class GuardBase;
+} // namespace Internal
 
-namespace Core {
-class IMode;
-}
-
-namespace MainWin {
-class MainWindow: public Core::IMainWindow
+class GUARD_EXPORT GuardCore : public QObject
 {
     Q_OBJECT
-    enum { MaxRecentFiles = 10 };
-
-public:
-    MainWindow(QWidget *parent = 0);
-    ~MainWindow();
-
-    // IMainWindow Interface
-    bool initialize(const QStringList &arguments, QString *errorString);
-    void extensionsInitialized();
-
-    void refreshPatient();
-    void readSettings();
-    void writeSettings();
-
-public Q_SLOTS:
-    bool openFile();
-    bool saveFile();
-    bool saveAsFile();
-
-    void aboutToShowRecentFiles();
-    void openRecentFile();
+    friend class Guard::Internal::GuardPlugin;
 
 protected:
-    void closeEvent(QCloseEvent *event);
-    void changeEvent(QEvent *event);
-
-private:
-    bool saveFileContent(const QString &file);
-    void readFile(const QString &file);
-
-private Q_SLOTS:
-    void postCoreOpened();
+    GuardCore(QObject *parent = 0);
+    bool initialize();
 
 public:
-    Utils::FancyTabWidget *m_modeStack;
+    static GuardCore &instance();
+    ~GuardCore();
+
+    bool isDatabaseInitialized() const;
+
+    Internal::GuardBase &guardBase() const;
+
+protected:
+    void postCoreInitialization();
+
+private:
+    static GuardCore *_instance;
+    Internal::GuardCorePrivate *d;
 };
 
-} // End MainWin
+}  // namespace Guard
 
-#endif  // FREEGUARD_PLUGIN_MAINWINDOW_H
+#endif  // GUARD_GUARDCORE_H
+

@@ -29,26 +29,25 @@
 #include <coreplugin/isettings.h>
 #include <coreplugin/icommandline.h>
 #include <coreplugin/constants.h>
-#include <coreplugin/translators.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/filemanager.h>
 #include <coreplugin/constants_icons.h>
 #include <coreplugin/constants_menus.h>
+#include <coreplugin/modemanager/imode.h>
+#include <coreplugin/modemanager/modemanager.h>
 #include <coreplugin/actionmanager/mainwindowactions.h>
 #include <coreplugin/actionmanager/mainwindowactionhandler.h>
 #include <coreplugin/actionmanager/actionmanager.h>
 #include <coreplugin/actionmanager/actioncontainer.h>
 #include <coreplugin/contextmanager/contextmanager.h>
-#include <coreplugin/dialogs/plugindialog.h>
-#include <coreplugin/dialogs/settingsdialog.h>
-#include <coreplugin/dialogs/helpdialog.h>
-#include <coreplugin/idocumentprinter.h>
 
 #include <utils/log.h>
 #include <utils/global.h>
 #include <utils/randomizer.h>
 #include <utils/stylehelper.h>
 #include <utils/updatechecker.h>
+#include <utils/widgets/fancyactionbar.h>
+#include <utils/widgets/fancytabwidget.h>
 #include <extensionsystem/pluginerrorview.h>
 #include <extensionsystem/pluginview.h>
 #include <extensionsystem/pluginmanager.h>
@@ -57,9 +56,7 @@
 #include <translationutils/trans_filepathxml.h>
 #include <translationutils/trans_msgerror.h>
 #include <translationutils/trans_current.h>
-
-#include "ui_mainwindow.h"
-#include "ui_headerwidget.h"
+#include <translationutils/trans_database.h>
 
 #include <QString>
 #include <QTextEdit>
@@ -82,7 +79,6 @@
 #include <QToolBar>
 
 using namespace MainWin;
-using namespace MainWin::Internal;
 using namespace Trans::ConstantTranslations;
 
 enum { WarnLogMessage = false };
@@ -94,31 +90,22 @@ static inline Core::ISettings *settings()  { return Core::ICore::instance()->set
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline Core::ActionManager *actionManager() { return Core::ICore::instance()->actionManager(); }
 static inline Core::ContextManager *contextManager() { return Core::ICore::instance()->contextManager(); }
-static inline Core::IDocumentPrinter *printer() {return ExtensionSystem::PluginManager::instance()->getObject<Core::IDocumentPrinter>();}
 static inline Core::FileManager *fileManager() { return Core::ICore::instance()->fileManager(); }
+static inline Core::ModeManager *modeManager() { return Core::ICore::instance()->modeManager(); }
 
 // SplashScreen Messagers
 static inline void messageSplash(const QString &s) {theme()->messageSplashScreen(s); }
 static inline void finishSplash(QMainWindow *w) {theme()->finishSplashScreen(w); }
 
-namespace MainWin {
-namespace Internal {
-const char* const  SETTINGS_COUNTDOWN = "applicationCountDown";
-
-const char* const  XML_PATIENT_NAME = "patient";
-const char* const  XML_DATE = "date";
-const char* const  XML_USERNAME = "user";
-
-} // namespace Internal
-} // namespace Core
-
+namespace {
+const char* const S_LASTACTIVEMODE = "Mod/LastActive";
+}
 
 //--------------------------------------------------------------------------------------------------------
 //--------------------------------------- Constructor / Destructor ---------------------------------------
 //--------------------------------------------------------------------------------------------------------
 MainWindow::MainWindow(QWidget *parent) :
-    Core::IMainWindow(parent),
-    ui(0)
+    Core::IMainWindow(parent)
 {
     setObjectName("MainWindow");
     messageSplash(tr("Creating Main Window"));
@@ -137,12 +124,8 @@ bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
     Q_UNUSED(errorString);
     // create menus
     createFileMenu();
-    createFileNewSubMenu();
-    Core::ActionContainer *fmenu = actionManager()->createMenu(Core::Constants::M_FILE_RECENTFILES);
-    fmenu->setOnAllDisabledBehavior(Core::ActionContainer::Show);
-    connect(fmenu->menu(), SIGNAL(aboutToShow()),this, SLOT(aboutToShowRecentFiles()));
     createEditMenu();
-//    createFormatMenu();
+    createFormatMenu();
     createConfigurationMenu();
     createHelpMenu();
 
@@ -150,22 +133,20 @@ bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
     actions.setFileActions(
                 Core::MainWindowActions::A_FileOpen |
                 Core::MainWindowActions::A_FileSave |
-                Core::MainWindowActions::A_FileSaveAs |
+                // Core::MainWindowActions::A_FileSaveAs |
                 Core::MainWindowActions::A_FilePrint |
-                Core::MainWindowActions::A_FilePrintPreview |
+                // Core::MainWindowActions::A_FilePrintPreview |
                 Core::MainWindowActions::A_FileQuit);
     actions.setConfigurationActions(
                 Core::MainWindowActions::A_AppPreferences |
                 Core::MainWindowActions::A_LanguageChange //|
-                //            Core::MainWindowActions::A_ConfigureMedinTux
                 );
     actions.setHelpActions(
                 Core::MainWindowActions::A_AppAbout |
                 Core::MainWindowActions::A_PluginsAbout |
                 Core::MainWindowActions::A_AppHelp |
                 Core::MainWindowActions::A_DebugDialog |
-                Core::MainWindowActions::A_CheckUpdate //|
-                //            Core::MainWindowActions::A_QtAbout
+                Core::MainWindowActions::A_CheckUpdate
                 );
     actions.createEditActions(false);
     createActions(actions);
@@ -173,6 +154,10 @@ bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
     connectFileActions();
     connectConfigurationActions();
     connectHelpActions();
+
+    // Create Mode stack
+    m_modeStack = new Utils::FancyTabWidget(this);
+    modeManager()->init(m_modeStack);
 
     return true;
 }
@@ -185,69 +170,34 @@ bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
  */
 void MainWindow::extensionsInitialized()
 {
-    // Creating MainWindow UI
-    ui = new Internal::Ui::MainWindow();
-    ui->setupUi(this);
-    if (layout())
-        layout()->setMargin(0);
-
-    // Creating ToolBar
-    QToolBar *bar = new QToolBar(this);
-    bar->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-    bar->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
-    bar->setIconSize(QSize(32, 32));
-    QStringList uids;
-    uids  << Core::Constants::A_FILE_OPEN
-          << Core::Constants::A_FILE_SAVE
-          << Core::Constants::A_FILE_SAVEAS
-          << "--"
-          << Core::Constants::A_FILE_PRINT
-          << "->"
-             ;
-    foreach(const QString &uid, uids) {
-        if (uid=="--") {
-            bar->addSeparator();
-            continue;
-        } else if (uid=="->") {
-            QWidget *w = new QWidget(bar);
-            w->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-            w->setLayout(new QHBoxLayout(w));
-            w->layout()->addItem(new QSpacerItem(10,10, QSizePolicy::Expanding, QSizePolicy::Expanding));
-            bar->addWidget(w);
-            continue;
-        } else {
-            Core::Command *cmd = actionManager()->command(Core::Id(uid));
-            if (cmd)
-                bar->addAction(cmd->action());
-        }
-    }
-    bar->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
-    setUnifiedTitleAndToolBarOnMac(true);
-    addToolBar(bar);
-
+#ifndef WITH_TESTS
     // Start the update checker
     if (updateChecker()->needsUpdateChecking(settings()->getQSettings())) {
         settings()->setPath(Core::ISettings::UpdateUrl, Utils::Constants::FREEGUARD_UPDATE_URL);
         if (checkUpdate())
             settings()->setValue(Utils::Constants::S_LAST_CHECKUPDATE, QDate::currentDate());
     }
-
-    createDockWindows();
+#endif
+    m_modeStack->statusBar()->hide();
+    setCentralWidget(m_modeStack);
+    // createDockWindows();
 
     setWindowTitle(QString("%1 %2 - (c) %3").arg(qApp->applicationName()).arg(qApp->applicationVersion()).arg(tkTr(Trans::Constants::THE_FREEMEDFORMS_COMMUNITY)));
-//    setWindowIcon(theme()->icon(Core::Constants::ICONFREEDRC));
+    setWindowIcon(theme()->icon(Core::Constants::ICONFREEGUARD));
 
     connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreOpened()));
 }
 
 MainWindow::~MainWindow()
 {
-    delete centralWidget();
-    setCentralWidget(0);
-    delete _headerWidget;
-    delete ui;
     if (Utils::Log::debugPluginsCreation())
         qWarning() << "MainWindow::~MainWindow()";
+    // We need to delete UI components before the mainwindow is destroy
+    // because all mainwindow Core components (action manager, mode manager...)
+    // are deleted with the main window object but some widgets
+    // can need a last access to these Core components
+    delete m_modeStack;
+    m_modeStack = 0;
 }
 
 /**
@@ -269,7 +219,7 @@ void MainWindow::postCoreOpened()
     contextManager()->updateContext();
     raise();
     show();
-    readSettings(); // moved here because due to the toolbar presence, save/restoreGeometry is buggy
+    readSettings();
 }
 
 /**
@@ -288,33 +238,6 @@ void MainWindow::closeEvent(QCloseEvent *event)
 {
     LOG("Closing MainWindow");
     Core::ICore::instance()->requestSaveSettings();
-
-    //    const QList<ICoreListener *> listeners =
-    //        ExtensionSystem::PluginManager::instance()->getObjects<Core::ICoreListener>();
-    //    foreach (Core::ICoreListener *listener, listeners) {
-    //        if (!listener->coreAboutToClose()) {
-    //            event->ignore();
-    //            return;
-    //        }
-    //    }
-
-    // Save exchange file
-//    QString exfile = commandLine()->value(Core::Internal::CommandLine::CL_ExchangeFileOut).toString();
-//    if ((!exfile.isEmpty()) && (!QFile(exfile).exists())) {
-//        Utils::Log::addError(this,tkTr(Trans::Constants::FILE_1_DOESNOT_EXISTS).arg(exfile));
-//    } else if ((!exfile.isEmpty()) && (QFile(exfile).exists())) {
-//        Utils::Log::addMessage(this, QString("Exchange File : %1 ").arg(exfile));
-//        Utils::Log::addMessage(this, QString("Running as MedinTux plug : %1 ").arg(commandLine()->value(Core::Internal::CommandLine::CL_MedinTux).toString()));
-//        // if is a medintux plugins --> save prescription to exchange file
-//        if (commandLine()->value(Core::Internal::CommandLine::CL_MedinTux).toBool()) {
-//            QString tmp = DrugsDB::DrugsIO::instance()->prescriptionToHtml(drugModel());
-//            tmp.replace("font-weight:bold;", "font-weight:600;");
-//            Utils::saveStringToFile(Utils::htmlReplaceAccents(tmp) , exfile, Utils::DontWarnUser);
-//        } else {
-//            savePrescription(exfile);
-//        }
-//    }
-
     Core::ICore::instance()->coreIsAboutToClose();
     writeSettings();
     event->accept();
@@ -324,7 +247,6 @@ void MainWindow::closeEvent(QCloseEvent *event)
 void MainWindow::changeEvent(QEvent *event)
 {
     if (event->type()==QEvent::LanguageChange) {
-//        ui->retranslateUi(this);
         actionManager()->retranslateMenusAndActions();
         refreshPatient();
     }
@@ -356,11 +278,6 @@ void MainWindow::openRecentFile()
     }
 }
 
-void MainWindow::updateCheckerEnd(bool)
-{
-    delete statusBar();
-}
-
 /** Reads main window's settings */
 void MainWindow::readSettings()
 {
@@ -368,7 +285,9 @@ void MainWindow::readSettings()
     fileManager()->getRecentFilesFromSettings();
     fileManager()->getMaximumRecentFilesFromSettings();
     fileManager()->setCurrentFile(QString::null);
+    switchToCurrentUserLanguage();
     Utils::StyleHelper::setBaseColor(Utils::StyleHelper::DEFAULT_BASE_COLOR);
+    modeManager()->activateMode(settings()->value(::S_LASTACTIVEMODE).toString());
 }
 
 /** \brief Writes main window's settings */
@@ -376,74 +295,22 @@ void MainWindow::writeSettings()
 {
     settings()->saveState(this);
     fileManager()->saveRecentFiles();
+    settings()->setValue(::S_LASTACTIVEMODE, modeManager()->currentMode()->id());
     settings()->sync();
-}
-
-/** \obsolete */
-void MainWindow::createStatusBar()
-{
-//    statusBar()->showMessage( tkTr(Trans::Constants::READY), 2000 );
-}
-
-bool MainWindow::newFile()
-{
-    return true;
-}
-
-/** Open the preferences dialog */
-bool MainWindow::applicationPreferences()
-{
-    Core::SettingsDialog dlg(this);
-    dlg.exec();
-    return true;
-}
-
-/** \brief Runs the MedinTux configurator */
-bool MainWindow::configureMedintux()
-{
-//    Internal::configureMedinTux();
-    return true;
 }
 
 bool MainWindow::saveAsFile()
 {
-    // get filename
-    QString fileName = QFileDialog::getSaveFileName(this, tkTr(Trans::Constants::SAVE_FILE),
-                                QDir::homePath(),
-                                tkTr(Core::Constants::FREEDRC_FILEFILTER));
-    if (fileName.isEmpty())
-        return false;
-
-    bool ok = saveFileContent(fileName);
-    if (ok) {
-        fileManager()->addToRecentFiles(fileName);
-        fileManager()->setCurrentFile(fileName);
-    }
-    return ok;
+    return true;
 }
 
 bool MainWindow::saveFile()
 {
-    if (fileManager()->currentFile().isEmpty())
-        return saveAsFile();
-    return saveFileContent(fileManager()->currentFile());
+    return true;
 }
 
 bool MainWindow::openFile()
 {
-    QString f = QFileDialog::getOpenFileName(this,
-                                             tkTr(Trans::Constants::OPEN_FILE),
-                                             QDir::homePath(),
-                                             tkTr(Core::Constants::FREEDRC_FILEFILTER) );
-    if (f.isEmpty())
-        return false;
-//        QString f = QString("%1/%2/%3")
-//                .arg(settings()->path(Core::ISettings::BundleResourcesPath))
-//                .arg("textfiles/freedrctest")
-//                .arg("cr_2013_09.cr");
-    readFile(f);
-    fileManager()->addToRecentFiles(f);
-    fileManager()->setCurrentFile(f);
     return true;
 }
 
@@ -451,8 +318,9 @@ bool MainWindow::openFile()
  * Write XML the content of the CR to the file \e fileName.
  * File name must be an absolute file path.
  */
-bool MainWindow::saveFileContent(const QString &)
+bool MainWindow::saveFileContent(const QString &fileName)
 {
+    Q_UNUSED(fileName);
     return true;
 }
 
@@ -462,16 +330,5 @@ bool MainWindow::saveFileContent(const QString &)
  */
 void MainWindow::readFile(const QString &fileName)
 {
+    Q_UNUSED(fileName);
 }
-
-void MainWindow::createDockWindows()
-{
-//    QDockWidget *dock = m_TemplatesDock = new QDockWidget(tkTr(Trans::Constants::TEMPLATES), this);
-//    dock->setObjectName("templatesDock");
-//    dock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
-//    dock->setWidget(new Templates::TemplatesView(dock));
-//    addDockWidget(Qt::RightDockWidgetArea, dock);
-//    QMenu *menu = actionManager()->actionContainer(Core::Constants::M_TEMPLATES)->menu();
-//    menu->addAction(dock->toggleViewAction());
-}
-

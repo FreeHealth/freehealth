@@ -122,39 +122,71 @@ GuardBase::GuardBase(QObject *parent) :
 {
     setObjectName("GuardBase");
 
+    // Tables:
+    // - Guardian: represents all people that can be include in guard lines.
+    // - GardLine: represents the guard scheme
+    // - GardianPref: include all guardian preferences for a specific guard line
+    // - GuardTable: represents the distribution of guards for a specific guard line
+    // - GuardLineInclusion: links lines to guardians
+
     using namespace Guard::Constants;
     addTable(Table_Guardian,      "GUARDIAN");
     addTable(Table_GuardLine,     "GUARDLINE");
     addTable(Table_GuardianPref,  "GUARDIANPREF");
     addTable(Table_GuardTable,    "GUARDTABLE");
+    addTable(Table_GuardLineInclusion, "GUARDLINE_INCL");
 
     addTable(Table_VERSION,         "VERSION");
     addField(Table_VERSION, VERSION_TEXT, "TXT", FieldIsShortText);
 
     addField(Table_Guardian, GUARDIAN_ID,          "ID",    FieldIsUniquePrimaryKey);
     addField(Table_Guardian, GUARDIAN_UID,         "UUID",  FieldIsUUID);
+    addField(Table_Guardian, GUARDIAN_ISVALID,     "ISVALID", FieldIsBoolean, "1");
     addField(Table_Guardian, GUARDIAN_FULLNAME,    "NAME",  FieldIsShortText);
     addField(Table_Guardian, GUARDIAN_EMAIL,       "EMAIL", FieldIsShortText);
-    addField(Table_Guardian, GUARDIAN_ACCEPT_MAILS,"MAILS", FieldIsBoolean);
+    addField(Table_Guardian, GUARDIAN_ACCEPT_MAILS,"MAILS", FieldIsBoolean, "1");
     addField(Table_Guardian, GUARDIAN_MOBILEPHONE, "PHONE", FieldIsShortText);
-    addField(Table_Guardian, GUARDIAN_ACCEPT_SMS,  "SMS",   FieldIsBoolean);
+    addField(Table_Guardian, GUARDIAN_ACCEPT_SMS,  "SMS",   FieldIsBoolean, "1");
     addIndex(Table_Guardian, GUARDIAN_ID);
     addIndex(Table_Guardian, GUARDIAN_UID);
     addIndex(Table_Guardian, GUARDIAN_FULLNAME);
 
     addField(Table_GuardLine, GUARDLINE_ID,    "ID",       FieldIsUniquePrimaryKey);
-    addField(Table_GuardLine, GUARDLINE_UID,   "USER_UID", FieldIsUUID);
+    addField(Table_GuardLine, GUARDLINE_UID,   "UID",      FieldIsUUID);
     addField(Table_GuardLine, GUARDLINE_LABEL, "LABEL",    FieldIsShortText);
+    addField(Table_GuardLine, GUARDLINE_SITE,  "SITE",    FieldIsShortText);
+    addField(Table_GuardLine, GUARDLINE_INFO,  "INFO",    FieldIsLongText);
+    addField(Table_GuardLine, GUARDLINE_XML_SCHEME, "XMLSCHEME", FieldIsLongText);
     addIndex(Table_GuardLine, GUARDLINE_ID);
     addIndex(Table_GuardLine, GUARDLINE_UID);
 
     addField(Table_GuardianPref, GUARDIAN_PREFS_ID,            "ID",    FieldIsUniquePrimaryKey);
     addField(Table_GuardianPref, GUARDIAN_PREFS_GUARDIAN_UID,  "G_UID", FieldIsUUID);
-    addField(Table_GuardianPref, GUARDIAN_PREFS_GUARDLINE_UID, "L_UID", FieldIsUUID);
+    addField(Table_GuardianPref, GUARDIAN_PREFS_GUARDLINE_UID, "GL_UID", FieldIsUUID);
     addIndex(Table_GuardianPref, GUARDIAN_PREFS_ID);
     addIndex(Table_GuardianPref, GUARDIAN_PREFS_GUARDIAN_UID);
     addIndex(Table_GuardianPref, GUARDIAN_PREFS_GUARDLINE_UID);
 
+    addField(Table_GuardLineInclusion, LINEINCL_ID,          "ID",    FieldIsUniquePrimaryKey);
+    addField(Table_GuardLineInclusion, LINEINCL_LINE_UID,    "L_UID", FieldIsUUID);
+    addField(Table_GuardLineInclusion, LINEINCL_GARDIAN_UID, "G_UID", FieldIsUUID);
+    addField(Table_GuardLineInclusion, LINEINCL_DATESTART,   "DT_START", FieldIsDate);
+    addField(Table_GuardLineInclusion, LINEINCL_DATEEND,     "DT_END", FieldIsDate);
+    addField(Table_GuardLineInclusion, LINEINCL_MONTH,       "MONTH", FieldIsShortText);
+    addField(Table_GuardLineInclusion, LINEINCL_YEARS,       "YEARS", FieldIsShortText);
+    addField(Table_GuardLineInclusion, LINEINCL_CYCLING_START, "CYC_START", FieldIsDate);
+    addField(Table_GuardLineInclusion, LINEINCL_CYCLING_END, "CYC_END", FieldIsDate);
+    addIndex(Table_GuardLineInclusion, LINEINCL_ID);
+    addIndex(Table_GuardLineInclusion, LINEINCL_LINE_UID);
+    addIndex(Table_GuardLineInclusion, LINEINCL_GARDIAN_UID);
+
+    addField(Table_GuardTable, GUARDTABLE_ID,     "ID",    FieldIsUniquePrimaryKey);
+    addField(Table_GuardTable, GUARDTABLE_UID,    "UID", FieldIsUUID);
+    addField(Table_GuardTable, GUARDTABLE_ISVALID, "ISVALID", FieldIsBoolean, "1");
+    addField(Table_GuardTable, GUARDTABLE_STATE,   "STATE", FieldIsShortText);
+    addIndex(Table_GuardTable, GUARDTABLE_ID);
+    addIndex(Table_GuardTable, GUARDTABLE_UID);
+    addIndex(Table_GuardTable, GUARDTABLE_STATE);
 
     // Connect first run database creation requested
     connect(Core::ICore::instance(), SIGNAL(firstRunDatabaseCreation()), this, SLOT(onCoreFirstRunCreationRequested()));

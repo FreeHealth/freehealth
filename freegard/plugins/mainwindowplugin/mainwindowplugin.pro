@@ -18,9 +18,8 @@ SOURCES = mainwindowplugin.cpp \
     mainwindow.cpp \
     mainwindowpreferences.cpp
 
-FORMS = mainwindow.ui \
-    mainwindowpreferenceswidget.ui \
-    headerwidget.ui
+FORMS = \
+    mainwindowpreferenceswidget.ui
 
 # include translations
 TRANSLATION_NAME = guard_mainwindow

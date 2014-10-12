@@ -23,18 +23,17 @@
  *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef FREEACCOUNT_COREIMPL_H
-#define FREEACCOUNT_COREIMPL_H
+#ifndef FREEGUARD_COREIMPL_H
+#define FREEGUARD_COREIMPL_H
 
 #include <coreplugin/icore.h>
 
 /**
  * \file coreimpl.h
- * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.1.0
- * \date 28 Feb 2012
+ * \author Eric Maeker
+ * \version 0.10.0
+ * \date 14 Oct 2014
 */
-
 
 namespace Core {
 namespace Internal {
@@ -45,7 +44,6 @@ namespace Internal {
     class CommandLine;
 }  // End Internal
 }  // End Core
-
 
 namespace Core {
 namespace Internal {
@@ -61,6 +59,7 @@ public:
 
     ActionManager *actionManager() const;
     ContextManager *contextManager() const;
+    ModeManager *modeManager() const;
 
     ITheme *theme() const;
     Translators *translators() const;
@@ -96,6 +95,7 @@ private:
     IMainWindow *m_MainWindow;
     ActionManagerPrivate *m_ActionManager;
     ContextManagerPrivate *m_ContextManager;
+    ModeManager *m_ModeManager;
     ThemePrivate *m_Theme;
     Translators *m_Translators;
     SettingsPrivate *m_Settings;
@@ -110,4 +110,4 @@ private:
 } // namespace Internal
 } // namespace Core
 
-#endif // FREEACCOUNT_COREIMPL_H
+#endif // FREEGUARD_COREIMPL_H

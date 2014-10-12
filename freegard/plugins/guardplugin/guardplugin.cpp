@@ -24,9 +24,10 @@
  *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
 #include "guardplugin.h"
-//#include "guardcore.h"
-
-//#include "modes/guardmode.h"
+#include "guardcore.h"
+#include "modes/guardianmode.h"
+#include "modes/guardlinemode.h"
+#include "modes/guardtablemode.h"
 
 #include <utils/log.h>
 
@@ -58,7 +59,7 @@ GuardPlugin::GuardPlugin() :
     Core::ICore::instance()->translators()->addNewTranslator("plugin_guard");
 
     // Create the database instance
-//    _core = new GuardCore(this);
+    _core = new GuardCore(this);
 }
 
 GuardPlugin::~GuardPlugin()
@@ -74,6 +75,14 @@ bool GuardPlugin::initialize(const QStringList &arguments, QString *errorString)
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
 
+    // Create the mode
+    GuardianMode *mode = new GuardianMode(this);
+    addAutoReleasedObject(mode);
+    GuardLineMode *modeLine = new GuardLineMode(this);
+    addAutoReleasedObject(modeLine);
+    GuardTableMode *modeTable = new GuardTableMode(this);
+    addAutoReleasedObject(modeTable);
+
     return true;
 }
 
@@ -82,16 +91,16 @@ void GuardPlugin::extensionsInitialized()
     if (Utils::Log::debugPluginsCreation())
         qWarning() << "GuardPlugin::extensionsInitialized";
 
-    if (!user())
-        return;
-    if (user()->uuid().isEmpty())
-        return;
+//    if (!user())
+//        return;
+//    if (user()->uuid().isEmpty())
+//        return;
 
-    messageSplash(tr("Initializing accountancy plugin..."));
+    messageSplash(tr("Initializing guard plugin..."));
 
-    // Initialize Account Core
-//    if (!_core->initialize())
-//        LOG_ERROR("Unable to initialize account core");
+    // Initialize Guard Core
+    if (!_core->initialize())
+        LOG_ERROR("Unable to initialize guard core");
 
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
 }

@@ -19,71 +19,39 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *  Main Developer: Eric MAEKER, <eric.maeker@gmail.com>                   *
+ *  Main developer: Eric MAEKER, <eric.maeker@gmail.com>                   *
  *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef FREEGUARD_PLUGIN_MAINWINDOW_H
-#define FREEGUARD_PLUGIN_MAINWINDOW_H
+#ifndef GUARDCORE_CONSTANTS_H
+#define GUARDCORE_CONSTANTS_H
 
-#include <coreplugin/imainwindow.h>
+#include <coreplugin/constants_menus.h>
 
 /**
- * \file mainwindow.h
+ * \file constants.h
  * \author Eric Maeker
  * \version 0.10.0
  * \date 12 Oct 2014
 */
 
-namespace Utils {
-class FancyTabWidget;
-}
+namespace Guard {
+namespace Constants {
 
-namespace Core {
-class IMode;
-}
+// Modes
+const char * const MODE_GUARDIANS = "Guardians";
+const char * const MODE_GUARDLINES = "GuardLines";
+const char * const MODE_GUARDTABLES = "GuardTables";
 
-namespace MainWin {
-class MainWindow: public Core::IMainWindow
-{
-    Q_OBJECT
-    enum { MaxRecentFiles = 10 };
+const int P_MODE_GUARDIANS   = Core::Constants::FirstModeGroup + Core::Constants::FirstModeSubGroup;
+const int P_MODE_GUARDLINES  = Core::Constants::SecondModeGroup + Core::Constants::FirstModeSubGroup;
+const int P_MODE_GUARDTABLES = Core::Constants::ThirdModeGroup + Core::Constants::FirstModeSubGroup;
 
-public:
-    MainWindow(QWidget *parent = 0);
-    ~MainWindow();
+// Options page sortIndex (per categories)
+//const int OPTIONINDEX_MAIN         = 0;
+//const int OPTIONINDEX_PRINT        = 1000;
 
-    // IMainWindow Interface
-    bool initialize(const QStringList &arguments, QString *errorString);
-    void extensionsInitialized();
+} // Constants
+} // Guard
 
-    void refreshPatient();
-    void readSettings();
-    void writeSettings();
-
-public Q_SLOTS:
-    bool openFile();
-    bool saveFile();
-    bool saveAsFile();
-
-    void aboutToShowRecentFiles();
-    void openRecentFile();
-
-protected:
-    void closeEvent(QCloseEvent *event);
-    void changeEvent(QEvent *event);
-
-private:
-    bool saveFileContent(const QString &file);
-    void readFile(const QString &file);
-
-private Q_SLOTS:
-    void postCoreOpened();
-
-public:
-    Utils::FancyTabWidget *m_modeStack;
-};
-
-} // End MainWin
-
-#endif  // FREEGUARD_PLUGIN_MAINWINDOW_H
+#endif // GUARDCORE_CONSTANTS_H

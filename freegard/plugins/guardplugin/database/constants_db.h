@@ -56,7 +56,7 @@ namespace Constants {
     x tours de garde
     x médecins par tour de garde
     chaque tour est pondéré par une priorité (remplir d'abord les tours prioritaires)
-
+    un médecin peut participer pour un période définie à une ligne de guarde
 
     Médecins:   = GUARDIANS + GUARDIANS_PREFS
     - dispos et souhaits de dates
@@ -78,6 +78,7 @@ namespace Constants {
     enum Tables {
         Table_Guardian = 0,
         Table_GuardLine,
+        Table_GuardLineInclusion,
         Table_GuardianPref,
         Table_GuardTable,
         Table_VERSION
@@ -86,6 +87,7 @@ namespace Constants {
     enum TableGuardian_Fields {
         GUARDIAN_ID = 0,
         GUARDIAN_UID,
+        GUARDIAN_ISVALID,
         GUARDIAN_FULLNAME,
         GUARDIAN_EMAIL,
         GUARDIAN_ACCEPT_MAILS,
@@ -105,6 +107,9 @@ namespace Constants {
         GUARDLINE_ID = 0,
         GUARDLINE_UID,
         GUARDLINE_LABEL,
+        GUARDLINE_SITE,
+        GUARDLINE_INFO,
+        GUARDLINE_XML_SCHEME,
         GUARDLINE_MaxParam
     };
 
@@ -114,6 +119,18 @@ namespace Constants {
         GUARDTABLE_ISVALID,
         GUARDTABLE_STATE,           // Preview (rw), updated preview (rw), definitive (ro)
         GUARDTABLE_MaxParam
+    };
+
+    enum TableGuardLineInclusion_Fields {
+        LINEINCL_ID = 0,
+        LINEINCL_LINE_UID,
+        LINEINCL_GARDIAN_UID,
+        LINEINCL_DATESTART,
+        LINEINCL_DATEEND,
+        LINEINCL_MONTH,
+        LINEINCL_YEARS,
+        LINEINCL_CYCLING_START,
+        LINEINCL_CYCLING_END
     };
 
     enum Table_Version_Fields {

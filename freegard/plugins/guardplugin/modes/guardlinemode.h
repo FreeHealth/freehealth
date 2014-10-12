@@ -23,49 +23,40 @@
  *  Contributors:                                                          *
  *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
-#ifndef ACCOUNT2_ACCOUNTMODE_H
-#define ACCOUNT2_ACCOUNTMODE_H
+#ifndef GUARD_GUARDLINEMODE_H
+#define GUARD_GUARDLINEMODE_H
 
 #include <coreplugin/modemanager/imode.h>
 
-#include <QStackedWidget>
-
 /**
- * \file accountmode.h
+ * \file guardlinemode.h
  * \author Eric Maeker
- * \version 0.8.4
- * \date 17 Mar 2013
+ * \version 0.10.0
+ * \date 12 Oct 2014
 */
 
-namespace Account2 {
+namespace Guard {
 namespace Internal {
 
-class AccountMode : public Core::IMode
+class GuardLineMode : public Core::IMode
 {
     Q_OBJECT
 public:
-    explicit AccountMode(QObject *parent = 0);
-    ~AccountMode();
+    explicit GuardLineMode(QObject *parent = 0);
+    ~GuardLineMode();
 
-    void setCentralWidget(QWidget *widget);
-
-//public Q_SLOTS:
-//    void showAddReceipts();
-//    void showReceipts();
-//    void showLedger();
-//    void showMovements();
-//    void showAssets();
-//    void showAccount();
-
-private Q_SLOTS:
     void postCoreInitialization();
-    void modeActivated(Core::IMode *mode);
+
+#ifdef WITH_TESTS
+    void test_runWidgetTests();
+#endif
 
 private:
-    QStackedWidget *m_Stack;
+//    __Widget *_widget;
+
 };
 
 }  // End namespace Internal
-}  // End namespace Account2
+}  // End namespace Guard
 
-#endif // ACCOUNT2_ACCOUNTMODE_H
+#endif // GUARD_GUARDLINEMODE_H
