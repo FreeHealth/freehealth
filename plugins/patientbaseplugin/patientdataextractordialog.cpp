@@ -67,6 +67,7 @@ namespace {
 const char * const HTML_HEADER = "<!DOCTYPE html>\n"
         "<html>\n"
         "<head>\n"
+	"<meta charset=\"UTF-8\">\n"
         "%1\n"
         "<title>%2</title>\n"
         "</head>\n"
