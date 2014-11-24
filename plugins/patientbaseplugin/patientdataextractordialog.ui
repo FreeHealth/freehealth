@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>445</width>
-    <height>538</height>
+    <height>570</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -75,6 +75,9 @@
           </item>
           <item>
            <widget class="QTableView" name="availablePatients">
+            <property name="toolTip">
+             <string>Double-click to add</string>
+            </property>
             <property name="editTriggers">
              <set>QAbstractItemView::NoEditTriggers</set>
             </property>
