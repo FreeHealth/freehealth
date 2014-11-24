@@ -337,8 +337,6 @@ void PatientDataExtractorDialog::onExportRequested()
 
         // Define output path
         QString path = patient()->data(Core::IPatient::FullName).toString();
-        path = Utils::removeAccents(path);
-        path = path.replace(" ", "_");
         path = QString("%1/%2").arg(d->ui->pathChooser->path()).arg(path);
         if (!QDir().mkpath(path))
             LOG_ERROR("Unable to create path: " + path);
