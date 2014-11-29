@@ -21,23 +21,22 @@
 
     <!-- Translatable values -->
     <license>GPLv3</license>
-    <label lang="fr">Base de données thérapeutique américaine (sans interactions)</label>
+    <label lang="fr">Base de données thérapeutique américaine (sans les interactions)</label>
     <label lang="xx">USA pharmaceutical drug database (without interactions)</label>
-    <description lang="fr">Données thérapeutiques américaine pour FreeMedForms (sans interactions)</description>
+    <description lang="fr">Données thérapeutiques américaines pour FreeMedForms (sans les interactions)</description>
     <description lang="xx">USA pharmaceutical data for FreeMedForms (without interactions)</description>
 
     <htmldescription lang="fr">&lt;p>
-      La base de données thérapeutique américaine est construite sur la base
-      des données publiées par la FDA.&lt;br />
+      La base de données thérapeutique américaine est construite d'après les données publiées par la FDA.&lt;br />
       &lt;br />
-      Cette base de données ne permet pas le calcul des interactions médicamenteuses&lt;br />
+      Cette base de données ne permet pas le calcul des interactions médicamenteuses.&lt;br />
       &lt;/p>
     </htmldescription>
 
     <htmldescription lang="xx">&lt;p>
-      The french pharmaceutical drug database is build upon FDA' data.&lt;br />
+      The USA pharmaceutical drug database is built upon FDA's data.&lt;br />
       &lt;br />
-      Data for drug interaction engines are not included in this database.&lt;br />
+      Drug interactions data are not included in this database.&lt;br />
       &lt;/p>
     </htmldescription>
 
