@@ -94,7 +94,7 @@ void UpdateCheckerPrivate::onDownloadFinished()
 
     Q_EMIT static_cast<UpdateChecker*>(parent())->done(error);
     if (error) {
-        LOG_ERROR(tr( "Error %1 while retreiving update file %2" )
+        LOG_ERROR(tr( "Error %1 while retrieving update file %2" )
                          .arg(_downloader->lastErrorString())
                          .arg(m_Url.toString()));
         return;
