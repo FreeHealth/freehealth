@@ -339,7 +339,10 @@ void HttpDownloaderPrivate::cancelDownload()
 /** Slot called when the downloading is finished (with or without error) */
 void HttpDownloaderPrivate::httpFinished()
 {
-    qWarning() << "httpFinished" << reply->error() << reply->errorString();
+    if (reply->error() == QNetworkReply::NoError) {
+        qWarning() << "httpFinished No error";
+	}
+    else qWarning() << "httpFinished" << " QNetworkReply::NetworkError value: " << reply->error() << reply->errorString();
 
     networkError = reply->error();
 
