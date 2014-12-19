@@ -24,29 +24,28 @@
 
     <!-- Translatable values -->
     <license>GPLv3</license>
-    <label lang="fr">Base de données thérapeutique américaine (sans interactions)</label>
+    <label lang="fr">Base de données thérapeutique américaine (sans les interactions)</label>
     <label lang="xx">USA pharmaceutical drug database (without interactions)</label>
-    <description lang="fr">Données thérapeutiques américaine pour FreeMedForms (sans interactions)</description>
+    <description lang="fr">Données thérapeutiques américaines pour FreeMedForms (sans les interactions)</description>
     <description lang="xx">USA pharmaceutical data for FreeMedForms (without interactions)</description>
 
     <htmldescription lang="fr">&lt;p>
-      La base de données thérapeutique américaine est construite sur la base
-      des données publiées par la FDA. Vous y trouverez tous les médicaments
-      commercialisés en France.&lt;br />
+      La base de données thérapeutique américaine est construite grâce aux
+      données publiées par la FDA. Vous y trouverez tous les médicaments
+      commercialisés aux USA.&lt;br />
       &lt;br />
-      L'utilisation de cette base de données n'est soumise à aucune restriction et
-      est distribuée sous licence GPLv3.&lt;br />
+      L'utilisation de cette base de données n'est soumise à aucune restriction. Elle est distribuée sous licence GPLv3.&lt;br />
       &lt;br />
-      Cette base de données ne permet pas le calcul des interactions médicamenteuses&lt;br />
+      Cette base de données ne permet pas le calcul des interactions médicamenteuses.&lt;br />
       &lt;br />
       &lt;/p>
     </htmldescription>
 
     <htmldescription lang="xx">&lt;p>
-      The french pharmaceutical drug database is build upon FDA' data.
+      The USA pharmaceutical drug database is built upon FDA's data.
       You will find all available and marketed drugs for USA.&lt;br />
       &lt;br />
-      You can freely use the database with any restriction, it is released
+      You can freely use the database without any restriction, it is released
       under the GPLv3 license.&lt;br />
       &lt;br />
       Data for drug interaction engines are not included in this database.&lt;br />
