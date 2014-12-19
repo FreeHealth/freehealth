@@ -21,7 +21,7 @@
 /***************************************************************************
  *  Main developer: Eric MAEKER, <eric.maeker@gmail.com>                   *
  *  Contributors:                                                          *
- *       NAME <MAIL@ADDRESS.COM>                                           *
+ *       Jérôme Pinguet <jerome@jerome.cc>                                           *
  ***************************************************************************/
 /**
  * \class Utils::HttpDownloader
