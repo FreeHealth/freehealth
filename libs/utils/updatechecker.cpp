@@ -18,6 +18,11 @@
  *  along with this program (COPYING.FREEMEDFORMS file).                   *
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
+ /***************************************************************************
+  *  Main developer: Eric MAEKER, <eric.maeker@gmail.com>                   *
+  *  Contributors:                                                          *
+  *      Jérôme Pinguet <jerome@jerome.cc>                                  *
+  ***************************************************************************/
 /**
   \class Utils::UpdateChecker
   \brief Threaded update checker over the internet. Connect the SIGNAL to catch the update.
@@ -35,6 +40,9 @@
       - check for update with hasUpdate(),
       - get the extracted update's text using updateText(),
       - stop the downloading of the file using cancel().
+
+  Update 12/20/2014
+  Changed http to https in function bool UpdateCheckerPrivate::getFile(const QUrl &url)
 */
 
 #include "updatechecker.h"
@@ -79,7 +87,7 @@ UpdateCheckerPrivate::~UpdateCheckerPrivate()
 bool UpdateCheckerPrivate::getFile(const QUrl &url)
 {
     LOG("getFile");
-    if ((!url.isValid()) || (url.scheme() != "http") || (url.path().isEmpty())) {
+    if ((!url.isValid()) || (url.scheme() != "https") || (url.path().isEmpty())) {
         Q_EMIT qobject_cast<UpdateChecker*>(parent())->done(false);
         return false;
     }
