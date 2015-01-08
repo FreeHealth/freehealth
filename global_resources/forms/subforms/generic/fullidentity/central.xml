@@ -148,7 +148,7 @@
             <icon>__theme__/carte_vitale.png</icon>
             <script>
               <onload>
-                // Enabled this button only is the FreeMedForms PDF object is available
+                // Enabled this button only if the FreeMedForms PDF object is available
                 freemedforms.forms.namespaceInUse = "Subs::Tools::Identity";
                 var item = freemedforms.forms.item("FrGroup::CreateDeclaration");
                 if (!item.isValid) {
