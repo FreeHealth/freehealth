@@ -4,7 +4,7 @@
                http://www.freemedforms.com/
 
 
-I. What is the FreeMedForms project?
+I What is the FreeMedForms project?
 
 FreeMedForms project is a fully open source medical project. It includes:
 - an open Electronic Medical Record Manager: FreeMedForms EMR
@@ -22,7 +22,7 @@ All FreeMedForms apps are available for:
 - Windows (from XP to latest)
 
 
-II. Where can I find informations about FreeMedForms?
+II Where can I find informations about FreeMedForms?
 
 Main web site:
     http://www.freemedforms.com/
@@ -40,7 +40,7 @@ Some code analysis:
     http://www.ohloh.net/p/freemedforms/
 
 
-III. How to contribute to FreeMedForms?
+III How to contribute to FreeMedForms?
 
 Main web site:
     [Français]  http://freemedforms.com/fr/contribute
@@ -48,3 +48,9 @@ Main web site:
 
 Project mailing list:
     freemedforms@googlegroups.com [Français] [English]
+
+IV Can I make a donation?
+    
+Yes! Go to our donation page: https://freemedforms.com/en/donation
+Your money will go to the nonprofit french organization Asso FreeMedForms
+Donating will speed up the development process
