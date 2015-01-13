@@ -27,9 +27,9 @@
 
 /**
  * \class UserPlugin::Internal::UserIdentifier
- * This class is a dialog that ask user for is login/password, with a limited number of tries.
+ * This class is a dialog that asks the user for her/his login/password, with a limited number of tries.
  * You can show some information on the left using the first parameter of the constructor.
- * If there is not information to show, the information's groupBox is hidden.
+ * If there is no information to show, the information's groupBox is hidden.
  *
  * The dialog does not need the UserPlugin::Internal::UserBase to be initialized
  * (UserPlugin::Internal::UserBase::initialize()) to check the login informations.
@@ -124,7 +124,7 @@ UserIdentifier::UserIdentifier(QWidget *parent) :
 void UserIdentifier::done(int result)
 {
     if (result == QDialog::Accepted) {
-        // ask database with login/password couple
+        // Query database with login/password couple
         if (!userBase()->checkLogin(login(), password())) {
             m_NumberOfTries++;
             if (m_NumberOfTries == MaxNumberOfTries) {
@@ -146,28 +146,27 @@ void UserIdentifier::done(int result)
     }
 }
 
-/** Uncrypted login. */
+/** Plain text login. */
 QString UserIdentifier::login() const
 {
     return m_ui->loginWidget->login();
 }
 
-/** FreeMedForms crypted login. */
+/** FreeMedForms encrypted login. */
 QString UserIdentifier::login64crypt() const
 {
     return Utils::loginForSQL(m_ui->loginWidget->login());
 }
 
-/** Uncrypted password. */
+/** Plain text password. */
 QString UserIdentifier::password() const
 {
     return m_ui->loginWidget->password();
 }
 
-/** FreeMedForms crypted password (the crypt algorythm is destructive). */
+/** FreeMedForms encrypted password (the encryption algorithm is destructive). */
 QString UserIdentifier::cryptedPassword() const
 {
     Utils::PasswordCrypter crypter;
     return crypter.cryptPassword(m_ui->loginWidget->password());
 }
-
