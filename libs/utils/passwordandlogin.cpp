@@ -32,24 +32,28 @@
 
 /**
  * \class Utils::PasswordCrypter
- * Owns all the intelligence of password crypting.
+ * Owns all the intelligence of password encryption.
+ * Note: unsalted passwords are insecure.
+ * TO DO: introduce PBKDF2 key derivation function. See RFC2898 http://tools.ietf.org/html/rfc2898#section-5.2
+ * Standard library for PBKDF2 used in highly secure and reviewed projects such as Bitcoin is OpenSSL (C language).
+ * See http://git.openssl.org/gitweb/?p=openssl.git;a=blob;f=crypto/evp/p5_crpt2.c
  */
 
 namespace Utils {
 
-/** Crypt a clear login. */
+/** Encrypt a clear login. */
 QString loginForSQL(const QString &log)
 {
     return log.toUtf8().toBase64();
 }
 
-/** Decrypt a crypted login. */
+/** Decrypt an encrypted login. */
 QString loginFromSQL(const QVariant &sql)
 {
     return QByteArray::fromBase64(sql.toByteArray());
 }
 
-/** Decrypt a crypted login. */
+/** Decrypt an encrypted login. */
 QString loginFromSQL(const QString &sql)
 {
     return QByteArray::fromBase64(sql.toUtf8());
@@ -64,9 +68,9 @@ PasswordCrypter::~PasswordCrypter()
 {}
 
 /**
- * Returns a crypted password using a defined algorithm. \n
+ * Returns an encrypted password using a defined algorithm. \n
  * This method uses destructive encryption. \n
- * The returned value is base64 encrypted and contains the used alogrithm
+ * The returned value is base64 encrypted and contains the used algorithm
  * followed by the hash eg \e {algorithm}:{base64(hash)}. \n
  * Returns a null string in case of error.
  */
@@ -140,7 +144,7 @@ PasswordCrypter::Algorithm PasswordCrypter::extractHashAlgorithm(const QString &
 }
 
 /**
- * Checks the prefix of the crypted password using \e algo.
+ * Checks the prefix of the encrypted password using \e algo.
  */
 bool PasswordCrypter::checkPrefix(const QString &cryptedBase64, Algorithm algo)
 {
@@ -150,8 +154,8 @@ bool PasswordCrypter::checkPrefix(const QString &cryptedBase64, Algorithm algo)
 }
 
 /** Checks equality between a clear password \e clear and
- * a crypted password (in base64 encoding) \e cryptedBase64.
- * The crypted password must have been created using the
+ * a encrypted password (in base64 encoding) \e cryptedBase64.
+ * The encrypted password must have been created using the
  * cryptPassword().
  */
 bool PasswordCrypter::checkPassword(const QString &clear, const QString &cryptedBase64)
