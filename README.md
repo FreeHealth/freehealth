@@ -20,6 +20,9 @@ All FreeMedForms apps are available for:
 - FreeBSD: need compilation of git trunk (please contact the author)
 - Windows (from XP to latest)
 
+There is currently a [Reflexion about porting to Meteor.js] for desktop, mobile and as a web application.
+
+
 ### Where can I find informations about FreeMedForms?
 
 - Main [website]
@@ -58,4 +61,4 @@ Donating will speed up the development process
 [Contribute]:https://freemedforms.com/en/contribute
 [Forum]:https://freemedforms.com/forum
 [donation page]:https://freemedforms.com/en/donation
-
+[Reflexion about porting to Meteor.js]:https://freemedforms.com/forum/viewtopic.php?f=11&t=136
