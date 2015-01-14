@@ -100,14 +100,13 @@ static int getGIR(const QString &chaine)
     if (chaineGIR[6] == 'B') { groupe = groupe + 120; }
     if (chaineGIR[7] == 'B') { groupe = groupe + 32; }
     // Rang groupe A
-    if (groupe >= 4380 )
-    { rang = 1; }
-    else
-        if ((groupe >= 4140 ) && (groupe <= 4379))
-        { rang = 2 ; }
-    else
-        if ((groupe >= 3390 ) && (groupe <= 4139))
-        {  rang = 1 ;}
+    if (groupe >= 4380) {
+        rang = 1; 
+    } else if ((groupe >= 4140 ) && (groupe <= 4379)) {
+        rang = 2 ; 
+    } else if ((groupe >= 3390 ) && (groupe <= 4139)) {
+        rang = 3 ;
+    }
 
     if (rang != 0)
     {  return getRang(rang);
