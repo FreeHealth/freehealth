@@ -1,10 +1,9 @@
-                  The FreeMeForms Project
-                        Source Code
-           Copyright (C) 2008-2014 by Eric MAEKER
-               http://www.freemedforms.com/
+# The FreeMeForms Project
+# Copyright (C) 2008-2015 by Eric MAEKER
+# [website]
 
 
-I What is the FreeMedForms project?
+### What is the FreeMedForms project?
 
 FreeMedForms project is a fully open source medical project. It includes:
 - an open Electronic Medical Record Manager: FreeMedForms EMR
@@ -13,7 +12,7 @@ FreeMedForms project is a fully open source medical project. It includes:
 - an ICD10 coding assistant: FreeICD
 - a french specific coding assistant: FreeDRC (in partnership with the SMFG)
 
-FreeMedForms and Derivatives are coded in C++/Qt4.8/Qt5
+FreeMedForms and Derivatives are coded in C++/Qt4.8/Qt5.
 
 All FreeMedForms apps are available for:
 - MacOS X universal
@@ -21,36 +20,42 @@ All FreeMedForms apps are available for:
 - FreeBSD: need compilation of git trunk (please contact the author)
 - Windows (from XP to latest)
 
+### Where can I find informations about FreeMedForms?
 
-II Where can I find informations about FreeMedForms?
+- Main [website]
+- Sources and issues are located on
+ - [GitHub] server since 2014
+ - [GoogleCode] before 2014
+ - [SourceForge] (packaged source) since 2014
+- [Build instructions] and [Code documentation]
+- [Source code analysis]
 
-Main web site:
-    http://www.freemedforms.com/
+### How to contribute to FreeMedForms?
 
-Sources and issues are located on
-    - GitHub server since 2014:
-        https://github.com/FreeMedForms/freemedforms
-    - GoogleCode before 2014
-        https://code.google.com/p/freemedforms/source/checkout
+All contributors are welcome, find all information
+- [Participez]
+- [Contribute]
 
-Build instructions and code documentation:
-    http://www.freemedforms.com/en/code_doc
-
-Some code analysis:
-    http://www.ohloh.net/p/freemedforms/
+Feel free to ask any question to our 
+- Mailing List (french or english): freemedforms@googlegroups.com
+- [Forum]
 
 
-III How to contribute to FreeMedForms?
-
-Main web site:
-    [Français]  http://freemedforms.com/fr/contribute
-    [English]   http://freemedforms.com/en/contribute
-
-Project mailing list:
-    freemedforms@googlegroups.com [Français] [English]
-
-IV Can I make a donation?
+### Can I make a donation?
     
-Yes! Go to our donation page: https://freemedforms.com/en/donation
-Your money will go to the nonprofit french organization Asso FreeMedForms
+Yes! Go to our [donation page].
+Your money will go to the [french non-profit organization asso.freemedforms.com](http://asso.freemedforms.com)
 Donating will speed up the development process
+
+[website]:https://freemedforms.com/
+[GitHub]:https://github.com/FreeMedForms/freemedforms
+[GoogleCode]:https://code.google.com/p/freemedforms
+[SourceForge]:http://sourceforge.net/projects/freemedforms/?source=navbar
+[Build instructions]:https://freemedforms.com/en/code_doc
+[Code documentation]:http://doc.freemedforms.com/
+[Source code analysis]:https://www.openhub.net/p/freemedforms/
+[Participez]:https://freemedforms.com/fr/contribute
+[Contribute]:https://freemedforms.com/en/contribute
+[Forum]:https://freemedforms.com/forum
+[donation page]:https://freemedforms.com/en/donation
+
