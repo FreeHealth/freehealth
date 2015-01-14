@@ -151,7 +151,9 @@ QString Pack::sha1ControlChecksum() const
 bool Pack::isSha1Checked() const
 {
     // TODO
-    // Une fois le fichier télécharger, vérifie la sha1 locale avec celle donnée par le serveur
+    //(en) After file download, check if local sha1 checksum is identical to sha1 checksum reported by server
+    //(fr) Une fois le fichier télécharger, vérifie la sha1 locale avec celle donnée par le serveur
+    // We should implement sha2 instead of sha1, it would add security to integrity
     return false;
 }
 
@@ -159,7 +161,8 @@ bool Pack::isSha1Checked() const
 bool Pack::isMd5Checked() const
 {
     // TODO
-    // Une fois le fichier télécharger, vérifie la md5 locale avec celle donnée par le serveur
+    // (en) After file download, check if local md5 checksum is identical to md5 checksum reported by server
+    // (fr) Une fois le fichier téléchargé, vérifie la md5 locale avec celle donnée par le serveur
     return false;
 }
 

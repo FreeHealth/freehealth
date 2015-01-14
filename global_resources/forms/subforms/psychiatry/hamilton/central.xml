@@ -7,6 +7,7 @@
     <version>0.7.0</version>
     <fmfv>0.7.0</fmfv>
     <cdate>2011-12-11</cdate>
+    <lmdate>2014-12-12</lmdate><!-- Labels text corrections, translation corrections (Jérôme Pinguet) -->
     <icon>psychiatry.png</icon>
     <weblink/>
     <bibliography pmid="7440521">Hamilton M. Rating depressive patients. J Clin Psychiatry. 1980 Dec;41(12 Pt 2):21-4.</bibliography>
@@ -42,14 +43,14 @@
         <uuid id="4">mood4</uuid>
         <possible id="0" lang="fr">Absent</possible>
         <possible id="1" lang="fr">Ces états affectifs ne sont signalés que si on interroge la personne</possible>
-        <possible id="2" lang="fr">Ces états sont signalés rapportés spontanément</possible>
-        <possible id="3" lang="fr">Ces états sont communiqués de manière non verbale (par exemple par l'expression faciale, l'attitude, la voix et la tendance à sangloter).</possible>
-        <possible id="4" lang="fr">La personne ne rapporte que ces états dans sa communication verbale spontanée et non verbale.</possible>
+        <possible id="2" lang="fr">Ces états affectifs sont signalés verbalement spontanément</possible>
+        <possible id="3" lang="fr">Ces états sont communiqués de manière non verbale (par exemple par l'expression faciale, l'attitude, la voix et la tendance à sangloter)</possible>
+        <possible id="4" lang="fr">La personne rapporte quasiment uniquement ces états affectifs dans sa communication spontanée verbale et non verbale</possible>
         <possible id="0" lang="xx">Absent</possible>
         <possible id="1" lang="xx">These feeling states indicated only on questioning</possible>
         <possible id="2" lang="xx">These feeling states spontaneously reported verbally</possible>
         <possible id="3" lang="xx">Communicates feeling states non-verbally —i.e., through facial expression, posture, voice, and tendency to weep</possible>
-        <possible id="4" lang="xx">Patient reports VIRTUALLY ONLY these feeling states in his spontaneous verbal and non- verbal communication</possible>
+        <possible id="4" lang="xx">Patient reports VIRTUALLY ONLY these feeling states in his spontaneous verbal and non-verbal communication</possible>
         <numerical id="0">0</numerical>
         <numerical id="1">1</numerical>
         <numerical id="2">2</numerical>
@@ -73,7 +74,8 @@
         <possible id="2" lang="fr">Idées de culpabilité ou rumination sur des erreurs passées ou des actes condamnables</possible>
         <possible id="3" lang="fr">La maladie actuelle est une punition. Idées délirantes de culpabilité</possible>
         <possible id="4" lang="fr">Entend des voix qui l'accusent ou la dénoncent; a des hallucinations visuelles menaçantes</possible>
-        <possible id="1" lang="xx">Self reproach, feels he has let people down</possible>
+	<possible id="0" lang="xx">Absent</possible>
+	<possible id="1" lang="xx">Self reproach, feels he has let people down</possible>
         <possible id="2" lang="xx">Ideas of guilt or rumination over past errors or sinful deeds</possible>
         <possible id="3" lang="xx">Present illness is a punishment. Delusions of guilt</possible>
         <possible id="4" lang="xx">Hears accusatory or denunciatory voices and/or experiences threatening visual hallucinations</possible>
@@ -98,8 +100,8 @@
         <possible id="0" lang="fr">Absent</possible>
         <possible id="1" lang="fr">A l'impression que la vie ne vaut pas la peine d'être vécue</possible>
         <possible id="2" lang="fr">Souhaite être morte ou a des pensées de mort</possible>
-        <possible id="3" lang="fr">Idées ou geste suicidaire</possible>
-        <possible id="4" lang="fr">Tentatives de suicide</possible>
+        <possible id="3" lang="fr">Idées ou geste de suicide</possible>
+        <possible id="4" lang="fr">Tentatives de suicide (coter 4 toute tentative sérieuse)</possible>
         <possible id="0" lang="xx">Absent</possible>
         <possible id="1" lang="xx">Feels life is not worth living</possible>
         <possible id="2" lang="xx">Wishes he were dead or any thoughts of possible death to self</possible>
@@ -203,7 +205,7 @@
 
     <Item name="psychomotor" type="radio">
       <label lang="fr"> Ralentissement (lenteur de pensée et de langage, difficulté de concentration, activité motrice diminuée)</label>
-      <label lang="xx">Retardation: Psychomoteur (Slowness of thought and speech; impaired ability to concentrate; decreased motor activity)</label>
+      <label lang="xx">Retardation: Psychomotor (Slowness of thought and speech; impaired ability to concentrate; decreased motor activity)</label>
       <options>vertical;labelontop;DontPrintEmptyValues</options>
       <value>
         <uuid id="0">psychomotor0</uuid>
@@ -286,7 +288,7 @@
     </Item>
 
     <Item name="anxietyso" type="radio">
-      <label lang="fr">Anxiété (aspect physique)</label>
+      <label lang="fr">Anxiété somatique: effets physiologiques concomitant à l'anxiété (c.-à-d., effets d'une activité exagérée du système nerveux autonome, "papillons", indigestion, crampes d'estomac, éructations, diarrhée, palpitations, hyperventilation, paresthésies, transpiration, rougeur de la face, tremblement, céphalée, pollakiurie). Eviter de poser des questions au sujet de possibles effets indésirables médicamenteux (par ex., bouche sèche, constipation)</label>
       <label lang="xx">Anxiety somatic: Physiological concomitants of anxiety, (i.e., effects of autonomic overactivity, “butterﬂies,” indigestion, stomach cramps, belching, diarrhea, palpitations, hyperventilation, paresthesia, sweating, ﬂushing, tremor, headache, urinary frequency).  Avoid asking about possible medication side effects (i.e., dry mouth, constipation)</label>
       <options>vertical;labelontop;DontPrintEmptyValues</options>
       <value>
@@ -322,8 +324,8 @@
         <uuid id="1">gastro1</uuid>
         <uuid id="2">gastro2</uuid>
         <possible id="0" lang="fr">Aucun symptôme</possible>
-        <possible id="1" lang="fr">Perte d'appétit, mais mange à peu près normalement sans s'y être incitée</possible>
-        <possible id="2" lang="fr">Réduction marquée de l'appétit et de la prise de nourriture. La personne a de la difficulté à manger sans être incitée par d'autres</possible>
+        <possible id="1" lang="fr">Perte d'appétit, mais mange à peu près normalement sans y être incitée</possible>
+        <possible id="2" lang="fr">Réduction marquée de l'appétit et de la prise de nourriture. La personne a de la difficulté à manger sans être y incitée</possible>
         <possible id="0" lang="xx">None</possible>
         <possible id="1" lang="xx">Loss of appetite but eating without encouragement from others. Food intake  about normal</possible>
         <possible id="2" lang="xx">Difficulty eating without urging from others. Marked reduction of appetite and  food intake</possible>
@@ -345,7 +347,7 @@
         <possible id="1" lang="fr">Lourdeur dans les membres, le dos ou la tête. Maux de dos, de tête, douleurs musculaires. Perte d'énergie et fatigabilité.</possible>
         <possible id="2" lang="fr">Un de ces symptômes est très marqué</possible>
         <possible id="0" lang="xx">None</possible>
-        <possible id="1" lang="xx">Heaviness in limbs, back or head. Backaches, headache, muscle aches. Loss of energ and fatigability</possible>
+        <possible id="1" lang="xx">Heaviness in limbs, back or head. Backaches, headache, muscle aches. Loss of energy and fatigability</possible>
         <possible id="2" lang="xx">Any clear-cut symptom rates 2</possible>
         <numerical id="0">0</numerical>
         <numerical id="1">1</numerical>
@@ -411,9 +413,10 @@
         <uuid id="2">weight2</uuid>
         <uuid id="3">weight</uuid>
         <possible id="0" lang="fr">Pas de perte de poids</possible>
-        <possible id="1" lang="fr">Perte de poids probable associée à la présente maladie</possible>
-        <possible id="2" lang="fr">Perte de poids certaine selon la personne</possible>
-        <possible id="0" lang="xx">No weight loss</possible>
+        <possible id="1" lang="fr">Perte de poids probable associée à la maladie actuelle</possible>
+        <possible id="2" lang="fr">Perte de poids certaine (d'après le patient)</possible>
+	<possible id="3" lang="fr">Non évaluée</possible>
+	<possible id="0" lang="xx">No weight loss</possible>
         <possible id="1" lang="xx">Probably weight loss associated with present illness</possible>
         <possible id="2" lang="xx">Deﬁnite (according to patient) weight loss</possible>
         <possible id="3" lang="xx">Not assessed</possible>
@@ -433,7 +436,7 @@
         <uuid id="1">insight1</uuid>
         <uuid id="2">insight2</uuid>
         <possible id="0" lang="fr">Reconnaît être déprimée et malade</possible>
-        <possible id="1" lang="fr">Reconnaît être malade mais attribue la maladie à une mauvaise alimentation, le climat, le surmenage, un virus, le besoin de repos...</possible>
+        <possible id="1" lang="fr">Reconnaît être malade mais attribue la maladie à une mauvaise alimentation, au climat, au surmenage, à un virus, au besoin de repos...</possible>
         <possible id="2" lang="fr">Nie être malade</possible>
         <possible id="0" lang="xx">Acknowledges being depressed and ill</possible>
         <possible id="1" lang="xx">Acknowledges illness but attributes cause to bad food, climate, overwork, virus, need for rest, etc.</possible>
@@ -456,7 +459,7 @@
       <options>horizontal;labelontop;DontPrintEmptyValues</options>
 
       <Item type="radio" name="diurnal::morning">
-        <label lang="fr">A. Noter si les symptômes sont plus marqués dans la matinée ou la soirée. Si Pas de variation diurne, noter Aucune</label>
+        <label lang="fr">A. Noter si les symptômes sont plus marqués dans la matinée ou la soirée. En l'absence de variation diurne, noter "Aucune"</label>
         <label lang="xx">A. Note whether symptoms are worse in morning or evening. If NO diurnal variation, mark none</label>
         <options>vertical;DontPrintEmptyValues</options>
         <value>
@@ -476,7 +479,7 @@
       </Item>
 
       <Item type="radio" name="diurnal::severity">
-        <label lang="fr">B. Quand il y a variation diurne, indiquer la sévérité de la variation. Indiquer Aucune s'il n'y a pas de variation</label>
+        <label lang="fr">B. Quand il y a variation diurne, indiquer la sévérité de la variation. Indiquer "Aucune" s'il n'y a pas de variation</label>
         <label lang="xx">B. When present, mark the severity of the variation. Mark “None” if NO variation</label>
         <options>vertical;DontPrintEmptyValues</options>
         <value>
@@ -498,7 +501,7 @@
 
     <Item name="depersonalization" type="radio">
       <label lang="fr">Dépersonnalisation et déréalisation (par ex. sentiment que le monde n'est pas réel, idées de négation)</label>
-      <label lang="xx">Depersonalization and Derealization (Such as: Feelings of unreality;  Nihilistic ideas)</label>
+      <label lang="xx">Depersonalization and derealization (Such as: Feelings of unreality;  Nihilistic ideas)</label>
       <options>vertical;labelontop;DontPrintEmptyValues</options>
       <value>
         <uuid id="0">depersonalization0</uuid>
@@ -510,7 +513,7 @@
         <possible id="1" lang="fr">Légère </possible>
         <possible id="2" lang="fr">Moyenne</possible>
         <possible id="3" lang="fr">Grave</possible>
-        <possible id="4" lang="fr">Entraînant une incapacité fonctionnelle</possible>
+        <possible id="4" lang="fr">Invalidante</possible>
         <possible id="0" lang="xx">Absent</possible>
         <possible id="1" lang="xx">Mild</possible>
         <possible id="2" lang="xx">Moderate</possible>
@@ -525,8 +528,8 @@
     </Item>
 
     <Item name="parano" type="radio">
-      <label lang="fr">Symptômes délirants (persécutifs)?</label>
-      <label lang="xx">Paranoid symtoms</label>
+      <label lang="fr">Symptômes délirants. Par ex. délire de persécution</label>
+      <label lang="xx">Paranoid symptoms</label>
       <options>vertical;labelontop;DontPrintEmptyValues</options>
       <value>
         <uuid id="0">parano0</uuid>
@@ -535,7 +538,7 @@
         <uuid id="3">parano3</uuid>
         <possible id="0" lang="fr">Aucun</possible>
         <possible id="1" lang="fr">Soupçonneux </possible>
-        <possible id="2" lang="fr">Idées de référencee</possible>
+        <possible id="2" lang="fr">Idées de référence</possible>
         <possible id="3" lang="fr">Idées délirantes de référence et de persécutionn</possible>
         <possible id="0" lang="xx">None</possible>
         <possible id="1" lang="xx">Suspicious</possible>
@@ -550,7 +553,7 @@
 
     <Item name="obsession" type="radio">
       <label lang="fr">Symptômes obsessionnels et compulsifs</label>
-      <label lang="xx">Obsessional and COmpulsive symptoms</label>
+      <label lang="xx">Obsessional and Compulsive symptoms</label>
       <options>vertical;labelontop;DontPrintEmptyValues</options>
       <value>
         <uuid id="0">obsession0</uuid>

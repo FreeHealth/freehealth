@@ -164,7 +164,7 @@
     </message>
     <message>
         <source>Use color to differentiate genders</source>
-        <translation>Différentier les sexes par des couleurs différentes</translation>
+        <translation>Différencier les sexes par des couleurs différentes</translation>
     </message>
     <message>
         <source>Select newly created patients</source>

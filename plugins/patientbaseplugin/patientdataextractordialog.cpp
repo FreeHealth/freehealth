@@ -67,6 +67,7 @@ namespace {
 const char * const HTML_HEADER = "<!DOCTYPE html>\n"
         "<html>\n"
         "<head>\n"
+	"<meta charset=\"UTF-8\">\n"
         "%1\n"
         "<title>%2</title>\n"
         "</head>\n"
@@ -336,8 +337,6 @@ void PatientDataExtractorDialog::onExportRequested()
 
         // Define output path
         QString path = patient()->data(Core::IPatient::FullName).toString();
-        path = Utils::removeAccents(path);
-        path = path.replace(" ", "_");
         path = QString("%1/%2").arg(d->ui->pathChooser->path()).arg(path);
         if (!QDir().mkpath(path))
             LOG_ERROR("Unable to create path: " + path);
