@@ -1117,6 +1117,7 @@ bool UserBase::createUser(UserData *user)
     case Utils::Database::MySQL:
         {
             // create user grants
+            // TODO: security problem, lower grants on DB according to user's FMF rights
             Utils::Database::Grants grants = Grant_Select | Grant_Update | Grant_Insert | Grant_Delete | Grant_Create | Grant_Drop | Grant_Alter | Grant_Index;
             if (user->hasRight(Constants::USER_ROLE_USERMANAGER, Core::IUser::Create)) {
                 grants |= Grant_CreateUser;
