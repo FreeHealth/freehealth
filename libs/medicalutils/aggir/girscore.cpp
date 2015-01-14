@@ -57,14 +57,14 @@ static bool isValidSubScore(const QString &s)
 }
 
 static int getRang(const int rang)
-{  int GIR_calcule;
+{
+    int GIR_calcule;
     if (rang == 1){ GIR_calcule = 1; }
     if ((rang >= 2) && (rang <= 7)) { GIR_calcule = 2; }
     if ((rang >= 8) && (rang <= 9)) { GIR_calcule = 3; }
     if ((rang >= 10) && (rang <= 11)) { GIR_calcule = 4; }
     if (rang == 12) { GIR_calcule = 5; }
     if (rang == 13) { GIR_calcule = 6; }
-
     return GIR_calcule;
 }
 
@@ -85,20 +85,20 @@ static int getGIR(const QString &chaine)
 
     // Teste UneChaine pour le groupe A
     groupe = 0;
-    if (chaineGIR[0] == 'C') { groupe = 2000; }
-    if (chaineGIR[1] == 'C') { groupe = groupe + 1200; }
-    if (chaineGIR[2] == 'C') { groupe = groupe + 40; }
-    if (chaineGIR[3] == 'C') { groupe = groupe + 40; }
-    if (chaineGIR[4] == 'C') { groupe = groupe + 60; }
-    if (chaineGIR[5] == 'C') { groupe = groupe + 100; }
-    if (chaineGIR[6] == 'C') { groupe = groupe + 800; }
-    if (chaineGIR[7] == 'C') { groupe = groupe + 200; }
-    if (chaineGIR[2] == 'B') { groupe = groupe + 16; }
-    if (chaineGIR[3] == 'B') { groupe = groupe + 16; }
-    if (chaineGIR[4] == 'B') { groupe = groupe + 20; }
-    if (chaineGIR[5] == 'B') { groupe = groupe + 16; }
-    if (chaineGIR[6] == 'B') { groupe = groupe + 120; }
-    if (chaineGIR[7] == 'B') { groupe = groupe + 32; }
+    if (chaineGIR[0] == 'C') { groupe += 2000; }
+    if (chaineGIR[1] == 'C') { groupe += 1200; }
+    if (chaineGIR[2] == 'C') { groupe += 40; }
+    if (chaineGIR[3] == 'C') { groupe += 40; }
+    if (chaineGIR[4] == 'C') { groupe += 60; }
+    if (chaineGIR[5] == 'C') { groupe += 100; }
+    if (chaineGIR[6] == 'C') { groupe += 800; }
+    if (chaineGIR[7] == 'C') { groupe += 200; }
+    if (chaineGIR[2] == 'B') { groupe += 16; }
+    if (chaineGIR[3] == 'B') { groupe += 16; }
+    if (chaineGIR[4] == 'B') { groupe += 20; }
+    if (chaineGIR[5] == 'B') { groupe += 16; }
+    if (chaineGIR[6] == 'B') { groupe += 120; }
+    if (chaineGIR[7] == 'B') { groupe += 32; }
     // Rang groupe A
     if (groupe >= 4380) {
         rang = 1; 
@@ -108,160 +108,168 @@ static int getGIR(const QString &chaine)
         rang = 3 ;
     }
 
-    if (rang != 0)
-    {  return getRang(rang);
+    if (rang != 0) {
+        return getRang(rang);
     }
 
     // Teste UneChaine pour le groupe B
     groupe = 0;
-    if (chaineGIR[0] == 'C') { groupe = 1500; }
-    if (chaineGIR[1] == 'C') { groupe = groupe + 1200; }
-    if (chaineGIR[2] == 'C') { groupe = groupe + 40; }
-    if (chaineGIR[3] == 'C') { groupe = groupe + 40; }
-    if (chaineGIR[4] == 'C') { groupe = groupe + 60; }
-    if (chaineGIR[5] == 'C') { groupe = groupe + 100; }
-    if (chaineGIR[6] == 'C') { groupe = groupe + 800;  }
-    if (chaineGIR[7] == 'C') { groupe = groupe - 80; }
-    if (chaineGIR[0] == 'B') { groupe = groupe + 320; }
-    if (chaineGIR[1] == 'B') { groupe = groupe + 120; }
-    if (chaineGIR[2] == 'B') { groupe = groupe + 16; }
-    if (chaineGIR[3] == 'B') { groupe = groupe + 16; }
-    if (chaineGIR[4] == 'B') { groupe = groupe + 0; }
-    if (chaineGIR[5] == 'B') { groupe = groupe + 16; }
-    if (chaineGIR[6] == 'B') { groupe = groupe + 120; }
-    if (chaineGIR[7] == 'B') { groupe = groupe - 40; }
+    if (chaineGIR[0] == 'C') { groupe += 1500; }
+    if (chaineGIR[1] == 'C') { groupe += 1200; }
+    if (chaineGIR[2] == 'C') { groupe += 40; }
+    if (chaineGIR[3] == 'C') { groupe += 40; }
+    if (chaineGIR[4] == 'C') { groupe += 60; }
+    if (chaineGIR[5] == 'C') { groupe += 100; }
+    if (chaineGIR[6] == 'C') { groupe += 800;  }
+    if (chaineGIR[7] == 'C') { groupe -= 80; }
+    if (chaineGIR[0] == 'B') { groupe += 320; }
+    if (chaineGIR[1] == 'B') { groupe += 120; }
+    if (chaineGIR[2] == 'B') { groupe += 16; }
+    if (chaineGIR[3] == 'B') { groupe += 16; }
+    if (chaineGIR[4] == 'B') { groupe += 0; }
+    if (chaineGIR[5] == 'B') { groupe += 16; }
+    if (chaineGIR[6] == 'B') { groupe += 120; }
+    if (chaineGIR[7] == 'B') { groupe -= 40; }
     // ' Rang groupe B
-    if (groupe >= 2016)
-    { rang = 4;
+    if (groupe >= 2016) {
+        rang = 4;
         return getRang(rang);
+    } else {
+        rang = 0; 
     }
-    else  { rang = 0; }
 
     // Teste UneChaine pour le groupe C
     groupe = 0;
-    if (chaineGIR[2] == 'C') { groupe = groupe + 40; }
-    if (chaineGIR[3] == 'C') { groupe = groupe + 40; }
-    if (chaineGIR[4] == 'C') { groupe = groupe + 60; }
-    if (chaineGIR[5] == 'C') { groupe = groupe + 160; }
-    if (chaineGIR[6] == 'C') { groupe = groupe + 1000; }
-    if (chaineGIR[7] == 'C') { groupe = groupe + 400; }
-    if (chaineGIR[2] == 'B') { groupe = groupe + 16; }
-    if (chaineGIR[3] == 'B') { groupe = groupe + 16; }
-    if (chaineGIR[4] == 'B') { groupe = groupe + 20; }
-    if (chaineGIR[5] == 'B') { groupe = groupe + 20; }
-    if (chaineGIR[6] == 'B') { groupe = groupe + 200; }
-    if (chaineGIR[7] == 'B') { groupe = groupe + 40; }
+    if (chaineGIR[2] == 'C') { groupe += 40; }
+    if (chaineGIR[3] == 'C') { groupe += 40; }
+    if (chaineGIR[4] == 'C') { groupe += 60; }
+    if (chaineGIR[5] == 'C') { groupe += 160; }
+    if (chaineGIR[6] == 'C') { groupe += 1000; }
+    if (chaineGIR[7] == 'C') { groupe += 400; }
+    if (chaineGIR[2] == 'B') { groupe += 16; }
+    if (chaineGIR[3] == 'B') { groupe += 16; }
+    if (chaineGIR[4] == 'B') { groupe += 20; }
+    if (chaineGIR[5] == 'B') { groupe += 20; }
+    if (chaineGIR[6] == 'B') { groupe += 200; }
+    if (chaineGIR[7] == 'B') { groupe += 40; }
     // Rang groupe C
-    if (groupe >= 1700) { rang = 5; }
-    if ((groupe >= 1432) && (groupe <= 1699)) { rang = 6; }
-    if (rang != 0)
-    { return getRang(rang); }
+    if (groupe >= 1700) {
+        rang = 5; 
+    } else if ((groupe >= 1432) && (groupe <= 1699)) { 
+        rang = 6; 
+    }
+    if (rang != 0) {
+        return getRang(rang); 
+    }
 
     // Teste UneChaine pour le groupe D
     groupe = 0;
-    if (chaineGIR[4] == 'C') { groupe = groupe + 2000; }
-    if (chaineGIR[5] == 'C') { groupe = groupe + 400; }
-    if (chaineGIR[6] == 'C') { groupe = groupe + 2000; }
-    if (chaineGIR[7] == 'C') { groupe = groupe + 200; }
-    if (chaineGIR[4] == 'B') { groupe = groupe + 200; }
-    if (chaineGIR[5] == 'B') { groupe = groupe + 200; }
-    if (chaineGIR[6] == 'B') { groupe = groupe + 200; }
+    if (chaineGIR[4] == 'C') { groupe += 2000; }
+    if (chaineGIR[5] == 'C') { groupe += 400; }
+    if (chaineGIR[6] == 'C') { groupe += 2000; }
+    if (chaineGIR[7] == 'C') { groupe += 200; }
+    if (chaineGIR[4] == 'B') { groupe += 200; }
+    if (chaineGIR[5] == 'B') { groupe += 200; }
+    if (chaineGIR[6] == 'B') { groupe += 200; }
     // Rang groupe D
-    if (groupe >= 2400)
-    {  rang = 7;
+    if (groupe >= 2400) {
+        rang = 7;
         return getRang(rang);
     }
-    else { rang = 0; }
+    rang = 0; 
 
     // Teste UneChaine pour le groupe E
     groupe = 0;
-    if (chaineGIR[0] == 'C') { groupe = 400; }
-    if (chaineGIR[1] == 'C') { groupe = groupe + 400; }
-    if (chaineGIR[2] == 'C') { groupe = groupe + 400; }
-    if (chaineGIR[3] == 'C') { groupe = groupe + 400; }
-    if (chaineGIR[4] == 'C') { groupe = groupe + 400; }
-    if (chaineGIR[5] == 'C') { groupe = groupe + 800; }
-    if (chaineGIR[6] == 'C') { groupe = groupe + 800; }
-    if (chaineGIR[7] == 'C') { groupe = groupe + 200; }
-    if (chaineGIR[2] == 'B') { groupe = groupe + 100; }
-    if (chaineGIR[3] == 'B') { groupe = groupe + 100; }
-    if (chaineGIR[4] == 'B') { groupe = groupe + 100; }
-    if (chaineGIR[5] == 'B') { groupe = groupe + 100; }
-    if (chaineGIR[6] == 'B') { groupe = groupe + 100; }
+    if (chaineGIR[0] == 'C') { groupe += 400; }
+    if (chaineGIR[1] == 'C') { groupe += 400; }
+    if (chaineGIR[2] == 'C') { groupe += 400; }
+    if (chaineGIR[3] == 'C') { groupe += 400; }
+    if (chaineGIR[4] == 'C') { groupe += 400; }
+    if (chaineGIR[5] == 'C') { groupe += 800; }
+    if (chaineGIR[6] == 'C') { groupe += 800; }
+    if (chaineGIR[7] == 'C') { groupe += 200; }
+    if (chaineGIR[2] == 'B') { groupe += 100; }
+    if (chaineGIR[3] == 'B') { groupe += 100; }
+    if (chaineGIR[4] == 'B') { groupe += 100; }
+    if (chaineGIR[5] == 'B') { groupe += 100; }
+    if (chaineGIR[6] == 'B') { groupe += 100; }
     // Rang groupe E
-    if (groupe >= 1200)
-    { rang = 8;
+    if (groupe >= 1200) {
+        rang = 8;
         return getRang(rang);
     }
-    else { rang = 0 ; }
+    rang = 0 ;
 
     // ' Teste UneChaine pour le groupe F
     groupe = 0;
-    if (chaineGIR[0] == 'C') { groupe = 200; }
-    if (chaineGIR[1] == 'C') { groupe = groupe + 200; }
-    if (chaineGIR[2] == 'C') { groupe = groupe + 500; }
-    if (chaineGIR[3] == 'C') { groupe = groupe + 500; }
-    if (chaineGIR[4] == 'C') { groupe = groupe + 500; }
-    if (chaineGIR[5] == 'C') { groupe = groupe + 500; }
-    if (chaineGIR[6] == 'C') { groupe = groupe + 500; }
-    if (chaineGIR[7] == 'C') { groupe = groupe + 200; }
-    if (chaineGIR[0] == 'B') { groupe = groupe + 100; }
-    if (chaineGIR[1] == 'B') { groupe = groupe + 100; }
-    if (chaineGIR[2] == 'B') { groupe = groupe + 100; }
-    if (chaineGIR[3] == 'B') { groupe = groupe + 100; }
-    if (chaineGIR[4] == 'B') { groupe = groupe + 100; }
-    if (chaineGIR[5] == 'B') { groupe = groupe + 100; }
-    if (chaineGIR[6] == 'B') { groupe = groupe + 100; }
+    if (chaineGIR[0] == 'C') { groupe += 200; }
+    if (chaineGIR[1] == 'C') { groupe += 200; }
+    if (chaineGIR[2] == 'C') { groupe += 500; }
+    if (chaineGIR[3] == 'C') { groupe += 500; }
+    if (chaineGIR[4] == 'C') { groupe += 500; }
+    if (chaineGIR[5] == 'C') { groupe += 500; }
+    if (chaineGIR[6] == 'C') { groupe += 500; }
+    if (chaineGIR[7] == 'C') { groupe += 200; }
+    if (chaineGIR[0] == 'B') { groupe += 100; }
+    if (chaineGIR[1] == 'B') { groupe += 100; }
+    if (chaineGIR[2] == 'B') { groupe += 100; }
+    if (chaineGIR[3] == 'B') { groupe += 100; }
+    if (chaineGIR[4] == 'B') { groupe += 100; }
+    if (chaineGIR[5] == 'B') { groupe += 100; }
+    if (chaineGIR[6] == 'B') { groupe += 100; }
     // Rang groupe F
-    if (groupe >= 800)
-    {  rang = 9 ;
+    if (groupe >= 800) {
+        rang = 9 ;
         return getRang(rang);
     }
-    else { rang = 0; }
+    rang = 0;
 
     // Teste UneChaine pour le groupe G
     groupe = 0;
-    if (chaineGIR[0] == 'C') { groupe = 150; }
-    if (chaineGIR[1] == 'C') { groupe = groupe + 150; }
-    if (chaineGIR[2] == 'C') { groupe = groupe + 300; }
-    if (chaineGIR[3] == 'C') { groupe = groupe + 300; }
-    if (chaineGIR[4] == 'C') { groupe = groupe + 500; }
-    if (chaineGIR[5] == 'C') { groupe = groupe + 500; }
-    if (chaineGIR[6] == 'C') { groupe = groupe + 400; }
-    if (chaineGIR[7] == 'C') { groupe = groupe + 200; }
-    if (chaineGIR[2] == 'B') { groupe = groupe + 200; }
-    if (chaineGIR[3] == 'B') { groupe = groupe + 200; }
-    if (chaineGIR[4] == 'B') { groupe = groupe + 200; }
-    if (chaineGIR[5] == 'B') { groupe = groupe + 200; }
-    if (chaineGIR[6] == 'B') { groupe = groupe + 200; }
-    if (chaineGIR[7] == 'B') { groupe = groupe + 100; }
+    if (chaineGIR[0] == 'C') { groupe += 150; }
+    if (chaineGIR[1] == 'C') { groupe += 150; }
+    if (chaineGIR[2] == 'C') { groupe += 300; }
+    if (chaineGIR[3] == 'C') { groupe += 300; }
+    if (chaineGIR[4] == 'C') { groupe += 500; }
+    if (chaineGIR[5] == 'C') { groupe += 500; }
+    if (chaineGIR[6] == 'C') { groupe += 400; }
+    if (chaineGIR[7] == 'C') { groupe += 200; }
+    if (chaineGIR[2] == 'B') { groupe += 200; }
+    if (chaineGIR[3] == 'B') { groupe += 200; }
+    if (chaineGIR[4] == 'B') { groupe += 200; }
+    if (chaineGIR[5] == 'B') { groupe += 200; }
+    if (chaineGIR[6] == 'B') { groupe += 200; }
+    if (chaineGIR[7] == 'B') { groupe += 100; }
     // Rang groupe G
-    if (groupe >= 650)
-    {  rang = 10;
+    if (groupe >= 650) {
+        rang = 10;
         return getRang(rang);
     }
-    else { rang = 0; }
+    rang = 0;
 
     // Teste UneChaine pour le groupe H
     groupe = 0;
-    if (chaineGIR[2] == 'C') { groupe = groupe + 3000; }
-    if (chaineGIR[3] == 'C') { groupe = groupe + 3000; }
-    if (chaineGIR[4] == 'C') { groupe = groupe + 3000; }
-    if (chaineGIR[5] == 'C') { groupe = groupe + 3000; }
-    if (chaineGIR[6] == 'C') { groupe = groupe + 1000; }
-    if (chaineGIR[7] == 'C') { groupe = groupe + 1000; }
-    if (chaineGIR[2] == 'B') { groupe = groupe + 2000; }
-    if (chaineGIR[3] == 'B') { groupe = groupe + 2000; }
-    if (chaineGIR[4] == 'B') { groupe = groupe + 2000; }
-    if (chaineGIR[5] == 'B') { groupe = groupe + 2000; }
-    if (chaineGIR[6] == 'B') { groupe = groupe + 2000; }
-    if (chaineGIR[7] == 'B') { groupe = groupe + 1000; }
+    if (chaineGIR[2] == 'C') { groupe += 3000; }
+    if (chaineGIR[3] == 'C') { groupe += 3000; }
+    if (chaineGIR[4] == 'C') { groupe += 3000; }
+    if (chaineGIR[5] == 'C') { groupe += 3000; }
+    if (chaineGIR[6] == 'C') { groupe += 1000; }
+    if (chaineGIR[7] == 'C') { groupe += 1000; }
+    if (chaineGIR[2] == 'B') { groupe += 2000; }
+    if (chaineGIR[3] == 'B') { groupe += 2000; }
+    if (chaineGIR[4] == 'B') { groupe += 2000; }
+    if (chaineGIR[5] == 'B') { groupe += 2000; }
+    if (chaineGIR[6] == 'B') { groupe += 2000; }
+    if (chaineGIR[7] == 'B') { groupe += 1000; }
     // Rang groupe H
-    if (groupe >= 4000){ rang = 11; }
-    if (groupe >= 2000 && groupe <= 3999) { rang = 12; }
-    if (groupe < 2000) { rang = 13; }
+    if (groupe >= 4000) {
+        rang = 11;
+    } else if (groupe >= 2000 && groupe <= 3999) { 
+        rang = 12; 
+    } else if (groupe < 2000) { 
+        rang = 13; 
+    }
     return getRang(rang);
-
 }
 
 //Les groupes 5 et 6 :
