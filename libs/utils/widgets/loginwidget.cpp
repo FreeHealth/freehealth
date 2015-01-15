@@ -51,6 +51,7 @@ LoginWidget::~LoginWidget()
 
 void LoginWidget::setToggleViewIcon(const QString &fullAbsPath)
 {
+    ui->login->setIcon(QIcon(fullAbsPath));
     ui->password->setIcon(QIcon(fullAbsPath));
 }
 
