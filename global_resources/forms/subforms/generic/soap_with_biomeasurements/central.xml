@@ -7,9 +7,9 @@
     <!-- Non translatable values -->
     <authors>Eric Maeker, MD</authors>
     <version>test</version>
-    <fmfv>0.8.4</fmfv>
+    <fmfv>0.9.1</fmfv>
     <cdate>2012-10-13</cdate>
-    <lmdate>2013-04-18</lmdate>
+    <lmdate>2014-01-19</lmdate>
     <icon>__theme__/stethoscope.png</icon>
     <weblink></weblink>
     <bibliography/>
@@ -27,6 +27,14 @@
     <specialties lang="de">Tools</specialties>
 
     <updateinfo>
+      <updateversion from="0.8.4" to="0.9.1">
+        <text lang="fr">
+        Augmentation de la masse maximale dans le fichier soapbio.ui
+	</text>
+	<text lang="xx">
+	Increase maximal weight in soapbio.ui
+        </text>
+      </updateversion>
       <updateversion from="0.8.2" to="0.8.4">
         <text lang="fr">
         Gestion du poids et de la taille du patient
