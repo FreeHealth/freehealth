@@ -625,7 +625,7 @@ BaseGroup::BaseGroup(Form::FormItem *formItem, QWidget *parent) :
             m_Group = grp;
         } else {
             LOG_ERROR("Using the QtUiLinkage, item not found in the ui: " + formItem->uuid());
-            // To avoid segfaulting create a fake combo
+            // To avoid segfaulting create a fake group
             m_Group = new QGroupBox(this);
         }
     } else {
