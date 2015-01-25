@@ -102,6 +102,11 @@ MeasurementWidget::MeasurementWidget(Form::FormItem *formItem, QWidget *parent) 
     if (!hb && (!m_units || !m_value) && !uiBased) {
         LOG_ERROR("No layout, creating a default one. Form item: " + formItem->uuid());
         hb = new QHBoxLayout(this);
+    } else if (!hb) {
+        hb = getBoxLayout(OnLeft, m_FormItem->spec()->label(), this);
+        hb->addWidget(m_Label);
+        hb->setMargin(0);
+        hb->setSpacing(0);
     }
     if (!m_value) {
         m_value = new QDoubleSpinBox(this);
