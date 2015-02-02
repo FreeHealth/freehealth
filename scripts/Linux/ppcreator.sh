@@ -3,8 +3,8 @@
 # This script is part of the FreeMedForms project
 # License : GPLv3
 # Create the Launchpad PPA package for one specific application
-# In order to use this script, you need to install following packages:
-# subversion svn-buildpackage qtchooser libquazip-dev
+# In order to use this script, you need to have the following packages installed:
+# subversion svn-buildpackage
 
 SCRIPT_VERSION=0.9.0
 
