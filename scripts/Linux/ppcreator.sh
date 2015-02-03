@@ -3,6 +3,7 @@
 # This script is part of the FreeMedForms project
 # License : GPLv3
 # Create the Launchpad PPA package for one specific application
+# FreeMedForms launchpad team: https://launchpad.net/~freemedforms
 # In order to use this script, you need to have the following packages installed:
 # subversion svn-buildpackage
 
@@ -16,12 +17,12 @@ SOURCEPACK_FULLPATH=""
 DOWNLOAD_URL=""
 DOWNLOAD_FILENAME=""
 UBUNTU_RELEASE_NAME=""
-PGP_KEY="0x3FA0BBEF"      # Eric's key by default, you have to know the phrase
+PGP_KEY="0x75D4AE85B9520933"      # Long ID of Eric Maeker new OpenPGP key (default key)
 WGET_NOPROXY=""
 DEBUILD_SOURCE="-sa"
 PPA_VERSION="1"
 DPUT_ARGS=""
-SERIES="precise quantal raring"
+SERIES="precise trusty utopic"
 DEBUILD_OPTIONS=""
 
 showHelp()
@@ -34,11 +35,11 @@ showHelp()
   echo "   -h           show this help"
   echo "   -b app       Application name"
   echo "   -v version   Application version"
-  echo "   -k pgpkey    Use this specific key to sign the package"
+  echo "   -k pgpkey    Use this specific key to sign the package (indicate key long ID starting with 0x)"
   echo "   -p ppaver    PPA subversion (pack name -> app-appservsion-natty-ppaver)"
   echo "   -s           Do not include source to package for uploading"
   echo "   -n           Do not use proxy when downloading"
-  echo "   -r           Specify the Series to build (oneiric maverick natty lucid)"
+  echo "   -r           Specify the Series to build (precise trusty utopic)"
   echo "   -f           Use dput -f to upload packages"
   echo "   -d           Don't execute dpkg-checkbuilddeps (like debuild -d)"
   echo
@@ -163,7 +164,7 @@ checkDependenciesVersion()
 svnBuildPackage()
 {
   cd $PACKDIR
-  echo "    * Fecthing svn debian files"
+  echo "    * Fetching svn debian files"
   echo "      from Debian Med"
    svn checkout svn://svn.debian.org/svn/debian-med/trunk/packages/$APP_NAME/ ./
   #echo "       from FreeMedForms project"
@@ -220,7 +221,7 @@ if [ ! -n "$APP_VERSION" ]; then
 fi
 
 if [ -e $PGP_KEY ]; then
-  echo "Error: you must specify a PGP Key to sign the package"
+  echo "Error: you must specify an OpenPGP key to sign the package"
   exit 3
 fi
 
