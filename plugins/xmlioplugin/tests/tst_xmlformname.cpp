@@ -24,8 +24,8 @@
  *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#include "xmlioplugin.h"
-#include "xmlformname.h"
+#include "../xmlioplugin.h"
+#include "../xmlformname.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
