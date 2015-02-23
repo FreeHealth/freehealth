@@ -65,7 +65,6 @@ CommandLine::CommandLine(QObject *parent) :
     // read command line params
     QStringList args = qApp->arguments();
     foreach(const QString &a, args) {
-        LOG_FOR("CommandLine", a);
         QString k = a;
         if (k.contains(" "))
             k = k.left(k.indexOf(" "));
