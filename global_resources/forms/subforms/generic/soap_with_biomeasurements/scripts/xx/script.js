@@ -7,7 +7,7 @@ namespace.module('com.freemedforms.generic.soapWithBio', function (exports, requ
 
     // Ui vars (retrieved from the ui)
     var syst, diast, pulse;
-    var weight, weightUnit, height, heightUnit;
+//    var weight, weightUnit, height, heightUnit;
 
     function setupUi() {
         print("com.freemedforms.generic.soapWithBio Setup UI");
@@ -18,11 +18,10 @@ namespace.module('com.freemedforms.generic.soapWithBio', function (exports, requ
         syst = formUi.findChild("bpSyst");
         diast = formUi.findChild("bpDiast");
         pulse = formUi.findChild("bpPulse");
-        weight = formUi.findChild("weight");
-        weightUnit = formUi.findChild("weightUnit");
-        height = formUi.findChild("height");
-        heightUnit = formUi.findChild("heightUnit");
-	bmi = formUi.findchild("bmiValue");
+//        weight = formUi.findChild("weight");
+//        weightUnit = formUi.findChild("weightUnit");
+//        height = formUi.findChild("height");
+//        heightUnit = formUi.findChild("heightUnit");
 
         populateCombos();
 
@@ -30,10 +29,10 @@ namespace.module('com.freemedforms.generic.soapWithBio', function (exports, requ
         syst['valueChanged(int)'].connect(this, computePulsePressure);
         diast['valueChanged(int)'].connect(this, computePulsePressure);
 
-        weight['valueChanged(int)'].connect(this, computeBMI);
-        height['valueChanged(int)'].connect(this, computeBMI);
-        weightUnit['currentIndexChanged(int)'].connect(this, computeBMI);
-        heightUnit['currentIndexChanged(int)'].connect(this, computeBMI);
+//        weight['valueChanged(int)'].connect(this, computeBMI);
+//        height['valueChanged(int)'].connect(this, computeBMI);
+//        weightUnit['currentIndexChanged(int)'].connect(this, computeBMI);
+//        heightUnit['currentIndexChanged(int)'].connect(this, computeBMI);
 
     }
 
@@ -57,13 +56,9 @@ namespace.module('com.freemedforms.generic.soapWithBio', function (exports, requ
         pulse.setText(text);
     }
 
-    function computeBMI() {
-        var metricWeight = weight.value;
-	var metricHeight = height.value;
-	var calculate_bmi = metricWeight / (metricHeight * metricHeight);
-	bmi.setText(calculate_bmi);
-
-    }
+//    function computeBMI() {
+//        var metricWeight = weight.value;
+//    }
 
 });
 
