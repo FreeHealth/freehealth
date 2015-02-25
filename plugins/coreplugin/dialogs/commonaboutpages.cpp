@@ -187,6 +187,13 @@ static const QList<Team> m_Team = QList<Team>()
                  Trans::ConstantTranslations::tkTr(Trans::Constants::TEAM_DEVELOPERS_CONTRIBUTORS)
                 )
 
+        << Team( Trans::ConstantTranslations::tkTr(Trans::Constants::TEAM_DEVELOPERS_CONTRIBUTORS),
+                 "Jerome Pinguet",
+                 Trans::ConstantTranslations::tkTr(Trans::Constants::COUNTRY_FRANCE),
+                 "jerome@jerome.cc",
+                 Trans::ConstantTranslations::tkTr(Trans::Constants::TEAM_DEVELOPER_AND_DEBUGGER)
+                )
+
         << Team( Trans::ConstantTranslations::tkTr(Trans::Constants::TEAM_DRUG_DATABASE_MANAGER),
                  "Eric MAEKER, MD",
                   Trans::ConstantTranslations::tkTr(Trans::Constants::COUNTRY_FRANCE),
