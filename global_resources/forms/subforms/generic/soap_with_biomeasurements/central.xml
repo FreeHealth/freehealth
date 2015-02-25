@@ -6,10 +6,10 @@
   <formdescription>
     <!-- Non translatable values -->
     <authors>Eric Maeker, MD</authors>
-    <version>test</version>
+    <version>1.1</version>
     <fmfv>0.9.1</fmfv>
     <cdate>2012-10-13</cdate>
-    <lmdate>2014-01-19</lmdate>
+    <lmdate>2015-01-27</lmdate>
     <icon>__theme__/stethoscope.png</icon>
     <weblink></weblink>
     <bibliography/>
@@ -27,6 +27,14 @@
     <specialties lang="de">Tools</specialties>
 
     <updateinfo>
+      <updateversion from="0.9.1" to="0.9.4">
+	<text lang="xx">
+	Compute BMI
+        </text>
+        <text lang="fr">
+	Calcul de l'IMC
+        </text>
+      </updateversion>
       <updateversion from="0.8.4" to="0.9.1">
         <text lang="fr">
         Augmentation de la masse maximale dans le fichier soapbio.ui

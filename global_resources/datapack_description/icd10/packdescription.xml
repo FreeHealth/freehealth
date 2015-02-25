@@ -11,6 +11,8 @@
     <icon>__theme__/freeicd.png</icon>
     <file>icd10/icd10.zip</file>
     <unziptopath>icd10</unziptopath>
+    <md5>092a2ceb2dc01b945b827c7ab7cbfaa2</md5>
+    <sha1>c7d7531315a1df3cf23cfbce08c0bc7b96859832</sha1>
     <datatype>ICD</datatype>
 
     <!-- Translatable values -->

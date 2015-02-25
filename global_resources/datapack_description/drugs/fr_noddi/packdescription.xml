@@ -15,8 +15,8 @@
     <file>drugs/fr_noddi/master.db.zip</file>
     <unziptopath>drugs</unziptopath>
     <size></size>
-    <md5></md5>
-    <sha1></sha1>
+    <md5>19ba797e3244b7168a7c43c4b137afca</md5>
+    <sha1>bf0b05696a89d7d8a9b46112a1050807905b2256</sha1>
     <datatype>DrugsWithoutInteractions</datatype>
 
     <!-- Translatable values -->
