@@ -24,7 +24,7 @@ using namespace Utils;
 
 EmailValidator::EmailValidator(QObject *parent) :
     QValidator(parent),
-    m_validMailRegExp("[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}"),
+    m_validMailRegExp("[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,63}"),
     m_intermediateMailRegExp("[a-z0-9._%+-]*@?[a-z0-9.-]*\\.?[a-z]*")
 {
 }
