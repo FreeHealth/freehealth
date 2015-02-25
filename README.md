@@ -18,7 +18,7 @@ All FreeMedForms apps are available for:
 - MacOS X universal
 - Linux: Debian, Ubuntu, OpenSuse and standalone binary
 - FreeBSD: need compilation of git trunk (please contact the author)
-- Windows (from XP to latest)
+- Windows (from Windows 7 to latest)
 
 There is currently a [Reflexion about porting to Meteor.js] for desktop, mobile and as a web application.
 
