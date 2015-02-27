@@ -7,8 +7,8 @@
     <!-- Based on form "POMR with biometrics" by Eric Maeker MD -->
     <!-- Non translatable values -->
     <authors>Jerome Pinguet</authors>
-    <version>1.8</version>
-    <fmfv>0.9.4</fmfv>
+    <version>test</version>
+    <fmfv>test</fmfv>
     <cdate>2015-01-19</cdate>
     <lmdate>2015-01-24</lmdate>
     <icon>__theme__/stethoscope.png</icon>

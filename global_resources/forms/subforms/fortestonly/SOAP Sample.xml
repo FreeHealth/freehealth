@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE FreeMedForms>
 <MedForm>
-  <version>0.3.0</version>
+  <version>test</version>
   <name>SOAPSample</name>
   <label>SOAP examples</label>
   <type>form</type>

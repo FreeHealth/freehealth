@@ -6,8 +6,8 @@
   <formdescription>
     <!-- Non translatable values -->
     <authors>Eric Maeker, MD</authors>
-    <version>0.7.1</version>
-    <fmfv>0.7.0</fmfv>
+    <version>test</version>
+    <fmfv>test</fmfv>
     <cdate>2011-03-15</cdate>
     <lmdate>2012-02-26</lmdate>
     <icon>addictology.png</icon>

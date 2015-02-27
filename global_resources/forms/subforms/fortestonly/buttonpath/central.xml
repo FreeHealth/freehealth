@@ -6,8 +6,8 @@
   <formdescription>
     <!-- Non translatable values -->
     <authors>Eric Maeker, MD</authors>
-    <version>0.9.6</version>
-    <fmfv>0.8.4</fmfv>
+    <version>test</version>
+    <fmfv>test</fmfv>
     <cdate>2013-05-14</cdate>
     <lmdate>2013-05-14</lmdate>
     <icon>tests.png</icon>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE FreeMedForms>
 <MedForm>
-  <version>0.3.0</version>
+  <version>test</version>
   <name>richTextFormSample</name>
   <label>Rich Text Widget example</label>
   <type>form</type>

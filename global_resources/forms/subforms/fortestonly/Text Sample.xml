@@ -3,7 +3,7 @@
 	<name>formSample</name>
 	<label>Text's example</label>
 	<type>form</type>
-	<version>0.1</version>
+	<version>test</version>
 	<cdate>2008-10-16</cdate>
 	<categorie>samples</categorie>
 	<script>
