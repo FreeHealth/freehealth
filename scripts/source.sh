@@ -140,7 +140,7 @@ global_resources/translations/qt*.qm \
 "
 
 BUILDSPEC_SOURCES="\
-README.txt COPYING.txt INSTALL \
+README.md COPYING.txt INSTALL \
 updatetranslations.sh \
 buildspecs/*.pri \
 buildspecs/*.in \
