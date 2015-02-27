@@ -22,7 +22,7 @@
 #/***************************************************************************
 # *  Main developers : Eric MAEKER, <eric.maeker@gmail.com>                 *
 # *  Contributors:                                                          *
-# *       NAME <MAIL@ADDRESS.COM>                                           *
+# *       Jerome Pinguet <jerome@jerome.cc>                                           *
 # *       NAME <MAIL@ADDRESS.COM>                                           *
 # ***************************************************************************/
 
@@ -31,7 +31,7 @@ GIT_REVISION=""
 PROJECT_VERSION=""
 PACKPATH=""
 SOURCES_ROOT_PATH=""
-GPG_KEY="0xB9520933"
+GPG_KEY="0x75D4AE85B9520933"    # Long ID of Eric Maeker new OpenPGP key (default key)
 SED_INPLACE="-ibkup" # on macos change to "-i bkup"
 
 # Some path definition
@@ -60,6 +60,7 @@ showHelp()
     echo "Options:"
     echo "  -d  Include eDRC non-free datapack in datapacks/appinstalled"
     echo "  -h  Show this help"
+    echo "  -k pgpkey    Use this specific key to sign the package (indicate key long ID starting with 0x)"
     echo
 }
 
@@ -316,7 +317,8 @@ createSource()
     tar czf ../$ZIP_PATH/$ZIP_FILENAME  ./$PARENT_PATH
 
     echo "**** SIGNING SOURCE FILE, KEY: $GPG_KEY ****"
-    gpg -u $GPG_KEY --sign --detach-sign -o ../$ZIP_PATH/$ZIP_FILENAME.sig ../$ZIP_PATH/$ZIP_FILENAME
+    # --armor: GPG signature in ASCII Armor format: This format is more human readable and more portable.
+    gpg -u $GPG_KEY --armor --output ../$ZIP_PATH/$ZIP_FILENAME.asc --detach-sig ../$ZIP_PATH/$ZIP_FILENAME
 
     echo "**** CLEANING TMP SOURCES PATH ****"
     rm -R $PACKPATH
@@ -331,13 +333,15 @@ createSource()
 
 prepareFileSelection
 
-while getopts "hd" option
+while getopts "hdk:" option
 do
   case $option in
     h) showHelp
       exit 0
     ;;
     d) includeEdrcFiles
+    ;;
+    k) GPG_KEY=$OPTARG
     ;;
   esac
 done
