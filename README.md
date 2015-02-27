@@ -6,7 +6,7 @@
 ### What is the FreeMedForms project?
 
 FreeMedForms project is a fully open source medical project. It includes:
-- an open Electronic Medical Record Manager: FreeMedForms EMR
+- an Electronic Medical Record Manager: FreeMedForms EMR
 - a pharmaceutical drug prescriptor assistant: FreeDiams
 - a drug and drug-interaction database manager: FreeDDIManager
 - an ICD10 coding assistant: FreeICD
@@ -20,7 +20,7 @@ All FreeMedForms apps are available for:
 - FreeBSD: need compilation of git trunk (please contact the author)
 - Windows (from Windows 7 to latest)
 
-There is currently a [Reflexion about porting to Meteor.js] for desktop, mobile and as a web application.
+There is currently a [Reflection about porting to Meteor.js] for desktop, mobile and as a web application.
 
 
 ### Where can I find informations about FreeMedForms?
@@ -36,29 +36,29 @@ There is currently a [Reflexion about porting to Meteor.js] for desktop, mobile 
 ### How to contribute to FreeMedForms?
 
 All contributors are welcome, find all information
-- [Participez]
 - [Contribute]
+- [Participez]
 
-Feel free to ask any question to our 
-- Mailing List (french or english): freemedforms@googlegroups.com
+Feel free to ask any question 
+- Mailing List (english or french): freemedforms@googlegroups.com
 - [Forum]
 
 
 ### Can I make a donation?
     
 Yes! Go to our [donation page].
-Your money will go to the [french non-profit organization asso.freemedforms.com](http://asso.freemedforms.com)
+Your money will go to the [french non-profit organization asso.freemedforms.com](https://freemedforms.com/en/asso/start)
 Donating will speed up the development process
 
 [website]:https://freemedforms.com/
 [GitHub]:https://github.com/FreeMedForms/freemedforms
 [GoogleCode]:https://code.google.com/p/freemedforms
-[SourceForge]:http://sourceforge.net/projects/freemedforms/?source=navbar
+[SourceForge]:http://sourceforge.net/projects/freemedforms/
 [Build instructions]:https://freemedforms.com/en/code_doc
-[Code documentation]:http://doc.freemedforms.com/
+[Code documentation]:https://freemedforms.com/fr/developers
 [Source code analysis]:https://www.openhub.net/p/freemedforms/
 [Participez]:https://freemedforms.com/fr/contribute
 [Contribute]:https://freemedforms.com/en/contribute
 [Forum]:https://freemedforms.com/forum
 [donation page]:https://freemedforms.com/en/donation
-[Reflexion about porting to Meteor.js]:https://freemedforms.com/forum/viewtopic.php?f=11&t=136
+[Reflection about porting to Meteor.js]:https://freemedforms.com/forum/viewtopic.php?f=11&t=136
