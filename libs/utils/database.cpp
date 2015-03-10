@@ -442,20 +442,31 @@ bool Database::createMySQLUser(const QString &log, const QString &password,
             g += "ALTER, ";
         }
         g.chop(2);
-//    }
+    
     if (g.isEmpty()) {
         LOG_ERROR_FOR("Database","No grants when creating user");
         return false;
     }
+    
     // Managing defaults
+    // For each new FMF user account, FMF creates 4 almost identical MySQL
+    // users: 1 that can connect from "localhost", 1 that can connect from
+    // 127.0.0.1 (ipv4 loopback), 1 that can connect from ::1 (ipv6 loopback)
+    // and 1 that can connect from "%" (any host).
+    // This behaviour could be fine tuned in the future but access from any
+    // host should be default behaviour for now.
+    // Make sure your MySQL server is not accessible from the wide area network.
+    // For secure access through the wide area network we recommend SSH tunnels.
+    
+    // This is to avoid unused parameter warning during compilation until
+    // userHost parameter is actually used:
     QString uh = userHost;
-    if (uh.isEmpty()) {
-        uh = "%";
-    }
+    
     QString udb = userDatabases;
     if (udb.isEmpty()) {
         udb = "%fmf\\_%";
     }
+
     LOG_FOR("Database", QString("Trying to create MySQL user: %1\n"
                                 "       on host: %2(%3)\n"
                                 "       with user: %4")
@@ -463,25 +474,9 @@ bool Database::createMySQLUser(const QString &log, const QString &password,
 
     DB.transaction();
     QSqlQuery query(DB);
-    QString req = QString("CREATE USER '%1'@'%2' IDENTIFIED BY '%3';").arg(log).arg(uh).arg(password);
-    if (!query.exec(req)) {
-        LOG_QUERY_ERROR_FOR("Database", query);
-        LOG_DATABASE_FOR("Database", database());
-        DB.rollback();
-        return false;
-    }
-    query.finish();
-
-    if (uh.compare("localhost", Qt::CaseInsensitive)!=0) {
-        // MySQL Doc: user created on 'localhost' && '%'
-        // It is necessary to have both accounts for monty to be able to connect from
-        // anywhere as monty. Without the localhost account, the anonymous-user account
-        // for localhost that is created by mysql_install_db would take precedence when
-        // monty connects from the local host. As a result, monty would be treated as an
-        // anonymous user. The reason for this is that the anonymous-user account has a
-        // more specific Host column value than the 'monty'@'%' account and thus comes
-        // earlier in the user table sort order.
-        req = QString("CREATE USER '%1'@'localhost' IDENTIFIED BY '%3';").arg(log).arg(password);
+    QString MySqlHosts[] = {"%", "localhost", "127.0.0.1", "::1"};
+    for (int i=0; i<4; i++) {
+        QString req = QString("CREATE USER '%1'@'%2' IDENTIFIED BY '%3';").arg(log).arg(MySqlHosts[i]).arg(password);
         if (!query.exec(req)) {
             LOG_QUERY_ERROR_FOR("Database", query);
             LOG_DATABASE_FOR("Database", database());
@@ -490,32 +485,14 @@ bool Database::createMySQLUser(const QString &log, const QString &password,
         }
         query.finish();
     }
-
-    // If grants fail -> remove user and return false
-    req = QString("GRANT %1, GRANT OPTION ON `%2`.* TO '%3'@'%';").arg(g).arg(udb).arg(log);
-    if (!query.exec(req)) {
-        LOG_QUERY_ERROR_FOR("Database", query);
-        LOG_DATABASE_FOR("Database", database());
-        query.finish();
-        req = QString("DROP USER '%1'@'%2'").arg(log).arg(uh);
-        if (!query.exec(req)) {
-            LOG_QUERY_ERROR_FOR("Database", query);
-            LOG_DATABASE_FOR("Database", database());
-        } else {
-            LOG_ERROR_FOR("Database", QString("User %1 removed").arg(log));
-        }
-        DB.rollback();
-        return false;
-    }
-    query.finish();
-
-    if (grants & Grant_CreateUser) {
-        req = QString("GRANT CREATE USER, GRANT OPTION ON *.* TO '%1'@'%';").arg(log);
+    
+    for (int i=0; i<4; i++) {    
+        QString req = QString("GRANT %1, GRANT OPTION ON `%2`.* TO '%3'@'%4';").arg(g).arg(udb).arg(log).arg(MySqlHosts[i]);
         if (!query.exec(req)) {
             LOG_QUERY_ERROR_FOR("Database", query);
             LOG_DATABASE_FOR("Database", database());
             query.finish();
-            req = QString("DROP USER '%1'@'%2'").arg(log).arg(uh);
+            req = QString("DROP USER '%1'@'%2'").arg(log).arg(MySqlHosts[i]);
             if (!query.exec(req)) {
                 LOG_QUERY_ERROR_FOR("Database", query);
                 LOG_DATABASE_FOR("Database", database());
@@ -524,8 +501,31 @@ bool Database::createMySQLUser(const QString &log, const QString &password,
             }
             DB.rollback();
             return false;
-        }
+            }
         query.finish();
+    }
+    
+    if (grants & Grant_CreateUser) {
+        // grant CREATE USER, GRANT OPTION on both hosts "%" & "localhost"
+        QString MySqlHosts[] = {"%", "localhost", "127.0.0.1", "::1"};
+        for (int i=0; i<4; i++) { 
+            QString req = QString("GRANT CREATE USER, GRANT OPTION ON *.* TO '%1'@'%2';").arg(log).arg(MySqlHosts[i]);
+            if (!query.exec(req)) {
+                LOG_QUERY_ERROR_FOR("Database", query);
+                LOG_DATABASE_FOR("Database", database());
+                query.finish();
+                req = QString("DROP USER '%1'@'%2'").arg(log).arg(MySqlHosts[i]);
+                if (!query.exec(req)) {
+                    LOG_QUERY_ERROR_FOR("Database", query);
+                    LOG_DATABASE_FOR("Database", database());
+                } else {
+                    LOG_ERROR_FOR("Database", QString("User %1 removed").arg(log));
+                }   
+                DB.rollback();
+                return false;
+            }       
+            query.finish();
+        }
     }
 
     DB.commit();
