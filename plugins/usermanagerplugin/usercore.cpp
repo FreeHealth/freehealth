@@ -82,8 +82,8 @@ private:
 UserCore *UserCore::_instance = 0;
 
 /**
- * Singleton access. This object creates its instance in the Ctor. So you should never
- * request the ctor more than once.
+ * Singleton access. This object creates its instance in the constructor. So you
+ * should never request the constructor more than once.
  */
 UserPlugin::UserCore &UserPlugin::UserCore::instance() // static
 {
@@ -91,7 +91,7 @@ UserPlugin::UserCore &UserPlugin::UserCore::instance() // static
     return *_instance;
 }
 
-/*! Constructor of the UserPlugin::UserCore class */
+/*! Constructor of UserPlugin::UserCore class */
 UserCore::UserCore(QObject *parent) :
     QObject(parent),
     d(new UserCorePrivate(this))
@@ -100,7 +100,7 @@ UserCore::UserCore(QObject *parent) :
     d->_base = new UserBase(this);
 }
 
-/*! Destructor of the UserPlugin::UserCore class */
+/*! Destructor of UserPlugin::UserCore class */
 UserCore::~UserCore()
 {
     _instance = 0;
@@ -110,7 +110,7 @@ UserCore::~UserCore()
 }
 
 /*!
- * Initializes the object with the default values.
+ * Initializes the object with default values.
  * Return true if initialization was completed.
  */
 bool UserCore::initialize()
@@ -135,7 +135,7 @@ bool UserCore::initialize()
 }
 
 /*!
- * Return true if the core is initialization is completed.
+ * Return true if core initialization is completed.
  */
 bool UserCore::isInitialized() const
 {
@@ -147,8 +147,8 @@ bool UserCore::isInitialized() const
 }
 
 /**
- * If the first initialization gone wrong, you can force a new initialization of the user core
- * after the problem was corrected.
+ * If the first initialization went wrong, you can force a new initialization of
+ * the user core after the problem was corrected.
  */
 bool UserCore::forceReInitialization()
 {
@@ -157,7 +157,7 @@ bool UserCore::forceReInitialization()
     delete d->_coreUserModelWrapper;
     d->_coreUserModelWrapper = 0;
     Core::ICore::instance()->setUser(0);
-    d->_base->onCoreDatabaseServerChanged(); // force a re-initialization of the database
+    d->_base->onCoreDatabaseServerChanged(); // force database re-initialization
     return initialize();
 }
 
@@ -179,7 +179,7 @@ bool UserCore::postCoreInitialization()
 
 /**
  * Only for internal use.\n
- * Return the Utils::Database for the UserPlugin plugin
+ * Return Utils::Database for UserPlugin plugin
  */
 Internal::UserBase *UserCore::userBase() const
 {
@@ -187,7 +187,7 @@ Internal::UserBase *UserCore::userBase() const
 }
 
 /**
- * Return the main user model (used in the Core::IUser).
+ * Return main user model (used in Core::IUser).
  */
 UserModel *UserCore::userModel() const
 {
