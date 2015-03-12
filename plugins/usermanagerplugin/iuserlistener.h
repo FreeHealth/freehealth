@@ -35,24 +35,26 @@ namespace UserPlugin {
 /*!
   \class Core::IUserListener
 
-  \brief Provides a hook for plugins to veto on certain events emitted from the UserManager plugin.
+  \brief Provides a hook for plugins to veto on certain events emitted from the
+  UserManager plugin.
 
   You implement this interface if you want to prevent certain events from
   occurring, e.g.  if you want to prevent user disconnection.
 
-  If e.g. the UserModel requests a user disconnection then a new user connection, then first
-  IUserListener::userAboutToChange() is called (in arbitrary order) on all
-  registered objects implementing this interface. If one if these calls returns
-  false, the process is aborted. If all calls return
-  true, the corresponding signal is emitted and the event is accepted/performed.
+  If e.g. the UserModel requests a user disconnection then a new user
+  connection, then first IUserListener::userAboutToChange() is called (in
+  arbitrary order) on all registered objects implementing this interface.
+  If one of these calls returns false, the process is aborted. If all calls
+  return true, the corresponding signal is emitted and the event is
+  accepted/performed.
 
   Guidelines for implementing:
   \list
   \o Return false from the implemented method if you want to prevent the event.
   \o You need to add your implementing object to the plugin managers objects:
      ExtensionSystem::PluginManager::instance()->addObject(yourImplementingObject);
-  \o Don't forget to remove the object again at deconstruction (e.g. in the destructor of
-     your plugin).
+  \o Don't forget to remove the object again at deconstruction (e.g. in the
+     destructor of your plugin).
 */
 class USER_EXPORT IUserListener : public QObject
 {
