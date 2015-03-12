@@ -293,7 +293,8 @@ void UserDynamicData::setValue(const QVariant &value)
 }
 
 /**
-  \brief Return the Print::TextDocumentExtra related to this user dynamic data or 0 if this data does not correspond to a tkTextDocuementExtra.
+  \brief Return the Print::TextDocumentExtra related to this user dynamic data 
+  or 0 if this data does not correspond to a tkTextDocuementExtra.
   The returned pointer SHOULD NOT BE deleted !!!
   \sa UserDynamicData::DynamicDataType
 */
@@ -323,7 +324,8 @@ QVariant UserDynamicData::value() const
 }
 
 /**
-  \brief Defines the bound values of the QSqlQuery according to the database scheme without the Id field.
+  \brief Defines the bound values of the QSqlQuery according to the database
+  scheme without the Id field.
   \sa tkUserConstants::DATAfields, UserBase::saveUser()
 */
 void UserDynamicData::prepareQuery(QSqlQuery &bindedQuery) const
