@@ -857,7 +857,12 @@ void UserData::setDynamicDataValue(const char *name, const QVariant &val, UserDy
 
 /**
   Define the rights of the user according to the role name of the rights.
-  \sa UserPlugin::Constants::USER_ROLE_ADMINISTRATIVE, UserPlugin::Constants::USER_ROLE_MEDICAL, UserPlugin::Constants::USER_ROLE_PARAMEDICAL, UserPlugin::Constants::USER_ROLE_USERMANAGER, UserPlugin::Constants::USER_ROLE_DOSAGES, Core::IUser::UserRights
+  \sa UserPlugin::Constants::USER_ROLE_ADMINISTRATIVE,
+  UserPlugin::Constants::USER_ROLE_MEDICAL,
+  UserPlugin::Constants::USER_ROLE_PARAMEDICAL,
+  UserPlugin::Constants::USER_ROLE_USERMANAGER,
+  UserPlugin::Constants::USER_ROLE_DOSAGES,
+  Core::IUser::UserRights
 */
 void UserData::setRights(const char *roleName, const Core::IUser::UserRights rights)
 {
