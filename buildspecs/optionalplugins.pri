@@ -24,7 +24,7 @@ contains(FREEMEDFORMS,1){
     # *                                AccountOld Plugin (obsolete)                         *
     # ***************************************************************************************
     # Uncomment the following line to build the plugin
-    # CONFIG *= with-account-old
+    # CONFIG *= with-account
     # ***************************************************************************************
 
 
@@ -32,7 +32,7 @@ contains(FREEMEDFORMS,1){
     # *                                  Agenda Plugin                                      *
     # ***************************************************************************************
     # Uncomment the following line to build the plugin
-     CONFIG *= with-agenda
+      CONFIG *= with-agenda
     # ***************************************************************************************
 
 
@@ -40,7 +40,7 @@ contains(FREEMEDFORMS,1){
     # *                                  Alert Plugin                                       *
     # ***************************************************************************************
     # Uncomment the following line to build the plugin
-     CONFIG *= with-alerts
+      CONFIG *= with-alerts
     # ***************************************************************************************
 
 
@@ -48,7 +48,7 @@ contains(FREEMEDFORMS,1){
     # *                                 Feedback Plugin                                     *
     # ***************************************************************************************
     # Uncomment the following line to build the plugin
-     CONFIG *= with-feedback
+      CONFIG *= with-feedback
     # ***************************************************************************************
 
 
@@ -57,7 +57,7 @@ contains(FREEMEDFORMS,1){
     # ***************************************************************************************
     # Uncomment the following line to build the plugin
     # FIXME: PadTools is not optional anymore
-     CONFIG *= with-pad
+      CONFIG *= with-pad
     # ***************************************************************************************
 
 
@@ -65,7 +65,7 @@ contains(FREEMEDFORMS,1){
     # *                                   PMHx Plugin                                       *
     # ***************************************************************************************
     # Uncomment the following line to build the plugin
-     CONFIG *= with-pmh
+      CONFIG *= with-pmh
     # ***************************************************************************************
 
 
@@ -73,7 +73,7 @@ contains(FREEMEDFORMS,1){
     # *                                  Webcam Plugin                                      *
     # ***************************************************************************************
     # Uncomment the following line to build the plugin
-    # CONFIG *= with-webcam
+      CONFIG *= with-webcam
     # ***************************************************************************************
 
 
