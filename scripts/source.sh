@@ -44,7 +44,7 @@ fi
 SOURCES_ROOT_PATH=$SCRIPT_PATH"/../"
 
 # get version number of the project
-PROJECT_VERSION=`cat $SOURCES_ROOT_PATH/buildspecs/projectversion.pri | grep "PACKAGE_VERSION" -m 1 | cut -d = -s -f2 | tr -d ' '`
+PROJECT_VERSION=`cat $SOURCES_ROOT_PATH/buildspecs/projectversion.pri | grep "PACKAGE_VERSION" | cut -d = -s -f2 | tr -d ' '`
 
 # file naming
 ZIP_FILENAME="freemedforms-project-src_$PROJECT_VERSION.tgz"
@@ -56,7 +56,7 @@ showHelp()
     echo "$SCRIPT_NAME builds FreeMedForms source package, GIT branches and tags."
     echo "Project version: $PROJECT_VERSION"
     echo
-    echo "Usage: $SCRIPT_NAME -r 123"
+    echo "Usage: $SCRIPT_NAME"
     echo "Options:"
     echo "  -d  Include eDRC non-free datapack in datapacks/appinstalled"
     echo "  -h  Show this help"
