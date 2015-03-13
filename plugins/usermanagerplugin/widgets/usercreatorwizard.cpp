@@ -21,7 +21,7 @@
 /***************************************************************************
  *  Main developer: Eric MAEKER, <eric.maeker@gmail.com>                   *
  *  Contributors:                                                          *
- *      NAME <MAIL@Address>                                                *
+ *      Jerome Pinguet <jerome@jerome.cc>                                                *
  *      NAME <MAIL@Address>                                                *
  ***************************************************************************/
 /**
@@ -544,7 +544,7 @@ bool UserProfilePage::validatePage()
         UserCreatorWizard::setUserRights(Core::IUser::DrugsRights, Core::IUser::AllRights);
         UserCreatorWizard::setUserRights(Core::IUser::MedicalRights, Core::IUser::AllRights);
         UserCreatorWizard::setUserRights(Core::IUser::AgendaRights, Core::IUser::AllRights);
-        UserCreatorWizard::setUserRights(Core::IUser::ParamedicalRights, int(Core::IUser::ReadAll | Core::IUser::Print));
+        UserCreatorWizard::setUserRights(Core::IUser::ParamedicalRights, Core::IUser::ReadAll | Core::IUser::Print);
         UserCreatorWizard::setUserRights(Core::IUser::AdministrativeRights, Core::IUser::NoRights);
         next = UserCreatorWizard::SpecialiesQualificationsPage;
 
@@ -561,15 +561,30 @@ bool UserProfilePage::validatePage()
         UserCreatorWizard::setUserPaper(Core::IUser::AdministrativeFooter, defaultPaper("medicals", "footer"));
         UserCreatorWizard::setUserPaper(Core::IUser::AdministrativeWatermark, defaultPaper("medicals", "watermark"));
     } else if (result.contains(tkTr(Trans::Constants::NURSE))) {
+        UserCreatorWizard::setUserRights(Core::IUser::ManagerRights, Core::IUser::ReadOwn | Core::IUser::ReadDelegates | Core::IUser::WriteOwn | Core::IUser::WriteDelegates | Core::IUser::Print);
+        UserCreatorWizard::setUserRights(Core::IUser::MedicalRights, Core::IUser::ReadAll | Core::IUser::Print);
+        UserCreatorWizard::setUserRights(Core::IUser::DrugsRights, Core::IUser::ReadAll | Core::IUser::Print);
+        UserCreatorWizard::setUserRights(Core::IUser::ParamedicalRights, Core::IUser::AllRights);
+        UserCreatorWizard::setUserRights(Core::IUser::AdministrativeRights, Core::IUser::AllRights);
 
     } else if (result.contains(tkTr(Trans::Constants::CAREGIVER))) {
+        UserCreatorWizard::setUserRights(Core::IUser::ManagerRights, Core::IUser::ReadOwn | Core::IUser::ReadDelegates | Core::IUser::WriteOwn | Core::IUser::WriteDelegates | Core::IUser::Print);
+        UserCreatorWizard::setUserRights(Core::IUser::AgendaRights, Core::IUser::AllRights);
+        UserCreatorWizard::setUserRights(Core::IUser::ParamedicalRights, Core::IUser::ReadOwn | Core::IUser::ReadDelegates | Core::IUser::WriteOwn | Core::IUser::WriteDelegates | Core::IUser::Print);
 
     } else if (result.contains(tkTr(Trans::Constants::SECRETARY))) {
+         UserCreatorWizard::setUserRights(Core::IUser::ManagerRights, Core::IUser::ReadOwn | Core::IUser::ReadDelegates | Core::IUser::WriteOwn | Core::IUser::WriteDelegates | Core::IUser::Print);
         UserCreatorWizard::setUserRights(Core::IUser::MedicalRights, Core::IUser::ReadAll);
         UserCreatorWizard::setUserRights(Core::IUser::AgendaRights, Core::IUser::ReadAll | Core::IUser::WriteAll | Core::IUser::Print);
+        UserCreatorWizard::setUserRights(Core::IUser::AdministrativeRights, Core::IUser::AllRights);
     }
     if (result.contains(tkTr(Trans::Constants::SOFT_ADMIN))) {
         UserCreatorWizard::setUserRights(Core::IUser::ManagerRights, Core::IUser::AllRights);
+        UserCreatorWizard::setUserRights(Core::IUser::MedicalRights, Core::IUser::AllRights);
+        UserCreatorWizard::setUserRights(Core::IUser::DrugsRights, Core::IUser::AllRights);
+        UserCreatorWizard::setUserRights(Core::IUser::ParamedicalRights, Core::IUser::AllRights);
+        UserCreatorWizard::setUserRights(Core::IUser::AgendaRights, Core::IUser::AllRights);
+        UserCreatorWizard::setUserRights(Core::IUser::AdministrativeRights, Core::IUser::AllRights);
     }
 
     if (box->isChecked()) {
