@@ -6,8 +6,8 @@
   <formdescription>
     <!-- Non translatable values -->
     <authors>Hoel Charbonnel, Intern</authors>
-    <version>test</version>
-    <fmfv>test</fmfv>
+    <version>0.7.0</version>
+    <fmfv>0.7.0</fmfv>
     <cdate>2012-03-04</cdate>
     <icon>ipss.png</icon>
     <weblink></weblink>

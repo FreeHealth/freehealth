@@ -6,8 +6,8 @@
   <formdescription>
     <!-- Non translatable values -->
     <authors>Eric Maeker, MD</authors>
-    <version>test</version>
-    <fmfv>test</fmfv>
+    <version>0.9.6</version>
+    <fmfv>0.8.2</fmfv>
     <cdate>2013-02-17</cdate>
     <lmdate>2013-02-17</lmdate>
     <icon>__theme__/pregnancy.png</icon>

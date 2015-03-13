@@ -4,8 +4,8 @@
     <formdescription>
         <!-- Non translatable values -->
         <authors>Eric Maeker, MD</authors>
-        <version>test</version>
-        <fmfv>test</fmfv>
+        <version>0.9.6</version>
+        <fmfv>0.9.1</fmfv>
         <cdate>2014-05-31</cdate>
         <lmdate>2014-06-01</lmdate>
         <icon>__theme__/identity.png</icon>

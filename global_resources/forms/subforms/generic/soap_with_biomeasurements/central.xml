@@ -6,8 +6,8 @@
   <formdescription>
     <!-- Non translatable values -->
     <authors>Eric Maeker, MD</authors>
-    <version>test</version>
-    <fmfv>test</fmfv>
+    <version>0.9.6</version>
+    <fmfv>0.8.4</fmfv>
     <cdate>2012-10-13</cdate>
     <lmdate>2013-04-18</lmdate>
     <icon>__theme__/stethoscope.png</icon>

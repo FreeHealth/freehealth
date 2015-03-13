@@ -6,8 +6,8 @@
 
     <!-- Non translatable values -->
     <authors>Eric Maeker, MD</authors>
-    <version>test</version>
-    <fmfv>test</fmfv>
+    <version>0.8.0</version>
+    <fmfv>0.7.0</fmfv>
     <cdate>2011-12-19</cdate>
     <lmdate>2012-01-01</lmdate>
     <icon>xray.png</icon>

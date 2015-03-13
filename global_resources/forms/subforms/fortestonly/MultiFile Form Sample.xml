@@ -4,7 +4,7 @@
    <name>multiform</name>
    <type>form</type>
    <label>Exemple de formulaire "multifichier".</label>
-   <version>test</version>
+   <version>0.2</version>
    <cdate>2009-01-20</cdate>
    <categorie>samples</categorie>
    <file>./BaseWidgets Sample.xml</file>

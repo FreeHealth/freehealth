@@ -3,7 +3,7 @@
 	<name>formSample</name>
 	<label>ComboBox' example</label>
 	<type>form</type>
-	<version>test</version>
+	<version>0.1</version>
 	<cdate>2008-10-16</cdate>
 	<categorie>samples</categorie>
 	<script>

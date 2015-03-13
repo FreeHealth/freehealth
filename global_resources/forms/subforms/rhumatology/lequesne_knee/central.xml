@@ -5,8 +5,8 @@
   <formdescription>
     <!-- Non translatable values -->
     <authors>Fredman, MD; Eric Maeker, MD</authors>
-    <version>test</version>
-    <fmfv>test</fmfv>
+    <version>0.7.1</version>
+    <fmfv>0.7.0</fmfv>
     <cdate>2011-12-17</cdate>
     <icon>rhumatology.png</icon>
     <weblink/>

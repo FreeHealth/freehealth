@@ -5,7 +5,7 @@
    <name>depressionForm</name>
    <label>Diagnostic de la dépression</label>
    <type>form</type>
-   <version>test</version>
+   <version>0.04</version>
    <cdate>26/10/2008</cdate>
    <categorie>français</categorie>
    <categorie>psychiatrie</categorie>

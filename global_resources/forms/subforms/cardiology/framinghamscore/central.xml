@@ -5,8 +5,8 @@
   <formdescription>
     <!-- Non translatable values -->
     <authors>Eric Maeker, MD; Fredman, MD</authors>
-    <version>test</version>
-    <fmfv>test</fmfv>
+    <version>0.7.1</version>
+    <fmfv>0.7.0</fmfv>
     <cdate>2012-01-10</cdate>
     <lmdate>2012-02-26</lmdate>
     <icon>cardiology.png</icon>

@@ -6,7 +6,7 @@
    <label lang="de" >Arbeiten mit Form von Übersetzungen</label>
    <label lang="en" >Working with form's translations</label>
    <label lang="fr" >Travailler avec les traductions de formulaires</label>
-   <version>test</version>
+   <version>0.04</version>
    <cdate>2008-10-19</cdate>
    <categorie>examples</categorie>
    <option>col=1</option>
