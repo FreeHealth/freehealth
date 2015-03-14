@@ -151,6 +151,12 @@ DrcDatabase::DrcDatabase(const QString &absPathToDb) :
 DrcDatabase::~DrcDatabase()
 {}
 
+/** Returns the version number of the current database */
+QString DrcDatabase::version() const
+{
+    return getVersion(Utils::Field(Constants::Table_Version, Constants::VERSION_TEXT));
+}
+
 /**
  * Initialize the database. \n
  * By default, the connection is defined to eDRC::Constants::DB_NAME.
