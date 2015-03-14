@@ -393,11 +393,13 @@ bool Database::createMySQLDatabase(const QString &dbName)
  * Create a MySQL server user using the \e log and \e pass, with the specified \e grants
  * on the \e userHost and the \e userDatabases.
  * Creates its own transaction.
+ * \warning userHost is not taken into account. All users are registered on the following hosts: "%", "localhost", "127.0.0.1", "::1"
 */
 bool Database::createMySQLUser(const QString &log, const QString &password,
                                const Grants grants,
                                const QString &userHost, const QString &userDatabases)
 {
+    Q_UNUSED(userHost);
     QSqlDatabase DB = database();
     if (!connectedDatabase(DB, __LINE__))
         return false;
@@ -460,8 +462,9 @@ bool Database::createMySQLUser(const QString &log, const QString &password,
     
     // This is to avoid unused parameter warning during compilation until
     // userHost parameter is actually used:
-    QString uh = userHost;
-    
+    QStringList mySqlHosts;
+    mySqlHosts << "%" << "localhost" << "127.0.0.1" << "::1";
+
     QString udb = userDatabases;
     if (udb.isEmpty()) {
         udb = "%fmf\\_%";
@@ -474,9 +477,10 @@ bool Database::createMySQLUser(const QString &log, const QString &password,
 
     DB.transaction();
     QSqlQuery query(DB);
-    QString MySqlHosts[] = {"%", "localhost", "127.0.0.1", "::1"};
-    for (int i=0; i<4; i++) {
-        QString req = QString("CREATE USER '%1'@'%2' IDENTIFIED BY '%3';").arg(log).arg(MySqlHosts[i]).arg(password);
+    foreach(const QString &host, mySqlHosts) {
+        // Create user for each host
+        QString req = QString("CREATE USER '%1'@'%2' IDENTIFIED BY '%3';")
+                      .arg(log).arg(host).arg(password);
         if (!query.exec(req)) {
             LOG_QUERY_ERROR_FOR("Database", query);
             LOG_DATABASE_FOR("Database", database());
@@ -484,46 +488,45 @@ bool Database::createMySQLUser(const QString &log, const QString &password,
             return false;
         }
         query.finish();
-    }
-    
-    for (int i=0; i<4; i++) {    
-        QString req = QString("GRANT %1, GRANT OPTION ON `%2`.* TO '%3'@'%4';").arg(g).arg(udb).arg(log).arg(MySqlHosts[i]);
+
+        // Manage user grants for each host
+        req = QString("GRANT %1, GRANT OPTION ON `%2`.* TO '%3'@'%4';")
+                .arg(g).arg(udb).arg(log).arg(host);
         if (!query.exec(req)) {
             LOG_QUERY_ERROR_FOR("Database", query);
             LOG_DATABASE_FOR("Database", database());
             query.finish();
-            req = QString("DROP USER '%1'@'%2'").arg(log).arg(MySqlHosts[i]);
+            DB.rollback();
+            req = QString("DROP USER '%1'@'%2'").arg(log).arg(host);
             if (!query.exec(req)) {
                 LOG_QUERY_ERROR_FOR("Database", query);
                 LOG_DATABASE_FOR("Database", database());
             } else {
                 LOG_ERROR_FOR("Database", QString("User %1 removed").arg(log));
             }
-            DB.rollback();
             return false;
             }
         query.finish();
-    }
     
-    if (grants & Grant_CreateUser) {
-        // grant CREATE USER, GRANT OPTION on both hosts "%" & "localhost"
-        QString MySqlHosts[] = {"%", "localhost", "127.0.0.1", "::1"};
-        for (int i=0; i<4; i++) { 
-            QString req = QString("GRANT CREATE USER, GRANT OPTION ON *.* TO '%1'@'%2';").arg(log).arg(MySqlHosts[i]);
+        // Manage user creation grant
+        if (grants & Grant_CreateUser) {
+            // grant CREATE USER, GRANT OPTION on both hosts "%" & "localhost"
+            req = QString("GRANT CREATE USER, GRANT OPTION ON *.* TO '%1'@'%2';")
+                    .arg(log).arg(host);
             if (!query.exec(req)) {
                 LOG_QUERY_ERROR_FOR("Database", query);
                 LOG_DATABASE_FOR("Database", database());
                 query.finish();
-                req = QString("DROP USER '%1'@'%2'").arg(log).arg(MySqlHosts[i]);
+                DB.rollback();
+                req = QString("DROP USER '%1'@'%2'").arg(log).arg(host);
                 if (!query.exec(req)) {
                     LOG_QUERY_ERROR_FOR("Database", query);
                     LOG_DATABASE_FOR("Database", database());
                 } else {
                     LOG_ERROR_FOR("Database", QString("User %1 removed").arg(log));
-                }   
-                DB.rollback();
+                }
                 return false;
-            }       
+            }
             query.finish();
         }
     }
