@@ -16,6 +16,7 @@ The FreeMedForms project
   * All applications
   * FreeMedForms
     * User database: fixing a severe compatibility issue
+    * AGGIR plugin: correcting GIR group computation
     * Fixing user creation (users are now registered on all host for MySQL config)
     * Some bug fixes
   * FreeDiams
