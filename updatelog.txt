@@ -1,12 +1,14 @@
 The FreeMedForms project
-0.9.2 -> 0.9.4 / 1.0.0
+0.9.4 -> 0.9.6
 
 ===== News =====
 
   * Forms
   * FreeMedForms
+    * Removing webcam plugin from the default configuration of all project apps
   * FreeDDIManager
   * Build process
+    * Some improvements in build reproducibility
   * XML Forms coding
 
 ===== Bug correction =====
@@ -14,6 +16,8 @@ The FreeMedForms project
   * All applications
   * FreeMedForms
     * User database: fixing a severe compatibility issue
+    * Fixing user creation (users are now registered on all host for MySQL config)
+    * Some bug fixes
   * FreeDiams
   * FreeDRC
   * FreeToolBox
@@ -29,6 +33,7 @@ The FreeMedForms project
 ===== Packaging and documentation ====
 
   * Sources
+    * Improving source packaging script with a gpg signing option
   * Packaging
   * Compilation
   * Documentation
