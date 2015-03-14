@@ -62,6 +62,8 @@ QT_END_NAMESPACE
 
 #define WARN_FUNC qDebug() << Q_FUNC_INFO
 
+#define VERSION_MESSAGE Utils::Log::versionInformation()
+
 namespace Utils {
 
 class UTILS_EXPORT LogData
@@ -100,6 +102,7 @@ class UTILS_EXPORT Log
 
 public:
     static void logCompilationConfiguration();
+    static QString versionInformation();
 
     static void setDebugPluginsCreation(bool debug) {m_debugPlugins = debug;}
     static bool debugPluginsCreation() {return m_debugPlugins;}

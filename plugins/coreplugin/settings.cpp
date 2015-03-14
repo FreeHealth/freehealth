@@ -989,7 +989,6 @@ QTreeWidget* SettingsPrivate::getTreeWidget(QWidget *parent) const
     // add compilation information
     QTreeWidgetItem * compileItem = new QTreeWidgetItem(tree, QStringList() << Trans::ConstantTranslations::tkTr(Trans::Constants::BUILD_INFORMATION));
     compileItem->setFont(0,bold);
-    new QTreeWidgetItem(compileItem, QStringList() << tr("Compilation Date") << Trans::ConstantTranslations::tkTr(Trans::Constants::BUILD_DATE_TIME_1_2).arg(__DATE__, __TIME__));
     new QTreeWidgetItem(compileItem, QStringList() << tr("Compile Qt version") << QString("%1").arg(QT_VERSION_STR));
     new QTreeWidgetItem(compileItem, QStringList() << tr("Actual Qt version") << QString("%1").arg(qVersion()));
     new QTreeWidgetItem(compileItem, QStringList() << Trans::ConstantTranslations::tkTr(Trans::Constants::BUILD_VERSION_1).arg("") << qApp->applicationVersion());
@@ -1094,7 +1093,6 @@ QString SettingsPrivate::toString() const
     // add building information
     tmp += "\n^ Object ^ Value ^";
     tmp += "\n| " + tr("Running version: %1").arg(qApp->applicationName()).replace(":", "|") + " |";
-    tmp += "\n| " + tr("Build date | %1 %2").arg(__DATE__, __TIME__) + " |";
     tmp += "\n| " + tr("Qt Build version: %1").arg(QT_VERSION_STR).replace(":", "|") + " |";
     tmp += "\n| " + tr("Qt running version: %1").arg(qVersion()).replace(":", "|") + " |";
     tmp += "\n| " + tr("Application Version: %1").arg(qApp->applicationVersion()).replace(":", "|") + " |";

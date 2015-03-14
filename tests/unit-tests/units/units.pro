@@ -28,6 +28,6 @@ HEADERS += \
 
 # Include unit-tests for librairies
 include(lib_utils/lib_utils.pri)
-include(lib_translations/lib_translations.pri)
-include(lib_datapacks/lib_datapacks.pri)
+#include(lib_translations/lib_translations.pri)
+#include(lib_datapacks/lib_datapacks.pri)
 

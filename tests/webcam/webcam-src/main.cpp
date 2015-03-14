@@ -50,32 +50,6 @@ static const char * USERMANAGERPLUGINSNAME = "UserManager";
 static const QString HELP_MESSAGE =
         QString("");
 
-static const QString VERSION_MESSAGE =
-        QString("webcam (test) %1 - %2 ; build on %3 %4 \n  %5 \n  Compiled with Qt: %6 - Running with Qt: %7")
-        .arg(PACKAGE_VERSION)
-#ifdef LINUX_INTEGRATED
-#  ifdef DEBUG
-        .arg("Debug (Linux Integrated)")
-#  else
-        .arg("Release (Linux Integrated)")
-#  endif
-#else  // NOT LINUX_INTEGRATED
-#  ifdef DEBUG
-        .arg("Debug")
-#  else
-        .arg("Release")
-#  endif
-#endif
-        .arg(__DATE__, __TIME__)
-#ifdef FULLAPPLICATION_BUILD
-        .arg("Full application")
-#else
-        .arg("SVN application")
-#endif
-        .arg(QT_VERSION_STR)
-        .arg(qVersion());
-
-
 static inline QString getPluginPaths()
 {
     QString app = qApp->applicationDirPath();

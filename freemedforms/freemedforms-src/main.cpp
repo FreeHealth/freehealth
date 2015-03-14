@@ -50,32 +50,6 @@ typedef QList<ExtensionSystem::PluginSpec *> PluginSpecSet;
 static const char* COREPLUGINSNAME = "Core";
 static const char* USERPLUGINSNAME = "UserManager";
 
-static const QString VERSION_MESSAGE =
-        QString("FreeMedForms\n"
-                "     Version: %1 (%2 compilation)\n"
-                "     Built on %3 %4\n"
-                "     GIT revision: %5\n"
-                "     Compiled with Qt: %6\n"
-                "     Running with Qt: %7\n")
-        .arg(PACKAGE_VERSION)
-#ifdef LINUX_INTEGRATED
-#  ifdef DEBUG
-        .arg("Debug (Linux Integrated)")
-#  else
-        .arg("Release (Linux Integrated)")
-#  endif
-#else  // NOT LINUX_INTEGRATED
-#  ifdef DEBUG
-        .arg("Debug")
-#  else
-        .arg("Release")
-#  endif
-#endif
-        .arg(__DATE__, __TIME__)
-        .arg(GIT_REVISION_HASH)
-        .arg(QT_VERSION_STR)
-        .arg(qVersion());
-
 static const QString HELP_MESSAGE =
         QString("FreeMedForms %1 (%2%3 compilation)\n"
                 "Usage: freemedforms [--clear-user-databases] [--create-virtuals] [--config=...]\n"
