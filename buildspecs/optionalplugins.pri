@@ -24,7 +24,7 @@ contains(FREEMEDFORMS,1){
     # *                                AccountOld Plugin (obsolete)                         *
     # ***************************************************************************************
     # Uncomment the following line to build the plugin
-    # CONFIG *= with-account
+    # CONFIG *= with-account-old
     # ***************************************************************************************
 
 
