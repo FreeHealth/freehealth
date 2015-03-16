@@ -39,10 +39,7 @@
 --  *
 --  */
 
--- Create the main FreeMedForms adminstrator on MySQL user
--- An error will occur if the user does not exist and the script will fail
--- DROP USER 'fmf_admin';
-
+-- Create the main FreeMedForms administrator on MySQL user
 -- An error will occur if the user already exists and the script will fail
 CREATE USER 'fmf_admin' IDENTIFIED BY 'fmf_admin';
 
@@ -52,8 +49,16 @@ GRANT SELECT, UPDATE, INSERT, DELETE, CREATE, DROP, ALTER, INDEX, GRANT OPTION O
 GRANT CREATE USER, GRANT OPTION, RELOAD, SHOW DATABASES ON *.* TO 'fmf_admin'@'localhost' IDENTIFIED BY 'fmf_admin';
 GRANT SELECT, UPDATE, INSERT, DELETE, CREATE, DROP, ALTER, INDEX, GRANT OPTION ON `%fmf\_%`.* TO 'fmf_admin'@'localhost' IDENTIFIED BY 'fmf_admin';
 
+GRANT CREATE USER, GRANT OPTION, RELOAD, SHOW DATABASES ON *.* TO 'fmf_admin'@'127.0.0.1' IDENTIFIED BY 'fmf_admin';
+GRANT SELECT, UPDATE, INSERT, DELETE, CREATE, DROP, ALTER, INDEX, GRANT OPTION ON `%fmf\_%`.* TO 'fmf_admin'@'127.0.0.1' IDENTIFIED BY 'fmf_admin';
+
+GRANT CREATE USER, GRANT OPTION, RELOAD, SHOW DATABASES ON *.* TO 'fmf_admin'@'::1' IDENTIFIED BY 'fmf_admin';
+GRANT SELECT, UPDATE, INSERT, DELETE, CREATE, DROP, ALTER, INDEX, GRANT OPTION ON `%fmf\_%`.* TO 'fmf_admin'@'::1' IDENTIFIED BY 'fmf_admin';
+
 GRANT SELECT, UPDATE, INSERT, DELETE, CREATE ON `mysql`.`user` TO 'fmf_admin'@'localhost' IDENTIFIED BY 'fmf_admin';
 GRANT SELECT, UPDATE, INSERT, DELETE, CREATE ON `mysql`.`user` TO 'fmf_admin'@'%' IDENTIFIED BY 'fmf_admin';
+GRANT SELECT, UPDATE, INSERT, DELETE, CREATE ON `mysql`.`user` TO 'fmf_admin'@'127.0.0.1' IDENTIFIED BY 'fmf_admin';
+GRANT SELECT, UPDATE, INSERT, DELETE, CREATE ON `mysql`.`user` TO 'fmf_admin'@'::1' IDENTIFIED BY 'fmf_admin';
 
 FLUSH PRIVILEGES;
 
