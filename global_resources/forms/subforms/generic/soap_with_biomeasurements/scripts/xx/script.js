@@ -7,59 +7,31 @@ namespace.module('com.freemedforms.generic.soapWithBio', function (exports, requ
 
     // Ui vars (retrieved from the ui)
     var syst, diast, pulse;
-//    var weight, weightUnit, height, heightUnit;
 
     function setupUi() {
         print("com.freemedforms.generic.soapWithBio Setup UI");
-        freemedforms.forms.namespaceInUse = "";
-        var formItem = freemedforms.forms.item("Subs::Tools::SOAP::WithBio");
-        print(formItem);
-        formUi = formItem.ui();
-        syst = formUi.findChild("bpSyst");
-        diast = formUi.findChild("bpDiast");
-        pulse = formUi.findChild("bpPulse");
-//        weight = formUi.findChild("weight");
-//        weightUnit = formUi.findChild("weightUnit");
-//        height = formUi.findChild("height");
-//        heightUnit = formUi.findChild("heightUnit");
 
-        populateCombos();
+        // Get items to work with
+        freemedforms.forms.namespaceInUse = "Subs::Tools::SOAP::WithBio";
+        syst = freemedforms.forms.item("ObjectiveGroup::BloodPressure::Syst");
+        diast = freemedforms.forms.item("ObjectiveGroup::BloodPressure::Diast");
+        pulse = freemedforms.forms.item("ObjectiveGroup::BloodPressure::Pulse");
 
-        // connect data changed on spins
-        syst['valueChanged(int)'].connect(this, computePulsePressure);
-        diast['valueChanged(int)'].connect(this, computePulsePressure);
-
-//        weight['valueChanged(int)'].connect(this, computeBMI);
-//        height['valueChanged(int)'].connect(this, computeBMI);
-//        weightUnit['currentIndexChanged(int)'].connect(this, computeBMI);
-//        heightUnit['currentIndexChanged(int)'].connect(this, computeBMI);
-
+        // Connect item data changed
+        //syst.ui['valueChanged(int)'].connect(this, computePulsePressure);
+        print(syst);
+        print(syst.ui);
+        //diast.ui['valueChanged(int)'].connect(this, computePulsePressure);
     }
 
     function retranslateUi() {
         var lang = freemedforms.forms.currentLanguage;
     }
 
-    function populateCombos() {
-        // TODO: add weight and height units
-//        freemedforms.uiTools.addItems(cholCombo, totalCholRanges);
-//        freemedforms.uiTools.addItems(hdlCombo, hdlCholRanges);
-//        freemedforms.uiTools.addItems(systCombo, systolicRanges);
-    }
-
-    function prepareSlider() {
-
-    }
-
     function computePulsePressure() {
-        var text = syst.value - diast.value;
-        pulse.setText(text);
+        var text = syst.currentValue - diast.currentValue;
+        pulse.currentText = text;
     }
-
-//    function computeBMI() {
-//        var metricWeight = weight.value;
-//    }
-
 });
 
 namespace.com.freemedforms.generic.soapWithBio.setupUi();
