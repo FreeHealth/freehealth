@@ -92,6 +92,7 @@ PasswordDialog::PasswordDialog(QWidget *parent) :
     checkNewPassword("");
 }
 
+/** Checks if \e text is equal to UI newPassword lineEdit content */
 void PasswordDialog::checkControlPassword(const QString &text)
 {
     if (text == m_ui->newPass->text()) {
@@ -101,6 +102,7 @@ void PasswordDialog::checkControlPassword(const QString &text)
     }
 }
 
+/** Checks if \e text content can be used has password. Check password weakness */
 void PasswordDialog::checkNewPassword(const QString &text)
 {
     if (text.size() >= 5) {
@@ -163,6 +165,10 @@ QString PasswordDialog::uncryptedPassword() const
 //    return model->setData(model->index(userRow, Core::IUser::ClearPassword), clearPassword());
 //}
 
+/**
+ * If the dialog ends with a QDialog::Accepted, you can get the new password
+ * information using the cryptedPassword() or uncryptedPassword().
+*/
 void PasswordDialog::done(int result)
 {
     if (result == Rejected) {
