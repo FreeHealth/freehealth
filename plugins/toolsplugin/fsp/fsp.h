@@ -29,7 +29,7 @@
 
 #include <QDate>
 #include <QString>
-
+#include <QVariant>
 /**
  * \file fsp.h
  * \author Eric Maeker

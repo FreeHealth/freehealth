@@ -1861,7 +1861,7 @@ QString removeAccents(const QString &text)
     if (text.isEmpty())
         return QString::null;
     QHash< QString, QString > accents;
-    accents.insert(QString::fromUtf8("é"), "e;");
+    accents.insert(QString::fromUtf8("é"), "e");
     accents.insert(QString::fromUtf8("è"), "e");
     accents.insert(QString::fromUtf8("à"), "a");
     accents.insert(QString::fromUtf8("ù"), "u");

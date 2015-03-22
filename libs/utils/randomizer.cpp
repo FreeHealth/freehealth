@@ -21,7 +21,7 @@
 /***************************************************************************
  *  Main developer: Eric MAEKER, <eric.maeker@gmail.com>                   *
  *  Contributors:                                                          *
- *       NAME <MAIL@ADDRESS.COM>                                           *
+ *       Jerome Pinguet <jerome@jerome.cc>                                           *
  ***************************************************************************/
 /**
   \class Utils::Randomizer
@@ -259,10 +259,17 @@ QPair<int, QString> Randomizer::randomFrenchCity() const
     return p;
 }
 
-/** Create a random user name */
+/** Create a random user name less than 7 characters long */
+/** so that firstname.surname is less than or equal to 16 characters (MySQL limit) */
 QString Randomizer::randomName() const
 {
-    return randomWords(randomInt(1, 2));
+    QString randName;
+    do
+    {
+        randName = randomWords(randomInt(1, 2));
+    }while ( randName.size()>7 );
+    
+    return randName;
 }
 
 /** Returns a fake sentence composed of \e nbOfWords words. */
