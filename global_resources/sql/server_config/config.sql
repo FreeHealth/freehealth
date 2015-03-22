@@ -37,6 +37,12 @@
 --  *
 --  * \warning SQL commands MUST end with \e ;
 --  *
+--  * *** BUG ***
+--  * TODO: if user creates databases using a specific prefix,
+--  *       this script does not work properly
+--  * SOLV: use a token (string replacement) instead of 'fmf_'
+--  * *** BUG ***
+--  *
 --  */
 
 -- Create the main FreeMedForms adminstrator on MySQL user
