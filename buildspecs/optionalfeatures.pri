@@ -20,7 +20,7 @@ DEFINES += DRUGS_DATABASE_VERSION=0x000804
 # * identification.                                                                     *
 # * This is a good security feature, but can be redondant with OS configuration.        *
 # ***************************************************************************************
-# * We suggest to not activate this feature as it is not currently stable.              *
+# * We would recommend that you not activate this feature as it is not currently stable.*
 # ***************************************************************************************
 # Uncomment the following line to activate the feature
 # DEFINES *= WITH_UI_AUTO_LOCKING
@@ -32,8 +32,8 @@ DEFINES += DRUGS_DATABASE_VERSION=0x000804
 # * automatically connected to FreeMedForms according to their last identification      *
 # * without any required action.                                                        *
 # * This is a high security failure to activate this feature, as it keeps a weak        *
-# * crypted version of the identifiants of the user on the local hard drive.            *
-# * This can cause a high security failure to activate this feature.                    *
+# * crypted version of the credentials of the user on the local hard drive.             *
+# * Activating this feature can lead to severe security compromise.                     *
 # ***************************************************************************************
 # * Dependencies: WITH_LOGINANDPASSWORD_CACHING feature.                                *
 # ***************************************************************************************
@@ -46,9 +46,9 @@ DEFINES += DRUGS_DATABASE_VERSION=0x000804
 # *                                 Allow episode removal                               *
 # ***************************************************************************************
 # * By default this feature is activated. When activated, users can remove episode if   *
-# they are user validated.                                                              *
+# * they are user validated.                                                            *
 # ***************************************************************************************
-# * We suggest to activate this feature as it does not lead to data lose (all removed   *
+# * We suggest to activate this feature as it does not lead to data loss (all removed   *
 # * episodes are still stored in the database and can be reactivated with a simple code *
 # * adaptation.                                                                         *
 # ***************************************************************************************
@@ -93,12 +93,11 @@ DEFINES += DRUGS_DATABASE_VERSION=0x000804
 # ***************************************************************************************
 # * FreeMedForms uses the external lib QuaZip to manage file/dir (de)compression.       *
 # * On some OS we need to build quazip (like Mac OS and Windows) because it is not      *
-# * already available. On Linux, we can need to build QuaZip or not. A package now      *
-# * exists for the main Linux distro. So if you want to link FreeMedForms with the      *
+# * already available. On Linux, we might have to build QuaZip or not. A package now    *
+# * exists for the main Linux distros. So if you want to link FreeMedForms with the     *
 # * system's QuaZip lib, then uncomment the following line.                             *
 # ***************************************************************************************
 # * If you don't what you are doing here, keep this line commented.                     *
 # ***************************************************************************************
 # Uncomment the following line to activate the feature
 # CONFIG += dontbuildquazip
-
