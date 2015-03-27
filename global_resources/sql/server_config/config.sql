@@ -37,11 +37,11 @@
 --  *
 --  * \warning SQL commands MUST end with \e ;
 --  *
---  * *** BUG ***
---  * TODO: if user creates databases using a specific prefix,
---  *       this script does not work properly
---  * SOLV: use a token (string replacement) instead of 'fmf_'
---  * *** BUG ***
+--  * 
+--  * TODO: This script allows the use of a prefix by giving access to all
+--  * databases that include "fmf_" in their names. That is what `%fmf\_%` does.
+--  * Code could be improved to allow access only to a specific prefix. Possible
+--  * use case: hosting multiple organizations on the same MySQL server.
 --  *
 --  */
 
