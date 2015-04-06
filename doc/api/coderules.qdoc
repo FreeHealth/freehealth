@@ -8,7 +8,7 @@ common coding style for inter-readability and exchange.
 Therefore we are publishing this "code rules" / "rules of conduct".
 
 Before making any changes in the code or the FreeMedForms libs, it is essential
-to discuss the intents on the mailing list (freemedforms@googlegroups.com). Any change made ​​without
+to discuss the intents on the mailing list (freemedforms@googlegroups.com). Any change made without
 consultation can induce unwanted and unexpected behavior on plugins or applications derived from
 the base FreeMedForms.
 
@@ -16,8 +16,9 @@ the base FreeMedForms.
 
 Each .h and .cpp file \e must contain the FreeMedForms header.
 
-If you are writing some code that is inspired by some other (open source) software, you must include
-the following paragraph in the header file (and where the software demands this else):
+If you are writing some code that is inspired by some other (free and open
+source) software, you must include the following paragraph in the header file
+(in addition to requirements mentioned in the original free software license):
 
 \verbatim
 /***************************************************************************
@@ -26,12 +27,12 @@ the following paragraph in the header file (and where the software demands this 
  *   NAME_OF_ORIGINAL_AUTHOR, MAIL_ADRESS_OF_THE_ORIGINAL_AUTHOR           *
  *   LICENSE_OF_THE_ORIGINAL_SOFTWARE                                      *
  *                                                                         *
- *   Adaptations to FreeMedForms by:                                       *
+ *   Adaptation to FreeMedForms by:                                       *
  *       YOUR_NAME <MAIL@ADRESS>                                           *
  ***************************************************************************\/
 \endverbatim
 
-You can add a comment frame like below stating your participation.
+To record your participation, you can add this comment:
 
 \verbatim
 /***************************************************************************
@@ -42,9 +43,9 @@ You can add a comment frame like below stating your participation.
  ***************************************************************************\/
 \endverbatim
 
-\section intendation Code Intendation
+\section indentation Code Indentation
 
-All code presented to the administrators of the suite must meet indentation rules as follows:
+Commits and pull requests must follow thos indentation rules:
 - One instruction per line
 \code
 //BAD:
@@ -61,14 +62,13 @@ if (blah) {
 - \b Four \b spaces (no tabs!) for each indentation
 - A line of code which is too long for proofreading easily should be wrapped at ~80-100 characters.
 There is no strict rule in this area, but do not hesitate to "break"
-your line of code (line break + indentation) when it exceeds about
-80-100 characters.
+your line of code (line break + indentation) if it exceeds about 80-100 characters.
 \code
 OuterNamespace::Internal::FooClass::someStaticMethod("This is the first very long argument",
                                         otherMethod->toString(),
                                         thirdMethod->calculate());
 \endcode
-- Open curly brackets always on the \b same \b line for \b normal \b blocks (if, do, while, switch, etc.)
+- Open curly brackets on the \b same \b line for \b normal \b blocks (if, do, while, switch, etc.)
 \code
 if (test) {
     fooMethod();
@@ -77,7 +77,7 @@ if (test) {
     barMethod();
 }
 \endcode
-- Open curly brackets always on the \b next \b line for \b function \b blocks
+- Open curly brackets on the \b next \b line for \b function \b blocks
 \code
 void foo(int blah)
 {
@@ -85,8 +85,8 @@ void foo(int blah)
 }
 \endcode
 
-- No unnecessary whitespace at the end of lines or at empty lines. There is a QtCreator feature
-that automatically removes this whitespaceson saving files - just turn it on and you'll be fine.
+- No unnecessary whitespace at the end of lines or in empty lines. There is a QtCreator feature
+that automatically removes those whitespaces on saving files - just turn it on and you'll be fine.
 - Don't change the value of variables in a function call
 \code
 //BAD:
@@ -98,8 +98,8 @@ getValue(i);
 \endcode
 
 We prefer:
-- well readable, "airy" code
-- group code parts that belong together visually by separating them from others with newlines
+- readable, uncluttered code
+- group code parts that belong together visually separated from others with newlines
 
 Many IDEs can generally set the style of the code. Feel free to use these functions.\n
 Read the code that is already there and try to submit your code in the same way.
@@ -114,9 +114,10 @@ When you add a new class to FreeMedForms or one of its toolkits, make sure you e
         - \e CORE_EXPORT for objects within FreeMedForms
         - e.g. \e UTILS_EXPORT for libraries and plugins (here e.g. of the \e Utils library)
 
-\Hint: If you use QtCreator, you can easily create these files automatically using the template wizards
-that are provided with FreeMedforms.
-<a href="http://www.freemedforms.com/en/code/howto_write_a_fmf_plugin">More information here</a>.
+\Hint: With QtCreator, you can automatically create these files with provided
+template wizards.
+More on this: <a href="http://www.freemedforms.com/en/code/howto_write_a_fmf_plugin">
+How to write a FMF plugin</a>.
 
 \section namespaces Naming rules for namespaces, classes, and class data
 
@@ -126,11 +127,11 @@ File names:
 
 Classes:
 - As meaningful as possible. Think about what exactly the class will do and name it very carefully. Don't
-create clases like "PatientThings" etc. that don't explicitely tell the purpose of the class.
-- Class names are \e CamelCased (first letter of each word constituting the class name is capitalized)
+create classes like "PatientThings" etc. that don't explicitly convey the purpose of the class.
+- Class names are \e CamelCased (first letter of each word is capitalized)
 - Stereotypes
     - Postfixes:
-        - 'Base' for databases managers: 'Base' after the database manager name
+        - 'Base' for databases managers
         - 'Dialog' or 'Model' for dialogs and models specific to a concrete class, e.g. a dialog
 for class "Webcam" should be named "WebcamDialog"
         - 'Widget' for a widget
@@ -175,15 +176,14 @@ it should be added to a library or a plugin (Editor for example).
 
 \section codedocumentation Code Documentation
 
-We document our code with Doxygen. If you want to dive into howto document with Doxygen, look at the official
-Doxygen documentation at <a href="http://www.doxygen.org">www.doxygen.org</a>.
-- Generally should all methods have at least a single line documentation explaining the purpose.
+We use Doxygen. Documentation: <a href="http://doxygen.org">doxygen.org</a>.
+- Methods should have at least one line of documentation explaining the purpose.
 - Complex functions \b must be documented.
-To improve bugfixing please add the following framework documentation block in the header file of your
+To facilitate bug fixing please add the following framework documentation block in the header file of your
 code (\e version is the release version of the object).
 
 \e Hint: If you use QtCreator and create classes using the template wizards provided by FreeMedForms
-this documentation part will be done automatically.
+this will be done automatically.
 
 \verbatim
 /**
@@ -194,7 +194,7 @@ this documentation part will be done automatically.
  *\/
 \endverbatim
 
-A quick class descriptor is written \e in \e English in the upper part of the header file (.h) above the
+A quick class descriptor is written in the upper part of the header file (.h) above the
 class itself:
 \verbatim
 /**
@@ -208,19 +208,20 @@ class itself:
 \endverbatim
 
 
-- Generally try to document code in the implementation (.cpp file), not in the header files.
+- Code is documented in the implementation (.cpp file), not in the header files.
 This keeps the header files smaller (faster compile times) and cleaner.
-- Comments are written using the C++ style '//'.
+- Comments start by '//' (C++ style).
 For convenience reasons, comments like
 \verbatim
 \/* comment *\/
 \endverbatim
-are used \e only by administrators to neutralize large portions of code in tests.
+are used \e only by core developers to neutralize large portions of code in tests.
 
 - Don't comment \e every single bit in your source code, it can affect the readability.
 - Prefer variables and functions with meaningful names ('drugsCounter' rather than 'm1').
 - It should be possible to read the code naturally, without much explanation. For example,
-do not write a comment that the call to 'resetDatabaseValue()' will reset the database value - this is obvious by the name.
+do not write a comment that the call to 'resetDatabaseValue()' will reset the
+database value - this is obvious by the name.
 - The documentation is written in \e English \e only.
 - Inclusions paths are defined in the project as following:
     - \e ./plugins
@@ -249,7 +250,7 @@ do not write a comment that the call to 'resetDatabaseValue()' will reset the da
 
 \section interactions User Interface and Interaction with the User
 
-\subsection messageboxes Using of MessageBox
+\subsection messageboxes Message Boxes
 
 - <b>QMessageBox should \u not be used.</b>
 - The Utils library provides all the functions for your MessageBoxes.
@@ -272,7 +273,7 @@ do not write a comment that the call to 'resetDatabaseValue()' will reset the da
     // If the Utils version doesn't fit your needs, please extend/subclass it and use the same model.
 \endcode
 
-\subsection i18n Internationalisation
+\subsection i18n Internationalization
 
 - \e All user visible text must be written in simple and correct English, and translatable
 using the functions \e tr() or \e QCoreApplication::translate().
@@ -293,19 +294,17 @@ The class Form::FormItem already implements the i18n feature.
 The Utils library provides functions for identifying the Operating system:
 Utils::isRunningOn(). Where possible use these functions instead of using preprocessor instructions
 (#ifdef Q_OS_MAC). Of course, if your code is highly specific to one OS, then the use of macros
-will be ignored.
-<i>//TODO: please correct from original: "Bien évidemment, si votre code est hautement spécifique à l'OS, alors l'utilisation
-   des macros sera incontournable."</i>
+will be unavoidable.
 
 Two functions are used to identify the application compilation mode: \e isDebugCompilation() and
 \e isFullApplication(). These functions use macros defined in \e config.pri which is used by all
  FreeMedForms projects.
 
-\section optimisations Optimisations
+\section optimizations Optimizations
 
-Optimized code is generally more prefered than unnecessarily cumbersome code. However, in general,
+Optimized code is generally preferred to cumbersome code. However, in general,
 avoid writing 'highly optimized code' at the expense of readability and scalability;
-we do not write a RTOS (RealTime Operating System), but the tools should not force your machine to
+we do not write a RTOS (Real Time Operating System), but the tools should not bring your machine to
 its knees :)
 
 Do not choose objects for their performance, but for their specificity to a problem.
