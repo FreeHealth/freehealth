@@ -1,0 +1,134 @@
+ /*!
+ * \mainpage FreeMedForms - a free and open source medical files manager.
+ * \author   Main author, administrator: Eric Maeker, MD
+ * \author   Accountancy:  Christian A. Reiter, MD (was Pierre-Marie Desombre, MD)
+ * \author   Agenda, FreePad: Eric Maeker, MD (was Guillaume Denry)
+ * \author   WebCam: Christian A. Reiter, MD
+ * \version  FreeMedForms: GIT version
+ * 
+ * 
+ * \section introduction Introduction
+ * 
+ * \subsection intro_fr Français
+ * 
+ * FreeMedForms (FMF) est une suite logicielle multi-plateforme (disponible pour MacOs, Linux, FreeBSD, Windows),
+ * multilingue, gratuite et en code ouvert sous licence GPLv3. FreeMedForms est développée par des médecins et
+ * est essentiellement destinée aux professionnels de la santé. Actuellement, la suite est en phase de développement.
+ * Elle est mise à disposition uniquement à des fins de tests. Le principal objectif de FreeMedForms est de gérer les
+ * dossiers médicaux électroniques basés sur votre pratique médicale ou la pratique de groupes de recherche clinique.
+ * Vos dossiers seront intégralement personnalisables grâce à l'utilisation des plugins. Certaines parties de la suite
+ * sont déjà opérationnelles et utilisables en pratique courante comme le prescripteur FreeDiams (anciennement
+ * DrugsInteractions).
+ * 
+ * FreeDiams est le plugins prescripteur de la suite FreeMedForms construit en une application à part entière.
+ * FreeDiams est un logiciel multi-plateforme (MacOs, Linux, FreeBSD, Windows), gratuit et en code ouvert sous
+ * licence GPLv3. Il est développé par des médecins et se destine à une utilisation par ces mêmes professionnels.
+ * Il peut être utilisé seul pour prescrire et/ou tester les interactions médicamenteuses d'une prescription.
+ * Il peut être lié à n'importe quelle application grâce à ses paramétres de ligne de commande. La base de données
+ * thérapeutique et des interactions est synchronisée aux données de l'AFSSAPS.
+ * 
+ * \subsection intro_en English
+ * 
+ * FreeMedForms (FMF) is a multi-platform software (available on MacOS, Linux, FreeBSD, Windows), multilingual,
+ * free and open source, released under the GPLv3 license. FreeMedForms is developed by medical doctors and is
+ * mainly intended for health professionals. Currently, the suite is under development. It is available only for
+ * testing purposes. The main objective of FreeMedForms is to manage the electronic medical records based on your
+ * medical practice or the practice of clinical research groups. Your records will be fully customizable through
+ * the use of plugins. Some parts of the suite are already operational and usable in practice as the prescriber
+ * FreeDiams (formerly DrugsInteractions).
+ * 
+ * 
+ * FreeDiams prescriber is the result of FreeMedForms prescriber plugins built into a standalone application.
+ * FreeDiams is a multi-platform (MacOS, Linux, FreeBSD, Windows), free and open source released under the GPLv3 license.
+ * It is developed by medical doctors and is intended for use by these same professionals. It can be used alone to
+ * prescribe and / or test drug interactions within a prescription. It can be linked to any application thanks to its
+ * command line parameters. The therapeutic and interactions database are synchronized with data from the french AFSSAPS.
+ * 
+ * \subsection intro_de Deutsch
+ * 
+ * FreeMedForms (FMF) ist eine Multiplattform-Software (verfügbar auf
+ * MacOS, Linux, FreeBSD und Windows), sie ist multilingual, frei und
+ * Open-Source und veröffentlicht unter der GPLv3-Lizenz. FreeMedForms wurde
+ * von Medizinern entwickelt und richtet sich an Professionelle im
+ * Gesundheitswesen.
+ * Momentan ist die Sofware in Entwicklung, und steht nur zu
+ * Testzwecken zur Verfügung. Das erklärte Hauptziel von FreeMedForms ist
+ * die Verwaltung von elektronischen medizinischen Daten, basierend auf
+ * unserer medizinischen Praxis oder der Praxis die wir in klinischen
+ * Studien erworben haben. Die Eingaben sind voll anpassbar durch die
+ * Benutzung von Plugins. Einige Teile der Suite sind bereits voll
+ * benutzbar und auch in der Praxis zum Verschreiben von Rezepten nutzbar
+ * (FreeDiams).
+ * 
+ * FreeDiams ist das Resultat des FreeMedForms-Rezept-Plugins, das als
+ * eigenständige Applikation designed wurde. FreeDiams ist eine multi-
+ * Plattform (MacOS, Linux, FreeBSD, Windows) freie und Open-Source
+ * Anwendung, die unter der GPLv3-Lizenz veröffentlicht wurde. Sie wird
+ * von Medizinern entwickelt, und richtet sich an das professionelle
+ * Umfeld. Es kann benutzt werden, um Rezepte zu verschreiben, oder aber
+ * zum Testen von Wechselwirkungen verschiedener Medikamente. Es kann dank
+ * der Kommandozeile mit jedem Programm verknüpft werden. Die
+ * therapeutische und Neben-/Wechselwirkungsdatenbank wird mit den Daten des
+ * französischen AFSSAPS synchronisiert.
+ * 
+ * \subsection intro_platforms Availables platforms
+ * 
+ * FreeMedForms and derivatives are availables for:
+ *   - Linux
+ *   - FreeBSD (need some adaptation, please contact development team)
+ *   - MacOs X universal
+ *   - Windows
+ * 
+ * FreeMedForms and derivatives use:
+ *   - C++ language
+ *   - Qt libs (latests)
+ *   - SQLite / MySQL
+ *   - XML / HTML / ECMA Script
+ *   - Bash for some scripts
+ * 
+ * 
+ * \section mainwebsite Main website
+ * 
+ * \htmlonly <a href="http://www.freemedforms.org">Find all information about the FreeMedForms project in the main website</a> \endhtmlonly
+ * 
+ * 
+ *    \section toc Table of contents
+ * 
+ *    \li \ref coderules
+ *    \li \ref buildinstructions
+ *    \li \ref getting_latest_version
+ *    \li \ref participate
+ *    \li \ref license_terms
+ * 
+ *    \section testing Testing and bug submission
+ *     <b>Please, before sending us a bug verify that you are using the LATEST version.</b> \n
+ *     You have three possibilities for bug submission :
+ *     - <a href="https://github.com/FreeMedForms/freemedforms/issues">GitHub Issues</a>
+ *     - Debug dialog inside the application, information sending is available only if the application detects an error
+ *     - <a href="mailto:freemedforms-dev@googlegroups.com">FMF dev mailing list</a>
+ * 
+ */
+  
+ /** \page getting_latest_version Getting the latest version
+ * 
+ * FreeMedForms and derivatives include an automatic update checking over the web.\n
+ * While you are running applications of FreeMedForms suite, if an update is found, the menubar shows 'Update available'.\n
+ * 
+ * If you want to test the latest development snapshot please checkout our
+ * <a href="https://github.com/FreeMedForms/freemedforms">GIT repository</a>.
+ *      
+ * \ref index
+ */
+  
+ /**    \page contribute Contribute to FreeMedForms and derivatives
+ * 
+ * \section redirection This page has moved
+ * 
+ * Follow this link
+ * 
+ *   - <a href="http://www.freemedforms.com/en/contribute">Contribute [En]</a>
+ *   - <a href="http://www.freemedforms.com/fr/contribute">Contribuez [Fr]</a>
+ * 
+ *   \ref index
+ * 
+ */
