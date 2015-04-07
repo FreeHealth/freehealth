@@ -42,23 +42,23 @@
 <context>
     <name>MainWin::MainWindow</name>
     <message>
-        <location filename="../../freeddimanager/plugins/mainwindowplugin/mainwindow.cpp" line="121"/>
+        <location filename="../../freeddimanager/plugins/mainwindowplugin/mainwindow.cpp" line="118"/>
         <source>Creating Main Window</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freeddimanager/plugins/mainwindowplugin/mainwindow.cpp" line="341"/>
+        <location filename="../../freeddimanager/plugins/mainwindowplugin/mainwindow.cpp" line="337"/>
         <source>Unable to save database</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freeddimanager/plugins/mainwindowplugin/mainwindow.cpp" line="342"/>
+        <location filename="../../freeddimanager/plugins/mainwindowplugin/mainwindow.cpp" line="338"/>
         <source>An error occured when trying to backup the current database.
 Please, try again.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freeddimanager/plugins/mainwindowplugin/mainwindow.cpp" line="348"/>
+        <location filename="../../freeddimanager/plugins/mainwindowplugin/mainwindow.cpp" line="344"/>
         <source>The database was correctly backuped to the following location:</source>
         <translation type="unfinished"></translation>
     </message>

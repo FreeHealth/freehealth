@@ -224,7 +224,7 @@ Do you really want to remove the current episode?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/episodebase.cpp" line="343"/>
+        <location filename="../../plugins/formmanagerplugin/episodebase.cpp" line="347"/>
         <source>Episode database updated from version %1 to version: %2</source>
         <translation type="unfinished"></translation>
     </message>

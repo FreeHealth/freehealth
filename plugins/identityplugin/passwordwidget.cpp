@@ -231,6 +231,9 @@ void PasswordWidget::onLoginChanged(const QString &login)
     // Length
     if (login.size() < 6)
         msg << tr("Login is too short (6 chars minimum)");
+    
+    if (login.size() > 16)
+        msg << tr("Login is too long (16 chars maximum)");
 
     if (msg.isEmpty()) {
         d->ui->info->setText(tr("Login is valid"));

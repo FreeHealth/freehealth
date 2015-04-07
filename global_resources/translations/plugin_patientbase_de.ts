@@ -317,6 +317,10 @@ Warning: If you are using FreeMedForms over a network, this can lead to heavy ne
         <source>Patient file exportation - %1</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Double-click to add</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Patients::Internal::UrlPhotoDialog</name>

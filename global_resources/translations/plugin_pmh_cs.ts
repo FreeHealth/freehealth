@@ -336,7 +336,7 @@
 <context>
     <name>PMH::PmhViewer</name>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhviewer.cpp" line="273"/>
+        <location filename="../../plugins/pmhplugin/pmhviewer.cpp" line="276"/>
         <source>Replacing pmh data</source>
         <translation type="unfinished"></translation>
     </message>

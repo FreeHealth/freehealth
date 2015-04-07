@@ -82,42 +82,42 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/icdplugin/icdcentralwidget.cpp" line="166"/>
+        <location filename="../../plugins/icdplugin/icdcentralwidget.cpp" line="161"/>
         <source>Collection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/icdplugin/icdcentralwidget.cpp" line="184"/>
+        <location filename="../../plugins/icdplugin/icdcentralwidget.cpp" line="181"/>
         <source>Can not add this code to your collection.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/icdplugin/icdcentralwidget.cpp" line="185"/>
+        <location filename="../../plugins/icdplugin/icdcentralwidget.cpp" line="182"/>
         <source>This code is already included or is excluded by the current collection code.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/icdplugin/icdcentralwidget.cpp" line="252"/>
+        <location filename="../../plugins/icdplugin/icdcentralwidget.cpp" line="249"/>
         <source>Opening an ICD collection: merge or replace?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/icdplugin/icdcentralwidget.cpp" line="253"/>
+        <location filename="../../plugins/icdplugin/icdcentralwidget.cpp" line="250"/>
         <source>There is an ICD collection inside the editor, do you to replace it or to add the opened collection?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/icdplugin/icdcentralwidget.cpp" line="255"/>
+        <location filename="../../plugins/icdplugin/icdcentralwidget.cpp" line="252"/>
         <source>Replace collection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/icdplugin/icdcentralwidget.cpp" line="255"/>
+        <location filename="../../plugins/icdplugin/icdcentralwidget.cpp" line="252"/>
         <source>Add to collection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/icdplugin/icdcentralwidget.cpp" line="256"/>
+        <location filename="../../plugins/icdplugin/icdcentralwidget.cpp" line="253"/>
         <source>Open a collection</source>
         <translation type="unfinished"></translation>
     </message>

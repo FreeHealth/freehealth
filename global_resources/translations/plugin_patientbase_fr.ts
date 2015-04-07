@@ -320,6 +320,10 @@ Attention : Si vous utilisez FreeMedForms en réseau, cela peut causer une surch
         <source>Patient file exportation - %1</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Double-click to add</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Patients::Internal::UrlPhotoDialog</name>

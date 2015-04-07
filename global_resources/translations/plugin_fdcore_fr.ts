@@ -344,10 +344,6 @@
         <translation>Sortie de uname</translation>
     </message>
     <message>
-        <source>Compilation Date</source>
-        <translation>Date de compilation</translation>
-    </message>
-    <message>
         <source>Compile Qt version</source>
         <translation>Version de Qt (compilation)</translation>
     </message>
@@ -398,10 +394,6 @@
     <message>
         <source>FreeMedForms PlugIns path</source>
         <translation>Répertoire des plugins de FreeMedForms</translation>
-    </message>
-    <message>
-        <source>Build date | %1 %2</source>
-        <translation>Date de compilation | %1 %2</translation>
     </message>
     <message>
         <source>Default installed datapack path</source>

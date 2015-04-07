@@ -42,23 +42,23 @@
 <context>
     <name>MainWin::MainWindow</name>
     <message>
-        <location filename="../../freeddimanager/plugins/mainwindowplugin/mainwindow.cpp" line="121"/>
+        <location filename="../../freeddimanager/plugins/mainwindowplugin/mainwindow.cpp" line="118"/>
         <source>Creating Main Window</source>
         <translation>Création de la fenêtre principale</translation>
     </message>
     <message>
-        <location filename="../../freeddimanager/plugins/mainwindowplugin/mainwindow.cpp" line="341"/>
+        <location filename="../../freeddimanager/plugins/mainwindowplugin/mainwindow.cpp" line="337"/>
         <source>Unable to save database</source>
         <translation>Impossible de sauvegarder la base de données</translation>
     </message>
     <message>
-        <location filename="../../freeddimanager/plugins/mainwindowplugin/mainwindow.cpp" line="342"/>
+        <location filename="../../freeddimanager/plugins/mainwindowplugin/mainwindow.cpp" line="338"/>
         <source>An error occured when trying to backup the current database.
 Please, try again.</source>
         <translation>Une erreur est survenue lors de la tentative de sauvegarde de la base de données actuelle. Veuillez essayer une nouvelle fois.</translation>
     </message>
     <message>
-        <location filename="../../freeddimanager/plugins/mainwindowplugin/mainwindow.cpp" line="348"/>
+        <location filename="../../freeddimanager/plugins/mainwindowplugin/mainwindow.cpp" line="344"/>
         <source>The database was correctly backuped to the following location:</source>
         <translation>La base de données a été correctement sauvegardée dans le répertoire suivant :</translation>
     </message>

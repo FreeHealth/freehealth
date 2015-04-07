@@ -946,7 +946,7 @@
     <message>
         <location filename="../../freeddimanager/plugins/ddiplugin/components/componentatceditorwidget.ui" line="90"/>
         <source>Search ATC code</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Chercher un code ATC</translation>
     </message>
     <message>
         <location filename="../../freeddimanager/plugins/ddiplugin/components/componentatceditorwidget.cpp" line="240"/>

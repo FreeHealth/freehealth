@@ -4,47 +4,47 @@
 <context>
     <name>Database</name>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="722"/>
+        <location filename="../../libs/utils/database.cpp" line="725"/>
         <source>WARNING: %1 database already in use</source>
         <translation>ATTENTION: base de données %1 déjà en cours d&apos;utilisation</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="866"/>
+        <location filename="../../libs/utils/database.cpp" line="869"/>
         <source>ERROR: Database `%1` is not readable. Path: %2</source>
         <translation>ERREUR: base de données %1 n&apos;est pas lisible. Chemin %2</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="877"/>
+        <location filename="../../libs/utils/database.cpp" line="880"/>
         <source>ERROR: Database %1 is not readable. Host: %2</source>
         <translation>ERREUR: base de données %1 n&apos;est pas lisible. Hôte %2</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="886"/>
+        <location filename="../../libs/utils/database.cpp" line="889"/>
         <source>ERROR: Database %1 is not readable. Path: %2</source>
         <translation>ERREUR: base de données %1 n&apos;est pas lisible. Chemin : %2</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="915"/>
+        <location filename="../../libs/utils/database.cpp" line="918"/>
         <source>ERROR: Database %1 is not writable. Path: %2.</source>
         <translation>ERREUR: base de données %1 n&apos;est pas inscriptible. Chemin : %2.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="967"/>
+        <location filename="../../libs/utils/database.cpp" line="970"/>
         <source>INFO: database %1 connection = %2</source>
         <translation>INFO : base de données %1 connexion %2</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="1193"/>
-        <source>Database Scheme Error: wrong number of fields for table %1</source>
-        <translation>Schema de base erroné : mauvais nombre de champs dans la table %1</translation>
+        <location filename="../../libs/utils/database.cpp" line="1198"/>
+        <source>Database Scheme Error: wrong number of fields for table %1 (expected: %2; current: %3)</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="1202"/>
+        <location filename="../../libs/utils/database.cpp" line="1210"/>
         <source>Database Scheme Error: field number %1 differs: %2 instead of %3 in table %4</source>
         <translation>Schema de base erroné : champs numéro %1 différe : %2 au lieu de %3 dans la table %4</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="2377"/>
+        <location filename="../../libs/utils/database.cpp" line="2385"/>
         <source>Can not create table %1</source>
         <translation>Impossible de créer la table %1</translation>
     </message>
@@ -61,7 +61,7 @@
 <context>
     <name>Log</name>
     <message>
-        <location filename="../../libs/utils/log.cpp" line="180"/>
+        <location filename="../../libs/utils/log.cpp" line="206"/>
         <source>SQL Error: 
      * %1
      * %2
@@ -69,17 +69,17 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/log.cpp" line="216"/>
+        <location filename="../../libs/utils/log.cpp" line="242"/>
         <source>%1 ms: %2</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/log.cpp" line="289"/>
+        <location filename="../../libs/utils/log.cpp" line="315"/>
         <source>Unable to save %1: Error %2</source>
         <translation>Impossible de sauvegarder %1 : Erreur %2</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/log.cpp" line="319"/>
+        <location filename="../../libs/utils/log.cpp" line="345"/>
         <source>*****  Registered Errors  *****
 </source>
         <translation>*****  Erreurs engistrées  *****
@@ -604,44 +604,44 @@
         <translation>Téléchargement annulé.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="363"/>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="366"/>
         <source>Download finished with an error: %1.</source>
         <translation>Le téléchargement s&apos;est terminé avec une erreur :%1.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="367"/>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="370"/>
         <source>Download finished.</source>
         <translation>Téléchargement terminé.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="380"/>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="383"/>
         <source>Download failed: %1.</source>
         <translation>Le téléchargement a échoué %1.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="381"/>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="386"/>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="384"/>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="389"/>
         <source>HTTP</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="384"/>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="385"/>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="387"/>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="388"/>
         <source>Redirect to %1?</source>
         <translation>Redirigé vers %1 ?</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="398"/>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="401"/>
         <source>Downloaded %1 to current directory.</source>
         <translation>Téléchargement terminé de %1 dans le répertoire courant.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="454"/>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="457"/>
         <source>Server authentication required</source>
         <translation>Authentification requise par le serveur</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="481"/>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="484"/>
         <source>Proxy authentication required</source>
         <translation>Authentification requise par le pare-feu</translation>
     </message>
@@ -649,12 +649,12 @@
 <context>
     <name>Utils::Internal::UpdateCheckerPrivate</name>
     <message>
-        <location filename="../../libs/utils/updatechecker.cpp" line="97"/>
-        <source>Error %1 while retreiving update file %2</source>
-        <translation>Erreur %1 lors du rapatriement du fichier de mise à jour %2</translation>
+        <location filename="../../libs/utils/updatechecker.cpp" line="105"/>
+        <source>Error %1 while retrieving update file %2</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/updatechecker.cpp" line="124"/>
+        <location filename="../../libs/utils/updatechecker.cpp" line="132"/>
         <source>* Updates of version: %1</source>
         <translation>* Mises à jour de la version : %1</translation>
     </message>
@@ -736,7 +736,7 @@
 <context>
     <name>Utils::UpdateChecker</name>
     <message>
-        <location filename="../../libs/utils/updatechecker.cpp" line="275"/>
+        <location filename="../../libs/utils/updatechecker.cpp" line="283"/>
         <source>An update is available. Please check the web site: &lt;a href=&quot;%1&quot;&gt;%1&lt;/a&gt;</source>
         <translation>Une mise à jour est disponible. Veuillez vérifier sur le site internet de l&apos;application : &lt;a href=&quot;%1&quot;&gt;%1&lt;/a&gt;</translation>
     </message>

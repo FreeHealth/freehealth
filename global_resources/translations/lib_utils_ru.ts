@@ -4,47 +4,47 @@
 <context>
     <name>Database</name>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="722"/>
+        <location filename="../../libs/utils/database.cpp" line="725"/>
         <source>WARNING: %1 database already in use</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="866"/>
+        <location filename="../../libs/utils/database.cpp" line="869"/>
         <source>ERROR: Database `%1` is not readable. Path: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="877"/>
+        <location filename="../../libs/utils/database.cpp" line="880"/>
         <source>ERROR: Database %1 is not readable. Host: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="886"/>
+        <location filename="../../libs/utils/database.cpp" line="889"/>
         <source>ERROR: Database %1 is not readable. Path: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="915"/>
+        <location filename="../../libs/utils/database.cpp" line="918"/>
         <source>ERROR: Database %1 is not writable. Path: %2.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="967"/>
+        <location filename="../../libs/utils/database.cpp" line="970"/>
         <source>INFO: database %1 connection = %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="1193"/>
-        <source>Database Scheme Error: wrong number of fields for table %1</source>
+        <location filename="../../libs/utils/database.cpp" line="1198"/>
+        <source>Database Scheme Error: wrong number of fields for table %1 (expected: %2; current: %3)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="1202"/>
+        <location filename="../../libs/utils/database.cpp" line="1210"/>
         <source>Database Scheme Error: field number %1 differs: %2 instead of %3 in table %4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="2377"/>
+        <location filename="../../libs/utils/database.cpp" line="2385"/>
         <source>Can not create table %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -61,7 +61,7 @@
 <context>
     <name>Log</name>
     <message>
-        <location filename="../../libs/utils/log.cpp" line="180"/>
+        <location filename="../../libs/utils/log.cpp" line="206"/>
         <source>SQL Error: 
      * %1
      * %2
@@ -69,17 +69,17 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/log.cpp" line="216"/>
+        <location filename="../../libs/utils/log.cpp" line="242"/>
         <source>%1 ms: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/log.cpp" line="289"/>
+        <location filename="../../libs/utils/log.cpp" line="315"/>
         <source>Unable to save %1: Error %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/log.cpp" line="319"/>
+        <location filename="../../libs/utils/log.cpp" line="345"/>
         <source>*****  Registered Errors  *****
 </source>
         <translation type="unfinished"></translation>
@@ -603,44 +603,44 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="363"/>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="366"/>
         <source>Download finished with an error: %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="367"/>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="370"/>
         <source>Download finished.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="380"/>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="383"/>
         <source>Download failed: %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="381"/>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="386"/>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="384"/>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="389"/>
         <source>HTTP</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="384"/>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="385"/>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="387"/>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="388"/>
         <source>Redirect to %1?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="398"/>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="401"/>
         <source>Downloaded %1 to current directory.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="454"/>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="457"/>
         <source>Server authentication required</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="481"/>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="484"/>
         <source>Proxy authentication required</source>
         <translation type="unfinished"></translation>
     </message>
@@ -648,12 +648,12 @@
 <context>
     <name>Utils::Internal::UpdateCheckerPrivate</name>
     <message>
-        <location filename="../../libs/utils/updatechecker.cpp" line="97"/>
-        <source>Error %1 while retreiving update file %2</source>
+        <location filename="../../libs/utils/updatechecker.cpp" line="105"/>
+        <source>Error %1 while retrieving update file %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/updatechecker.cpp" line="124"/>
+        <location filename="../../libs/utils/updatechecker.cpp" line="132"/>
         <source>* Updates of version: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -735,7 +735,7 @@
 <context>
     <name>Utils::UpdateChecker</name>
     <message>
-        <location filename="../../libs/utils/updatechecker.cpp" line="275"/>
+        <location filename="../../libs/utils/updatechecker.cpp" line="283"/>
         <source>An update is available. Please check the web site: &lt;a href=&quot;%1&quot;&gt;%1&lt;/a&gt;</source>
         <translation type="unfinished"></translation>
     </message>

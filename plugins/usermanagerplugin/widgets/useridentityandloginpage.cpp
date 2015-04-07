@@ -137,8 +137,9 @@ bool UserIdentityAndLoginPage::checkLogin() const
 {
     // user login must be unique in the FreeMedForms database
     // user login must be unique on the server
+    // MySQL user names can be up to 16 characters long.
     const QString &login = _identity->currentClearLogin();
-    if (login.length() < 6) // FIXME : avoid magic number \sa void PasswordWidget::onLoginChanged(const QString &login)
+    if (login.length() < 6 || login.length() > 16 ) // FIXME : avoid magic number \sa void PasswordWidget::onLoginChanged(const QString &login)
         return false;
 
     if (userBase()->isLoginAlreadyExists(_identity->currentClearLogin())) {

@@ -146,23 +146,23 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/identityplugin/passworddialog.cpp" line="112"/>
-        <location filename="../../plugins/identityplugin/passworddialog.cpp" line="113"/>
+        <location filename="../../plugins/identityplugin/passworddialog.cpp" line="114"/>
+        <location filename="../../plugins/identityplugin/passworddialog.cpp" line="115"/>
         <source>Password must have at least 5 chars.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/identityplugin/passworddialog.cpp" line="197"/>
+        <location filename="../../plugins/identityplugin/passworddialog.cpp" line="203"/>
         <source>The old password is not correct. Please retry with the correct password.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/identityplugin/passworddialog.cpp" line="199"/>
+        <location filename="../../plugins/identityplugin/passworddialog.cpp" line="205"/>
         <source>Wrong password confirmation.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/identityplugin/passworddialog.cpp" line="200"/>
+        <location filename="../../plugins/identityplugin/passworddialog.cpp" line="206"/>
         <source>Password can not be change.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -196,11 +196,16 @@
     </message>
     <message>
         <location filename="../../plugins/identityplugin/passwordwidget.cpp" line="236"/>
-        <source>Login is valid</source>
+        <source>Login is too long (16 chars maximum)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/identityplugin/passwordwidget.cpp" line="239"/>
+        <source>Login is valid</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/identityplugin/passwordwidget.cpp" line="242"/>
         <source>Login is invalid</source>
         <translation type="unfinished"></translation>
     </message>

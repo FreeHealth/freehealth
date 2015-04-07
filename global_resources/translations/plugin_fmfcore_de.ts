@@ -460,10 +460,6 @@ Select your preferred language and the installation type.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Compilation Date</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Compile Qt version</source>
         <translation type="unfinished"></translation>
     </message>
@@ -601,10 +597,6 @@ Select your preferred language and the installation type.</source>
     </message>
     <message>
         <source>Running version: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Build date | %1 %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

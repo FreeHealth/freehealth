@@ -22,6 +22,10 @@
         <source>User %1 successfully updated.</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Can not retrieve crypted password from the login %1</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>UserContactPage</name>
@@ -167,6 +171,10 @@
     </message>
     <message>
         <source>Unable to initialize the database with the login: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Login not found: %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
