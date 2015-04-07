@@ -1,6 +1,6 @@
 # The FreeMeForms Project
 # Copyright (C) 2008-2015 by Eric MAEKER
-# [website]
+# [https://freemedforms.com]
 
 
 ### What is the FreeMedForms project?
