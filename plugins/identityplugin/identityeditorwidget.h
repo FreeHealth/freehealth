@@ -175,7 +175,7 @@ Q_SIGNALS:
     void genderChanged(const QString &gender);
     void languageChanged(const QString &languageName);
     void clearLoginChanged(const QString &login);
-    void clearPasswordChanged(const QString &lpassword);
+    void clearPasswordChanged(const QString &clearPassword);
 
     void clearLoginEditionFinished();
     void passwordConfirmed();

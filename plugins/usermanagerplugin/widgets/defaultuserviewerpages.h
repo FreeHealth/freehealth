@@ -76,13 +76,17 @@ public:
     void clear();
     bool submit();
 
+private Q_SLOTS:
+    void passwordChanged(const QString &newClearPassword);
+
 //private:
 //    void changeEvent(QEvent *e);
 
 private:
-    Identity::IdentityEditorWidget *m_identity;
-    UserModel *m_Model;
+    Identity::IdentityEditorWidget *_identity;
+    UserModel *_userModel;
     QString m_parentId;
+    int _row;
 };
 
 class DefaultUserContactPage : public IUserViewerPage
@@ -124,7 +128,7 @@ private:
 private:
     Ui::UserViewer_ProfessionalUI *ui;
     QDataWidgetMapper *m_Mapper;
-    UserModel *m_Model;
+    UserModel *_userModel;
     QString m_parentId;
 };
 
@@ -150,7 +154,7 @@ public:
 
 private:
     QPointer<DefaultUserProfessionalWidget> m_Widget;
-    UserModel *m_Model;
+    UserModel *_userModel;
 };
 
 
@@ -176,7 +180,7 @@ private:
 private:
     Ui::UserViewer_RightsUI *ui;
     QDataWidgetMapper *m_Mapper;
-    UserModel *m_Model;
+    UserModel *_userModel;
     QString m_parentId;
 };
 
@@ -202,7 +206,7 @@ public:
 
 private:
     QPointer<DefaultUserRightsWidget> m_Widget;
-    UserModel *m_Model;
+    UserModel *_userModel;
 };
 
 
@@ -228,7 +232,7 @@ private:
 private:
     Print::PrinterPreviewer *preview;
     QDataWidgetMapper *m_Mapper;
-    UserModel *m_Model;
+    UserModel *_userModel;
     int m_type;
     int m_row;
     QString m_parentId;
@@ -262,7 +266,7 @@ public:
 
 private:
     QPointer<DefaultUserPapersWidget> m_Widget;
-    UserModel *m_Model;
+    UserModel *_userModel;
     PaperType m_type;
 };
 

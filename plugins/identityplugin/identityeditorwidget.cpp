@@ -58,6 +58,12 @@
  * - full login and password
  * If you don't want the whole information, you can be defined the widget to
  * show/hide using the setAvailableWidgets().
+ *
+ * Password modification :\n
+ * This widget allow users to edit/change their password. You can catch any
+ * password changes using the signal clearPasswordChanged(QString). This signal
+ * is emitted after the user has correctly edited the
+ * Identity::Internal::PasswordWidget.
 */
 
 #include "identityeditorwidget.h"

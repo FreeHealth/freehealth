@@ -36,6 +36,7 @@
   \sa UserPlugin::Internal::UserData
   \sa UserPlugin::IUserListener
 */
+
 //TODO: write documentation+++
 //TODO: code LOCKER
 //TODO: when QDataWidgetMapper (UserViewer) is set, it calls ALL the data of the user, even for the hidden widgets. This causes an important memory usage. Improve this ++++
@@ -910,7 +911,13 @@ Qt::ItemFlags UserModel::flags(const QModelIndex &index) const
     return Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsEditable;
 }
 
-/** Define the data of users.  */
+/**
+ * Define the data of users. \n
+ * For index creation, you must use the Core::IUser enumerator for the column.\n
+ * Using the Core::IUser::ClearPassword has column, defines the users'
+ * clear password: user's password is changed from the old to the new data
+ * (see also: UserPlugin::Internal::UserBase::changeUserPassword()).
+*/
 bool UserModel::setData(const QModelIndex &item, const QVariant &value, int role)
 {
     if (!item.isValid())

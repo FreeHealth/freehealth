@@ -459,7 +459,7 @@ UserData *UserBase::getUserByLoginPassword(const QVariant &login, const QVariant
  */
 bool UserBase::checkLogin(const QString &clearLogin, const QString &clearPassword)
 {
-    qDebug() << "checkLogin" << clearLogin << clearPassword;
+    // qDebug() << "checkLogin" << clearLogin << clearPassword;
     m_LastUuid.clear();
     m_LastLogin.clear();
     m_LastPass.clear();
@@ -521,8 +521,6 @@ bool UserBase::checkLogin(const QString &clearLogin, const QString &clearPasswor
     QHash<int, QString> where;
     where.insert(USER_LOGIN, QString("='%1'").arg(Utils::loginForSQL(clearLogin)));
     QString req = select(Table_USERS, list, where);
-
-    qDebug() << req;
 
     QSqlQuery query(DB);
     if (query.exec(req)) {

@@ -24,6 +24,15 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
+
+/**
+ * \class UserPlugin::DefaultUserContactWidget
+ * Widget containing all editor of the user contact items using the
+ * Identity::IdentityEditorWidget. This widget manages password changes
+ * using the signl/slot of the Identity::IdentityEditorWidget and
+ * the UserPlugin::Internal::UserModel.
+ */
+
 #include "defaultuserviewerpages.h"
 #include <usermanagerplugin/usermodel.h>
 
@@ -36,7 +45,10 @@
 #include <identityplugin/identityeditorwidget.h>
 
 #include <utils/global.h>
-#include <translationutils/constanttranslations.h>
+#include <utils/log.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_menu.h>
+#include <translationutils/trans_user.h>
 
 #include <QDataWidgetMapper>
 #include <QStringListModel>
@@ -57,67 +69,95 @@ static inline Core::ISettings *settings() {return Core::ICore::instance()->setti
 /////////////////////////////////////////////////////////////////////////////////////////
 DefaultUserContactWidget::DefaultUserContactWidget(QWidget *parent) :
     UserPlugin::IUserViewerWidget(parent),
-    m_Model(0)
+    _userModel(0),
+    _row(-1)
 {
+    setObjectName("DefaultUserContactWidget");
     QHBoxLayout *lay = new QHBoxLayout(this);
     setLayout(lay);
     lay->setMargin(0);
     lay->setSpacing(0);
-    m_identity = new Identity::IdentityEditorWidget(this);
-//    m_identity->setAvailableWidgets(Identity::IdentityEditorWidget::FullIdentity | Identity::IdentityEditorWidget::FullAddress | Identity::IdentityEditorWidget::Photo | Identity::IdentityEditorWidget::FullLogin);
-    lay->addWidget(m_identity);
+    _identity = new Identity::IdentityEditorWidget(this);
+//    _identity->setAvailableWidgets(Identity::IdentityEditorWidget::FullIdentity | Identity::IdentityEditorWidget::FullAddress | Identity::IdentityEditorWidget::Photo | Identity::IdentityEditorWidget::FullLogin);
+    lay->addWidget(_identity);
+    connect(_identity, SIGNAL(clearPasswordChanged(QString)), this, SLOT(passwordChanged(QString)));
 }
 
 DefaultUserContactWidget::~DefaultUserContactWidget()
 {
 }
 
+/** This widget needs a direct acces to the UserPlugin::Internal::UserModel. */
 void DefaultUserContactWidget::setUserModel(UserModel *model)
 {
-//    qWarning() << "DefaultUserContactWidget::setUserModel" << model;
-    m_Model = model;
-    m_identity->setModel(model);
-    m_identity->addMapping(Identity::IdentityEditorWidget::Street, Core::IUser::Street);
-    m_identity->addMapping(Identity::IdentityEditorWidget::Province, Core::IUser::StateProvince);
-    m_identity->addMapping(Identity::IdentityEditorWidget::City, Core::IUser::City);
-    m_identity->addMapping(Identity::IdentityEditorWidget::Country_TwoCharIso, Core::IUser::Country);
-    m_identity->addMapping(Identity::IdentityEditorWidget::Zipcode, Core::IUser::Zipcode);
+    _userModel = model;
+    _identity->setModel(model);
+    _identity->addMapping(Identity::IdentityEditorWidget::Street, Core::IUser::Street);
+    _identity->addMapping(Identity::IdentityEditorWidget::Province, Core::IUser::StateProvince);
+    _identity->addMapping(Identity::IdentityEditorWidget::City, Core::IUser::City);
+    _identity->addMapping(Identity::IdentityEditorWidget::Country_TwoCharIso, Core::IUser::Country);
+    _identity->addMapping(Identity::IdentityEditorWidget::Zipcode, Core::IUser::Zipcode);
 
-    m_identity->addMapping(Identity::IdentityEditorWidget::FirstName, Core::IUser::Firstname);
-    m_identity->addMapping(Identity::IdentityEditorWidget::UsualName, Core::IUser::UsualName);
-    m_identity->addMapping(Identity::IdentityEditorWidget::OtherNames, Core::IUser::OtherNames);
-    m_identity->addMapping(Identity::IdentityEditorWidget::TitleIndex, Core::IUser::TitleIndex);
-    m_identity->addMapping(Identity::IdentityEditorWidget::GenderIndex, Core::IUser::GenderIndex);
-    m_identity->addMapping(Identity::IdentityEditorWidget::LanguageIso, Core::IUser::LanguageISO);
-    m_identity->addMapping(Identity::IdentityEditorWidget::DateOfBirth, Core::IUser::DateOfBirth);
-    m_identity->addMapping(Identity::IdentityEditorWidget::Photo, Core::IUser::PhotoPixmap);
+    _identity->addMapping(Identity::IdentityEditorWidget::FirstName, Core::IUser::Firstname);
+    _identity->addMapping(Identity::IdentityEditorWidget::UsualName, Core::IUser::UsualName);
+    _identity->addMapping(Identity::IdentityEditorWidget::OtherNames, Core::IUser::OtherNames);
+    _identity->addMapping(Identity::IdentityEditorWidget::TitleIndex, Core::IUser::TitleIndex);
+    _identity->addMapping(Identity::IdentityEditorWidget::GenderIndex, Core::IUser::GenderIndex);
+    _identity->addMapping(Identity::IdentityEditorWidget::LanguageIso, Core::IUser::LanguageISO);
+    _identity->addMapping(Identity::IdentityEditorWidget::DateOfBirth, Core::IUser::DateOfBirth);
+    _identity->addMapping(Identity::IdentityEditorWidget::Photo, Core::IUser::PhotoPixmap);
 
-    m_identity->addMapping(Identity::IdentityEditorWidget::Extra_Login, Core::IUser::ClearLogin);
-    m_identity->addMapping(Identity::IdentityEditorWidget::Extra_Password, Core::IUser::Password);
+    _identity->addMapping(Identity::IdentityEditorWidget::Extra_Login, Core::IUser::ClearLogin);
+    _identity->addMapping(Identity::IdentityEditorWidget::Extra_Password, Core::IUser::Password);
 }
 
+/** Define the index of the user to edit. Essentially its row. */
 void DefaultUserContactWidget::setUserIndex(const int row)
 {
-    if (m_identity)
-        m_identity->setCurrentIndex(m_Model->index(row, 0));
+    if (_identity) {
+        _identity->setCurrentIndex(_userModel->index(row, 0));
+        _row = row;
+    }
 }
 
+/** Clear the widget */
 void DefaultUserContactWidget::clear()
 {
-    m_identity->clear();
+    _identity->clear();
 }
 
+/**
+ * Submit all editor changes.
+ * Except for password changes which is transmitted
+ * in real time to the UserPlugin::Internal::UserModel
+ */
 bool DefaultUserContactWidget::submit()
 {
-    return m_identity->submit();
+    return _identity->submit();
 }
 
-//void DefaultUserContactWidget::changeEvent(QEvent *e)
-//{
-//    if (e->type()==QEvent::LanguageChange) {
-//        ui->retranslateUi(this);
-//    }
-//}
+void DefaultUserContactWidget::passwordChanged(const QString &newClearPassword)
+{
+    // Assert if no usermodel
+    Q_ASSERT(_userModel);
+    Q_ASSERT(_row != -1);
+    if (!_userModel || _row == -1) {
+        LOG_ERROR("No UserModel or no current user");
+        return;
+    }
+    // Set the new password in the usermodel
+    LOG("User password changed");
+    if (!_userModel->setData(_userModel->index(_row, Core::IUser::ClearPassword), newClearPassword)) {
+        LOG_ERROR("New password can not be changed. UserModel::setData returned false");
+        return;
+    }
+    // All went good -> Warn user
+    Utils::informativeMessageBox(tr("Password correctly changed."),
+                                 tr("Your password was correctly modified in the server and the database."),
+                                 "",
+                                 tr("Password correctly changed."));
+}
+
 
 DefaultUserContactPage::DefaultUserContactPage(QObject *parent) :
     IUserViewerPage(parent)
@@ -167,7 +207,7 @@ DefaultUserProfessionalWidget::DefaultUserProfessionalWidget(QWidget *parent) :
     UserPlugin::IUserViewerWidget(parent),
     ui(new Ui::UserViewer_ProfessionalUI),
     m_Mapper(0),
-    m_Model(0)
+    _userModel(0)
 {
     ui->setupUi(this);
     QStringListModel *m1 = new QStringListModel(ui->specialtyListView);
@@ -270,7 +310,7 @@ DefaultUserRightsWidget::DefaultUserRightsWidget(QWidget *parent) :
     UserPlugin::IUserViewerWidget(parent),
     ui(new Ui::UserViewer_RightsUI),
     m_Mapper(0),
-    m_Model(0)
+    _userModel(0)
 {
     ui->setupUi(this);
 }
@@ -369,7 +409,7 @@ QWidget *DefaultUserRightsPage::createPage(QWidget *parent)
 DefaultUserPapersWidget::DefaultUserPapersWidget(const int type, QWidget *parent) :
     UserPlugin::IUserViewerWidget(parent),
     m_Mapper(0),
-    m_Model(0),
+    _userModel(0),
     m_type(type),
     m_row(-1)
 {
@@ -385,30 +425,30 @@ DefaultUserPapersWidget::~DefaultUserPapersWidget()
 
 void DefaultUserPapersWidget::setUserModel(UserModel *model)
 {
-    m_Model = model;
+    _userModel = model;
 }
 
 void DefaultUserPapersWidget::setUserIndex(const int index)
 {
-    if (m_Model) {
+    if (_userModel) {
         m_row = index;
         switch (m_type) {
         case DefaultUserPapersPage::GenericPaper:
-            preview->setHeader(m_Model->paper(m_row, Core::IUser::GenericHeader));
-            preview->setFooter(m_Model->paper(m_row, Core::IUser::GenericFooter));
-            preview->setWatermark(m_Model->paper(m_row, Core::IUser::GenericWatermark));
+            preview->setHeader(_userModel->paper(m_row, Core::IUser::GenericHeader));
+            preview->setFooter(_userModel->paper(m_row, Core::IUser::GenericFooter));
+            preview->setWatermark(_userModel->paper(m_row, Core::IUser::GenericWatermark));
             break;
 
         case DefaultUserPapersPage::AdministrativePaper:
-            preview->setHeader(m_Model->paper(m_row, Core::IUser::AdministrativeHeader));
-            preview->setFooter(m_Model->paper(m_row, Core::IUser::AdministrativeFooter));
-            preview->setWatermark(m_Model->paper(m_row, Core::IUser::AdministrativeWatermark));
+            preview->setHeader(_userModel->paper(m_row, Core::IUser::AdministrativeHeader));
+            preview->setFooter(_userModel->paper(m_row, Core::IUser::AdministrativeFooter));
+            preview->setWatermark(_userModel->paper(m_row, Core::IUser::AdministrativeWatermark));
             break;
 
         case DefaultUserPapersPage::PrescriptionPaper:
-            preview->setHeader(m_Model->paper(m_row, Core::IUser::PrescriptionHeader));
-            preview->setFooter(m_Model->paper(m_row, Core::IUser::PrescriptionFooter));
-            preview->setWatermark(m_Model->paper(m_row, Core::IUser::PrescriptionWatermark));
+            preview->setHeader(_userModel->paper(m_row, Core::IUser::PrescriptionHeader));
+            preview->setFooter(_userModel->paper(m_row, Core::IUser::PrescriptionFooter));
+            preview->setWatermark(_userModel->paper(m_row, Core::IUser::PrescriptionWatermark));
             break;
         }
     }
@@ -421,44 +461,44 @@ void DefaultUserPapersWidget::clear()
 
 bool DefaultUserPapersWidget::submit()
 {
-    if (m_Model) {
+    if (_userModel) {
         Print::TextDocumentExtra *text = 0;
-        QString uid = m_Model->index(m_row, Core::IUser::Uuid).data().toString();
+        QString uid = _userModel->index(m_row, Core::IUser::Uuid).data().toString();
         switch (m_type) {
         case DefaultUserPapersPage::GenericPaper:
             text = new Print::TextDocumentExtra();
             preview->headerToPointer(text);
-            m_Model->setPaper(uid, Core::IUser::GenericHeader, text);
+            _userModel->setPaper(uid, Core::IUser::GenericHeader, text);
             text = new Print::TextDocumentExtra();
             preview->footerToPointer(text);
-            m_Model->setPaper(uid, Core::IUser::GenericFooter, text);
+            _userModel->setPaper(uid, Core::IUser::GenericFooter, text);
             text = new Print::TextDocumentExtra();
             preview->watermarkToPointer(text);
-            m_Model->setPaper(uid, Core::IUser::GenericWatermark, text);
+            _userModel->setPaper(uid, Core::IUser::GenericWatermark, text);
             break;
 
         case DefaultUserPapersPage::AdministrativePaper:
             text = new Print::TextDocumentExtra();
             preview->headerToPointer(text);
-            m_Model->setPaper(uid, Core::IUser::AdministrativeHeader, text);
+            _userModel->setPaper(uid, Core::IUser::AdministrativeHeader, text);
             text = new Print::TextDocumentExtra();
             preview->footerToPointer(text);
-            m_Model->setPaper(uid, Core::IUser::AdministrativeFooter, text);
+            _userModel->setPaper(uid, Core::IUser::AdministrativeFooter, text);
             text = new Print::TextDocumentExtra();
             preview->watermarkToPointer(text);
-            m_Model->setPaper(uid, Core::IUser::AdministrativeWatermark, text);
+            _userModel->setPaper(uid, Core::IUser::AdministrativeWatermark, text);
             break;
 
         case DefaultUserPapersPage::PrescriptionPaper:
             text = new Print::TextDocumentExtra();
             preview->headerToPointer(text);
-            m_Model->setPaper(uid, Core::IUser::PrescriptionHeader, text);
+            _userModel->setPaper(uid, Core::IUser::PrescriptionHeader, text);
             text = new Print::TextDocumentExtra();
             preview->footerToPointer(text);
-            m_Model->setPaper(uid, Core::IUser::PrescriptionFooter, text);
+            _userModel->setPaper(uid, Core::IUser::PrescriptionFooter, text);
             text = new Print::TextDocumentExtra();
             preview->watermarkToPointer(text);
-            m_Model->setPaper(uid, Core::IUser::PrescriptionWatermark, text);
+            _userModel->setPaper(uid, Core::IUser::PrescriptionWatermark, text);
             break;
         }
         // sync settings to save user papers
