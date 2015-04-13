@@ -1,7 +1,7 @@
 /***************************************************************************
  *  The FreeMedForms project is a set of free, open source medical         *
  *  applications.                                                          *
- *  (C) 2008-2014 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
+ *  (C) 2008-2015 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
  *  All rights reserved.                                                   *
  *                                                                         *
  *  This program is free software: you can redistribute it and/or modify   *
@@ -28,13 +28,13 @@
 /**
  * \class Identity::Internal::PasswordDialog
  * \brief Dialog for password changing / setting.
- * With this dialog, user can change its password. He's asked of the actual
- * password once, and of the new password twice. When user accept the dialog
- * a verification is done. \n
- * - canGetNewPassword() return the verification state. If it's true, all
+ * With this dialog, users can change their passwords.
+ * Current password is typed once, new password is typed twice.
+ * When user accepts the dialog a verification is done. \n
+ * - canGetNewPassword() returns the verification state. If it's true, all
  * is good: old password was verified, and new password was confirmed correctly.
- * - cryptedPassword() return the crypted new password to use.
- * - clearPassword() return the new password (non crypted).
+ * - cryptedPassword() returns the encrypted new password to use.
+ * - clearPassword() returns the new password (not encrypted).
 */
 
 #include "passworddialog.h"
@@ -47,7 +47,7 @@
 #include <utils/global.h>
 #include <utils/passwordandlogin.h>
 #include <utils/widgets/lineeditechoswitcher.h>
-// FIXME: this header should be avoid
+// FIXME: this header should be avoided
 #include <translationutils/constanttranslations.h>
 
 #include "ui_passworddialog.h"
@@ -102,7 +102,7 @@ void PasswordDialog::checkControlPassword(const QString &text)
     }
 }
 
-/** Checks if \e text content can be used has password. Check password weakness */
+/** Checks if \e text content can be used as password. Check password weakness */
 void PasswordDialog::checkNewPassword(const QString &text)
 {
     if (text.size() >= 5) {
@@ -117,7 +117,7 @@ void PasswordDialog::checkNewPassword(const QString &text)
     checkControlPassword(m_ui->newControl->text());
 }
 
-/** Define the old crypted password when you want to change the password and not only set the password */
+/** Define the old encrypted password when you want to change the password and not only set the password */
 void PasswordDialog::setOldCryptedPassword(const QString &crypted)
 {
     m_OldCryptedPass = crypted;
@@ -139,7 +139,7 @@ bool PasswordDialog::canGetNewPassword() const
     return m_AllIsGood;
 }
 
-/** Returns the crypted new password. The dialog must be accepted before. */
+/** Returns the encrypted new password. The dialog must be accepted before. */
 QString PasswordDialog::cryptedPassword() const
 {
     if (m_AllIsGood)
