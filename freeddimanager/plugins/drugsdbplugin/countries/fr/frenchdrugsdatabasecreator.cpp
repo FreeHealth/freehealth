@@ -59,6 +59,9 @@
 
 #include <QDebug>
 
+// TODO: Mise à jour des bases de données sur un site centralisé
+// Voir http://base-donnees-publique.medicaments.gouv.fr/telechargement.php
+
 // For your tests, you can limit the number of drugs computed
 // and inserted into the database using this debugging enum.
 // Set to -1 if you want all drugs to be processed
