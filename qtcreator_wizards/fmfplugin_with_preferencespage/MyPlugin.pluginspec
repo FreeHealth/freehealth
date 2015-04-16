@@ -1,6 +1,6 @@
 <plugin name="%PluginName%" version="0.0.1" compatVersion="0.0.1">
     <vendor>%VendorName%</vendor>
-    <copyright>(C) 2008-2014 by Eric MAEKER, MD</copyright>
+    <copyright>(C) 2008-2015 by Eric MAEKER, MD</copyright>
     <license>%License%</license>
     <description>%Description%</description>
     <url>%URL%</url>

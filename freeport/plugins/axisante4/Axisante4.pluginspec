@@ -1,6 +1,6 @@
 <plugin name="Axisante4" version="0.0.1" compatVersion="0.0.1">
     <vendor>FreePort</vendor>
-    <copyright>(C) 2008-2014 by Eric MAEKER, MD</copyright>
+    <copyright>(C) 2008-2015 by Eric MAEKER, MD</copyright>
     <license>GNU General Public License version 3</license>
     <category>Data recovering</category>
     <description>Allow retrieving of Axisante 4 patient database into FreeMedForms</description>

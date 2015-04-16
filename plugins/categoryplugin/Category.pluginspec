@@ -1,6 +1,6 @@
 <plugin name="Category" version="0.0.1" compatVersion="0.0.1">
     <vendor>FreeMedForms</vendor>
-    <copyright>(C) 2008-2014 by Eric MAEKER, MD</copyright>
+    <copyright>(C) 2008-2015 by Eric MAEKER, MD</copyright>
     <license>GPLv3</license>
     <category>Category manager</category>
     <description>Category manager for FreeMedForms applications.</description>
