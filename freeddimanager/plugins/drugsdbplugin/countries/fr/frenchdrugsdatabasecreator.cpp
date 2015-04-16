@@ -1,7 +1,7 @@
 /***************************************************************************
  *  The FreeMedForms project is a set of free, open source medical         *
  *  applications.                                                          *
- *  (C) 2008-2014 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
+ *  (C) 2008-2015 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
  *  All rights reserved.                                                   *
  *                                                                         *
  *  This program is free software: you can redistribute it and/or modify   *
@@ -58,6 +58,9 @@
 #include <QTextStream>
 
 #include <QDebug>
+
+// TODO: Mise à jour des bases de données sur un site centralisé
+// Voir http://base-donnees-publique.medicaments.gouv.fr/telechargement.php
 
 // For your tests, you can limit the number of drugs computed
 // and inserted into the database using this debugging enum.

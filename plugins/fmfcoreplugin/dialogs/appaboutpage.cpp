@@ -10,7 +10,7 @@ using namespace Core::Internal;
 
 static const char *ABOUT_TEXT = QT_TRANSLATE_NOOP("AboutDialog",
         "<p align=center><b>Welcome to FreeMedForms</b><br />"
-        "(C) 2008-2014 by Eric MAEKER, MD</p>"
+        "(C) 2008-2015 by Eric MAEKER, MD</p>"
         "<p align=left>This application is an early alpha release. This means that a lot of "
         "features are not yet implemented or may not work and that you may experiment bugs.<br />"
         "This software is release without any warranty and only for test purposal.<br />"

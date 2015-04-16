@@ -1,7 +1,7 @@
 /***************************************************************************
  *  The FreeMedForms project is a set of free, open source medical         *
  *  applications.                                                          *
- *  (C) 2008-2014 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
+ *  (C) 2008-2015 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
  *  All rights reserved.                                                   *
  *                                                                         *
  *  This program is free software: you can redistribute it and/or modify   *
@@ -281,7 +281,7 @@ static bool saveUids(const QHash<QString, int> &drugs_uids)
     QString content;
     content += "// /***************************************************************************\n"
                "//  *   FreeMedicalForms                                                      *\n"
-               "//  *   (C) 2008-2014 by Eric MAEKER, MD                                      *\n"
+               "//  *   (C) 2008-2015 by Eric MAEKER, MD                                      *\n"
                "//  *   eric.maeker@gmail.com                                                   *\n"
                "//  *   All rights reserved.                                                  *\n"
                "//  ***************************************************************************/\n"

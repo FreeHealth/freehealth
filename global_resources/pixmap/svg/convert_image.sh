@@ -1,7 +1,7 @@
 ###########################################################################
 #  The FreeMedForms project is a set of free, open source medical         #
 #  applications.                                                          #
-#  (C) 2008-2014 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      #
+#  (C) 2008-2015 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      #
 #  All rights reserved.                                                   #
 #                                                                         #
 #  The FreeAccount plugins are free, open source FreeMedForms' plugins.   #
