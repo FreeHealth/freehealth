@@ -1113,27 +1113,27 @@ bool UserBase::createUser(UserData *user)
     // TODO: check current user freemedforms' rights
     switch (driver()) {
     case Utils::Database::MySQL:
-        {
-            // create user grants
-            // TODO: security problem, lower grants on DB according to user's FMF rights
-            Utils::Database::Grants grants = Grant_Select | Grant_Update | Grant_Insert | Grant_Delete | Grant_Create | Grant_Drop | Grant_Alter | Grant_Index;
-            if (user->hasRight(Constants::USER_ROLE_USERMANAGER, Core::IUser::Create)) {
-                grants |= Grant_CreateUser;
-            }
+    {
+        // create user grants
+        // TODO: security problem, lower grants on DB according to user's FMF rights
+        Utils::Database::Grants grants = Grant_Select | Grant_Update | Grant_Insert | Grant_Delete | Grant_Create | Grant_Drop | Grant_Alter | Grant_Index;
+        if (user->hasRight(Constants::USER_ROLE_USERMANAGER, Core::IUser::Create)) {
+            grants |= Grant_CreateUser;
+        }
 
-            // create a MySQL user
-            if (!createMySQLUser(user->clearLogin(), user->clearPassword(), grants))
-                return false;
-            break;
-        }
-    case Utils::Database::SQLite:
-        {
-            break;
-        }
-    case Utils::Database::PostSQL:
-        {
+        // create a MySQL user
+        if (!createMySQLUser(user->clearLogin(), user->clearPassword(), grants))
             return false;
-        }
+        break;
+    }
+    case Utils::Database::SQLite:
+    {
+        break;
+    }
+    case Utils::Database::PostSQL:
+    {
+        return false;
+    }
     }
 
     // Create the FreeMedForms user
