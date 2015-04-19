@@ -15,9 +15,12 @@ The FreeMedForms project
 
   * All applications
   * FreeMedForms
+    * Installation: correctly manage database prefix when configuring MySQL server
     * User database: fixing a severe compatibility issue
     * AGGIR plugin: correcting GIR group computation
-    * Fixing user creation (users are now registered on all host for MySQL config)
+    * Fixing user creation:
+      * users are now registered on all host for MySQL config
+      * when configured with MySQL correctly manage user rights (database prefixes)
     * Some bug fixes
   * FreeDiams
   * FreeDRC

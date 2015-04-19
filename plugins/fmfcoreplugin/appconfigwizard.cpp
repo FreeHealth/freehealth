@@ -531,15 +531,18 @@ bool ClientConfigPage::validatePage()
     // Test server identifiants
     settings()->setValue(Core::Constants::S_LASTLOGIN, QString());
     settings()->setValue(Core::Constants::S_LASTPASSWORD, QString());
+
     // try to connect the MySQL server and test existence of a FreeMedForms configuration
-    QSqlDatabase mysql = QSqlDatabase::addDatabase("QMYSQL", "__CHECK__CONFIG__");
-    Utils::DatabaseConnector c = settings()->databaseConnector();
-    // test fmf_admin user
-    mysql.setHostName(c.host());
-    mysql.setPort(c.port());
-    mysql.setUserName(c.clearLog());
-    mysql.setPassword(c.clearPass());
+    Utils::DatabaseConnector connector = settings()->databaseConnector();
+    const QString connection = Utils::createUid();
+    QSqlDatabase mysql = QSqlDatabase::addDatabase("QMYSQL", connection);
+    mysql.setHostName(connector.host());
+    mysql.setPort(connector.port());
+    mysql.setUserName(connector.clearLog());
+    mysql.setPassword(connector.clearPass());
+    mysql.setDatabaseName("mysql");
     if (!mysql.open()) {
+        LOG_ERROR("Unable to connect to MySQL databases");
         Q_EMIT completeChanged();
         return false;
     }
@@ -548,30 +551,47 @@ bool ClientConfigPage::validatePage()
     // all freemedforms databases are prefixed with fmf_
     // test the fmf_* databases existence
     QSqlQuery query(mysql);
-    int n = 0;
-    if (!query.exec("show databases;")) {
-        LOG_QUERY_ERROR(query);
-        Q_EMIT completeChanged();
-        return false;
-    } else {
-        while (query.next())
-            if (query.value(0).toString().startsWith("fmf_"))
-                ++n;
+    int tries = 0;
+    bool ok = false;
+    QString prefix;
+
+    while (tries < 4) {
+        tries++;
+        // Get the database prefix to use
+        prefix = Utils::askUser(tr("Database global prefix"), tr("Please specify the database prefix to use (please ask your software administrator)"));
+        if (!query.exec(QString("show databases like '%1fmf_%';").arg(prefix))) {
+            LOG_QUERY_ERROR(query);
+            Q_EMIT completeChanged();
+            return false;
+        }
+        if (query.size() < 5) {
+            ok = false;
+            Utils::warningMessageBox(tr("No FreeMedForms server configuration detected"),
+                                     tr("You are trying to configure a network client of FreeMedForms. "
+                                        "It is manadatory to connect to a FreeMedForms network server.\n"
+                                        "While the host connection is valid, no FreeMedForms configuration was "
+                                        "found on this host.\n\n"
+                                        "Please check that this host contains a FreeMedForms server configuration."));
+            LOG_ERROR("No FreeMedForms configuration detected on the server");
+        } else {
+            ok = true;
+            query.finish();
+            break;
+        }
+        query.finish();
     }
-    if (n<5) {
-        Utils::warningMessageBox(tr("No FreeMedForms server configuration detected"),
-                                 tr("You are trying to configure a network client of FreeMedForms. "
-                                    "It is manadatory to connect to a FreeMedForms network server.\n"
-                                    "While the host connection is valid, no FreeMedForms configuration was "
-                                    "found on this host.\n\n"
-                                    "Please check that this host contains a FreeMedForms server configuration."));
-        LOG_ERROR("No FreeMedForms configuration detected on the server");
+    if (!ok) {
         Q_EMIT completeChanged();
         return false;
     }
 
+    // Inform connector of the prefix
+    connector.setGlobalDatabasePrefix(prefix);
+    settings()->setDatabaseConnector(connector);
+
     // Connect databases
-    QProgressDialog dlg(tkTr(Trans::Constants::CONNECTING_DATABASE), tkTr(Trans::Constants::PLEASE_WAIT), 0, 0);
+    QProgressDialog dlg(tkTr(Trans::Constants::CONNECTING_DATABASE),
+                        tkTr(Trans::Constants::PLEASE_WAIT), 0, 0);
     dlg.setWindowModality(Qt::WindowModal);
     dlg.setMinimumDuration(1000);
     dlg.show();
