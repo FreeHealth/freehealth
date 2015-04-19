@@ -139,6 +139,7 @@ public:
     void setEditable(bool state);
     void setModified(bool state);
     void setCurrent(bool state);
+    void setPasswordModified(bool state);
 
     bool isCurrent() const;
     bool isEditable() const;

@@ -459,20 +459,27 @@ UserData *UserBase::getUserByLoginPassword(const QVariant &login, const QVariant
  */
 bool UserBase::checkLogin(const QString &clearLogin, const QString &clearPassword)
 {
-    // qDebug() << "checkLogin" << clearLogin << clearPassword;
+    const QString hidenPass = QString().fill('*', clearPassword.length());
+    LOG(QString("Check user login %1: %2")
+        .arg(clearLogin)
+        .arg(hidenPass)
+        );
+    {
+        Utils::PasswordCrypter crypter;
+        qDebug() << clearPassword << crypter.cryptPassword(clearPassword);
+    }
+
     m_LastUuid.clear();
     m_LastLogin.clear();
     m_LastPass.clear();
-
-    if (QSqlDatabase::connectionNames().contains("__ConnectionTest__"))
-        QSqlDatabase::removeDatabase("__ConnectionTest__");
+    const QString connection = Utils::createUid();
 
     // Connect to database server
     switch (settings()->databaseConnector().driver()) {
     case Utils::Database::MySQL:
     {
         // Try to connect with the new identifiers to MySQL server
-        QSqlDatabase connectionTest = database().addDatabase("QMYSQL", "__ConnectionTest__");
+        QSqlDatabase connectionTest = database().addDatabase("QMYSQL", connection);
         connectionTest.setHostName(settings()->databaseConnector().host());
         connectionTest.setPort(settings()->databaseConnector().port());
         connectionTest.setUserName(clearLogin);
@@ -482,7 +489,9 @@ bool UserBase::checkLogin(const QString &clearLogin, const QString &clearPasswor
             LOG_ERROR(database().lastError().text());
             return false;
         }
-        LOG(QString("Database server identifiers are correct for login %1: %2").arg(clearLogin).arg(clearPassword.length()));
+        LOG(QString("Database server identifiers are correct for login %1: %2")
+            .arg(clearLogin)
+            .arg(hidenPass));
 
         // If user database is not currently initialized, we need to initialize it
         Utils::DatabaseConnector connector = settings()->databaseConnector();
@@ -522,6 +531,8 @@ bool UserBase::checkLogin(const QString &clearLogin, const QString &clearPasswor
     where.insert(USER_LOGIN, QString("='%1'").arg(Utils::loginForSQL(clearLogin)));
     QString req = select(Table_USERS, list, where);
 
+    qDebug() << req;
+
     QSqlQuery query(DB);
     if (query.exec(req)) {
         if (query.next()) {
@@ -544,16 +555,20 @@ bool UserBase::checkLogin(const QString &clearLogin, const QString &clearPasswor
 
     // Check user password using the Utils::PasswordCrypter
     Utils::PasswordCrypter crypter;
+
+
+    qDebug() << clearPassword << m_LastPass << crypter.cryptPassword(clearPassword);
+
+
     if (!crypter.checkPassword(clearPassword, m_LastPass)) {
+        LOG_ERROR(QString("Unable to connect to FreeMedForms database with user %1").arg(clearLogin));
         m_LastLogin.clear();
         m_LastPass.clear();
         m_LastUuid.clear();
         return false;
     }
-
-    if (QSqlDatabase::connectionNames().contains("__ConnectionTest__"))
-        QSqlDatabase::removeDatabase("__ConnectionTest__");
     DB.commit();
+    QSqlDatabase::removeDatabase(connection);
     return (!m_LastUuid.isEmpty());
 }
 
@@ -1150,6 +1165,7 @@ bool UserBase::createUser(UserData *user)
  * - an UUID is defined
  * - a login is defined
  * - a UserPlugin::Internal::UserData::cryptedPassword() is defined
+ * \warning if you are updating a user, you must use specific method for the password. UUID and ID cannot be updated
 */
 bool UserBase::saveUser(UserData *user)
 {
@@ -1193,23 +1209,47 @@ bool UserBase::saveUser(UserData *user)
     qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     if (toUpdate) {
         // update Table_USERS
-        // TODO: update identifiers according to the driver.
-        query.prepare(prepareUpdateQuery(Table_USERS, where));
-        query.bindValue(USER_ID, user->id());
-        query.bindValue(USER_UUID, user->uuid());
-        query.bindValue(USER_VALIDITY, (int)user->validity());
-        query.bindValue(USER_ISVIRTUAL, (int)user->isVirtual());
-        query.bindValue(USER_LOGIN, user->login64());
-        query.bindValue(USER_PASSWORD, user->cryptedPassword());
-        query.bindValue(USER_LASTLOG, user->lastLogin());
-        query.bindValue(USER_USUALNAME, user->usualName());
-        query.bindValue(USER_OTHERNAMES, user->otherNames());
-        query.bindValue(USER_FIRSTNAME, user->firstname());
-        query.bindValue(USER_TITLE, user->titleIndex());
-        query.bindValue(USER_GENDER, user->genderIndex());
-        query.bindValue(USER_MAIL, user->mail());
-        query.bindValue(USER_LANGUAGE, user->languageIso());
-        query.bindValue(USER_LOCKER, user->locker());
+        // NOTE: in this part, some user data can not be updated like this
+        // Eg: password, uuid.
+        int i = 0;
+        query.prepare(prepareUpdateQuery(Table_USERS, QList<int>()
+                                         << USER_VALIDITY
+                                         << USER_ISVIRTUAL
+                                         << USER_LOGIN
+                                         << USER_LASTLOG
+                                         << USER_USUALNAME
+                                         << USER_OTHERNAMES
+                                         << USER_FIRSTNAME
+                                         << USER_TITLE
+                                         << USER_GENDER
+                                         << USER_MAIL
+                                         << USER_LANGUAGE
+                                         << USER_LOCKER
+                                         ,
+                                         where));
+        query.bindValue(i, (int)user->validity());
+        i++;
+        query.bindValue(i, (int)user->isVirtual());
+        i++;
+        query.bindValue(i, user->login64());
+        i++;
+        query.bindValue(i, user->lastLogin());
+        i++;
+        query.bindValue(i, user->usualName());
+        i++;
+        query.bindValue(i, user->otherNames());
+        i++;
+        query.bindValue(i, user->firstname());
+        i++;
+        query.bindValue(i, user->titleIndex());
+        i++;
+        query.bindValue(i, user->genderIndex());
+        i++;
+        query.bindValue(i, user->mail());
+        i++;
+        query.bindValue(i, user->languageIso());
+        i++;
+        query.bindValue(i, user->locker());
         if (!query.exec()) {
             LOG_QUERY_ERROR(query);
             query.finish();
@@ -1568,13 +1608,35 @@ bool UserBase::changeUserPassword(UserData *user, const QString &newClearPasswor
     if (!connectDatabase(DB, __LINE__)) {
         return false;
     }
-    DB.transaction();
 
-    // update FreeMedForms password
+    // Try to update server password first
+    if (driver()==MySQL) {
+        // Own User Password
+        if (user->uuid() == Core::ICore::instance()->user()->uuid()) {
+            if (!changeMySQLUserOwnPassword(user->clearLogin(), newClearPassword)) {
+                LOG_ERROR("Unable to update MySQL server own password");
+                return false;
+            }
+        } else {
+            // Admin changes Other User Password
+            if (!changeMySQLOtherUserPassword(user->clearLogin(), newClearPassword)) {
+                LOG_ERROR("Unable to update MySQL server other user password");
+                return false;
+            }
+        }
+    }
+
+    // Update FreeMedForms password
     Utils::PasswordCrypter crypter;
+    qDebug() << newClearPassword << crypter.cryptPassword(newClearPassword);
+
     QHash<int, QString> where;
     where.insert(USER_UUID, QString("='%1'").arg(user->uuid()));
+    DB.transaction();
     QSqlQuery query(DB);
+
+    qDebug() << prepareUpdateQuery(Table_USERS, USER_PASSWORD, where);
+
     query.prepare(prepareUpdateQuery(Table_USERS, USER_PASSWORD, where));
     query.bindValue(0, crypter.cryptPassword(newClearPassword));
     if (!query.exec()) {
@@ -1583,15 +1645,8 @@ bool UserBase::changeUserPassword(UserData *user, const QString &newClearPasswor
         DB.rollback();
         return false;
     }
+    LOG("User password updated in the FreeMedForms database");
     query.finish();
-
-    // update server password
-    if (driver()==MySQL) {
-        if (!changeMySQLUserPassword(user->clearLogin(), newClearPassword)) {
-            DB.rollback();
-            return false;
-        }
-    }
     DB.commit();
     return true;
 }

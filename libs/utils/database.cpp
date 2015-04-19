@@ -109,6 +109,20 @@ struct DbIndex {
     QString name;
 };
 
+// Managing defaults
+// For each new FMF user account, FMF creates 4 almost identical MySQL
+// users: 1 that can connect from "localhost", 1 that can connect from
+// 127.0.0.1 (ipv4 loopback), 1 that can connect from ::1 (ipv6 loopback)
+// and 1 that can connect from "%" (any host).
+// This behaviour could be fine tuned in the future but access from any
+// host should be default behaviour for now.
+// Make sure your MySQL server is not accessible from the wide area network.
+// For secure access through the wide area network we recommend SSH tunnels.
+static QStringList mySqlHosts()
+{
+    return QStringList() << "%" << "localhost" << "127.0.0.1" << "::1";
+}
+
 class DatabasePrivate
 {
 public:
@@ -451,21 +465,6 @@ bool Database::createMySQLUser(const QString &log,
         LOG_ERROR_FOR("Database","No grants when creating user");
         return false;
     }
-    
-    // Managing defaults
-    // For each new FMF user account, FMF creates 4 almost identical MySQL
-    // users: 1 that can connect from "localhost", 1 that can connect from
-    // 127.0.0.1 (ipv4 loopback), 1 that can connect from ::1 (ipv6 loopback)
-    // and 1 that can connect from "%" (any host).
-    // This behaviour could be fine tuned in the future but access from any
-    // host should be default behaviour for now.
-    // Make sure your MySQL server is not accessible from the wide area network.
-    // For secure access through the wide area network we recommend SSH tunnels.
-    
-    // This is to avoid unused parameter warning during compilation until
-    // userHost parameter is actually used:
-    QStringList mySqlHosts;
-    mySqlHosts << "%" << "localhost" << "127.0.0.1" << "::1";
 
     QString prefix = databasePrefix + "fmf_%";
     prefix = prefix.replace("_", "\\_");
@@ -481,7 +480,7 @@ bool Database::createMySQLUser(const QString &log,
 
     DB.transaction();
     QSqlQuery query(DB);
-    foreach(const QString &host, mySqlHosts) {
+    foreach(const QString &host, mySqlHosts()) {
         // Create user for each host
         QString req = QString("CREATE USER '%1'@'%2' IDENTIFIED BY '%3';")
                       .arg(log).arg(host).arg(password);
@@ -587,9 +586,10 @@ bool Database::dropMySQLUser(const QString &log, const QString &userHost)
 
 /**
  * Change the password to \e newPassword for a MySQL user identified by his \e login.
- * Creates its own transaction.
+ * Creates its own transaction.\n
+ * \warning Use at own risk as this function does not make checks and uses SET PASSWORD (for the current MySQL user)
 */
-bool Database::changeMySQLUserPassword(const QString &login, const QString &newPassword)
+bool Database::changeMySQLUserOwnPassword(const QString &login, const QString &newPassword)
 {
     if (login.isEmpty())
         return false;
@@ -598,32 +598,83 @@ bool Database::changeMySQLUserPassword(const QString &login, const QString &newP
     if (!connectedDatabase(DB, __LINE__))
         return false;
 
-    // TODO: manage user grants
-//    // Testing current connected user grants
-//    Grants userGrants = d_database->m_Grants.value(d_database->m_ConnectionName, Grant_NoGrant);
+    LOG_FOR("Database", QString("Trying to change MySQL OWN user password:\n"
+                                ".user: %1\n"
+                                ".host: %2(%3)\n"
+                                ".newPass: %4")
+            .arg(login)
+            .arg(database().hostName())
+            .arg(database().port())
+            .arg(QString().fill('*', newPassword.size())));
 
-//    if (!(userGrants & Grant_CreateUser)) {
-//        LOG_ERROR_FOR("Database", "Trying to create user, insufficient rights.");
-//        return false;
-//    }
-    LOG_FOR("Database", QString("Trying to change MySQL user password:\n"
-                                "       user: %1\n"
-                                "       host: %2(%3)\n"
-                                "       new password: %4")
-            .arg(login).arg(database().hostName()).arg(database().port()).arg(newPassword));
-
-    QString req;
-    req = QString("UPDATE `mysql`.`user` SET `Password` = PASSWORD('%1') WHERE `User` = '%2';")
-            .arg(newPassword).arg(login);
     DB.transaction();
     QSqlQuery query(DB);
-    if (!query.exec(req)) {
+    QString req;
+    foreach(const QString &host, mySqlHosts()) {
+        req = QString("SET PASSWORD FOR '%1'@'%2' = PASSWORD('%3');")
+                .arg(login).arg(host).arg(newPassword);
+        if (!query.exec(req)) {
+            LOG_QUERY_ERROR_FOR("Database", query);
+            LOG_DATABASE_FOR("Database", database());
+            DB.rollback();
+            return false;
+        }
+        query.finish();
+    }
+
+    if (!query.exec("FLUSH PRIVILEGES;")) {
         LOG_QUERY_ERROR_FOR("Database", query);
         LOG_DATABASE_FOR("Database", database());
         DB.rollback();
         return false;
     }
-    query.finish();
+    DB.commit();
+    LOG_FOR("Database", QString("User %1 password modified").arg(login));
+    return true;
+}
+
+/**
+ * Change the password to \e newPassword for a MySQL user identified by his \e login.
+ * Creates its own transaction.\n
+ * \warning Use at own risk as this function does not make checks and uses UPDATE `mysql`.`user`...
+ * \warning Before calling this method you must take care that the current logged user has administrative rights to update users data
+*/
+bool Database::changeMySQLOtherUserPassword(const QString &login, const QString &newPassword)
+{
+    if (login.isEmpty())
+        return false;
+
+    QSqlDatabase DB = database();
+    if (!connectedDatabase(DB, __LINE__))
+        return false;
+
+    LOG_FOR("Database", QString("Trying to change MySQL OTHER user password:\n"
+                                "       user: %1\n"
+                                "       host: %2(%3)\n"
+                                "       new password: %4")
+            .arg(login)
+            .arg(database().hostName())
+            .arg(database().port())
+            .arg(newPassword));
+
+    // Change password for each mysql hosts
+    DB.transaction();
+    QSqlQuery query(DB);
+    QString req;
+    foreach(const QString &host, mySqlHosts()) {
+//        req = QString("UPDATE `mysql`.`user` SET `Password` = PASSWORD('%1') WHERE `User` = '%2';")
+//                .arg(newPassword).arg(login);
+        req = QString("SET PASSWORD FOR '%1'@'%2' = PASSWORD('%3');")
+                .arg(login).arg(host).arg(newPassword);
+        if (!query.exec(req)) {
+            LOG_QUERY_ERROR_FOR("Database", query);
+            LOG_DATABASE_FOR("Database", database());
+            DB.rollback();
+            return false;
+        }
+        query.finish();
+    }
+
     if (!query.exec("FLUSH PRIVILEGES;")) {
         LOG_QUERY_ERROR_FOR("Database", query);
         LOG_DATABASE_FOR("Database", database());

@@ -974,8 +974,11 @@ bool UserModel::setData(const QModelIndex &item, const QVariant &value, int role
     {
         if (user->clearPassword()==value.toString())
             break;
+        QString oldPass = user->clearPassword();
         user->setClearPassword(value.toString());
-        userBase()->changeUserPassword(user, value.toString());
+        if (!userBase()->changeUserPassword(user, value.toString()))
+            user->setClearPassword(oldPass);
+        user->setPasswordModified(false); // as we just saved it or revert the change
         break;
     }
     case Core::IUser::Password :  user->setCryptedPassword(value); break;

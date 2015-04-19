@@ -657,6 +657,11 @@ bool UserData::isPasswordModified() const
     return d->m_PasswordChanged;
 }
 
+void UserData::setPasswordModified(bool state)
+{
+    d->m_PasswordChanged = false;
+}
+
 /** Returns true if the object is null */
 bool UserData::isNull() const
 {

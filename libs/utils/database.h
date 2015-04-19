@@ -45,8 +45,8 @@ QT_END_NAMESPACE
 /**
  * \file database.h
  * \author Eric Maeker
- * \version 0.8.2
- * \date 27 Jan 2013
+ * \version 0.10.1
+ * \date 19 April 2015
 */
 
 namespace Utils {
@@ -262,7 +262,8 @@ public:
     virtual bool createMySQLDatabase(const QString &dbName);
     virtual bool createMySQLUser(const QString &log, const QString &clearPass, const Grants grants, const QString &databasePrefix = QString::null);
     virtual bool dropMySQLUser(const QString &log, const QString &userHost = QString::null);
-    virtual bool changeMySQLUserPassword(const QString &login, const QString &newPassword);
+    virtual bool changeMySQLUserOwnPassword(const QString &login, const QString &newPassword);
+    virtual bool changeMySQLOtherUserPassword(const QString &login, const QString &newPassword);
 
     // All drivers members
     virtual QSqlDatabase database() const;

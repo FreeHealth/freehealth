@@ -132,7 +132,8 @@ void UserIdentifier::done(int result)
             } else {
                 Utils::warningMessageBox(tr("Incorrect login/password information."),
                                          tr("You can try %1 more time(s).")
-                                         .arg(MaxNumberOfTries - m_NumberOfTries),"",qApp->applicationName());
+                                         .arg(MaxNumberOfTries - m_NumberOfTries - 1),
+                                         "",qApp->applicationName());
             }
         } else {
             LOG(tr("User can be identified."));
