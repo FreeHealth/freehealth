@@ -130,6 +130,7 @@ EdrcWidget::EdrcWidget(const QString &name, Form::FormItem *formItem, QWidget *p
     m_CentralWidget(0),
     m_CrTreeModel(0)
 {
+    Q_UNUSED(name); // TODO: check why name is not used
     // Prepare Widget Layout and label
     QWidget *labelWidget = new QWidget(this);
     QBoxLayout *labelBox = getBoxLayout(OnLeft, m_FormItem->spec()->label(), labelWidget);
@@ -233,6 +234,7 @@ bool EdrcWidgetData::isModified() const
 
 void EdrcWidgetData::setModified(bool modified)
 {
+    Q_UNUSED(modified);
     // TODO: here
     return;
 //    m_Widget->m_PrescriptionModel->setModified(modified);
@@ -240,6 +242,7 @@ void EdrcWidgetData::setModified(bool modified)
 
 void EdrcWidgetData::setReadOnly(bool readOnly)
 {
+    Q_UNUSED(readOnly);
     // TODO: here
     return;
 //    m_Widget->m_CentralWidget->setEnabled(!readOnly);
@@ -262,6 +265,7 @@ bool EdrcWidgetData::setData(const int ref, const QVariant &data, const int role
 
 QVariant EdrcWidgetData::data(const int ref, const int role) const
 {
+    Q_UNUSED(ref); // TODO: check why ref is not used
 //    qWarning() << "EdrcWidgetData::data(" << ref << role << ");" << Core::IPatient::DrugsInnAllergies;
 
     if (role == Form::IFormItemData::PrintRole) {
