@@ -575,7 +575,7 @@ bool ServerConfigPage::validatePage()
     }
 
     // execute the server configuration SQL script
-    const QString connection = "__APP_CONNECTION_TESTER";
+    const QString connection = Utils::createUid();
     QSqlDatabase mysql = QSqlDatabase::addDatabase("QMYSQL", connection);
     mysql.setHostName(serverWidget->hostName());
     mysql.setPort(serverWidget->port());
@@ -599,13 +599,20 @@ bool ServerConfigPage::validatePage()
                                          tr("The server is already configured for FreeMedForms."));
         } else {
             LOG("Executing server configuration SQL script");
-            QString error;
-            if (!Utils::Database::executeSqlFile(connection, serverConfigurationSqlScript(), &error)) {
+            // Get original file
+            QString sqlCommands = Utils::readTextFile(serverConfigurationSqlScript());
+            // Replace __PREFIX__ with the current user database prefix
+            // TODO: get the correct prefix
+            QString prefix = "%";
+            prefix = prefix.replace("_", "\\_"); // Always escape _ for MySQL commands
+            sqlCommands = sqlCommands.replace("__PREFIX__", prefix);
+            // Execute SQL commands
+            if (!Utils::Database::executeSQL(sqlCommands, mysql)) {
                 LOG_ERROR("Server configuration script not processed");
                 Utils::warningMessageBox(tr("An error occured..."),
                                          tr("An error occured when trying to execute the script configuration script.\n"
                                             "Please check out the log files and contact your administrator."),
-                                         error);
+                                         "");
             } else {
                 LOG("Server successfully configured");
                 Utils::informativeMessageBox(tr("Server configured"),

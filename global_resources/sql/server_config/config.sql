@@ -1,6 +1,6 @@
 -- /***************************************************************************
 --  *  The FreeMedForms project is a set of free, open source medical         *
--- *  applications.                                                           *
+--  *  applications.                                                          *
 --  *  (C) 2008-2015 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
 --  *  All rights reserved.                                                   *
 --  *                                                                         *
@@ -18,10 +18,10 @@
 --  *  along with this program (COPYING.FREEMEDFORMS file).                   *
 --  *  If not, see <http://www.gnu.org/licenses/>.                            *
 --  ***************************************************************************/
--- /**************************************************************************
--- *   Main Developer:  Eric MAEKER, MD <eric.maeker@free.fr>               *
--- *  Contributors:                                                          *
--- ***************************************************************************/
+-- /***************************************************************************
+--  *   Main Developer:  Eric MAEKER, MD <eric.maeker@free.fr>                *
+--  *  Contributors:                                                          *
+--  ***************************************************************************/
 
 -- /**
 --  * \file global_resources/sql/server_config/config.sql
@@ -50,16 +50,16 @@
 CREATE USER 'fmf_admin' IDENTIFIED BY 'fmf_admin';
 
 GRANT CREATE USER, GRANT OPTION, RELOAD, SHOW DATABASES ON *.* TO 'fmf_admin'@'%' IDENTIFIED BY 'fmf_admin';
-GRANT SELECT, UPDATE, INSERT, DELETE, CREATE, DROP, ALTER, INDEX, GRANT OPTION ON `%fmf\_%`.* TO 'fmf_admin'@'%' IDENTIFIED BY 'fmf_admin';
+GRANT SELECT, UPDATE, INSERT, DELETE, CREATE, DROP, ALTER, INDEX, GRANT OPTION ON `__PREFIX__fmf\_%`.* TO 'fmf_admin'@'%' IDENTIFIED BY 'fmf_admin';
 
 GRANT CREATE USER, GRANT OPTION, RELOAD, SHOW DATABASES ON *.* TO 'fmf_admin'@'localhost' IDENTIFIED BY 'fmf_admin';
-GRANT SELECT, UPDATE, INSERT, DELETE, CREATE, DROP, ALTER, INDEX, GRANT OPTION ON `%fmf\_%`.* TO 'fmf_admin'@'localhost' IDENTIFIED BY 'fmf_admin';
+GRANT SELECT, UPDATE, INSERT, DELETE, CREATE, DROP, ALTER, INDEX, GRANT OPTION ON `__PREFIX__fmf\_%`.* TO 'fmf_admin'@'localhost' IDENTIFIED BY 'fmf_admin';
 
 GRANT CREATE USER, GRANT OPTION, RELOAD, SHOW DATABASES ON *.* TO 'fmf_admin'@'127.0.0.1' IDENTIFIED BY 'fmf_admin';
-GRANT SELECT, UPDATE, INSERT, DELETE, CREATE, DROP, ALTER, INDEX, GRANT OPTION ON `%fmf\_%`.* TO 'fmf_admin'@'127.0.0.1' IDENTIFIED BY 'fmf_admin';
+GRANT SELECT, UPDATE, INSERT, DELETE, CREATE, DROP, ALTER, INDEX, GRANT OPTION ON `__PREFIX__fmf\_%`.* TO 'fmf_admin'@'127.0.0.1' IDENTIFIED BY 'fmf_admin';
 
 GRANT CREATE USER, GRANT OPTION, RELOAD, SHOW DATABASES ON *.* TO 'fmf_admin'@'::1' IDENTIFIED BY 'fmf_admin';
-GRANT SELECT, UPDATE, INSERT, DELETE, CREATE, DROP, ALTER, INDEX, GRANT OPTION ON `%fmf\_%`.* TO 'fmf_admin'@'::1' IDENTIFIED BY 'fmf_admin';
+GRANT SELECT, UPDATE, INSERT, DELETE, CREATE, DROP, ALTER, INDEX, GRANT OPTION ON `__PREFIX__fmf\_%`.* TO 'fmf_admin'@'::1' IDENTIFIED BY 'fmf_admin';
 
 GRANT SELECT, UPDATE, INSERT, DELETE, CREATE ON `mysql`.* TO 'fmf_admin'@'localhost' IDENTIFIED BY 'fmf_admin' WITH GRANT OPTION;
 GRANT SELECT, UPDATE, INSERT, DELETE, CREATE ON `mysql`.* TO 'fmf_admin'@'%' IDENTIFIED BY 'fmf_admin' WITH GRANT OPTION;
