@@ -2572,7 +2572,7 @@ bool Database::executeSqlFile(const QString &connectionName, const QString &file
 
     // execute all sql queries
     QString req = QString::fromUtf8(file.readAll());
-    return executeSQL(req,DB);
+    return executeSQL(req, DB);
 }
 
 /**
