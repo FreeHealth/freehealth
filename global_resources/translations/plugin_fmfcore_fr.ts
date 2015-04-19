@@ -86,23 +86,23 @@ Sélectionnez votre langage préféré et le type d&apos;installation.</translat
     </message>
     <message>
         <source>Use this prefix for all databases&lt;br&gt;&lt;i&gt;&amp;nbsp;&amp;nbsp;Optional, you can safely leave this editor empty&lt;/i&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>Utiliser ce préfixe pour toutes les bases de données&lt;br&gt;&lt;i&gt;&amp;nbsp;&amp;nbsp;Optionnel, vous pouvez laisser ce paramètre vide&lt;/i&gt;</translation>
     </message>
     <message>
         <source>If you define a global prefix, all database will be named {YourPrefix}{DatabaseName} for all configuration.</source>
-        <translation type="unfinished"></translation>
+        <translation>Si vous définissez un préfixe global, toutes les bases de données seront nommées {Préfixe}{NomBaseDeDonnées} pour toutes les configurations.</translation>
     </message>
     <message>
         <source>Create all database</source>
-        <translation type="unfinished"></translation>
+        <translation>Créer les bases de données</translation>
     </message>
     <message>
         <source>Select the path where to store your personal databases&lt;br&gt;&lt;i&gt;&amp;nbsp;&amp;nbsp;Optional, you can safely leave this editor empty&lt;/i&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>Sélectionnez le chemin où vous souhaitez sauvegarder vos bases de données personnelles&lt;br&gt;&lt;i&gt;&amp;nbsp;&amp;nbsp;Optionnel, vous pouvez laisser ce paramètre vide&lt;/i&gt;</translation>
     </message>
     <message>
         <source>You can store your local personal database anywhere you want, just select a path.</source>
-        <translation type="unfinished"></translation>
+        <translation>Vous pouvez sauvegardeer vos bases de données locales là où vous le souhaitez, vous n&apos;avez qu&apos;à sélectionner le chemin.</translation>
     </message>
 </context>
 <context>
@@ -152,7 +152,7 @@ Sélectionnez votre langage préféré et le type d&apos;installation.</translat
     <name>Core::HelpDialog</name>
     <message>
         <source>&lt;center&gt;Documentation is available on line only.&lt;/center&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;center&gt;La documentation est uniquement disponible en ligne.&lt;/center&gt;</translation>
     </message>
 </context>
 <context>
@@ -671,7 +671,7 @@ Sélectionnez votre langage préféré et le type d&apos;installation.</translat
     <name>Core::Internal::SqliteDatabasePathPage</name>
     <message>
         <source>Database path</source>
-        <translation type="unfinished"></translation>
+        <translation>Chemin vers les bases de données</translation>
     </message>
 </context>
 <context>
@@ -682,26 +682,29 @@ Sélectionnez votre langage préféré et le type d&apos;installation.</translat
     </message>
     <message>
         <source>When configured as single computer mode, you can move your personal database anywhere you want. If you change this value, you will have to restart the application.</source>
-        <translation type="unfinished"></translation>
+        <translation>Lorsque vous utilisez la configuration mono-poste, vous pouvez placer vos bases de données là où vous le souhaitez. Si vous modifiez cette valeur, vous devrez redémarrer l&apos;application.</translation>
     </message>
     <message>
         <source>Move database</source>
-        <translation type="unfinished"></translation>
+        <translation>Déplacer les bases de données</translation>
     </message>
     <message>
         <source>Select a path</source>
-        <translation type="unfinished"></translation>
+        <translation>Sélectionnez un chemin</translation>
     </message>
     <message>
         <source>Database moved</source>
-        <translation type="unfinished"></translation>
+        <translation>Bases de données déplacées</translation>
     </message>
     <message>
         <source>All your database are now moved to:
 %1
 
 &lt;b&gt;You must restart the application.&lt;/b&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>Toutes vos bases de données sont maintenant déplacée vers :
+%1
+
+&lt;b&gt;Vous devez redémarrer l&apos;application.&lt;/b&gt;</translation>
     </message>
 </context>
 <context>
@@ -914,11 +917,11 @@ but does not contains all other form items.</source>
     </message>
     <message>
         <source>FreeDDIManager files (*.ddi)</source>
-        <translation type="unfinished"></translation>
+        <translation>Fichiers FreeDDIManager (*.ddi)</translation>
     </message>
     <message>
         <source>FreeMedForms database files (*.db)</source>
-        <translation type="unfinished"></translation>
+        <translation>Bases de données FreeMedForms (*.db)</translation>
     </message>
 </context>
 </TS>
