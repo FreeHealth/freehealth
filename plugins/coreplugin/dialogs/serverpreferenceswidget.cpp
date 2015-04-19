@@ -94,7 +94,6 @@ public:
         ui->port->setValue(3306);
     }
 
-
 public:
     Internal::Ui::ServerPreferencesWidget *ui;
     bool _hostReachable, _connectionSucceeded;
@@ -116,6 +115,15 @@ ServerPreferencesWidget::ServerPreferencesWidget(QWidget *parent) :
     setObjectName("ServerPreferencesWidget");
 
     d->setupUi();
+
+    // This is a work around the wrong attribution of the taborder due to widget promotion
+    setTabOrder(d->ui->server, d->ui->host);
+    setTabOrder(d->ui->host, d->ui->port);
+    setTabOrder(d->ui->port, d->ui->testHostButton);
+    setTabOrder(d->ui->testHostButton, d->ui->useDefaultAdminLog);
+    setTabOrder(d->ui->useDefaultAdminLog, d->ui->log);
+    setTabOrder(d->ui->log, d->ui->pass);
+    setTabOrder(d->ui->pass, d->ui->testMySQLButton);
 
     if (settings()->value(Core::Constants::S_USE_EXTERNAL_DATABASE, false).toBool())
         on_testMySQLButton_clicked();

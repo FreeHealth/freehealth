@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>387</width>
-    <height>373</height>
+    <height>384</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -204,6 +204,11 @@
   </customwidget>
  </customwidgets>
  <tabstops>
+  <tabstop>server</tabstop>
+  <tabstop>host</tabstop>
+  <tabstop>port</tabstop>
+  <tabstop>testHostButton</tabstop>
+  <tabstop>useDefaultAdminLog</tabstop>
   <tabstop>testMySQLButton</tabstop>
  </tabstops>
  <resources/>
