@@ -368,7 +368,7 @@ bool Database::createMySQLDatabase(const QString &dbName)
     // Testing current connected user grants
     Grants userGrants = d_database->m_Grants.value(d_database->m_ConnectionName, Grant_NoGrant);
     if (userGrants & Grant_Create) {
-        LOG_ERROR_FOR("Database", "Trying to create database, no suffisant rights.");
+        LOG_ERROR_FOR("Database", "Trying to create database, insufficient rights.");
         return false;
     }
     LOG_FOR("Database", QString("Trying to create database: %1\n"
@@ -490,7 +490,7 @@ bool Database::createMySQLUser(const QString &log, const QString &password,
         query.finish();
 
         // Manage user grants for each host
-        req = QString("GRANT %1, GRANT OPTION ON `%2`.* TO '%3'@'%4';")
+        req = QString("GRANT %1 ON `%2`.* TO '%3'@'%4';")
                 .arg(g).arg(udb).arg(log).arg(host);
         if (!query.exec(req)) {
             LOG_QUERY_ERROR_FOR("Database", query);
@@ -510,8 +510,8 @@ bool Database::createMySQLUser(const QString &log, const QString &password,
     
         // Manage user creation grant
         if (grants & Grant_CreateUser) {
-            // grant CREATE USER, GRANT OPTION on both hosts "%" & "localhost"
-            req = QString("GRANT CREATE USER, GRANT OPTION ON *.* TO '%1'@'%2';")
+            // grant privileges CREATE USER, WITH GRANT OPTION on all hosts
+            req = QString("GRANT CREATE USER ON *.* TO '%1'@'%2' WITH GRANT OPTION;")
                     .arg(log).arg(host);
             if (!query.exec(req)) {
                 LOG_QUERY_ERROR_FOR("Database", query);
@@ -553,7 +553,7 @@ bool Database::dropMySQLUser(const QString &log, const QString &userHost)
 //    qWarning() << grants << (grants & Grant_All);
 
     if (!(userGrants & Grant_CreateUser)) {
-        LOG_ERROR_FOR("Database", "Trying to create user, no suffisant rights.");
+        LOG_ERROR_FOR("Database", "Trying to create user, insufficient rights.");
         return false;
     }
     LOG_FOR("Database", QString("Trying to drop MySQL user: %1\n"
@@ -599,7 +599,7 @@ bool Database::changeMySQLUserPassword(const QString &login, const QString &newP
 //    Grants userGrants = d_database->m_Grants.value(d_database->m_ConnectionName, Grant_NoGrant);
 
 //    if (!(userGrants & Grant_CreateUser)) {
-//        LOG_ERROR_FOR("Database", "Trying to create user, no suffisant rights.");
+//        LOG_ERROR_FOR("Database", "Trying to create user, insufficient rights.");
 //        return false;
 //    }
     LOG_FOR("Database", QString("Trying to change MySQL user password:\n"
