@@ -1122,7 +1122,9 @@ bool UserBase::createUser(UserData *user)
         }
 
         // create a MySQL user
-        if (!createMySQLUser(user->clearLogin(), user->clearPassword(), grants))
+        Utils::DatabaseConnector c = settings()->databaseConnector();
+        if (!createMySQLUser(user->clearLogin(), user->clearPassword(), grants,
+                             c.globalDatabasePrefix()))
             return false;
         break;
     }

@@ -390,16 +390,18 @@ bool Database::createMySQLDatabase(const QString &dbName)
 }
 
 /**
- * Create a MySQL server user using the \e log and \e pass, with the specified \e grants
- * on the \e userHost and the \e userDatabases.
+ * Create a MySQL server user using the \e log and \e pass,
+ * with the specified \e grants
+ * with rights to access prefixed database using \e databasePrefix
+ * ('fmf_' will be automatically added to this prefix).
+ * Leave \e host empty to use the default one ('fmf_').\n
  * Creates its own transaction.
- * \warning userHost is not taken into account. All users are registered on the following hosts: "%", "localhost", "127.0.0.1", "::1"
 */
-bool Database::createMySQLUser(const QString &log, const QString &password,
+bool Database::createMySQLUser(const QString &log,
+                               const QString &password,
                                const Grants grants,
-                               const QString &userHost, const QString &userDatabases)
+                               const QString &databasePrefix)
 {
-    Q_UNUSED(userHost);
     QSqlDatabase DB = database();
     if (!connectedDatabase(DB, __LINE__))
         return false;
@@ -465,15 +467,17 @@ bool Database::createMySQLUser(const QString &log, const QString &password,
     QStringList mySqlHosts;
     mySqlHosts << "%" << "localhost" << "127.0.0.1" << "::1";
 
-    QString udb = userDatabases;
-    if (udb.isEmpty()) {
-        udb = "%fmf\\_%";
-    }
-
+    QString prefix = databasePrefix + "fmf_%";
+    prefix = prefix.replace("_", "\\_");
     LOG_FOR("Database", QString("Trying to create MySQL user: %1\n"
                                 "       on host: %2(%3)\n"
-                                "       with user: %4")
-            .arg(log).arg(database().hostName()).arg(database().port()).arg(database().userName()));
+                                "       with user: %4\n"
+                                "       db prefix: %5")
+            .arg(log)
+            .arg(database().hostName())
+            .arg(database().port())
+            .arg(database().userName())
+            .arg(prefix));
 
     DB.transaction();
     QSqlQuery query(DB);
@@ -491,7 +495,7 @@ bool Database::createMySQLUser(const QString &log, const QString &password,
 
         // Manage user grants for each host
         req = QString("GRANT %1 ON `%2`.* TO '%3'@'%4';")
-                .arg(g).arg(udb).arg(log).arg(host);
+                .arg(g).arg(prefix).arg(log).arg(host);
         if (!query.exec(req)) {
             LOG_QUERY_ERROR_FOR("Database", query);
             LOG_DATABASE_FOR("Database", database());
