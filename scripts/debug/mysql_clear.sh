@@ -119,9 +119,10 @@ dropUsers()
 {
     echo "SELECT DISTINCT mysql.user.User, \"'@'\", mysql.user.Host FROM mysql.db" > ./select.sql
     echo "JOIN mysql.user on mysql.user.User=mysql.db.User" >> ./select.sql
-    echo "WHERE mysql.db.Db='"$MYSQL_DB_PREFIX"fmf\_%';" >> ./select.sql
+    echo "WHERE mysql.db.Db='"$MYSQL_DB_PREFIX"%';" >> ./select.sql
     echo "*** Drop FreeMedForms users ***"
     $MYSQL < ./select.sql | sed '1d' | tr -d "\t" | sed "s/^/DROP USER '/" | sed "s/$/';/" > ./drop.sql
+
     if [[ -e ./drop.sql ]]; then
         echo
         echo "*** No recorded users ***"
