@@ -575,43 +575,45 @@ bool ServerConfigPage::validatePage()
     }
 
     // execute the server configuration SQL script
-    {
-        QSqlDatabase mysql = QSqlDatabase::addDatabase("QMYSQL", "__APP_CONNECTION_TESTER");
-        mysql.setHostName(serverWidget->hostName());
-        mysql.setPort(serverWidget->port());
-        mysql.setUserName(serverWidget->login());
-        mysql.setPassword(serverWidget->password());
-        mysql.setDatabaseName("mysql");
-        if (!mysql.open()) {
-            LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(mysql.connectionName()).arg(mysql.lastError().text()));
-            QSqlDatabase::removeDatabase("__APP_CONNECTION_TESTER");
-            Q_EMIT completeChanged();
-            return false;
-        }
+    const QString connection = "__APP_CONNECTION_TESTER";
+    QSqlDatabase mysql = QSqlDatabase::addDatabase("QMYSQL", connection);
+    mysql.setHostName(serverWidget->hostName());
+    mysql.setPort(serverWidget->port());
+    mysql.setUserName(serverWidget->login());
+    mysql.setPassword(serverWidget->password());
+    mysql.setDatabaseName("mysql");
+    if (!mysql.open()) {
+        LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
+                  .arg(mysql.connectionName()).arg(mysql.lastError().text()));
+        QSqlDatabase::removeDatabase(connection);
+        Q_EMIT completeChanged();
+        return false;
+    }
 
-        // execute script : server configurator
-        QSqlQuery query(mysql);
-        if (query.exec("SELECT * FROM `user` where User='fmf_admin';")) {
-            if (query.next()) {
-                LOG("Server already configured");
-                Utils::informativeMessageBox(tr("Server already configured"), tr("The server is already configured for FreeMedForms."));
+    // execute script : server configurator
+    QSqlQuery query(mysql);
+    if (query.exec("SELECT * FROM `user` where User='fmf_admin';")) {
+        if (query.next()) {
+            LOG("Server already configured");
+            Utils::informativeMessageBox(tr("Server already configured"),
+                                         tr("The server is already configured for FreeMedForms."));
+        } else {
+            LOG("Executing server configuration SQL script");
+            QString error;
+            if (!Utils::Database::executeSqlFile(connection, serverConfigurationSqlScript(), &error)) {
+                LOG_ERROR("Server configuration script not processed");
+                Utils::warningMessageBox(tr("An error occured..."),
+                                         tr("An error occured when trying to execute the script configuration script.\n"
+                                            "Please check out the log files and contact your administrator."),
+                                         error);
             } else {
-                LOG("Executing server configuration SQL script");
-                QString error;
-                if (!Utils::Database::executeSqlFile("__APP_CONNECTION_TESTER", serverConfigurationSqlScript(), &error)) {
-                    LOG_ERROR("Server configuration script not processed");
-                    Utils::warningMessageBox(tr("An error occured..."),
-                                             tr("An error occured when trying to execute the script configuration script.\n"
-                                                "Please check out the log files and contact your administrator."),
-                                             error);
-                } else {
-                    LOG("Server successfully configured");
-                    Utils::informativeMessageBox(tr("Server configured"), tr("The server was successfully configured."));
-                }
+                LOG("Server successfully configured");
+                Utils::informativeMessageBox(tr("Server configured"),
+                                             tr("The server was successfully configured."));
             }
         }
     }
-    QSqlDatabase::removeDatabase("__APP_CONNECTION_TESTER");
+    QSqlDatabase::removeDatabase(connection);
     return true;
 }
 
