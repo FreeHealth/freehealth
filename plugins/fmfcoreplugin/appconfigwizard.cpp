@@ -84,6 +84,13 @@ namespace {
 
     const char* const FIELD_TYPEOFINSTALL = "typeOfInstall";
 
+    // Keep these constants sync with the AppConfigWizard typeOfInstall combo order
+    enum typeOfInstallComboOrder {
+        INSTALLING_SQLITE = 0,
+        INSTALLING_MYSQL_CLIENT,
+        INSTALLING_MYSQL_SERVER
+    };
+
     class CoreFirstRunPage : public Core::IFirstConfigurationPage
     {
     public:
@@ -131,6 +138,97 @@ namespace {
         int id() const {return IFirstConfigurationPage::LastPage;}
         QWizardPage *createPage(QWidget *parent) {return new EndConfigPage(parent);}
     };
+
+    static bool configureServer(const Utils::DatabaseConnector &connector)
+    {
+        // Create QSqlDatabase and open mysql database
+        const QString connection = Utils::createUid();
+        QSqlDatabase mysql = QSqlDatabase::addDatabase("QMYSQL", connection);
+        mysql.setHostName(connector.host());
+        mysql.setPort(connector.port());
+        mysql.setUserName(connector.clearLog());
+        mysql.setPassword(connector.clearPass());
+        mysql.setDatabaseName("mysql");
+        if (!mysql.open()) {
+            LOG_FOR("AppConfigWzard::configureServer",
+                    tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
+                    .arg(mysql.connectionName()).arg(mysql.lastError().text()));
+            QSqlDatabase::removeDatabase(connection);
+            return false;
+        }
+
+        // get grants on database for the user
+        Utils::Database::Grants grants = Utils::Database::getConnectionGrants(connection);
+
+        // if grants not suffisant -> warning dialog
+        if (!((grants & Utils::Database::Grant_Select) &&
+              (grants & Utils::Database::Grant_Update) &&
+              (grants & Utils::Database::Grant_Insert) &&
+              (grants & Utils::Database::Grant_Delete) &&
+              (grants & Utils::Database::Grant_Create) &&
+              (grants & Utils::Database::Grant_Drop) &&
+              (grants & Utils::Database::Grant_Alter) &&
+              (grants & Utils::Database::Grant_CreateUser)
+              )) {
+            Utils::warningMessageBox(QApplication::translate("Core::ServerConfigPage",
+                                                             "Connection to the server: User rights inadequate"),
+                                     QApplication::translate("Core::ServerConfigPage",
+                                                             "You need to connect with another user that have rights to "
+                                                             "select, udpate, delete, insert, create, drop, alter and create user.\n"
+                                                             "Please contact your server administrator."));
+            QSqlDatabase::removeDatabase(connection);
+            return false;
+        }
+
+        // Server is already configured (there is one fmf_admin user registered)
+        QSqlQuery query(mysql);
+        if (query.exec("SELECT * FROM `user` where User='fmf_admin';")) {
+            if (query.next()) {
+                LOG_FOR("AppConfigWzard::configureServer",
+                        "Server already configured");
+                Utils::informativeMessageBox(QApplication::translate("Core::ServerConfigPage", "Server already configured"),
+                                             QApplication::translate("Core::ServerConfigPage", "The server is already configured for FreeMedForms."));
+                query.finish();
+                QSqlDatabase::removeDatabase(connection);
+                return true;
+            }
+        }
+
+        // Configure server using global_resources server script
+        LOG_FOR("AppConfigWzard::configureServer",
+                "Executing server configuration SQL script");
+
+        // Get original file
+        QString sqlCommands = Utils::readTextFile(serverConfigurationSqlScript());
+        // Replace __PREFIX__ with the current user database prefix
+        QString prefix = connector.globalDatabasePrefix();
+        // Always escape '_' for MySQL commands
+        prefix = prefix.replace("_", "\\_");
+        sqlCommands = sqlCommands.replace("__PREFIX__", prefix);
+
+        // Execute SQL commands
+        if (!Utils::Database::executeSQL(sqlCommands, mysql)) {
+            LOG_ERROR_FOR("AppConfigWzard::configureServer",
+                          "Server configuration script not processed");
+            Utils::warningMessageBox(QApplication::translate("Core::ServerConfigPage", "An error occured..."),
+                                     QApplication::translate("Core::ServerConfigPage",
+                                                             "An error occured when trying to execute the script configuration script.\n"
+                                                             "Please check out the log files and contact your administrator."),
+                                     "");
+            QSqlDatabase::removeDatabase(connection);
+            return false;
+        }
+        LOG_FOR("AppConfigWzard::configureServer",
+                "Server successfully configured");
+        Utils::informativeMessageBox(QApplication::translate("Core::ServerConfigPage",
+                                                             "Server configured"),
+                                     QApplication::translate("Core::ServerConfigPage",
+                                                             "The server was successfully configured."));
+        QSqlDatabase::removeDatabase(connection);
+        return true;
+    }
+
+
 }
 
 AppConfigWizard::AppConfigWizard(QWidget *parent) :
@@ -157,7 +255,7 @@ AppConfigWizard::AppConfigWizard(QWidget *parent) :
     setWindowTitle(tr("Application Configurator Wizard"));
     QList<QWizard::WizardButton> layout;
     layout << QWizard::CancelButton << QWizard::Stretch << QWizard::BackButton
-            << QWizard::NextButton << QWizard::FinishButton;
+           << QWizard::NextButton << QWizard::FinishButton;
     setButtonLayout(layout);
 
     QPixmap pix = theme()->splashScreenPixmap("freemedforms-wizard-first.png");
@@ -248,6 +346,8 @@ void CoreConfigPage::retranslate()
     typeLabel->setText(tr("Select the type of installation"));
 
     installCombo->clear();
+    // Keep typeOfInstall combo order sync with the constants:
+    // INSTALLING_SQLITE, INSTALLING_MYSQL_CLIENT, INSTALLING_MYSQL_SERVER
     installCombo->addItem(theme()->icon(Constants::ICONCOMPUTER), tr("Single computer"));
     if (QSqlDatabase::drivers().contains("QMYSQL")) {
         // FIXME: test if mysql-client/mysql-server is available on this machine
@@ -260,7 +360,7 @@ bool CoreConfigPage::validatePage()
 {
     setField(::FIELD_TYPEOFINSTALL, installCombo->currentIndex());
     switch (installCombo->currentIndex()) {
-    case 0: // SQLite
+    case INSTALLING_SQLITE:
     {
         // Define the default database connector for the SQLite version
         Utils::DatabaseConnector connector;
@@ -272,8 +372,8 @@ bool CoreConfigPage::validatePage()
         settings()->setDatabaseConnector(connector);
         break;
     }
-    case 1: // MySQL Client
-    case 2: // MySQL Server
+    case INSTALLING_MYSQL_CLIENT:
+    case INSTALLING_MYSQL_SERVER:
         break;
     }
     return true;
@@ -301,11 +401,11 @@ int CoreConfigPage::nextId() const
     // Fallback to install procedure
     switch (installCombo->currentIndex())
     {
-    case 0: // No server
+    case INSTALLING_SQLITE:
         return Core::IFirstConfigurationPage::DatabaseCreationPage;
-    case 1: // Network as client
+    case INSTALLING_MYSQL_CLIENT:
         return Core::IFirstConfigurationPage::ServerClientConfig;
-    case 2: // Network as server
+    case INSTALLING_MYSQL_SERVER:
         return Core::IFirstConfigurationPage::ServerConfig;
     }
     return Core::IFirstConfigurationPage::FirstPage;
@@ -360,11 +460,11 @@ int ProxyPage::nextId() const
 {
     switch (field(::FIELD_TYPEOFINSTALL).toInt())
     {
-    case 0: // No server
+    case INSTALLING_SQLITE:
         return Core::IFirstConfigurationPage::DatabaseCreationPage;
-    case 1: // Network as client
+    case INSTALLING_MYSQL_CLIENT:
         return Core::IFirstConfigurationPage::ServerClientConfig;
-    case 2: // Network as server
+    case INSTALLING_MYSQL_SERVER:
         return Core::IFirstConfigurationPage::ServerConfig;
     }
     return Core::IFirstConfigurationPage::FirstPage;
@@ -471,7 +571,7 @@ bool ClientConfigPage::validatePage()
     }
 
     // Connect databases
-    QProgressDialog dlg(tr("Connecting databases"), tr("Please wait"), 0, 0);
+    QProgressDialog dlg(tkTr(Trans::Constants::CONNECTING_DATABASE), tkTr(Trans::Constants::PLEASE_WAIT), 0, 0);
     dlg.setWindowModality(Qt::WindowModal);
     dlg.setMinimumDuration(1000);
     dlg.show();
@@ -552,75 +652,6 @@ bool ServerConfigPage::validatePage()
 {
     if (!serverWidget->connectionSucceeded())
         return false;
-
-    // get grants on database for the user
-    Utils::Database::Grants grants = serverWidget->grantsOnLastConnectedDatabase();
-
-    // if grants not suffisant -> warning dialog
-    if (!((grants & Utils::Database::Grant_Select) &&
-          (grants & Utils::Database::Grant_Update) &&
-          (grants & Utils::Database::Grant_Insert) &&
-          (grants & Utils::Database::Grant_Delete) &&
-          (grants & Utils::Database::Grant_Create) &&
-          (grants & Utils::Database::Grant_Drop) &&
-          (grants & Utils::Database::Grant_Alter) &&
-          (grants & Utils::Database::Grant_CreateUser)
-          )) {
-        Utils::warningMessageBox(tr("Connection to the server: User rights inadequate"),
-                                 tr("You need to connect with another user that have rights to "
-                                    "select, udpate, delete, insert, create, drop, alter and create user.\n"
-                                    "Please contact your server administrator."));
-        Q_EMIT completeChanged();
-        return false;
-    }
-
-    // execute the server configuration SQL script
-    const QString connection = Utils::createUid();
-    QSqlDatabase mysql = QSqlDatabase::addDatabase("QMYSQL", connection);
-    mysql.setHostName(serverWidget->hostName());
-    mysql.setPort(serverWidget->port());
-    mysql.setUserName(serverWidget->login());
-    mysql.setPassword(serverWidget->password());
-    mysql.setDatabaseName("mysql");
-    if (!mysql.open()) {
-        LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
-                  .arg(mysql.connectionName()).arg(mysql.lastError().text()));
-        QSqlDatabase::removeDatabase(connection);
-        Q_EMIT completeChanged();
-        return false;
-    }
-
-    // execute script : server configurator
-    QSqlQuery query(mysql);
-    if (query.exec("SELECT * FROM `user` where User='fmf_admin';")) {
-        if (query.next()) {
-            LOG("Server already configured");
-            Utils::informativeMessageBox(tr("Server already configured"),
-                                         tr("The server is already configured for FreeMedForms."));
-        } else {
-            LOG("Executing server configuration SQL script");
-            // Get original file
-            QString sqlCommands = Utils::readTextFile(serverConfigurationSqlScript());
-            // Replace __PREFIX__ with the current user database prefix
-            // TODO: get the correct prefix
-            QString prefix = "%";
-            prefix = prefix.replace("_", "\\_"); // Always escape _ for MySQL commands
-            sqlCommands = sqlCommands.replace("__PREFIX__", prefix);
-            // Execute SQL commands
-            if (!Utils::Database::executeSQL(sqlCommands, mysql)) {
-                LOG_ERROR("Server configuration script not processed");
-                Utils::warningMessageBox(tr("An error occured..."),
-                                         tr("An error occured when trying to execute the script configuration script.\n"
-                                            "Please check out the log files and contact your administrator."),
-                                         "");
-            } else {
-                LOG("Server successfully configured");
-                Utils::informativeMessageBox(tr("Server configured"),
-                                             tr("The server was successfully configured."));
-            }
-        }
-    }
-    QSqlDatabase::removeDatabase(connection);
     return true;
 }
 
@@ -654,6 +685,7 @@ CoreDatabaseCreationPage::CoreDatabaseCreationPage(QWidget *parent) :
     _createBaseButton(0),
     _completed(false)
 {
+    setObjectName("CoreDatabaseCreationPage");
     layout = new QGridLayout(this);
     layout->setVerticalSpacing(30);
     setLayout(layout);
@@ -677,7 +709,8 @@ CoreDatabaseCreationPage::CoreDatabaseCreationPage(QWidget *parent) :
 
 void CoreDatabaseCreationPage::initializePage()
 {
-    if (field(::FIELD_TYPEOFINSTALL).toInt() == 0) { // SQLite
+    retranslate();
+    if (field(::FIELD_TYPEOFINSTALL).toInt() == INSTALLING_SQLITE) {
         _sqlitePathLbl = new QLabel(this);
         _sqlitePath = new Utils::PathChooser(this);
         _sqlitePath->setExpectedKind(Utils::PathChooser::Directory);
@@ -693,14 +726,25 @@ void CoreDatabaseCreationPage::startDbCreation()
     _progressBar->setRange(0, 0);
     _progressBar->setValue(0);
 
+    // Catch path for SQLite databases and global database prefix
     Utils::DatabaseConnector c = settings()->databaseConnector();
-    if (field(::FIELD_TYPEOFINSTALL).toInt() == 0) { // SQLite
+    if (field(::FIELD_TYPEOFINSTALL).toInt() == INSTALLING_SQLITE) {
         if (!_sqlitePath->path().isEmpty())
             c.setAbsPathToReadWriteSqliteDatabase(_sqlitePath->path());
     }
     if (!_prefix->text().isEmpty())
         c.setGlobalDatabasePrefix(_prefix->text());
+    // Store database settings to the app settings
     settings()->setDatabaseConnector(c);
+
+    // If selected installation mode is "MySQL server" -> configure the server
+    if (field(::FIELD_TYPEOFINSTALL).toInt() == INSTALLING_MYSQL_SERVER) {
+        LOG("Preparing server configuration before creating databases");
+        if (!configureServer(settings()->databaseConnector())) {
+            LOG_ERROR("Unable to configure MySQL server");
+            return;
+        }
+    }
 
     Core::ICore::instance()->requestFirstRunDatabaseCreation();
     _completed = true;
@@ -731,7 +775,10 @@ void CoreDatabaseCreationPage::retranslate()
     setSubTitle(tr("Preparing databases. Please wait..."));
     _prefixLbl->setText(tr("Use this prefix for all databases<br><i>&nbsp;&nbsp;Optional, you can safely leave this editor empty</i>"));
     _prefix->setToolTip(tr("If you define a global prefix, all database will be named {YourPrefix}{DatabaseName} for all configuration."));
-    _createBaseButton->setText(tr("Create all database"));
+    if (field(::FIELD_TYPEOFINSTALL).toInt() == INSTALLING_MYSQL_SERVER)
+        _createBaseButton->setText(tr("Configure the server and create all database"));
+    else
+        _createBaseButton->setText(tr("Create all database"));
     if (_sqlitePathLbl)
         _sqlitePathLbl->setText(tr("Select the path where to store your personal databases<br><i>&nbsp;&nbsp;Optional, you can safely leave this editor empty</i>"));
     if (_sqlitePath)
