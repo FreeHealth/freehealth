@@ -285,36 +285,38 @@ void ServerPreferencesWidget::on_testMySQLButton_clicked()
         Q_EMIT userConnectionChanged(false);
         return;
     }
+
+    // Test connection settings
     d->ui->testConnectionLabel->setText(tr("Test in progress..."));
-    {
-        QSqlDatabase test = QSqlDatabase::addDatabase("QMYSQL", "__APP_CONNECTION_TESTER");
-        test.setHostName(hostName());
-        test.setPort(port());
-        if (d->ui->useDefaultAdminLog->isChecked()) {
-            test.setUserName("fmf_admin");
-            test.setPassword("fmf_admin");
-        } else {
-            test.setUserName(login());
-            test.setPassword(password());
-        }
-        if (!test.open()) {
-            d->ui->testMySQLButton->setIcon(theme()->icon(Core::Constants::ICONERROR));
-            d->ui->testConnectionLabel->setText(tr("Connection error: %1").arg(test.lastError().number()));
-            d->ui->testConnectionLabel->setToolTip(test.lastError().driverText());
-            d->_connectionSucceeded = false;
-            d->_grants = Utils::Database::Grant_NoGrant;
-            Q_EMIT userConnectionChanged(false);
-        } else {
-            d->ui->testMySQLButton->setIcon(theme()->icon(Core::Constants::ICONOK));
-            d->ui->testConnectionLabel->setText(tr("Connected"));
-            d->_connectionSucceeded = true;
-            d->_grants = Utils::Database::getConnectionGrants("__APP_CONNECTION_TESTER");
-//            qWarning() << "GRANTS" << _grants;
-            saveToSettings();
-            Q_EMIT userConnectionChanged(true);
-        }
+    const QString connection = Utils::createUid();
+    QSqlDatabase test = QSqlDatabase::addDatabase("QMYSQL", connection);
+    test.setHostName(hostName());
+    test.setPort(port());
+    test.setDatabaseName("mysql");
+    if (d->ui->useDefaultAdminLog->isChecked()) {
+        test.setUserName("fmf_admin");
+        test.setPassword("fmf_admin");
+    } else {
+        test.setUserName(login());
+        test.setPassword(password());
     }
-    QSqlDatabase::removeDatabase("__APP_CONNECTION_TESTER");
+    // Try to open a database
+    if (!test.open()) {
+        d->ui->testMySQLButton->setIcon(theme()->icon(Core::Constants::ICONERROR));
+        d->ui->testConnectionLabel->setText(tr("Connection error: %1").arg(test.lastError().number()));
+        d->ui->testConnectionLabel->setToolTip(test.lastError().driverText());
+        d->_connectionSucceeded = false;
+        d->_grants = Utils::Database::Grant_NoGrant;
+        Q_EMIT userConnectionChanged(false);
+    } else {
+        d->ui->testMySQLButton->setIcon(theme()->icon(Core::Constants::ICONOK));
+        d->ui->testConnectionLabel->setText(tr("Connected"));
+        d->_connectionSucceeded = true;
+        d->_grants = Utils::Database::getConnectionGrants(connection);
+        saveToSettings();
+        Q_EMIT userConnectionChanged(true);
+    }
+    QSqlDatabase::removeDatabase(connection);
 }
 
 /** Toggle login and password edits to enabled/disabled */
