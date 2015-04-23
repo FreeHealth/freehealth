@@ -108,7 +108,7 @@ void DefaultUserContactWidget::setUserModel(UserModel *model)
     _identity->addMapping(Identity::IdentityEditorWidget::Photo, Core::IUser::PhotoPixmap);
 
     _identity->addMapping(Identity::IdentityEditorWidget::Extra_Login, Core::IUser::ClearLogin);
-    _identity->addMapping(Identity::IdentityEditorWidget::Extra_Password, Core::IUser::Password);
+    _identity->addMapping(Identity::IdentityEditorWidget::Extra_Password, Core::IUser::CryptedPassword);
 }
 
 /** Define the index of the user to edit. Essentially its row. */

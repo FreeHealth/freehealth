@@ -52,7 +52,7 @@ public:
         Validity,       /*!< \brief Validity of this user */
         IsVirtual,      /*!< \brief User is virtual?*/
         Login64,        /*!< \brief Encrypted login username \sa UserGlobal::loginForSQL() */
-        Password,       /*!< \brief Encrypted password \sa UserGlobal::crypt() */
+        CryptedPassword,/*!< \brief Encrypted password \sa UserGlobal::crypt() */
         LastLogin,      /*!< \brief Date of the last correct login */
         UsualName,      /*!< \brief Lastname */
         OtherNames,     /*!< \brief Second name (name after marriage) */

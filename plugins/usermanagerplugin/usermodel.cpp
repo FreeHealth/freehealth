@@ -193,8 +193,8 @@ public:
         case Core::IUser::Login64 : toReturn = user->login64(); break;
         case Core::IUser::ClearLogin : toReturn = user->clearLogin(); break;
         case Core::IUser::DecryptedLogin : toReturn = user->decryptedLogin(); break;
-        case Core::IUser::ClearPassword : break;
-        case Core::IUser::Password : toReturn = user->cryptedPassword(); break;
+        case Core::IUser::ClearPassword : toReturn = user->clearPassword(); break;
+        case Core::IUser::CryptedPassword : toReturn = user->cryptedPassword(); break;
         case Core::IUser::LastLogin : toReturn = user->lastLogin(); break;
         case Core::IUser::GenderIndex : toReturn = user->genderIndex(); break;
         case Core::IUser::TitleIndex : toReturn = user->titleIndex(); break;
@@ -865,7 +865,7 @@ bool UserModel::insertRows(int row, int count, const QModelIndex &parent)
                              .arg(row+i).arg(uuid));
             return i;
         }
-        newIndex = index(row+i, Core::IUser::Password);
+        newIndex = index(row+i, Core::IUser::CryptedPassword);
         Utils::PasswordCrypter crypter;
         if (!d->m_Sql->setData(newIndex, crypter.cryptPassword(""), Qt::EditRole)) {
            LOG_ERROR(QString("Can not add user's login into the new user into SQL Table. Row = %1 , UUID = %2 ")
@@ -981,7 +981,7 @@ bool UserModel::setData(const QModelIndex &item, const QVariant &value, int role
         user->setPasswordModified(false); // as we just saved it or revert the change
         break;
     }
-    case Core::IUser::Password :  user->setCryptedPassword(value); break;
+    case Core::IUser::CryptedPassword :  user->setCryptedPassword(value); break;
     case Core::IUser::LastLogin :  user->setLastLogin(value); break;
     case Core::IUser::GenderIndex :
         colsToEmit << Core::IUser::Gender << Core::IUser::FullName<< Core::IUser::FullHtmlContact;

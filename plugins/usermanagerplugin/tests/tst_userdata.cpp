@@ -774,7 +774,7 @@ void UserManagerPlugin::test_usermodel_basics()
     QCOMPARE(userModel()->currentUserData(Core::IUser::Validity), QVariant(fromDb->validity()));
     QCOMPARE(userModel()->currentUserData(Core::IUser::IsVirtual), QVariant(fromDb->isVirtual()));
     QCOMPARE(userModel()->currentUserData(Core::IUser::Login64), QVariant(fromDb->login64()));
-    QCOMPARE(userModel()->currentUserData(Core::IUser::Password), QVariant(fromDb->cryptedPassword()));
+    QCOMPARE(userModel()->currentUserData(Core::IUser::CryptedPassword), QVariant(fromDb->cryptedPassword()));
     // QCOMPARE(userModel()->currentUserData(Core::IUser::LastLogin), QVariant(fromDb->lastLogin()));
     QCOMPARE(userModel()->currentUserData(Core::IUser::UsualName), QVariant(fromDb->usualName()));
     QCOMPARE(userModel()->currentUserData(Core::IUser::OtherNames), QVariant(fromDb->otherNames()));

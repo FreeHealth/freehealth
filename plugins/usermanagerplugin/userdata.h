@@ -216,6 +216,7 @@ public:
     QString decryptedLogin() const;
 
     /** Returns the user password extracted from the database */
+    QString clearPassword() const;
     QString cryptedPassword() const      { return value(Table_USERS, USER_PASSWORD).toString(); }
 
     QDateTime lastLogin() const          { return value(Table_USERS, USER_LASTLOG).toDateTime(); }
@@ -302,7 +303,6 @@ protected:
     bool hasModifiedRightsToStore() const;
     QList<UserDynamicData*> modifiedDynamicData() const;
     QStringList modifiedRoles() const;
-    QString clearPassword() const;
 
     // generic getters for database
     QVariant value(const int tableref, const int fieldref) const;
