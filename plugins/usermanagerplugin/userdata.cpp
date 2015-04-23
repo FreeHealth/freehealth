@@ -645,6 +645,8 @@ bool UserData::isModified() const
 {
     if (d->m_Modified)
         return true;
+    if (d->m_PasswordChanged)
+        return true;
     if (hasModifiedDynamicDataToStore())
         return true;
     if (hasModifiedRightsToStore())
@@ -659,7 +661,7 @@ bool UserData::isPasswordModified() const
 
 void UserData::setPasswordModified(bool state)
 {
-    d->m_PasswordChanged = false;
+    d->m_PasswordChanged = state;
 }
 
 /** Returns true if the object is null */
@@ -934,7 +936,6 @@ void UserData::setCryptedPassword(const QVariant &val)
         return;
     d->m_Table_Field_Value[Table_USERS].insert(USER_PASSWORD, val);
     d->m_PasswordChanged = true;
-    d->m_Modified = true;
 }
 
 /** Add the current login to the login history of the user. */
