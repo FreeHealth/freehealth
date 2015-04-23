@@ -600,8 +600,8 @@ bool Database::changeMySQLUserOwnPassword(const QString &login, const QString &n
 
     LOG_FOR("Database", QString("Trying to change MySQL OWN user password:\n"
                                 ".user: %1\n"
-                                ".host: %2(%3)\n"
-                                ".newPass: %4")
+                                "@%2(%3)\n"
+                                ".pass: %4")
             .arg(login)
             .arg(database().hostName())
             .arg(database().port())

@@ -1628,15 +1628,10 @@ bool UserBase::changeUserPassword(UserData *user, const QString &newClearPasswor
 
     // Update FreeMedForms password
     Utils::PasswordCrypter crypter;
-    qDebug() << newClearPassword << crypter.cryptPassword(newClearPassword);
-
     QHash<int, QString> where;
     where.insert(USER_UUID, QString("='%1'").arg(user->uuid()));
     DB.transaction();
     QSqlQuery query(DB);
-
-    qDebug() << prepareUpdateQuery(Table_USERS, USER_PASSWORD, where);
-
     query.prepare(prepareUpdateQuery(Table_USERS, USER_PASSWORD, where));
     query.bindValue(0, crypter.cryptPassword(newClearPassword));
     if (!query.exec()) {
@@ -1648,6 +1643,7 @@ bool UserBase::changeUserPassword(UserData *user, const QString &newClearPasswor
     LOG("User password updated in the FreeMedForms database");
     query.finish();
     DB.commit();
+    LOG("User password succesfully updated");
     return true;
 }
 

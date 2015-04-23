@@ -972,6 +972,10 @@ bool UserModel::setData(const QModelIndex &item, const QVariant &value, int role
     case Core::IUser::DecryptedLogin : user->setLogin64(value.toString().toUtf8().toBase64()); break;
     case Core::IUser::ClearPassword :
     {
+        // When a clear password is defined throught the model
+        // the model reacts **in real time**. The user password
+        // is updated on the database server and inside the
+        // FreeMedForms database. You do not need to call submit()
         if (user->clearPassword()==value.toString())
             break;
         QString oldPass = user->clearPassword();
