@@ -12,25 +12,38 @@ namespace.module('com.freemedforms.generic.soapWithBio', function (exports, requ
         print("com.freemedforms.generic.soapWithBio Setup UI");
 
         // Get items to work with
-        freemedforms.forms.namespaceInUse = "Subs::Tools::SOAP::WithBio";
-        syst = freemedforms.forms.item("ObjectiveGroup::BloodPressure::Syst");
-        diast = freemedforms.forms.item("ObjectiveGroup::BloodPressure::Diast");
-        pulse = freemedforms.forms.item("ObjectiveGroup::BloodPressure::Pulse");
+        freemedforms.forms.namespaceInUse = "";
+        var formItem = freemedforms.forms.item("Subs::Tools::SOAP::WithBio");
+        print(formItem);
+        formUi = formItem.ui();
+        syst = formUi.findChild("bpSyst");
+        diast = formUi.findChild("bpDiast");
+        pulse = formUi.findChild("bpPulse");
 
-        // Connect item data changed
-        //syst.ui['valueChanged(int)'].connect(this, computePulsePressure);
-        print(syst);
-        print(syst.ui);
-        //diast.ui['valueChanged(int)'].connect(this, computePulsePressure);
+//      populateCombos();
+        
+        // Connect data changed on spins
+        // Spin should use valueChanged(int)
+        // DoubleSpin should use valueChanged(double)
+
+        syst['valueChanged(int)'].connect(this, computePulsePressure);          
+        diast['valueChanged(int)'].connect(this, computePulsePressure);
     }
+
+//     function populateCombos() {                                                 
+       // TODO: add weight and height units                                    
+//        freemedforms.uiTools.addItems(cholCombo, totalCholRanges);            
+//        freemedforms.uiTools.addItems(hdlCombo, hdlCholRanges);               
+//        freemedforms.uiTools.addItems(systCombo, systolicRanges);             
+//    } 
 
     function retranslateUi() {
         var lang = freemedforms.forms.currentLanguage;
     }
 
     function computePulsePressure() {
-        var text = syst.currentValue - diast.currentValue;
-        pulse.currentText = text;
+        var text = syst.value - diast.value;                                    
+        pulse.setText(text);                                                    
     }
 });
 
