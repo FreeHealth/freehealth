@@ -610,18 +610,18 @@ bool Database::changeMySQLUserOwnPassword(const QString &login, const QString &n
     DB.transaction();
     QSqlQuery query(DB);
     QString req;
-    foreach(const QString &host, mySqlHosts()) {
-        req = QString("SET PASSWORD = PASSWORD('%1');")
-                .arg(newPassword);
-        if (!query.exec(req)) {
-            LOG_QUERY_ERROR_FOR("Database", query);
-            LOG_DATABASE_FOR("Database", database());
-            DB.rollback();
-            return false;
-        }
-        query.finish();
+    req = QString("SET PASSWORD = PASSWORD('%1');")
+                 .arg(newPassword);
+    
+    if (!query.exec(req)) {
+        LOG_QUERY_ERROR_FOR("Database", query);
+        LOG_DATABASE_FOR("Database", database());
+        DB.rollback();
+        return false;
     }
-
+    
+    query.finish();
+    
     DB.commit();
     LOG_FOR("Database", QString("User %1 password modified").arg(login));
     return true;
