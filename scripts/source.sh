@@ -279,7 +279,7 @@ createSource()
     cd $PACKPATH/scripts
     FILES=`find ./ -type f -name '*.bat'`
     for f in $FILES; do
-        sed $SED_INPLACE 's#__version__#'$PROJECT_VERSION'#'
+        sed $SED_INPLACE 's#__version__#'$PROJECT_VERSION'#' $f
     done
     rm *.*bkup
 
@@ -309,7 +309,7 @@ createSource()
     sed $SED_INPLACE 's/GIT_HASH=.*/GIT_HASH='$GITHASH'/' $PACKPATH/buildspecs/githash.pri
 
     # Remove all backup files
-    find . -type f -name '*bkup' -delete
+    find . -type f -name '*bkup' -exec rm {} \;
 
     echo "**** REPACK SOURCES PACKAGE FROM CREATED DIR ****"
     cd $SCRIPT_PATH
