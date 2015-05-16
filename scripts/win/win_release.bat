@@ -23,7 +23,6 @@ set PATH_TO_INNOSETUP=C:\Progra~1\InnoSe~1\iscc.exe
 set WORKING_DIRECTORY=%CD%
 set PATH_TO_MINGW=C:\MinGW\bin
 set PATH_TO_OPENSSL=C:\OPENSS~1
-set VERSION=0.9.6
 
 REM # Go to source root dir
 cd ../..
@@ -66,7 +65,7 @@ REM # Go to root source tree
 cd ..
 
 REM # Rename and move the setup.exe file
-copy packages\win\%1\%1\setup.exe %1-%VERSION%.exe
+copy packages\win\%1\%1\setup.exe %1-__version__.exe
 
 REM # Unset var
 set PATH_TO_MYSQL=
