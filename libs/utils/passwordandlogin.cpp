@@ -34,7 +34,7 @@
 
 enum {
     // Set to false if you don't want console log in the checkPassword() method
-    DebugCheckPassword = true
+    DebugCheckPassword = false
 };
 
 /**
