@@ -187,19 +187,20 @@ void PasswordDialog::done(int result)
         m_CryptedNewPass = crypter.cryptPassword(m_ui->newPass->text());
         QDialog::done(result);
     } else {
-        // Change password mode
-        const QString &cryptedNewPass = crypter.cryptPassword(m_ui->newPass->text());
-        const QString &oldPass = crypter.cryptPassword(m_ui->oldPass->text());
-
-        if ((oldPass == m_OldCryptedPass) &&
+        // Using PasswordCrypter::checkPassword to check password equivalence
+        // instead of a basic string comparison
+        // This is du to Qt4 to Qt5 port as we use different hash method with each version
+        // See PasswordCrypter::cryptPassword
+        bool oldPassCorrect = crypter.checkPassword(m_ui->oldPass->text(), m_OldCryptedPass);
+        if (oldPassCorrect &&
                 (m_ui->newPass->text() == m_ui->newControl->text())) {
             m_AllIsGood = true;
-            m_CryptedNewPass = cryptedNewPass;
+            m_CryptedNewPass = crypter.cryptPassword(m_ui->newPass->text());
             QDialog::done(result);
         } else {
             m_AllIsGood = false;
             QString info;
-            if (oldPass != m_OldCryptedPass)
+            if (oldPassCorrect)
                 info = tr("The old password is not correct. Please retry with the correct password.");
             else
                 info = tr("Wrong password confirmation.");

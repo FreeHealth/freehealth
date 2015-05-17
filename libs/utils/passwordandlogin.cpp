@@ -25,10 +25,17 @@
  ***************************************************************************/
 #include "passwordandlogin.h"
 
+#include <utils/log.h>
+
 #include <QCryptographicHash>
 #include <QCoreApplication>
 
 #include <QDebug>
+
+enum {
+    // Set to false if you don't want console log in the checkPassword() method
+    DebugCheckPassword = true
+};
 
 /**
  * \class Utils::PasswordCrypter
@@ -160,12 +167,18 @@ bool PasswordCrypter::checkPrefix(const QString &cryptedBase64, Algorithm algo)
  */
 bool PasswordCrypter::checkPassword(const QString &clear, const QString &cryptedBase64)
 {
+    if (DebugCheckPassword)
+        WARN_FUNC;
     // Get the prefixed algorithm
     Algorithm algo = SHA1;
     if (cryptedBase64.contains(":")) {
         algo = extractHashAlgorithm(cryptedBase64);
     }
     QString crypted = cryptPassword(clear, algo);
+    if (DebugCheckPassword) {
+        qDebug() << QString("clear: %1; crypted: %2\nhash: %3; comparison: %4")
+                    .arg(clear).arg(cryptedBase64).arg(algo).arg(crypted);
+    }
     return (crypted.compare(cryptedBase64) == 0);
 }
 
