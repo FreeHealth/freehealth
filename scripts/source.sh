@@ -141,7 +141,7 @@ global_resources/translations/qt*.qm \
 "
 
 BUILDSPEC_SOURCES="\
-README.md COPYING.txt INSTALL \
+README.md README.txt COPYING.txt INSTALL \
 updatetranslations.sh \
 buildspecs/*.pri \
 buildspecs/*.in \
@@ -265,14 +265,15 @@ createSource()
     cd $PACKPATH/global_resources/package_helpers
     FILES=`find ./ -type f -name '*.iss'`
     for f in $FILES; do
-        # ISS files are latin1, sed can generate error on utf8 system working on latin1 files
-        # So convert the charset, sed the file, convert the charset
-        iconv -f latin1 -t utf-8 $f > $f.utf8
-        sed $SED_INPLACE 's#__version__#'$PROJECT_VERSION'#' $f.utf8
-        iconv -f utf-8 -t latin1 $f.utf8 > $f
-        rm $f
-        rm $f.utf8
-        # sed $SED_INPLACE 's#__version__#'$PROJECT_VERSION'#' $f
+        # Since version 5.3 there is a unicode version of Inno Setup that supports... unicode!
+        # Download the  Unicode version (tested with isetup-5.5.5-unicode.exe
+        # Lines using older non Unicode version of Inno Setup have been commented out
+        # (ISS files are latin1, sed can generate error on utf8 system working on latin1 files)
+        # (So convert the charset, sed the file, convert the charset)
+        # iconv -f latin1 -t utf-8 $f > $f.utf8
+        sed $SED_INPLACE 's#__version__#'$PROJECT_VERSION'#' $f
+        # iconv -f utf-8 -t latin1 $f.utf8 > $f
+        # rm $f.utf8
     done
     rm *.*bkup
     echo "   * DEFINING *.BAT FILES APP VERSION"
