@@ -128,6 +128,9 @@ void executeOnValueChangedScript(Form::FormItem *item)
 
 QLabel *findLabel(Form::FormItem *item)
 {
+    Q_ASSERT(item);
+    if (!item)
+        return 0;
     QLabel *l = 0;
     // Find label
     const QString &lbl = item->spec()->value(Form::FormItemSpec::Spec_UiLabel).toString();
