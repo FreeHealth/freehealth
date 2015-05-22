@@ -51,8 +51,14 @@ MeasurementWidget::MeasurementWidget(Form::FormItem *formItem, QWidget *parent) 
     QLayout *hb = 0;
     const QString &layout = formItem->spec()->value(Form::FormItemSpec::Spec_UiInsertIntoLayout).toString();
     const QString &widgets = formItem->spec()->value(Form::FormItemSpec::Spec_UiWidget).toString();
-    if (!layout.isEmpty()) {
+
+    // Manage Qt UI files and pure FreeMedForms defined forms
+    if (widgets.isEmpty() && !layout.isEmpty()) {
         // QtUi Loaded using layout
+        // Here the user wants to build the measurement widget from a
+        // Qt UI file inside a specific layout.
+        // We need here to insert the measurement widgets inside the layout
+        // This includes a label, one value (spin) and one unit (combo) editor
         QLayout *lay = formItem->parentFormMain()->formWidget()->findChild<QLayout*>(layout);
         if (lay) {
             hb = lay;
@@ -70,8 +76,14 @@ MeasurementWidget::MeasurementWidget(Form::FormItem *formItem, QWidget *parent) 
         hb->addWidget(m_value);
         hb->addWidget(m_units);
         uiBased= true;
-    } else if (!widgets.isEmpty()) {
+    } else if (!widgets.isEmpty() && layout.isEmpty()) {
         // Qt Ui using widgets naming
+        // Here the user wants to build a measurement widget from a
+        // Qt UI file using specific & defined widgets.
+        // We need here to get the measurement widgets from the UI
+        // This includes a label, one value (spin) and one unit (combo) editor
+        // The FormItem widget string content must include two objectname
+        // coma separated. Eg: "widget1Value;widget2Units"
         if (widgets.count(";") != 1) {
             LOG_ERROR("Wrong widget naming. No ; found.");
         } else {
@@ -92,27 +104,42 @@ MeasurementWidget::MeasurementWidget(Form::FormItem *formItem, QWidget *parent) 
         }
         // Find Label
         m_Label = findLabel(formItem);
+    } else if (!widgets.isEmpty() && !layout.isEmpty())  {
+        // This is a form coding error
+        // Users can choose two Qt UI method: use widgets, insert in a layout
+        // Not both
+        LOG_ERROR(QString("Item %1 can not be constructed. "
+                          "Please choose between QtUI widgets method or Qt UI layout insertion method. You can not use both")
+                  .arg(formItem->spec()->uuid())
+                  );
     } else {
+        // Pure FreeMedForms form. User does not use any Qt UI file.
+        // We need here to create the measurement widgets and insert them inside the right layout
+        // Widgets include: a label, one value (spin) and one unit (combo) editor
         hb = getBoxLayout(OnLeft, m_FormItem->spec()->label(), this);
         hb->addWidget(m_Label);
         hb->setMargin(0);
         hb->setSpacing(0);
     }
+
     // Ensure that the widgets are available
+    // - layout
     if (!hb && (!m_units || !m_value) && !uiBased) {
         LOG_ERROR("No layout, creating a default one. Form item: " + formItem->uuid());
         hb = new QHBoxLayout(this);
-    } else if (!hb) {
+    } else if (!hb && !uiBased) {
         hb = getBoxLayout(OnLeft, m_FormItem->spec()->label(), this);
-        //hb->addWidget(m_Label);
+        hb->addWidget(m_Label);
         hb->setMargin(0);
         hb->setSpacing(0);
     }
+    // - value editor
     if (!m_value) {
         m_value = new QDoubleSpinBox(this);
         m_value->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
         hb->addWidget(m_value);
     }
+    // - units editor
     if (!m_units) {
         // Add spin + combo to the layout
         m_units = new QComboBox(this);
@@ -121,6 +148,9 @@ MeasurementWidget::MeasurementWidget(Form::FormItem *formItem, QWidget *parent) 
     }
     m_units->setFocusPolicy(Qt::ClickFocus);
 
+    // Manage options:
+    // The measurement units widget can be autopopulated with
+    // Length or Weight units using the "length" and "weight" options
     const QStringList &options = formItem->getOptions();
     if (options.contains("Length", Qt::CaseInsensitive)) {
         populateWithLength();
