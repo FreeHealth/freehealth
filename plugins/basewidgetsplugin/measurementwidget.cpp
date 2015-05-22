@@ -104,7 +104,7 @@ MeasurementWidget::MeasurementWidget(Form::FormItem *formItem, QWidget *parent) 
         hb = new QHBoxLayout(this);
     } else if (!hb) {
         hb = getBoxLayout(OnLeft, m_FormItem->spec()->label(), this);
-        hb->addWidget(m_Label);
+        //hb->addWidget(m_Label);
         hb->setMargin(0);
         hb->setSpacing(0);
     }
