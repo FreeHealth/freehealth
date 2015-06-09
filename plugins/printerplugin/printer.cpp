@@ -51,6 +51,7 @@
 #include <QTextTable>
 #include <QPointer>
 #include <QFileInfo>
+#include <QPrinter>
 
 #if QT_VERSION < 0x050000
 #include <QPrinterInfo>
@@ -256,7 +257,7 @@ public:
         }
         m_Printer = new QPrinter;
         m_Printer->setColorMode(QPrinter::ColorMode(settings()->value(Constants::S_COLOR_PRINT).toInt()));
-        m_Printer->setPageSize(QPrinter::A4);
+        m_Printer->setPaperSize(QPrinter::A4);
     }
 
     // used by complexDraw()
@@ -660,7 +661,7 @@ bool PrinterPrivate::simpleDraw()
     int _pageWidth = pageWidth();                     //TODO add margins
     this->setTextWidth(_pageWidth);
 
-    m_Content->setPageSize(getSimpleDrawContentPageSize());
+    m_Content->setPaperSize(getSimpleDrawContentPageSize(), QPrinter::Millimeter);
 //    qWarning() << getSimpleDrawContentPageSize();
     m_Content->setUseDesignMetrics(true);
 
@@ -808,7 +809,7 @@ bool Printer::getUserPrinter()
     }
     if (d->m_Printer) {
         d->m_Printer->setColorMode(QPrinter::ColorMode(settings()->value(Constants::S_COLOR_PRINT).toInt()));
-        d->m_Printer->setPageSize(QPrinter::A4);
+        d->m_Printer->setPaperSize(QPrinter::A4);
 //        d->m_Printer->setPageMargins(50,50,50,50, QPrinter::DevicePixel);
         return true;
     }
@@ -1216,7 +1217,7 @@ void Printer::previewDocumentWatermark(QPixmap &drawTo,
     painter.restore();
     painter.end();
     doc->setDefaultTextOption(docOptionSave);
-    doc->setPageSize(docSizeSave);
+    doc->QPrinter::setPaperSize(docSizeSave);
 }
 
 /** \brief Draws the \e html text watermark to QPixmap \e drawTo */
@@ -1303,7 +1304,7 @@ void Printer::previewToPixmap(QPixmap &drawTo, QPrinter *printer)
     int _pageWidth = printer->paperRect().width();//d->pageWidth();
     d->setTextWidth(_pageWidth);
 
-    d->m_Content->setPageSize(printer->paperRect().size());//d->getSimpleDrawContentPageSize());
+    d->m_Content->setPaperSize(printer->paperRect().size());//d->getSimpleDrawContentPageSize());
     d->m_Content->setUseDesignMetrics(true);
 
     // prepare drawing areas
