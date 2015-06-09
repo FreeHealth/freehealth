@@ -60,7 +60,7 @@ const char * const ANCHOR_ITEM = "item";
 // Translations
 const char * const PADWRITER_TRANS_CONTEXT = "PadWriter";
 
-const char * const PADTOOLS_TEXT = QT_TRANSLATE_NOOP("PadWriter", "Padtools");
+const char * const PADTOOLS_TEXT = QT_TRANSLATE_NOOP("PadWriter", "PadTools");
 const char * const FOLLOW_CURSOR_IN_RESULT_OUTPUT = QT_TRANSLATE_NOOP("PadWriter", "Follow cursor in result output");
 const char * const FIND_CURSOR_IN_RESULT = QT_TRANSLATE_NOOP("PadWriter", "Find cursor");
 const char * const AUTO_UPDATE_RESULT = QT_TRANSLATE_NOOP("PadWriter", "Automatic update of results");

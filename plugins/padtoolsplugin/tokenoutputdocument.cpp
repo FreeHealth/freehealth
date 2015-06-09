@@ -282,7 +282,7 @@ void TokenHighlighterEditor::onPadCleared()
 
 /**
  * \internal
- * Reset view when Padtools::PadDocument reset its token analyze.
+ * Reset view when PadTools::PadDocument reset its token analyze.
  * \sa PadTools::PadDocument::documentAnalyzeReset()
  */
 void TokenHighlighterEditor::onDocumentAnalyzeReset()
