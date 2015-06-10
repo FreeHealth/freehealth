@@ -131,15 +131,28 @@ detectQtVersion()
 
 detectSpec()
 {
-    SPEC_PATH=`qmake -query "QT_INSTALL_DATA"`
-    SPEC_PATH=$SPEC_PATH"/mkspecs"
-    SPEC=`ls -al $SPEC_PATH/default | sed "s/^.*default -> //"`
-    if [[ -z $SPEC ]]; then
-        echo "ERROR: no default spec detected"
+    if [[ "$QT_VERSION" == "4" ]]; then
+        SPEC_PATH=`qmake -query "QT_INSTALL_DATA"`
+        SPEC_PATH=$SPEC_PATH"/mkspecs"
+        SPEC=`ls -al $SPEC_PATH/default | sed "s/^.*default -> //"`
+            if [[ -z $SPEC ]]; then
+                echo "ERROR: no default spec detected"
+            fi
+        echo "* Default qmake spec: "$SPEC
+        return 0
+    elif [[ "$QT_VERSION" == "5" ]]; then
+        SPEC=`qmake -query QMAKE_SPEC`
+            if [[ "$SPEC" == "**Unknown**" ]]; then
+                echo "ERROR: qmake -query couldn't detect your default mkspecs"
+                exit 1
+            fi
+        echo "* Default qmake spec: "$SPEC
+        return 0
+    else
+        echo "Your Qt version seems to be incorrect."
+        echo "To build FreeMedForms applications, use either latest Qt4.8 version or latest Qt 5.3 version"
+        exit 1
     fi
-    echo "* Default qmake spec: "$SPEC
-#    echo "* Default qmake spec: "$SPEC
-    return 0
 }
 
 detectGit()
@@ -239,8 +252,8 @@ makeClean()
         # runCommand "find . -type f -name \".qmake.cache\" -delete" || return 1
         rm -rf $SCRIPT_PATH/bin/$LOWERED_BUNDLE_NAME"_Qt"$QT_VERSION"_"$SPEC_FOR_PATH
         rm -rf $SCRIPT_PATH/build/Qt$QT_VERSION"_"$SPEC_FOR_PATH"/"$CAMELCASE_BUNDLE_NAME
-        find . -type f -name "Makefile*" -delete
-        find . -type f -name ".qmake.cache" -delete
+        find . -type f -name "Makefile*" -exec rm {} \;
+        find . -type f -name ".qmake.cache" -exec rm {} \;
         if [[ "$LOWERED_BUNDLE_NAME" == "*" ]]; then
             LOWERED_BUNDLE_NAME=""
             CAMELCASE_BUNDLE_NAME=""
@@ -487,7 +500,7 @@ done
 ZENITY_TITLE="FreeMedForms project builder assistant"
 SEPARATOR=";"        # on modification, change also in secondPage() Release;
 ZENITY="/usr/bin/zenity"
-ZENITY_SIZED="$ZENITY --width 400  --height 300 --separator $SEPARATOR"
+ZENITY_SIZED="$ZENITY --width 400  --height 400 --separator $SEPARATOR"
 ZENITY_NO_SIZE="$ZENITY --width 300"
 CONFIG=""
 RET=""
@@ -620,11 +633,11 @@ fourthPage()
          )
 }
 
-fifthPage()
-{
-    SPEC=`echo ${CONFIG##*;}`
-    RET=$($ZENITY_NO_SIZE --title "$ZENITY_TITLE" --text "Optional: Please enter a spec file, if you want to use one:\n(If not, just leave empty)" --entry --entry-text "$SPEC")
-}
+#fifthPage()
+#{
+    #SPEC=`echo ${CONFIG##*;}`
+#    RET=$($ZENITY_NO_SIZE --title "$ZENITY_TITLE" --text "Optional: Please enter a spec file, if you want to use one:\n(If not, just leave empty)" --entry)
+#}
 
 saveConfig()
 {
@@ -646,7 +659,7 @@ loadConfig()
 zenityConfigToBuildSystem()
 {
     echo "* CONFIG: $CONFIG"
-    SPEC=`echo ${CONFIG##*;}`
+    #SPEC=`echo ${CONFIG##*;}`
     SLEEP_TIME=1
     # Options
     CLEAN="`[ $(expr "$CONFIG" : ".*Clean_build_path.*") -ne 0 ] && echo 'y' || echo 'n'`"
@@ -699,8 +712,8 @@ startZenityDialog()
     CONF=$CONF$SEPARATOR$RET
     fourthPage
     CONF=$CONF$SEPARATOR$RET
-    fifthPage
-    CONF=$CONF$SEPARATOR$RET
+#    fifthPage
+#    CONF=$CONF$SEPARATOR$RET
 
     CONFIG=$CONF
     saveConfig
