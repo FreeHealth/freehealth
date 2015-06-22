@@ -24,7 +24,7 @@ contains(FREEMEDFORMS,1){
     # *                                AccountOld Plugin (obsolete)                         *
     # ***************************************************************************************
     # Uncomment the following line to build the plugin
-    # CONFIG *= with-account-old
+    # CONFIG *= with-account
     # ***************************************************************************************
 
 
@@ -73,7 +73,7 @@ contains(FREEMEDFORMS,1){
     # *                                  Webcam Plugin                                      *
     # ***************************************************************************************
     # Uncomment the following line to build the plugin
-    # CONFIG *= with-webcam
+      CONFIG *= with-webcam
     # ***************************************************************************************
 
 

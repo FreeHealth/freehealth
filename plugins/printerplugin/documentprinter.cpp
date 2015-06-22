@@ -301,7 +301,7 @@ bool DocumentPrinter::toPdf(const QString &html, const QString &absOutputFilePat
     // Create a QPrinter pointer (will be deleted by ~Print::Printer)
     Print::Printer p;
     QPrinter *printer = new QPrinter(QPrinter::ScreenResolution);
-    printer->setPageSize(QPrinter::A4);
+    printer->setPaperSize(QPrinter::A4);
     printer->setNumCopies(1);
     printer->setPrintRange(QPrinter::AllPages);
     if (!absOutputFilePath.endsWith(".pdf", Qt::CaseInsensitive))

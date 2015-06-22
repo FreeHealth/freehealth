@@ -92,7 +92,7 @@
 
 /**
   \var Print::Printer::Presence Printer::EachPages
-  The document is present on each pages to print
+  The document is present on each page to print
 */
 
 /**
@@ -661,7 +661,7 @@ bool PrinterPrivate::simpleDraw()
     int _pageWidth = pageWidth();                     //TODO add margins
     this->setTextWidth(_pageWidth);
 
-    m_Content->setPaperSize(getSimpleDrawContentPageSize(), QPrinter::Millimeter);
+    m_Content->setPageSize(getSimpleDrawContentPageSize());
 //    qWarning() << getSimpleDrawContentPageSize();
     m_Content->setUseDesignMetrics(true);
 
@@ -1217,7 +1217,7 @@ void Printer::previewDocumentWatermark(QPixmap &drawTo,
     painter.restore();
     painter.end();
     doc->setDefaultTextOption(docOptionSave);
-    doc->QPrinter::setPaperSize(docSizeSave);
+    doc->setPageSize(docSizeSave);
 }
 
 /** \brief Draws the \e html text watermark to QPixmap \e drawTo */
@@ -1304,7 +1304,7 @@ void Printer::previewToPixmap(QPixmap &drawTo, QPrinter *printer)
     int _pageWidth = printer->paperRect().width();//d->pageWidth();
     d->setTextWidth(_pageWidth);
 
-    d->m_Content->setPaperSize(printer->paperRect().size());//d->getSimpleDrawContentPageSize());
+    d->m_Content->setPageSize(printer->paperRect().size());//d->getSimpleDrawContentPageSize());
     d->m_Content->setUseDesignMetrics(true);
 
     // prepare drawing areas
