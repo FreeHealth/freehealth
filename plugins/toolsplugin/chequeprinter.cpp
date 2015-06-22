@@ -41,8 +41,14 @@
 #include <translationutils/constants.h>
 #include <translationutils/trans_current.h>
 
+#if QT_VERSION < 0x050000
 #include <QPrinter>
 #include <QPrintDialog>
+#else
+#include <QtPrintSupport/QPrinter>
+#include <QtPrintSupport/QPrintDialog>
+#endif
+
 #include <QPainter>
 #include <QSystemLocale>
 #include <QPixmap>

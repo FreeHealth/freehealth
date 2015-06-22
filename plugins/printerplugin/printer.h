@@ -39,7 +39,7 @@
 #if QT_VERSION < 0x050000
 #include <QPrinter>
 #else
-#include <QPrinter>
+#include <QtPrintSupport/QPrinter>
 #endif
 
 QT_BEGIN_NAMESPACE
