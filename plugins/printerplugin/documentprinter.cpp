@@ -302,7 +302,7 @@ bool DocumentPrinter::toPdf(const QString &html, const QString &absOutputFilePat
     Print::Printer p;
     QPrinter *printer = new QPrinter(QPrinter::ScreenResolution);
     printer->setPaperSize(QPrinter::A4);
-    printer->setNumCopies(1);
+    printer->setCopyCount(1);
     printer->setPrintRange(QPrinter::AllPages);
     if (!absOutputFilePath.endsWith(".pdf", Qt::CaseInsensitive))
         printer->setOutputFileName(absOutputFilePath + ".pdf");

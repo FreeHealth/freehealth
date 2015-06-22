@@ -129,7 +129,7 @@ void PrintDialog::accept()
 {
     // Print the doc
     int copies = ui->copies->value();
-    m_Printer->printer()->setNumCopies(copies);
+    m_Printer->printer()->setCopyCount(copies);
     if (ui->allPages->isChecked()) {
         m_Printer->printer()->setPrintRange(QPrinter::AllPages);
     } else {
