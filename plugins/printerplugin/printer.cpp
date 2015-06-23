@@ -51,7 +51,6 @@
 #include <QTextTable>
 #include <QPointer>
 #include <QFileInfo>
-#include <QPrinter>
 
 #if QT_VERSION < 0x050000
 #include <QPrinterInfo>
