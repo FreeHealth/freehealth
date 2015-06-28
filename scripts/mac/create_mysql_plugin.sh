@@ -32,11 +32,11 @@
 # - installs the plugins
 # - clean the Qt sources
 
-QT_VERSION=4.8.7
+QT_VERSION=4.8.5
 ACTUAL_PATH=`pwd`
 DEFAULT_WORKING_PATH=~/Downloads
 TMP_BUILD_PATH=$DEFAULT_WORKING_PATH/qt-src-tmp
-MAC_SPEC=macx-g++
+MAC_SPEC=macx-clang
 
 # Get scripts names and paths
 SCRIPT_NAME=`basename $0`
@@ -58,13 +58,9 @@ showHelp()
 }
 
 # This script assumes that MySQL is installed with header files
-# MySQL version should be the same as the current Debian Stable MySQL version
-# As of May 2015 (Debian Stable is Debian 8.0 Jessie): MySQL 5.5
-# Get it from : https://dev.mysql.com/downloads/mysql/
-# May 2015 direct link:
-# https://dev.mysql.com/get/Downloads/MySQL-5.5/mysql-5.5.44-osx10.9-x86_64.dmg
-# Please verify file integrity with OpenPGP signature available on download page
-# https://dev.mysql.com/downloads/mysql/
+# Get it from : http://dev.mysql.com/downloads/mysql/
+# March 2014 using:
+#     http://cdn.mysql.com/Downloads/MySQL-5.6/mysql-5.6.16-osx10.7-x86_64.dmg
 MYSQL_SOURCES=/usr/local/mysql/include
 MYSQL_LIB=/usr/local/mysql/lib
 MYSQL_LIB_VERSION=18

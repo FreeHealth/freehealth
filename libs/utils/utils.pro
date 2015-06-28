@@ -168,6 +168,3 @@ FORMS += \
 # include translations
 TRANSLATION_NAME = utils
 include($${SOURCES_ROOT_PATH}/buildspecs/translations.pri)
-
-# Qt5 QPrinter
-greaterThan(QT_MAJOR_VERSION, 4): QT += printsupport
