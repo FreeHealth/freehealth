@@ -41,9 +41,16 @@
 #include <utils/printaxishelper.h>
 #include <translationutils/constants.h>
 
+#if QT_VERSION < 0x050000
 #include <QPrinter>
 #include <QPrinterInfo>
 #include <QPrintDialog>
+#else
+#include <QtPrintSupport/QPrinter>
+#include <QtPrintSupport/QPrinterInfo>                                          
+#include <QtPrintSupport/QPrintDialog>                                          
+#endif 
+
 #include <QPainter>
 #include <QPixmap>
 
@@ -588,7 +595,7 @@ bool FspPrinter::print(const Fsp &fsp, Cerfa cerfa, bool printCerfaAsBackground)
     printer->setFullPage(true);
     printer->setPaperSize(QPrinter::A4);
     printer->setResolution(150);
-    d->_axisHelper.setPageSize(printer->paperRect(), printer->paperSize(QPrinter::Millimeter));
+    d->_axisHelper.setPaperSize(printer->paperRect(), printer->paperSize(QPrinter::Millimeter), QPrinter::Millimeter);
 
     QPainter painter;
     if (!painter.begin(printer)) { // failed to open file
@@ -654,7 +661,7 @@ bool FspPrinter::print(const Fsp &fsp, Cerfa cerfa, bool printCerfaAsBackground)
 QPixmap FspPrinter::preview(const Fsp &fsp, Cerfa cerfa)
 {
     QPixmap image(210*10, 297*10);
-    d->_axisHelper.setPageSize(image.rect(), QSize(210,297)); // A4
+    d->_axisHelper.setPaperSize(image.rect(), QSize(210,297), QPrinter::Millimeter); // A4
 
     QPainter painter;
     if (!painter.begin(&image)) { // failed to open file

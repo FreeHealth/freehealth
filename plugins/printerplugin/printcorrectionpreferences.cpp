@@ -207,7 +207,7 @@ bool PrintCorrectionPreferencesWidget::printTest()
     printer->setResolution(150);
 
     Utils::PrintAxisHelper axisHelper;
-    axisHelper.setPageSize(printer->paperRect(), printer->paperSize(QPrinter::Millimeter));
+    axisHelper.setPaperSize(printer->paperRect(), printer->paperSize(QPrinter::Millimeter), QPrinter::Millimeter);
 
     QPainter painter;
     if (!painter.begin(printer)) { // failed to open file
@@ -279,7 +279,7 @@ void PrintCorrectionPreferencesWidget::shiftPreview()
     image.fill(Qt::white);
 
     Utils::PrintAxisHelper axisHelper;
-    axisHelper.setPageSize(image.rect(), QSizeF(150, 100));
+    axisHelper.setPaperSize(image.rect(), QSizeF(150, 100), QPrinter::Millimeter);
 
     QPainter painter;
     if (!painter.begin(&image)) { // failed to open file

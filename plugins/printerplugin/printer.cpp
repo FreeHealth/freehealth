@@ -91,7 +91,7 @@
 
 /**
   \var Print::Printer::Presence Printer::EachPages
-  The document is present on each pages to print
+  The document is present on each page to print
 */
 
 /**
@@ -256,7 +256,7 @@ public:
         }
         m_Printer = new QPrinter;
         m_Printer->setColorMode(QPrinter::ColorMode(settings()->value(Constants::S_COLOR_PRINT).toInt()));
-        m_Printer->setPageSize(QPrinter::A4);
+        m_Printer->setPaperSize(QPrinter::A4);
     }
 
     // used by complexDraw()
@@ -808,7 +808,7 @@ bool Printer::getUserPrinter()
     }
     if (d->m_Printer) {
         d->m_Printer->setColorMode(QPrinter::ColorMode(settings()->value(Constants::S_COLOR_PRINT).toInt()));
-        d->m_Printer->setPageSize(QPrinter::A4);
+        d->m_Printer->setPaperSize(QPrinter::A4);
 //        d->m_Printer->setPageMargins(50,50,50,50, QPrinter::DevicePixel);
         return true;
     }

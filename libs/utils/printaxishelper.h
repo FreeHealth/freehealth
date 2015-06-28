@@ -31,6 +31,7 @@
 #include <QSize>
 #include <QRect>
 #include <QPainter>
+#include <QPrinter>
 
 /**
  * \file printaxishelper.h
@@ -64,7 +65,7 @@ class UTILS_EXPORT PrintAxisHelper
 {
 public:
     PrintAxisHelper();
-    void setPageSize(const QRect &pageRect, const QSizeF &pageSizeInMillimeters);
+    void setPaperSize(const QRect &pageRect, const QSizeF &pageSizeInMillimeters, const enum QPrinter::Unit);
     void setMargins(qreal left, qreal top, qreal right, qreal bottom);
     void translatePixels(int x, int y);
     void translateMillimeters(double x, double y);

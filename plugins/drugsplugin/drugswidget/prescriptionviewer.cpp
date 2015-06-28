@@ -51,8 +51,15 @@
 #include <translationutils/constanttranslations.h>
 
 #include <QFileDialog>
-#include <QPrinter>
-#include <QPrintDialog>
+
+#if QT_VERSION < 0x050000                                                       
+#include <QPrinter>                                                             
+#include <QPrintDialog>                                                         
+#else                                                                           
+#include <QtPrintSupport/QPrinter>                                              
+#include <QtPrintSupport/QPrintDialog>                                          
+#endif 
+
 #include <QTextDocument>
 #include <QTreeWidget>
 #include <QClipboard>

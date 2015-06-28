@@ -41,8 +41,14 @@
 #include <translationutils/constants.h>
 #include <translationutils/trans_current.h>
 
+#if QT_VERSION < 0x050000
 #include <QPrinter>
 #include <QPrintDialog>
+#else
+#include <QtPrintSupport/QPrinter>
+#include <QtPrintSupport/QPrintDialog>
+#endif
+
 #include <QPainter>
 #include <QSystemLocale>
 #include <QPixmap>
@@ -173,7 +179,7 @@ bool ChequePrinter::print()
     printer->setPaperSize(QPrinter::A4);
     printer->setResolution(150);
     printer->setOrientation(QPrinter::Landscape);
-    d->_axisHelper.setPageSize(printer->paperRect(), printer->paperSize(QPrinter::Millimeter));
+    d->_axisHelper.setPaperSize(printer->paperRect(), printer->paperSize(QPrinter::Millimeter), QPrinter::Millimeter);
 
     QPainter painter;
     if (!painter.begin(printer)) { // failed to open file

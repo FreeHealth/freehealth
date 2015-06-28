@@ -46,8 +46,14 @@
 #include <translationutils/constants.h>
 #include <translationutils/trans_current.h>
 
+#if QT_VERSION < 0x050000
 #include <QPrinter>
 #include <QPrintDialog>
+#else
+#include <QtPrintSupport/QPrinter>
+#include <QtPrintSupport/QPrintDialog>
+#endif
+
 #include <QPainter>
 #include <QPixmap>
 
@@ -209,7 +215,7 @@ bool ChequePrinter::print(const Internal::ChequePrintFormat &format)
     printer->setPaperSize(QPrinter::A4);
     printer->setResolution(150);
     printer->setOrientation(QPrinter::Landscape);
-    d->_axisHelper.setPageSize(printer->paperRect(), printer->paperSize(QPrinter::Millimeter));
+    d->_axisHelper.setPaperSize(printer->paperRect(), printer->paperSize(QPrinter::Millimeter), QPrinter::Millimeter);
 
     // Printer correction: not over margins
     qreal l, r, t ,b;
@@ -267,8 +273,8 @@ QPixmap ChequePrinter::preview(const Internal::ChequePrintFormat &format)
 {
     QPixmap image(format.sizeMillimeters().width()*10, format.sizeMillimeters().height()*10);
     image.fill(Qt::white);
-    d->_axisHelper.setPageSize(image.rect(), format.sizeMillimeters());
-//    d->_axisHelper.setPageSize(image.rect(), QSize(210,297)); // A4
+    d->_axisHelper.setPaperSize(image.rect(), format.sizeMillimeters(), QPrinter::Millimeter);
+//    d->_axisHelper.setPaperSize(image.rect(), QSize(210,297), QPrinter::Millimeter); // A4
 
     // Center the cheque in the page
 //    double centerX = (printer->paperSize(QPrinter::Millimeter).width() - format.sizeMillimeters().width());

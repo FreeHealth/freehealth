@@ -45,7 +45,7 @@ PrintAxisHelper::PrintAxisHelper() :
 }
 
 /** Computes the coefficient to transform millimeters to pixels and vice-versa */
-void PrintAxisHelper::setPageSize(const QRect &pageRectPixels, const QSizeF &pageSizeInMillimeters)
+void PrintAxisHelper::setPaperSize(const QRect &pageRectPixels, const QSizeF &pageSizeInMillimeters, const QPrinter::Unit = QPrinter::Millimeter)
 {
     _pixToMmCoefX = (qreal)pageRectPixels.width() / pageSizeInMillimeters.width();
     _pixToMmCoefY = (qreal)pageRectPixels.height() / pageSizeInMillimeters.height();
@@ -63,7 +63,7 @@ void PrintAxisHelper::setMargins(qreal left, qreal top, qreal right, qreal botto
 
 /**
  * Translates a QPoint in millimeters to QPoint in pixels
- * according to coefficient computed in setPageSize().
+ * according to coefficient computed in setPaperSize().
  * Manages translation of coordinates.
  * \sa translateMillimeters(), translatePixels()
  */
@@ -74,7 +74,7 @@ QPointF PrintAxisHelper::pointToPixels(const QPointF &pointInMilliters)
 
 /**
  * Translates a QPoint in millimeters to QPoint in pixels
- * according to coefficient computed in setPageSize()
+ * according to coefficient computed in setPaperSize()
  */
 QPointF PrintAxisHelper::pointToPixels(double x_millimeter, double y_millimeter)
 {
@@ -83,7 +83,7 @@ QPointF PrintAxisHelper::pointToPixels(double x_millimeter, double y_millimeter)
 
 /**
  * Translate a QSize in millimeters to QSize in pixels
- * according to coefficient computed in setPageSize()
+ * according to coefficient computed in setPaperSize()
  */
 QSizeF PrintAxisHelper::sizeToPixels(const QSizeF &sizeMilliters)
 {
@@ -92,7 +92,7 @@ QSizeF PrintAxisHelper::sizeToPixels(const QSizeF &sizeMilliters)
 
 /**
  * Translate a QSize in millimeters to QSize in pixels
- * according to coefficient computed in setPageSize()
+ * according to coefficient computed in setPaperSize()
  */
 QSizeF PrintAxisHelper::sizeToPixels(double width_millimeter, double height_millimeter)
 {
