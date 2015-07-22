@@ -1471,7 +1471,14 @@ bool Printer::toPdf(const QString &fileName, const QString &docName)
         tmp.append(".pdf");
 
     QPrinter::OutputFormat format = d->m_Printer->outputFormat();
+
+    #ifdef Q_OS_MAC                                                             
+    printer->setOutputFormat(QPrinter::NativeFormat);                           
+    // On other OS, use PdfFormat                                               
+    #else
     d->m_Printer->setOutputFormat(QPrinter::PdfFormat);
+    #endif
+
     d->m_Printer->setCreator(qApp->applicationName() + " " + qApp->applicationVersion());
     d->m_Printer->setOutputFileName(tmp);
     d->m_Printer->setDocName(docName);

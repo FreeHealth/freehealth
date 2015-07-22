@@ -308,7 +308,15 @@ bool DocumentPrinter::toPdf(const QString &html, const QString &absOutputFilePat
         printer->setOutputFileName(absOutputFilePath + ".pdf");
     else
         printer->setOutputFileName(absOutputFilePath);
+
+    // On Mac OS X use NativeFormat
+    #ifdef Q_OS_MAC
+    printer->setOutputFormat(QPrinter::NativeFormat);
+    // On other OS, use PdfFormat
+    #else
     printer->setOutputFormat(QPrinter::PdfFormat);
+    #endif
+
     printer->setCreator(qApp->applicationName() + " " + qApp->applicationVersion());
 
     p.setPrinter(printer);
