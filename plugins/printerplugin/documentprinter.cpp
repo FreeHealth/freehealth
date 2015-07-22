@@ -300,7 +300,9 @@ bool DocumentPrinter::toPdf(const QString &html, const QString &absOutputFilePat
 {
     // Create a QPrinter pointer (will be deleted by ~Print::Printer)
     Print::Printer p;
-    QPrinter *printer = new QPrinter(QPrinter::ScreenResolution);
+    // Try QPrinter::HighResolution
+    //QPrinter *printer = new QPrinter(QPrinter::ScreenResolution);
+    QPrinter *printer = new QPrinter(QPrinter::HighResolution);
     printer->setPaperSize(QPrinter::A4);
     printer->setCopyCount(1);
     printer->setPrintRange(QPrinter::AllPages);
@@ -309,9 +311,9 @@ bool DocumentPrinter::toPdf(const QString &html, const QString &absOutputFilePat
     else
         printer->setOutputFileName(absOutputFilePath);
 
-    // On Mac OS X use NativeFormat
+    // On Mac OS X use (NativeFormat) try PdfFormat again with Resolution change
     #ifdef Q_OS_MAC
-    printer->setOutputFormat(QPrinter::NativeFormat);
+    printer->setOutputFormat(QPrinter::PdfFormat);
     // On other OS, use PdfFormat
     #else
     printer->setOutputFormat(QPrinter::PdfFormat);
