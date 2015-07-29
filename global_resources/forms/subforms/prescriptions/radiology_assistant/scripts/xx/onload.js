@@ -3,6 +3,7 @@ namespace.module('com.freemedforms.xray.prescription.helper', function (exports,
   // Ui vars (retrieved from the ui)
   var siteCombo, siteSelectorListWidget, leftCheck, rightCheck, addButton, raySelectorListWidget;
   var htmlItem;
+  var html;
   var mainSites = new Array();
   var siteSelector = new Array("xx", "fr");
   var raySelector = new Array("xx", "fr");
@@ -619,7 +620,18 @@ namespace.module('com.freemedforms.xray.prescription.helper', function (exports,
                      }
 					
                      function putSelectionToHtmlEditor() {
+                        
                          // return html code
+                        
+                        // if there is no currently defined htmlItem.currentText
+                        // set previoushtml to empty string:
+                        var previoushtml;
+                        if ( typeof htmlItem.currentText == 'undefined' ) {
+                            previoushtml = "";
+                        } else {
+                            previoushtml = htmlItem.currentText;
+                        }
+                        
                          var html = "<span style=\"font-weight:bold;font-size:large;font-variant:small-caps;text-decoration:underline\">" + siteCombo.currentText + "</span><ul title=" + siteCombo.currentText + ">";
                          var selected = freemedforms.uiTools.selectedItems(siteSelectorListWidget);
                          var r_selected = freemedforms.uiTools.selectedItems(raySelectorListWidget);
@@ -639,10 +651,10 @@ namespace.module('com.freemedforms.xray.prescription.helper', function (exports,
                              } else {
                                  html += "<li><b>" + selected[i] + "</b> " + lat + "</li>";
                              }
-                         }
-                         html += "</ul>";
-                         htmlItem.currentText = htmlItem.currentText + html;
-                     }
+                        }
+                        html += "</ul>";
+                        htmlItem.currentText = previoushtml + html;
+                    }
 
 });
 

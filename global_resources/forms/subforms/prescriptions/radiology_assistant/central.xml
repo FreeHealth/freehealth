@@ -5,11 +5,11 @@
   <formdescription>
 
     <!-- Non translatable values -->
-    <authors>Eric Maeker, MD</authors>
-    <version>0.8.0</version>
+    <authors>Eric Maeker, MD; Jérôme Pinguet</authors>
+    <version>test</version>
     <fmfv>0.7.0</fmfv>
     <cdate>2011-12-19</cdate>
-    <lmdate>2012-01-01</lmdate>
+    <lmdate>2015-06-27</lmdate>
     <icon>xray.png</icon>
     <weblink>http://www.freemedforms.com</weblink>
     <!-- Translatable values -->
