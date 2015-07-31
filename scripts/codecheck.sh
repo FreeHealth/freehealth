@@ -147,6 +147,10 @@ startCppCheck()
             CPPINCLUDES="-I $SOURCES_ROOT_PATH/libs -I $SOURCES_ROOT_PATH/contrib -I $SOURCES_ROOT_PATH/plugins -I plugins"
             CPPDIRSTOSCAN="plugins $PRO-src"
             CPPOUTPUT="$OUTPUT_PATH/$PRO"
+            if [ ! -z `mkdir -p $OUTPUT_PATH/$PRO` ]; then                      
+                echo "ERROR: unable to create folder: $PRO in path: $OUTPUT_PATH"                           
+                exit 124;                                                       
+            fi
             runCppCheck
         fi
     done
