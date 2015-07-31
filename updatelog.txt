@@ -14,25 +14,26 @@ The FreeMedForms project
 ===== Bug correction =====
 
   * All applications
+    * Fix Mac OS X printing issue and pdf creation
   * FreeMedForms
     * Installation: correctly manage database prefix when configuring MySQL server
     * User database: fixing a severe compatibility issue
     * AGGIR plugin: correcting GIR group computation
     * Fixing user creation:
-      * users are now registered on all host for MySQL config
+      * users are now registered on all hosts for MySQL config
       * when configured with MySQL correctly manage user rights (database prefixes)
     * Some bug fixes
   * FreeDiams
   * FreeDRC
   * FreeToolBox
   * PMHx
-  * Agenda:
+  * Agenda
   * DataPack manager
   * HPRIM integrator
   * Forms
   * Debian specific
   * Under the hood
-  * Various unloggued bug corrected
+  * Various unloggud bugs corrected
 
 ===== Packaging and documentation ====
 
@@ -42,4 +43,3 @@ The FreeMedForms project
   * Compilation
   * Documentation
     * Currently only available online
-
