@@ -390,6 +390,15 @@ macx {
    qt_accessibleplugins.files = $${QTPLUGINS_PATH}/accessible
    INSTALLS+=qt_sqlplugins qt_imagesplugins qt_accessibleplugins
    message(Bundle: Qt Plugins will be installed from $${QTPLUGINS_PATH} to $${INSTALL_QT_PLUGINS_PATH} )
+
+
+   # install printsupport
+   win32 {
+   qt_printsupport.path = $${INSTALL_QT_LIBS_PATH}                           
+   qt_printsupport.files = $${QTPLUGINS_PATH}/printsupport
+   INSTALLS+=qt_printsupport
+   }
+   
  }
 
 }
