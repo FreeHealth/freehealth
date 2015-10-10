@@ -18,11 +18,13 @@ REM #
 REM # After the compilation, you will find the installer in the source root dir
 
 REM # Var definition
+set VERSION=__version__
 set PATH_TO_MYSQL=C:\Progra~1\MySQL\MYSQLS~1.5\lib
 set PATH_TO_INNOSETUP=C:\Progra~1\InnoSe~1\iscc.exe
 set WORKING_DIRECTORY=%CD%
 set PATH_TO_MINGW=C:\MinGW\bin
 set PATH_TO_OPENSSL=C:\OPENSS~1
+set PATH_TO_SYSTEM32=C:\Windows\System32
 
 REM # Go to source root dir
 cd ../..
@@ -54,18 +56,25 @@ copy %PATH_TO_OPENSSL%\ssleay32.dll ..\packages\win\%1\
 copy %PATH_TO_OPENSSL%\libssl32.dll ..\packages\win\%1\
 copy %PATH_TO_OPENSSL%\libeay32.dll ..\packages\win\%1\
 
+REM # Copy msvcr120.dll into package dir
+copy %PATH_TO_SYSTEM32%\msvcr120.dll ..\packages\win\%1\
+
 REM # Change linefeed on TXT files
 unix2dos ..\packages\win\%1\README.txt
 unix2dos ..\packages\win\%1\COPYING.txt
 
 REM # Create the installer
-%PATH_TO_INNOSETUP% "%WORKING_DIRECTORY%\..\..\global_resources\package_helpers\%1.iss"
+copy %WORKING_DIRECTORY%\..\..\global_resources\package_helpers\%1.iss %WORKING_DIRECTORY%
+copy %WORKING_DIRECTORY%\..\..\%1\%1-src\%1.ico %WORKING_DIRECTORY%
+%PATH_TO_INNOSETUP% "%WORKING_DIRECTORY%\%1.iss"
+del %WORKING_DIRECTORY%\%1.iss
+del %WORKING_DIRECTORY%\%1.ico 
 
 REM # Go to root source tree
 cd ..
 
 REM # Rename and move the setup.exe file
-copy packages\win\%1\%1\setup.exe %1-__version__.exe
+copy packages\win\%1\%1\setup.exe %1-%VERSION%.exe
 
 REM # Unset var
 set PATH_TO_MYSQL=

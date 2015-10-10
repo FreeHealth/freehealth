@@ -342,7 +342,7 @@ macx {
                   $$[QT_INSTALL_LIBS]/*QtNetwork.so.4
    }
    win32 {
-       equals(QT_MAJOR_VERSION, 4) {      
+       equals(QT_MAJOR_VERSION, 4) {
            qt_libs.files = $$[QT_INSTALL_BINS]/QtCore4.$${LIB_EXTENSION} \
                   $$[QT_INSTALL_BINS]/QtGui4.$${LIB_EXTENSION} \
                   $$[QT_INSTALL_BINS]/QtSql4.$${LIB_EXTENSION} \
@@ -370,10 +370,7 @@ macx {
                $$[QT_INSTALL_BINS]/icuuc52.$${LIB_EXTENSION} \
                $$[QT_INSTALL_BINS]/icudt52.$${LIB_EXTENSION} \
                $$[QT_INSTALL_BINS]/.$${LIB_EXTENSION} \
-               
-
        }
-        
    }
 
    INSTALLS+=qt_libs
@@ -394,11 +391,22 @@ macx {
 
    # install printsupport
    win32 {
-   qt_printsupport.path = $${INSTALL_QT_LIBS_PATH}                           
-   qt_printsupport.files = $${QTPLUGINS_PATH}/printsupport
-   INSTALLS+=qt_printsupport
+       greaterThan(QT_MAJOR_VERSION, 4) {
+           qt_printsupport.path = $${INSTALL_QT_LIBS_PATH}/plugins
+           qt_printsupport.files = $${QTPLUGINS_PATH}/printsupport
+           INSTALLS+=qt_printsupport
+       }
    }
-   
+
+   # install platforms/qwindows.dll qminimal.dll & qoffscreen.dll
+   win32 {
+       greaterThan(QT_MAJOR_VERSION, 4) {     
+           qt_platforms.path = $${INSTALL_QT_LIBS_PATH}
+           qt_platforms.files = $${QTPLUGINS_PATH}/platforms
+           INSTALLS+=qt_platforms
+       }
+   }
+
  }
 
 }
