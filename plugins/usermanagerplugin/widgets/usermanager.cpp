@@ -218,8 +218,8 @@ UserManagerDialog::UserManagerDialog(QWidget *parent) :
     QDialog(parent)
 {
     Q_ASSERT_X(userModel()->hasCurrentUser(), "UserManagerDialog", "NO CURRENT USER");
-    setWindowFlags(windowFlags() | Qt::CustomizeWindowHint | Qt::WindowCloseButtonHint | Qt::WindowMaximizeButtonHint);
-
+    setWindowFlags(Qt::Window | Qt::CustomizeWindowHint | Qt::WindowCloseButtonHint | Qt::WindowMaximizeButtonHint);
+    show();
     if (!userModel()->hasCurrentUser())
         return;
 //    setAttribute(Qt::WA_DeleteOnClose);
