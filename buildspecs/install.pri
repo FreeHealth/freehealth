@@ -337,13 +337,13 @@ macx {
                   $$[QT_INSTALL_LIBS]/*QtGui.so.4 \
                   $$[QT_INSTALL_LIBS]/*QtSql.so.4 \
                   $$[QT_INSTALL_LIBS]/*QtScript.so.4 \
-                  $$[QT_INSTALL_LIBS]/*Qt3Support.so.4 \
                   $$[QT_INSTALL_LIBS]/*QtXml.so.4 \
                   $$[QT_INSTALL_LIBS]/*QtSvg.so.4 \
                   $$[QT_INSTALL_LIBS]/*QtNetwork.so.4
    }
    win32 {
-   qt_libs.files = $$[QT_INSTALL_BINS]/QtCore4.$${LIB_EXTENSION} \
+       equals(QT_MAJOR_VERSION, 4) {
+           qt_libs.files = $$[QT_INSTALL_BINS]/QtCore4.$${LIB_EXTENSION} \
                   $$[QT_INSTALL_BINS]/QtGui4.$${LIB_EXTENSION} \
                   $$[QT_INSTALL_BINS]/QtSql4.$${LIB_EXTENSION} \
                   $$[QT_INSTALL_BINS]/QtScript4.$${LIB_EXTENSION} \
@@ -352,7 +352,25 @@ macx {
                   $$[QT_INSTALL_BINS]/QtNetwork4.$${LIB_EXTENSION} \
                   $$[QT_INSTALL_BINS]/mingw*.$${LIB_EXTENSION} \
                   $$[QT_INSTALL_BINS]/libgcc_s_dw2-1.$${LIB_EXTENSION} \
-                 # $$[QT_INSTALL_LIBS]/Qt3Support.$${LIB_EXTENSION} \
+       }
+       greaterThan(QT_MAJOR_VERSION, 4) {
+           qt_libs.files = $$[QT_INSTALL_BINS]/Qt5Core.$${LIB_EXTENSION} \
+               $$[QT_INSTALL_BINS]/Qt5Gui.$${LIB_EXTENSION} \
+               $$[QT_INSTALL_BINS]/Qt5Sql.$${LIB_EXTENSION} \
+               $$[QT_INSTALL_BINS]/Qt5Script.$${LIB_EXTENSION} \
+               $$[QT_INSTALL_BINS]/Qt5Xml.$${LIB_EXTENSION} \
+               $$[QT_INSTALL_BINS]/Qt5Svg.$${LIB_EXTENSION} \
+               $$[QT_INSTALL_BINS]/Qt5Network.$${LIB_EXTENSION} \
+               $$[QT_INSTALL_BINS]/Qt5PrintSupport.$${LIB_EXTENSION} \
+               $$[QT_INSTALL_BINS]/Qt5Widgets.$${LIB_EXTENSION} \
+               $$[QT_INSTALL_BINS]/libwinpthread-1.$${LIB_EXTENSION} \
+               $$[QT_INSTALL_BINS]/libgcc_s_dw2-1.$${LIB_EXTENSION} \
+               $$[QT_INSTALL_BINS]/libstdc++-6.$${LIB_EXTENSION} \
+               $$[QT_INSTALL_BINS]/icuin52.$${LIB_EXTENSION} \
+               $$[QT_INSTALL_BINS]/icuuc52.$${LIB_EXTENSION} \
+               $$[QT_INSTALL_BINS]/icudt52.$${LIB_EXTENSION} \
+               $$[QT_INSTALL_BINS]/.$${LIB_EXTENSION} \
+       }
    }
 
    INSTALLS+=qt_libs
@@ -369,6 +387,26 @@ macx {
    qt_accessibleplugins.files = $${QTPLUGINS_PATH}/accessible
    INSTALLS+=qt_sqlplugins qt_imagesplugins qt_accessibleplugins
    message(Bundle: Qt Plugins will be installed from $${QTPLUGINS_PATH} to $${INSTALL_QT_PLUGINS_PATH} )
+
+
+   # install printsupport
+   win32 {
+       greaterThan(QT_MAJOR_VERSION, 4) {
+           qt_printsupport.path = $${INSTALL_QT_LIBS_PATH}/plugins
+           qt_printsupport.files = $${QTPLUGINS_PATH}/printsupport
+           INSTALLS+=qt_printsupport
+       }
+   }
+
+   # install platforms/qwindows.dll qminimal.dll & qoffscreen.dll
+   win32 {
+       greaterThan(QT_MAJOR_VERSION, 4) {     
+           qt_platforms.path = $${INSTALL_QT_LIBS_PATH}
+           qt_platforms.files = $${QTPLUGINS_PATH}/platforms
+           INSTALLS+=qt_platforms
+       }
+   }
+
  }
 
 }

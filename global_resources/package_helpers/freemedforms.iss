@@ -14,17 +14,18 @@ VersionInfoProductName=FreeMedForms
 OutputDir=freemedforms
 ;ShowLanguageDialog=no
 ;ShowUndisplayableLanguages=yes
-AppCopyright=Copyright (C) 2008-2012 Eric Maeker, MD, {cm:FreeMedFormsProject}
+AppCopyright=Copyright (C) 2008-2015 Eric Maeker, MD, {cm:FreeMedFormsProject}
 AppPublisher={cm:FreeMedFormsProject}
 AppPublisherURL=https://www.freemedforms.com/
 ChangesAssociations=yes
 ;LicenseFile=
 ;OutputDir=SourceDir
 ;WizardSmallImageFile=mysmallimage.bmp
-SourceDir=c:\freemedforms-__version__\packages\win\freemedforms
-SetupIconFile=c:\freemedforms-__version__\freemedforms\freemedforms-src\freemedforms.ico
-;WizardSmallImageFile=c:\freemedforms-__version__\global_resources\pixmap\svg\freemedforms-128.bmp
-;WizardImageFile=c:\freemedforms-__version__\global_resources\pixmap\svg\freemedforms-128.bmp
+;You may need to manually set SourceDir and SetupIconFile
+;SourceDir=
+SetupIconFile=freemedforms.ico
+;WizardSmallImageFile=c:\freemedforms-0.9.6\global_resources\pixmap\svg\freemedforms-128.bmp
+;WizardImageFile=c:\freemedforms-0.9.6\global_resources\pixmap\svg\freemedforms-128.bmp
 ;WizardImageStretch=no
 Compression=lzma/normal
 
@@ -90,6 +91,7 @@ Name: "helpFr"; Description: {cm:CompHelpFr}; Types: full custom
 Source: "freemedforms.exe"; DestDir: "{app}"; Components: program
 Source: "*.dll"; DestDir: "{app}"; Components: program
 Source: "plugins/*"; DestDir: "{app}/plugins"; Components: program; Flags: recursesubdirs
+Source: "platforms/*"; DestDir: "{app}/platforms"; Components: program; Flags: recursesubdirs
 Source: "Resources/datapacks/appinstalled/account/*"; DestDir: "{app}/Resources/datapacks/appinstalled/account"; Flags: recursesubdirs; Components: program
 Source: "Resources/datapacks/appinstalled/drugs/*"; DestDir: "{app}/Resources/datapacks/appinstalled/drugs"; Components: program
 Source: "Resources/datapacks/appinstalled/defaultservers.txt"; DestDir: "{app}/Resources/datapacks/appinstalled"; Components: program
@@ -111,4 +113,3 @@ Name: "{group}\{cm:UninstallProgram,FreeMedForms}"; Filename: "{uninstallexe}"
 Name: "{group}\{cm:FreeMedFormsProject}"; FileName: "{app}\freemedforms.url"
 Name: "{group}\README.txt"; FileName: "{app}\README.txt"
 Name: "{group}\COPYING.txt"; FileName: "{app}\COPYING.txt"
-
