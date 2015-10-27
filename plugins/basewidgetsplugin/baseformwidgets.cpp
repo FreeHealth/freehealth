@@ -2092,11 +2092,11 @@ QString BaseSpin::printableHtml(bool withValues) const
         QSpinBox *spin = qobject_cast<QSpinBox*>(m_Spin);
         QString value;
         if (spin) {
-            value = QString::number(spin->value());
+            value = spin->text();
         } else {
             QDoubleSpinBox *dspin = qobject_cast<QDoubleSpinBox*>(m_Spin);
             if (dspin) {
-                value = QString::number(dspin->value());
+                value = dspin->text();
             }
         }
         return QString("<table width=100% border=1 cellpadding=0 cellspacing=0  style=\"margin: 0px\">"
