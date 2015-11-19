@@ -2504,6 +2504,29 @@ bool Database::alterTableForNewField(const int tableRef, const int newFieldRef, 
     return true;
 }
 
+virtual bool modifyMySQLColumnType(const int tableRef, const int column,
+                                   const & QString type = FieldUndefined)
+{
+    QSqlDatabase DB = database();
+    if (!connectedDatabase(DB, __LINE__))                                       
+        return false;
+    QString req;
+    req = QString("ALTER TABLE `%1`"
+                  "  MODIFY COLUMN `%2` `%3`;")
+            .arg(table(table(tableRef), fieldName(tableRef, column), type);
+    DB.transaction();
+    QSqlQuery query(DB);
+    if (!query.exec(req)) {                                                     
+          LOG_QUERY_ERROR_FOR("Database", query);                               
+          LOG_FOR("Database",QString("Unable to modify column %1 type to %2").arg(fieldName(tableRef, column),type);
+          query.finish();                                                       
+          DB.rollback();                                                        
+          return false;                                                         
+    }
+    query.finish();
+    DB.commit();      
+    return true;
+}
 /**
  * Vacuum the database (for SQLite only). Execute the 'VACUUM' sql command on the database.
  * \warning SQLite can not vacuum inside a transaction. Be sure that the database is not

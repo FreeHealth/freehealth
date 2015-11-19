@@ -21,7 +21,7 @@
 /***************************************************************************
  *  Main developer: Eric MAEKER, <eric.maeker@gmail.com>                   *
  *  Contributors:                                                          *
- *       NAME <MAIL@ADDRESS.COM>                                           *
+ *       Jerome Pinguet <jerome@jerome.cc>                                 *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #ifndef FORMMANAGER_DB_CONSTANTS_H
@@ -32,7 +32,7 @@ namespace Constants {
 
     const char * const  DB_NAME            = "episodes";
     const char * const  DB_FILENAME        = "episodes.db";
-    const char * const  DB_ACTUALVERSION   = "0.2";
+    const char * const  DB_ACTUALVERSION   = "0.3";
 
     // Tables
     enum Tables {

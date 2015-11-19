@@ -24,6 +24,11 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
+/*!
+ * \brief Create fmf_episodes database
+ *
+ */
+
 #include "episodebase.h"
 #include "constants_db.h"
 #include "iformio.h"
@@ -127,8 +132,8 @@ EpisodeBase::EpisodeBase(QObject *parent) :
     addField(Table_EPISODES, EPISODES_ISVALID, "ISVALID", FieldIsBoolean);
     addField(Table_EPISODES, EPISODES_FORM_PAGE_UID, "FORM_PAGE_UID", FieldIsShortText);
     addField(Table_EPISODES, EPISODES_LABEL, "LABEL", FieldIsShortText);
-    addField(Table_EPISODES, EPISODES_USERDATE, "USERDATE", FieldIsDate);
-    addField(Table_EPISODES, EPISODES_DATEOFCREATION, "DATECREATION", FieldIsDate);
+    addField(Table_EPISODES, EPISODES_USERDATE, "USERDATE", FieldIsDateTime);
+    addField(Table_EPISODES, EPISODES_DATEOFCREATION, "DATECREATION", FieldIsDateTime);
     addField(Table_EPISODES, EPISODES_USERCREATOR, "CREATOR", FieldIsUUID);
     addField(Table_EPISODES, EPISODES_PRIORITY, "PRIOR", FieldIsInteger, "1"); // Medium
     addIndex(Table_EPISODES, EPISODES_ID);

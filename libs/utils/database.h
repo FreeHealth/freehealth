@@ -264,7 +264,7 @@ public:
     virtual bool dropMySQLUser(const QString &log, const QString &userHost = QString::null);
     virtual bool changeMySQLUserOwnPassword(const QString &login, const QString &newPassword);
     virtual bool changeMySQLOtherUserPassword(const QString &login, const QString &newPassword);
-
+    virtual bool modifyMySQLColumnType(const int table, const int column, const int type = FieldUndefined, const QString & nullOption = QString::null);
     // All drivers members
     virtual QSqlDatabase database() const;
     virtual QString connectionName() const;
