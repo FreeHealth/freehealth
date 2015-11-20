@@ -230,7 +230,7 @@ QString ProtocolsBase::dosageCreateTableSqlQuery()
 {
     // TODO: add UserUuid field or lkid
     return "CREATE TABLE IF NOT EXISTS `DOSAGE` ("
-           "`POSO_ID`               INTEGER        PRIMARY KEY AUTOINCREMENT,"
+           "`POSO_ID`               INT NOT NULL AUTO_INCREMENT PRIMARY KEY,"
            "`POSO_UUID`             varchar(40)    NULL,"    // put NOT NULL
            "`DRUGS_DATABASE_IDENTIFIANT` varchar(200) NULL,   "
            "`INN_LK`                int(11)        DEFAULT -1,"
