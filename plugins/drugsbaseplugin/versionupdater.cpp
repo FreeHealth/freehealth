@@ -101,7 +101,7 @@ public:
         }
         QStringList req;
         if (db.driverName()=="QMYSQL") {                                 
-            req << "ALTER TABLE DOSAGE MODIFY COLUMN `POSO_ID` INT NOT NULL AUTO_INCREMENT PRIMARY KEY;";
+            req << "ALTER TABLE DOSAGE MODIFY COLUMN `POSO_ID` INT NOT NULL AUTO_INCREMENT;";
         }
         // update SQLite DOSAGES DB version to 1 even though nothing has changed                                                                  
         req << "INSERT INTO `VERSION` (`ACTUAL`) VALUES('1');";           
