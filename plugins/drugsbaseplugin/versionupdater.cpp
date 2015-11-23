@@ -68,6 +68,62 @@ static inline DrugsDB::ProtocolsBase &protocolsBase() {return core().protocolsBa
 ///////////////////////////////////////////////////////////////////////
 namespace {
 
+class Dosage_054_To_1 : public DrugsDB::DosageDatabaseUpdateStep
+{
+public:
+    // From version 0.5.4 to version 1
+    // MySQL only: in table DOSAGE, modify column POSO_ID to add AUTO_INCREMENT feature
+    // This solves issue #80 "FMF EMR 0.9.6 Error saving 2nd protocol on MySQL"
+    Dosage_054_To_1() : DrugsDB::DosageDatabaseUpdateStep() {}
+    ~Dosage_054_To_1() {}
+
+    QString userMessage() const                                                 
+    {                                                                           
+        return QApplication::translate("DatabaseUpdater", "Your dosage database needs to be "
+                                       "updated from version 0.5.4 to version 1.\n"
+                                       "This will be automatically done.");     
+    }
+    QString fromVersion() const { return "0.5.4"; }
+    QString toVersion() const { return "1"; }
+    void setConnectionName(const QString &name) { m_Name = name; }
+    bool retrieveValuesToUpdate() const  {return true;}
+    
+    bool updateDatabaseScheme() const
+    {
+        QSqlDatabase db = QSqlDatabase::database(Dosages::Constants::DB_DOSAGES_NAME);
+        if (!db.isOpen()) {                                                     
+            if (!db.open()) {                                                   
+                Utils::Log::addError("VersionUpdater", tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
+                                     .arg(db.connectionName()).arg(db.lastError().text()),
+                                     __FILE__, __LINE__);                       
+                return false;                                                   
+            }                                                                   
+        }
+        QStringList req;
+        if (db.driverName()=="QMYSQL") {                                 
+            req << "ALTER TABLE DOSAGE MODIFY COLUMN `POSO_ID` INT NOT NULL AUTO_INCREMENT PRIMARY KEY;";
+        }
+        // update SQLite DOSAGES DB version to 1 even though nothing has changed                                                                  
+        req << "INSERT INTO `VERSION` (`ACTUAL`) VALUES('1');";           
+                                                                                
+        foreach(const QString &r, req) {                                        
+            QSqlQuery q(r,db);                                                  
+                if (q.isActive()) {                                                 
+                    q.finish();                                                     
+                } else {                                                            
+                LOG_QUERY_ERROR_FOR("VersionUpdater", q);                       
+                }                                                                      
+        }                                                                       
+        LOG_FOR("VersionUpdater", QString("Dosage Database SQL update done from %1 to %2").arg("0.5.4", "1"));
+        return true;                                                            
+    }            
+
+    bool saveUpdatedValuesToDatabase() const {return true;}                     
+                                                                                
+private:                                                                        
+    QString m_Name;                                                             
+};
+
 class Dosage_050_To_054 : public DrugsDB::DosageDatabaseUpdateStep
 {
 public:
@@ -894,7 +950,7 @@ public:
         qDeleteAll(m_Updaters);
     }
 
-    static QStringList dosageDatabaseVersions() { return QStringList() << "0.0.8" << "0.2.0" << "0.4.0" << "0.5.0" << "0.5.4"; }
+    static QStringList dosageDatabaseVersions() { return QStringList() << "0.0.8" << "0.2.0" << "0.4.0" << "0.5.0" << "0.5.4" << "1"; }
     static QStringList xmlIoVersions() {return QStringList() << "0.0.8" << "0.2.0" << "0.4.0" << "0.5.0" << "0.6.0" << "0.7.2"; }
 
     QString xmlVersion(const QString &xml)
@@ -953,7 +1009,8 @@ VersionUpdater::VersionUpdater() :
     d->m_Updaters.append(new ::Dosage_030_To_040);
     d->m_Updaters.append(new ::Dosage_040_To_050);
     d->m_Updaters.append(new ::Dosage_050_To_054);
-
+    d->m_Updaters.append(new ::Dosage_054_To_1);
+    
     d->m_Updaters.append(new ::IO_Update_From_0008_To_020);
     d->m_Updaters.append(new ::IO_Update_From_020_To_040);
     d->m_Updaters.append(new ::IO_Update_From_040_To_050);

@@ -27,8 +27,9 @@
 
 /**
   \class DrugsDB::ProtocolsBase
-  This class manages all accesses to the protocol database. It also manages transmition to
-  the central FreeMedForms server or recorded protocols.
+  This class manages all accesses to the protocol database. Protocol database is
+  named fmf_dosages. It also manages transmission to the central FreeMedForms
+  server of recorded protocols.
 
   DB Relations Schema\n
   \n
