@@ -31,7 +31,7 @@
 --  */
 
 -- /**
---  * \brief Use this script to configure you MySQL server.
+--  * \brief Use this script to configure your MySQL server.
 --  *
 --  * You must be connected with a MySQL server administrator user.
 --  *
