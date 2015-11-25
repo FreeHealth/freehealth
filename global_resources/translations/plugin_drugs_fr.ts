@@ -973,7 +973,7 @@ Voulez-vous réellement changer de mode d&apos;édition ?</translation>
     </message>
     <message>
         <source>Drug&apos;s selector preferences</source>
-        <translation>Préférences du sélectionneur de thérapeutiques</translation>
+        <translation>Préférences du sélecteur de thérapeutiques</translation>
     </message>
 </context>
 <context>
@@ -1134,7 +1134,7 @@ Voulez-vous réellement changer de mode d&apos;édition ?</translation>
     </message>
     <message>
         <source>Toggle drug selector</source>
-        <translation>Afficher/Cacher le sélectionneur de médicaments</translation>
+        <translation>Afficher/Cacher le sélecteur de médicaments</translation>
     </message>
     <message>
         <source>Search by commercial name</source>

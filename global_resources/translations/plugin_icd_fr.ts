@@ -29,7 +29,7 @@
     </message>
     <message>
         <source>Toggle code selector</source>
-        <translation>Afficher/cacher le sélectionneur de code</translation>
+        <translation>Afficher/cacher le sélecteur de code</translation>
     </message>
     <message>
         <source>Print ICD10 code collection</source>
