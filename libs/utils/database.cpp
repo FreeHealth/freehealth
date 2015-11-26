@@ -2504,21 +2504,21 @@ bool Database::alterTableForNewField(const int tableRef, const int newFieldRef, 
     return true;
 }
 
-virtual bool modifyMySQLColumnType(const int tableRef, const int column,
-                                   const & QString type = FieldUndefined)
+bool Database::modifyMySQLColumnType(const int & tableref, const int & fieldref,
+                                   const int TypeOfField)
 {
     QSqlDatabase DB = database();
     if (!connectedDatabase(DB, __LINE__))                                       
         return false;
+    QString type = d_database->getTypeOfField(TypeOfField);
     QString req;
-    req = QString("ALTER TABLE `%1`"
-                  "  MODIFY COLUMN `%2` `%3`;")
-            .arg(table(table(tableRef), fieldName(tableRef, column), type);
+    req = QString("ALTER TABLE `%1` MODIFY COLUMN `%2` `%3`;")
+            .arg(table(tableref), fieldName(tableref, fieldref), type);
     DB.transaction();
     QSqlQuery query(DB);
     if (!query.exec(req)) {                                                     
           LOG_QUERY_ERROR_FOR("Database", query);                               
-          LOG_FOR("Database",QString("Unable to modify column %1 type to %2").arg(fieldName(tableRef, column),type);
+          //LOG_FOR("Database", QString("Unable to modify column %1 type to %2").arg(fieldName(tableref, fieldref), type));
           query.finish();                                                       
           DB.rollback();                                                        
           return false;                                                         
@@ -2874,6 +2874,9 @@ QString DatabasePrivate::getTypeOfField(const int &fieldref) const
         break;
     case Database::FieldIsDateTime:
         toReturn = "datetime";
+        break;
+    case Database::FieldIsTimeStamp:
+        toReturn = "timestamp";
         break;
     case Database::FieldIsOneChar :
             toReturn = "varchar(1)";

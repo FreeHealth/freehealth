@@ -32,7 +32,7 @@ namespace Constants {
 
     const char * const  DB_NAME            = "episodes";
     const char * const  DB_FILENAME        = "episodes.db";
-    const char * const  DB_ACTUALVERSION   = "0.3";
+    const char * const  DB_ACTUALVERSION   = "1";
 
     // Tables
     enum Tables {

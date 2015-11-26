@@ -132,7 +132,7 @@ EpisodeBase::EpisodeBase(QObject *parent) :
     addField(Table_EPISODES, EPISODES_ISVALID, "ISVALID", FieldIsBoolean);
     addField(Table_EPISODES, EPISODES_FORM_PAGE_UID, "FORM_PAGE_UID", FieldIsShortText);
     addField(Table_EPISODES, EPISODES_LABEL, "LABEL", FieldIsShortText);
-    addField(Table_EPISODES, EPISODES_USERDATE, "USERDATE", FieldIsDateTime);
+    addField(Table_EPISODES, EPISODES_USERDATE, "USERDATE", FieldIsTimeStamp);
     addField(Table_EPISODES, EPISODES_DATEOFCREATION, "DATECREATION", FieldIsDateTime);
     addField(Table_EPISODES, EPISODES_USERCREATOR, "CREATOR", FieldIsUUID);
     addField(Table_EPISODES, EPISODES_PRIORITY, "PRIOR", FieldIsInteger, "1"); // Medium
@@ -352,6 +352,34 @@ bool EpisodeBase::checkDatabaseVersion()
         LOG(tr("Episode database updated from version %1 to version: %2")
             .arg("0.1")
             .arg(Constants::DB_ACTUALVERSION));
+    }
+    // Update from version 0.2 to version 1
+    if (currentVersion == "0.2") {
+        QSqlDatabase db = QSqlDatabase::database(DB_NAME);
+        if (!db.isOpen()) {                                                     
+            if (!db.open()) {                                                   
+                Utils::Log::addError("Update of episode database", tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
+                                     .arg(db.connectionName()).arg(db.lastError().text()),
+                                     __FILE__, __LINE__);                       
+                return false;                                                   
+            }                                                                   
+        }                                                                       
+        if (db.driverName()=="QMYSQL") {
+            QString req = "ALTER TABLE EPISODES MODIFY USERDATE TIMESTAMP;";
+            QSqlQuery q(db);
+            if (!q.exec(req)) {                                                 
+                //LOG_QUERY_ERROR_FOR("Update database episodes from version 0.2 to 1", q);
+                return false;                       
+            }
+        LOG(tr("Episode database updated from version %1 to version: %2")       
+            .arg("0.2")                                                         
+            .arg(Constants::DB_ACTUALVERSION));
+        }
+        if (db.driverName()=="QSQLITE") {
+        LOG(tr("No change happened but episode database updated from version %1 to version: %2")       
+            .arg("0.2")                                                         
+            .arg(Constants::DB_ACTUALVERSION));   
+        }
     }
     // Update the database version
     return setVersion(vField, Constants::DB_ACTUALVERSION);
