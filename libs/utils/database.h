@@ -161,6 +161,7 @@ public:
         FieldIsDate,
         FieldIsTime,
         FieldIsDateTime,
+        FieldIsTimeStamp,
         FieldIsBlob,                // SQLite: 1,000,000,000 max size
                                     // MySQL:  4Go max size
         FieldIsUUID,                // varchar(32) (see Utils::createUid())
@@ -264,7 +265,7 @@ public:
     virtual bool dropMySQLUser(const QString &log, const QString &userHost = QString::null);
     virtual bool changeMySQLUserOwnPassword(const QString &login, const QString &newPassword);
     virtual bool changeMySQLOtherUserPassword(const QString &login, const QString &newPassword);
-
+    virtual bool modifyMySQLColumnType(const int &tableref, const int &fieldref, const int TypeOfField = FieldUndefined);
     // All drivers members
     virtual QSqlDatabase database() const;
     virtual QString connectionName() const;

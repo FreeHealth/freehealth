@@ -1167,7 +1167,7 @@ int Database::addTable(const int & ref, const QString & name)
  */
 int Database::addField(const int & tableref, const int & fieldref, const QString & name, TypeOfField type, const QString & defaultValue)
 {
-    Q_ASSERT_X(name.length() < 50, "Database", "Name of field can not exceed 50 chars");
+    Q_ASSERT_X(name.length() < 64, "Database", "Name of field can not exceed 50 chars");
     int ref = d_database->index(tableref, fieldref);
     d_database->m_Tables_Fields.insertMulti(tableref, ref);
     d_database->m_Fields.insert(ref , name);
@@ -2504,6 +2504,29 @@ bool Database::alterTableForNewField(const int tableRef, const int newFieldRef, 
     return true;
 }
 
+bool Database::modifyMySQLColumnType(const int & tableref, const int & fieldref,
+                                   const int TypeOfField)
+{
+    QSqlDatabase DB = database();
+    if (!connectedDatabase(DB, __LINE__))                                       
+        return false;
+    QString type = d_database->getTypeOfField(TypeOfField);
+    QString req;
+    req = QString("ALTER TABLE `%1` MODIFY COLUMN `%2` `%3`;")
+            .arg(table(tableref), fieldName(tableref, fieldref), type);
+    DB.transaction();
+    QSqlQuery query(DB);
+    if (!query.exec(req)) {                                                     
+          LOG_QUERY_ERROR_FOR("Database", query);                               
+          //LOG_FOR("Database", QString("Unable to modify column %1 type to %2").arg(fieldName(tableref, fieldref), type));
+          query.finish();                                                       
+          DB.rollback();                                                        
+          return false;                                                         
+    }
+    query.finish();
+    DB.commit();      
+    return true;
+}
 /**
  * Vacuum the database (for SQLite only). Execute the 'VACUUM' sql command on the database.
  * \warning SQLite can not vacuum inside a transaction. Be sure that the database is not
@@ -2751,6 +2774,10 @@ QStringList DatabasePrivate::getSQLCreateTable(const int &tableref)
                     if (defVal.startsWith("CUR")) {
                         if (m_Driver==Database::MySQL) {
                             // CURRENT_DATE as default value is not supported by MySQL
+                            // When we switch to >=5.6.5 we will be able to use DATETIME:
+                            // "The exception is that you can specify CURRENT_TIMESTAMP
+                            // as the default for a TIMESTAMP
+                            // or (as of MySQL 5.6.5) DATETIME column."
                             defVal = "NULL";
                         } else if (defVal.endsWith("()")) {
                             defVal = defVal.remove("()");
@@ -2773,6 +2800,7 @@ QStringList DatabasePrivate::getSQLCreateTable(const int &tableref)
             case Database::FieldIsUnsignedInteger:
             case Database::FieldIsUnsignedLongInteger:
             case Database::FieldIsReal :
+            case Database::FieldIsTimeStamp :
                 fieldLine.append(QString("%1 %2 DEFAULT %3")
                                 .arg(fieldName)
                                 .arg(getTypeOfField(i))// .leftJustified(20, ' '))
@@ -2851,6 +2879,9 @@ QString DatabasePrivate::getTypeOfField(const int &fieldref) const
         break;
     case Database::FieldIsDateTime:
         toReturn = "datetime";
+        break;
+    case Database::FieldIsTimeStamp:
+        toReturn = "timestamp";
         break;
     case Database::FieldIsOneChar :
             toReturn = "varchar(1)";
