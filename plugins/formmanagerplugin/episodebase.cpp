@@ -132,7 +132,7 @@ EpisodeBase::EpisodeBase(QObject *parent) :
     addField(Table_EPISODES, EPISODES_ISVALID, "ISVALID", FieldIsBoolean);
     addField(Table_EPISODES, EPISODES_FORM_PAGE_UID, "FORM_PAGE_UID", FieldIsShortText);
     addField(Table_EPISODES, EPISODES_LABEL, "LABEL", FieldIsShortText);
-    addField(Table_EPISODES, EPISODES_USERDATE, "USERDATE", FieldIsTimeStamp);
+    addField(Table_EPISODES, EPISODES_USERDATE, "USERDATE", FieldIsTimeStamp, "CURRENT_TIMESTAMP");
     addField(Table_EPISODES, EPISODES_DATEOFCREATION, "DATECREATION", FieldIsDateTime);
     addField(Table_EPISODES, EPISODES_USERCREATOR, "CREATOR", FieldIsUUID);
     addField(Table_EPISODES, EPISODES_PRIORITY, "PRIOR", FieldIsInteger, "1"); // Medium
@@ -365,7 +365,7 @@ bool EpisodeBase::checkDatabaseVersion()
             }                                                                   
         }                                                                       
         if (db.driverName()=="QMYSQL") {
-            QString req = "ALTER TABLE EPISODES MODIFY USERDATE TIMESTAMP;";
+            QString req = "ALTER TABLE EPISODES MODIFY USERDATE TIMESTAMP DEFAULT CURRENT_TIMESTAMP;";
             QSqlQuery q(db);
             if (!q.exec(req)) {                                                 
                 //LOG_QUERY_ERROR_FOR("Update database episodes from version 0.2 to 1", q);

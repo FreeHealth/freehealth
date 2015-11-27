@@ -1167,7 +1167,7 @@ int Database::addTable(const int & ref, const QString & name)
  */
 int Database::addField(const int & tableref, const int & fieldref, const QString & name, TypeOfField type, const QString & defaultValue)
 {
-    Q_ASSERT_X(name.length() < 50, "Database", "Name of field can not exceed 50 chars");
+    Q_ASSERT_X(name.length() < 64, "Database", "Name of field can not exceed 50 chars");
     int ref = d_database->index(tableref, fieldref);
     d_database->m_Tables_Fields.insertMulti(tableref, ref);
     d_database->m_Fields.insert(ref , name);
@@ -2774,6 +2774,10 @@ QStringList DatabasePrivate::getSQLCreateTable(const int &tableref)
                     if (defVal.startsWith("CUR")) {
                         if (m_Driver==Database::MySQL) {
                             // CURRENT_DATE as default value is not supported by MySQL
+                            // When we switch to >=5.6.5 we will be able to use DATETIME:
+                            // "The exception is that you can specify CURRENT_TIMESTAMP
+                            // as the default for a TIMESTAMP
+                            // or (as of MySQL 5.6.5) DATETIME column."
                             defVal = "NULL";
                         } else if (defVal.endsWith("()")) {
                             defVal = defVal.remove("()");
@@ -2796,6 +2800,7 @@ QStringList DatabasePrivate::getSQLCreateTable(const int &tableref)
             case Database::FieldIsUnsignedInteger:
             case Database::FieldIsUnsignedLongInteger:
             case Database::FieldIsReal :
+            case Database::FieldIsTimeStamp :
                 fieldLine.append(QString("%1 %2 DEFAULT %3")
                                 .arg(fieldName)
                                 .arg(getTypeOfField(i))// .leftJustified(20, ' '))
