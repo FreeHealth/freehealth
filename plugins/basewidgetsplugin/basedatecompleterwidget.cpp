@@ -127,11 +127,7 @@ QString BaseDateCompleterWidget::printableHtml(bool withValues) const
                        "</table>")
                 .arg(m_FormItem->spec()->label());
     } else {
-        QString dateFormat = "ddMMyyyy";
-        QString defaultDate = "01012000";
-        QString widgetDate = _dateEdit->date().toString(dateFormat);
-        bool dateIsDefault(widgetDate == defaultDate);
-        if (Constants::dontPrintEmptyValues(m_FormItem) && dateIsDefault)
+        if (Constants::dontPrintEmptyValues(m_FormItem) && _dateEdit->date().isNull())
             return QString();
         return QString("<table width=100% border=1 cellpadding=0 cellspacing=0  style=\"margin: 0px\">"
                        "<tbody>"
