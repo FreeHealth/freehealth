@@ -1546,12 +1546,6 @@ QString BaseSimpleText::printableHtml(bool withValues) const
 
     if (withValues) {
         if (Constants::dontPrintEmptyValues(m_FormItem)) {
-            bool t = m_Line;
-            QString s = QString::number(t);
-            LOG_ERROR(QString("m_Line true of false ? %1 ").arg(s));
-            t = (m_Line->text().isEmpty());
-            s = QString::number(t);
-            LOG_ERROR(QString("m_Line->text().isEmpty() true or false ? %1 ").arg(s));
             if (m_Line && m_Line->text().isEmpty())
                 return QString();
             else if (m_Text && m_Text->toPlainText().isEmpty())
