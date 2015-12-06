@@ -51,6 +51,7 @@ class QCheckBox;
 class QRadioButton;
 class QLineEdit;
 class QTextEdit;
+class QDateEdit;
 class QDateTimeEdit;
 class QAbstractSpinBox;
 class QPushButton;
@@ -414,7 +415,7 @@ public Q_SLOTS:
      void retranslate();
 
 public:
-     QDateTimeEdit *m_Date;
+     QDateEdit *m_Date;
 };
 
 class BaseDateData : public Form::IFormItemData

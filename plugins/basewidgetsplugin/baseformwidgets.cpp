@@ -62,6 +62,7 @@
 #include <QTextEdit>
 #include <QListWidget>
 #include <QComboBox>
+#include <QDateEdit>
 #include <QDateTimeEdit>
 #include <QSpinBox>
 #include <QPushButton>
@@ -1801,13 +1802,13 @@ BaseDate::BaseDate(Form::FormItem *formItem, QWidget *parent) :
     const QString &widget = formItem->spec()->value(Form::FormItemSpec::Spec_UiWidget).toString();
     if (!widget.isEmpty()) {
         // Find widget
-        QDateTimeEdit *le = formItem->parentFormMain()->formWidget()->findChild<QDateTimeEdit*>(widget);
+        QDateEdit *le = formItem->parentFormMain()->formWidget()->findChild<QDateEdit*>(widget);
         if (le) {
             m_Date = le;
         } else {
             LOG_ERROR("Using the QtUiLinkage, item not found in the ui: " + formItem->uuid());
             // To avoid segfaulting create a fake combo
-            m_Date = new QDateTimeEdit(this);
+            m_Date = new QDateEdit(this);
         }
         // Find Label
         m_Label = Constants::findLabel(formItem);
@@ -1816,7 +1817,7 @@ BaseDate::BaseDate(Form::FormItem *formItem, QWidget *parent) :
         hb->addWidget(m_Label);
 
         // Add Date selector and manage date format
-        m_Date = new QDateTimeEdit(this);
+        m_Date = new QDateEdit(this);
         m_Date->setObjectName("Date_" + m_FormItem->uuid());
         m_Date->setSizePolicy(QSizePolicy::Expanding , QSizePolicy::Fixed);
         m_Date->setCalendarPopup(true);
@@ -1828,7 +1829,7 @@ BaseDate::BaseDate(Form::FormItem *formItem, QWidget *parent) :
     // Manage options
     const QStringList &options = formItem->getOptions();
     if (options.contains(Constants::DATE_NOW, Qt::CaseInsensitive))
-        m_Date->setDateTime(QDateTime::currentDateTime());
+        m_Date->setDate(QDate::currentDate());
     if (options.contains(Constants::DATE_PATIENTLIMITS, Qt::CaseInsensitive)) {
         connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(onCurrentPatientChanged()));
         onCurrentPatientChanged();
@@ -1922,7 +1923,7 @@ BaseDateData::~BaseDateData()
 void BaseDateData::setDate(const QString &s)
 {
     m_Date->m_Date->clear();
-    m_Date->m_Date->setDateTime(QDateTime::fromString(s, Qt::ISODate));
+    m_Date->m_Date->setDate(QDate::fromString(s, Qt::ISODate));
     onValueChanged();
 }
 
@@ -1960,9 +1961,6 @@ bool BaseDateData::setData(const int ref, const QVariant &data, const int role)
     if (role==Qt::EditRole) {
         if (data.canConvert<QDate>()) {
             m_Date->m_Date->setDate(data.toDate());
-            onValueChanged();
-        } else if (data.canConvert<QDateTime>()) {
-            m_Date->m_Date->setDateTime(data.toDateTime());
             onValueChanged();
         }
     }
