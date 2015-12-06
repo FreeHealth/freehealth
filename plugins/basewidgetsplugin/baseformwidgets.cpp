@@ -1936,13 +1936,13 @@ void BaseDateData::clear()
 
 bool BaseDateData::isModified() const
 {
-    return m_OriginalValue != m_Date->m_Date->dateTime().toString(Qt::ISODate);
+    return m_OriginalValue != m_Date->m_Date->date().toString(Qt::ISODate);
 }
 
 void BaseDateData::setModified(bool modified)
 {
     if (!modified)
-        m_OriginalValue = m_Date->m_Date->dateTime().toString(Qt::ISODate);
+        m_OriginalValue = m_Date->m_Date->date().toString(Qt::ISODate);
 }
 
 void BaseDateData::setReadOnly(bool readOnly)
@@ -1971,7 +1971,7 @@ QVariant BaseDateData::data(const int ref, const int role) const
 {
     Q_UNUSED(ref);
     Q_UNUSED(role);
-    return m_Date->m_Date->dateTime();
+    return m_Date->m_Date->date();
 }
 
 void BaseDateData::setStorableData(const QVariant &data)
@@ -1982,7 +1982,7 @@ void BaseDateData::setStorableData(const QVariant &data)
 
 QVariant BaseDateData::storableData() const
 {
-    return m_Date->m_Date->dateTime().toString(Qt::ISODate);
+    return m_Date->m_Date->date().toString(Qt::ISODate);
 }
 
 void BaseDateData::onValueChanged()
