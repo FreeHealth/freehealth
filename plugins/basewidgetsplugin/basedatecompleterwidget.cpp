@@ -128,7 +128,7 @@ QString BaseDateCompleterWidget::printableHtml(bool withValues) const
                 .arg(m_FormItem->spec()->label());
     } else {
         QString dateFormat = "ddMMyyyy";
-        QString defaultDate = "01011900";
+        QString defaultDate = "01012000";
         QString widgetDate = _dateEdit->date().toString(dateFormat);
         bool dateIsDefault(widgetDate == defaultDate);
         if (Constants::dontPrintEmptyValues(m_FormItem) && dateIsDefault)
