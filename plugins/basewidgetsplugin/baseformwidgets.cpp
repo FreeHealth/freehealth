@@ -1822,8 +1822,12 @@ BaseDate::BaseDate(Form::FormItem *formItem, QWidget *parent) :
 
     // Manage options
     const QStringList &options = formItem->getOptions();
-    if (options.contains(Constants::DATE_NOW, Qt::CaseInsensitive))
+    if (options.contains(Constants::DATE_NOW, Qt::CaseInsensitive)) {
         m_Date->setDate(QDate::currentDate());
+    } else {
+        QDate defaultDate = QDate::fromString(Constants::DEFAULT_DATE, Constants::DEFAULT_DATE_FORMAT);
+        m_Date->setDate(defaultDate);
+    }
     if (options.contains(Constants::DATE_PATIENTLIMITS, Qt::CaseInsensitive)) {
         connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(onCurrentPatientChanged()));
         onCurrentPatientChanged();
