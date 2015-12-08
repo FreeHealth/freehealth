@@ -62,7 +62,7 @@ const char * const  DATE_PATIENTLIMITS      = "patientLimits";
 
 // Default date
 const char * const DEFAULT_DATE = "01011900";
-const char * const DEFAULT_DATE_FORMAT = "ddMMyyy";
+const char * const DEFAULT_DATE_FORMAT = "ddMMyyyy";
 
 // Spins
 const char * const  SPIN_EXTRAS_KEY_MIN         = "min";
