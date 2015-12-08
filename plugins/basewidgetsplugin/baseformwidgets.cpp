@@ -1876,7 +1876,11 @@ QString BaseDate::printableHtml(bool withValues) const
                        "</table>")
                 .arg(m_FormItem->spec()->label());
     } else {
-        if (Constants::dontPrintEmptyValues(m_FormItem) && m_Date->date().isNull())
+        QString defaultDateFormat = Constants::DEFAULT_DATE_FORMAT;
+        QString defaultDate = Constants::DEFAULT_DATE;
+        QString widgetDate = m_Date->date().toString(defaultDateFormat);
+        bool dateIsDefault(widgetDate == defaultDate);
+        if (Constants::dontPrintEmptyValues(m_FormItem) && dateIsDefault)
             return QString();
         return QString("<table width=100% border=1 cellpadding=0 cellspacing=0  style=\"margin: 0px\">"
                        "<tbody>"
@@ -1924,7 +1928,8 @@ void BaseDateData::setDate(const QString &s)
 /** \brief Set the widget to the default value \sa FormItem::FormItemValue*/
 void BaseDateData::clear()
 {
-    m_OriginalValue = m_FormItem->valueReferences()->defaultValue().toString();
+    QDate defaultDate = QDate::fromString(Constants::DEFAULT_DATE, Constants::DEFAULT_DATE_FORMAT);
+    m_OriginalValue = defaultDate.toString(Qt::ISODate);
     setDate(m_OriginalValue);
 }
 

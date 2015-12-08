@@ -21,7 +21,7 @@
 /***************************************************************************
  *  Main developer: Eric MAEKER, <eric.maeker@gmail.com>                   *
  *  Contributors:                                                          *
- *       NAME <MAIL@ADDRESS.COM>                                           *
+ *       Jerome Pinguet <jerome@jerome.cc>                                 *
  ***************************************************************************/
 #ifndef BASEWIDGETS_CONSTANTS_H
 #define BASEWIDGETS_CONSTANTS_H
@@ -59,6 +59,10 @@ const char * const  EXTRAS_LINEEDIT_MASK      = "mask";
 const char * const  DATE_EXTRAS_KEY         = "dateformat";
 const char * const  DATE_NOW                = "now";
 const char * const  DATE_PATIENTLIMITS      = "patientLimits";
+
+// Default date
+const char * const DEFAULT_DATE = "01011900";
+const char * const DEFAULT_DATE_FORMAT = "ddMMyyy";
 
 // Spins
 const char * const  SPIN_EXTRAS_KEY_MIN         = "min";
