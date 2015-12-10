@@ -62,6 +62,7 @@
 #include <QTextEdit>
 #include <QListWidget>
 #include <QComboBox>
+#include <QDate>
 #include <QDateEdit>
 #include <QDateTimeEdit>
 #include <QSpinBox>
@@ -1788,6 +1789,7 @@ void BaseHelpText::retranslate()
 //--------------------------------------------------------------------------------------------------------
 //----------------------------------------- BaseDate ---------------------------------------------------
 //--------------------------------------------------------------------------------------------------------
+//TODO: create a function that returns default time 
 BaseDate::BaseDate(Form::FormItem *formItem, QWidget *parent) :
     Form::IFormWidget(formItem,parent), m_Date(0)
 {
