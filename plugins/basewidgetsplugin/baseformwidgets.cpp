@@ -22,7 +22,7 @@
  *  Main developer: Eric MAEKER, <eric.maeker@gmail.com>                   *
  *  Contributors:                                                          *
  *       Guillaume DENRY <guillaume.denry@gmail.com>                       *
- *       NAME <MAIL@ADDRESS.COM>                                           *
+ *       Jerome Pinguet <jerome@jerome.cc>                                 *
  ***************************************************************************/
 #include "baseformwidgets.h"
 #include "baselistwidgets.h"
