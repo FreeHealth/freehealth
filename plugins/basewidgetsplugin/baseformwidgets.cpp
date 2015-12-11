@@ -2101,10 +2101,16 @@ QString BaseSpin::printableHtml(bool withValues) const
         QSpinBox *spin = qobject_cast<QSpinBox*>(m_Spin);
         QString value;
         if (spin) {
+            if ((spin->value()) == 0) {
+                return QString();
+            }
             value = spin->text();
         } else {
             QDoubleSpinBox *dspin = qobject_cast<QDoubleSpinBox*>(m_Spin);
             if (dspin) {
+                if ((spin->value()) == 0.0) {
+                    return QString();
+                }
                 value = dspin->text();
             }
         }
