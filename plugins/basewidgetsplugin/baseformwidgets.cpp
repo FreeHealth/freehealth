@@ -2108,7 +2108,7 @@ QString BaseSpin::printableHtml(bool withValues) const
         } else {
             QDoubleSpinBox *dspin = qobject_cast<QDoubleSpinBox*>(m_Spin);
             if (dspin) {
-                if ((spin->value()) == 0.0) {
+                if ((dspin->value()) == 0.0) {
                     return QString();
                 }
                 value = dspin->text();
