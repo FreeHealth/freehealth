@@ -1,45 +1,20 @@
-The FreeMedForms project
-0.9.4 -> 0.9.6
+# FreeMedForms 0.9.6 -> 0.9.7
 
-===== News =====
+0.9.7 is a patch version. It includes only bug fixes.
 
-  * Forms
-  * FreeMedForms
-    * Removing webcam plugin from the default configuration of all project apps
-  * FreeDDIManager
-  * Build process
-    * Some improvements in build reproducibility
-  * XML Forms coding
+## Bug corrections
 
-===== Bug correction =====
+See https://github.com/FreeMedForms/freemedforms/issues for more details
 
-  * All applications
-    * Fix Mac OS X printing issue and pdf creation
-  * FreeMedForms
-    * Installation: correctly manage database prefix when configuring MySQL server
-    * User database: fixing a severe compatibility issue
-    * AGGIR plugin: correcting GIR group computation
-    * Fixing user creation:
-      * users are now registered on all hosts for MySQL config
-      * when configured with MySQL correctly manage user rights (database prefixes)
-    * Some bug fixes
-  * FreeDiams
-  * FreeDRC
-  * FreeToolBox
-  * PMHx
-  * Agenda
-  * DataPack manager
-  * HPRIM integrator
-  * Forms
-  * Debian specific
-  * Under the hood
-  * Various unloggud bugs corrected
+### All applications
+* Issue #74: Mac OS X printing and pdf creation issue fixed
 
-===== Packaging and documentation ====
+### FreeMedForms
+* Issue #86: In forms, DontPrintEmptyValues option taken into account for Spin and DoubleSpin items
+* Issue #85: In forms, default date for date item is 01/01/1900; with DontPrintEmptyValues option, date item set to default date is not printed
+* Issue #84: Date item printing token gives correct output
+* Issue #76: Suffix (e.g. units) added to a Spin or DoubleSpin item in ui file (with QtCreator / Designer) will be printed
+* Issue #66: Full time stamps (date and time) to distinguish episodes
 
-  * Sources
-    * Improving source packaging script with a gpg signing option
-  * Packaging
-  * Compilation
-  * Documentation
-    * Currently only available online
+### FreeDiams & FreeMedForms
+* Issue #80: Multiple drug protocols can be saved correctly
