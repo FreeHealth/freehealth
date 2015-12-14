@@ -132,6 +132,7 @@ global_resources/textfiles/haarcascade_frontalface_alt2.xml \
 global_resources/textfiles/listemotsfr.txt \
 global_resources/textfiles/surnames.txt \
 global_resources/textfiles/*.db \
+global_resources/textfiles/zipcodes.csv \
 global_resources/textfiles/freediamstest \
 global_resources/textfiles/oldprescriptionsfiles \
 global_resources/textfiles/edrc \
