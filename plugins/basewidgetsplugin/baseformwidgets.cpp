@@ -1216,11 +1216,11 @@ QString BaseRadio::printableHtml(bool withValues) const
     foreach (QRadioButton *button, m_RadioList) {
         if (withValues) {
             if (button->isChecked()) {
-                html << QString("%1&nbsp;%2").arg("&#x26AB").arg(button->text());
+                html << QString("&#x26AB;&nbsp;%1").arg(button->text());
                 continue;
             }
         }
-        html << QString("%1&nbsp;%2").arg("&#x26AC").arg(button->text());
+        html << QString("&#x26AC;&nbsp;%1").arg(button->text());
     }
     if (horiz) {
         QString buttons;
