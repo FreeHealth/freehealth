@@ -1210,17 +1210,17 @@ QString BaseRadio::printableHtml(bool withValues) const
     if (Constants::dontPrintEmptyValues(m_FormItem) && m_ButGroup->checkedButton()==0)
         return QString();
 
-    // ⚪⚫
+    // ⚪⚫ characters encoded as hexadecimal reference for multi OS compatibility
     QStringList html;
     bool horiz = Constants::isRadioHorizontalAlign(m_FormItem);
     foreach (QRadioButton *button, m_RadioList) {
         if (withValues) {
             if (button->isChecked()) {
-                html << QString("%1&nbsp;%2").arg("⚫").arg(button->text());
+                html << QString("%1&nbsp;%2").arg("&#x26AB").arg(button->text());
                 continue;
             }
         }
-        html << QString("%1&nbsp;%2").arg("⚪").arg(button->text());
+        html << QString("%1&nbsp;%2").arg("&#x26AC").arg(button->text());
     }
     if (horiz) {
         QString buttons;
