@@ -887,7 +887,7 @@ QString Printer::htmlContent() const
 
 QString Printer::toHtml() const
 {
-    QString html, content, css;
+    QString html, content, css, header, body;
     QTextDocument *doc = 0;
     // Add Each page header
     doc = d->header(EachPages);
@@ -923,6 +923,13 @@ QString Printer::toHtml() const
         content.prepend(css);
         html += content;
     }
+    // Add HTML5 HEADER
+    css = Utils::htmlTakeAllCssContent(html);
+    content = Utils::htmlBodyContent(html);
+    body = QString("<body>%1</body>").arg(content);
+    header = QString("<head><meta charset=\"UTF-8\"><title></title>%1</head>").arg(css);
+    html = body.prepend(header);
+    html = QString("<!DOCTYPE html><html>%1</html>").arg(html);
     return html;
 }
 
