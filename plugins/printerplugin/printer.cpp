@@ -1505,6 +1505,6 @@ bool Printer::toPdf(const QString &fileName, const QString &docName)
 */
 bool Printer::toPdf(const QString &fileName, const QTextDocument &docToPrint)
 {
-    d->m_Content->setHtml(docToPrint.toHtml());
+    d->m_Content->setHtml(docToPrint.toHtml("UTF-8"));
     return toPdf(fileName, "");
 }
