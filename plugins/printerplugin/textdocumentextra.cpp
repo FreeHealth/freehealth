@@ -155,7 +155,7 @@ TextDocumentExtra *TextDocumentExtra::fromXml(const QString &xml)
 QString TextDocumentExtra::toHtml() const
 {
     if (d->m_Doc) {
-        return document()->toHtml();
+        return document()->toHtml("UTF-8");
     }
     return d->m_Html;
 }

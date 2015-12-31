@@ -80,7 +80,7 @@ public:
     static QStringList presencesAvailable()
     {
         return QStringList()
-                << tr("Each Pages")  //FIXME: shouln't this be "All pages", or "ON each page"? This seems to be bad English.
+                << tr("Each Page")  //FIXME: shouln't this be "All pages", or "ON each page"? This seems to be bad English.
                 << tr("First page only")
                 << tr("Second page only")
                 << tr("Last page only")
