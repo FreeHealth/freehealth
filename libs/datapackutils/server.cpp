@@ -260,7 +260,7 @@ int Server::recommendedUpdateFrequency() const
 }
 
 /** Test DataPack::Server equality. */
-bool Server::operator==(const Server &s)
+bool Server::operator==(const Server &s) const
 {
     return ((m_Url == s.url()) && (m_UrlStyle==s.urlStyle()) && (version()==s.version()));
 }

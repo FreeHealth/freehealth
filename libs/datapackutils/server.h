@@ -117,7 +117,7 @@ public:
     QStringList errors() const {return m_Errors;}
 
     // Some helpers
-    bool operator==(const Server &s);
+    bool operator==(const Server &s) const;
     static QString serverConfigurationFileName();
 
 private:
