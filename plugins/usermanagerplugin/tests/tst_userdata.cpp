@@ -427,7 +427,7 @@ void UserManagerPlugin::test_userbase_test_with_virtualuser()
     QCOMPARE(fromDb->uuid(), data.uuid());
     QCOMPARE(fromDb->validity(), data.validity());
     QCOMPARE(fromDb->isVirtual(), true);
-    QCOMPARE(fromDb->locker(), 0);
+    QCOMPARE(fromDb->locker(), false);
     QCOMPARE(fromDb->titleIndex(), data.titleIndex());
     QCOMPARE(fromDb->genderIndex(), data.genderIndex());
     QCOMPARE(fromDb->clearLogin(), Utils::removeAccents(QString(fromDb->usualName()+"."+fromDb->firstname()).toLower()));
