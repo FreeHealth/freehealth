@@ -26,6 +26,7 @@
 #include <QHash>
 #include <QString>
 #include <QStringList>
+#include <QVariant>
 QT_BEGIN_NAMESPACE
 class QNetworkProxy;
 QT_END_NAMESPACE
