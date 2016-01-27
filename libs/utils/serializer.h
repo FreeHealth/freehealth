@@ -23,6 +23,7 @@
 
 #include <utils/global_exporter.h>
 
+#include <QHash>
 #include <QString>
 #include <QStringList>
 QT_BEGIN_NAMESPACE
