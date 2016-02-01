@@ -110,6 +110,9 @@
          </layout>
         </widget>
         <widget class="QListView" name="selectedPatients">
+         <property name="toolTip">
+          <string>Double-click to remove</string>
+         </property>
          <property name="editTriggers">
           <set>QAbstractItemView::NoEditTriggers</set>
          </property>

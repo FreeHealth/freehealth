@@ -56,6 +56,7 @@ Q_SIGNALS:
 private Q_SLOTS:
     void refreshPatientModelFilter();
     void onPatientActivated(const QModelIndex &index);
+    void onPatientRemoved(const QModelIndex &index);
     void onAddCurrentClicked();
     void onExportRequested();
 

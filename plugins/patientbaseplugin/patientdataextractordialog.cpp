@@ -24,7 +24,7 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-/*!
+/*! \brief Dialog to select 1 or several patients for data export
  * \class Patients::Internal::PatientDataExtractorDialog
  */
 
@@ -189,6 +189,7 @@ bool PatientDataExtractorDialog::initialize()
 
     connect(d->ui->addCurrent, SIGNAL(clicked()), this, SLOT(onAddCurrentClicked()), Qt::UniqueConnection);
     d->ui->selectedPatients->setModel(d->_selectedModel);
+    connect(d->ui->selectedPatients, SIGNAL(clicked(const QModelIndex)), this, SLOT(onPatientRemoved(QModelIndex)));
     return true;
 }
 
@@ -208,20 +209,36 @@ void PatientDataExtractorDialog::onPatientActivated(const QModelIndex &index)
 {
     QModelIndex full = d->_patientModel->index(index.row(), Core::IPatient::FullName);
     QModelIndex uid = d->_patientModel->index(index.row(), Core::IPatient::Uid);
-    QString toAdd = QString("%1 {%2}")
+    QModelIndex dob = d->_patientModel->index(index.row(), Core::IPatient::DateOfBirth);
+    QString toAdd = QString("%1 %2 {%3}")
             .arg(d->_patientModel->data(full).toString())
+            .arg(d->_patientModel->data(dob).toString())
             .arg(d->_patientModel->data(uid).toString());
     QStringList list = d->_selectedModel->stringList();
+    if (list.contains(toAdd))                                                   
+        return;
     list << toAdd;
     d->_selectedModel->setStringList(list);
+}
+
+void PatientDataExtractorDialog::onPatientRemoved(const QModelIndex &index)
+{
+    QStringList list = d->_selectedModel->stringList();
+    QString patient = index.data().toString();
+    if (list.contains(patient)) {
+        list.removeAll(patient);
+        d->_selectedModel->setStringList(list);
+    }
+    return;
 }
 
 void PatientDataExtractorDialog::onAddCurrentClicked()
 {
     if (patient()->uuid().isEmpty())
         return;
-    QString toAdd = QString("%1 {%2}")
+    QString toAdd = QString("%1 %2 {%3}")
             .arg(patient()->data(Core::IPatient::FullName).toString())
+            .arg(patient()->data(Core::IPatient::DateOfBirth).toString())
             .arg(patient()->data(Core::IPatient::Uid).toString());
     QStringList list = d->_selectedModel->stringList();
     if (list.contains(toAdd))
