@@ -353,8 +353,12 @@ void PatientDataExtractorDialog::onExportRequested()
         patient()->setCurrentPatientUid(uid);
 
         // Define output path
-        QString path = patient()->data(Core::IPatient::FullName).toString();
-        path = QString("%1/%2").arg(d->ui->pathChooser->path()).arg(path);
+        QString fullname = patient()->data(Core::IPatient::FullName).toString();
+        QString dob = patient()->data(Core::IPatient::DateOfBirth).toString();
+        QString path = QString("%1/%2 %3")
+               .arg(d->ui->pathChooser->path())
+               .arg(fullname)
+               .arg(dob);
         if (!QDir().mkpath(path))
             LOG_ERROR("Unable to create path: " + path);
         job.setOutputAbsolutePath(path);
@@ -398,10 +402,11 @@ void PatientDataExtractorDialog::onExportRequested()
         // Re-create a full HTML document with exported datas
         QString header = QString(HTML_HEADER).arg(outCss).arg(tr("Patient file exportation - %1").arg(patient()->data(Core::IPatient::FullName).toString()));
         QString html = QString("%1\n%2\n%3").arg(header).arg(out).arg(HTML_FOOTER);
-
+        // file name
+        QString filename = QString("%2 %3").arg(fullname).arg(dob);
         // Save HTML file
         if (d->ui->outputFormat->currentText().contains("HTML", Qt::CaseInsensitive)) {
-            if (!Utils::saveStringToFile(html, job.outputAbsolutePath() + "/export.html")) {
+            if (!Utils::saveStringToFile(html, job.outputAbsolutePath() + "/" + filename + ".html")) {
                 LOG_ERROR("Unable to save file");
                 finalMessage << QString("&nbsp;&nbsp;%1")
                                 .arg(tr("An error occured when saving the HTML patient file"));
@@ -409,13 +414,13 @@ void PatientDataExtractorDialog::onExportRequested()
                 finalMessage << QString("&nbsp;&nbsp;%1")
                                 .arg(QString("<a href='file://%1'>%2</a>")
                                      .arg(tr("Patient HTML file correctly created"))
-                                     .arg(job.outputAbsolutePath() + "/export.html"));
+                                     .arg(job.outputAbsolutePath() + "/" + filename + ".html"));
             }
         }
 
         // Save PDF file
         if (d->ui->outputFormat->currentText().contains("PDF", Qt::CaseInsensitive)) {
-            if (!printer()->toPdf(html, job.outputAbsolutePath() + "/export.pdf")) {
+            if (!printer()->toPdf(html, job.outputAbsolutePath() + "/" + filename + ".pdf")) {
                 LOG_ERROR("Unable to save file");
                 finalMessage << QString("&nbsp;&nbsp;%1")
                                 .arg(tr("An error occured when saving the PDF patient file"));
@@ -423,7 +428,7 @@ void PatientDataExtractorDialog::onExportRequested()
                 finalMessage << QString("&nbsp;&nbsp;%1")
                                 .arg(QString("<a href='file://%1'>%2</a>")
                                      .arg(tr("Patient PDF file correctly created"))
-                                     .arg(job.outputAbsolutePath() + "/export.pdf"));
+                                     .arg(job.outputAbsolutePath() + "/" + filename + ".pdf"));
             }
         }
     }
