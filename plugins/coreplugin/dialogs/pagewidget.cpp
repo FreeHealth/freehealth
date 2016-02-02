@@ -21,17 +21,17 @@
 /***************************************************************************
  *  Main developer: Eric MAEKER, <eric.maeker@gmail.com>                   *
  *  Contributors:                                                          *
- *       NAME <MAIL@ADDRESS.COM>                                           *
+ *       Jerome Pinguet <jerome@jerome.cc>                                 *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 /**
   \class Core::PageWidget
-  The PageWidget can be used to present a tree of Core::IGenericPage. The views are automatically
-  created. \n
-  You can populate the widget with your pages using the template member setPages(). The template must
-  be a derivated of the Core::IGenericPage. \n
-  There is an automatic settings state saving and restoring of the last page in view. Set the
-  settings key using the setSettingKey().\n
+  PageWidget can be used to present a tree of Core::IGenericPage. The views are
+  automatically created. \n
+  You can populate the widget with your pages using the template member
+  setPages(). The template must be derived from Core::IGenericPage. \n
+  You can automatically save and restore the state of the last page in view: set
+  the settings key using the setSettingKey().\n
   Generate the widget using setupUi().
   Usage:
   \code
@@ -97,6 +97,9 @@ PageWidget::PageWidget(QWidget *parent) :
 
     connect(m_ui->pageTree, SIGNAL(currentItemChanged(QTreeWidgetItem *, QTreeWidgetItem *)),
         this, SLOT(pageSelected()));
+    
+    connect(m_ui->pageTree, SIGNAL(clicked(const QModelIndex &)), 
+        this, SLOT(expandItem(const QModelIndex &)));
 }
 
 /** Setup the ui. You can specify if you want the category view to be sorted or not using the \e sortCategoryView. */
@@ -213,6 +216,12 @@ void PageWidget::expandAllCategories()
 void PageWidget::expandFirstCategories()
 {
 //    m_ui->pageTree->expandItem(m_ui->pageTree->);
+}
+
+/** Expand tree item with single click */
+void PageWidget::expandItem(const QModelIndex &index)
+{
+    m_ui->pageTree->isExpanded(index)? m_ui->pageTree->collapse(index) : m_ui->pageTree->expand(index);
 }
 
 /** Set the sizes to the splitter (sa QSplitter documentation) */

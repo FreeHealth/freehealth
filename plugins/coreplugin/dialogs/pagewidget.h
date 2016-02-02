@@ -34,6 +34,8 @@
 #include <QHash>
 #include <QLabel>
 #include <QToolButton>
+#include <QModelIndex>
+
 class QTreeWidgetItem;
 
 /**
@@ -93,7 +95,7 @@ private:
 private Q_SLOTS:
     void pageSelected();
     void expandView();
-
+    void expandItem(const QModelIndex &index);
 private:
     Internal::Ui::PageWidget *m_ui;
     QList<Core::IGenericPage*> m_pages;
