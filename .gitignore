@@ -1,4 +1,6 @@
 /global_resources/sql/account/medical_procedure_fr_FR.csv
+# Source packages
+source_package/*
 # Translations
 global_resources/translations/*.qm
 
