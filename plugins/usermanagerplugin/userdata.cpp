@@ -560,6 +560,7 @@ UserData::UserData() :
     setRights(USER_ROLE_DOSAGES, Core::IUser::NoRights);
     setRights(USER_ROLE_PARAMEDICAL, Core::IUser::NoRights);
     setRights(USER_ROLE_ADMINISTRATIVE, Core::IUser::NoRights);
+    setRights(USER_ROLE_AGENDA, Core::IUser::NoRights);
     setCryptedPassword(d->crypter.cryptPassword(""));
     setLocker(false);
     createUuid();
