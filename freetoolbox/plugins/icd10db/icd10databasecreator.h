@@ -43,6 +43,8 @@ class Icd10Step;
 
 class Icd10DatabasePage : public Core::IToolPage
 {
+    Q_OBJECT
+
 public:
     Icd10DatabasePage(QObject *parent = 0);
     ~Icd10DatabasePage();

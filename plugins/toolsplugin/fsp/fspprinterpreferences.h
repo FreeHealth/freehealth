@@ -79,6 +79,7 @@ private:
 
 class FspPrinterPreferencesPage : public Core::IOptionsPage
 {
+    Q_OBJECT
 public:
     FspPrinterPreferencesPage(QObject *parent = 0);
     ~FspPrinterPreferencesPage();

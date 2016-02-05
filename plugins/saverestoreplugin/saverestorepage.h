@@ -84,6 +84,7 @@ protected:
 
 class SaveRestorePage : public Core::IOptionsPage
 {
+    Q_OBJECT
 public:
     SaveRestorePage(QObject *parent = 0);
     ~SaveRestorePage();

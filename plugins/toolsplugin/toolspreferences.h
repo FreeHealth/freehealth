@@ -69,6 +69,8 @@ private:
 
 class ToolsPreferencesPage : public Core::IOptionsPage
 {
+    Q_OBJECT
+
 public:
     ToolsPreferencesPage(QObject *parent = 0);
     ~ToolsPreferencesPage();

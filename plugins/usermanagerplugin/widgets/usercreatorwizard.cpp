@@ -121,6 +121,7 @@ private:
 
 class UserProfilePage : public QWizardPage
 {
+    Q_OBJECT
 public:
     UserProfilePage(QWidget *parent = 0);
     bool validatePage();
@@ -135,12 +136,14 @@ private:
 
 class UserSpecialiesQualificationsPage: public QWizardPage
 {
+    Q_OBJECT
 public:
     UserSpecialiesQualificationsPage(QWidget *parent = 0);
 };
 
 class UserRightsPage: public QWizardPage
 {
+    Q_OBJECT
 public:
     UserRightsPage(QWidget *parent = 0);
     void initializePage();
@@ -152,6 +155,7 @@ private:
 
 class UserLastPage: public QWizardPage
 {
+    Q_OBJECT
 public:
     UserLastPage(QWidget *parent = 0);
     void initializePage();
@@ -165,6 +169,7 @@ namespace UserPlugin {
 namespace Internal {
 class UserCreatorWizardPrivate
 {
+    Q_OBJECT
 public:
     UserCreatorWizardPrivate(UserCreatorWizard */*parent*/) :
         m_User(new UserData),

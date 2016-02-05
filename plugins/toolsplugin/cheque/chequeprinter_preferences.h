@@ -82,6 +82,7 @@ private:
 
 class ChequePrinterPreferencesPage : public Core::IOptionsPage
 {
+    Q_OBJECT
 public:
     ChequePrinterPreferencesPage(QObject *parent = 0);
     ~ChequePrinterPreferencesPage();
