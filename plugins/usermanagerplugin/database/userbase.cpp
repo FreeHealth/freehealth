@@ -21,7 +21,7 @@
 /***************************************************************************
  *  Main developer: Eric MAEKER, <eric.maeker@gmail.com>                   *
  *  Contributors:                                                          *
- *       NAME <MAIL@ADDRESS.COM>                                           *
+ *       Jerome Pinguet <jerome@jerome.cc>                                 *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 /**
@@ -572,19 +572,67 @@ bool UserBase::checkLogin(const QString &clearLogin, const QString &clearPasswor
     return (!m_LastUuid.isEmpty());
 }
 
-/** Return true if the \e login is already used on the server or in freemedforms configuration. */
+/** Returns true if the \e login is already used in freemedforms user database. */
 bool UserBase::isLoginAlreadyExists(const QString &clearLogin) const
 {
     QSqlDatabase DB = QSqlDatabase::database(Constants::USER_DB_CONNECTION);
     if (!connectDatabase(DB, __LINE__)) {
         return 0;
     }
-    // TODO: test is the login is alreday used in mysql / postgre
 
-    // Check is user login is used
+    // Check if user login is used
     QHash<int, QString> where;
     where.insert(USER_LOGIN, QString("='%1'").arg(Utils::loginForSQL(clearLogin)));
     return count(Table_USERS, USER_LOGIN, getWhereClause(Table_USERS, where));
+}
+
+/** Returns true if a user with username "clearlogin" exists in MySQL database */
+bool UserBase::userExists(const QString &clearLogin) const
+{
+    switch (driver()) {                                                         
+    case Utils::Database::MySQL:
+    {
+        QSqlDatabase DB = QSqlDatabase::database(Constants::USER_DB_CONNECTION);    
+        if (!connectDatabase(DB, __LINE__)) {
+        LOG_FOR("In userbase.cpp", "userExists() can't connect to database, return false");                                       
+        return false;                                                           
+        }                                                                           
+        DB.transaction();                                                           
+        QString check = QString("SELECT EXISTS(SELECT * FROM mysql.user WHERE User='%1')").arg(clearLogin);
+        LOG_FOR("In userbase.cpp", "userExists() user: " + clearLogin);                  
+        QSqlQuery exist(DB);                                                        
+            if(!exist.exec(check)) {                                                
+                LOG_QUERY_ERROR(exist);                                             
+                exist.finish();
+                return false;                                                     
+            } else {
+                QVariant result;
+                bool userExist;
+                while (exist.next()) {
+                QVariant result = exist.value(0);
+                userExist = result.toBool();
+                qDebug() << userExist;
+                }
+                if (userExist) {                                            
+                    LOG("User already exists: " + clearLogin);                                         
+                    exist.finish();                                                     
+                    return true;
+                } else {
+                    LOG("User doesn't exist: " + clearLogin);
+                    exist.finish();
+                    return false;
+                }
+            }
+        }
+        case Utils::Database::SQLite:                                               
+        {                                                                           
+            return false;                                                                  
+        }
+        case Utils::Database::PostSQL:                                              
+        {                                                                           
+            return false;                                                           
+        }
+    }
 }
 
 /** Return the Uuid of the user identified with couple login/password. Returns a null QString if an error occurs. */
@@ -1197,6 +1245,8 @@ bool UserBase::saveUser(UserData *user)
     DB.transaction();
     QSqlQuery query(DB);
 
+    
+
     // if user already exists ==> update   else ==> insert
     bool toUpdate = false;
     QHash<int, QString> where;
@@ -1205,6 +1255,7 @@ bool UserBase::saveUser(UserData *user)
         where.insert(USER_UUID, QString("='%1'").arg(user->uuid()));
         toUpdate = (count(Table_USERS, USER_UUID, getWhereClause(Table_USERS, where)) == 1);
     }
+
     // construct query
     qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     if (toUpdate) {

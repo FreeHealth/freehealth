@@ -102,6 +102,7 @@ public:
     // data checkers
     bool checkLogin(const QString &clearLogin, const QString &clearPassword);
     bool isLoginAlreadyExists(const QString &clearLogin) const;
+    bool userExists(const QString &clearLogin) const;
     QDateTime recordLastLogin(const QString &log, const QString &pass);
 
     // Linkers

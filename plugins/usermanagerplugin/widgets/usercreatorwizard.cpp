@@ -413,6 +413,15 @@ void UserCreatorWizard::done(int r)
     d->m_User->setExtraDocument(Print::TextDocumentExtra::fromXml(d->m_Papers.value(Core::IUser::PrescriptionWatermark)), Core::IUser::PrescriptionWatermark);
 
     if (d->m_CreateUser) {
+        // Check if user already exists in database
+        if (userBase()->userExists(d->m_User->clearLogin())) {
+            Utils::warningMessageBox(tr("Username %1 already exists in MySQL database.").arg(d->m_User->clearLogin())
+                                        ,tr("Please choose a different login or delete user %1 in MySQL database and try again.").arg(d->m_User->clearLogin())
+                                        ,tr("To change login, click on button 'Back' 2 times and modify the login.\n To delete user %1 in MySQL, ask your database administrator.").arg(d->m_User->clearLogin())                                 
+                                        ,tr("User creation issue"));
+            return;
+        }
+
         // Create user in database
         if (!userBase()->createUser(d->m_User)) {
             Utils::warningMessageBox(tr("An error occured during database access."),
