@@ -632,6 +632,7 @@ bool UserBase::userExists(const QString &clearLogin) const
         {                                                                           
             return false;                                                           
         }
+        default: return false;
     }
 }
 
