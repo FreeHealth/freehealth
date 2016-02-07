@@ -22,7 +22,7 @@ set VERSION=__version__
 set PATH_TO_MYSQL=C:\Progra~1\MySQL\MYSQLS~1.5\lib
 set PATH_TO_INNOSETUP=C:\Progra~1\InnoSe~1\iscc.exe
 set WORKING_DIRECTORY=%CD%
-set PATH_TO_MINGW=C:\MinGW\bin
+set PATH_TO_MINGW=C:\Progra~1\mingw-w64\i686-4.9.1-posix-dwarf-rt_v3-rev2\mingw32\bin
 set PATH_TO_OPENSSL=C:\OPENSS~1
 set PATH_TO_SYSTEM32=C:\Windows\System32
 
@@ -42,39 +42,38 @@ qmake.exe %1.pro -r -spec win32-g++ CONFIG+=release CONFIG-=debug_and_release
 mingw32-make.exe -w
 mingw32-make.exe install
 
-REM # Copy MySQL lib into package dir
-copy %PATH_TO_MYSQL%\libmySQL.dll ..\packages\win\%1\libmySQL.dll
-copy %PATH_TO_MYSQL%\libmySQL.dll ..\packages\win\%1\plugins\libmySQL.dll
-
-REM # Copy MinGW lib into package dir
-copy %PATH_TO_MINGW%\libgcc_s_dw2-1.dll ..\packages\win\%1\
-copy %PATH_TO_MINGW%\libstdc*-6.dll ..\packages\win\%1\
-copy %PATH_TO_MINGW%\mingwm10.dll ..\packages\win\%1\
-
-REM # Copy OpenSSL lib into package dir
-copy %PATH_TO_OPENSSL%\ssleay32.dll ..\packages\win\%1\
-copy %PATH_TO_OPENSSL%\libssl32.dll ..\packages\win\%1\
-copy %PATH_TO_OPENSSL%\libeay32.dll ..\packages\win\%1\
-
-REM # Copy msvcr120.dll into package dir
-copy %PATH_TO_SYSTEM32%\msvcr120.dll ..\packages\win\%1\
-
-REM # Change linefeed on TXT files
-unix2dos ..\packages\win\%1\README.txt
-unix2dos ..\packages\win\%1\COPYING.txt
-
-REM # Create the installer
-copy %WORKING_DIRECTORY%\..\..\global_resources\package_helpers\%1.iss %WORKING_DIRECTORY%
-copy %WORKING_DIRECTORY%\..\..\%1\%1-src\%1.ico %WORKING_DIRECTORY%
-%PATH_TO_INNOSETUP% "%WORKING_DIRECTORY%\%1.iss"
-del %WORKING_DIRECTORY%\%1.iss
-del %WORKING_DIRECTORY%\%1.ico 
-
-REM # Go to root source tree
+REM # Go to source root dir
 cd ..
 
+REM # Copy MySQL lib into package dir
+copy %PATH_TO_MYSQL%\libmySQL.dll packages\win\%1\libmySQL.dll
+copy %PATH_TO_MYSQL%\libmySQL.dll packages\win\%1\plugins\libmySQL.dll
+
+REM # Copy MinGW lib into package dir
+copy %PATH_TO_MINGW%\libgcc_s_dw2-1.dll packages\win\%1\
+copy %PATH_TO_MINGW%\libstdc*-6.dll packages\win\%1\
+copy %PATH_TO_MINGW%\mingwm10.dll packages\win\%1\
+
+REM # Copy OpenSSL lib into package dir
+copy %PATH_TO_OPENSSL%\ssleay32.dll packages\win\%1\
+copy %PATH_TO_OPENSSL%\libssl32.dll packages\win\%1\
+copy %PATH_TO_OPENSSL%\libeay32.dll packages\win\%1\
+
+REM # Copy msvcr120.dll into package dir
+copy %PATH_TO_SYSTEM32%\msvcr120.dll packages\win\%1\
+
+REM # Change linefeed on TXT files
+unix2dos packages\win\%1\README.txt
+unix2dos packages\win\%1\COPYING.txt
+
+REM # Create the installer
+copy global_resources\package_helpers\%1.iss packages\win\%1\
+copy %1\%1-src\%1.ico packages\win\%1\
+%PATH_TO_INNOSETUP% packages\win\%1\%1.iss"
+del packages\win\%1\%1.iss
+
 REM # Rename and move the setup.exe file
-copy packages\win\%1\%1\setup.exe %1-%VERSION%.exe
+copy packages\win\%1\setup.exe %1-%VERSION%.exe
 
 REM # Unset var
 set PATH_TO_MYSQL=
