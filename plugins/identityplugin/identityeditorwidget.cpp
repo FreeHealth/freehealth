@@ -267,7 +267,7 @@ public:
 
             QAction *photoAction;
             foreach(Core::IPhotoProvider *provider, photoProviderList) {
-                //: which IPhotoProvider to get picture from: from URL, from Webcam, from ...
+                // which IPhotoProvider to get picture from: from URL, from Webcam, from ...
                 photoAction = new QAction(provider->displayText(), provider);
                 QObject::connect(photoAction, SIGNAL(triggered()), q, SLOT(onPhotoProviderRequested()));
                 QObject::connect(provider, SIGNAL(photoReady(QPixmap)), q, SLOT(onPhotoProviderPhotoReady(QPixmap)));

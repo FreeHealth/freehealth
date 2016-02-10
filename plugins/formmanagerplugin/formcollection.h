@@ -45,9 +45,8 @@ class FormCollectionPrivate;
 class FormManagerPrivate;
 }  // namespace Internal
 
-class FORM_EXPORT FormCollection //: public QObject
+class FORM_EXPORT FormCollection 
 {
-//    Q_OBJECT
     friend class Form::FormManager;
     friend class Form::Internal::FormManagerPrivate;
 

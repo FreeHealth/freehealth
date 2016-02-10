@@ -58,9 +58,8 @@ namespace Internal {
 class FormItemValuesPrivate;
 }
 
-class FORM_EXPORT FormItemValues //: public QObject
+class FORM_EXPORT FormItemValues // : public QObject
 {
-//    Q_OBJECT
 public:
     enum {
         Value_Uuid = 0,

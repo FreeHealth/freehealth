@@ -38,9 +38,8 @@ namespace DrugsDB {
 class DrugInteractionResult;
 class IDrug;
 
-class DRUGSBASE_EXPORT IDrugInteractionAlert //: public QObject
+class DRUGSBASE_EXPORT IDrugInteractionAlert
 {
-//    Q_OBJECT
 public:
     IDrugInteractionAlert(IDrugEngine *engine) : m_Engine(engine){}
     virtual ~IDrugInteractionAlert() {}
