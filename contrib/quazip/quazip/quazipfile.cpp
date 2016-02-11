@@ -22,6 +22,7 @@ quazip/(un)zip.h files for details, basically it's zlib license.
  **/
 
 #include "quazipfile.h"
+#include <QCoreApplication>
 
 using namespace std;
 
@@ -34,6 +35,9 @@ allowing to preserve binary compatibility between releases, the
 technique known as the Pimpl (private implementation) idiom.
 */
 class QuaZipFilePrivate {
+
+    Q_DECLARE_TR_FUNCTIONS(QuaZipFilePrivate)
+
   friend class QuaZipFile;
   private:
     /// The pointer to the associated QuaZipFile instance.
@@ -214,7 +218,7 @@ void QuaZipFilePrivate::setZipError(int zipError) const
   if(zipError==UNZ_OK)
     q->setErrorString(QString());
   else
-    q->setErrorString(q->tr("ZIP/UNZIP API error %1").arg(zipError));
+    q->setErrorString(QuaZipFile::tr("ZIP/UNZIP API error %1").arg(zipError));
 }
 
 bool QuaZipFile::open(OpenMode mode)

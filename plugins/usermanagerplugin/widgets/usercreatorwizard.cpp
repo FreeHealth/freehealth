@@ -111,6 +111,7 @@ static inline UserPlugin::Internal::UserBase *userBase() {return userCore().user
 namespace {
 class UserContactPage: public QWizardPage
 {
+    Q_DECLARE_TR_FUNCTIONS(UserContactPage)
 public:
     UserContactPage(QWidget *parent = 0);
     ~UserContactPage();
@@ -121,6 +122,7 @@ private:
 
 class UserProfilePage : public QWizardPage
 {
+    Q_DECLARE_TR_FUNCTIONS(UserProfilePage)
 public:
     UserProfilePage(QWidget *parent = 0);
     bool validatePage();
@@ -135,12 +137,14 @@ private:
 
 class UserSpecialiesQualificationsPage: public QWizardPage
 {
+    Q_DECLARE_TR_FUNCTIONS(UserSpecialiesQualificationsPage)
 public:
     UserSpecialiesQualificationsPage(QWidget *parent = 0);
 };
 
 class UserRightsPage: public QWizardPage
 {
+    Q_DECLARE_TR_FUNCTIONS(UserRightsPage)
 public:
     UserRightsPage(QWidget *parent = 0);
     void initializePage();
@@ -152,6 +156,7 @@ private:
 
 class UserLastPage: public QWizardPage
 {
+    Q_DECLARE_TR_FUNCTIONS(UserLastPage)
 public:
     UserLastPage(QWidget *parent = 0);
     void initializePage();

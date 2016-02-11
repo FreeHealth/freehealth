@@ -79,6 +79,8 @@ private:
 
 class HprimPreferencesPage : public Core::IOptionsPage
 {
+    Q_OBJECT
+
 public:
     HprimPreferencesPage(QObject *parent = 0);
     ~HprimPreferencesPage();

@@ -4,6 +4,8 @@ TEMPLATE = lib
 DEFINES += FEEDBACK_LIBRARY
 BUILD_PATH_POSTFIXE = FreeMedForms
 
+INCLUDEPATH += ../
+
 include(../fmf_plugins.pri)
 include(feedback_dependencies.pri)
 

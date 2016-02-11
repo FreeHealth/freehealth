@@ -80,6 +80,8 @@ private:
 
 class FullReleasePage : public Core::IToolPage
 {
+    Q_OBJECT
+
 public:
     FullReleasePage(QObject *parent = 0);
     ~FullReleasePage();
