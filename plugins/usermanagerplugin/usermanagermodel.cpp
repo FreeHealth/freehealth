@@ -71,7 +71,7 @@ enum UserDataRepresentation {
     FirstName,
     Uuid,
     Title,
-    LastLogin,
+    LastLoggedIn,
     Gender,
 
     NumberOfColumns
@@ -249,7 +249,7 @@ QVariant UserManagerModel::data(const QModelIndex &index, int role) const
         const QString &otherNames = d->_sqlModel->index(i, OtherNames).data().toString();
         QModelIndex firstname = d->_sqlModel->index(i, FirstName);
         QModelIndex title = d->_sqlModel->index(i, Title);
-        QModelIndex lastLogin = d->_sqlModel->index(i, LastLogin);
+        QModelIndex lastLoggedIn = d->_sqlModel->index(i, LastLoggedIn);
         QString titleString = Trans::ConstantTranslations::titles().at(d->_sqlModel->data(title).toInt());
         if (!titleString.isEmpty())
             titleString = titleString.replace(" ", "&nbsp;") + "<br />";
@@ -259,13 +259,13 @@ QVariant UserManagerModel::data(const QModelIndex &index, int role) const
         else
             fullname = titleString + name.data().toString() + " " + firstname.data().toString();
 
-        const QString &lastLog = d->_sqlModel->data(lastLogin).toString();
+        const QString &lastLog = d->_sqlModel->data(lastLoggedIn).toString();
         QString html;
         if (!lastLog.isEmpty())
             html = QString("<span style=\"font-weight:bold;color:black\">%1</span><br />"
                                    "<span style=\"font-size:small;color:gray\">%3</span>")
                     .arg(fullname)
-                    .arg(tr("Last login: %1").arg(d->_sqlModel->data(lastLogin).toString()));
+                    .arg(tr("Last logged-in: %1").arg(d->_sqlModel->data(lastLoggedIn).toString()));
         else
             html = QString("<span style=\"font-weight:bold;color:black\">%1</span><br />"
                                    "<span style=\"font-size:small;color:gray\">%3</span>")
@@ -343,7 +343,7 @@ int UserManagerModel::genderIndex(const QModelIndex &index) const
     return 0;
 }
 
-QString UserManagerModel::lastLogin(const QModelIndex &index) const
+QString UserManagerModel::lastLoggedIn(const QModelIndex &index) const
 {
     QModelIndex sql = d->_sqlModel->index(index.row(), 5);
     return d->_sqlModel->data(sql).toString();

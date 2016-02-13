@@ -42,8 +42,9 @@
  * You can check the identifiers of users with the checkLogin() member.
  *
  * 5. Users trace keeper\n
- * The recaordLastLogin() update user's database with the actual login's date and time. It also update the login
- * history data of the user. This login history need to be saved by hand (saveUser()).
+ * recordLastLoggedIn() updates user's database with the current logged-in date and time.
+ * SQLite uses local system time.
+ * MySQL uses TIMESTAMP type auto-update feature and UTC time
  *
  * Unit-tests available see UserPlugin::Internal::UserManagerPlugin
  */
@@ -1142,7 +1143,7 @@ bool UserBase::createVirtualUser(const QString &uid, const QString &name, const 
   Record the last login date for the user identified by couple login/password. The date is returned.
   \todo add a locker for users
 */
-QDateTime UserBase::recordLastLogin(const QString &log, const QString &pass)
+QDateTime UserBase::recordLastLoggedIn(const QString &log, const QString &pass)
 {
     // create the linker
     QSqlDatabase DB = QSqlDatabase::database(Constants::USER_DB_CONNECTION);
@@ -1150,25 +1151,54 @@ QDateTime UserBase::recordLastLogin(const QString &log, const QString &pass)
         return QDateTime();
     }
     DB.transaction();
-    // change last login value
-    QDateTime now = QDateTime::currentDateTime();
-    QHash< int, QString >  where;
-    where.insert(USER_LOGIN, QString("='%1'").arg(log));
-    where.insert(USER_PASSWORD, QString("='%1'").arg(pass));
-    QSqlQuery query(DB);
-    query.prepare(prepareUpdateQuery(Table_USERS, USER_LASTLOG, where));
-    query.bindValue(0 , now);
-    if (!query.exec()) {
-        LOG_QUERY_ERROR(query);
-        query.finish();
-        DB.rollback();
-        return QDateTime();
+
+    switch (driver()) {                                                         
+    case Utils::Database::MySQL: {                                                
+        QDateTime now = QDateTime::currentDateTime(); // temporary, for testing
+        QHash< int, QString >  where;                                           
+        where.insert(USER_LOGIN, QString("='%1'").arg(log));                    
+        where.insert(USER_PASSWORD, QString("='%1'").arg(pass));                
+        QSqlQuery query(DB);                                                    
+        query.prepare(prepareUpdateQuery(Table_USERS, USER_LASTLOG, where));    
+        query.bindValue(0 , "NULL"); // passing NULL will trigger auto-update
+                                   // & set LASTLOGIN field to current UTC time                                              
+        if (!query.exec()) {                                                    
+            LOG_QUERY_ERROR(query);                                             
+            query.finish();                                                     
+            DB.rollback();                                                      
+            return QDateTime();                                                 
+        }                                                                       
+        query.finish();                                                         
+        DB.commit();                                                            
+        // TODO add locker                                                      
+        LOG(tr("Last recorded user login: %1 ").arg(now.toString()));
+        return now; //temporary return value           
     }
-    query.finish();
-    DB.commit();
-    // TODO add locker
-    LOG(tr("Last recorded user login: %1 ").arg(now.toString()));
-    return now;
+    case Utils::Database::SQLite: {
+        QDateTime now = QDateTime::currentDateTime();
+        QHash< int, QString >  where;
+        where.insert(USER_LOGIN, QString("='%1'").arg(log));
+        where.insert(USER_PASSWORD, QString("='%1'").arg(pass));
+        QSqlQuery query(DB);
+        query.prepare(prepareUpdateQuery(Table_USERS, USER_LASTLOG, where));
+        query.bindValue(0 , now);
+        if (!query.exec()) {
+            LOG_QUERY_ERROR(query);
+            query.finish();
+            DB.rollback();
+            return QDateTime();
+        }
+        query.finish();
+        DB.commit();
+        // TODO add locker
+        LOG(tr("Last recorded user login: %1 ").arg(now.toString()));
+        return now;
+    }
+    case Utils::Database::PostSQL: {                                              
+        return QDateTime();                                                           
+    }
+    }
+   return QDateTime(); 
 }
 
 /** Creates a new user in the database according to the actual specified driver. */
@@ -1285,7 +1315,7 @@ bool UserBase::saveUser(UserData *user)
         i++;
         query.bindValue(i, user->login64());
         i++;
-        query.bindValue(i, user->lastLogin());
+        query.bindValue(i, user->lastLoggedIn());
         i++;
         query.bindValue(i, user->usualName());
         i++;
@@ -1402,7 +1432,7 @@ bool UserBase::saveUser(UserData *user)
         query.bindValue(USER_TITLE,        user->titleIndex());
         query.bindValue(USER_GENDER,       user->genderIndex());
         query.bindValue(USER_MAIL ,        user->mail());
-        query.bindValue(USER_LASTLOG ,     user->lastLogin());
+        query.bindValue(USER_LASTLOG ,     user->lastLoggedIn());
         query.bindValue(USER_LANGUAGE,     user->languageIso());
         query.bindValue(USER_LOCKER,       user->locker());
         if (!query.exec()) {

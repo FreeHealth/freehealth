@@ -195,7 +195,7 @@ public:
         case Core::IUser::DecryptedLogin : toReturn = user->decryptedLogin(); break;
         case Core::IUser::ClearPassword : toReturn = user->clearPassword(); break;
         case Core::IUser::CryptedPassword : toReturn = user->cryptedPassword(); break;
-        case Core::IUser::LastLogin : toReturn = user->lastLogin(); break;
+        case Core::IUser::LastLoggedIn : toReturn = user->lastLoggedIn(); break;
         case Core::IUser::GenderIndex : toReturn = user->genderIndex(); break;
         case Core::IUser::TitleIndex : toReturn = user->titleIndex(); break;
         case Core::IUser::Gender : toReturn = user->gender(); break;
@@ -588,7 +588,7 @@ bool UserModel::setCurrentUser(const QString &clearLog, const QString &clearPass
 
         // 7. Trace log
         user->setCurrent(true);
-        user->setLastLogin(QDateTime::currentDateTime());
+        user->setLastLoggedIn(QDateTime::currentDateTime());
         user->addLoginToHistory();
         if (!userBase()->saveUser(user))
             return false;
@@ -957,7 +957,7 @@ bool UserModel::setData(const QModelIndex &item, const QVariant &value, int role
                              .arg(sqlIndex.row()).arg(sqlIndex.column()).arg(value.toString()));
             return false;
         }
-        // poursue to feed UserData (need to know if it is modified)
+        // continue to feed UserData (need to know if it is modified)
     }
 
     QList<int> colsToEmit;
@@ -986,7 +986,7 @@ bool UserModel::setData(const QModelIndex &item, const QVariant &value, int role
         break;
     }
     case Core::IUser::CryptedPassword :  user->setCryptedPassword(value); break;
-    case Core::IUser::LastLogin :  user->setLastLogin(value); break;
+    case Core::IUser::LastLoggedIn :  user->setLastLoggedIn(value); break;
     case Core::IUser::GenderIndex :
         colsToEmit << Core::IUser::Gender << Core::IUser::FullName<< Core::IUser::FullHtmlContact;
         user->setGenderIndex(value.toInt());
