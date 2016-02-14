@@ -125,7 +125,7 @@ UserBase::UserBase(QObject *parent) :
     addField(Table_USERS, USER_ISVIRTUAL,    "ISVIRTUAL",       FieldIsBoolean);
     addField(Table_USERS, USER_LOGIN,        "LOGIN",           FieldIsShortText);
     addField(Table_USERS, USER_PASSWORD,     "PASSWORD",        FieldIsShortText);
-    addField(Table_USERS, USER_LASTLOG,      "LASTLOGIN",       FieldIsDate);
+    addField(Table_USERS, USER_LASTLOG,      "LASTLOGIN",       FieldIsTimeStamp,       "0");
     addField(Table_USERS, USER_USUALNAME,    "NAME",            FieldIsShortText);
     addField(Table_USERS, USER_OTHERNAMES,   "SECONDNAME",      FieldIsShortText);
     addField(Table_USERS, USER_FIRSTNAME,    "SURNAME",         FieldIsShortText);
