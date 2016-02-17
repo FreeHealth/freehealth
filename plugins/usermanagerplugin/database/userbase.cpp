@@ -285,7 +285,21 @@ QString UserBase::getDatabaseFmfVersion() const
  */
 bool UserBase::updateLastloginTypeToTimeStamp()
 {
-    return true;
+    switch (settings()->databaseConnector().driver()) {                         
+        case Utils::Database::MySQL: {
+            if(!Database::modifyMySQLColumnType(Constants::Table_USERS, Constants::USER_LASTLOG,
+                                   FieldIsTimeStamp)) {
+                return false;
+            }
+            return true;
+        }
+        case Utils::Database::SQLite: {
+            return true; // No change required for SQLite
+        }
+        case Utils::Database::PostSQL:                                              
+            return false;                                                           
+        default: return false;
+    }
 }
 
 /**
@@ -581,7 +595,6 @@ bool UserBase::checkLogin(const QString &clearLogin, const QString &clearPasswor
         break;
     }
     case Utils::Database::PostSQL:
-        // TODO: not implemented
         return false;
     default: return false;
     }
