@@ -39,7 +39,7 @@ namespace Constants {
 
     // User Database connection
     const char * const USER_DB_CONNECTION           = "users";
-    const char * const USER_DB_VERSION              = "1";
+    const char * const USER_DB_VERSION              = "0.9.8";
 
     // constants for DATA table represent DATANAME field
     const char * const USER_DATA_PHOTO             = "identity.photo";

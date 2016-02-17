@@ -119,10 +119,12 @@ private:
                         const int port,
                         CreationOption createOption
                        );
-
+    bool updateLastloginTypeToTimeStamp();
     // privates retrievers
     UserData *getUser(const QHash<int, QString> &conditions) const;
     QString databaseAndQtVersion() const;
+    QString getDatabaseQtVersion() const;
+    QString getDatabaseFmfVersion() const;
 
 private:
     bool m_initialized;

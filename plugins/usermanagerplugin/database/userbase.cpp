@@ -250,6 +250,45 @@ QString UserBase::databaseAndQtVersion() const
 }
 
 /**
+ * Returns Users database Qt version
+ * If Qt version not set (FMF =< 0.9.0) returns an empty string
+ */
+QString UserBase::getDatabaseQtVersion() const
+{
+    Utils::Field vField(Constants::Table_INFORMATION, Constants::INFO_VERSION); 
+    QString fullVersion = getVersion(vField);                                       
+    if (fullVersion.contains("/")) {                                                
+        QString qtVersion = fullVersion.mid(fullVersion.indexOf("/")+1);
+        return qtVersion;
+    } else {
+        return QString();
+    }   
+}
+
+/**                                                                             
+ * Returns Users database FMF version                                            
+ */
+QString UserBase::getDatabaseFmfVersion() const                                  
+{                                                                               
+    Utils::Field vField(Constants::Table_INFORMATION, Constants::INFO_VERSION); 
+    QString fullVersion = getVersion(vField);                                   
+    if (fullVersion.contains("/")) {                                                
+        QString userDbVersion = fullVersion.left(fullVersion.indexOf("/"));
+        return userDbVersion;                                                       
+    } else {                                                                    
+        return fullVersion;                                                       
+    }                                                                           
+}
+
+/**
+ * Update LASTLOGIN colum type to TimeStamp
+ */
+bool UserBase::updateLastloginTypeToTimeStamp()
+{
+    return true;
+}
+
+/**
  * Return \e true if the userbase is the lastest version of the database.
  * Checks also if the current running Qt version is compatible
  * with the database version.
@@ -260,49 +299,77 @@ bool UserBase::checkDatabaseVersion()
     // Since FreeMedForms EMR v0.9.1 the userbase version now includes
     // the Qt version used to create the database. We need to check
     // the database scheme version and the Qt version.
-    // If the currently running Qt version is higher than the
-    // database-qt-version, we must update the database-qt-version number
-    // as all created users with this Qt version will use a better
-    // password hashing Qt-version dependent.
+    // If the currently running Qt version (currentQt) is higher than the
+    // user database Qt version (userDbQt), we must update the user database Qt
+    // version number: FMF running with Qt5 will use SHA2 password hashing for
+    // newly created users
+
+    // Once user DB has been tagged "Qt5", it cannot go back to Qt4. Users created
+    // with Qt5 would not be able to log-in with Qt4.
 
     // If the Qt tag is set, check the database scheme version and
     // the Qt version. If the current Qt version is lower than the
-    // database-qt-version then raise an error.
+    // user database Qt version then raise an error.
 
     Utils::Field vField(Constants::Table_INFORMATION, Constants::INFO_VERSION);
+    QString qsUserDbVersion(getDatabaseFmfVersion());
+    QString qsQtVersion(getDatabaseQtVersion());
+    Utils::VersionNumber vnUserDbVersion(getDatabaseFmfVersion()); // vn VersionNumber
+    Utils::VersionNumber vnUserCodeVersion(Constants::USER_DB_VERSION);
     QString version = getVersion(vField);
     if (version.contains("/")) {
-        QString qtVersion = version.mid(version.indexOf("/")+1);
-        version = version.left(version.indexOf("/"));
+    
         // Qt version matches?
-        Utils::VersionNumber qt(qtVersion);
-        Utils::VersionNumber currentQt(QT_VERSION_STR);
-        if (currentQt < qt) {
-            LOG_ERROR_FOR("UserBase", QString("Wrong Qt Version. Database: %1 - Current: %2")
-                          .arg(qtVersion).arg(QT_VERSION_STR));
+        Utils::VersionNumber vnUserDbQt(qsQtVersion);
+        Utils::VersionNumber vnCurrentQt(QT_VERSION_STR);
+
+        // If database and Qt version are up-to-date, do nothing
+        if ((vnCurrentQt == vnUserDbQt) && (vnUserCodeVersion == vnUserDbVersion)) {
+            return true;
+        } else if (vnCurrentQt < vnUserDbQt) {
+            LOG_ERROR(QString("In User base. Qt Version mismatch. Linux users: install Qt%1 or higher. Windows and Mac users: use FreeMedForms 0.9.8 or higher. FMF/system Qt version: %2 inferior to User Database Qt version: %3").arg(QT_VERSION_STR).arg(qsQtVersion).arg(qsQtVersion));
             // TODO: raise a UI error
             return false;
-        } else if ((version == Constants::USER_DB_VERSION)
-                    && (currentQt > qt)) {
+        } else if (vnCurrentQt > vnUserDbQt) {
             // Update the database qt version number
             Utils::Field vField(Constants::Table_INFORMATION, Constants::INFO_VERSION);
-            if (!setVersion(vField, version)) {
+            QString newVersion = QString("%1/%2").arg(qsUserDbVersion).arg(QT_VERSION_STR);
+            if (!setVersion(vField, newVersion)) {
                 LOG_ERROR_FOR("UserBase", "Unable to set version");
             }
-            return true;
         }
-    } else if (version == Constants::USER_DB_VERSION) {
-        // Update the database qt version number
-        version = databaseAndQtVersion();
+        if (vnUserDbVersion < vnUserCodeVersion) {
+            if(UserBase::updateLastloginTypeToTimeStamp()) {
+                Utils::Field vField(Constants::Table_INFORMATION, Constants::INFO_VERSION);
+                QString newVersion = QString("%1/%2").arg(Constants::USER_DB_VERSION).arg(UserBase::getDatabaseQtVersion());
+                if (!setVersion(vField, newVersion)) {                              
+                    LOG_ERROR_FOR("UserBase", "Unable to set version");             
+                }
+            }
+        }                                                        
+    } else if (vnUserDbVersion < vnUserCodeVersion) {
+        
+        // Update database qt version number
+        Utils::Field vField(Constants::Table_INFORMATION, Constants::INFO_VERSION);
+        QString newVersion = QString("%1/%2").arg(qsUserDbVersion).arg(QT_VERSION_STR);
+            if (!setVersion(vField, newVersion)) {                              
+                LOG_ERROR_FOR("UserBase", "Unable to set version");             
+            }
         LOG_FOR("UserBase", QString("Tag database version with Qt Version: %1")
                       .arg(version));
-        Utils::Field vField(Constants::Table_INFORMATION, Constants::INFO_VERSION);
-        if (!setVersion(vField, version)) {
-            LOG_ERROR_FOR("UserBase", "Unable to set version");
+        // Update database then tag it to current version
+        if(UserBase::updateLastloginTypeToTimeStamp()) {                              
+                Utils::Field vField(Constants::Table_INFORMATION, Constants::INFO_VERSION);
+                QString newVersion = QString("%1/%2").arg(Constants::USER_DB_VERSION).arg(UserBase::getDatabaseQtVersion());
+                if (!setVersion(vField, newVersion)) {                          
+                    LOG_ERROR_FOR("UserBase", "Unable to set version");         
+                }
+        } else {
+            return false;
         }
-        return true;
     }
-    return (version == Constants::USER_DB_VERSION);
+    return ((getDatabaseFmfVersion() == Constants::USER_DB_VERSION)
+             && UserBase::getDatabaseFmfVersion() == QT_VERSION_STR);
 }
 
 void UserBase::onCoreFirstRunCreationRequested()
