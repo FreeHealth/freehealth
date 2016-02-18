@@ -266,10 +266,10 @@ public:
     virtual bool changeMySQLUserOwnPassword(const QString &login, const QString &newPassword);
     virtual bool changeMySQLOtherUserPassword(const QString &login, const QString &newPassword);
     virtual bool modifyMySQLColumnType(const int &tableref, const int &fieldref,
-                                       const int TypeOfField = FieldUndefined,  
+                                       TypeOfField type = FieldUndefined,  
                                        const QString &defaultValue = QString());
     virtual bool modifyMySQLColumnType(const int &tableref, const int &fieldref,
-                                       const int TypeOfField = FieldUndefined);
+                                       TypeOfField type = FieldUndefined);
     // All drivers members
     virtual QSqlDatabase database() const;
     virtual QString connectionName() const;

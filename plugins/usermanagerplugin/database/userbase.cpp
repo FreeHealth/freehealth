@@ -382,8 +382,8 @@ bool UserBase::checkDatabaseVersion()
             return false;
         }
     }
-    return ((getDatabaseFmfVersion() == Constants::USER_DB_VERSION)
-             && UserBase::getDatabaseFmfVersion() == QT_VERSION_STR);
+    return ((UserBase::getDatabaseFmfVersion() == Constants::USER_DB_VERSION)
+             && (UserBase::getDatabaseQtVersion() == QT_VERSION_STR));
 }
 
 void UserBase::onCoreFirstRunCreationRequested()

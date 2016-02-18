@@ -2505,15 +2505,15 @@ bool Database::alterTableForNewField(const int tableRef, const int newFieldRef, 
 }
 
 bool Database::modifyMySQLColumnType(const int & tableref, const int & fieldref,
-                                   const int TypeOfField)
+                                     TypeOfField type)
 {
     QSqlDatabase DB = database();
     if (!connectedDatabase(DB, __LINE__))                                       
         return false;
-    QString type = d_database->getTypeOfField(TypeOfField);
     QString req;
-    req = QString("ALTER TABLE `%1` MODIFY COLUMN `%2` `%3`;")
-            .arg(table(tableref), fieldName(tableref, fieldref), type);
+    QString newType = d_database->getTypeOfField(d_database->index(tableref, fieldref));
+    req = QString("ALTER TABLE `%1` MODIFY COLUMN `%2` %3;")
+            .arg(table(tableref), fieldName(tableref, fieldref), newType);
     DB.transaction();
     QSqlQuery query(DB);
     if (!query.exec(req)) {                                                     
@@ -2529,16 +2529,16 @@ bool Database::modifyMySQLColumnType(const int & tableref, const int & fieldref,
 }
 
 bool Database::modifyMySQLColumnType(const int & tableref, const int & fieldref,
-                                   const int TypeOfField, const QString & defaultValue)
+                                     TypeOfField type, const QString & defaultValue)
 {                                                                               
     QSqlDatabase DB = database();                                               
     if (!connectedDatabase(DB, __LINE__))                                       
-        return false;                                                           
-    QString type = d_database->getTypeOfField(TypeOfField);                     
+        return false;
+    QString newType = d_database->getTypeOfField(d_database->index(tableref, fieldref));     
     QString req;
     // Handle default value
-    req = QString("ALTER TABLE `%1` MODIFY COLUMN `%2` `%3` DEFAULT %4;")                  
-            .arg(table(tableref), fieldName(tableref, fieldref), type, defaultValue);         
+    req = QString("ALTER TABLE `%1` MODIFY COLUMN `%2` %3 DEFAULT %4;")                  
+            .arg(table(tableref)).arg(fieldName(tableref, fieldref)).arg(newType).arg(defaultValue);         
     DB.transaction();                                                           
     QSqlQuery query(DB);                                                        
     if (!query.exec(req)) {                                                     
