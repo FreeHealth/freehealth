@@ -1,6 +1,6 @@
 #!/bin/bash
 # This script is part of FreeMedForms project : http://www.freemedforms.com
-# (c) 2008 - 2014  Eric MAEKER, MD
+# (c) 2008 - 2016  Eric MAEKER, MD
 #
 # This script helps on the compilation on unices machines
 #
@@ -79,13 +79,18 @@ showHelp()
 testDependencies()
 {
     # TODO: this code only works with debian distros, include other distro
-    # DEPENDENCIES_QT5="qt5-default qt5-qmake"
-    DEPENDENCIES_QT4="libqt4-dev libxext-dev" # libquazip-dev not in wheezy
+    DEPENDENCIES_QT5="qttools5-dev-tools \
+    libqt5svg5-dev \
+    qtscript5-dev \
+    libqt5scripttools5 \
+    qttools5-dev \
+    libquazip-dev \
+    qtxmlpatterns5-dev-tools"
     DEPENDENCIES_WEBCAM=""
     if [[ "$WEBCAM" == "y" ]]; then
         DEPENDENCIES_WEBCAM="libopencv-core-dev libopencv-highgui-dev libopencv-objdetect-dev"
     fi
-    DEPENDENCIES="zlib1g-dev "$DEPENDENCIES_QT4" "$DEPENDENCIES_WEBCAM
+    DEPENDENCIES="zlib1g-dev "$DEPENDENCIES_QT5" "$DEPENDENCIES_WEBCAM
     for d in $DEPENDENCIES ; do
         echo "* Checking dependencies $d"
         if [[ -z `dpkg -l | grep $d` ]] ; then
@@ -131,16 +136,7 @@ detectQtVersion()
 
 detectSpec()
 {
-    if [[ "$QT_VERSION" == "4" ]]; then
-        SPEC_PATH=`qmake -query "QT_INSTALL_DATA"`
-        SPEC_PATH=$SPEC_PATH"/mkspecs"
-        SPEC=`ls -al $SPEC_PATH/default | sed "s/^.*default -> //"`
-            if [[ -z $SPEC ]]; then
-                echo "ERROR: no default spec detected"
-            fi
-        echo "* Default qmake spec: "$SPEC
-        return 0
-    elif [[ "$QT_VERSION" == "5" ]]; then
+    if [[ "$QT_VERSION" == "5" ]]; then
         SPEC=`qmake -query QMAKE_SPEC`
             if [[ "$SPEC" == "**Unknown**" ]]; then
                 echo "ERROR: qmake -query couldn't detect your default mkspecs"
@@ -150,7 +146,7 @@ detectSpec()
         return 0
     else
         echo "Your Qt version seems to be incorrect."
-        echo "To build FreeMedForms applications, use either latest Qt4.8 version or latest Qt 5.3 version"
+        echo "To build FreeMedForms applications, use Qt 5.3 or higher"
         exit 1
     fi
 }
