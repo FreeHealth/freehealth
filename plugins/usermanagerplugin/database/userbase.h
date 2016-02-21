@@ -103,7 +103,7 @@ public:
     bool checkLogin(const QString &clearLogin, const QString &clearPassword);
     bool isLoginAlreadyExists(const QString &clearLogin) const;
     bool userExists(const QString &clearLogin) const;
-    QDateTime recordLastLogin(const QString &log, const QString &pass);
+    QDateTime recordLastLoggedIn(const QString &log, const QString &pass);
 
     // Linkers
     int getMaxLinkId();
@@ -119,10 +119,12 @@ private:
                         const int port,
                         CreationOption createOption
                        );
-
+    bool updateLastloginTypeToTimeStamp();
     // privates retrievers
     UserData *getUser(const QHash<int, QString> &conditions) const;
     QString databaseAndQtVersion() const;
+    QString getDatabaseQtVersion() const;
+    QString getDatabaseFmfVersion() const;
 
 private:
     bool m_initialized;

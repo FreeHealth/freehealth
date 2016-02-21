@@ -946,7 +946,7 @@ void UserData::addLoginToHistory()
                         QString("%1 %2")
                         .arg(dynamicDataValue(USER_DATA_LOGINHISTORY).toString())
                         .arg(QCoreApplication::translate("tkUser", "User logged at %1\n")
-                             .arg(lastLogin().toString(Qt::DefaultLocaleLongDate)))
+                             .arg(lastLoggedIn().toString(Qt::DefaultLocaleLongDate)))
               );
     setModified(true);
 }

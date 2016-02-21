@@ -53,7 +53,7 @@ public:
         IsVirtual,      /*!< \brief User is virtual?*/
         Login64,        /*!< \brief Encrypted login username \sa UserGlobal::loginForSQL() */
         CryptedPassword,/*!< \brief Encrypted password \sa UserGlobal::crypt() */
-        LastLogin,      /*!< \brief Date of the last correct login */
+        LastLoggedIn,   /*!< \brief Date and Time of the last successful log-in */
         UsualName,      /*!< \brief Lastname */
         OtherNames,     /*!< \brief Second name (name after marriage) */
         Firstname,      /*!< \brief Firstname, ("Given" name) */

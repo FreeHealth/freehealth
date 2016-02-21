@@ -219,7 +219,7 @@ public:
     QString clearPassword() const;
     QString cryptedPassword() const      { return value(Table_USERS, USER_PASSWORD).toString(); }
 
-    QDateTime lastLogin() const          { return value(Table_USERS, USER_LASTLOG).toDateTime(); }
+    QDateTime lastLoggedIn() const          { return value(Table_USERS, USER_LASTLOG).toDateTime(); }
     QString fullName() const;
     QString title() const;
     int     titleIndex() const           { return value(Table_USERS, USER_TITLE).toInt(); }
@@ -294,7 +294,7 @@ protected:
 
     // Login can not be changed for any users
     void setLogin64(const QVariant &val)             { setValue(Table_USERS, USER_LOGIN, val); }
-    void setLastLogin(const QVariant &val)           { setValue(Table_USERS, USER_LASTLOG, val); }
+    void setLastLoggedIn(const QVariant &val)           { setValue(Table_USERS, USER_LASTLOG, val); }
     // Crypted password must always be sync with clear password
     void setCryptedPassword(const QVariant &val);
 

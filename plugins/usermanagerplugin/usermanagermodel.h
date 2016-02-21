@@ -69,7 +69,7 @@ public:
     QList<IUserViewerPage *> pages() const;
     QString userUuid(const QModelIndex &index) const;
     int genderIndex(const QModelIndex &index) const;
-    QString lastLogin(const QModelIndex &index) const;
+    QString lastLoggedIn(const QModelIndex &index) const;
     QString title(const QModelIndex &index) const;
 
 Q_SIGNALS:

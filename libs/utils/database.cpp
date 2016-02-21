@@ -2505,15 +2505,15 @@ bool Database::alterTableForNewField(const int tableRef, const int newFieldRef, 
 }
 
 bool Database::modifyMySQLColumnType(const int & tableref, const int & fieldref,
-                                   const int TypeOfField)
+                                     TypeOfField type)
 {
     QSqlDatabase DB = database();
     if (!connectedDatabase(DB, __LINE__))                                       
         return false;
-    QString type = d_database->getTypeOfField(TypeOfField);
     QString req;
-    req = QString("ALTER TABLE `%1` MODIFY COLUMN `%2` `%3`;")
-            .arg(table(tableref), fieldName(tableref, fieldref), type);
+    QString newType = d_database->getTypeOfField(d_database->index(tableref, fieldref));
+    req = QString("ALTER TABLE `%1` MODIFY COLUMN `%2` %3;")
+            .arg(table(tableref), fieldName(tableref, fieldref), newType);
     DB.transaction();
     QSqlQuery query(DB);
     if (!query.exec(req)) {                                                     
@@ -2526,6 +2526,31 @@ bool Database::modifyMySQLColumnType(const int & tableref, const int & fieldref,
     query.finish();
     DB.commit();      
     return true;
+}
+
+bool Database::modifyMySQLColumnType(const int & tableref, const int & fieldref,
+                                     TypeOfField type, const QString & defaultValue)
+{                                                                               
+    QSqlDatabase DB = database();                                               
+    if (!connectedDatabase(DB, __LINE__))                                       
+        return false;
+    QString newType = d_database->getTypeOfField(d_database->index(tableref, fieldref));     
+    QString req;
+    // Handle default value
+    req = QString("ALTER TABLE `%1` MODIFY COLUMN `%2` %3 DEFAULT %4;")                  
+            .arg(table(tableref)).arg(fieldName(tableref, fieldref)).arg(newType).arg(defaultValue);         
+    DB.transaction();                                                           
+    QSqlQuery query(DB);                                                        
+    if (!query.exec(req)) {                                                     
+          LOG_QUERY_ERROR_FOR("Database", query);                               
+          //LOG_FOR("Database", QString("Unable to modify column %1 type to %2").arg(fieldName(tableref, fieldref), type));
+          query.finish();                                                       
+          DB.rollback();                                                        
+          return false;                                                         
+    }                                                                           
+    query.finish();                                                             
+    DB.commit();                                                                
+    return true;                                                                
 }
 /**
  * Vacuum the database (for SQLite only). Execute the 'VACUUM' sql command on the database.
