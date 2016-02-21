@@ -21,17 +21,17 @@
 /***************************************************************************
  *  Main developer: Eric MAEKER, <eric.maeker@gmail.com>                   *
  *  Contributors:                                                          *
- *       NAME <MAIL@ADDRESS.COM>                                           *
+ *       Jerome PINGUET <jerome@jerome.cc>                                 *
  ***************************************************************************/
 /**
   \class Utils::Database
-  this class is a base class for databases. It manages scheme and creates SQL queries.
+  This class is a base class for databases. It manages scheme and creates SQL queries.
     The idea is to create a database scheme dynamically. Your superbase must hold the enums
     corresponding to the tables and the fields of each tables.\n
     Then Database is populated with real names of tables and fields.\n
     Then you can get what ever you want without any knowledge of the database tables, fields names and driver.\n
 
-    It manages connections and propose a virtual member for the database creation if requiered.\n
+    It manages connections and propose a virtual member for the database creation if required.\n
     You can easily manage automatic scheme database creation with createTables().\n
 
     Usage :
@@ -2504,8 +2504,11 @@ bool Database::alterTableForNewField(const int tableRef, const int newFieldRef, 
     return true;
 }
 
-bool Database::modifyMySQLColumnType(const int & tableref, const int & fieldref,
-                                     TypeOfField type)
+/**
+ * Modify the type of an existing column of a table in a MySQL database
+ * Default value will be set automatically by MySQL
+ */
+bool Database::modifyMySQLColumnType(const int & tableref, const int & fieldref)
 {
     QSqlDatabase DB = database();
     if (!connectedDatabase(DB, __LINE__))                                       
@@ -2528,8 +2531,12 @@ bool Database::modifyMySQLColumnType(const int & tableref, const int & fieldref,
     return true;
 }
 
+/**                                                                             
+ * Modify the type of an existing column of a table in a MySQL database
+ * Default value is set by QString & defaultValue                             
+ */
 bool Database::modifyMySQLColumnType(const int & tableref, const int & fieldref,
-                                     TypeOfField type, const QString & defaultValue)
+                                     const QString & defaultValue)
 {                                                                               
     QSqlDatabase DB = database();                                               
     if (!connectedDatabase(DB, __LINE__))                                       

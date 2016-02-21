@@ -287,8 +287,8 @@ bool UserBase::updateLastloginTypeToTimeStamp()
 {
     switch (settings()->databaseConnector().driver()) {                         
         case Utils::Database::MySQL: {
-            if(!Database::modifyMySQLColumnType(Constants::Table_USERS, Constants::USER_LASTLOG,
-                                                Database::FieldIsTimeStamp, "0")) {
+            if(!Database::modifyMySQLColumnType(Constants::Table_USERS,
+                                                Constants::USER_LASTLOG, "0")) {
                 return false;
             }
             return true;
