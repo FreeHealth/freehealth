@@ -29,7 +29,7 @@
 # so that the whole output can be filtered via e.g. grep
 
 # define colors for highlighting
-WHITE="\033[1;37m"
+GREEN="\033[32;40m"
 NO_COLOUR="\033[0m"
 
 #for i in $( ls plugins ); do
@@ -45,9 +45,7 @@ APPS=". freediams freedrc freetoolbox freeddimanager"
 for a in $APPS; do
     for i in $( ls $a/plugins ); do
         if [ -f $a/plugins/$i/*.pro ]; then
-            echo
-            echo "$WHITE********* Updating translation for $a plugin: $i$NO_COLOUR"
-            echo
+            printf "$GREEN********* Updating translation for $a plugin: $i$NO_COLOUR\n"
             lupdate $a/plugins/$i/*.pro -no-obsolete  2>&1
         fi
     done
@@ -55,9 +53,7 @@ done
 
 for i in $( ls libs ); do
     if [ -f libs/$i/*.pro ]; then
-        echo
-        echo "$WHITE********* Updating translation for libs: $i$NO_COLOUR"
-        echo
+        printf "$GREEN********* Updating translation for libs: $i$NO_COLOUR\n"
         lupdate libs/$i/*.pro -no-obsolete  2>&1
     fi
 done
