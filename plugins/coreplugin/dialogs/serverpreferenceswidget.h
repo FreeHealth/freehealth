@@ -71,6 +71,7 @@ Q_SIGNALS:
     void userConnectionChanged(bool coonected);
 
 protected Q_SLOTS:
+    void checkHostNameLength(const QString &hostName);
     void testHost();
     void testHost(const QString &hostName);
     void saveToSettings(Core::ISettings *s = 0);

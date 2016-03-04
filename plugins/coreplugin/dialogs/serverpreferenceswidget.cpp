@@ -57,10 +57,12 @@ namespace Core {
 namespace Internal {
 class ServerPreferencesWidgetPrivate
 {
+
 public:
     ServerPreferencesWidgetPrivate(ServerPreferencesWidget *parent) :
         ui(new Internal::Ui::ServerPreferencesWidget),
         _hostReachable(false),
+        _hostNameLengthValid(false),
         _connectionSucceeded(false),
         _grants(Utils::Database::Grant_NoGrant),
         q(parent)
@@ -80,6 +82,7 @@ public:
         ui->useDefaultAdminLog->setVisible(false);
         ui->testMySQLButton->setEnabled(_hostReachable);
         ui->userGroupBox->setEnabled(false);
+        ui->testConnectionLabel->setVisible(false);
 
         // Populate with settings()->databaseConnector() data
         const Utils::DatabaseConnector &db = settings()->databaseConnector();
@@ -87,16 +90,13 @@ public:
         ui->log->setText(db.clearLog());
         ui->pass->setText(db.clearPass());
         ui->port->setValue(db.port());
-        if (db.host().isEmpty()) {
-            ui->host->setText("localhost");
-            q->testHost("localhost");
-        }
         ui->port->setValue(3306);
+        ui->testHostConnectionLabel->setText(QT_TR_NOOP("Enter host name..."));
     }
 
 public:
     Internal::Ui::ServerPreferencesWidget *ui;
-    bool _hostReachable, _connectionSucceeded;
+    bool _hostNameLengthValid, _hostReachable, _connectionSucceeded;
     Utils::Database::Grants _grants;
     QString _groupTitle, _groupTitleTrContext;
 
@@ -105,8 +105,6 @@ private:
 };
 } // namespace Internal
 } // namespace Core
-
-// TODO: add an automatic test when host is reachable to detect mysql, mariadb... installation
 
 ServerPreferencesWidget::ServerPreferencesWidget(QWidget *parent) :
     QWidget(parent),
@@ -125,9 +123,10 @@ ServerPreferencesWidget::ServerPreferencesWidget(QWidget *parent) :
     setTabOrder(d->ui->log, d->ui->pass);
     setTabOrder(d->ui->pass, d->ui->testMySQLButton);
 
-    if (settings()->value(Core::Constants::S_USE_EXTERNAL_DATABASE, false).toBool())
-        on_testMySQLButton_clicked();
+//    if (settings()->value(Core::Constants::S_USE_EXTERNAL_DATABASE, false).toBool())
+//        on_testMySQLButton_clicked();
 
+    connect(d->ui->host, SIGNAL(textChanged(QString)), this, SLOT(checkHostNameLength(QString)));
     connect(d->ui->useDefaultAdminLog, SIGNAL(clicked(bool)), this, SLOT(toggleLogPass(bool)));
     connect(d->ui->testHostButton, SIGNAL(clicked()), this, SLOT(testHost()));
 }
@@ -193,10 +192,43 @@ QString ServerPreferencesWidget::password() const
     return d->ui->pass->text();
 }
 
-/** Returns current user grants on database (only available is connection is reached) */
+/** Returns current user grants on database (only available if connection is reached) */
 Utils::Database::Grants ServerPreferencesWidget::grantsOnLastConnectedDatabase() const
 {
     return d->_grants;
+}
+
+void ServerPreferencesWidget::checkHostNameLength(const QString &hostName)
+{
+    // Hostname has changed: disable database credentials groupbox and button
+    // Hide testConnectionLabel
+    d->ui->userGroupBox->setEnabled(false);
+    d->ui->testMySQLButton->setEnabled(false);
+    d->ui->testConnectionLabel->setVisible(false);
+
+    // Check if host name is valid (RFC1034, RFC1035, RFC2181)
+    if ((hostName.length() < 1) || hostName.length() > 255) {
+        d->_hostNameLengthValid = false;
+    } else {
+        d->_hostNameLengthValid = true;
+    }
+    // Colorize hostname red if invalid, blue if valid
+    QPalette palette = d->ui->host->palette();
+    palette.setColor(QPalette::Active, QPalette::Text, d->_hostNameLengthValid ? Qt::darkBlue : Qt::darkRed);
+    d->ui->host->setPalette(palette);
+    d->ui->labelHost->setPalette(palette);
+    // Disable testHostButton
+    d->ui->testHostButton->setEnabled(d->_hostNameLengthValid);
+    if (hostName.isEmpty()) {
+        d->ui->testHostConnectionLabel->setText(tr("Enter hostname..."));
+        d->ui->testHostConnectionLabel->setToolTip(QString());
+    } else if (d->_hostNameLengthValid) {
+        d->ui->testHostConnectionLabel->setText(tr("Host name is valid..."));
+        d->ui->testHostConnectionLabel->setToolTip(QString());
+    } else {
+        d->ui->testHostConnectionLabel->setText(tr("Host name is not valid..."));
+        d->ui->testHostConnectionLabel->setToolTip("Must be between 1 and 255 characters long.");
+    }
 }
 
 /** Slot, test connection to host using the UI hostname */
@@ -211,14 +243,11 @@ void ServerPreferencesWidget::testHost(const QString &hostName)
     QString error;
 
     // Check that hostname is reachable on the network
-    if (hostName.length() < 3) {
-        d->_hostReachable = false;
-    } else {
-        QHostInfo info = QHostInfo::fromName(hostName);
-        d->_hostReachable = (info.error()==QHostInfo::NoError);
-        error = info.errorString();
-        // TODO: Test that a database server is configured
-    }
+    QHostInfo info = QHostInfo::fromName(hostName);
+    d->_hostReachable = (info.error()==QHostInfo::NoError);
+    error = info.errorString();
+    // TODO: Test that a database server is configured
+
 
     // Change palette of the host edit
     QPalette palette = d->ui->host->palette();
@@ -280,8 +309,10 @@ void ServerPreferencesWidget::writeDefaultSettings(Core::ISettings *s)
 /** Test mysql database connection */
 void ServerPreferencesWidget::on_testMySQLButton_clicked()
 {
-    // FIXME: only manages MySQL
+    d->ui->testConnectionLabel->setVisible(true);
+    d->ui->testConnectionLabel->setText(QString());
     if (!d->_hostReachable) {
+        d->ui->testConnectionLabel->setVisible(true);
         d->ui->testConnectionLabel->setText(tr("Host not reachable..."));
         d->ui->userGroupBox->setEnabled(false);
         Q_EMIT userConnectionChanged(false);
