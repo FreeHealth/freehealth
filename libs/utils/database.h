@@ -134,7 +134,7 @@ public:
        \brief Specifies what to do when database does not exist.
        \sa createConnection(), createDatabase
     */
-    enum CreationOption  // if database doesnot exist :
+    enum CreationOption  // if database does not exist :
     {
         WarnOnly = 0,
         CreateDatabase,
@@ -268,7 +268,8 @@ public:
     virtual bool modifyMySQLColumnType(const int &tableref, const int &fieldref,
                                        const QString &defaultValue = QString());
     virtual bool modifyMySQLColumnType(const int &tableref, const int &fieldref);
-    
+    virtual QStringList mySQLUserHostNames(const QString & userName);
+
     // All drivers members
     virtual QSqlDatabase database() const;
     virtual QString connectionName() const;

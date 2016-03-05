@@ -118,9 +118,9 @@ struct DbIndex {
 // host should be default behaviour for now.
 // Make sure your MySQL server is not accessible from the wide area network.
 // For secure access through the wide area network we recommend SSH tunnels.
-static QStringList mySqlHosts()
+static QString mySqlHost()
 {
-    return QStringList() << "%" << "localhost" << "127.0.0.1" << "::1";
+    return QString("%");
 }
 
 class DatabasePrivate
@@ -480,27 +480,45 @@ bool Database::createMySQLUser(const QString &log,
 
     DB.transaction();
     QSqlQuery query(DB);
-    foreach(const QString &host, mySqlHosts()) {
-        // Create user for each host
-        QString req = QString("CREATE USER '%1'@'%2' IDENTIFIED BY '%3';")
-                      .arg(log).arg(host).arg(password);
+    QString req = QString("CREATE USER '%1'@'%2' IDENTIFIED BY '%3';")
+            .arg(log).arg(mySqlHost()).arg(password);
+    if (!query.exec(req)) {
+        LOG_QUERY_ERROR_FOR("Database", query);
+        LOG_DATABASE_FOR("Database", database());
+        DB.rollback();
+        return false;
+    }
+    query.finish();
+
+    req = QString("GRANT %1 ON `%2`.* TO '%3'@'%4';")
+            .arg(g).arg(prefix).arg(log).arg(mySqlHost());
+    if (!query.exec(req)) {
+        LOG_QUERY_ERROR_FOR("Database", query);
+        LOG_DATABASE_FOR("Database", database());
+        query.finish();
+        DB.rollback();
+        req = QString("DROP USER '%1'@'%2'").arg(log).arg(mySqlHost());
         if (!query.exec(req)) {
             LOG_QUERY_ERROR_FOR("Database", query);
             LOG_DATABASE_FOR("Database", database());
-            DB.rollback();
-            return false;
+        } else {
+            LOG_ERROR_FOR("Database", QString("User %1 removed").arg(log));
         }
-        query.finish();
-
-        // Manage user grants for each host
-        req = QString("GRANT %1 ON `%2`.* TO '%3'@'%4';")
-                .arg(g).arg(prefix).arg(log).arg(host);
+        return false;
+    }
+    query.finish();
+    
+    // Manage user creation grant
+    if (grants & Grant_CreateUser) {
+        // grant privileges CREATE USER, WITH GRANT OPTION on host
+        req = QString("GRANT CREATE USER ON *.* TO '%1'@'%2' WITH GRANT OPTION;")
+                .arg(log).arg(mySqlHost());
         if (!query.exec(req)) {
             LOG_QUERY_ERROR_FOR("Database", query);
             LOG_DATABASE_FOR("Database", database());
             query.finish();
             DB.rollback();
-            req = QString("DROP USER '%1'@'%2'").arg(log).arg(host);
+            req = QString("DROP USER '%1'@'%2'").arg(log).arg(mySqlHost());
             if (!query.exec(req)) {
                 LOG_QUERY_ERROR_FOR("Database", query);
                 LOG_DATABASE_FOR("Database", database());
@@ -508,30 +526,8 @@ bool Database::createMySQLUser(const QString &log,
                 LOG_ERROR_FOR("Database", QString("User %1 removed").arg(log));
             }
             return false;
-            }
-        query.finish();
-    
-        // Manage user creation grant
-        if (grants & Grant_CreateUser) {
-            // grant privileges CREATE USER, WITH GRANT OPTION on all hosts
-            req = QString("GRANT CREATE USER ON *.* TO '%1'@'%2' WITH GRANT OPTION;")
-                    .arg(log).arg(host);
-            if (!query.exec(req)) {
-                LOG_QUERY_ERROR_FOR("Database", query);
-                LOG_DATABASE_FOR("Database", database());
-                query.finish();
-                DB.rollback();
-                req = QString("DROP USER '%1'@'%2'").arg(log).arg(host);
-                if (!query.exec(req)) {
-                    LOG_QUERY_ERROR_FOR("Database", query);
-                    LOG_DATABASE_FOR("Database", database());
-                } else {
-                    LOG_ERROR_FOR("Database", QString("User %1 removed").arg(log));
-                }
-                return false;
-            }
-            query.finish();
         }
+        query.finish();
     }
 
     DB.commit();
@@ -651,15 +647,14 @@ bool Database::changeMySQLOtherUserPassword(const QString &login, const QString 
             .arg(database().port())
             .arg(newPassword));
 
-    // Change password for each mysql hosts
     DB.transaction();
     QSqlQuery query(DB);
     QString req;
-    foreach(const QString &host, mySqlHosts()) {
-//        req = QString("UPDATE `mysql`.`user` SET `Password` = PASSWORD('%1') WHERE `User` = '%2';")
-//                .arg(newPassword).arg(login);
+    QStringList hostNames = mySQLUserHostNames(login);
+
+    foreach(const QString &hostName, hostNames ) {
         req = QString("SET PASSWORD FOR '%1'@'%2' = PASSWORD('%3');")
-                .arg(login).arg(host).arg(newPassword);
+                .arg(login).arg(hostName).arg(newPassword);
         if (!query.exec(req)) {
             LOG_QUERY_ERROR_FOR("Database", query);
             LOG_DATABASE_FOR("Database", database());
@@ -668,7 +663,6 @@ bool Database::changeMySQLOtherUserPassword(const QString &login, const QString 
         }
         query.finish();
     }
-
     if (!query.exec("FLUSH PRIVILEGES;")) {
         LOG_QUERY_ERROR_FOR("Database", query);
         LOG_DATABASE_FOR("Database", database());
@@ -2559,6 +2553,40 @@ bool Database::modifyMySQLColumnType(const int & tableref, const int & fieldref,
     DB.commit();                                                                
     return true;                                                                
 }
+
+/**
+ * @brief mySQLUserHostNames return a QStringList list of host names correponding to a MySQL user name
+ * @param userName is the MySQL user name (it should be identical to FMF login)
+ * @return
+ */
+QStringList Database::mySQLUserHostNames(const QString & userName)
+
+{
+    QSqlDatabase DB = database();
+    if (!connectedDatabase(DB, __LINE__))
+        return QStringList();
+    QString req;
+    req = QString("SELECT Host FROM mysql.user where user= '%1';").arg(userName);
+    DB.transaction();
+
+    QStringList hostNames;
+    QSqlQuery query(req, DB);
+    if (!query.isActive()) {
+        LOG_ERROR_FOR("Database", "No host name for user?");
+        LOG_QUERY_ERROR_FOR("Database", query);
+        DB.rollback();
+        return QStringList();
+    } else {
+        while (query.next()) {
+            hostNames << query.value(0).toString();
+        }
+    }
+    query.finish();
+    DB.commit();
+    qWarning() << "mySQLUserHostNames() -> hostNames:" << hostNames;
+    return hostNames;
+}
+
 /**
  * Vacuum the database (for SQLite only). Execute the 'VACUUM' sql command on the database.
  * \warning SQLite can not vacuum inside a transaction. Be sure that the database is not
