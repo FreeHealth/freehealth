@@ -388,7 +388,7 @@ public:
         }
     }
 
-    // Return true if the current user has enought rights to read data from the user \e userUidToRead
+    // Return true if the current user has enough rights to read data from the user \e userUidToRead
     bool userCanReadData(const QString &userUidToRead)
     {
         // TODO: manage user delegates
@@ -408,7 +408,24 @@ public:
         return (canReadAll || canReadOwn);
     }
 
-    // Return true if the current user has enought rights to write data to the user \e userUidToRead
+    // Return true if the current user is admin
+    bool isCurrentUserAdmin()
+    {
+        // TODO: manage user delegates
+        bool isAdmin = false;
+        if (!m_CurrentUserUuid.isEmpty()) {
+            // Use internal data
+            isAdmin = m_CurrentUserRights & Core::IUser::AllRights;
+        } else {
+            // Use Core::IUser
+            Core::IUser::UserRights rights = Core::IUser::UserRights(userModel()->currentUserData(Core::IUser::ManagerRights).toInt());
+            const QString &userUuid = userModel()->currentUserData(Core::IUser::Uuid).toString();
+            isAdmin = rights & Core::IUser::AllRights;
+        }
+        return (isAdmin);
+    }
+
+    // Return true if the current user has enough rights to write data to the user \e userUidToRead
     bool userCanWriteData(const QString &userUidToRead)
     {
         // TODO: manage user delegates
@@ -972,15 +989,13 @@ bool UserModel::setData(const QModelIndex &item, const QVariant &value, int role
     case Core::IUser::DecryptedLogin : user->setLogin64(value.toString().toUtf8().toBase64()); break;
     case Core::IUser::ClearPassword :
     {
-        // When a clear password is defined throught the model
+        // When a clear password is defined through the model
         // the model reacts **in real time**. The user password
         // is updated on the database server and inside the
-        // FreeMedForms database. You do not need to call submit()
-        if (user->clearPassword()==value.toString())
-            break;
+        // FreeMedForms user database. You do not need to call submit()
         QString oldPass = user->clearPassword();
         user->setClearPassword(value.toString());
-        if (!userBase()->changeUserPassword(user, value.toString()))
+        if (!userBase()->changeUserPassword(user, value.toString(), d->isCurrentUserAdmin()))
             user->setClearPassword(oldPass);
         user->setPasswordModified(false); // as we just saved it or revert the change
         break;

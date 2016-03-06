@@ -1759,7 +1759,7 @@ bool UserBase::savePapers(UserData *user)
 }
 
 /** Update the user's password (taking care of the current server settings). */
-bool UserBase::changeUserPassword(UserData *user, const QString &newClearPassword)
+bool UserBase::changeUserPassword(UserData *user, const QString &newClearPassword, const bool &isCurrentUserAdmin)
 {
     if (!user)
         return false;
@@ -1774,7 +1774,15 @@ bool UserBase::changeUserPassword(UserData *user, const QString &newClearPasswor
     // Try to update server password first
     if (driver()==MySQL) {
         // Own User Password
-        if (user->uuid() == Core::ICore::instance()->user()->uuid()) {
+
+        // Then it should change all passwords for all username/hostname combinations with changeMySQLOtherUserPassword()
+
+        //QModelIndex currentUserIndex = Core::IUser::UserPlugin::UserModel::currentUserIndex()
+        //Core::IUser::UserRights rights = Core::IUser::UserRights(userModel()->currentUserData(Core::IUser::ManagerRights).toInt());
+        //currentUser = Core::IUser::currentUserIndex();
+        //Internal::UserData *currentUser = d->m_Uuid_UserList.value(d->m_CurrentUserUuid,0);
+
+        if (user->uuid() == Core::ICore::instance()->user()->uuid() && !isCurrentUserAdmin) {
             if (!changeMySQLUserOwnPassword(user->clearLogin(), newClearPassword)) {
                 LOG_ERROR("Unable to update MySQL server own password");
                 return false;
