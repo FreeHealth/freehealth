@@ -408,23 +408,6 @@ public:
         return (canReadAll || canReadOwn);
     }
 
-    // Return true if the current user is admin
-    bool isCurrentUserAdmin()
-    {
-        // TODO: manage user delegates
-        bool isAdmin = false;
-        if (!m_CurrentUserUuid.isEmpty()) {
-            // Use internal data
-            isAdmin = m_CurrentUserRights & Core::IUser::AllRights;
-        } else {
-            // Use Core::IUser
-            Core::IUser::UserRights rights = Core::IUser::UserRights(userModel()->currentUserData(Core::IUser::ManagerRights).toInt());
-            const QString &userUuid = userModel()->currentUserData(Core::IUser::Uuid).toString();
-            isAdmin = rights & Core::IUser::AllRights;
-        }
-        return (isAdmin);
-    }
-
     // Return true if the current user has enough rights to write data to the user \e userUidToRead
     bool userCanWriteData(const QString &userUidToRead)
     {
@@ -995,7 +978,7 @@ bool UserModel::setData(const QModelIndex &item, const QVariant &value, int role
         // FreeMedForms user database. You do not need to call submit()
         QString oldPass = user->clearPassword();
         user->setClearPassword(value.toString());
-        if (!userBase()->changeUserPassword(user, value.toString(), d->isCurrentUserAdmin()))
+        if (!userBase()->changeUserPassword(user, value.toString()))
             user->setClearPassword(oldPass);
         user->setPasswordModified(false); // as we just saved it or revert the change
         break;
@@ -1155,7 +1138,7 @@ QVariant UserModel::data(const QModelIndex &item, int role) const
     }
     QVariant toReturn;
 
-    // First manage decoration WITHOUT retreiving any user from database
+    // First manage decoration WITHOUT retrieving any user from database
     if (role == Qt::FontRole) {
         QFont font;
         if (d->m_Uuid_UserList.keys().contains(uuid)) {

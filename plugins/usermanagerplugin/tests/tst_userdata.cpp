@@ -623,7 +623,7 @@ void UserManagerPlugin::test_userbase_basics()
 
     QString oldpass = data.clearPassword();
     data.setClearPassword("password");
-    QCOMPARE(userCore().userBase()->changeUserPassword(fromDb, data.clearPassword(), true), true);
+    QCOMPARE(userCore().userBase()->changeUserPassword(fromDb, data.clearPassword()), true);
     QCOMPARE(userCore().userBase()->checkLogin(fromDb->clearLogin(), data.clearPassword()), true);
     QCOMPARE(userCore().userBase()->checkLogin(fromDb->clearLogin(), oldpass), false);
 

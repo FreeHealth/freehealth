@@ -96,7 +96,7 @@ public:
     bool purgeUser(const QString &uuid);
     bool saveUserPreferences(const QString &uid, const QString &content);
     bool savePapers(UserData *user);
-    bool changeUserPassword(UserData *user, const QString &clearPassword, const bool &isCurrentUserAdmin);
+    bool changeUserPassword(UserData *user, const QString &clearPassword);
     bool saveUserDynamicData(const QString &userUid, const QString &dynDataUuid, const QVariant &value);
 
     // data checkers
