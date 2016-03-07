@@ -1771,24 +1771,19 @@ bool UserBase::changeUserPassword(UserData *user, const QString &newClearPasswor
         return false;
     }
 
-    // Try to update server password first
+    // Try to update MySQL server password first
     if (driver()==MySQL) {
-        // Own User Password
-
-        // Then it should change all passwords for all username/hostname combinations with changeMySQLOtherUserPassword()
-
-        //QModelIndex currentUserIndex = Core::IUser::UserPlugin::UserModel::currentUserIndex()
-        //Core::IUser::UserRights rights = Core::IUser::UserRights(userModel()->currentUserData(Core::IUser::ManagerRights).toInt());
-        //currentUser = Core::IUser::currentUserIndex();
-        //Internal::UserData *currentUser = d->m_Uuid_UserList.value(d->m_CurrentUserUuid,0);
-
+        // Current connected normal user (non admin) changes its own MySQL password
+        // Current connected normal user can only change MySQL password for current username/hostname connection
         if (user->uuid() == Core::ICore::instance()->user()->uuid() && !isCurrentUserAdmin) {
             if (!changeMySQLUserOwnPassword(user->clearLogin(), newClearPassword)) {
                 LOG_ERROR("Unable to update MySQL server own password");
                 return false;
             }
         } else {
-            // Admin changes Other User Password
+            // Admin changes other user's password or its own password(s)
+            // If admin user changes its own password, then all passwords for all username/hostname
+            // combinations will be changed with changeMySQLOtherUserPassword()
             if (!changeMySQLOtherUserPassword(user->clearLogin(), newClearPassword)) {
                 LOG_ERROR("Unable to update MySQL server other user password");
                 return false;
@@ -1796,7 +1791,7 @@ bool UserBase::changeUserPassword(UserData *user, const QString &newClearPasswor
         }
     }
 
-    // Update FreeMedForms password
+    // Update FreeMedForms password in fmf_users database
     Utils::PasswordCrypter crypter;
     QHash<int, QString> where;
     where.insert(USER_UUID, QString("='%1'").arg(user->uuid()));
