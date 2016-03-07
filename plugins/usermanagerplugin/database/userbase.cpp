@@ -1771,16 +1771,27 @@ bool UserBase::changeUserPassword(UserData *user, const QString &newClearPasswor
         return false;
     }
 
-    // Try to update server password first
+    // Try to update MySQL server password first
     if (driver()==MySQL) {
-        // Own User Password
-        if (user->uuid() == Core::ICore::instance()->user()->uuid()) {
+        // get currently connected user's ManagerRights
+        QVariant currentUserRights = Core::ICore::instance()->user()->value(Core::IUser::ManagerRights);
+
+        // If currently connected user has AllRight for ManagerRights, it is an administrative account
+        bool currentUserIsAdmin = Core::IUser::UserRight(currentUserRights.toInt()) == Core::IUser::AllRights;
+
+        // Current connected normal user (non admin) changes its own MySQL password
+        // Current connected normal user can only change MySQL password for current username/hostname connection
+        if (user->uuid() == Core::ICore::instance()->user()->uuid() && !currentUserIsAdmin) {
             if (!changeMySQLUserOwnPassword(user->clearLogin(), newClearPassword)) {
                 LOG_ERROR("Unable to update MySQL server own password");
                 return false;
             }
         } else {
-            // Admin changes Other User Password
+            // Admin changes other user's password(s) or its own password(s)
+            // If admin user changes its own password, then all passwords for all username/hostname
+            // combinations will be changed with changeMySQLOtherUserPassword()
+            // It is impossible for a normal user to change the other MySQL username/hostname combinations:
+            // an admin (FMF admin or MySQL admin) will have to take care of it.
             if (!changeMySQLOtherUserPassword(user->clearLogin(), newClearPassword)) {
                 LOG_ERROR("Unable to update MySQL server other user password");
                 return false;
@@ -1788,7 +1799,7 @@ bool UserBase::changeUserPassword(UserData *user, const QString &newClearPasswor
         }
     }
 
-    // Update FreeMedForms password
+    // Update FreeMedForms password in fmf_users database
     Utils::PasswordCrypter crypter;
     QHash<int, QString> where;
     where.insert(USER_UUID, QString("='%1'").arg(user->uuid()));

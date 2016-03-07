@@ -388,7 +388,7 @@ public:
         }
     }
 
-    // Return true if the current user has enought rights to read data from the user \e userUidToRead
+    // Return true if the current user has enough rights to read data from the user \e userUidToRead
     bool userCanReadData(const QString &userUidToRead)
     {
         // TODO: manage user delegates
@@ -408,7 +408,7 @@ public:
         return (canReadAll || canReadOwn);
     }
 
-    // Return true if the current user has enought rights to write data to the user \e userUidToRead
+    // Return true if the current user has enough rights to write data to the user \e userUidToRead
     bool userCanWriteData(const QString &userUidToRead)
     {
         // TODO: manage user delegates
@@ -972,12 +972,10 @@ bool UserModel::setData(const QModelIndex &item, const QVariant &value, int role
     case Core::IUser::DecryptedLogin : user->setLogin64(value.toString().toUtf8().toBase64()); break;
     case Core::IUser::ClearPassword :
     {
-        // When a clear password is defined throught the model
+        // When a clear password is defined through the model
         // the model reacts **in real time**. The user password
         // is updated on the database server and inside the
-        // FreeMedForms database. You do not need to call submit()
-        if (user->clearPassword()==value.toString())
-            break;
+        // FreeMedForms user database. You do not need to call submit()
         QString oldPass = user->clearPassword();
         user->setClearPassword(value.toString());
         if (!userBase()->changeUserPassword(user, value.toString()))
@@ -1140,7 +1138,7 @@ QVariant UserModel::data(const QModelIndex &item, int role) const
     }
     QVariant toReturn;
 
-    // First manage decoration WITHOUT retreiving any user from database
+    // First manage decoration WITHOUT retrieving any user from database
     if (role == Qt::FontRole) {
         QFont font;
         if (d->m_Uuid_UserList.keys().contains(uuid)) {
