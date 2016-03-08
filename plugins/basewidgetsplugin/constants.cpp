@@ -110,6 +110,14 @@ QString getDateFormat(Form::FormItem *item, const QString &defaultValue)
     return defaultValue;
 }
 
+QString getTimeFormat(Form::FormItem *item, const QString &defaultValue)
+{
+    if (!item->extraData().value(TIME_EXTRAS_KEY).isEmpty()) {
+        return item->extraData().value(TIME_EXTRAS_KEY);
+    }
+    return defaultValue;
+}
+
 bool dontPrintEmptyValues(Form::FormItem *item)
 {
     return item->getOptions().contains(DONTPRINTEMPTYVALUES, Qt::CaseInsensitive);

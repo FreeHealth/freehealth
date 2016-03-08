@@ -64,6 +64,8 @@
 #include <QComboBox>
 #include <QDate>
 #include <QDateEdit>
+#include <QTime>
+#include <QTimeEdit>
 #include <QDateTimeEdit>
 #include <QSpinBox>
 #include <QPushButton>
@@ -104,6 +106,7 @@ namespace {
         Type_File,
         Type_Group,
         Type_Date,
+        Type_DateTime,
         Type_ModernDate,
         Type_Button,
         Type_DetailsWidget,
@@ -120,7 +123,7 @@ namespace {
                           << "combo" << "uniquelist" << "multilist" << "editablelist"
                           << "spin" << "doublespin"
                           << "shorttext" << "longtext" << "helptext" << "file" << "group"
-                          << "date" << "moderndate" << "button" << "detailswidget"
+                          << "date" << "datetime" "moderndate" << "button" << "detailswidget"
                           << "measurement" << "frenchnss" << "austriansvnr"
                           << "buttonmenupath";
 }
@@ -180,6 +183,7 @@ Form::IFormWidget *BaseWidgetsFactory::createWidget(const QString &name, Form::F
     case ::Type_EditableList : return new BaseEditableStringList(formItem,parent);
     case ::Type_Combo : return new BaseCombo(formItem,parent);
     case ::Type_Date : return new BaseDate(formItem,parent);
+    case ::Type_DateTime : return new BaseDateTime(formItem,parent);
     case ::Type_ModernDate : return new BaseDateCompleterWidget(formItem,parent);
     case ::Type_Spin : return new BaseSpin(formItem,parent);
     case ::Type_DoubleSpin : return new BaseSpin(formItem,parent,true);
@@ -1995,6 +1999,240 @@ void BaseDateData::onValueChanged()
     Constants::executeOnValueChangedScript(m_FormItem);
     Q_EMIT dataChanged(0);
 }
+
+//--------------------------------------------------------------------------------------------------------
+//----------------------------------------- BaseDateTime ---------------------------------------------------
+//--------------------------------------------------------------------------------------------------------
+//TODO: create a function that returns default time and date
+BaseDateTime::BaseDateTime(Form::FormItem *formItem, QWidget *parent) :
+    Form::IFormWidget(formItem,parent), m_DateTime(0)
+{
+    setObjectName("BaseDateTime");
+    // QtUi Loaded ?
+    const QString &widget = formItem->spec()->value(Form::FormItemSpec::Spec_UiWidget).toString();
+    if (!widget.isEmpty()) {
+        // Find widget
+        QDateTimeEdit *le = formItem->parentFormMain()->formWidget()->findChild<QDateTimeEdit*>(widget);
+        if (le) {
+            m_DateTime = le;
+        } else {
+            LOG_ERROR("Using the QtUiLinkage, item not found in the ui: " + formItem->uuid());
+            // To avoid segfaulting create a fake combo
+            m_DateTime = new QDateTimeEdit(this);
+        }
+        // Find Label
+        m_Label = Constants::findLabel(formItem);
+    } else {    // Prepare Widget Layout and label
+        QBoxLayout * hb = getBoxLayout(OnLeft, m_FormItem->spec()->label(), this);
+        hb->addWidget(m_Label);
+
+        // Add DateTime selector and manage date format
+        m_DateTime = new QDateTimeEdit(this);
+        m_DateTime->setObjectName("DateTime_" + m_FormItem->uuid());
+        m_DateTime->setSizePolicy(QSizePolicy::Expanding , QSizePolicy::Fixed);
+        m_DateTime->setCalendarPopup(true);
+        hb->addWidget(m_DateTime);
+    }
+    m_DateTime->setDisplayFormat(Constants::getDateFormat(m_FormItem));
+    setFocusedWidget(m_DateTime);
+
+    // Manage options
+    const QStringList &options = formItem->getOptions();
+    // We use DATE_NOW for Date widget and DateTime widget
+    if (options.contains(Constants::DATE_NOW, Qt::CaseInsensitive)) {
+        m_DateTime->setDateTime(QDateTime::currentDateTime());
+    } else {
+        // Set default QDateTime date to defaultDate and QDateTime time to minimumTime()
+        // By default minimumTime() is 00:00:00 and 000 milliseconds
+        QDate defaultDate = QDate::fromString(Constants::DEFAULT_DATE, Constants::DEFAULT_DATE_FORMAT);
+        m_DateTime->setDate(defaultDate);
+
+        m_DateTime->setTime(QTime::fromString(Constants::DEFAULT_TIME, Constants::DEFAULT_TIME_FORMAT));
+    }
+    if (options.contains(Constants::DATE_PATIENTLIMITS, Qt::CaseInsensitive)) {
+        connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(onCurrentPatientChanged()));
+        onCurrentPatientChanged();
+    }
+
+    // create FormItemData
+    BaseDateTimeData *data = new BaseDateTimeData(m_FormItem);
+    data->setBaseDateTime(this);
+    m_FormItem->setItemData(data);
+
+    connect(m_DateTime, SIGNAL(dateTimeChanged(QDateTime)), data, SLOT(onValueChanged()));
+}
+
+BaseDateTime::~BaseDateTime()
+{
+}
+
+void BaseDateTime::onCurrentPatientChanged()
+{
+    if (!patient()->data(Core::IPatient::DateOfBirth).isNull()) {
+        m_DateTime->setMinimumDate(patient()->data(Core::IPatient::DateOfBirth).toDate());
+    } else {
+        m_DateTime->setMinimumDate(QDate::currentDate().addYears(-200));
+    }
+    if (!patient()->data(Core::IPatient::DateOfDeath).isNull()) {
+        m_DateTime->setMaximumDate(patient()->data(Core::IPatient::DateOfDeath).toDate());
+    } else {
+        m_DateTime->setMaximumDate(QDate::currentDate().addYears(200));
+    }
+}
+
+QString BaseDateTime::printableHtml(bool withValues) const
+{
+    if (m_FormItem->getOptions().contains(Constants::NOT_PRINTABLE))
+        return QString();
+
+    QString content;
+    if (!withValues) {
+        return QString("<table width=100% border=1 cellpadding=0 cellspacing=0  style=\"margin: 0px\">"
+                       "<tbody>"
+                       "<tr>"
+                       "<td style=\"vertical-align: top; padding-left:2em; padding-top:5px; padding-bottom: 5px; padding-right:2em\">"
+                       "%1"
+                       "</td>"
+                       "<td style=\"vertical-align: top;\" width=50%>"
+                       "&nbsp;"
+                       "</td>"
+                       "</tr>"
+                       "</tbody>"
+                       "</table>")
+                .arg(m_FormItem->spec()->label());
+    } else {
+        QString defaultDateFormat = Constants::DEFAULT_DATE_FORMAT;
+        QString defaultDate = Constants::DEFAULT_DATE;
+
+        QString widgetDate = m_DateTime->date().toString(defaultDateFormat);
+
+        QTime defaultTime = QTime::fromString(Constants::DEFAULT_TIME, Constants::DEFAULT_TIME_FORMAT);
+
+        QTime widgetTime = m_DateTime->time();
+
+        bool dateTimeIsDefault((widgetDate == defaultDate) && (widgetTime == defaultTime));
+        if (Constants::dontPrintEmptyValues(m_FormItem) && dateTimeIsDefault)
+            return QString();
+        return QString("<table width=100% border=1 cellpadding=0 cellspacing=0  style=\"margin: 0px\">"
+                       "<tbody>"
+                       "<tr>"
+                       "<td style=\"vertical-align: top; padding-left:2em; padding-top:5px; padding-bottom: 5px; padding-right:2em\">"
+                       "%1"
+                       "</td>"
+                       "<td style=\"vertical-align: top;\">"
+                       "%2"
+                       "</td>"
+                       "<td style=\"vertical-align: top;\">"
+                       "%3"
+                       "</td>"
+                       "</tr>"
+                       "</tbody>"
+                       "</table>")
+                .arg(m_FormItem->spec()->label())
+                .arg(QLocale().toString(m_DateTime->date(), Constants::getDateFormat(m_FormItem)).replace(" ","&nbsp;"))
+                .arg(QLocale().toString(m_DateTime->time(), Constants::getTimeFormat(m_FormItem)).replace(" ", "&nbsp;"));
+    }
+    return content;
+}
+
+void BaseDateTime::retranslate()
+{
+    if (m_Label)
+        m_Label->setText(m_FormItem->spec()->label());
+    if (m_DateTime)
+        m_DateTime->setToolTip(m_FormItem->spec()->tooltip());
+}
+
+////////////////////////////////////////// ItemData /////////////////////////////////////////////
+BaseDateTimeData::BaseDateTimeData(Form::FormItem *item) :
+        m_FormItem(item), m_DateTime(0)
+{
+}
+
+BaseDateTimeData::~BaseDateTimeData()
+{
+}
+
+void BaseDateTimeData::setDateTime(const QString &s)
+{
+    m_DateTime->m_DateTime->clear();
+    m_DateTime->m_DateTime->setDateTime(QDateTime::fromString(s, Qt::ISODate));
+    onValueChanged();
+}
+
+/** \brief Set the widget to the default value \sa FormItem::FormItemValue*/
+void BaseDateTimeData::clear()
+{
+    QDate defaultDate = QDate::fromString(Constants::DEFAULT_DATE, Constants::DEFAULT_DATE_FORMAT);
+    QString m_OriginalDateValue = defaultDate.toString(Qt::ISODate);
+    QTime defaultTime = QTime::fromString(Constants::DEFAULT_TIME, Constants::DEFAULT_TIME_FORMAT);
+    QString m_OriginalTimeValue = defaultTime.toString();
+    m_OriginalDateTimeValue = m_OriginalDateValue.append(m_OriginalTimeValue);
+    setDateTime(m_OriginalDateTimeValue);
+}
+
+bool BaseDateTimeData::isModified() const
+{
+
+    return (m_OriginalDateTimeValue != m_DateTime->m_DateTime->dateTime().toString(Qt::ISODate));
+}
+
+void BaseDateTimeData::setModified(bool modified)
+{
+    if (!modified) {
+        m_OriginalDateTimeValue = m_DateTime->m_DateTime->dateTime().toString(Qt::ISODate);
+    }
+}
+
+void BaseDateTimeData::setReadOnly(bool readOnly)
+{
+    m_DateTime->m_DateTime->setReadOnly(readOnly);
+}
+
+bool BaseDateTimeData::isReadOnly() const
+{
+    return m_DateTime->m_DateTime->isReadOnly();
+}
+
+bool BaseDateTimeData::setData(const int ref, const QVariant &data, const int role)
+{
+    Q_UNUSED(ref);
+    if (role==Qt::EditRole) {
+        if (data.canConvert<QDateTime>()) {
+            m_DateTime->m_DateTime->setDateTime(data.toDateTime());
+            onValueChanged();
+        }
+    }
+    return true;
+}
+
+QVariant BaseDateTimeData::data(const int ref, const int role) const
+{
+    Q_UNUSED(ref);
+    Q_UNUSED(role);
+    return m_DateTime->m_DateTime->dateTime();
+}
+
+void BaseDateTimeData::setStorableData(const QVariant &data)
+{
+    setDateTime(data.toString());
+    QDateTime dateTime = QDateTime::fromString(data.toString());
+    QString m_OriginalDateValue = dateTime.date().toString();
+    QString m_OriginalTimeValue = dateTime.time().toString();
+    m_OriginalDateTimeValue = m_OriginalDateValue.append(m_OriginalTimeValue);
+}
+
+QVariant BaseDateTimeData::storableData() const
+{
+    return m_DateTime->m_DateTime->dateTime().toString(Qt::ISODate);
+}
+
+void BaseDateTimeData::onValueChanged()
+{
+    Constants::executeOnValueChangedScript(m_FormItem);
+    Q_EMIT dataChanged(0);
+}
+
 //--------------------------------------------------------------------------------------------------------
 //------------------------------------------ BaseSpin --------------------------------------------------
 //--------------------------------------------------------------------------------------------------------
