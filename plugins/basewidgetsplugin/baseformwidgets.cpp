@@ -66,6 +66,7 @@
 #include <QDateEdit>
 #include <QTime>
 #include <QTimeEdit>
+#include <QDateTime>
 #include <QDateTimeEdit>
 #include <QSpinBox>
 #include <QPushButton>
@@ -87,7 +88,7 @@ static inline Core::IScriptManager *scriptManager() {return Core::ICore::instanc
 static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 
 namespace {
-    // TypeEnum must be sync with the widgetsName QStringList
+// TypeEnum must be sync with the widgetsName QStringList
     enum TypeEnum {
         Type_Undefined = 0,
         Type_Form,
@@ -123,7 +124,7 @@ namespace {
                           << "combo" << "uniquelist" << "multilist" << "editablelist"
                           << "spin" << "doublespin"
                           << "shorttext" << "longtext" << "helptext" << "file" << "group"
-                          << "date" << "datetime" "moderndate" << "button" << "detailswidget"
+                          << "date" << "datetime" << "moderndate" << "button" << "detailswidget"
                           << "measurement" << "frenchnss" << "austriansvnr"
                           << "buttonmenupath";
 }
@@ -2046,8 +2047,9 @@ BaseDateTime::BaseDateTime(Form::FormItem *formItem, QWidget *parent) :
         // By default minimumTime() is 00:00:00 and 000 milliseconds
         QDate defaultDate = QDate::fromString(Constants::DEFAULT_DATE, Constants::DEFAULT_DATE_FORMAT);
         m_DateTime->setDate(defaultDate);
-
-        m_DateTime->setTime(QTime::fromString(Constants::DEFAULT_TIME, Constants::DEFAULT_TIME_FORMAT));
+        //QTime defaultTime = QTime::fromString(Constants::DEFAULT_TIME, Constants::DEFAULT_TIME_FORMAT);
+        //qWarning() << defaultTime << "defaultTime";
+        //m_DateTime->setTime(defaultTime);
     }
     if (options.contains(Constants::DATE_PATIENTLIMITS, Qt::CaseInsensitive)) {
         connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(onCurrentPatientChanged()));
@@ -2163,11 +2165,18 @@ void BaseDateTimeData::setDateTime(const QString &s)
 /** \brief Set the widget to the default value \sa FormItem::FormItemValue*/
 void BaseDateTimeData::clear()
 {
+    QDateTime defaultDateTime;
+
     QDate defaultDate = QDate::fromString(Constants::DEFAULT_DATE, Constants::DEFAULT_DATE_FORMAT);
-    QString m_OriginalDateValue = defaultDate.toString(Qt::ISODate);
+    defaultDateTime.setDate(defaultDate);
+    //QString m_OriginalDateValue = defaultDate.toString(Qt::ISODate);
+
     QTime defaultTime = QTime::fromString(Constants::DEFAULT_TIME, Constants::DEFAULT_TIME_FORMAT);
-    QString m_OriginalTimeValue = defaultTime.toString();
-    m_OriginalDateTimeValue = m_OriginalDateValue.append(m_OriginalTimeValue);
+    //QString m_OriginalTimeValue = defaultTime.toString(Qt::ISODate);
+    defaultDateTime.setTime(defaultTime);
+
+    m_OriginalDateTimeValue = defaultDateTime.toString(Qt::ISODate);
+    qWarning() << "m_OriginalDateTimeValue" << m_OriginalDateTimeValue;
     setDateTime(m_OriginalDateTimeValue);
 }
 
@@ -2216,10 +2225,13 @@ QVariant BaseDateTimeData::data(const int ref, const int role) const
 void BaseDateTimeData::setStorableData(const QVariant &data)
 {
     setDateTime(data.toString());
-    QDateTime dateTime = QDateTime::fromString(data.toString());
-    QString m_OriginalDateValue = dateTime.date().toString();
-    QString m_OriginalTimeValue = dateTime.time().toString();
-    m_OriginalDateTimeValue = m_OriginalDateValue.append(m_OriginalTimeValue);
+    m_OriginalDateTimeValue = data.toString();
+    qWarning() << "m_OriginalDateTimeValue setStorableDate()" << m_OriginalDateTimeValue;
+    //setDateTime(data.toString());
+    //QDateTime dateTime = QDateTime::fromString(data.toString());
+    //QString m_OriginalDateValue = dateTime.date().toString(Qt::ISODate);
+    //QString m_OriginalTimeValue = dateTime.time().toString(Qt::ISODate);
+    //m_OriginalDateTimeValue = m_OriginalDateValue.append(m_OriginalTimeValue);
 }
 
 QVariant BaseDateTimeData::storableData() const

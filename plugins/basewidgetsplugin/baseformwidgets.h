@@ -31,7 +31,6 @@
 
 #include <QWidget>
 #include <QVariant>
-#include <QTime>
 
 #include <formmanagerplugin/iformwidgetfactory.h>
 #include <formmanagerplugin/iformitemdata.h>
