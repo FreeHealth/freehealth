@@ -99,8 +99,9 @@ public:
     virtual void addWidgetToContainer(IFormWidget *) {}
     virtual bool isContainer() const {return false;}
 
-    virtual void createLabel(const QString &text, Qt::Alignment horizAlign);
+    virtual void createLabel(const QString &text, Qt::Alignment horizAlign = Qt::AlignLeft);
     virtual QBoxLayout *getBoxLayout(const int labelOption, const QString &text, QWidget *parent);
+    virtual QHBoxLayout *getHBoxLayout(const int labelOption, const QString &text, QWidget *parent);
 
     virtual void changeEvent(QEvent *event);
 

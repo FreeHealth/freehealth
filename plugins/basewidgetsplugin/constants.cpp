@@ -110,10 +110,10 @@ QString getDateFormat(Form::FormItem *item, const QString &defaultValue)
     return defaultValue;
 }
 
-QString getTimeFormat(Form::FormItem *item, const QString &defaultValue)
+QString getDateTimeFormat(Form::FormItem *item, const QString &defaultValue)
 {
-    if (!item->extraData().value(TIME_EXTRAS_KEY).isEmpty()) {
-        return item->extraData().value(TIME_EXTRAS_KEY);
+    if (!item->extraData().value(DATETIME_EXTRAS_KEY).isEmpty()) {
+        return item->extraData().value(DATETIME_EXTRAS_KEY);
     }
     return defaultValue;
 }

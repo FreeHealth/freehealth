@@ -481,7 +481,7 @@ public:
     BaseDateTimeData(Form::FormItem *item);
     ~BaseDateTimeData();
 
-    void setBaseDateTime(BaseDateTime* dateTime) {m_DateTime = dateTime; clear();}
+    void setBaseDateTime(BaseDateTime* dateTime) {m_DateTime = dateTime;}
     void setDateTime(const QString &s);
 
     void clear();
@@ -505,6 +505,7 @@ private Q_SLOTS:
 private:
     Form::FormItem *m_FormItem;
     BaseDateTime* m_DateTime;
+    QDateTime m_OriginalDateTime;
     QString m_OriginalDateTimeValue;
 };
 
