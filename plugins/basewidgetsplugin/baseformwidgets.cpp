@@ -661,13 +661,15 @@ BaseGroup::BaseGroup(Form::FormItem *formItem, QWidget *parent) :
     if (Constants::isGroupCollapsible(m_FormItem, false)) {
         connect(m_Group, SIGNAL(toggled(bool)), this, SLOT(expandGroup(bool)));
     }
-    if (Constants::isGroupCollapsible(m_FormItem, false) || Constants::isGroupCheckable(m_FormItem, false)) {
-        connect(m_Group, SIGNAL(toggled(bool)), this, SLOT(BaseGroupData::onValueChanged()));
-    }
+
     // create itemdata
     m_ItemData = new BaseGroupData(formItem);
     m_ItemData->setBaseGroup(this);
     formItem->setItemData(m_ItemData);
+
+    if (Constants::isGroupCollapsible(m_FormItem, false) || Constants::isGroupCheckable(m_FormItem, false)) {
+        connect(m_Group, SIGNAL(toggled(bool)), m_ItemData, SLOT(onValueChanged()));
+    }
 }
 
 BaseGroup::~BaseGroup()
