@@ -173,6 +173,7 @@ public:
 public Q_SLOTS:
     void retranslate();
     void expandGroup(bool expand);
+    void onToggled();
 
 public:
     QGroupBox *m_Group;

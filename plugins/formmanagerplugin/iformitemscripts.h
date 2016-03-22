@@ -67,7 +67,8 @@ public:
         Script_OnValueChanged,
         Script_OnValueRequiered,
         Script_OnDependentValueChanged,
-        Script_OnClicked
+        Script_OnClicked,
+        Script_OnToggled
 
     };
 
@@ -78,8 +79,8 @@ public:
                     const QString &onDemand = QString::null,
                     const QString &onValChanged = QString::null,
                     const QString &onValRequiered = QString::null,
-                    const QString &onDependentValuesChanged = QString::null
-                    );
+                    const QString &onDependentValuesChanged = QString::null,
+                    const QString &onToggled = QString::null);
     ~FormItemScripts();
 
     void setScript(const int type, const QString &script, const QString &lang = Trans::Constants::ALL_LANGUAGE);
@@ -94,6 +95,7 @@ public:
     QString onValueRequieredScript() const {return script(Script_OnValueRequiered);}
     QString onDependentValueChangedScript() const {return script(Script_OnDependentValueChanged);}
     QString onClicked() const {return script(Script_OnClicked);}
+    QString onToggledScript() const {return script(Script_OnToggled);}
 
     void toTreeWidget(QTreeWidgetItem *tree);
 private:

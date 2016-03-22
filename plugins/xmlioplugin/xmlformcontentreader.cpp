@@ -113,6 +113,7 @@ bool XmlFormContentReader::initialize()
    m_ScriptsTypes.insert(Constants::TAG_SCRIPT_ONVALUEREQUIERED, Form::FormItemScripts::Script_OnValueRequiered);
    m_ScriptsTypes.insert(Constants::TAG_SCRIPT_ONDEPENDENCIESCHANGED, Form::FormItemScripts::Script_OnDependentValueChanged);
    m_ScriptsTypes.insert(Constants::TAG_SCRIPT_ONCLICKED, Form::FormItemScripts::Script_OnClicked);
+   m_ScriptsTypes.insert(Constants::TAG_SCRIPT_ONTOGGLED, Form::FormItemScripts::Script_OnToggled);
 
    m_ValuesTypes.clear();
    m_ValuesTypes.insert(Constants::TAG_VALUE_UUID, Form::FormItemValues::Value_Uuid);

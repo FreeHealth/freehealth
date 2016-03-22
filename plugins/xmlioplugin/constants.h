@@ -148,6 +148,7 @@ const char* const TAG_SCRIPT_ONVALUECHANGED     = "onvaluechanged";
 const char* const TAG_SCRIPT_ONVALUEREQUIERED   = "onvaluerequiered";
 const char* const TAG_SCRIPT_ONDEPENDENCIESCHANGED = "ondependencieschanged";
 const char* const TAG_SCRIPT_ONCLICKED          = "onclicked";
+const char* const TAG_SCRIPT_ONTOGGLED          = "ontoggled";
 
 const char* const TAG_DATAPATIENT                = "patientdata";
 

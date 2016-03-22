@@ -103,6 +103,8 @@ bool hideHeaderOnUniqueEpisode(Form::FormItem *item);
 
 void executeOnValueChangedScript(Form::FormItem *item);
 
+void executeOnToggledScript(Form::FormItem *item);
+
 QLabel *findLabel(Form::FormItem *item);
 
 bool hasOption(Form::FormItem *item, const QString &option);

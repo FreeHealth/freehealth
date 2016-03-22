@@ -269,6 +269,7 @@ public:
         new QTreeWidgetItem(l, QStringList() << "OnValueChanged" << m_Scripts.value(3) );
         new QTreeWidgetItem(l, QStringList() << "OnValueRequiered" << m_Scripts.value(4) );
         new QTreeWidgetItem(l, QStringList() << "OnDependentValueChanged" << m_Scripts.value(5) );
+        new QTreeWidgetItem(l, QStringList() << "OnToggled" << m_Scripts.value(6) );
     }
 
     QHash<int, QString> m_Scripts;
@@ -296,7 +297,8 @@ FormItemScripts::FormItemScripts(
         const QString &onDemand,
         const QString &onValChanged,
         const QString &onValRequiered,
-        const QString &onDependentValuesChanged ) :
+        const QString &onDependentValuesChanged,
+        const QString &onToggled ) :
         d(new FormItemScriptsPrivate)
 {
     ScriptsBook *s = d->createLanguage(lang.left(2));
@@ -306,6 +308,7 @@ FormItemScripts::FormItemScripts(
     s->m_Scripts.insert(Script_OnValueChanged, onValChanged);
     s->m_Scripts.insert(Script_OnValueRequiered, onValRequiered);
     s->m_Scripts.insert(Script_OnDependentValueChanged, onDependentValuesChanged);
+    s->m_Scripts.insert(Script_OnToggled, onToggled);
 }
 
 FormItemScripts::~FormItemScripts()

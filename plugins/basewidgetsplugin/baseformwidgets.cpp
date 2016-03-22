@@ -668,7 +668,7 @@ BaseGroup::BaseGroup(Form::FormItem *formItem, QWidget *parent) :
     formItem->setItemData(m_ItemData);
 
     if (Constants::isGroupCollapsible(m_FormItem, false) || Constants::isGroupCheckable(m_FormItem, false)) {
-        connect(m_Group, SIGNAL(toggled(bool)), m_ItemData, SLOT(onValueChanged()));
+        connect(m_Group, SIGNAL(toggled(bool)), this, SLOT(onToggled()));
     }
 }
 
@@ -807,6 +807,11 @@ void BaseGroup::expandGroup(bool expanded)
             static_cast<QWidget*>(child)->setVisible(expanded);
     }
     m_Group->setFlat(!expanded);
+}
+
+void BaseGroup::onToggled()
+{
+    Constants::executeOnToggledScript(m_FormItem);
 }
 
 ////////////////////////////////////////// ItemData /////////////////////////////////////////////

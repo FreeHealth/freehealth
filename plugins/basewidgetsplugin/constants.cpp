@@ -126,6 +126,12 @@ void executeOnValueChangedScript(Form::FormItem *item)
         scriptManager()->evaluate(item->scripts()->onValueChangedScript());
 }
 
+void executeOnToggledScript(Form::FormItem *item)
+{
+    if (!item->scripts()->onToggledScript().isEmpty())
+        scriptManager()->evaluate(item->scripts()->onToggledScript());
+}
+
 QLabel *findLabel(Form::FormItem *item)
 {
     Q_ASSERT(item);
