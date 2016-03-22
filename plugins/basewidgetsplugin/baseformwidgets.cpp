@@ -658,9 +658,12 @@ BaseGroup::BaseGroup(Form::FormItem *formItem, QWidget *parent) :
     }
 
     getCheckAndCollapsibleState();
-    if (Constants::isGroupCollapsible(m_FormItem, false))
+    if (Constants::isGroupCollapsible(m_FormItem, false)) {
         connect(m_Group, SIGNAL(toggled(bool)), this, SLOT(expandGroup(bool)));
-
+    }
+    if (Constants::isGroupCollapsible(m_FormItem, false) || Constants::isGroupCheckable(m_FormItem, false)) {
+        connect(m_Group, SIGNAL(toggled(bool)), this, SLOT(onValueChanged()));
+    }
     // create itemdata
     m_ItemData = new BaseGroupData(formItem);
     m_ItemData->setBaseGroup(this);
