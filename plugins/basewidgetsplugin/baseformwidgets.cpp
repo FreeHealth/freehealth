@@ -782,6 +782,8 @@ void BaseGroup::retranslate()
 
 void BaseGroup::getCheckAndCollapsibleState()
 {
+    const QSignalBlocker blocker(m_Group);
+
     if (Constants::isGroupCheckable(m_FormItem, false)) {
         m_Group->setCheckable(true);
         m_Group->setChecked(Constants::isGroupChecked(m_FormItem,false));
