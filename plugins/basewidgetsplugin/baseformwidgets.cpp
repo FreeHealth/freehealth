@@ -2035,7 +2035,6 @@ BaseDateTime::BaseDateTime(Form::FormItem *formItem, QWidget *parent) :
         hb->addWidget(m_DateTime);
     }
     m_DateTime->setDisplayFormat(Constants::getDateTimeFormat(m_FormItem));
-    qWarning() << "m_DateTime->displayFormat()" << m_DateTime->displayFormat();
     setFocusedWidget(m_DateTime);
 
     // Manage options
@@ -2044,14 +2043,9 @@ BaseDateTime::BaseDateTime(Form::FormItem *formItem, QWidget *parent) :
     // We use DATE_NOW for Date widget and DateTime widget
     if (options.contains(Constants::DATE_NOW, Qt::CaseInsensitive)) {
         m_DateTime->QDateTimeEdit::setDateTime(QDateTime::currentDateTime());
-        qWarning() << "***** using NOW option m_DateTime=" << m_DateTime << m_DateTime->dateTime();
     } else {
         QDateTime defaultDateTime = QDateTime::fromString(Constants::DEFAULT_DATETIME, Constants::DEFAULT_DATETIME_FORMAT);
         m_DateTime->setDateTime(defaultDateTime);
-        //m_DateTime->setTime(QTime::currentTime());
-        //QTime defaultTime = QTime::fromString(Constants::DEFAULT_TIME, Constants::DEFAULT_TIME_FORMAT);
-        //qWarning() << defaultTime << "defaultTime";
-        //m_DateTime->setTime(defaultTime);
     }
     if (options.contains(Constants::DATE_PATIENTLIMITS, Qt::CaseInsensitive)) {
         connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(onCurrentPatientChanged()));
@@ -2159,9 +2153,6 @@ void BaseDateTimeData::setDateTime(const QString &s)
 {
     m_DateTime->m_DateTime->clear();
     m_DateTime->m_DateTime->setDateTime(QDateTime::fromString(s, Qt::ISODate));
-    qWarning() << "setDateTime() QString &s" << s;
-    qWarning() << "setDateTime() QDateTime::fromString(s, Qt::ISODate)" << QDateTime::fromString(s, Qt::ISODate);
-
     onValueChanged();
 }
 
@@ -2169,21 +2160,8 @@ void BaseDateTimeData::setDateTime(const QString &s)
 void BaseDateTimeData::clear()
 {
     QDateTime defaultDateTime;
-
     defaultDateTime = QDateTime::fromString(Constants::DEFAULT_DATETIME, Constants::DEFAULT_DATETIME_FORMAT);
-    //defaultDateTime.setDate(defaultDate);
-    //QString m_OriginalDateValue = defaultDate.toString(Qt::ISODate);
-
-    //QTime defaultTime = QTime::fromString(Constants::DEFAULT_TIME, Constants::DEFAULT_TIME_FORMAT);
-    //QString m_OriginalTimeValue = defaultTime.toString(Qt::ISODate);
-    //qWarning() << "defaultTime" << defaultTime;
-    //defaultDateTime.setTime(defaultTime);
-
-    //qWarning() << "defaultDateTime" << defaultDateTime;
-
     m_OriginalDateTimeValue = defaultDateTime.toString(Qt::ISODate);
-
-    qWarning() << "m_OriginalDateTimeValue" << m_OriginalDateTimeValue;
     setDateTime(m_OriginalDateTimeValue);
 }
 
@@ -2216,8 +2194,6 @@ bool BaseDateTimeData::setData(const int ref, const QVariant &data, const int ro
     if (role==Qt::EditRole) {
         if (data.canConvert<QDateTime>()) {
             m_DateTime->m_DateTime->setDateTime(data.toDateTime());
-            qWarning() << "setData() data" << data;
-            qWarning() << "setData() data.toDateTime()" << data.toDateTime();
             onValueChanged();
         }
     }
@@ -2228,7 +2204,6 @@ QVariant BaseDateTimeData::data(const int ref, const int role) const
 {
     Q_UNUSED(ref);
     Q_UNUSED(role);
-    qWarning() << "data() m_DateTime->m_DateTime->dateTime()" << m_DateTime->m_DateTime->dateTime();
     return m_DateTime->m_DateTime->dateTime();
 }
 
@@ -2236,19 +2211,10 @@ void BaseDateTimeData::setStorableData(const QVariant &data)
 {
     setDateTime(data.toString());
     m_OriginalDateTimeValue = data.toString();
-    qWarning() << "setStorableData() m_OriginalDateTimeValue" << m_OriginalDateTimeValue;
-
-    //setDateTime(data.toString());
-    //QDateTime dateTime = QDateTime::fromString(data.toString());
-    //QString m_OriginalDateValue = dateTime.date().toString(Qt::ISODate);
-    //QString m_OriginalTimeValue = dateTime.time().toString(Qt::ISODate);
-    //m_OriginalDateTimeValue = m_OriginalDateValue.append(m_OriginalTimeValue);
 }
 
 QVariant BaseDateTimeData::storableData() const
 {
-    qWarning() << "m_DateTime->m_DateTime->dateTime().toString(Qt::ISODate)"
-               << m_DateTime->m_DateTime->dateTime().toString(Qt::ISODate);
     return m_DateTime->m_DateTime->dateTime().toString(Qt::ISODate);
 }
 
