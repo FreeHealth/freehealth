@@ -190,13 +190,13 @@ IFormWidget::~IFormWidget()
 
 void IFormWidget::createLabel(const QString &text, Qt::Alignment horizAlign)
 {
-    m_Label = new QLabel(this);
+    m_Label = new QLabel();
     QLabel *l = m_Label;
     l->setFrameStyle(IFormWidget::ItemLabelFrame);
 //    l->setFrameStyle(QFrame::Plain);
 //    l->setFrameShape(QFrame::Box);
     l->setText(text);
-    l->setAlignment(Qt::AlignTop | horizAlign);
+    l->setAlignment(horizAlign);
 //    l->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
     l->setWordWrap(true);
 }
@@ -219,6 +219,22 @@ QBoxLayout *IFormWidget::getBoxLayout(const int labelOption, const QString &text
         hb->setSpacing(5);
         hb->setMargin(5);
     }
+    return hb;
+}
+
+QHBoxLayout *IFormWidget::getHBoxLayout(const int labelOption, const QString &text, QWidget *parent)
+{
+    QHBoxLayout *hb = new QHBoxLayout(parent);
+    //m_Label->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+    // TODO: Code specific label options
+    if (labelOption != NoLabel) {
+        createLabel(text);
+    }
+    if (m_Label) {
+        hb->insertWidget(0, m_Label);
+    }
+    hb->setSpacing(5);
+    hb->setMargin(5);
     return hb;
 }
 

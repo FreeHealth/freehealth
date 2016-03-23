@@ -454,6 +454,63 @@ private:
 };
 
 //--------------------------------------------------------------------------------------------------------
+//-------------------------------------- BaseDateTime implementation ---------------------------------------
+//--------------------------------------------------------------------------------------------------------
+class BaseDateTime : public Form::IFormWidget
+{
+     Q_OBJECT
+public:
+     BaseDateTime(Form::FormItem *linkedObject, QWidget *parent = 0);
+     ~BaseDateTime();
+
+     QString printableHtml(bool withValues = true) const;
+
+ private Q_SLOTS:
+     void onCurrentPatientChanged();
+
+public Q_SLOTS:
+     void retranslate();
+
+public:
+     QDateTimeEdit *m_DateTime;
+};
+
+class BaseDateTimeData : public Form::IFormItemData
+{
+    Q_OBJECT
+public:
+    BaseDateTimeData(Form::FormItem *item);
+    ~BaseDateTimeData();
+
+    void setBaseDateTime(BaseDateTime* dateTime) {m_DateTime = dateTime;}
+    void setDateTime(const QString &s);
+
+    void clear();
+
+    Form::FormItem *parentItem() const {return m_FormItem;}
+    bool isModified() const;
+    void setModified(bool modified);
+
+    void setReadOnly(bool readOnly);
+    bool isReadOnly() const;
+
+    bool setData(const int ref, const QVariant &data, const int role = Qt::EditRole);
+    QVariant data(const int ref, const int role = Qt::DisplayRole) const;
+
+    void setStorableData(const QVariant &data);
+    QVariant storableData() const;
+
+private Q_SLOTS:
+    void onValueChanged();
+
+private:
+    Form::FormItem *m_FormItem;
+    BaseDateTime* m_DateTime;
+    QDateTime m_OriginalDateTime;
+    QString m_OriginalDateTimeValue;
+};
+
+//--------------------------------------------------------------------------------------------------------
 //-------------------------------------- BaseSpin implementation ---------------------------------------
 //--------------------------------------------------------------------------------------------------------
 class BaseSpin : public Form::IFormWidget

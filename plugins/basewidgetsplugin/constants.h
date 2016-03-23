@@ -60,9 +60,17 @@ const char * const  DATE_EXTRAS_KEY         = "dateformat";
 const char * const  DATE_NOW                = "now";
 const char * const  DATE_PATIENTLIMITS      = "patientLimits";
 
+// Time options
+const char * const  DATETIME_EXTRAS_KEY         = "datetimeformat";
+
 // Default date
 const char * const DEFAULT_DATE = "01011900";
 const char * const DEFAULT_DATE_FORMAT = "ddMMyyyy";
+
+// Default datetime
+const char * const DEFAULT_DATETIME = "1900-01-01 00:00:00";
+const char * const DEFAULT_DATETIME_FORMAT = "yyyy-MM-dd hh:mm:ss"; // default format of the default time
+const char * const DATETIME_DEFAULT_FORMAT = "yyyy-MM-dd hh:mm:ss"; // default printing format for all DateTime widgets
 
 // Spins
 const char * const  SPIN_EXTRAS_KEY_MIN         = "min";
@@ -96,6 +104,7 @@ int isGroupChecked(Form::FormItem *item, bool defaultValue = false);
 int isRadioHorizontalAlign(Form::FormItem *item, bool defaultValue = true);
 
 QString getDateFormat(Form::FormItem *item, const QString &defaultValue = "dd MM yyyy");
+QString getDateTimeFormat(Form::FormItem *item, const QString &defaultValue = "yyyy-MM-dd HH:mm:ss");
 
 bool dontPrintEmptyValues(Form::FormItem *item);
 
