@@ -2107,16 +2107,10 @@ QString BaseDateTime::printableHtml(bool withValues) const
                        "</table>")
                 .arg(m_FormItem->spec()->label());
     } else {
-        QString defaultDateFormat = Constants::DEFAULT_DATE_FORMAT;
-        QString defaultDate = Constants::DEFAULT_DATE;
-
-        QString widgetDate = m_DateTime->date().toString(defaultDateFormat);
-
-        QTime defaultTime = QTime::fromString(Constants::DEFAULT_DATETIME, Constants::DEFAULT_DATETIME_FORMAT);
-
-        QTime widgetTime = m_DateTime->time();
-
-        bool dateTimeIsDefault((widgetDate == defaultDate) && (widgetTime == defaultTime));
+        QString defaultDateTime = Constants::DEFAULT_DATETIME;
+        QString defaultDateTimeFormat = Constants::DEFAULT_DATETIME_FORMAT;
+        QString widgetDateTime = m_DateTime->dateTime().toString(defaultDateTimeFormat);
+        bool dateTimeIsDefault(widgetDateTime == defaultDateTime);
         if (Constants::dontPrintEmptyValues(m_FormItem) && dateTimeIsDefault)
             return QString();
         return QString("<table width=100% border=1 cellpadding=0 cellspacing=0  style=\"margin: 0px\">"
