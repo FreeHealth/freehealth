@@ -269,7 +269,7 @@ void BugReportDialog::changeEvent(QEvent *e)
 void BugReportDialog::openFmfDocUrl()
 {
     if(!QDesktopServices::openUrl(QUrl(Utils::Constants::URL_ONLINEDOCUMENTATION))) {
-        Utils::warningMessageBox(tr("The application has successfully requested the operating system to open the URL in an external application."),
-                                 tr("Check that you have a default browser enabled or go directly to freemedforms.com"));
+        Utils::warningMessageBox(tr("The application has requested the operating system to open the URL in an external browser but something went wrong."),
+                                 tr("Please verify that you have a default browser enabled or go directly to https://freemedforms.com and check the documentation."));
     }
 }
