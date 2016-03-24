@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>738</width>
-    <height>489</height>
+    <width>814</width>
+    <height>575</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -168,11 +168,60 @@
         </item>
         <item>
          <widget class="QLabel" name="hasLookedUpDocumentationLabel">
+          <property name="lineWidth">
+           <number>0</number>
+          </property>
           <property name="text">
-           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&amp;amp;Yes, I have checked the documentation on the &lt;a href=&quot;http://www.freemedforms.com/en/manuals/freemedforms/toc&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0057ae;&quot;&gt;FreeMedForms Project website&lt;/span&gt;&lt;/a&gt; before reporting this issue.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           <string>Yes, I have checked the documentation on the</string>
+          </property>
+          <property name="textInteractionFlags">
+           <set>Qt::TextBrowserInteraction</set>
           </property>
           <property name="buddy">
            <cstring>hasLookedUpDocumentationCheckBox</cstring>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="docUrlPushButton">
+          <property name="font">
+           <font>
+            <underline>true</underline>
+           </font>
+          </property>
+          <property name="cursor">
+           <cursorShape>PointingHandCursor</cursorShape>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">border: none;
+margin: 0px;
+padding: 0px;
+spacing: 0px;</string>
+          </property>
+          <property name="text">
+           <string>FreeMedForms Project website</string>
+          </property>
+          <property name="iconSize">
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="flat">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="label">
+          <property name="lineWidth">
+           <number>0</number>
+          </property>
+          <property name="text">
+           <string>before reporting this issue.</string>
+          </property>
+          <property name="indent">
+           <number>0</number>
           </property>
          </widget>
         </item>

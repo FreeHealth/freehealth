@@ -90,6 +90,7 @@ public:
         QObject::connect(ui->severityCombo, SIGNAL(currentIndexChanged(int)), q, SLOT(validateInputs()));
         QObject::connect(ui->descrEdit, SIGNAL(textChanged()), q, SLOT(validateInputs()));
         QObject::connect(ui->hasLookedUpDocumentationCheckBox, SIGNAL(clicked()), q, SLOT(validateInputs()));
+        QObject::connect(ui->docUrlPushButton, SIGNAL(clicked()), q, SLOT(openFmfDocUrl()));
         QObject::connect(_sendButton, SIGNAL(clicked()), q, SLOT(sendBugReport()));
     }
 
@@ -262,5 +263,13 @@ void BugReportDialog::changeEvent(QEvent *e)
         break;
     default:
         break;
+    }
+}
+
+void BugReportDialog::openFmfDocUrl()
+{
+    if(!QDesktopServices::openUrl(QUrl(Utils::Constants::URL_ONLINEDOCUMENTATION))) {
+        Utils::warningMessageBox(tr("The application has successfully requested the operating system to open the URL in an external application."),
+                                 tr("Check that you have a default browser enabled or go directly to freemedforms.com"));
     }
 }

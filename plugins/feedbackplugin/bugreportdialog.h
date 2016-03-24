@@ -38,6 +38,12 @@
  * \date 20 Dec 2012
 */
 
+namespace Utils {
+namespace Constants {
+const char * const URL_ONLINEDOCUMENTATION     = "http://www.freemedforms.com/en/manuals/freemedforms/toc";
+}  // End Constants
+}  // End Utils
+
 namespace Feedback {
 namespace Internal {
 class BugReportDialogPrivate;
@@ -57,6 +63,7 @@ public:
 private Q_SLOTS:
     void validateInputs();
     void sendBugReport();
+    void openFmfDocUrl();
 
 private:
     void changeEvent(QEvent *e);
