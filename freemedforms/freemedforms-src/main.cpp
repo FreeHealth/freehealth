@@ -26,7 +26,6 @@
  ***************************************************************************/
 #include <QtPlugin>
 #include <QApplication>
-#include <QTextCodec>
 #include <QDir>
 #include <QTimer>
 
@@ -96,12 +95,6 @@ static const QString HELP_MESSAGE =
 int main(int argc, char *argv[])
 {
      QApplication app(argc, argv);
-
-#if QT_VERSION < 0x050000
-     // Removed in Qt5
-     QTextCodec::setCodecForTr(QTextCodec::codecForName("UTF-8"));
-     QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
-#endif
 
      app.setApplicationName(BINARY_NAME);
      app.setOrganizationName(BINARY_NAME);
