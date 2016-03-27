@@ -27,11 +27,11 @@
 /**
  * \class Patients::Internal::PatientBase
  * \internal
- * Own the database connection mecanisms. The Patients::PatientModel
- * is a wrapper to the database and allow you to save/update/create patient data.
+ * Owns the database connection mechanisms. Patients::PatientModel
+ * is a wrapper to the database and allows you to save/update/create patient data.
  *
- * Avoid to access directly to the database, use the Patients::PatientModel
- * model or the Core::IPatient model.
+ * You should avoid direct access to database and use Patients::PatientModel
+ * model or Core::IPatient model instead.
  * \sa Patients::PatientModel, Core::IPatient
  */
 #include "patientbase.h"
