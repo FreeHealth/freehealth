@@ -102,26 +102,28 @@ void Log::logCompilationConfiguration()
 
 QString Log::versionInformation()
 {
-    return QString("%1 - %2 ; Compiled with Qt: %6 - Running with Qt: %7")
+    return QString("%1 - %2 ; %3 ; Compiled with Qt %6 - Running with Qt %7\n")
             .arg(BINARY_NAME " - " PACKAGE_VERSION)
         #ifdef LINUX_INTEGRATED
-        #  ifdef DEBUG
+            #  ifdef DEBUG
             .arg("Debug (Linux Integrated)")
-        #  else
+            #  else
             .arg("Release (Linux Integrated)")
-        #  endif
+            #  endif
         #else
-        #  ifdef DEBUG
+            #  ifdef DEBUG
             .arg("Debug")
-        #  else
+            #  else
             .arg("Release")
-        #  endif
+            #  endif
         #endif
+
         #ifdef FULLAPPLICATION_BUILD
             .arg("Full application")
         #else
             .arg("SVN application")
         #endif
+
             .arg(QT_VERSION_STR)
             .arg(qVersion());
 }

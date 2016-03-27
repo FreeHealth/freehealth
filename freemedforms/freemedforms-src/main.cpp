@@ -53,7 +53,7 @@ static const QString HELP_MESSAGE =
         QString("FreeMedForms %1 (%2%3 compilation)\n"
                 "Usage: freemedforms [--clear-user-databases] [--create-virtuals] [--config=...]\n"
                 "                    [--version,-version,-v] [--help,-help,-h]\n\n"
-                "FreeMedForms is free and open source an Electronic Medical Record manager.\n\n"
+                "FreeMedForms, free and open source Electronic Medical Record.\n\n"
                 "Options:\n"
                 "  -h, -help, --help:         show this message\n"
                 "  -v, -version, --version:   show the version\n"
