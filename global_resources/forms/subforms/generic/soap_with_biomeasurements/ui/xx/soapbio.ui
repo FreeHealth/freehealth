@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ui version="4.1">
+<ui version="4.0">
  <class>BaseWidgets::Internal::BaseFormWidget</class>
  <widget class="QWidget" name="BaseWidgets::Internal::BaseFormWidget">
   <property name="geometry">
@@ -46,15 +46,9 @@
      <property name="title">
       <string>O</string>
      </property>
-     <layout class="QGridLayout" name="gridLayout">
-      <item row="0" column="1" rowspan="2">
-       <layout class="QVBoxLayout" name="oLayout"/>
-      </item>
-      <item row="0" column="0" rowspan="2">
+     <layout class="QHBoxLayout" name="horizontalLayout_5">
+      <item>
        <layout class="QFormLayout" name="formLayout">
-        <property name="fieldGrowthPolicy">
-         <enum>QFormLayout::FieldsStayAtSizeHint</enum>
-        </property>
         <item row="0" column="0">
          <widget class="QLabel" name="bpLabel">
           <property name="text">
@@ -157,13 +151,27 @@
          </widget>
         </item>
         <item row="3" column="1">
-         <widget class="QLabel" name="bmiValue">
-          <property name="text">
-           <string>BMI</string>
-          </property>
-         </widget>
+         <layout class="QHBoxLayout" name="horizontalLayout_2">
+          <item>
+           <widget class="QLabel" name="bmiValueLabel">
+            <property name="text">
+             <string>BMI</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="bmiValueLineEdit">
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </item>
        </layout>
+      </item>
+      <item>
+       <layout class="QVBoxLayout" name="oLayout"/>
       </item>
      </layout>
     </widget>

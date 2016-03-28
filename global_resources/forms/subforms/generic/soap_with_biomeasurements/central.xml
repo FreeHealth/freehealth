@@ -159,13 +159,22 @@
         </Item>
 
         <Item type="helptext" name="ObjectiveGroup::BMI::Value">
-          <uilink widget="bmiValue"/>
+          <uilink widget="bmiValueLabel"/>
           <label lang="xx">BMI</label>
           <label lang="fr">IMC</label>
           <label lang="de">BMI</label>
           <tooltip lang="xx">Body Mass Index (kg/m2)&lt;br />BMI=Height (cm) / (Weight (kg) ^2)</tooltip>
           <tooltip lang="fr">Index de masse corporelle (kg/m2)&lt;br />BMI=Taille (cm) / (Poids (kg) ^2)</tooltip>
           <tooltip lang="de">Body-Mass-Index (kg/m2)&lt;br />BMI=Größe (cm) / (Gewicht (kg) ^2)</tooltip>
+          <options>DontPrintEmptyValues</options>
+        </Item>
+
+        <Item type="shorttext" name="ObjectiveGroup::BMI::Value::Shorttext">
+          <uilink label="bmiLabel" widget="bmiValueLineEdit" layout=""/>
+          <label lang="xx">BMI</label>
+          <label lang="fr">IMC</label>
+          <tooltip lang="xx">Body Mass Index (kg/m2)&lt;br />BMI=Height (cm) / (Weight (kg) ^2)</tooltip>
+          <tooltip lang="fr">Index de masse corporelle (kg/m2)&lt;br />BMI=Taille (cm) / (Poids (kg) ^2)</tooltip>
           <options>DontPrintEmptyValues</options>
         </Item>
 
