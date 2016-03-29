@@ -69,7 +69,6 @@ namespace.module('com.freemedforms.generic.soapWithBio', function (exports, requ
     }
 
     function weightToKilogram(weightUnit, weightValue) {
-        print(weightUnit,weightValue);
         var ounceToKilogram = 0.028349523125; //International avoirdupois ounce
         var poundToKilogram = 0.45359237; //International avoirdupois pound
         var gramToKilogram = 0.001;
@@ -78,7 +77,6 @@ namespace.module('com.freemedforms.generic.soapWithBio', function (exports, requ
         var ounce = "Ounce";
         var pound = "Pound";
         if (~weightUnit.indexOf(gram)) {
-            print("gram to kg", weightValue*gramToKilogram);
             return weightValue*gramToKilogram;
         } else if (~weightUnit.indexOf(kilogram)) {
             return weightValue;
