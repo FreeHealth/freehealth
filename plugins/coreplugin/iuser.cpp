@@ -247,3 +247,11 @@ void IUser::replaceTokens(QString &stringWillBeModified)
     // TODO: improve manage of token mail, tels, faxes
 }
 
+bool IUser::isAdministrator() const
+{
+    // get currently connected user's ManagerRights
+    QVariant currentUserRights = Core::ICore::instance()->user()->value(Core::IUser::ManagerRights);
+
+    // If currently connected user has AllRight for ManagerRights, it is an administrative account
+    return(Core::IUser::UserRight(currentUserRights.toInt()) == Core::IUser::AllRights);
+}

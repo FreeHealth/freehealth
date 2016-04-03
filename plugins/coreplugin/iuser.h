@@ -159,6 +159,7 @@ public:
 
     // Some code easiers
     QString uuid() const {return value(Uuid).toString();}
+    bool isAdministrator() const;
 
 Q_SIGNALS:
     void userChanged();
