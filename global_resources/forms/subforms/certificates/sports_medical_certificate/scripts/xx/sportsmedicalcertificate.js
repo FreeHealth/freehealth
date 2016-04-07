@@ -6,7 +6,8 @@ namespace.module('com.freemedforms.certificates.sportsmedicalcertificate', funct
   var sportsmedicalcertificate_htmlItem;
   var html;
   //var mainSites = new Array();
-  var signeeText = new Array("m", "f");
+  var signeeText;
+  var signeeArray = ["soussigné", "soussignée"];
   //var raySelector = new Array("xx", "fr");
 
   exports.extend({
@@ -40,8 +41,8 @@ function getUiElements() {
 
 function createVariableContent()
 {
-    signeeText["m"]= "soussigné";
-    signeeText["f"]= "soussignée";
+    //signeeText["m"]= "soussigné";
+    //signeeText["f"]= "soussignée";
 
 }
 
@@ -60,7 +61,7 @@ function today()
         mm='0'+mm
     }
 
-    today = mm+'/'+dd+'/'+yyyy;
+    today = dd+'/'+mm+'/'+yyyy;
 
     return today;
 }
@@ -68,6 +69,8 @@ function today()
 function connectUiElements()
 {
     sportsmedicalcertificate_nameOfSportUi.textChanged.connect(this, test);
+    sportsmedicalcertificate_competitionCheckUi.stateChanged.connect(this, test);
+
 }
 
 function reTranslateUi()
@@ -93,19 +96,65 @@ function test()
     print("freemedforms.user.isMale=");
     print(freemedforms.user.isMale);
     print("\n");
+    print("freemedforms.user.isMale == true");
+    print(freemedforms.user.isMale == true);
+    print("\n");
+    print("freemedforms.user.isFemale == true");
+    print(freemedforms.user.isFemale == true);
+    print("\n");
+    print("freemedforms.user.isFemale == false");
+    print(freemedforms.user.isFemale == false);
+    print("\n");
+    var html = "";
+    //html = "<span style=\"font-weight:bold;font-size:large;font-variant:small-caps;text-decoration:underline;text-align:center;\">";
+    html += "Certificat médical de non contre-indication à la pratique sportive";
+    //html += "</span>";
 
-    var html = "<span style=\"font-weight:bold;font-size:large;font-variant:small-caps;text-decoration:underline\">"
-            + "Certificat médical de non contre-indication à la pratique sportive"
-            + "</span><ul>";
-
+    //html += "<span>";
     html += "Je ";
-    if (freemedforms.patient.isMale) {
-        html += signeeText["m"];
+    if (freemedforms.user.isMale) {
+        signeeText = signeeArray[0];
+        html += signeeText;
     } else {
-        signeeText["m"];
+        signeeText = signeeArray[1];
+        html += signeeText;
     }
 
-    html += " ";
+    html += ", ";
+    var fullUserName = freemedforms.user.fullName;
+    html += fullUserName;
+    html += ", certifie avoir examiné ";
+    var fullPatientName = freemedforms.patient.fullName;
+    html += fullPatientName;
+    html += " né";
+    if (freemedforms.patient.isFemale) {
+        html += "e";
+    }
+    html += " le ";
+    var patientDateTimeOfBirth = freemedforms.patient.dateOfBirth;
+    print(patientDateTimeOfBirth);
+    var indexOfColon = patientDateTimeOfBirth.toString().indexOf(':');
+    var indexEndOfDate = indexOfColon - 3;
+    var patientDateOfBirth = patientDateTimeOfBirth.toString().slice(0, indexEndOfDate);
+    html += patientDateOfBirth;
+    html += " et n’avoir pas constaté, à la date de ce jour, de signes cliniques apparents contre-indiquant la pratique ";
+    var sports = sportsmedicalcertificate_nameOfSportUi.text;
+    html += sports;
+    if (sportsmedicalcertificate_competitionCheckUi.checked == 1) {
+        html += " en compétition";
+    }
+    html += ".";
+    //html += "</span>";
+    //html += "<span style=\"text-align:right;\">";
+    html += "A ";
+    var city = freemedforms.user.city;
+    html += city;
+    html += ", le ";
+    var date = today();
+    html += date;
+    html += "";
+    //html += "</span>"
+    print("\n" + html);
 
     sportsmedicalcertificate_htmlItem.currentText = html;
 }
