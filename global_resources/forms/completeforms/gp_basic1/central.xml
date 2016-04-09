@@ -215,6 +215,14 @@
 
   </MedForm> <!-- Prescription -->
 
+  <MedForm name="GP::Basic::Certificates">
+    <label lang="xx">Certificates</label>
+    <label lang="fr">Certificats</label>
+    <icon>__theme__/edit.png</icon>
+    <options>NoEpisode;DontPrintEmptyValues</options>
+
+  </MedForm>
+
   <file>__subForms__/generic/patientfilesynthesis/central.xml</file>
 
   <MedForm name="GP::Basic::ICD10">

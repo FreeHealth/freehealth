@@ -7,9 +7,9 @@
     <!-- Non translatable values -->
     <authors>Eric Maeker, MD</authors>
     <version>test</version>
-    <fmfv>0.8.2</fmfv>
+    <fmfv>0.9.7</fmfv>
     <cdate>2012-09-03</cdate>
-    <lmdate>2013-02-05</lmdate>
+    <lmdate>2016-04-07</lmdate>
     <icon>generalpractitioner.png</icon>
     <weblink></weblink>
     <bibliography/>
@@ -197,6 +197,14 @@
         <options>AddChronicTherapyButton;DontPrintEmptyValues</options>
       </Item>
     </MedForm>
+
+  </MedForm>
+
+  <MedForm name="GP::Basic::Certificates">
+    <label lang="xx">Certificates</label>
+    <label lang="fr">Certificats</label>
+    <icon>__theme__/edit.png</icon>
+    <options>NoEpisode;DontPrintEmptyValues</options>
 
   </MedForm>
 
