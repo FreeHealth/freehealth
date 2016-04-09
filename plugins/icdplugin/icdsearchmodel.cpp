@@ -246,7 +246,7 @@ void IcdSearchModel::setFilter(const QString &searchLabel)
     QHash<int, QString> where;
     QString req;
     if (d->m_SearchMode==SearchByLabel) {
-        where.insert(d->m_LangField, QString("like '%1%'").arg(searchLabel));
+        where.insert(d->m_LangField, QString("like '%%1%'").arg(searchLabel));
         req = d->searchQuery() + " WHERE " + icdBase()->getWhereClause(Constants::Table_Libelle, where);
     } else {
         where.insert(Constants::MASTER_CODE, QString("like '%1%'").arg(searchLabel));
