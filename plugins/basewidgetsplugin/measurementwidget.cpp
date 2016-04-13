@@ -371,7 +371,7 @@ QVariant MeasurementWidgetData::data(const int ref, const int role) const
             double val = m_Measurement->m_value->value();
             switch (m_Measurement->m_units->currentIndex()) {
             case 0: return val;
-            case 1: return val*100.;
+            case 1: return val*1000.;       // 1 kilogram = 1000 grams
             case 2: return val*28.3495231; // 1 ounce = 28.3495231 grams
             case 3: return val*453.59237;  // 1 pound = 453.59237 grams
             }

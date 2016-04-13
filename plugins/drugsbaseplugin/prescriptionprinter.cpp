@@ -371,12 +371,15 @@ QString PrescriptionPrinterJob::patientBiometricsToHtml() const
     QStringList bio;
 
     // Include Weight
+    // Core::IPatient::WeightInGrams unit is gram
+    // output of patientBiometricsToHtml unit is kilogram
+    // Core::IPatient::WeightInGrams is divided by 1000 to convert gram to kilogram
     // FIXME: use tkTr(Trans::Constants::_1_COLON_2) "%1: %2" translation
     if (!patient()->data(Core::IPatient::WeightInGrams).toString().isEmpty()
             && patient()->data(Core::IPatient::WeightInGrams).toDouble() > 0.) {
         bio << QString("%1: %2 %3")
                .arg(tkTr(Trans::Constants::WEIGHT))
-               .arg(QString::number(patient()->data(Core::IPatient::WeightInGrams).toDouble() / 100, 'f', 2))
+               .arg(QString::number(patient()->data(Core::IPatient::WeightInGrams).toDouble() / 1000, 'f', 2))
                .arg(tkTr(Trans::Constants::KILOGRAM_S));
     }
 
