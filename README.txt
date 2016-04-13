@@ -1,5 +1,5 @@
 # The FreeMeForms Project
-# Copyright (C) 2008-2015 by Eric MAEKER
+# Copyright (C) 2008-2016 by Eric MAEKER
 # [https://freemedforms.com]
 
 

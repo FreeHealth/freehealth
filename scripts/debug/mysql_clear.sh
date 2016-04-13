@@ -1,7 +1,7 @@
 #!/bin/bash
 #  The FreeMedForms project is a set of free, open source medical
 #  applications.
-#  (C) 2008-2015 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>
+#  (C) 2008-2016 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>
 #  License: BSD 3 clauses
 
 SCRIPT_VERSION=1.0-1341675001  # see date "+%s"
