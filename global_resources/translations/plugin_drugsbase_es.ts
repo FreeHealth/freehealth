@@ -4,25 +4,31 @@
 <context>
     <name>DatabaseUpdater</name>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/versionupdater.cpp" line="81"/>
+        <location filename="../../plugins/drugsbaseplugin/versionupdater.cpp" line="82"/>
+        <source>Your dosage database needs to be updated from version 0.5.4 to version 1.
+This will be automatically done.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/drugsbaseplugin/versionupdater.cpp" line="137"/>
         <source>Your dosage database needs to be updated from version 0.5.0 to version 0.5.4.
 This will be automatically done.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/versionupdater.cpp" line="191"/>
+        <location filename="../../plugins/drugsbaseplugin/versionupdater.cpp" line="247"/>
         <source>Your dosage database needs to be updated from version 0.4.0 to version 0.5.0.
 This will be automatically done.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/versionupdater.cpp" line="300"/>
+        <location filename="../../plugins/drugsbaseplugin/versionupdater.cpp" line="356"/>
         <source>Your dosage database needs to be updated from version 0.2.0 to version 0.4.0.
 This will be automatically done.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/versionupdater.cpp" line="404"/>
+        <location filename="../../plugins/drugsbaseplugin/versionupdater.cpp" line="460"/>
         <source>Your dosage database needs to be updated from version 0.0.8 to version 0.2.0.
 This will be automatically done.
 Please verify your daily scheme prescriptions and relations to meal.</source>
@@ -407,8 +413,8 @@ Please find more documentation on the website %1.</source>
 <context>
     <name>DrugsDB::PrescriptionPrinter</name>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/prescriptionprinter.cpp" line="493"/>
-        <location filename="../../plugins/drugsbaseplugin/prescriptionprinter.cpp" line="513"/>
+        <location filename="../../plugins/drugsbaseplugin/prescriptionprinter.cpp" line="496"/>
+        <location filename="../../plugins/drugsbaseplugin/prescriptionprinter.cpp" line="516"/>
         <source>Drugs Prescription</source>
         <translation type="unfinished"></translation>
     </message>
@@ -416,19 +422,19 @@ Please find more documentation on the website %1.</source>
 <context>
     <name>DrugsDB::ProtocolsBase</name>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/protocolsbase.cpp" line="370"/>
-        <location filename="../../plugins/drugsbaseplugin/protocolsbase.cpp" line="376"/>
-        <location filename="../../plugins/drugsbaseplugin/protocolsbase.cpp" line="381"/>
+        <location filename="../../plugins/drugsbaseplugin/protocolsbase.cpp" line="371"/>
+        <location filename="../../plugins/drugsbaseplugin/protocolsbase.cpp" line="377"/>
+        <location filename="../../plugins/drugsbaseplugin/protocolsbase.cpp" line="382"/>
         <source>Unable to create the Protocol database.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/protocolsbase.cpp" line="422"/>
+        <location filename="../../plugins/drugsbaseplugin/protocolsbase.cpp" line="423"/>
         <source>Standardized protocols database can not be updated successfully</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/protocolsbase.cpp" line="487"/>
+        <location filename="../../plugins/drugsbaseplugin/protocolsbase.cpp" line="488"/>
         <source>Unable to update the protocol&apos;s transmission date.</source>
         <translation type="unfinished"></translation>
     </message>

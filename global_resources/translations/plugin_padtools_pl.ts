@@ -79,7 +79,7 @@
     <name>PadWriter</name>
     <message>
         <location filename="../../plugins/padtoolsplugin/constants.h" line="63"/>
-        <source>Padtools</source>
+        <source>PadTools</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

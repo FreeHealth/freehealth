@@ -29,6 +29,12 @@ Please verify your daily scheme prescriptions and relations to meal.</source>
 Ceci va être se faire automatiquement.
 Veuillez vérifier vos répartitions journalières et vos relations avec le repas.</translation>
     </message>
+    <message>
+        <source>Your dosage database needs to be updated from version 0.5.4 to version 1.
+This will be automatically done.</source>
+        <translation type="unfinished">Votre base de données de protocoles nécessite une mise à jour depuis la version 0.2.0 vers la version 0.4.0.
+Ceci va êetre réalisé automatiquement. {0.5.4 ?} {1.?}</translation>
+    </message>
 </context>
 <context>
     <name>DrugDatabaseInfo</name>

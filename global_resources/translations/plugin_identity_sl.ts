@@ -4,62 +4,62 @@
 <context>
     <name>Identity::IdentityEditorWidget</name>
     <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="789"/>
+        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="795"/>
         <source>You must specify a usualName.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="790"/>
+        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="796"/>
         <source>You can not create a patient without a usualName</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="791"/>
+        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="797"/>
         <source>No usualName</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="797"/>
+        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="803"/>
         <source>You must specify a first name.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="798"/>
+        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="804"/>
         <source>You can not create a patient without a first name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="799"/>
+        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="805"/>
         <source>No firstname</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="805"/>
+        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="811"/>
         <source>You must specify a date of birth.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="806"/>
+        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="812"/>
         <source>You can not create a patient without a date of birth</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="807"/>
+        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="813"/>
         <source>No date of birth</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="813"/>
+        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="819"/>
         <source>You must specify a gender.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="814"/>
+        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="820"/>
         <source>You can not create a patient without a gender</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="815"/>
+        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="821"/>
         <source>No gender</source>
         <translation type="unfinished"></translation>
     </message>
@@ -152,17 +152,17 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/identityplugin/passworddialog.cpp" line="203"/>
+        <location filename="../../plugins/identityplugin/passworddialog.cpp" line="204"/>
         <source>The old password is not correct. Please retry with the correct password.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/identityplugin/passworddialog.cpp" line="205"/>
+        <location filename="../../plugins/identityplugin/passworddialog.cpp" line="206"/>
         <source>Wrong password confirmation.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/identityplugin/passworddialog.cpp" line="206"/>
+        <location filename="../../plugins/identityplugin/passworddialog.cpp" line="207"/>
         <source>Password can not be change.</source>
         <translation type="unfinished"></translation>
     </message>

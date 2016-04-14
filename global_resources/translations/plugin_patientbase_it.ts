@@ -304,42 +304,47 @@ Warning: If you are using FreeMedForms over a network, this can lead to heavy ne
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientdataextractordialog.ui" line="134"/>
+        <location filename="../../plugins/patientbaseplugin/patientdataextractordialog.ui" line="114"/>
+        <source>Double-click to remove</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/patientbaseplugin/patientdataextractordialog.ui" line="137"/>
         <source>Select file format and exportation path</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientdataextractordialog.ui" line="143"/>
+        <location filename="../../plugins/patientbaseplugin/patientdataextractordialog.ui" line="146"/>
         <source>Select an output format</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientdataextractordialog.ui" line="151"/>
+        <location filename="../../plugins/patientbaseplugin/patientdataextractordialog.ui" line="154"/>
         <source>HTML</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientdataextractordialog.ui" line="156"/>
+        <location filename="../../plugins/patientbaseplugin/patientdataextractordialog.ui" line="159"/>
         <source>PDF</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientdataextractordialog.ui" line="161"/>
+        <location filename="../../plugins/patientbaseplugin/patientdataextractordialog.ui" line="164"/>
         <source>HTML+PDF</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientdataextractordialog.ui" line="169"/>
+        <location filename="../../plugins/patientbaseplugin/patientdataextractordialog.ui" line="172"/>
         <source>Group by</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientdataextractordialog.ui" line="177"/>
+        <location filename="../../plugins/patientbaseplugin/patientdataextractordialog.ui" line="180"/>
         <source>Forms</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientdataextractordialog.ui" line="182"/>
+        <location filename="../../plugins/patientbaseplugin/patientdataextractordialog.ui" line="185"/>
         <source>Dates</source>
         <translation type="unfinished"></translation>
     </message>
@@ -354,43 +359,43 @@ Warning: If you are using FreeMedForms over a network, this can lead to heavy ne
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientdataextractordialog.cpp" line="312"/>
+        <location filename="../../plugins/patientbaseplugin/patientdataextractordialog.cpp" line="329"/>
         <source>Start patient file extraction</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientdataextractordialog.cpp" line="330"/>
-        <location filename="../../plugins/patientbaseplugin/patientdataextractordialog.cpp" line="415"/>
+        <location filename="../../plugins/patientbaseplugin/patientdataextractordialog.cpp" line="347"/>
+        <location filename="../../plugins/patientbaseplugin/patientdataextractordialog.cpp" line="437"/>
         <source>Setting patient uuid %1 as current patient</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientdataextractordialog.cpp" line="376"/>
+        <location filename="../../plugins/patientbaseplugin/patientdataextractordialog.cpp" line="397"/>
         <source>Exporting %1 file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientdataextractordialog.cpp" line="382"/>
+        <location filename="../../plugins/patientbaseplugin/patientdataextractordialog.cpp" line="403"/>
         <source>Patient file exportation - %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientdataextractordialog.cpp" line="390"/>
+        <location filename="../../plugins/patientbaseplugin/patientdataextractordialog.cpp" line="412"/>
         <source>An error occured when saving the HTML patient file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientdataextractordialog.cpp" line="394"/>
+        <location filename="../../plugins/patientbaseplugin/patientdataextractordialog.cpp" line="416"/>
         <source>Patient HTML file correctly created</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientdataextractordialog.cpp" line="404"/>
+        <location filename="../../plugins/patientbaseplugin/patientdataextractordialog.cpp" line="426"/>
         <source>An error occured when saving the PDF patient file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientdataextractordialog.cpp" line="408"/>
+        <location filename="../../plugins/patientbaseplugin/patientdataextractordialog.cpp" line="430"/>
         <source>Patient PDF file correctly created</source>
         <translation type="unfinished"></translation>
     </message>

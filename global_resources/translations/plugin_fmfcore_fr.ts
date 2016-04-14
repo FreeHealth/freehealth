@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="fr_FR">
+<TS version="2.1" language="fr_FR">
 <context>
     <name>Core::AppConfigWizard</name>
     <message>
@@ -29,16 +29,16 @@ Alors que la configuration à l&apos;hôte est valide, aucune configuration serv
 Veuillez vérfier que l&apos;hôte contient bien une configuration serveur de FreeMedForms.</translation>
     </message>
     <message>
-        <source>Connecting databases</source>
-        <translation>Connection aux bases de données</translation>
-    </message>
-    <message>
-        <source>Please wait</source>
-        <translation>Veuillez patienter</translation>
-    </message>
-    <message>
         <source>You must configure the server using your personnal login and password to connect the database.</source>
         <translation>Vous devez configurer le serveur en utilisant vos identifiant et mot de passe personnels que vous utilisez pour vous connecter à la base de données.</translation>
+    </message>
+    <message>
+        <source>Database global prefix</source>
+        <translation>Préfixe global de base de données</translation>
+    </message>
+    <message>
+        <source>Please specify the database prefix to use (please ask your software administrator)</source>
+        <translation>Merci d&apos;indiquer le préfixe de base de données à utiliser (merci de demander à l&apos;adminstrateur de votre base de données)</translation>
     </message>
 </context>
 <context>
@@ -103,6 +103,10 @@ Sélectionnez votre langage préféré et le type d&apos;installation.</translat
     <message>
         <source>You can store your local personal database anywhere you want, just select a path.</source>
         <translation>Vous pouvez sauvegardeer vos bases de données locales là où vous le souhaitez, vous n&apos;avez qu&apos;à sélectionner le chemin.</translation>
+    </message>
+    <message>
+        <source>Configure the server and create all database</source>
+        <translation>Configurer le serveur et créer toutes les bases de données</translation>
     </message>
 </context>
 <context>
@@ -392,6 +396,13 @@ Sélectionnez votre langage préféré et le type d&apos;installation.</translat
     </message>
 </context>
 <context>
+    <name>Core::Internal::ServerPreferencesWidgetPrivate</name>
+    <message>
+        <source>Enter host name...</source>
+        <translation>Entrer le nom d&apos;hôte</translation>
+    </message>
+</context>
+<context>
     <name>Core::Internal::SettingDebugPage</name>
     <message>
         <source>Settings</source>
@@ -678,7 +689,7 @@ Sélectionnez votre langage préféré et le type d&apos;installation.</translat
     <name>Core::Internal::SqliteDatabasePathWidget</name>
     <message>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation>Formulaire</translation>
     </message>
     <message>
         <source>When configured as single computer mode, you can move your personal database anywhere you want. If you change this value, you will have to restart the application.</source>
@@ -863,6 +874,18 @@ Veuillez vérifier les fichiers journaux et contacter votre administrateur.</tra
     <message>
         <source>Connected</source>
         <translation>Connecté</translation>
+    </message>
+    <message>
+        <source>Enter hostname...</source>
+        <translation>Entrer le nom d&apos;hôte...</translation>
+    </message>
+    <message>
+        <source>Host name is valid...</source>
+        <translation>Le nom d&apos;hôte est valide...</translation>
+    </message>
+    <message>
+        <source>Host name is not valid...</source>
+        <translation>Le nom d&apos;hôte n&apos;est pas valide...</translation>
     </message>
 </context>
 <context>

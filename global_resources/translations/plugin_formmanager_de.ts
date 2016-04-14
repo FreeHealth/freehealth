@@ -188,6 +188,10 @@ Answering &apos;No&apos; will cause deftialtve data loss.</source>
         <source>Episode database updated from version %1 to version: %2</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>No change happened but episode database updated from version %1 to version: %2</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Form::Internal::FirstRunFormManagerWizardPage</name>

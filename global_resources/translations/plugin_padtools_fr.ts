@@ -105,7 +105,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Padtools</source>
+        <source>PadTools</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -442,7 +442,7 @@ Refer to your operating system documentation.</source>
     </message>
     <message>
         <location filename="../../plugins/printerplugin/printer.h" line="83"/>
-        <source>Each Pages</source>
+        <source>Each Page</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

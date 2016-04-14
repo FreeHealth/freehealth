@@ -2773,5 +2773,13 @@ Text Align Justify shortcut key : Mac specific</extracomment>
         <source>Port</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Please wait</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Connecting database</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 </TS>

@@ -4,8 +4,8 @@
 <context>
     <name>Core::AppConfigWizard</name>
     <message>
-        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="157"/>
-        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="198"/>
+        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="255"/>
+        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="296"/>
         <source>Application Configurator Wizard</source>
         <translation type="unfinished"></translation>
     </message>
@@ -13,74 +13,74 @@
 <context>
     <name>Core::ClientConfigPage</name>
     <message>
-        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="417"/>
+        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="517"/>
         <source>Network client configuration</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="418"/>
+        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="518"/>
         <source>You must configure the server using your personnal login and password to connect the database.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="462"/>
+        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="561"/>
+        <source>Database global prefix</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="561"/>
+        <source>Please specify the database prefix to use (please ask your software administrator)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="569"/>
         <source>No FreeMedForms server configuration detected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="463"/>
+        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="570"/>
         <source>You are trying to configure a network client of FreeMedForms. It is manadatory to connect to a FreeMedForms network server.
 While the host connection is valid, no FreeMedForms configuration was found on this host.
 
 Please check that this host contains a FreeMedForms server configuration.</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="474"/>
-        <source>Connecting databases</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="474"/>
-        <source>Please wait</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>Core::CoreConfigPage</name>
     <message>
-        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="242"/>
+        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="340"/>
         <source>Welcome to %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="243"/>
+        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="341"/>
         <source>This wizard will help you to configure the base parameters of the application.
 Select your preferred language and the installation type.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="247"/>
+        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="345"/>
         <source>Select your language</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="248"/>
+        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="346"/>
         <source>Select the type of installation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="251"/>
+        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="351"/>
         <source>Single computer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="254"/>
+        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="354"/>
         <source>Network (as client)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="255"/>
+        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="355"/>
         <source>Network (as server)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -88,37 +88,42 @@ Select your preferred language and the installation type.</source>
 <context>
     <name>Core::CoreDatabaseCreationPage</name>
     <message>
-        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="721"/>
+        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="794"/>
         <source>Preparing databases</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="722"/>
+        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="795"/>
         <source>Preparing databases. Please wait...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="723"/>
+        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="796"/>
         <source>Use this prefix for all databases&lt;br&gt;&lt;i&gt;&amp;nbsp;&amp;nbsp;Optional, you can safely leave this editor empty&lt;/i&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="724"/>
+        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="797"/>
         <source>If you define a global prefix, all database will be named {YourPrefix}{DatabaseName} for all configuration.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="725"/>
+        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="799"/>
+        <source>Configure the server and create all database</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="801"/>
         <source>Create all database</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="727"/>
+        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="803"/>
         <source>Select the path where to store your personal databases&lt;br&gt;&lt;i&gt;&amp;nbsp;&amp;nbsp;Optional, you can safely leave this editor empty&lt;/i&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="729"/>
+        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="805"/>
         <source>You can store your local personal database anywhere you want, just select a path.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -126,52 +131,52 @@ Select your preferred language and the installation type.</source>
 <context>
     <name>Core::EndConfigPage</name>
     <message>
-        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="850"/>
+        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="926"/>
         <source>%1 is now configured</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="851"/>
+        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="927"/>
         <source>Please read the user&apos;s manual. If you have any question, you can ask them to the mailing list.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="855"/>
+        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="931"/>
         <source>You can clean and recreate all your databases. Select the option above. If you select the clean option, all databases will be erased with &lt;b&gt;definitive data loss&lt;/b&gt;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="860"/>
+        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="936"/>
         <source>Don&apos;t clean databases</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="860"/>
+        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="936"/>
         <source>Clean and recreate database</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="863"/>
+        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="939"/>
         <source>You can create virtual data to test the application. Select the option above.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="866"/>
+        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="942"/>
         <source>Don&apos;t create virtual data</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="866"/>
+        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="942"/>
         <source>Create virtual data</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="868"/>
+        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="944"/>
         <source>French/english mailing list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="871"/>
+        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="947"/>
         <source>Application main web site</source>
         <translation type="unfinished"></translation>
     </message>
@@ -422,53 +427,61 @@ Select your preferred language and the installation type.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.ui" line="49"/>
+        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.ui" line="52"/>
         <source>Database server</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.ui" line="61"/>
+        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.ui" line="64"/>
         <source>Server type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.ui" line="72"/>
+        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.ui" line="75"/>
         <source>MySQL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.ui" line="86"/>
+        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.ui" line="89"/>
         <source>Host name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.ui" line="106"/>
+        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.ui" line="109"/>
         <source>Port</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.ui" line="126"/>
+        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.ui" line="129"/>
         <source>Test host connection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.ui" line="143"/>
+        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.ui" line="146"/>
         <source>User identification</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.ui" line="155"/>
+        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.ui" line="158"/>
         <source>Login</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.ui" line="175"/>
+        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.ui" line="178"/>
         <source>Password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.ui" line="189"/>
+        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.ui" line="192"/>
         <source>Use the default FreeMedForms administrator</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Core::Internal::ServerPreferencesWidgetPrivate</name>
+    <message>
+        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.cpp" line="94"/>
+        <source>Enter host name...</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -928,7 +941,7 @@ Select your preferred language and the installation type.</source>
 <context>
     <name>Core::PageWidget</name>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/pagewidget.cpp" line="351"/>
+        <location filename="../../plugins/coreplugin/dialogs/pagewidget.cpp" line="360"/>
         <source>Full view</source>
         <translation type="unfinished"></translation>
     </message>
@@ -969,12 +982,12 @@ Select your preferred language and the installation type.</source>
 <context>
     <name>Core::ProxyPage</name>
     <message>
-        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="347"/>
+        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="447"/>
         <source>Proxy definition</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="348"/>
+        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="448"/>
         <source>%1 has detected a network proxy on your computer. 
 Please check and validate the proxy settings.</source>
         <translation type="unfinished"></translation>
@@ -983,63 +996,63 @@ Please check and validate the proxy settings.</source>
 <context>
     <name>Core::ServerConfigPage</name>
     <message>
-        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="532"/>
+        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="652"/>
         <source>Missing files.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="542"/>
+        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="662"/>
         <source>Network server configuration</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="569"/>
+        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="173"/>
         <source>Connection to the server: User rights inadequate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="570"/>
+        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="175"/>
         <source>You need to connect with another user that have rights to select, udpate, delete, insert, create, drop, alter and create user.
 Please contact your server administrator.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="597"/>
+        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="189"/>
         <source>Server already configured</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="597"/>
+        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="190"/>
         <source>The server is already configured for FreeMedForms.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="609"/>
+        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="223"/>
         <source>Server configured</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="609"/>
+        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="225"/>
         <source>The server was successfully configured.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="603"/>
+        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="213"/>
         <source>An error occured...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="533"/>
+        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="653"/>
         <source>The configuration script is missing. You can not configure the server without this script.&lt;br&gt;&lt;br&gt;&lt;b&gt;%1&lt;/b&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="543"/>
+        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="663"/>
         <source>You must configure the server using the server super-administrator login and password to connect the database.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="604"/>
+        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="214"/>
         <source>An error occured when trying to execute the script configuration script.
 Please check out the log files and contact your administrator.</source>
         <translation type="unfinished"></translation>
@@ -1048,38 +1061,53 @@ Please check out the log files and contact your administrator.</source>
 <context>
     <name>Core::ServerPreferencesWidget</name>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.cpp" line="227"/>
-        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.cpp" line="277"/>
+        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.cpp" line="223"/>
+        <source>Enter hostname...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.cpp" line="226"/>
+        <source>Host name is valid...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.cpp" line="229"/>
+        <source>Host name is not valid...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.cpp" line="264"/>
+        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.cpp" line="316"/>
         <source>Host not reachable...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.cpp" line="231"/>
+        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.cpp" line="268"/>
         <source>Host available...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.cpp" line="247"/>
+        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.cpp" line="284"/>
         <source>Host name error (%1:%2)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.cpp" line="284"/>
+        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.cpp" line="323"/>
         <source>No anonymous connection allowed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.cpp" line="288"/>
+        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.cpp" line="329"/>
         <source>Test in progress...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.cpp" line="302"/>
+        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.cpp" line="345"/>
         <source>Connection error: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.cpp" line="309"/>
+        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.cpp" line="352"/>
         <source>Connected</source>
         <translation type="unfinished"></translation>
     </message>
