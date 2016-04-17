@@ -61,8 +61,8 @@ class ServerPreferencesWidgetPrivate
 public:
     ServerPreferencesWidgetPrivate(ServerPreferencesWidget *parent) :
         ui(new Internal::Ui::ServerPreferencesWidget),
-        _hostReachable(false),
         _hostNameLengthValid(false),
+        _hostReachable(false),
         _connectionSucceeded(false),
         _grants(Utils::Database::Grant_NoGrant),
         q(parent)
