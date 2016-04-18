@@ -185,7 +185,7 @@ linkQtLibs()
      echo "   * moving to cd $PACKAGES_PATH/mac/$BUNDLE_NAME"
    fi
 
-   MAKE_STEP=`$MAC_SCRIPTS_PATH/macDeploy.sh -a $BUNDLE_NAME -p iconengines -p imageformats -p sqldrivers -p accessible -p platforms -p printsupport`
+   MAKE_STEP=`$MAC_SCRIPTS_PATH/macDeploy.sh -a $BUNDLE_NAME -p iconengines -p imageformats -p sqldrivers -p platforms -p printsupport`
    MAKE_STEP=$?
    if [ ! $MAKE_STEP = 0 ]; then
    echo "   *** Error: Deployement step wrong ***"
