@@ -215,7 +215,7 @@ linkMySqlLib()
    echo "    Linking MySql client lib from $mysqllib to $FRAMEWORK_PATH for $BUNDLE_NAME"
    mysqllib_source=`basename $mysqllib`
    mysqllib_source=`locate $mysqllib_source`
-   cp $mysqllib_source $FRAMEWORK_PATH
+   cp "$mysqllib_source" "$FRAMEWORK_PATH"
    name=`basename $mysqllib`
    install_name_tool -change $mysqllib @executable_path/../Frameworks/$name "$MYSQL_PLUGIN"
    #    fi
