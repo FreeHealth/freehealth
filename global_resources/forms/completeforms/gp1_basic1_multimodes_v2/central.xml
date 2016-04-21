@@ -5,19 +5,19 @@
 
   <formdescription>
     <!-- Non translatable values -->
-    <authors>Eric Maeker, MD</authors>
+    <authors>Eric Maeker, MD; Jerome Pinguet</authors>
     <version>test</version>
     <fmfv>0.9.7</fmfv>
     <cdate>2012-09-03</cdate>
-    <lmdate>2016-04-07</lmdate>
+    <lmdate>2016-04-22</lmdate>
     <icon>generalpractitioner.png</icon>
     <weblink></weblink>
     <bibliography/>
 
     <!-- Translatable values -->
     <license>GPLv3</license>
-    <description lang="fr">Dossier médical générique multi-pages</description>
-    <description lang="xx">Multi-page generic patient file</description>
+    <description lang="fr">Dossier médical générique multi-pages Version 2</description>
+    <description lang="xx">Multi-page generic patient file Version 2</description>
     <category lang="xx">General practice</category>
     <category lang="fr">Médecine générale</category>
     <specialties lang="fr">Médecine générale</specialties>
