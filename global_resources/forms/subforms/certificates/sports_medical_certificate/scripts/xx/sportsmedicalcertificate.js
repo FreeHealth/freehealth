@@ -8,6 +8,7 @@ namespace.module('com.freemedforms.certificates.sportsmedicalcertificate', funct
   //var mainSites = new Array();
   var signeeText;
   var signeeArray = ["soussigné", "soussignée"];
+  var sportsmedicalcertificate_additionalTextUi;
   //var raySelector = new Array("xx", "fr");
 
   exports.extend({
@@ -27,6 +28,7 @@ function sportsmedicalcertificate_getUiElements() {
         freemedforms.forms.namespaceInUse = "Subforms::Certificates::Sports::Medical::Certificate";
         var ui = formUi.ui();
         sportsmedicalcertificate_nameOfSportUi = ui.findChild("nameOfSportLineEdit");
+        sportsmedicalcertificate_additionalTextUi = ui.findChild("additionalTextLineEdit");
         sportsmedicalcertificate_competitionCheckUi = ui.findChild("competitionCheckBox");
         //siteSelectorListWidget = ui.findChild("siteSelectorListWidget");
         //raySelectorListWidget = ui.findChild("RaySelectorListWidget");
@@ -61,7 +63,7 @@ function sportsmedicalcertificate_connectUiElements()
 {
     sportsmedicalcertificate_nameOfSportUi.textChanged.connect(this, sportsmedicalcertificate_createhtml);
     sportsmedicalcertificate_competitionCheckUi.stateChanged.connect(this, sportsmedicalcertificate_createhtml);
-
+    sportsmedicalcertificate_additionalTextUi.textChanged.connect(this, sportsmedicalcertificate_createhtml);
 }
 
 function sportsmedicalcertificate_reTranslateUi()
@@ -115,9 +117,14 @@ function sportsmedicalcertificate_createhtml()
     }
     html += ".";
     html += "</p>";
+
+    html += "<p>";
+    var additionalText = sportsmedicalcertificate_additionalTextUi.text;
+    html += additionalText;
+    html += "</p>";
     html += "<div style=\"margin-left: 100%;\">";
     html += "<p>"
-    html += "A ";
+    html += "À ";
     var city = freemedforms.user.city;
     html += city;
     html += ", le ";

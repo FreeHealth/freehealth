@@ -55,6 +55,15 @@
             <label lang="fr">En compétition</label>
         </Item>
 
+        <Item type="shorttext" name="Additional::Text::Shorttext">               
+            <uilink label="additionalTextLabel" widget="additionalTextLineEdit" layout=""/>
+            <options>DontPrintEmptyValues</options>                             
+            <label lang="xx">Texte supplémentaire</label>                               
+            <label lang="fr">Texte supplémentaire</label>                               
+            <placeholder lang="xx"></placeholder>                 
+            <placeholder lang="fr"></placeholder>                 
+        </Item>
+
       </Item> <!-- end of group Items::Group -->
 
 <!--
