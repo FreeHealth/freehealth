@@ -78,6 +78,10 @@
 
   </formdescription>
 
+  <fieldequivalence>
+    <equivalent old="FrGroup::OwnerName" new="FrGroup::Owner::Family::Name" setInVersion=""/>
+  </fieldequivalence>
+
   <MedForm name="Subs::Tools::IdentitySynopsis" uifilename="./ui/xx/identity.ui">
     <label lang="xx">Identity</label>
     <label lang="fr">Identité</label>
@@ -133,12 +137,31 @@
             <value><default>checked</default></value>
           </Item>
 
-          <Item type="shorttext" name="FrGroup::OwnerName">
-            <uilink label="ownerLabel" widget="ownerEdit"/>
-            <label lang="xx">Social number owner</label>
-            <label lang="fr">Propriétaire</label>
+          <Item type="shorttext" name="FrGroup::Owner::Family::Name">
+            <uilink label="ownerFamilyNameLabel" widget="ownerFamilyNameEdit"/>
+            <label lang="xx">Social number owner family name</label>
+            <label lang="fr">Nom de famille de l'assuré(e)</label>
             <options>DontPrintEmptyValues</options>
-            <patientdata>SocialNumberOwnerFullName</patientdata>
+            <patientdata>SocialNumberOwnerFamilyName</patientdata>
+          </Item>
+                    
+          <Item type="shorttext" name="FrGroup::Owner::Given::Name">                     
+            <uilink label="ownerGivenNameLabel" widget="ownerGivenNameEdit"/>                     
+            <label lang="xx">Social number owner given name</label>                        
+            <label lang="fr">Prénom de l'assuré(e)</label>                               
+            <options>DontPrintEmptyValues</options>                             
+            <patientdata>SocialNumberOwnerGivenName</patientdata>                
+          </Item>
+
+          <Item type="shorttext" name="FrGroup::Owner::Date::Of::Birth">            
+            <uilink label="ownerDobLabel" widget="ownerDobLineEdit"/>   
+            <label lang="xx">Social number owner date of birth (YYYY-MM-DD)</label>             
+            <label lang="fr">Date de naissance de l'assuré(e) (AAAA-MM-JJ)</label>
+            <placeholder lang="xx">1900-01-01</placeholder>
+            <placeholder lang="fr">1900-01-01</placeholder>
+            <options>DontPrintEmptyValues</options>                             
+            <patientdata>SocialNumberOwnerDateOfBirth</patientdata>
+            <inputmask>0000-00-00</inputmask>               
           </Item>
 
           <Item type="button" name="FrGroup::CreateDeclaration">

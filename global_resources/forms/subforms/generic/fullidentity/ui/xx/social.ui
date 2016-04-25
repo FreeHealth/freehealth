@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>331</width>
-    <height>106</height>
+    <width>307</width>
+    <height>190</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -27,12 +27,12 @@
    <item row="1" column="0" colspan="2">
     <layout class="QGridLayout" name="gridLayout_2">
      <item row="1" column="2">
-      <widget class="QLabel" name="ownerLabel">
+      <widget class="QLabel" name="ownerFamilyNameLabel">
        <property name="text">
-        <string>Owner</string>
+        <string>Family name</string>
        </property>
        <property name="buddy">
-        <cstring>ownerEdit</cstring>
+        <cstring>ownerFamilyNameEdit</cstring>
        </property>
       </widget>
      </item>
@@ -53,7 +53,7 @@
       </spacer>
      </item>
      <item row="1" column="3">
-      <widget class="QLineEdit" name="ownerEdit"/>
+      <widget class="QLineEdit" name="ownerFamilyNameEdit"/>
      </item>
      <item row="0" column="1" colspan="3">
       <widget class="QCheckBox" name="isSINOwnerCheck">
@@ -94,6 +94,26 @@
        </property>
       </spacer>
      </item>
+     <item row="2" column="2">
+      <widget class="QLabel" name="ownerGivenNameLabel">
+       <property name="text">
+        <string>Given name</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="3">
+      <widget class="QLineEdit" name="ownerGivenNameEdit"/>
+     </item>
+     <item row="3" column="3">
+      <widget class="QLineEdit" name="ownerDobLineEdit"/>
+     </item>
+     <item row="3" column="2">
+      <widget class="QLabel" name="ownerDobLabel">
+       <property name="text">
+        <string>dob</string>
+       </property>
+      </widget>
+     </item>
     </layout>
    </item>
    <item row="2" column="0" colspan="2">
@@ -120,14 +140,14 @@
  </widget>
  <tabstops>
   <tabstop>isSINOwnerCheck</tabstop>
-  <tabstop>ownerEdit</tabstop>
+  <tabstop>ownerFamilyNameEdit</tabstop>
  </tabstops>
  <resources/>
  <connections>
   <connection>
    <sender>isSINOwnerCheck</sender>
    <signal>toggled(bool)</signal>
-   <receiver>ownerEdit</receiver>
+   <receiver>ownerFamilyNameEdit</receiver>
    <slot>setDisabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
@@ -143,7 +163,7 @@
   <connection>
    <sender>isSINOwnerCheck</sender>
    <signal>toggled(bool)</signal>
-   <receiver>ownerLabel</receiver>
+   <receiver>ownerFamilyNameLabel</receiver>
    <slot>setDisabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
@@ -153,6 +173,70 @@
     <hint type="destinationlabel">
      <x>50</x>
      <y>197</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>isSINOwnerCheck</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>ownerGivenNameLabel</receiver>
+   <slot>setDisabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>166</x>
+     <y>47</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>103</x>
+     <y>102</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>isSINOwnerCheck</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>ownerGivenNameEdit</receiver>
+   <slot>setDisabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>166</x>
+     <y>47</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>223</x>
+     <y>102</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>isSINOwnerCheck</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>ownerDobLabel</receiver>
+   <slot>setDisabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>166</x>
+     <y>47</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>103</x>
+     <y>130</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>isSINOwnerCheck</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>ownerDobLineEdit</receiver>
+   <slot>setDisabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>166</x>
+     <y>47</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>223</x>
+     <y>130</y>
     </hint>
    </hints>
   </connection>
