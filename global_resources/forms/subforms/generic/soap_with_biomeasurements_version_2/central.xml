@@ -16,9 +16,9 @@
 
     <!-- Translatable values -->
     <license>GPLv3</license>
-    <description lang="xx">SOAP with biometrics</description>
-    <description lang="fr">POMR avec biométrie</description>
-    <description lang="de">SOAP mit Biometriedaten</description>
+    <description lang="xx">SOAP with biometrics version 2</description>
+    <description lang="fr">POMR avec biométrie version 2</description>
+    <description lang="de">SOAP mit Biometriedaten version 2</description>
     <category lang="xx">Generic tools</category>
     <category lang="fr">Outils généraux</category>
     <category lang="de">Allgemeine Tools</category>
