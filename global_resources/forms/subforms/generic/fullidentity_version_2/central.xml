@@ -5,11 +5,11 @@
 
   <formdescription>
     <!-- Non translatable values -->
-    <authors>Eric Maeker, MD</authors>
+    <authors>Eric Maeker, MD ; Jerome Pinguet</authors>
     <version>test</version>
     <fmfv>0.8.4</fmfv>
     <cdate>2012-01-01</cdate>
-    <lmdate>2014-07-22</lmdate>
+    <lmdate>2016-04-26</lmdate>
     <icon>__theme__/identity.png</icon>
     <weblink></weblink>
     <bibliography/>

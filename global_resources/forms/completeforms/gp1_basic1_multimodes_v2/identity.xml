@@ -40,6 +40,6 @@
     <icon>__theme__/identity.png</icon>
   </Page>
 
-  <file>__subForms__/generic/fullidentity/central.xml</file>
+  <file>__subForms__/generic/fullidentity_version_2/central.xml</file>
 
 </FreeMedForms>
