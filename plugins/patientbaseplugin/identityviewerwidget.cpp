@@ -85,6 +85,13 @@ namespace {
 class SimpleIdentityWidget : public QWidget
 {
 public:
+
+    /*! \brief Display patient identity data
+     *
+     *  Used by IdentityAndAgeDetailsWidget (and indirectly by IdentityViewerWidget
+     *  and IdentityViewerWidgetPrivate) to display title, names, gender of the
+     *  selected patient under the patients' list.
+     */
     SimpleIdentityWidget(QWidget *parent) : QWidget(parent)
     {
         _grid = new QFormLayout(this);
@@ -190,6 +197,12 @@ private:
 class AgeViewerWidget : public QWidget
 {
 public:
+    /*! \brief Display patient demographics data
+     *
+     *  Used by IdentityAndAgeDetailsWidget (and indirectly by IdentityViewerWidget
+     *  and IdentityViewerWidgetPrivate) to display age, DoB, social number,
+     *  occupation (profession) of the selected patient under the patients' list.
+     */
     AgeViewerWidget(QWidget *parent) : QWidget(parent)
     {
         QFormLayout *grid = new QFormLayout(this);
@@ -294,6 +307,12 @@ private:
 class IdentityAndAgeDetailsWidget : public QWidget
 {
 public:
+    /*! \brief Display patient identity & demographics data
+     *
+     *  Used by IdentityViewerWidgetPrivate and indirectly by IdentityViewerWidget
+     *  to display title, names, gender, age, DoB, Social number and Profession
+     *  of the selected patient under the patients' list.
+     */
     IdentityAndAgeDetailsWidget(QWidget *parent) : QWidget(parent)
     {
         QVBoxLayout *vboxIdent = new QVBoxLayout;
