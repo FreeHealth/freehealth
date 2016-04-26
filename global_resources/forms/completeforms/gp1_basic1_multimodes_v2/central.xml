@@ -85,7 +85,9 @@
     <icon>__theme__/stethoscope.png</icon>
     <options>NoEpisode;DontPrintEmptyValues</options>
 
+    <!-- set up this form by adding it manually to allow scripting
     <file>__subForms__/generic/soap_with_biomeasurements/central.xml</file>
+    -->
 
     <MedForm name="GP::Basic::Consultation::Reports">
       <label lang="xx">Consultation reports</label>
