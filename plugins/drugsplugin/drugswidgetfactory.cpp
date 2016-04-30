@@ -153,13 +153,14 @@ Form::IFormWidget *DrugsWidgetsFactory::createWidget(const QString &name, Form::
 DrugsPrescriptorWidget::DrugsPrescriptorWidget(const QString &name, Form::FormItem *formItem, QWidget *parent) :
     Form::IFormWidget(formItem,parent),
     m_PrescriptionModel(0),
+    m_VBoxLayout(0),
     m_AddChronic(0)
 {
     // Prepare Widget Layout and label
     // QtUi Loaded ?
-    const QString &widget = formItem->spec()->value(Form::FormItemSpec::Spec_UiWidget).toString();
+    const QString &widget = formItem->spec()->value(Form::FormItemSpec::Spec_UiInsertIntoLayout).toString();
     if (!widget.isEmpty()) {
-        // Find widget
+        // Find layout
         QVBoxLayout *vb = formItem->parentFormMain()->formWidget()->findChild<QVBoxLayout*>(widget);
         if (vb) {
             qWarning() << "layout =" << vb;
