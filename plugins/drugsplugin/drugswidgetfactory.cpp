@@ -155,17 +155,40 @@ DrugsPrescriptorWidget::DrugsPrescriptorWidget(const QString &name, Form::FormIt
     m_AddChronic(0)
 {
     // Prepare Widget Layout and label
+    // QtUi Loaded ?
+    const QString &widget = formItem->spec()->value(Form::FormItemSpec::Spec_UiWidget).toString();
+    if (!widget.isEmpty()) {
+        // Find widget
+        QVBoxLayout *hb = formItem->parentFormMain()->formWidget()->findChild<QVBoxLayout*>(widget);
+        if (hb) {
+            qWarning() << "layout =" << hb;
+        } else {
+            LOG_ERROR("Using the QtUiLinkage, item not found in the ui: " + formItem->uuid());
+            // To avoid segfaulting create a fake combo
+            hb = new QVBoxLayout(this);
+        }
+        // Find Label
+        QWidget *labelWidget = new QWidget(this);
+        QBoxLayout *labelBox = getBoxLayout(OnLeft, m_FormItem->spec()->label(), labelWidget);
+
+
+
+    } else {
+        QVBoxLayout *hb = new QVBoxLayout(this);
+    }
     QWidget *labelWidget = new QWidget(this);
     QBoxLayout *labelBox = getBoxLayout(OnLeft, m_FormItem->spec()->label(), labelWidget);
-    labelBox->setSpacing(0);
-    labelBox->setMargin(0);
-    labelBox->addWidget(m_Label);
+    QWidget *labelWidget = new QWidget(this);
 
     // Label always on top...
-    QVBoxLayout *hb = new QVBoxLayout(this);
+
     hb->setSpacing(0);
     hb->setMargin(0);
     hb->addWidget(labelWidget);
+
+    labelBox->setSpacing(0);
+    labelBox->setMargin(0);
+    labelBox->addWidget(m_Label);
 
     // create main widget
     m_CentralWidget = new DrugsCentralWidget(this);
