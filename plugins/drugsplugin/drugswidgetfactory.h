@@ -103,6 +103,7 @@ private Q_SLOTS:
 public:
     DrugsDB::DrugsModel *m_PrescriptionModel;
     DrugsWidget::DrugsCentralWidget *m_CentralWidget;
+    QVBoxLayout *m_VBoxLayout;
 
 private:
     QString m_iniPath;

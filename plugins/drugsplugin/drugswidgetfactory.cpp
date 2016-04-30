@@ -57,6 +57,7 @@
 #include <formmanagerplugin/iformitem.h>
 
 #include <utils/global.h>
+#include <utils/log.h>
 #include <translationutils/constants.h>
 
 #include <QStringList>
@@ -159,36 +160,29 @@ DrugsPrescriptorWidget::DrugsPrescriptorWidget(const QString &name, Form::FormIt
     const QString &widget = formItem->spec()->value(Form::FormItemSpec::Spec_UiWidget).toString();
     if (!widget.isEmpty()) {
         // Find widget
-        QVBoxLayout *hb = formItem->parentFormMain()->formWidget()->findChild<QVBoxLayout*>(widget);
-        if (hb) {
-            qWarning() << "layout =" << hb;
+        QVBoxLayout *vb = formItem->parentFormMain()->formWidget()->findChild<QVBoxLayout*>(widget);
+        if (vb) {
+            qWarning() << "layout =" << vb;
+            m_VBoxLayout = vb;
         } else {
             LOG_ERROR("Using the QtUiLinkage, item not found in the ui: " + formItem->uuid());
             // To avoid segfaulting create a fake combo
-            hb = new QVBoxLayout(this);
+            m_VBoxLayout = new QVBoxLayout(this);
         }
-        // Find Label
-        QWidget *labelWidget = new QWidget(this);
-        QBoxLayout *labelBox = getBoxLayout(OnLeft, m_FormItem->spec()->label(), labelWidget);
-
-
-
     } else {
-        QVBoxLayout *hb = new QVBoxLayout(this);
+        m_VBoxLayout = new QVBoxLayout(this);
     }
     QWidget *labelWidget = new QWidget(this);
     QBoxLayout *labelBox = getBoxLayout(OnLeft, m_FormItem->spec()->label(), labelWidget);
-    QWidget *labelWidget = new QWidget(this);
 
     // Label always on top...
-
-    hb->setSpacing(0);
-    hb->setMargin(0);
-    hb->addWidget(labelWidget);
-
     labelBox->setSpacing(0);
     labelBox->setMargin(0);
     labelBox->addWidget(m_Label);
+
+    m_VBoxLayout->setSpacing(0);
+    m_VBoxLayout->setMargin(0);
+    m_VBoxLayout->addWidget(labelWidget);
 
     // create main widget
     m_CentralWidget = new DrugsCentralWidget(this);
@@ -213,7 +207,7 @@ DrugsPrescriptorWidget::DrugsPrescriptorWidget(const QString &name, Form::FormIt
         labelBox->addWidget(m_AddChronic);
         connect(m_AddChronic, SIGNAL(clicked()), this, SLOT(addChronicTherapeutics()));
     }
-    hb->addWidget(m_CentralWidget);
+    m_VBoxLayout->addWidget(m_CentralWidget);
 
     if (options.contains("nointeractionchecking", Qt::CaseInsensitive)) {
         m_PrescriptionModel->setComputeDrugInteractions(false);
