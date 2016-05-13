@@ -427,7 +427,7 @@ bool Database::createMySQLUser(const QString &log,
 //    qWarning() << "xxxxxxxxxxxxxxxxxxxxxxx check";
 //    qWarning() << grants << (grants & Grant_All);
 
-    if (!(userGrants & Grant_CreateUser)) {
+    if (userGrants & Grant_CreateUser) {
         LOG_ERROR_FOR("Database", "You are trying to create a new user, but your current user doesn't have enough privileges.");
         LOG_DATABASE_FOR("Database", database());
         return false;
