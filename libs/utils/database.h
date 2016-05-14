@@ -34,6 +34,7 @@
 #include <QStringList>
 #include <QVariant>
 #include <QHash>
+#include <QFlags>
 
 #include <QDebug>
 
@@ -181,32 +182,33 @@ public:
 
     /** \brief Describe the grants on database/server (mainly used for MySQL connections). */
     enum Grant {
-        Grant_NoGrant          = 0x00000,
-        Grant_Select           = 0x00001,
-        Grant_Update           = 0x00002,
-        Grant_Insert           = 0x00004,
-        Grant_Delete           = 0x00008,
-        Grant_Create           = 0x00010,
-        Grant_Drop             = 0x00020,
-        Grant_Index            = 0x00040,
-        Grant_Alter            = 0x00080,
-        Grant_CreateTmpTables  = 0x00100,
-        Grant_LockTables       = 0x00200,
-        Grant_Execute          = 0x00400,
-        Grant_CreateView       = 0x00800,
-        Grant_ShowView         = 0x01000,
-        Grant_CreateRoutine    = 0x02000,
-        Grant_AlterRoutine     = 0x04000,
-        Grant_CreateUser       = 0x08000,
-        Grant_Options          = 0x10000,
-        Grant_Process          = 0x20000,
-        Grant_Trigger          = 0x40000,
-        Grant_ShowDatabases    = 0x80000,
+        Grant_NoGrant          = 0x000000,
+        Grant_Select           = 0x000001,
+        Grant_Update           = 0x000002,
+        Grant_Insert           = 0x000004,
+        Grant_Delete           = 0x000008,
+        Grant_Create           = 0x000010,
+        Grant_Drop             = 0x000020,
+        Grant_Index            = 0x000040,
+        Grant_Alter            = 0x000080,
+        Grant_CreateTmpTables  = 0x000100,
+        Grant_LockTables       = 0x000200,
+        Grant_Execute          = 0x000400,
+        Grant_CreateView       = 0x000800,
+        Grant_ShowView         = 0x001000,
+        Grant_CreateRoutine    = 0x002000,
+        Grant_AlterRoutine     = 0x004000,
+        Grant_CreateUser       = 0x008000,
+        Grant_Options          = 0x010000,
+        Grant_Process          = 0x020000,
+        Grant_Trigger          = 0x040000,
+        Grant_ShowDatabases    = 0x080000,
+        Grant_Reload           = 0x100000,
         Grant_All              = Grant_Select|Grant_Update|Grant_Insert|Grant_Delete|Grant_Create|
                                  Grant_Drop|Grant_Index|Grant_Alter|Grant_CreateTmpTables|
                                  Grant_LockTables|Grant_Execute|Grant_CreateView|Grant_ShowView|
                                  Grant_CreateRoutine|Grant_AlterRoutine|Grant_CreateUser|Grant_Options|
-                                 Grant_Process|Grant_Trigger|Grant_ShowDatabases
+                                 Grant_Process|Grant_Trigger|Grant_ShowDatabases|Grant_Reload
 
     };
     /** \brief Enumerate the values of fields got by Sqlite PRAGMA command */

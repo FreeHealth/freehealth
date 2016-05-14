@@ -171,9 +171,9 @@ namespace {
               (grants & Utils::Database::Grant_CreateUser)
               )) {
             Utils::warningMessageBox(QApplication::translate("Core::ServerConfigPage",
-                                                             "Connection to the server: User rights inadequate"),
+                                                             "Connection to the server: User privileges inadequate"),
                                      QApplication::translate("Core::ServerConfigPage",
-                                                             "You need to connect with another user that have rights to "
+                                                             "You need to connect with another user that has the following global privileges: "
                                                              "select, udpate, delete, insert, create, drop, alter and create user.\n"
                                                              "Please contact your server administrator."));
             QSqlDatabase::removeDatabase(connection);
