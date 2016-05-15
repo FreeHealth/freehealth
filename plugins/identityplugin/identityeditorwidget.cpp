@@ -296,7 +296,7 @@ public:
         QObject::connect(ui->dob, SIGNAL(dateChanged(QDate)), q, SIGNAL(dateOfBirthChanged(QDate)));
         QObject::connect(ui->genderCombo, SIGNAL(currentIndexChanged(int)), q, SIGNAL(genderIndexChanged(int)));
         QObject::connect(ui->genderCombo, SIGNAL(currentIndexChanged(QString)), q, SIGNAL(genderChanged(QString)));
-//        QObject::connect(ui->titleCombo, SIGNAL(currentIndexChanged(int)), q, SIGNAL(titleIndexChanged(int)));
+        QObject::connect(ui->titleCombo, SIGNAL(currentIndexChanged(int)), q, SIGNAL(titleIndexChanged(int)));
         QObject::connect(ui->titleCombo, SIGNAL(currentIndexChanged(QString)), q, SIGNAL(titleChanged(QString)));
 //        QObject::connect(ui->photoButton, SIGNAL(), q, SIGNAL(usualNameChanged(QString)));
     }
@@ -368,7 +368,8 @@ public:
     QWidget *getWidget(IdentityEditorWidget::AvailableWidget widget)
     {
         switch (widget) {
-        case IdentityEditorWidget::TitleIndex: return ui->titleCombo;
+        case IdentityEditorWidget::TitleIndex:
+        case IdentityEditorWidget::Title: return ui->titleCombo;
         case IdentityEditorWidget::UsualName: return ui->usualName;
         case IdentityEditorWidget::OtherNames: return ui->otherNames;
         case IdentityEditorWidget::FirstName: return ui->firstname;
@@ -389,6 +390,7 @@ public:
     QByteArray getWidgetPropertyForMapper(IdentityEditorWidget::AvailableWidget widget)
     {
         switch (widget) {
+        case IdentityEditorWidget::Title:
         case IdentityEditorWidget::TitleIndex:
         case IdentityEditorWidget::Gender:
         case IdentityEditorWidget::GenderIndex:
@@ -575,7 +577,7 @@ void IdentityEditorWidget::setAvailableWidgets(AvailableWidgets widgets)
     if (!d->ui)
         return;
 
-    d->ui->titleCombo->setEnabled(widgets.testFlag(TitleIndex));
+    d->ui->titleCombo->setEnabled(widgets.testFlag(Title) || widgets.testFlag(TitleIndex));
     d->ui->genderCombo->setEnabled(widgets.testFlag(Gender) || widgets.testFlag(GenderIndex));
     d->ui->usualName->setEnabled(widgets.testFlag(UsualName));
     d->ui->otherNames->setEnabled(widgets.testFlag(OtherNames));
@@ -835,9 +837,21 @@ bool IdentityEditorWidget::isModified() const
 }
 
 /** Return the current editing value */
+int IdentityEditorWidget::currentTitleIndex() const
+{
+    return d->ui->titleCombo->currentIndex();
+}
+
+/** Return the current editing value */
 QString IdentityEditorWidget::currentTitle() const
 {
-    return d->ui->titleCombo->currentText();
+    int titleIndex = -1;
+    titleIndex = d->ui->titleCombo->currentIndex();
+
+    if (IN_RANGE_STRICT_MAX(titleIndex, 0, Trans::ConstantTranslations::titles().count()))
+        return Trans::ConstantTranslations::titles()[titleIndex];
+
+    return QString();
 }
 
 /** Return the current editing value */

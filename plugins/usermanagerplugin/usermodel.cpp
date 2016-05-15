@@ -990,7 +990,7 @@ bool UserModel::setData(const QModelIndex &item, const QVariant &value, int role
         user->setGenderIndex(value.toInt());
         break;
     case Core::IUser::TitleIndex :
-        colsToEmit << Core::IUser::Title << Core::IUser::FullName<< Core::IUser::FullHtmlContact;
+        colsToEmit << Core::IUser::Title << Core::IUser::TitleIndex << Core::IUser::FullName<< Core::IUser::FullHtmlContact;
         user->setTitleIndex(value.toInt());
         break;
     case Core::IUser::UsualName:

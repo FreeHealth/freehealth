@@ -70,6 +70,7 @@ class IDENTITYSHARED_EXPORT IdentityEditorWidget : public QWidget
     friend class Internal::IdentityEditorWidgetPrivate;
 
     Q_PROPERTY(QString title READ currentTitle NOTIFY titleChanged)
+    Q_PROPERTY(QString titleIndex READ currentTitleIndex NOTIFY titleIndexChanged)
     Q_PROPERTY(QString usualName READ currentUsualName NOTIFY usualNameChanged)
     Q_PROPERTY(QString otherNames READ currentOtherNames NOTIFY otherNamesChanged)
     Q_PROPERTY(QString firstName READ currentFirstName NOTIFY firstNameChanged)
@@ -84,27 +85,28 @@ class IDENTITYSHARED_EXPORT IdentityEditorWidget : public QWidget
 
 public:
     enum AvailableWidget {
-        TitleIndex      = 0x00000001,
-        UsualName       = 0x00000002,
-        OtherNames      = 0x00000004,
-        FirstName       = 0x00000008,
-        Gender          = 0x00000010,
-        GenderIndex     = 0x00000020,
-        Language_QLocale= 0x00000040,
-        LanguageIso     = 0x00000080,
-        DateOfBirth     = 0x00000100,
-        DateOfDeath     = 0x08000000,
-        Photo           = 0x00001000,
-        Street          = 0x00002000,
-        City            = 0x00004000,
-        Zipcode         = 0x00008000,
-        Province        = 0x00010000,
-        Country_TwoCharIso  = 0x00020000,
-        Country_QLocale = 0x00040000,
+        Title                   = 0x00000001,
+        TitleIndex              = 0x00000002,
+        UsualName               = 0x00000004,
+        OtherNames              = 0x00000008,
+        FirstName               = 0x00000010,
+        Gender                  = 0x00000020,
+        GenderIndex             = 0x00000040,
+        Language_QLocale        = 0x00000080,
+        LanguageIso             = 0x00000100,
+        DateOfBirth             = 0x00000200,
+        DateOfDeath             = 0x08000400,
+        Photo                   = 0x00000800,
+        Street                  = 0x00001000,
+        City                    = 0x00002000,
+        Zipcode                 = 0x00004000,
+        Province                = 0x00008000,
+        Country_TwoCharIso      = 0x00010000,
+        Country_QLocale         = 0x00020000,
         // TODO: implement the following
-        Extra_Login     = 0x00080000,
-        Extra_Password  = 0x00100000,
-        Extra_ConfirmPassword   = 0x00200000,
+        Extra_Login             = 0x00040000,
+        Extra_Password          = 0x00080000,
+        Extra_ConfirmPassword   = 0x00100000,
         FullIdentity = TitleIndex | UsualName | OtherNames | FirstName | Gender | DateOfBirth,
         FullAddress =  Street | City | Zipcode | Province | Country_TwoCharIso |Country_QLocale,
         FullLogin = Extra_Login | Extra_Password | Extra_ConfirmPassword
@@ -134,6 +136,7 @@ public:
     bool isModified() const;
 
     QString currentTitle() const;
+    int currentTitleIndex() const;
     QString currentUsualName() const;
     QString currentOtherNames() const;
     QString currentFirstName() const;
@@ -166,6 +169,7 @@ public Q_SLOTS:
     bool fromXml(const QString &xml);
 
 Q_SIGNALS:
+    void titleIndexChanged(int titleIndex);
     void titleChanged(const QString &title);
     void usualNameChanged(const QString &usualName);
     void otherNamesChanged(const QString &otherNames);
