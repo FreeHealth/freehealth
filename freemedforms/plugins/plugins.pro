@@ -222,6 +222,13 @@ with-edrc {
     edrc.depends += formmanager # FreeMedForms EMR only
 }
 
+with-patientimport {
+    SUBDIRS += patientimport
+    patientimport.subdir = $${PLUGINS_PATH}/patientimportplugin
+    patientimport.depends += core
+    patientimport.depends += patientbase
+}
+
 tools.subdir   = $${PLUGINS_PATH}/toolsplugin
 tools.depends += core
 tools.depends += formmanager

@@ -84,13 +84,21 @@ contains(FREEMEDFORMS,1){
     # CONFIG *= with-edrc
     # ***************************************************************************************
 
+    # ***************************************************************************************
+    # *                                  Patientimport Plugin                                      *
+    # ***************************************************************************************
+    # Uncomment the following line to build the plugin
+      CONFIG *= with-patientimport
+    # ***************************************************************************************
+
     # The following lines must not be modified
-    with-agenda   { DEFINES *= WITH_AGENDA }
-    with-alerts   { DEFINES *= WITH_ALERTS }
-    with-feedback { DEFINES *= WITH_FEEDBACK }
-    with-pad      { DEFINES *= WITH_PAD }
-    with-pmh      { DEFINES *= WITH_PMH }
-    with-webcam   { DEFINES *= WITH_WEBCAM }
-    with-edrc     { DEFINES *= WITH_EDRC }
+    with-agenda         { DEFINES *= WITH_AGENDA }
+    with-alerts         { DEFINES *= WITH_ALERTS }
+    with-feedback       { DEFINES *= WITH_FEEDBACK }
+    with-pad            { DEFINES *= WITH_PAD }
+    with-pmh            { DEFINES *= WITH_PMH }
+    with-webcam         { DEFINES *= WITH_WEBCAM }
+    with-edrc           { DEFINES *= WITH_EDRC }
+    with-patientimport  { DEFINES *= WITH_PATIENTIMPORT }
 
 }
