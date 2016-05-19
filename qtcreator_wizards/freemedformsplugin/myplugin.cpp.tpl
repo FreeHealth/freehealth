@@ -53,7 +53,7 @@ static inline void messageSplash(const QString &s) {theme()->messageSplashScreen
 %PluginName%Plugin::%PluginName%Plugin()
 {
     setObjectName("%PluginName%Plugin");
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         qWarning() << "creating %PluginName%";
 
     // Add Translator to the Application
@@ -70,7 +70,7 @@ static inline void messageSplash(const QString &s) {theme()->messageSplashScreen
 
 %PluginName%Plugin::~%PluginName%Plugin()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         WARN_FUNC;
     // Unregister objects from the plugin manager's object pool
     // Delete members
@@ -81,7 +81,7 @@ bool %PluginName%Plugin::initialize(const QStringList &arguments, QString *error
     Q_UNUSED(arguments)
     Q_UNUSED(errorString)
 
-    if (Utils::Log::warnPluginsCreation()) {
+    if (Utils::Log::debugPluginsCreation()) {
         qWarning() << "creating %PluginName%";
     }
 
@@ -118,7 +118,7 @@ bool %PluginName%Plugin::initialize(const QStringList &arguments, QString *error
 
 void %PluginName%Plugin::extensionsInitialized()
 {
-    if (Utils::Log::warnPluginsCreation()) {
+    if (Utils::Log::debugPluginsCreation()) {
         qWarning() << "%PluginName%::extensionsInitialized";
     }
 
@@ -149,7 +149,7 @@ void %PluginName%Plugin::extensionsInitialized()
 
 void %PluginName%Plugin::postCoreInitialization()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         WARN_FUNC;
     // Core is fully intialized as well as all plugins
     // DataPacks are checked
@@ -157,7 +157,7 @@ void %PluginName%Plugin::postCoreInitialization()
 
 ExtensionSystem::IPlugin::ShutdownFlag %PluginName%Plugin::aboutToShutdown()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         WARN_FUNC;
     // Save settings
     // Disconnect from signals that are not needed during shutdown
@@ -179,7 +179,7 @@ ExtensionSystem::IPlugin::ShutdownFlag %PluginName%Plugin::aboutToShutdown()
 
 void %PluginName%Plugin::coreAboutToClose()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         WARN_FUNC;
     // Core is about to close
     // ICore::user() is still available
