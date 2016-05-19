@@ -495,11 +495,11 @@ UserContactPage::UserContactPage(QWidget *parent) :
     registerField("Country", ui->zipCodesWidget, "countryIso");
     registerField("State", ui->zipCodesWidget, "stateProvince");
 
-    registerField("Tel1", ui->tel1, "text");
-    registerField("Tel2", ui->tel2, "text");
-    registerField("Tel3", ui->tel3, "text");
-    registerField("Fax", ui->fax, "text");
-    registerField("Mail", ui->mail, "text");
+    registerField("Tel1", ui->tel1);
+    registerField("Tel2", ui->tel2);
+    registerField("Tel3", ui->tel3);
+    registerField("Fax", ui->fax);
+    registerField("Mail", ui->mail);
 }
 
 UserContactPage::~UserContactPage()

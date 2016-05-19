@@ -26,9 +26,9 @@
 /**
   \class Core::MainWindowActionHandler
   Core::MainWindowActionHandler is the action keeper for your main window.
-  Using the Core::MainWindowActions class, you can define which action you want to create, and then connect
-  them to the predefined slots. Slots are virtualized.
-  For code sample, please refer to MainWin::MainWindow code.
+  Using the Core::MainWindowActions class, you can define which action you want
+  to create, and then connect them to the predefined slots. Slots are
+  virtualized. For code sample, please refer to MainWin::MainWindow code.
 */
 
 #include "mainwindowactionhandler.h"
