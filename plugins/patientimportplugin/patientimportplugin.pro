@@ -23,10 +23,10 @@ SOURCES += \
 
 OTHER_FILES = patientimport.pluginspec
 
-equals(TEST, 1) {
-    SOURCES += \
-        tests/test_patientimportplugin.cpp
-}
+#equals(TEST, 1) {
+#    SOURCES += \
+#        tests/test_patientimportplugin.cpp
+#}
 
 #include translations
 TRANSLATION_NAME = patientimport

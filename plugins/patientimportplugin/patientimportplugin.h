@@ -49,12 +49,12 @@ private Q_SLOTS:
     void coreAboutToClose();
 
     // Declare plugin unit tests here
-#ifdef WITH_TESTS
-private Q_SLOTS:
-    void initTestCase();
-    void test_your_plugin_unit_test(); // see file tests/test_patientimport.cpp
-    void cleanTestCase();
-#endif
+//#ifdef WITH_TESTS
+//private Q_SLOTS:
+//    void initTestCase();
+//    void test_your_plugin_unit_test(); // see file tests/test_patientimport.cpp
+//    void cleanTestCase();
+//#endif
 
 };
 

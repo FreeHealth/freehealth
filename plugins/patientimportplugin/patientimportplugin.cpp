@@ -122,7 +122,7 @@ bool patientimportPlugin::initialize(const QStringList &arguments, QString *erro
 
 void patientimportPlugin::extensionsInitialized()
 {
-    if (Utils::Log::warnPluginsCreation()) {
+    if (Utils::Log::debugPluginsCreation()) {
         qWarning() << "patientimport::extensionsInitialized";
     }
 
@@ -153,7 +153,7 @@ void patientimportPlugin::extensionsInitialized()
 
 void patientimportPlugin::postCoreInitialization()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         WARN_FUNC;
     // Core is fully intialized as well as all plugins
     // DataPacks are checked
@@ -161,7 +161,7 @@ void patientimportPlugin::postCoreInitialization()
 
 ExtensionSystem::IPlugin::ShutdownFlag patientimportPlugin::aboutToShutdown()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         WARN_FUNC;
     // Save settings
     // Disconnect from signals that are not needed during shutdown
@@ -183,7 +183,7 @@ ExtensionSystem::IPlugin::ShutdownFlag patientimportPlugin::aboutToShutdown()
 
 void patientimportPlugin::coreAboutToClose()
 {
-    if (Utils::Log::warnPluginsCreation())
+    if (Utils::Log::debugPluginsCreation())
         WARN_FUNC;
     // Core is about to close
     // ICore::user() is still available
