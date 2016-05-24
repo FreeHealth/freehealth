@@ -27,22 +27,28 @@
 #define PATIENTIMPORT_IPLUGIN_H
 
 #include <extensionsystem/iplugin.h>
+#include <QStringList>
 
 namespace patientimport {
 namespace Internal {
 
-class patientimportPlugin : public ExtensionSystem::IPlugin
+class PatientimportPlugin : public ExtensionSystem::IPlugin
 {
     Q_OBJECT
     Q_PLUGIN_METADATA(IID "org.freemedforms.FreeMedForms.patientimportPlugin" FILE "patientimport.json")
 
 public:
-    patientimportPlugin();
-    ~patientimportPlugin();
+    PatientimportPlugin();
+    ~PatientimportPlugin();
 
     bool initialize(const QStringList &arguments, QString *errorString);
     void extensionsInitialized();
     ShutdownFlag aboutToShutdown();
+
+    static QStringList softwareList();
+
+public slots:
+    void openPatientImportDialog();
 
 private Q_SLOTS:
     void postCoreInitialization();

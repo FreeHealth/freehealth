@@ -25,6 +25,7 @@
  ***************************************************************************/
 #include "patientimportplugin.h"
 #include "patientimportconstants.h"
+#include "patientimportdialog.h"
 
 #include <coreplugin/dialogs/pluginaboutpage.h>
 #include <coreplugin/icore.h>
@@ -54,9 +55,9 @@ static inline Core::IUser *user()  { return Core::ICore::instance()->user(); }
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline void messageSplash(const QString &s) {theme()->messageSplashScreen(s); }
 
-patientimportPlugin::patientimportPlugin()
+PatientimportPlugin::PatientimportPlugin()
 {
-    setObjectName("patientimportPlugin");
+    setObjectName("PatientimportPlugin");
     if (Utils::Log::debugPluginsCreation())
         qWarning() << "creating patientimport";
 
@@ -72,7 +73,7 @@ patientimportPlugin::patientimportPlugin()
     connect(Core::ICore::instance(), SIGNAL(coreAboutToClose()), this, SLOT(coreAboutToClose()));
 }
 
-patientimportPlugin::~patientimportPlugin()
+PatientimportPlugin::~PatientimportPlugin()
 {
     if (Utils::Log::debugPluginsCreation())
         WARN_FUNC;
@@ -80,7 +81,7 @@ patientimportPlugin::~patientimportPlugin()
     // Delete members
 }
 
-bool patientimportPlugin::initialize(const QStringList &arguments, QString *errorString)
+bool PatientimportPlugin::initialize(const QStringList &arguments, QString *errorString)
 {
     Q_UNUSED(arguments)
     Q_UNUSED(errorString)
@@ -104,23 +105,30 @@ bool patientimportPlugin::initialize(const QStringList &arguments, QString *erro
     // No user is logged in until here
 
 
-    //    Core::ActionManager *am = Core::ICore::instance()->actionManager();
+    Core::ActionManager *am = Core::ICore::instance()->actionManager();
     //
-    //    QAction *action = new QAction(tr("patientimport action"), this);
-    //    Core::Command *cmd = am->registerAction(action, Constants::ACTION_ID,
-    //                         Core::Context(Core::Constants::C_GLOBAL));
+    QAction *a = new QAction(tr("patientimport action"), this);
+    a->setIcon(theme()->icon(Constants::PATIENTIMPORT_ICON));
+    Core::Command *cmd = am->registerAction(a, Constants::ACTION_ID,
+                                            Core::Context(Core::Constants::C_GLOBAL));
+    cmd->setTranslations(Constants::PATIENT_IMPORT);
+
+    //Core::ActionContainer *menu = am->createMenu(Constants::MENU_ID);
     //    cmd->setDefaultKeySequence(QKeySequence(tr("Ctrl+Alt+Shift+Meta+A")));
     //    connect(action, SIGNAL(triggered()), this, SLOT(triggerAction()));
-    //
     //    Core::ActionContainer *menu = am->createMenu(Constants::CUSTOM_MENU_ID);
-    //    menu->menu()->setTitle(tr("patientimport"));
     //    menu->addAction(cmd);
+    //menu->addAction(cmd, Core::Id(Core::Constants::G_GENERAL_PLUGINS));
+    am->actionContainer(Core::Constants::M_PLUGINS)->addAction(cmd);
+    connect(a, SIGNAL(triggered()), this, SLOT(openPatientImportDialog()));
+
+
     //    am->actionContainer(Core::Constants::M_TOOLS)->addMenu(menu);
 
     return true;
 }
 
-void patientimportPlugin::extensionsInitialized()
+void PatientimportPlugin::extensionsInitialized()
 {
     if (Utils::Log::debugPluginsCreation()) {
         qWarning() << "patientimport::extensionsInitialized";
@@ -151,7 +159,7 @@ void patientimportPlugin::extensionsInitialized()
     connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
 }
 
-void patientimportPlugin::postCoreInitialization()
+void PatientimportPlugin::postCoreInitialization()
 {
     if (Utils::Log::debugPluginsCreation())
         WARN_FUNC;
@@ -159,7 +167,23 @@ void patientimportPlugin::postCoreInitialization()
     // DataPacks are checked
 }
 
-ExtensionSystem::IPlugin::ShutdownFlag patientimportPlugin::aboutToShutdown()
+void PatientimportPlugin::openPatientImportDialog()
+{
+    qWarning() << "PatientimportPlugin::openPatientImportDialog()";
+    PatientImport::PatientImportDialog dlg;
+    dlg.exec();
+    return;
+}
+
+QStringList PatientimportPlugin::softwareList()
+{
+    QStringList softwareList;
+    softwareList << patientimport::Constants::CIELCOMPTA
+                 << patientimport::Constants::GESTCAB;
+    return softwareList;
+}
+
+ExtensionSystem::IPlugin::ShutdownFlag PatientimportPlugin::aboutToShutdown()
 {
     if (Utils::Log::debugPluginsCreation())
         WARN_FUNC;
@@ -174,14 +198,14 @@ ExtensionSystem::IPlugin::ShutdownFlag patientimportPlugin::aboutToShutdown()
     return SynchronousShutdown;
 }
 
-// void patientimportPlugin::triggerAction()
+// void PatientimportPlugin::triggerAction()
 // {
 //     QMessageBox::information(Core::ICore::instance()->mainWindow(),
 //                              tr("Action triggered"),
 //                              tr("This is an action from patientimport."));
 // }
 
-void patientimportPlugin::coreAboutToClose()
+void PatientimportPlugin::coreAboutToClose()
 {
     if (Utils::Log::debugPluginsCreation())
         WARN_FUNC;
@@ -189,7 +213,7 @@ void patientimportPlugin::coreAboutToClose()
     // ICore::user() is still available
 }
 
-//void patientimportPlugin::test_your_plugin_unit_test()
+//void PatientimportPlugin::test_your_plugin_unit_test()
 //{
 // Write your plugin unit test here.
 

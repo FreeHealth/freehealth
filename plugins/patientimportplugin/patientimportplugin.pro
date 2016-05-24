@@ -4,6 +4,8 @@ TEMPLATE = lib
 DEFINES += PATIENTIMPORT_LIBRARY
 BUILD_PATH_POSTFIXE = FreeMedForms
 
+INCLUDEPATH += ../
+
 include(../fmf_plugins.pri)
 include(patientimport_dependencies.pri)
 
@@ -16,10 +18,12 @@ include(patientimport_dependencies.pri)
 HEADERS += \
     patientimportplugin.h\
     patientimport_exporter.h\
-    patientimportconstants.h
+    patientimportconstants.h \
+    patientimportdialog.h
         
 SOURCES += \
-    patientimportplugin.cpp
+    patientimportplugin.cpp \
+    patientimportdialog.cpp
 
 OTHER_FILES = patientimport.pluginspec
 
@@ -31,3 +35,6 @@ OTHER_FILES = patientimport.pluginspec
 #include translations
 TRANSLATION_NAME = patientimport
 include($${SOURCES_ROOT_PATH}/buildspecs/translations.pri)
+
+FORMS += \
+    patientimportdialog.ui

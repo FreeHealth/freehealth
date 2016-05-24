@@ -26,11 +26,24 @@
 #ifndef PATIENTIMPORTCONSTANTS_H
 #define PATIENTIMPORTCONSTANTS_H
 
+#include <qglobal.h>
+
 namespace patientimport {
 namespace Constants {
 
-const char * const ACTION_ID = "patientimport.Action";
-const char * const MENU_ID = "patientimport.Menu";
+// Actions
+const char * const ACTION_ID = "grPlugins.patientimport";
+const char * const MENU_ID = "grGeneral.Plugins";
+
+// Icon
+const char * const PATIENTIMPORT_ICON = "merge-arrow.png";
+
+// Softwares
+const char * const CIELCOMPTA  = "Ciel Compta";
+const char * const GESTCAB     = "Gestcab";
+
+// Translations
+const char* const PATIENT_IMPORT = QT_TRANSLATE_NOOP("tkConstants", "&Import patient");
 
 } // namespace patientimport
 } // namespace Constants
