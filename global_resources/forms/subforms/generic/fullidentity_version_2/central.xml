@@ -363,6 +363,15 @@
               <options>DontPrintEmptyValues</options>
               <patientdata>ProfessionalSite</patientdata>
             </Item>
+
+            <Item type="shorttext" name="ProfGroup::ProfessionTels">
+              <uilink label="profTelsLabel" widget="profTelsEdit"/>
+              <label lang="xx">Work phone number</label>
+              <label lang="fr">Téléphone professionnel</label>
+              <options>DontPrintEmptyValues</options>
+              <patientdata>ProfessionalTels</patientdata>
+            </Item>
+
         </Item>
       </MedForm>
 
