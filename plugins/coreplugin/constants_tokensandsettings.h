@@ -96,6 +96,7 @@ const char * const  TOKEN_PATIENTCONTACT_EMAIL       = "Patient.Contact.Email";
 const char * const  TOKEN_PATIENTCONTACT_TELS        = "Patient.Contact.Tels";
 const char * const  TOKEN_PATIENTCONTACT_FAX         = "Patient.Contact.Fax";
 const char * const  TOKEN_PATIENTCONTACT_MOBILEPHONE = "Patient.Contact.MobilePhone";
+const char * const  TOKEN_PATIENTCONTACT_EXTERNALRECORDPATIENTID = "Patient.Contact.ExternalRecordPatientId";
 
 const char * const  TOKEN_PATIENTSOCIALNUMBER        = "Patient.Insurance.SocialNumber";
 const char * const  TOKEN_PATIENTSOCIALNUMBER2       = "Patient.Insurance.SocialNumber2";
