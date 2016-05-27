@@ -119,7 +119,7 @@
             <column>1</column>
             <options>DontPrintEmptyValues;SummaryFontBold;expanded</options>
 
-            <item type="combo" name="Marital::Status::Combo">
+            <Item type="combo" name="Marital::Status::Combo">
                 <uilink label="maritalStatusLabel" widget="maritalStatusComboBox"/>
                 <label lang="xx">Marital status</label>
                 <label lang="fr">Situation familiale</label>
@@ -177,7 +177,7 @@
               <patientdata>MaritalStatus</patientdata>
             </Item>
 
-        <Item> <!-- end of details widget -->
+        </Item> <!-- end of details widget -->
 
         <Item type="detailswidget" name="FrDetails" uifilename="./ui/xx/social.ui">
           <uilink label="" widget="" layout="identityLayout"/>
