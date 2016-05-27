@@ -322,14 +322,6 @@
             <patientdata>Tels</patientdata>
           </Item>
 
-          <Item type="shorttext" name="ContactGroup::Telephone::Work">
-            <uilink label="workTelephoneLabel" widget="workTelephoneLineEdit"/>
-            <label lang="xx">Work phone number</label>
-            <label lang="fr">Téléphone - Travail</label>
-            <options>DontPrintEmptyValues</options>
-            <patientdata>ProfessionalTels</patientdata>
-          </Item>
-
           <Item type="shorttext" name="ContactGroup::Fax">
             <uilink label="faxLabel" widget="faxLineEdit"/>
             <label lang="xx">Fax number</label>
@@ -371,15 +363,6 @@
               <options>DontPrintEmptyValues</options>
               <patientdata>ProfessionalSite</patientdata>
             </Item>
-
-            <Item type="shorttext" name="ProfGroup::ProfessionTels">
-              <uilink label="profTelsLabel" widget="profTelsEdit"/>
-              <label lang="xx">Professional tel</label>
-              <label lang="fr">Téléphone professionel</label>
-              <options>DontPrintEmptyValues</options>
-              <patientdata>ProfessionalTels</patientdata>
-            </Item>
-
         </Item>
       </MedForm>
 
