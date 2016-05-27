@@ -168,7 +168,7 @@
             </Item>
 
             <Item type="shorttext" name="Marital::Status::Other::ShortText">
-              <uilink label="otherMaritalStatus" widget="otherMaritalStatusLineEdit"/>
+              <uilink label="otherMaritalStatusLabel" widget="otherMaritalStatusLineEdit"/>
               <label lang="xx">Other</label>
               <label lang="fr">Autre</label>
               <placeholder lang="xx"></placeholder>
