@@ -84,7 +84,7 @@
  * Forms can be populated by episodes. Episodes are mainly created by the user when he wants to save
  * some data using a specific form. \n
  * The Form::EpisodeModel and the Form::FormTreeModel perfectly manages three types of forms:
- * - Forms with any episodes (just like a category)
+ * - Forms without any episode (just like a category)
  * - Forms with only one episode
  * - Forms with multiple episodes
  * You can define the episode possibilities using the Form::FormMain::setEpisodePossibilities() and
