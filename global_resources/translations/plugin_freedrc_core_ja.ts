@@ -305,53 +305,61 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.ui" line="49"/>
+        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.ui" line="52"/>
         <source>Database server</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.ui" line="61"/>
+        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.ui" line="64"/>
         <source>Server type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.ui" line="72"/>
+        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.ui" line="75"/>
         <source>MySQL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.ui" line="86"/>
+        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.ui" line="89"/>
         <source>Host name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.ui" line="106"/>
+        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.ui" line="109"/>
         <source>Port</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.ui" line="126"/>
+        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.ui" line="129"/>
         <source>Test host connection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.ui" line="143"/>
+        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.ui" line="146"/>
         <source>User identification</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.ui" line="155"/>
+        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.ui" line="158"/>
         <source>Login</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.ui" line="175"/>
+        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.ui" line="178"/>
         <source>Password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.ui" line="189"/>
+        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.ui" line="192"/>
         <source>Use the default FreeMedForms administrator</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Core::Internal::ServerPreferencesWidgetPrivate</name>
+    <message>
+        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.cpp" line="94"/>
+        <source>Enter host name...</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -766,7 +774,7 @@
 <context>
     <name>Core::PageWidget</name>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/pagewidget.cpp" line="351"/>
+        <location filename="../../plugins/coreplugin/dialogs/pagewidget.cpp" line="360"/>
         <source>Full view</source>
         <translation type="unfinished"></translation>
     </message>
@@ -821,38 +829,53 @@
 <context>
     <name>Core::ServerPreferencesWidget</name>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.cpp" line="227"/>
-        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.cpp" line="277"/>
+        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.cpp" line="223"/>
+        <source>Enter hostname...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.cpp" line="226"/>
+        <source>Host name is valid...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.cpp" line="229"/>
+        <source>Host name is not valid...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.cpp" line="264"/>
+        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.cpp" line="316"/>
         <source>Host not reachable...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.cpp" line="231"/>
+        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.cpp" line="268"/>
         <source>Host available...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.cpp" line="247"/>
+        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.cpp" line="284"/>
         <source>Host name error (%1:%2)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.cpp" line="284"/>
+        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.cpp" line="323"/>
         <source>No anonymous connection allowed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.cpp" line="288"/>
+        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.cpp" line="329"/>
         <source>Test in progress...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.cpp" line="302"/>
+        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.cpp" line="345"/>
         <source>Connection error: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.cpp" line="309"/>
+        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.cpp" line="352"/>
         <source>Connected</source>
         <translation type="unfinished"></translation>
     </message>

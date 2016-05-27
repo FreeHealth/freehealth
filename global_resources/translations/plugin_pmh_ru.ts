@@ -190,92 +190,92 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="23"/>
+        <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="32"/>
         <source>ICD 10</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="32"/>
+        <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="45"/>
         <source>Manage &amp;ICD10 Codes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="42"/>
+        <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="55"/>
         <source>Label and date</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="48"/>
+        <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="61"/>
         <source>&amp;Label:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="61"/>
+        <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="74"/>
         <source>&amp;Date:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="78"/>
+        <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="91"/>
         <source>This PMHx is &amp;private</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="88"/>
+        <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="101"/>
         <source>General information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="94"/>
+        <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="107"/>
         <source>&amp;Status:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="104"/>
+        <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="117"/>
         <source>&amp;Type:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="120"/>
+        <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="133"/>
         <source>unsure</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="149"/>
+        <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="162"/>
         <source>proven</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="156"/>
+        <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="169"/>
         <source>&amp;Confidence index:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="169"/>
+        <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="182"/>
         <source>Category</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="192"/>
+        <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="205"/>
         <source>Episodes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="202"/>
+        <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="215"/>
         <source>Management</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="207"/>
+        <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="220"/>
         <source>Contacts</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="212"/>
+        <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="225"/>
         <source>Links</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="217"/>
+        <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="230"/>
         <source>Comment</source>
         <translation type="unfinished"></translation>
     </message>

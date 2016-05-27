@@ -78,7 +78,7 @@
 <context>
     <name>Form::FormMain</name>
     <message>
-        <location filename="../../plugins/formmanagerplugin/iformitem.cpp" line="888"/>
+        <location filename="../../plugins/formmanagerplugin/iformitem.cpp" line="891"/>
         <source>Form: </source>
         <translation type="unfinished"></translation>
     </message>
@@ -86,7 +86,7 @@
 <context>
     <name>Form::FormMainDebugPage</name>
     <message>
-        <location filename="../../plugins/formmanagerplugin/iformitem.cpp" line="1058"/>
+        <location filename="../../plugins/formmanagerplugin/iformitem.cpp" line="1061"/>
         <source>Forms: </source>
         <translation type="unfinished"></translation>
     </message>
@@ -219,13 +219,19 @@ Do you really want to remove the current episode?</source>
 <context>
     <name>Form::Internal::EpisodeBase</name>
     <message>
-        <location filename="../../plugins/formmanagerplugin/episodebase.cpp" line="221"/>
+        <location filename="../../plugins/formmanagerplugin/episodebase.cpp" line="226"/>
         <source>Unable to update the database schema</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/episodebase.cpp" line="347"/>
+        <location filename="../../plugins/formmanagerplugin/episodebase.cpp" line="352"/>
+        <location filename="../../plugins/formmanagerplugin/episodebase.cpp" line="374"/>
         <source>Episode database updated from version %1 to version: %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formmanagerplugin/episodebase.cpp" line="379"/>
+        <source>No change happened but episode database updated from version %1 to version: %2</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

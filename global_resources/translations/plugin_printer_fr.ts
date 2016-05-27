@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="fr_FR">
+<TS version="2.1" language="fr_FR">
 <context>
     <name>Print</name>
     <message>
@@ -37,7 +37,7 @@ Troisièmement, imprimez une page test &lt;u&gt;avec&lt;/u&gt; les corrections e
     </message>
     <message>
         <source>Correction de l&apos;impression</source>
-        <translation type="unfinished"></translation>
+        <translation>Correction de l&apos;impression</translation>
     </message>
     <message>
         <source>To your right (-&gt;)</source>
@@ -73,11 +73,11 @@ Troisièmement, imprimez une page test &lt;u&gt;avec&lt;/u&gt; les corrections e
     </message>
     <message>
         <source>Du haut vers le bas</source>
-        <translation type="unfinished"></translation>
+        <translation>Du haut vers le bas</translation>
     </message>
     <message>
         <source>Du bas vers le haut</source>
-        <translation type="unfinished"></translation>
+        <translation>Du bas vers le haut</translation>
     </message>
     <message>
         <source>To the top of the page</source>
@@ -361,10 +361,6 @@ Référez-vous à la documentation de votre système d&apos;exploitation.</trans
 <context>
     <name>Print::Printer</name>
     <message>
-        <source>Each Pages</source>
-        <translation>Toutes les pages</translation>
-    </message>
-    <message>
         <source>First page only</source>
         <translation>Première page seulement</translation>
     </message>
@@ -395,6 +391,10 @@ Référez-vous à la documentation de votre système d&apos;exploitation.</trans
     <message>
         <source>Print document</source>
         <translation>Imprimer le document</translation>
+    </message>
+    <message>
+        <source>Each Page</source>
+        <translation>Chaque page</translation>
     </message>
 </context>
 <context>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="fr_FR">
+<TS version="2.1" language="fr_FR">
 <context>
     <name>Form::EpisodeModel</name>
     <message>
@@ -191,6 +191,10 @@ Répondre &apos;Non&apos; causera des pertes de données définitive.</translati
     <message>
         <source>Episode database updated from version %1 to version: %2</source>
         <translation>La base de données épisodes a été mise à jour de la version %1 à la version %2</translation>
+    </message>
+    <message>
+        <source>No change happened but episode database updated from version %1 to version: %2</source>
+        <translation>Aucune modification mais la version de la base de données episodes a été mise à jour: ancienne version: %1, nouvelle version: %2</translation>
     </message>
 </context>
 <context>

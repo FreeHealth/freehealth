@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="fr_FR">
+<TS version="2.1" language="fr_FR">
 <context>
     <name>DataPackPlugin::AutoDataPackCreation</name>
     <message>
@@ -14,7 +14,7 @@
     <message>
         <location filename="../../freetoolbox/plugins/datapackplugin/autodatapackcreation.cpp" line="114"/>
         <source>Automatic Datapack Creation</source>
-        <translation type="unfinished"></translation>
+        <translation>Création automatique du pack de données</translation>
     </message>
 </context>
 <context>
@@ -22,12 +22,12 @@
     <message>
         <location filename="../../freetoolbox/plugins/datapackplugin/servercreationwidget.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation>Formulaire</translation>
     </message>
     <message>
         <location filename="../../freetoolbox/plugins/datapackplugin/servercreationwidget.ui" line="32"/>
         <source>Datapack server creation page</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Page de création du serveur de packs de données</translation>
     </message>
 </context>
 <context>

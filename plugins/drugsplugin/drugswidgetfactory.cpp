@@ -1,6 +1,6 @@
 /***************************************************************************
  *   FreeMedicalForms                                                      *
- *   (C) 2008-2015 by Eric MAEKER, MD                                     **
+ *   (C) 2008-2016 by Eric MAEKER, MD                                     **
  *   eric.maeker@gmail.com                                                   *
  *   All rights reserved.                                                  *
  *                                                                         *
@@ -57,6 +57,7 @@
 #include <formmanagerplugin/iformitem.h>
 
 #include <utils/global.h>
+#include <utils/log.h>
 #include <translationutils/constants.h>
 
 #include <QStringList>
@@ -152,20 +153,37 @@ Form::IFormWidget *DrugsWidgetsFactory::createWidget(const QString &name, Form::
 DrugsPrescriptorWidget::DrugsPrescriptorWidget(const QString &name, Form::FormItem *formItem, QWidget *parent) :
     Form::IFormWidget(formItem,parent),
     m_PrescriptionModel(0),
+    m_VBoxLayout(0),
     m_AddChronic(0)
 {
     // Prepare Widget Layout and label
+    // QtUi Loaded ?
+    const QString &widget = formItem->spec()->value(Form::FormItemSpec::Spec_UiInsertIntoLayout).toString();
+    if (!widget.isEmpty()) {
+        // Find layout
+        QVBoxLayout *vb = formItem->parentFormMain()->formWidget()->findChild<QVBoxLayout*>(widget);
+        if (vb) {
+            qWarning() << "layout =" << vb;
+            m_VBoxLayout = vb;
+        } else {
+            LOG_ERROR("Using the QtUiLinkage, item not found in the ui: " + formItem->uuid());
+            // To avoid segfaulting create a fake combo
+            m_VBoxLayout = new QVBoxLayout(this);
+        }
+    } else {
+        m_VBoxLayout = new QVBoxLayout(this);
+    }
     QWidget *labelWidget = new QWidget(this);
     QBoxLayout *labelBox = getBoxLayout(OnLeft, m_FormItem->spec()->label(), labelWidget);
+
+    // Label always on top...
     labelBox->setSpacing(0);
     labelBox->setMargin(0);
     labelBox->addWidget(m_Label);
 
-    // Label always on top...
-    QVBoxLayout *hb = new QVBoxLayout(this);
-    hb->setSpacing(0);
-    hb->setMargin(0);
-    hb->addWidget(labelWidget);
+    m_VBoxLayout->setSpacing(0);
+    m_VBoxLayout->setMargin(0);
+    m_VBoxLayout->addWidget(labelWidget);
 
     // create main widget
     m_CentralWidget = new DrugsCentralWidget(this);
@@ -190,7 +208,7 @@ DrugsPrescriptorWidget::DrugsPrescriptorWidget(const QString &name, Form::FormIt
         labelBox->addWidget(m_AddChronic);
         connect(m_AddChronic, SIGNAL(clicked()), this, SLOT(addChronicTherapeutics()));
     }
-    hb->addWidget(m_CentralWidget);
+    m_VBoxLayout->addWidget(m_CentralWidget);
 
     if (options.contains("nointeractionchecking", Qt::CaseInsensitive)) {
         m_PrescriptionModel->setComputeDrugInteractions(false);

@@ -1,65 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="fr_FR">
+<TS version="2.1" language="fr_FR">
 <context>
     <name>Identity::IdentityEditorWidget</name>
     <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="789"/>
+        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="795"/>
         <source>You must specify a usualName.</source>
         <translation>Vous devez spécifier un nom usuel.</translation>
     </message>
     <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="790"/>
+        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="796"/>
         <source>You can not create a patient without a usualName</source>
         <translation>Vous ne pouvez pas créer un patient sans nom usuel</translation>
     </message>
     <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="791"/>
+        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="797"/>
         <source>No usualName</source>
         <translation>Pas de nom usuel</translation>
     </message>
     <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="797"/>
+        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="803"/>
         <source>You must specify a first name.</source>
         <translation>You devez spécifier un prénom.</translation>
     </message>
     <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="798"/>
+        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="804"/>
         <source>You can not create a patient without a first name</source>
         <translation>Vous ne pouvez pas créer un patient sans prénom</translation>
     </message>
     <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="799"/>
+        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="805"/>
         <source>No firstname</source>
         <translation>Pas de prénom</translation>
     </message>
     <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="805"/>
+        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="811"/>
         <source>You must specify a date of birth.</source>
         <translation>Vous devez spécifier un date de naissance.</translation>
     </message>
     <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="806"/>
+        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="812"/>
         <source>You can not create a patient without a date of birth</source>
         <translation>Vous ne pouvez pas créer un patient sans date de naissance</translation>
     </message>
     <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="807"/>
+        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="813"/>
         <source>No date of birth</source>
         <translation>Pas de date de naissance</translation>
     </message>
     <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="813"/>
+        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="819"/>
         <source>You must specify a gender.</source>
         <translation>Vous devez spécifier un genre.</translation>
     </message>
     <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="814"/>
+        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="820"/>
         <source>You can not create a patient without a gender</source>
         <translation>Vous ne pouvez pas créer un patient sans genre</translation>
     </message>
     <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="815"/>
+        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="821"/>
         <source>No gender</source>
         <translation>Pas de genre</translation>
     </message>
@@ -152,17 +152,17 @@
         <translation>Le mot de passe doit contenir au minimum 5 caractères.</translation>
     </message>
     <message>
-        <location filename="../../plugins/identityplugin/passworddialog.cpp" line="203"/>
+        <location filename="../../plugins/identityplugin/passworddialog.cpp" line="204"/>
         <source>The old password is not correct. Please retry with the correct password.</source>
         <translation>L&apos;ancien mot de passe n&apos;est pas correct. Veuillez réessayer.</translation>
     </message>
     <message>
-        <location filename="../../plugins/identityplugin/passworddialog.cpp" line="205"/>
+        <location filename="../../plugins/identityplugin/passworddialog.cpp" line="206"/>
         <source>Wrong password confirmation.</source>
         <translation>La confirmation du nouveau mot de passe est erronée.</translation>
     </message>
     <message>
-        <location filename="../../plugins/identityplugin/passworddialog.cpp" line="206"/>
+        <location filename="../../plugins/identityplugin/passworddialog.cpp" line="207"/>
         <source>Password can not be change.</source>
         <translation>Le mot de passe ne peut pas être modifié.</translation>
     </message>
@@ -187,27 +187,27 @@
     <message>
         <location filename="../../plugins/identityplugin/passwordwidget.cpp" line="228"/>
         <source>Login must not contain the following char: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Le nom d&apos;utilisateur ne doit pas contenir le caractère suivant: %1</translation>
     </message>
     <message>
         <location filename="../../plugins/identityplugin/passwordwidget.cpp" line="233"/>
         <source>Login is too short (6 chars minimum)</source>
-        <translation type="unfinished"></translation>
+        <translation>Le nom d&apos;utilisateur est trop court (minimum 6 caractères)</translation>
     </message>
     <message>
         <location filename="../../plugins/identityplugin/passwordwidget.cpp" line="236"/>
         <source>Login is too long (16 chars maximum)</source>
-        <translation type="unfinished"></translation>
+        <translation>Le nom d&apos;utilisateur est trop long (16 caractères maximum)</translation>
     </message>
     <message>
         <location filename="../../plugins/identityplugin/passwordwidget.cpp" line="239"/>
         <source>Login is valid</source>
-        <translation type="unfinished"></translation>
+        <translation>Le nom d&apos;utilisateur est valide</translation>
     </message>
     <message>
         <location filename="../../plugins/identityplugin/passwordwidget.cpp" line="242"/>
         <source>Login is invalid</source>
-        <translation type="unfinished"></translation>
+        <translation>Le nom d&apos;utilisateur n&apos;est pas valide</translation>
     </message>
 </context>
 <context>
@@ -223,17 +223,17 @@
     <message>
         <location filename="../../plugins/identityplugin/identityconstants.h" line="35"/>
         <source>Please choose login and password</source>
-        <translation type="unfinished"></translation>
+        <translation>Merci de choisir un nom d&apos;utilisateur et une phrase de passe</translation>
     </message>
     <message>
         <location filename="../../plugins/identityplugin/identityconstants.h" line="36"/>
         <source>Login set, but password not</source>
-        <translation type="unfinished"></translation>
+        <translation>Nom d&apos;utilisateur entré, mais pas la phrase de passe</translation>
     </message>
     <message>
         <location filename="../../plugins/identityplugin/identityconstants.h" line="37"/>
         <source>Login and password are set</source>
-        <translation type="unfinished"></translation>
+        <translation>Le nom d&apos;utilisateur et la phrase de passe ont été entrés</translation>
     </message>
     <message>
         <location filename="../../plugins/identityplugin/identityconstants.h" line="39"/>
@@ -243,7 +243,7 @@
     <message>
         <location filename="../../plugins/identityplugin/identityconstants.h" line="40"/>
         <source>Crypted password set</source>
-        <translation type="unfinished"></translation>
+        <translation>La phrase de passe chiffrée est enregistrée</translation>
     </message>
 </context>
 </TS>

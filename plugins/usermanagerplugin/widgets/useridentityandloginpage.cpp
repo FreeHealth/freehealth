@@ -1,7 +1,7 @@
 /***************************************************************************
  *  The FreeMedForms project is a set of free, open source medical         *
  *  applications.                                                          *
- *  (C) 2008-2015 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
+ *  (C) 2008-2016 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
  *  All rights reserved.                                                   *
  *                                                                         *
  *  This program is free software: you can redistribute it and/or modify   *
@@ -49,6 +49,7 @@
  * - "UsualName*"
  * - "Firstname*"
  * - "OtherName"
+ * - "TitleIndex"
  * - "Title"
  * - "GenderIndex"
  * - "Gender"
@@ -106,6 +107,7 @@ UserIdentityAndLoginPage::UserIdentityAndLoginPage(QWidget *parent) :
     registerField("Firstname*", _identity, "firstName");
     registerField("OtherNames", _identity, "otherNames");
     registerField("Title", _identity, "title");
+    registerField("TitleIndex", _identity, "titleIndex");
     registerField("GenderIndex", _identity, "genderIndex");
     registerField("Gender", _identity, "gender");
     registerField("Language*", _identity, "language");
@@ -116,6 +118,7 @@ UserIdentityAndLoginPage::UserIdentityAndLoginPage(QWidget *parent) :
     connect(_identity, SIGNAL(clearLoginEditionFinished()), this, SLOT(checkCompleteState()));
     connect(_identity, SIGNAL(passwordConfirmed()), this, SLOT(checkCompleteState()));
     connect(_identity, SIGNAL(titleChanged(QString)), this, SLOT(checkCompleteState()));
+    connect(_identity, SIGNAL(titleIndexChanged(int)), this, SLOT(checkCompleteState()));
     connect(_identity, SIGNAL(usualNameChanged(QString)), this, SLOT(checkCompleteState()));
     connect(_identity, SIGNAL(otherNamesChanged(QString)), this, SLOT(checkCompleteState()));
     connect(_identity, SIGNAL(firstNameChanged(QString)), this, SLOT(checkCompleteState()));

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   FreeMedicalForms                                                      *
- *   (C) 2008-2015 by Eric MAEKER, MD                                      *
+ *   (C) 2008-2016 by Eric MAEKER, MD                                      *
  *   eric.maeker@gmail.com                                                   *
  *   All rights reserved.                                                  *
  *                                                                         *
@@ -103,6 +103,7 @@ private Q_SLOTS:
 public:
     DrugsDB::DrugsModel *m_PrescriptionModel;
     DrugsWidget::DrugsCentralWidget *m_CentralWidget;
+    QVBoxLayout *m_VBoxLayout;
 
 private:
     QString m_iniPath;

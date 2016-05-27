@@ -138,6 +138,17 @@
     </message>
 </context>
 <context>
+    <name>UserPlugin::Internal::DefaultUserContactWidget</name>
+    <message>
+        <source>Password correctly changed.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Your password was correctly modified in the server and the database.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>UserPlugin::Internal::DefaultUserPapersPage</name>
     <message>
         <source>Generic papers</source>
@@ -295,11 +306,11 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>UserPlugin::Internal::UserManagerModel</name>
     <message>
-        <source>Last login: %1</source>
+        <source>Never logged</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Never logged</source>
+        <source>Last logged-in: %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -622,6 +633,23 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>The user was successfully created and saved into database.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Username %1 already exists in MySQL database.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please choose a different login or delete user %1 in MySQL database and try again.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>To change login, click on button &apos;Back&apos; 2 times and modify the login.
+ To delete user %1 in MySQL, ask your database administrator.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>User creation issue</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

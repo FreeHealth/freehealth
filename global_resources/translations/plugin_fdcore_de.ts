@@ -288,6 +288,13 @@
     </message>
 </context>
 <context>
+    <name>Core::Internal::ServerPreferencesWidgetPrivate</name>
+    <message>
+        <source>Enter host name...</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Core::Internal::SettingDebugPage</name>
     <message>
         <source>Settings</source>
@@ -665,6 +672,18 @@
     </message>
     <message>
         <source>Connected</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enter hostname...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Host name is valid...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Host name is not valid...</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

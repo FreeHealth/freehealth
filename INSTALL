@@ -1,5 +1,5 @@
-                  Welcome to FreeMeForms
-           Copyright (C) 2008-2014 by Eric MAEKER
+                  Welcome to FreeMedForms
+           Copyright (C) 2008-2016 by Eric MAEKER
                    eric.maeker@gmail.com
                   All rights reserved.
 
@@ -15,11 +15,10 @@ This project is a free and open source project. A community grows up
 around it. FreeMedForms and derivatives is released under the terms
 of the GPLv3 License. Some parts of the code are LGPL v2.1.
 
-FreeMedForms and Derivatives are coded in C++/Qt4.8/Qt5 at least.
+FreeMedForms and Derivatives are coded in C++/Qt5
 FreeMedForms and Derivatives are available for :
-- MacOs X universal
-- Linux : Ubuntu, Debian, OpenSuse, standalone binary
-- FreeBSD : need compilation of SVN trunk (please contact author)
+- Mac Os
+- GNU/Linux : Ubuntu, Debian
 - Windows
 
 
@@ -32,4 +31,3 @@ Build instructions are described here:
 III. Install procedure
 
 Install procedure is described in the build instructions.
-

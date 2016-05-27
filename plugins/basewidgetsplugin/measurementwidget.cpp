@@ -1,7 +1,7 @@
 /***************************************************************************
  *  The FreeMedForms project is a set of free, open source medical         *
  *  applications.                                                          *
- *  (C) 2008-2015 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
+ *  (C) 2008-2016 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
  *  All rights reserved.                                                   *
  *                                                                         *
  *  This program is free software: you can redistribute it and/or modify   *
@@ -371,7 +371,7 @@ QVariant MeasurementWidgetData::data(const int ref, const int role) const
             double val = m_Measurement->m_value->value();
             switch (m_Measurement->m_units->currentIndex()) {
             case 0: return val;
-            case 1: return val*100.;
+            case 1: return val*1000.;       // 1 kilogram = 1000 grams
             case 2: return val*28.3495231; // 1 ounce = 28.3495231 grams
             case 3: return val*453.59237;  // 1 pound = 453.59237 grams
             }

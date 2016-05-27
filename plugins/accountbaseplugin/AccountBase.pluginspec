@@ -1,6 +1,6 @@
 <plugin name="AccountBase" version="0.0.1" compatVersion="0.0.1">
     <vendor>FreeMedForms</vendor>
-    <copyright>(C) 2008-2015 by Eric MAEKER, MD and Pierre-Marie Desombre</copyright>
+    <copyright>(C) 2008-2016 by Eric MAEKER, MD and Pierre-Marie Desombre</copyright>
     <license>GPLv3</license>
     <category>Accountancy</category>
     <description>Accountancy databases and models managers plugin.</description>

@@ -328,47 +328,47 @@
 <context>
     <name>DrugsDb::Internal::FrDrugDatabase</name>
     <message>
-        <location filename="../../freeddimanager/plugins/drugsdbplugin/countries/fr/frenchdrugsdatabasecreator.cpp" line="106"/>
+        <location filename="../../freeddimanager/plugins/drugsdbplugin/countries/fr/frenchdrugsdatabasecreator.cpp" line="109"/>
         <source>Non-free French drugs database</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freeddimanager/plugins/drugsdbplugin/countries/fr/frenchdrugsdatabasecreator.cpp" line="115"/>
+        <location filename="../../freeddimanager/plugins/drugsdbplugin/countries/fr/frenchdrugsdatabasecreator.cpp" line="118"/>
         <source>Free French drugs database</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freeddimanager/plugins/drugsdbplugin/countries/fr/frenchdrugsdatabasecreator.cpp" line="134"/>
+        <location filename="../../freeddimanager/plugins/drugsdbplugin/countries/fr/frenchdrugsdatabasecreator.cpp" line="137"/>
         <source>Non-free French drugs database creation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freeddimanager/plugins/drugsdbplugin/countries/fr/frenchdrugsdatabasecreator.cpp" line="135"/>
+        <location filename="../../freeddimanager/plugins/drugsdbplugin/countries/fr/frenchdrugsdatabasecreator.cpp" line="138"/>
         <source>Free French drugs database creation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freeddimanager/plugins/drugsdbplugin/countries/fr/frenchdrugsdatabasecreator.cpp" line="163"/>
+        <location filename="../../freeddimanager/plugins/drugsdbplugin/countries/fr/frenchdrugsdatabasecreator.cpp" line="166"/>
         <source>French Pharmaceutical Drug Database: raw data processed.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freeddimanager/plugins/drugsdbplugin/countries/fr/frenchdrugsdatabasecreator.cpp" line="187"/>
+        <location filename="../../freeddimanager/plugins/drugsdbplugin/countries/fr/frenchdrugsdatabasecreator.cpp" line="190"/>
         <source>Reading drugs raw source</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freeddimanager/plugins/drugsdbplugin/countries/fr/frenchdrugsdatabasecreator.cpp" line="232"/>
+        <location filename="../../freeddimanager/plugins/drugsdbplugin/countries/fr/frenchdrugsdatabasecreator.cpp" line="235"/>
         <source>Reading composition raw source</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freeddimanager/plugins/drugsdbplugin/countries/fr/frenchdrugsdatabasecreator.cpp" line="258"/>
+        <location filename="../../freeddimanager/plugins/drugsdbplugin/countries/fr/frenchdrugsdatabasecreator.cpp" line="261"/>
         <source>Saving drugs into database</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freeddimanager/plugins/drugsdbplugin/countries/fr/frenchdrugsdatabasecreator.cpp" line="283"/>
+        <location filename="../../freeddimanager/plugins/drugsdbplugin/countries/fr/frenchdrugsdatabasecreator.cpp" line="286"/>
         <source>Running database finalization script</source>
         <translation type="unfinished"></translation>
     </message>

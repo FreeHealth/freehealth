@@ -383,9 +383,19 @@ macx {
    qt_sqlplugins.files = $${QTPLUGINS_PATH}/sqldrivers
    qt_imagesplugins.path = $${INSTALL_QT_PLUGINS_PATH}
    qt_imagesplugins.files = $${QTPLUGINS_PATH}/imageformats
-   qt_accessibleplugins.path = $${INSTALL_QT_PLUGINS_PATH}
-   qt_accessibleplugins.files = $${QTPLUGINS_PATH}/accessible
-   INSTALLS+=qt_sqlplugins qt_imagesplugins qt_accessibleplugins
+
+   INSTALLS+=qt_sqlplugins qt_imagesplugins
+
+    # Install accessiblility plugin only for Qt 5.3
+    # Since Qt 5.4 accessibility is built in widgets by default
+    equals(QT_MAJOR_VERSION, 5) {
+        lessThan(QT_MINOR_VERSION, 4) {
+            qt_accessibleplugins.path = $${INSTALL_QT_PLUGINS_PATH}
+            qt_accessibleplugins.files = $${QTPLUGINS_PATH}/accessible
+            INSTALLS+=qt_accessibleplugins
+        }
+    }
+
    message(Bundle: Qt Plugins will be installed from $${QTPLUGINS_PATH} to $${INSTALL_QT_PLUGINS_PATH} )
 
 

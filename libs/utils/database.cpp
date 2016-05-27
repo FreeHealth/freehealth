@@ -1,7 +1,7 @@
 /***************************************************************************
  *  The FreeMedForms project is a set of free, open source medical         *
  *  applications.                                                          *
- *  (C) 2008-2015 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
+ *  (C) 2008-2016 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
  *  All rights reserved.                                                   *
  *                                                                         *
  *  This program is free software: you can redistribute it and/or modify   *
@@ -193,16 +193,15 @@ public:
 //        ref.insert("EVENT", Database::Grant_Event);
 //        ref.insert("FILE", Database::Grant_File);
 //        ref.insert("REFERENCES", Database::Grant_References);
-//        ref.insert("RELOAD", Database::Grant_Reload);
+        ref.insert("RELOAD", Database::Grant_Reload);
 //        ref.insert("USAGE", Database::Grant_Usage);
 
         // check grants from stringlist
         Database::Grants g = 0;
         foreach(const QString &s, grants) {
             foreach(const QString &k, ref.keys()) {
-                if (s.contains(k + ",") || s.contains(k+" ON")) {
-                    g |= Database::Grants(ref.value(k));
-                    break;
+                if (s.contains(k + ",") || s.contains(k + " ON")) {
+                    g |= QFlags<Database::Grant>(ref.value(k));
                 }
             }
         }
@@ -379,12 +378,6 @@ bool Database::createMySQLDatabase(const QString &dbName)
     if (!connectedDatabase(DB, __LINE__))
         return false;
 
-    // Testing current connected user grants
-    Grants userGrants = d_database->m_Grants.value(d_database->m_ConnectionName, Grant_NoGrant);
-    if (userGrants & Grant_Create) {
-        LOG_ERROR_FOR("Database", "Trying to create database, insufficient rights.");
-        return false;
-    }
     LOG_FOR("Database", QString("Trying to create database: %1\n"
                                 "       on host: %2(%3)\n"
                                 "       with user: %4")
@@ -420,18 +413,6 @@ bool Database::createMySQLUser(const QString &log,
     if (!connectedDatabase(DB, __LINE__))
         return false;
 
-    // Testing current connected user grants
-    Grants userGrants = d_database->m_Grants.value(d_database->m_ConnectionName, Grant_NoGrant);
-
-    // TODO: bug with grant privileges of created user
-//    qWarning() << "xxxxxxxxxxxxxxxxxxxxxxx check";
-//    qWarning() << grants << (grants & Grant_All);
-
-    if (!(userGrants & Grant_CreateUser)) {
-        LOG_ERROR_FOR("Database", "You are trying to create a new user, but your current user doesn't have enough privileges.");
-        LOG_DATABASE_FOR("Database", database());
-        return false;
-    }
     // Creating grants string
     QString g;
 //    if (grants & Grant_All) {
@@ -545,16 +526,6 @@ bool Database::dropMySQLUser(const QString &log, const QString &userHost)
     if (!connectedDatabase(DB, __LINE__))
         return false;
 
-    // Testing current connected user grants
-    Grants userGrants = d_database->m_Grants.value(d_database->m_ConnectionName, Grant_NoGrant);
-
-//    qWarning() << "xxxxxxxxxxxxxxxxxxxxxxx check";
-//    qWarning() << grants << (grants & Grant_All);
-
-    if (!(userGrants & Grant_CreateUser)) {
-        LOG_ERROR_FOR("Database", "Trying to create user, insufficient rights.");
-        return false;
-    }
     LOG_FOR("Database", QString("Trying to drop MySQL user: %1\n"
                                 "       on host: %2(%3)\n"
                                 "       with user: %4")

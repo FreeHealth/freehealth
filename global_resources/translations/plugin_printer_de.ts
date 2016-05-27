@@ -353,10 +353,6 @@ Dies kann eine starke CPU Belastung sein.</translation>
 <context>
     <name>Print::Printer</name>
     <message>
-        <source>Each Pages</source>
-        <translation>Jede Seite</translation>
-    </message>
-    <message>
         <source>First page only</source>
         <translation>Nur erste Seite</translation>
     </message>
@@ -386,6 +382,10 @@ Dies kann eine starke CPU Belastung sein.</translation>
     </message>
     <message>
         <source>Print document</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Each Page</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

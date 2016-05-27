@@ -324,6 +324,10 @@ Attention : Si vous utilisez FreeMedForms en réseau, cela peut causer une surch
         <source>Double-click to add</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Double-click to remove</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Patients::Internal::UrlPhotoDialog</name>

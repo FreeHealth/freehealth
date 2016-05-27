@@ -26,15 +26,15 @@ Please check that this host contains a FreeMedForms server configuration.</sourc
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Connecting databases</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Please wait</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>You must configure the server using your personnal login and password to connect the database.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Database global prefix</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please specify the database prefix to use (please ask your software administrator)</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -98,6 +98,10 @@ Select your preferred language and the installation type.</source>
     </message>
     <message>
         <source>You can store your local personal database anywhere you want, just select a path.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Configure the server and create all database</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -384,6 +388,13 @@ Select your preferred language and the installation type.</source>
     </message>
     <message>
         <source>Use the default FreeMedForms administrator</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Core::Internal::ServerPreferencesWidgetPrivate</name>
+    <message>
+        <source>Enter host name...</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -852,6 +863,18 @@ Please check out the log files and contact your administrator.</source>
     </message>
     <message>
         <source>Connected</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enter hostname...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Host name is valid...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Host name is not valid...</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

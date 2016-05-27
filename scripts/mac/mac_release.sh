@@ -2,7 +2,7 @@
 #/***************************************************************************
 # *  The FreeMedForms project is a set of free, open source medical         *
 # *  applications.                                                          *
-# *  (C) 2008-2015 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
+# *  (C) 2008-2016 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
 # *  All rights reserved.                                                   *
 # *                                                                         *
 # *  This program is free software: you can redistribute it and/or modify   *
@@ -185,7 +185,7 @@ linkQtLibs()
      echo "   * moving to cd $PACKAGES_PATH/mac/$BUNDLE_NAME"
    fi
 
-   MAKE_STEP=`$MAC_SCRIPTS_PATH/macDeploy.sh -a $BUNDLE_NAME -p iconengines -p imageformats -p sqldrivers -p accessible -p platforms -p printsupport`
+   MAKE_STEP=`$MAC_SCRIPTS_PATH/macDeploy.sh -a $BUNDLE_NAME -p iconengines -p imageformats -p sqldrivers -p platforms -p printsupport`
    MAKE_STEP=$?
    if [ ! $MAKE_STEP = 0 ]; then
    echo "   *** Error: Deployement step wrong ***"
@@ -215,7 +215,7 @@ linkMySqlLib()
    echo "    Linking MySql client lib from $mysqllib to $FRAMEWORK_PATH for $BUNDLE_NAME"
    mysqllib_source=`basename $mysqllib`
    mysqllib_source=`locate $mysqllib_source`
-   cp $mysqllib_source $FRAMEWORK_PATH
+   cp "$mysqllib_source" "$FRAMEWORK_PATH"
    name=`basename $mysqllib`
    install_name_tool -change $mysqllib @executable_path/../Frameworks/$name "$MYSQL_PLUGIN"
    #    fi

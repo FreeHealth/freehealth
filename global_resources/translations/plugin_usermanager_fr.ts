@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="fr_FR">
+<TS version="2.1" language="fr_FR">
 <context>
     <name>UserBase</name>
     <message>
@@ -27,7 +27,7 @@
     </message>
     <message>
         <source>Can not retrieve crypted password from the login %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Ne peut pas retrouver la phrase de passe chiffrée d&apos;après le login %1</translation>
     </message>
 </context>
 <context>
@@ -141,6 +141,17 @@
     </message>
 </context>
 <context>
+    <name>UserPlugin::Internal::DefaultUserContactWidget</name>
+    <message>
+        <source>Password correctly changed.</source>
+        <translation>Phrase de passe correctement modifiée</translation>
+    </message>
+    <message>
+        <source>Your password was correctly modified in the server and the database.</source>
+        <translation>Votre phrase de passe a été correctement modifiée (utilisateur MySQL et utilisateur FreeMedForms)</translation>
+    </message>
+</context>
+<context>
     <name>UserPlugin::Internal::DefaultUserPapersPage</name>
     <message>
         <source>Generic papers</source>
@@ -174,11 +185,11 @@
     </message>
     <message>
         <source>Unable to initialize the database with the login: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossible d&apos;initialiser la base de données avec le login: %1</translation>
     </message>
     <message>
         <source>Login not found: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Login non trouvé: %1</translation>
     </message>
 </context>
 <context>
@@ -235,7 +246,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>User can be identified.</source>
-        <translation type="unfinished"></translation>
+        <translation>L&apos;utilisateur a pu être identifié.</translation>
     </message>
 </context>
 <context>
@@ -303,12 +314,12 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>UserPlugin::Internal::UserManagerModel</name>
     <message>
-        <source>Last login: %1</source>
-        <translation>Dernière ouverture de session : %1</translation>
-    </message>
-    <message>
         <source>Never logged</source>
         <translation>Jamais connecté</translation>
+    </message>
+    <message>
+        <source>Last logged-in: %1</source>
+        <translation>Dernière connexion: %1</translation>
     </message>
 </context>
 <context>
@@ -331,15 +342,15 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Using command line user identifiants: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Utilisant l&apos;identifiant utilisateur en ligne de commande: %1</translation>
     </message>
     <message>
         <source>Unable to change current user</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossible de changer l&apos;utilisateur actuel</translation>
     </message>
     <message>
         <source>An error occured when trying to change the current user. %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Une erreur est survenue en essayant de changer l&apos;utilisateur actuel %1</translation>
     </message>
 </context>
 <context>
@@ -631,6 +642,24 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>The user was successfully created and saved into database.</source>
         <translation>L&apos;utilisateur a été correctement créé et sauvegardé dans la base de données.</translation>
+    </message>
+    <message>
+        <source>Username %1 already exists in MySQL database.</source>
+        <translation>L&apos;utilisateur %1 existe déjà dans la base de données MySQL.</translation>
+    </message>
+    <message>
+        <source>Please choose a different login or delete user %1 in MySQL database and try again.</source>
+        <translation>Merci de choisir un nom d&apos;utilisateur différent ou d&apos;effacer l&apos;utilisateur %1 dans la base de données MySQL, puis essayer à nouveau.</translation>
+    </message>
+    <message>
+        <source>To change login, click on button &apos;Back&apos; 2 times and modify the login.
+ To delete user %1 in MySQL, ask your database administrator.</source>
+        <translation>Pour modifier votre nom d&apos;utilisateur, cliquez sur le bouton &apos;En arrière&apos; deux fois.
+Pour effacer l&apos;utilisateur %1 dans la base de données, demandez à l&apos;administrateur.de la base de données.</translation>
+    </message>
+    <message>
+        <source>User creation issue</source>
+        <translation>Problème lors de la création de l&apos;utilisateur</translation>
     </message>
 </context>
 <context>
