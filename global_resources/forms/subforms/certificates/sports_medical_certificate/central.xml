@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE FreeMedForms>
+<FreeMedForms>
+
+  <formdescription>
+
+    <!-- Non translatable values -->
+    <authors>Jérôme Pinguet</authors>
+    <version>test</version>
+    <fmfv>0.9.7</fmfv>
+    <cdate>2016-04-05</cdate>
+    <lmdate>2016-04-05</lmdate>
+    <icon>edit.png</icon>
+    <weblink>https://www.medecinelibre.com</weblink>
+    <!-- Translatable values -->
+    <license>GPLv3</license>
+    <description lang="xx">Sports medical certificate</description>
+    <description lang="fr">Certificat de non contre-indication à la pratique sportive</description>
+    <category lang="xx">Certificates</category>
+    <category lang="fr">Certificats</category>
+
+    <updateinfo>
+
+    </updateinfo>
+
+  </formdescription>
+
+  <file type="script" name="onload">./scripts/xx/sportsmedicalcertificate.js</file>
+
+  <MedForm type="form" name="Subforms::Certificates::Sports::Medical::Certificate" uifilename="./ui/xx/sportsmedicalcertificate.ui">
+    <label lang="xx">Certificat de non contre-indication à la pratique sportive</label>
+    <label lang="fr">Certificat de non contre-indication à la pratique sportive</label>
+    <icon>__theme__/xray.png</icon>
+    <options>DontPrintEmptyValues;UseFormNameAsNameSpace</options>
+
+      <Item type="group" name="Items::Group">
+        <uilink label="" widget="itemsGroupBox" layout=""/>
+        <label lang="xx">Items à compléter</label>
+        <label lang="fr">Items à compléter</label>
+        <options>DontPrintEmptyValues</options>
+
+        <Item type="shorttext" name="Name::Of::Sport::Shorttext">
+            <uilink label="nameOfSportLabel" widget="nameOfSportLineEdit" layout=""/>
+            <options>DontPrintEmptyValues</options>
+            <label lang="xx">Nom du sport</label>
+            <label lang="fr">Nom du sport</label>
+            <placeholder lang="xx">de la natation</placeholder>
+            <placeholder lang="fr">de la natation</placeholder>
+        </Item>
+
+        <Item type="check" name="Competition::Check">
+            <uilink label="" widget="competitionCheckBox" layout=""/>
+            <options>DontPrintEmptyValues;fulleditor</options>
+            <label lang="xx">En compétition</label>
+            <label lang="fr">En compétition</label>
+        </Item>
+
+        <Item type="shorttext" name="Additional::Text::Shorttext">               
+            <uilink label="additionalTextLabel" widget="additionalTextLineEdit" layout=""/>
+            <options>DontPrintEmptyValues</options>                             
+            <label lang="xx">Texte supplémentaire</label>                               
+            <label lang="fr">Texte supplémentaire</label>                               
+            <placeholder lang="xx"></placeholder>                 
+            <placeholder lang="fr"></placeholder>                 
+        </Item>
+
+      </Item> <!-- end of group Items::Group -->
+
+<!--
+        <Item type="button" name="AddToEditor">
+        <uilink label="" widget="addButton" layout=""/>
+        <label lang="xx">Add to prescription</label>
+        <label lang="fr">Ajouter à la prescription</label>
+        <icon>__theme__/pixmap/16x16/add.png</icon>
+        <options>DontPrintEmptyValues;fulleditor</options>
+      </Item>
+-->
+
+      <Item type="texteditor" name="Certificate::Texteditor">
+        <uilink label="" widget="" layout="certificateFormLayout"/>
+        <options>DontPrintEmptyValues;fulleditor</options>
+      </Item>
+
+  </MedForm>
+</FreeMedForms>

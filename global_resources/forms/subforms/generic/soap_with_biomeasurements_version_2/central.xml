@@ -5,20 +5,20 @@
 
   <formdescription>
     <!-- Non translatable values -->
-    <authors>Eric Maeker, MD</authors>
+    <authors>Eric Maeker, MD ; Jerome Pinguet</authors>
     <version>test</version>
-    <fmfv>0.8.4</fmfv>
+    <fmfv>0.9.7</fmfv>
     <cdate>2012-10-13</cdate>
-    <lmdate>2013-04-18</lmdate>
+    <lmdate>2016-04-26</lmdate>
     <icon>__theme__/stethoscope.png</icon>
     <weblink></weblink>
     <bibliography/>
 
     <!-- Translatable values -->
     <license>GPLv3</license>
-    <description lang="xx">SOAP with biometrics</description>
-    <description lang="fr">POMR avec biométrie</description>
-    <description lang="de">SOAP mit Biometriedaten</description>
+    <description lang="xx">SOAP with biometrics version 2</description>
+    <description lang="fr">POMR avec biométrie version 2</description>
+    <description lang="de">SOAP mit Biometriedaten version 2</description>
     <category lang="xx">Generic tools</category>
     <category lang="fr">Outils généraux</category>
     <category lang="de">Allgemeine Tools</category>
@@ -180,11 +180,11 @@
 
     </Item>
 
-    <Item type="group" name="AssessmentPlanGroup">
-      <uilink widget="apGroup"/>
-      <label lang="xx">Assessment and plan</label>
-      <label lang="fr">Analyse et prise en charge</label>
-      <label lang="de">Beurteilung / Procedere</label>
+    <Item type="group" name="AssessmentGroup">
+      <uilink widget="aGroup"/>
+      <label lang="xx">Assessment</label>
+      <label lang="fr">Analyse</label>
+      <label lang="de">Beurteilung</label>
       <options>DontPrintEmptyValues</options>
 
         <Item type="texteditor" name="AssessmentPlanGroup::Assessment">
@@ -194,6 +194,15 @@
           <tooltip lang="fr">Analyse</tooltip>
           <tooltip lang="de">Beurteilung, Zusammenfassung</tooltip>
         </Item>
+
+    </Item> <!-- end of group AssessmentPlanGroup -->
+
+    <Item type="group" name="PlanGroup">
+      <uilink widget="pGroup"/>
+      <label lang="xx">Plan</label>
+      <label lang="fr">Prise en charge</label>
+      <label lang="de">Procedere</label>
+      <options>DontPrintEmptyValues</options>
 
         <Item type="texteditor" name="AssessmentPlanGroup::Plan">
           <uilink label="" widget="" layout="pLayout"/>
