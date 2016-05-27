@@ -112,6 +112,71 @@
             </Item>
         </Item>
 
+        <Item type="detailswidget" name="Marital::Status::Group" uifilename="./ui/xx/maritalstatus.ui">
+            <uilink label="" widget="" layout="identityLayout"/>
+            <label lang="xx">Marital status</label>
+            <label lang="fr">Situation familiale</label>
+            <column>1</column>
+            <options>DontPrintEmptyValues;SummaryFontBold;expanded</options>
+
+            <item type="combo" name="Marital::Status::Combo">
+                <uilink label="maritalStatusLabel" widget="maritalStatusComboBox"/>
+                <label lang="xx">Marital status</label>
+                <label lang="fr">Situation familiale</label>
+                <value>
+                    <uuid id="0">UNK</uuid>
+                    <uuid id="1">Unmarried</uuid>
+                    <uuid id="2">Never Married</uuid>
+                    <uuid id="3">Divorced</uuid>
+                    <uuid id="4">Interlocutory</uuid>
+                    <uuid id="5">Legally Separated</uuid>
+                    <uuid id="6">Married</uuid>
+                    <uuid id="7">Polygamous</uuid>
+                    <uuid id="8">Annulled</uuid>
+                    <uuid id="9">Domestic partner</uuid>
+                    <uuid id="10">Widowed</uuid>
+                    <uuid id="11">Other</uuid>
+
+                    <possible id="0" lang="xx">Unknown</possible>
+                    <possible id="1" lang="xx">Unmarried</possible>
+                    <possible id="2" lang="xx">Never married</possible>
+                    <possible id="3" lang="xx">Divorced</possible>
+                    <possible id="4" lang="xx">Interlocutory</possible>
+                    <possible id="5" lang="xx">Legally Separated</possible>
+                    <possible id="6" lang="xx">Married</possible>
+                    <possible id="7" lang="xx">Polygamous</possible>
+                    <possible id="8" lang="xx">Annulled</possible>
+                    <possible id="9" lang="xx">Domestic partner</possible>
+                    <possible id="10" lang="xx">Widowed</possible>
+                    <possible id="11" lang="xx">Other</possible>
+
+                    <possible id="0" lang="fr">Inconnue</possible>
+                    <possible id="1" lang="fr">Célibataire (situation familiale antérieure inconnue)</possible>
+                    <possible id="2" lang="fr">Célibataire (jamais marié-e)</possible>
+                    <possible id="3" lang="fr">Divorcé-e</possible>
+                    <possible id="4" lang="fr">En cours de divorce</possible>
+                    <possible id="5" lang="fr">Séparation de corps</possible>
+                    <possible id="6" lang="fr">Marié-e</possible>
+                    <possible id="7" lang="fr">Polygame</possible>
+                    <possible id="8" lang="fr">Mariage annulé</possible>
+                    <possible id="9" lang="fr">Concubinage</possible>
+                    <possible id="10" lang="fr">Veuve, veuf</possible>
+                    <possible id="11" lang="fr">Autre</possible>
+                </value>
+                <option>DontPrintEmptyValues</option>
+            </Item>
+
+            <Item type="shorttext" name="Marital::Status::Other::ShortText">
+              <uilink label="otherMaritalStatus" widget="otherMaritalStatusLineEdit"/>
+              <label lang="xx">Other</label>
+              <label lang="fr">Autre</label>
+              <placeholder lang="xx"></placeholder>
+              <placeholder lang="fr"></placeholder>
+              <option>DontPrintEmptyValues</option>
+            </Item>
+
+        <Item> <!-- end of details widget -->
+
         <Item type="detailswidget" name="FrDetails" uifilename="./ui/xx/social.ui">
           <uilink label="" widget="" layout="identityLayout"/>
           <country>FR</country>
