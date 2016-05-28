@@ -397,6 +397,14 @@
             <patientdata>Faxes</patientdata>
           </Item>
 
+          <Item type="shorttext" name="ContactGroup::External::Record::Patient::Id">
+            <uilink label="externalRecordPatientIdLabel" widget="externalRecordPatientIdLineEdit"/>
+            <label lang="xx">External record ID</label>
+            <label lang="fr">Identifiant dossier externe</label>
+            <options>DontPrintEmptyValues</options>
+            <patientdata>ExternalRecordPatientId</patientdata>
+          </Item>
+
 
 
           <Item type="button" name="ContactGroup::SendSmsButton">
