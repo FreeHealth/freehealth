@@ -63,6 +63,7 @@ const char* const EMAILS            = QT_TRANSLATE_NOOP("tkConstants", "E-Mails"
 const char* const EMAIL             = QT_TRANSLATE_NOOP("tkConstants", "E-Mail");
 const char* const TELS              = QT_TRANSLATE_NOOP("tkConstants", "Tels");
 const char* const MOBILEPHONE       = QT_TRANSLATE_NOOP("tkConstants", "Mobile phone");
+const char* const EXTERNALRECORDPATIENTID = QT_TRANSLATE_NOOP("tkConstants", "External Record Patient ID");
 
 const char* const DATE_OF_BIRTH               = QT_TRANSLATE_NOOP("tkConstants", "Date of birth");
 const char* const DATE_OF_BIRTH_1             = QT_TRANSLATE_NOOP("tkConstants", "Date of birth: %1");
