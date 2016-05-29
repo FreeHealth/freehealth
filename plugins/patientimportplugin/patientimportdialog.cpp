@@ -29,76 +29,14 @@
  * Import patient(s) from external softwares.
  */
 
-#include "patientimportconstants.h"
-#include "patientimportdialog.h"
-#include "patientimportplugin.h"
-#include "ui_patientimportdialog.h"
 
-#include <utils/log.h>
-#include <utils/global.h>
+#include "patientimportdialog_p.h"
 
-#include <coreplugin/itheme.h>
-#include <coreplugin/icore.h>
-#include <coreplugin/constants_icons.h>
-
-#include <QDebug>
-
-#include <QLineEdit>
-#include <QProgressBar>
-#include <QLabel>
-#include <QComboBox>
-#include <QPushButton>
-#include <QDialogButtonBox>
-#include <QPlainTextEdit>
-#include <QFileDialog>
 
 using namespace PatientImport;
 using namespace Internal;
 
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
-
-namespace PatientImport {
-namespace Internal {
-
-class PatientImportDialogPrivate
-{
-public:
-    PatientImportDialogPrivate(PatientImportDialog *parent):
-        q(parent)
-    {}
-
-    ~PatientImportDialogPrivate()
-    {
-        if (ui)
-            delete ui;
-    }
-
-    void createUi()
-    {
-        ui = new Ui::PatientImportDialog;
-        ui->setupUi(q);
-        //_filePushButton = new QPushButton(q);
-        ui->filePushButton->setText(QObject::tr("File"));
-    }
-
-    void connectUi()
-    {
-        QObject::connect(ui->filePushButton, SIGNAL(clicked()),
-                         q, SLOT(getFileName()));
-    }
-
-public:
-    Ui::PatientImportDialog *ui;
-    //QPushButton *_sendButton;
-    //QString fileName;
-    //QPushButton *_filePushButton;
-
-private:
-    PatientImportDialog *q;
-
-};
-} // namespace Internal
-} // namespace PatientImport
 
 PatientImportDialog::PatientImportDialog(QWidget *parent) :
     QDialog(parent),
@@ -107,6 +45,8 @@ PatientImportDialog::PatientImportDialog(QWidget *parent) :
     d->createUi();
     setSoftwareComboBoxItems(patientimport::Internal::PatientimportPlugin::softwareList());
     d->ui->softwareLabel->setText(tr("Software"));
+    d->ui->startPushButton->setText(tr("Start import"));
+    d->ui->startPushButton->setEnabled(false);
     d->connectUi();
     //d->getReportInformation();
     //d->_sendButton->setText(tr("&Send report"));
@@ -116,9 +56,9 @@ PatientImportDialog::PatientImportDialog(QWidget *parent) :
 
 PatientImportDialog::~PatientImportDialog()
 {
-    if (d)
-        delete d;
-    d = 0;
+//    if (d)
+//        delete d;
+//    d = 0;
 }
 
 void PatientImportDialog::changeEvent(QEvent *e)
@@ -134,11 +74,8 @@ void PatientImportDialog::setSoftwareComboBoxItems(const QStringList &softlist)
     d->ui->softwareComboBox->setCurrentIndex(-1);
 }
 
-QString PatientImportDialog::getFileName()
+void PatientImportDialog::startImport()
 {
-    qWarning() << "getFileName()";
-    QString fileName;
-    fileName= QFileDialog::getOpenFileName(d->ui->filePushButton, QObject::tr("Open File"));
-    d->ui->fileLineEdit->setText(fileName);
-    return fileName;
+    d->ui->startPushButton->setEnabled(false);
+    ProcessPatientImport(d->fileName());
 }

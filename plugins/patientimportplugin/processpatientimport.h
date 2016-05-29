@@ -19,52 +19,32 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developer: Jerome Pinguet <jerome@jerome.cc>                     *
+ *  Main developer: Jerome Pinguet <jerome@jerome.cc                       *
  *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef PATIENTIMPORT_IPLUGIN_H
-#define PATIENTIMPORT_IPLUGIN_H
+#ifndef PROCESSPATIENTIMPORT_H
+#define PROCESSPATIENTIMPORT_H
 
-#include <extensionsystem/iplugin.h>
-#include <QStringList>
+#include "patientbaseplugin/patientmodel.h"
+#include "patientbaseplugin/patientbase.h"
+#include <QString>
+#include <QFile>
 
-namespace patientimport {
-namespace Internal {
+class ProcessPatientImportPrivate;
+class PatientModel;
 
-class PatientimportPlugin : public ExtensionSystem::IPlugin
+class ProcessPatientImport
 {
-    Q_OBJECT
-    Q_PLUGIN_METADATA(IID "org.freemedforms.FreeMedForms.patientimportPlugin" FILE "patientimport.json")
-
 public:
-    PatientimportPlugin();
-    ~PatientimportPlugin();
+    ProcessPatientImport(QString filename);
+    ~ProcessPatientImport();
+    void parseGestcab(QFile *file);
+    void setPatientModel();
 
-    bool initialize(const QStringList &arguments, QString *errorString);
-    void extensionsInitialized();
-    ShutdownFlag aboutToShutdown();
-
-    static QStringList softwareList();
-
-public slots:
-    void openPatientImportDialog();
-
-private Q_SLOTS:
-    void postCoreInitialization();
-    void coreAboutToClose();
-
-    // Declare plugin unit tests here
-//#ifdef WITH_TESTS
-//private Q_SLOTS:
-//    void initTestCase();
-//    void test_your_plugin_unit_test(); // see file tests/test_patientimport.cpp
-//    void cleanTestCase();
-//#endif
-
+private:
+    ProcessPatientImportPrivate *d_ptr;
 };
 
-} // namespace Internal
-} // namespace patientimport
-
-#endif // PATIENTIMPORT_IPLUGIN_H
+#endif // PROCESSPATIENTIMPORT_H

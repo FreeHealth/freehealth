@@ -19,11 +19,14 @@ HEADERS += \
     patientimportplugin.h\
     patientimport_exporter.h\
     patientimportconstants.h \
-    patientimportdialog.h
+    patientimportdialog.h \
+    processpatientimport.h \
+    patientimportdialog_p.h
         
 SOURCES += \
     patientimportplugin.cpp \
-    patientimportdialog.cpp
+    patientimportdialog.cpp \
+    processpatientimport.cpp
 
 OTHER_FILES = patientimport.pluginspec
 

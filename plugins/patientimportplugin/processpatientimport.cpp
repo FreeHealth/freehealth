@@ -19,52 +19,41 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developer: Jerome Pinguet <jerome@jerome.cc>                     *
+ *  Main developer: Jerome Pinguet <jerome@jerome.cc                       *
  *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef PATIENTIMPORT_IPLUGIN_H
-#define PATIENTIMPORT_IPLUGIN_H
+#include "processpatientimport.h"
 
-#include <extensionsystem/iplugin.h>
-#include <QStringList>
-
-namespace patientimport {
-namespace Internal {
-
-class PatientimportPlugin : public ExtensionSystem::IPlugin
-{
-    Q_OBJECT
-    Q_PLUGIN_METADATA(IID "org.freemedforms.FreeMedForms.patientimportPlugin" FILE "patientimport.json")
-
-public:
-    PatientimportPlugin();
-    ~PatientimportPlugin();
-
-    bool initialize(const QStringList &arguments, QString *errorString);
-    void extensionsInitialized();
-    ShutdownFlag aboutToShutdown();
-
-    static QStringList softwareList();
-
-public slots:
-    void openPatientImportDialog();
-
-private Q_SLOTS:
-    void postCoreInitialization();
-    void coreAboutToClose();
-
-    // Declare plugin unit tests here
-//#ifdef WITH_TESTS
-//private Q_SLOTS:
-//    void initTestCase();
-//    void test_your_plugin_unit_test(); // see file tests/test_patientimport.cpp
-//    void cleanTestCase();
-//#endif
+struct ProcessPatientImportPrivate {
+ ProcessPatientImportPrivate(ProcessPatientImport *q) : q_ptr(q) { }
+ ProcessPatientImport *q_ptr;
+ QString m_fileName;
+ PatientModel *m_patientModel;
 
 };
 
-} // namespace Internal
-} // namespace patientimport
+ProcessPatientImport::ProcessPatientImport(QString filename) : d_ptr(new ProcessPatientImportPrivate(this))
+{
+    d_ptr->m_fileName = filename;
+    qWarning() << "ProcessPatientImport::ProcessPatientImport()";
+}
 
-#endif // PATIENTIMPORT_IPLUGIN_H
+ProcessPatientImport::~ProcessPatientImport()
+{
+    if (d_ptr)
+        delete d_ptr;
+    d_ptr = 0;
+}
+
+void ProcessPatientImport::parseGestcab(QFile *file)
+{
+Q_UNUSED(file);
+    qWarning() << "ProcessPatientImport::parseGestcab()";
+}
+
+void ProcessPatientImport::setPatientModel()
+{
+
+}
