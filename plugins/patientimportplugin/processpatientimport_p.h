@@ -19,33 +19,36 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developer: Jerome Pinguet <jerome@jerome.cc>                     *
+ *  Main developer: Jerome Pinguet <jerome@jerome.cc                       *
  *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef PATIENTIMPORTCONSTANTS_H
-#define PATIENTIMPORTCONSTANTS_H
+#ifndef PROCESSPATIENTIMPORT_P_H
+#define PROCESSPATIENTIMPORT_P_H
 
-#include <qglobal.h>
+#include "processpatientimport.h"
+#include "patientimportconstants.h"
+#include "patientimportplugin.h"
+#include <iostream>
+#include <QVector>
+#include <QStringList>
+#include <QTextStream>
+#include <QUuid>
+#include <QObject>
 
 namespace PatientImport {
-namespace Constants {
+namespace Internal {
 
-// Actions
-const char * const ACTION_ID = "grPlugins.patientimport";
-const char * const MENU_ID = "grGeneral.Plugins";
+struct ProcessPatientImportPrivate {
+ ProcessPatientImportPrivate(ProcessPatientImport *q) : q_ptr(q) { }
+ ProcessPatientImport *q_ptr;
+ QString m_fileName;
+ QString m_software;
+ Patients::PatientModel *m_patientModel;
+ QVector<QVector<QString>> *m_import;
+ };
 
-// Icon
-const char * const PATIENTIMPORT_ICON = "merge-arrow.png";
-
-// Softwares
-const char * const CIELCOMPTA  = "Ciel Compta";
-const char * const GESTCAB     = "Gestcab";
-
-// Translations
-const char* const PATIENT_IMPORT = QT_TRANSLATE_NOOP("tkConstants", "&Import patient");
-
-} // namespace PatientImport
-} // namespace Constants
-
-#endif // PATIENTIMPORTCONSTANTS_H
+} // Internal
+}
+#endif // PROCESSPATIENTIMPORT_P_H

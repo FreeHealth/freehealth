@@ -27,24 +27,42 @@
 #ifndef PROCESSPATIENTIMPORT_H
 #define PROCESSPATIENTIMPORT_H
 
-#include "patientbaseplugin/patientmodel.h"
-#include "patientbaseplugin/patientbase.h"
+#include <patientimportplugin/patientimport_exporter.h>
+#include <patientbaseplugin/patientmodel.h>
+#include <patientbaseplugin/patientbase.h>
+#include <coreplugin/icore.h>
+#include <coreplugin/itheme.h>
+#include <coreplugin/constants_icons.h>
+#include <coreplugin/ipatient.h>
+#include <coreplugin/isettings.h>
+#include <coreplugin/constants_tokensandsettings.h>
 #include <QString>
 #include <QFile>
 
-class ProcessPatientImportPrivate;
+namespace Patients {
 class PatientModel;
+} // namespace Patients
 
-class ProcessPatientImport
+namespace PatientImport {
+namespace Internal {
+class ProcessPatientImportPrivate;
+} // namespace Internal
+
+class ProcessPatientImport : public QObject
 {
+    Q_OBJECT
+
 public:
-    ProcessPatientImport(QString filename);
+    ProcessPatientImport(QString filename, QString software);
     ~ProcessPatientImport();
-    void parseGestcab(QFile *file);
-    void setPatientModel();
+    void parseGestcab();
+    void importGestcab();
 
 private:
-    ProcessPatientImportPrivate *d_ptr;
+    Internal::ProcessPatientImportPrivate *d_ptr;
 };
+
+
+} // PatientImport
 
 #endif // PROCESSPATIENTIMPORT_H

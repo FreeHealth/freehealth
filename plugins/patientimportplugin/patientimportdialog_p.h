@@ -59,7 +59,7 @@ public:
                          this, SLOT(getFileName()));
         QObject::connect(ui->startPushButton, SIGNAL(clicked()),
                          q_ptr, SLOT(startImport()));
-        QObject::connect(ui->softwareComboBox, SIGNAL(currentIndexChanged()),
+        QObject::connect(ui->softwareComboBox, SIGNAL(currentTextChanged()),
                          this, SLOT(setStartButtonState()));
 
     }

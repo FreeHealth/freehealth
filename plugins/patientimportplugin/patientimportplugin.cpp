@@ -49,7 +49,7 @@
 #include <QDebug>
 #include <QAction>
 
-using namespace patientimport::Internal;
+using namespace PatientImport::Internal;
 
 static inline Core::IUser *user()  { return Core::ICore::instance()->user(); }
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
@@ -178,8 +178,8 @@ void PatientimportPlugin::openPatientImportDialog()
 QStringList PatientimportPlugin::softwareList()
 {
     QStringList softwareList;
-    softwareList << patientimport::Constants::CIELCOMPTA
-                 << patientimport::Constants::GESTCAB;
+    softwareList << PatientImport::Constants::CIELCOMPTA // Index 0
+                 << PatientImport::Constants::GESTCAB;   // Index 1
     return softwareList;
 }
 

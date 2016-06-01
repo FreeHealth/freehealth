@@ -21,7 +21,8 @@ HEADERS += \
     patientimportconstants.h \
     patientimportdialog.h \
     processpatientimport.h \
-    patientimportdialog_p.h
+    patientimportdialog_p.h \
+    processpatientimport_p.h
         
 SOURCES += \
     patientimportplugin.cpp \

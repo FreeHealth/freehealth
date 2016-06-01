@@ -43,7 +43,7 @@ PatientImportDialog::PatientImportDialog(QWidget *parent) :
     d(new PatientImportDialogPrivate(this))
 {
     d->createUi();
-    setSoftwareComboBoxItems(patientimport::Internal::PatientimportPlugin::softwareList());
+    setSoftwareComboBoxItems(PatientImport::Internal::PatientimportPlugin::softwareList());
     d->ui->softwareLabel->setText(tr("Software"));
     d->ui->startPushButton->setText(tr("Start import"));
     d->ui->startPushButton->setEnabled(false);
@@ -77,5 +77,5 @@ void PatientImportDialog::setSoftwareComboBoxItems(const QStringList &softlist)
 void PatientImportDialog::startImport()
 {
     d->ui->startPushButton->setEnabled(false);
-    ProcessPatientImport(d->fileName());
+    ProcessPatientImport(d->fileName(),d->ui->softwareComboBox->currentText());
 }

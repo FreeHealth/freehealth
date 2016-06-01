@@ -29,7 +29,7 @@
 #include <extensionsystem/iplugin.h>
 #include <QStringList>
 
-namespace patientimport {
+namespace PatientImport {
 namespace Internal {
 
 class PatientimportPlugin : public ExtensionSystem::IPlugin
@@ -65,6 +65,6 @@ private Q_SLOTS:
 };
 
 } // namespace Internal
-} // namespace patientimport
+} // namespace PatientImport
 
 #endif // PATIENTIMPORT_IPLUGIN_H
