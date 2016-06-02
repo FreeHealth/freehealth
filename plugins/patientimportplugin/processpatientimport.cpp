@@ -26,7 +26,7 @@
  ***************************************************************************/
 #include "processpatientimport_p.h"
 
-
+static inline Core::IPatient *patient() { return Core::ICore::instance()->patient(); }
 using namespace PatientImport;
 
 ProcessPatientImport::ProcessPatientImport(QString filename, QString software) : d_ptr(new Internal::ProcessPatientImportPrivate(this))
@@ -41,6 +41,7 @@ ProcessPatientImport::ProcessPatientImport(QString filename, QString software) :
                 break;
             case 1:
                 ProcessPatientImport::parseGestcab();
+                ProcessPatientImport::importGestcab();
                 break;
             default:
                 break;
@@ -69,18 +70,18 @@ void ProcessPatientImport::parseGestcab()
     QTextStream in(file);
     qWarning() << "QTextStream reading ok";
     qWarning() << "set codec ok";
-    QVector<QVector<QString>> *test = new QVector<QVector<QString>>;
+    QVector<QVector<QString>> *import = new QVector<QVector<QString>>;
     //d_ptr->m_import = new QVector<QVector<QString>>;
     while (!in.atEnd()) {
         QString line = in.readLine();
         qWarning() << line;
         QStringList fields = line.split('@');
-        QVector<QString> vect = QVector<QString>::fromList(fields);
-        test->append(vect);
+        QVector<QString> vector = QVector<QString>::fromList(fields);
+        import->append(vector);
     }
-    qDebug() << (test == NULL);
+    qDebug() << (import == NULL);
     qWarning() << "while loop over";
-    d_ptr->m_import = test;
+    d_ptr->m_import = import;
 
     for (int i = 0; i < 100; ++i) {
         qWarning()  << "***** Vector " << i << " *****";
@@ -96,10 +97,20 @@ void ProcessPatientImport::importGestcab()
     for (int i = 0; i < d_ptr->m_import->size(); ++i) {
         qWarning()  << "***** Importing patient " << i << " *****";
         d_ptr->m_patientModel = new Patients::PatientModel(this);
+        connect(d_ptr->m_patientModel, SIGNAL(patientCreated(QString)), patient(), SIGNAL(patientCreated(QString)), Qt::UniqueConnection);
         d_ptr->m_patientModel->setObjectName("PatientModelPatientImport");
+        d_ptr->m_patientModel->emitPatientCreationOnSubmit(true);
         d_ptr->m_patientModel->setFilter("", "", QUuid::createUuid().toString() + "__FAKE", Patients::PatientModel::FilterOnUuid);
-
-
+        d_ptr->m_patientModel->insertRow(0);
+        d_ptr->m_uuid = d_ptr->m_patientModel->index(0, Core::IPatient::Uid).data().toString();
+        d_ptr->m_patientModel->setData(d_ptr->m_patientModel->index(0, Core::IPatient::UsualName),
+                                       d_ptr->m_import->at(i).at(1));
+        d_ptr->m_patientModel->submit();
+        if (!(d_ptr->m_patientModel==NULL)) {
+            delete d_ptr->m_patientModel;
+            d_ptr->m_patientModel=NULL;
+        }
+        if(i==3) break;
     }
 }
 

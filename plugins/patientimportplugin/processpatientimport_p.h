@@ -47,6 +47,7 @@ struct ProcessPatientImportPrivate {
  QString m_software;
  Patients::PatientModel *m_patientModel;
  QVector<QVector<QString>> *m_import;
+ QString m_uuid;
  };
 
 } // Internal
