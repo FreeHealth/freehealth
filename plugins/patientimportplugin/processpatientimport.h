@@ -56,6 +56,7 @@ public:
     ProcessPatientImport(QString filename, QString software);
     ~ProcessPatientImport();
     void parseGestcab();
+    void modifyGestcab();
     void importGestcab();
 
 private:

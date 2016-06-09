@@ -630,6 +630,7 @@ bool PatientModel::setData(const QModelIndex &index, const QVariant &value, int 
             case 0: g = "M"; break;
             case 1: g = "F"; break;
             case 2: g = "H"; break;
+            case 3: g = "K"; break;
             }
 
             // value not changed ? -> return
@@ -643,12 +644,13 @@ bool PatientModel::setData(const QModelIndex &index, const QVariant &value, int 
         }
         case IPatient::Gender:
         {
-            const QString &g = value.toString();
+            const QString g = value.toString();
             QString toSave;
             switch (genders().indexOf(g)) {
             case 0 : toSave = "M"; break;
             case 1 : toSave = "F"; break;
             case 2:  toSave = "H"; break;
+            case 3:  toSave = "K"; break;
             default: LOG_ERROR("Unknown gender " + g);
             }
             // value not changed ? -> return

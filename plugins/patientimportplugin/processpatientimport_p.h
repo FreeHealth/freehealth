@@ -41,13 +41,14 @@ namespace PatientImport {
 namespace Internal {
 
 struct ProcessPatientImportPrivate {
- ProcessPatientImportPrivate(ProcessPatientImport *q) : q_ptr(q) { }
+ ProcessPatientImportPrivate(ProcessPatientImport *q): q_ptr(q) { }
  ProcessPatientImport *q_ptr;
  QString m_fileName;
  QString m_software;
  Patients::PatientModel *m_patientModel;
- QVector<QVector<QString>> *m_import;
+ QVector<QStringList> *m_import;
  QString m_uuid;
+ QStringList m_duplicate;
  };
 
 } // Internal
