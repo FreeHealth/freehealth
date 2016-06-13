@@ -96,6 +96,8 @@ public:
         Faxes,
         ProfessionalTels,
         ProfessionalSite,
+        ExternalRecordPatientId,
+
         // Social numbers
         SocialNumber,
         SocialNumber2,      // 40
@@ -140,7 +142,6 @@ public:
 
         // For debugging purpose
         PractitionnerLkID,
-        ExternalRecordPatientId,
         NumberOfColumns
     };
 
