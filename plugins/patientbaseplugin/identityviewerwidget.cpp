@@ -433,13 +433,11 @@ public:
         _faxLabel = new QLabel(this);
         _mailLabel = new QLabel(this);
         _mobileLabel = new QLabel(this);
-        _externalRecordPatientIdLabel = new QLabel(this);
         _tels = new QLabel(this);
         _fax = new QLabel(this);
         _mail = new QLabel(this);
         _sendMail = new QToolButton(this);
         _mobile = new QLabel(this);
-        _externalRecordPatientId = new QLabel(this);
 
         QHBoxLayout *mailLayout = new QHBoxLayout(this);
         mailLayout->addWidget(_mail);
@@ -451,7 +449,6 @@ public:
         _faxLabel->setFont(bold);
         _mailLabel->setFont(bold);
         _mobileLabel->setFont(bold);
-        _externalRecordPatientIdLabel->setFont(bold);
         _sendMail->setToolButtonStyle(Qt::ToolButtonIconOnly);
         _sendMail->setIcon(theme()->icon(Core::Constants::ICONNEWMAIL));
         QObject::connect(_sendMail, SIGNAL(clicked()), this, SLOT(sendMail()));
@@ -460,7 +457,6 @@ public:
         grid->addRow(_faxLabel, _fax);
         grid->addRow(_mailLabel, mailLayout);
         grid->addRow(_mobileLabel, _mobile);
-        grid->addRow(_externalRecordPatientIdLabel, _externalRecordPatientId);
 
         retranslate();
     }
@@ -471,7 +467,6 @@ public:
         _fax->clear();
         _mail->clear();
         _mobile->clear();
-        _externalRecordPatientId->clear();
     }
 
     void setTels(const QString &txt)
@@ -510,21 +505,12 @@ public:
             _mobile->setText(txt);
     }
 
-    void setExternalRecordPatientId(const QString &txt)
-    {
-        if (txt.isEmpty())
-            _externalRecordPatientId->setText("--");
-        else
-            _externalRecordPatientId->setText(txt);
-    }
-
     void retranslate()
     {
         _telsLabel->setText(tkTr(Trans::Constants::TELS));
         _faxLabel->setText(tkTr(Trans::Constants::FAX));
         _mailLabel->setText(tkTr(Trans::Constants::MAIL));
         _mobileLabel->setText(tkTr(Trans::Constants::MOBILEPHONE));
-        _externalRecordPatientIdLabel->setText(tkTr(Trans::Constants::EXTERNALRECORDPATIENTID));
         _sendMail->setToolTip(tkTr(Trans::Constants::SENDMAIL));
     }
 
@@ -545,8 +531,8 @@ private Q_SLOTS:
     }
 
 private:
-    QLabel *_telsLabel, *_faxLabel, *_mailLabel, *_mobileLabel, *_externalRecordPatientIdLabel;
-    QLabel *_tels, *_fax, *_mail, *_mobile, *_externalRecordPatientId;
+    QLabel *_telsLabel, *_faxLabel, *_mailLabel, *_mobileLabel;
+    QLabel *_tels, *_fax, *_mail, *_mobile;
     QToolButton *_sendMail;
 };
 
@@ -780,8 +766,6 @@ public:
         m_FullContactWidget->contact()->setFax(_patientModelIdentityWrapper->data(Core::IPatient::Faxes).toString());
         m_FullContactWidget->contact()->setMail(_patientModelIdentityWrapper->data(Core::IPatient::Mails).toString());
         m_FullContactWidget->contact()->setMobile(_patientModelIdentityWrapper->data(Core::IPatient::MobilePhone).toString());
-        m_FullContactWidget->contact()->setExternalRecordPatientId(_patientModelIdentityWrapper->data(Core::IPatient::ExternalRecordPatientId).toString());
-
     }
 
 public:

@@ -229,9 +229,6 @@ void IPatient::registerPatientTokens()
     t = new PatientToken(Constants::TOKEN_PATIENTCONTACT_MOBILEPHONE, MobilePhone);
     t->setUntranslatedHumanReadableName(Trans::Constants::MOBILEPHONE);
     _tokens << t;
-    t = new PatientToken(Constants::TOKEN_PATIENTCONTACT_EXTERNALRECORDPATIENTID, ExternalRecordPatientId);
-    t->setUntranslatedHumanReadableName(Trans::Constants::EXTERNALRECORDPATIENTID);
-    _tokens << t;
 
     t = new PatientToken(Constants::TOKEN_WEIGHTINGRAMS, WeightInGrams);
     t->setUntranslatedHumanReadableName(Trans::Constants::WEIGHT);
