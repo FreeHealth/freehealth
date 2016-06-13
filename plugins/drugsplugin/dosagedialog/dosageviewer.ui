@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>643</width>
-    <height>473</height>
+    <height>520</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,7 +17,16 @@
    <string>Show the summary of product characteristics</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <property name="margin">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
     <number>0</number>
    </property>
    <item row="0" column="0">
@@ -103,7 +112,16 @@
        <string>Basics</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_5">
-       <property name="margin">
+       <property name="leftMargin">
+        <number>10</number>
+       </property>
+       <property name="topMargin">
+        <number>10</number>
+       </property>
+       <property name="rightMargin">
+        <number>10</number>
+       </property>
+       <property name="bottomMargin">
         <number>10</number>
        </property>
        <property name="spacing">
@@ -128,7 +146,16 @@
           <string>Intakes</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_3">
-          <property name="margin">
+          <property name="leftMargin">
+           <number>10</number>
+          </property>
+          <property name="topMargin">
+           <number>10</number>
+          </property>
+          <property name="rightMargin">
+           <number>10</number>
+          </property>
+          <property name="bottomMargin">
            <number>10</number>
           </property>
           <property name="spacing">
@@ -313,7 +340,16 @@
           <string>Duration</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_4">
-          <property name="margin">
+          <property name="leftMargin">
+           <number>10</number>
+          </property>
+          <property name="topMargin">
+           <number>10</number>
+          </property>
+          <property name="rightMargin">
+           <number>10</number>
+          </property>
+          <property name="bottomMargin">
            <number>10</number>
           </property>
           <property name="spacing">
@@ -335,18 +371,12 @@
              </widget>
             </item>
             <item>
-             <widget class="QDoubleSpinBox" name="durationFromSpin">
+             <widget class="QSpinBox" name="durationFromSpin">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
-              </property>
-              <property name="minimum">
-               <double>1.000000000000000</double>
-              </property>
-              <property name="maximum">
-               <double>999.990000000000009</double>
               </property>
              </widget>
             </item>
@@ -367,18 +397,12 @@
              </widget>
             </item>
             <item>
-             <widget class="QDoubleSpinBox" name="durationToSpin">
+             <widget class="QSpinBox" name="durationToSpin">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
-              </property>
-              <property name="minimum">
-               <double>1.000000000000000</double>
-              </property>
-              <property name="maximum">
-               <double>999.990000000000009</double>
               </property>
              </widget>
             </item>
@@ -482,7 +506,16 @@
        <string>Schemes</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_6">
-       <property name="margin">
+       <property name="leftMargin">
+        <number>10</number>
+       </property>
+       <property name="topMargin">
+        <number>10</number>
+       </property>
+       <property name="rightMargin">
+        <number>10</number>
+       </property>
+       <property name="bottomMargin">
         <number>10</number>
        </property>
        <property name="spacing">
@@ -785,7 +818,16 @@
        <string>Limits</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_12">
-       <property name="margin">
+       <property name="leftMargin">
+        <number>10</number>
+       </property>
+       <property name="topMargin">
+        <number>10</number>
+       </property>
+       <property name="rightMargin">
+        <number>10</number>
+       </property>
+       <property name="bottomMargin">
         <number>10</number>
        </property>
        <property name="spacing">
@@ -797,7 +839,16 @@
           <string>Weight / Age / Sex Limited</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_8">
-          <property name="margin">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
            <number>0</number>
           </property>
           <property name="spacing">
@@ -913,7 +964,16 @@
           <string>Renal function limits</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_11">
-          <property name="margin">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
            <number>0</number>
           </property>
           <property name="spacing">
@@ -1074,7 +1134,16 @@
        <string>Monitoring</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_10">
-       <property name="margin">
+       <property name="leftMargin">
+        <number>10</number>
+       </property>
+       <property name="topMargin">
+        <number>10</number>
+       </property>
+       <property name="rightMargin">
+        <number>10</number>
+       </property>
+       <property name="bottomMargin">
         <number>10</number>
        </property>
        <property name="spacing">
@@ -1144,7 +1213,16 @@
        <string>Todos</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_7">
-       <property name="margin">
+       <property name="leftMargin">
+        <number>10</number>
+       </property>
+       <property name="topMargin">
+        <number>10</number>
+       </property>
+       <property name="rightMargin">
+        <number>10</number>
+       </property>
+       <property name="bottomMargin">
         <number>10</number>
        </property>
        <property name="spacing">
@@ -1250,22 +1328,6 @@
     <hint type="destinationlabel">
      <x>169</x>
      <y>129</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>fromToDurationCheck</sender>
-   <signal>clicked(bool)</signal>
-   <receiver>durationToSpin</receiver>
-   <slot>setVisible(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>24</x>
-     <y>240</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>169</x>
-     <y>264</y>
     </hint>
    </hints>
   </connection>
