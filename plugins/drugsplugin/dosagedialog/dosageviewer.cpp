@@ -585,7 +585,7 @@ void DosageViewer::on_intakesFromSpin_valueChanged(double value)
 }
 
 /** \brief Redefine the minimum of the "to" duration */
-void DosageViewer::on_durationFromSpin_valueChanged(double value)
+void DosageViewer::on_durationFromSpin_valueChanged(int value)
 {
     if (durationToSpin->value() < value) {
         durationToSpin->setValue(value);
