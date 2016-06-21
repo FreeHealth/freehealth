@@ -96,7 +96,6 @@ public:
         Faxes,
         ProfessionalTels,
         ProfessionalSite,
-        ExternalRecordPatientId,
 
         // Social numbers
         SocialNumber,
