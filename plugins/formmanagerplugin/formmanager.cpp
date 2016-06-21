@@ -40,7 +40,7 @@
  * - extracting screenshots and files from the 'form set'
  *
  * Form::FormManager also manages :
- * - a cache system to fasten the form's access and construction
+ * - a cache system to accelerate form access and construction
  * - keeps duplicates of each forms to use in specific computation (statistics...).
  * - allow creation of Form::FormPage (createFormPage())
  * - manages all Form::FormTreeModel (one per Form::FormMain empty root)

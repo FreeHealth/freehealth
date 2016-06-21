@@ -111,7 +111,9 @@ public:
     }
 
 
-    /** Return a pointer to the data class for one unique \e language. If \e language doesnot exists it is created. */
+    /** Return a pointer to the data class for one unique \e language.
+     *  If \e language does not exist, it is created.
+     */
     T *createLanguage(const QString &lang)
     {
         QString tmp = lang.left(2);

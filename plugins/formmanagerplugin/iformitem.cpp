@@ -27,42 +27,54 @@
 
 /**
  * \class Form::FormItem
- * This object represents one element of the patient file form. The forms are a tree of QObjects.
- * The root parent is an empty Form::FormMain item with some information about the Form::IFormIO reader,
- * the form internal information.\n
+ * This object represents one element of the patient file form. The forms are a
+ * tree of QObjects.
+ * The root parent is an empty Form::FormMain item with some information about
+ * the Form::IFormIO reader, the form internal information.\n
  *
  * Each Form::FormItem contains:
- * - one Form::FormItemSpec with a description of the item (or the form for the empty root object):
+ * - one Form::FormItemSpec with a description of the item (or the form for the
+ *   empty root object):
  *   - author, version, license...
- *   - these data are fully translatable and can be used in any form model/view/controller
+ *   - these data are fully translatable and can be used in any form
+ *     model/view/controller
  * - one Form::FormItemScripts book of JavaScript of the item
  * - one Form::FormItemValues book of different types of values of the item
- * - you can set its Form::IFormItemData for the database access and widget data management
- * - you can set its Form::IFormWidget for a more specialized graphical user interface
+ * - you can set its Form::IFormItemData for the database access and widget data
+ *   management
+ * - you can set its Form::IFormWidget for a more specialized graphical user
+ *   interface
  *
- * In your own Form::IFormIO engine, you may want to create children of item, you can use:
+ * In your own Form::IFormIO engine, you may want to create children of item,
+ * you can use:
  * - createChildForm() to create a new Form::FormMain
  * - createChildItem() to create a new Form::FormItem
  * - createPage() to create a new Form::FormPage
  *
- * You can get all of its first level children by calling Form::FormItem::formItemChildren() and the
- * full list of its children (flattened) using Form::FormItem::flattenedFormItemChildren().
+ * You can get all of its first level children by calling
+ * Form::FormItem::formItemChildren() and the full list of its children
+ * (flattened) using Form::FormItem::flattenedFormItemChildren().
  *
- * You can define extra data (options) with the addExtraData(), extraData() and clearExtraData().
+ * You can define extra data (options) with the addExtraData(), extraData() and
+ * clearExtraData().
  *
  * You can define the Core::IPatient representation of this Form::FormItem with
- * setPatientDataRepresentation(), patientDataRepresentation(). The patient data representation is used
- * in the Core::IPatient model wrapper to find requested values that are not stored in the patient
- * database.
+ * setPatientDataRepresentation(), patientDataRepresentation(). The patient data
+ * representation is used in the Core::IPatient model wrapper to find requested
+ * values that are not stored in the patient database.
  */
-// TODO: change Form::FormItem pointers to references distributed by the Form::FormManager? like getItem(Form::FormMainIndex &index, const QString &uid)?
+// TODO: change Form::FormItem pointers to references distributed by the
+// Form::FormManager? like
+// getItem(Form::FormMainIndex &index, const QString &uid)?
 
 // TODO: - Display options and printing??
 // TODO: - Rights options / authorized users
 // TODO: - Rule base
 // TODO: - 1 QWidget history
-// TODO: - add a checkValueIntegrity() method, based on the rules of the item to verify its accuracy
-// TODO: move multiple inline void findChildren(FormItem *item) to member function of FormItem class, as qFindChildren is deprecated
+// TODO: - add a checkValueIntegrity() method, based on the rules of the item to
+// verify its accuracy
+// TODO: move multiple inline void findChildren(FormItem *item) to member
+// function of FormItem class, as qFindChildren is deprecated
 
 /**
  * \class Form::FormPage
@@ -71,40 +83,49 @@
 
 /**
  * \class Form::FormMain
- * A Form::FormMain represents a root item of a form. Usually, the Form::FormMain are created by the
- * Form::IFormIO engines. The first item returned by the Form::IFormIO when loading files is empty
- * and represents the root of the form (it does only handle some basic information).\n
+ * A Form::FormMain represents a root item of a form. Usually,
+ * the Form::FormMain is created by the Form::IFormIO engines.
+ * The first item returned by the Form::IFormIO when loading files is empty
+ * and represents the root of the form (it does only handle some basic
+ * information).\n
  *
  * Object tree management:\n
- * When you need to create a Form::FormMain as child of another one, use the createChildForm() member.
- * Get all its children (including sub-trees) using the Form::FormMain::flattenedFormMainChildren()
- * member or the formMainChild() if you want a specific child.\n
+ * When you need to create a Form::FormMain as child of another one, use the
+ * createChildForm() member.
+ * Get all its children (including sub-trees) using
+ * Form::FormMain::flattenedFormMainChildren()
+ * or formMainChild() if you want a specific child.\n
  *
  * Managing episode behavior:\n
- * Forms can be populated by episodes. Episodes are mainly created by the user when he wants to save
- * some data using a specific form. \n
- * The Form::EpisodeModel and the Form::FormTreeModel perfectly manages three types of forms:
+ * Forms can be populated by episodes. Episodes are mainly created by the user
+ * when he wants to save some data using a specific form.\n
+ * The Form::EpisodeModel and the Form::FormTreeModel perfectly manages three
+ * types of forms:
  * - Forms without any episode (just like a category)
  * - Forms with only one episode
  * - Forms with multiple episodes
- * You can define the episode possibilities using the Form::FormMain::setEpisodePossibilities() and
+ * You can define the episode possibilities using
+ * Form::FormMain::setEpisodePossibilities() and
  * Form::FormMain::episodePossibilities().\n
  *
  * Form pointer accessing: \n
- * All Form::FormMain pointers are created by the Form::IFormIO engines and then managed by the
- * Form::FormManager. You should never:
+ * All Form::FormMain pointers are created by the Form::IFormIO engines and then
+ * managed by Form::FormManager. You should never:
  * - delete a Form::FormMain pointer
  * - reparent it outside the internal part of the Form plugin
- * - create a cache of theses pointers, the Form::FormManager already manages this cache
+ * - create a cache of theses pointers, the Form::FormManager already manages
+ *   this cache
  */
-// TODO: change Form::FormMain pointers to references distributed by the Form::FormManager?
+// TODO: change Form::FormMain pointers to references distributed by
+// Form::FormManager?
 
 
 /**
  * \class Form::FormItemSpec
- * Contains all descriptives informations of a Form::FormItem (like the author name, compatibility version,
- * version of the form, label, tooltip, license...).\n
- * You should never delete a Form::FormItemSpec pointer outside the internal part of the Form plugin.
+ * Contains descriptions of a Form::FormItem (like author name, compatibility
+ * version, form version, label, tooltip, license...).\n
+ * You should never delete a Form::FormItemSpec pointer outside the internal
+ * part of the Form plugin.
  */
 
 /** \enum Form::FormItemSpec::SpecData
@@ -142,7 +163,8 @@
  * Translatable label of the item.
  *
  * \var Form::FormItemSpec::Spec_ExtraLabel
- * Translatable extra-label of the item. This extra-string is only used by some plugins.
+ * Translatable extra-label of the item. This extra-string is only used by some
+ * plugins.
  *
  * \var Form::FormItemSpec::Spec_Priority
  * Priority of the item (usually an integer).\n
@@ -161,12 +183,12 @@
  * \sa Form::IFormWidget, Form::IFormWidgetFactory
  *
  * \var Form::FormItemSpec::Spec_UiWidget
- * Used during widget generation, define the Qt widget to use. \n
+ * Used during widget generation, define the Qt widget to use.\n
  * Only used with a Qt UI file (Form::FormItemSpec::Spec_UiFileContent).
  * \sa Form::IFormWidget, Form::IFormWidgetFactory
  *
  * \var Form::FormItemSpec::Spec_UiInsertIntoLayout
- * Used during widget generation, define the layout where to insert the widget. \n
+ * Used during widget generation, define the layout where to insert the widget.\n
  * Only used with a Qt UI file (Form::FormItemSpec::Spec_UiFileContent).
  * \sa Form::IFormWidget, Form::IFormWidgetFactory
  *
@@ -206,13 +228,17 @@
  * Stores the scripts associated with the Form::FormItem.
  * \todo Documentation
  */
-// TODO: change Form::FormItemScripts pointers to references distributed by the Form::FormManager? like getScript(Form::FormMainIndex &index, const ScriptType &type)?
+// TODO: change Form::FormItemScripts pointers to references distributed by the
+//Form::FormManager?
+//like getScript(Form::FormMainIndex &index, const ScriptType &type)?
 
 /**
   \class Form::FormItemValues
   \todo Documentation
 */
-// TODO: change Form::FormItemValues pointers to references distributed by the Form::FormManager? like getValues(Form::FormMainIndex &index, const ValueType &type)?
+// TODO: change Form::FormItemValues pointers to references distributed by
+//the Form::FormManager?
+//like getValues(Form::FormMainIndex &index, const ValueType &type)?
 
 #include "iformitem.h"
 #include "formcore.h"
@@ -422,7 +448,8 @@ FormItemValues::~FormItemValues()
 }
 
 /**
-  \brief Defines a value \e val for one \e type at one specified \e id in a list, for one \e language.
+  \brief Defines a value \e val for one \e type at one specified \e id in a
+  list, for one \e language.
   \e language must be a valid local language name in 2 chars encoding.
 */
 void FormItemValues::setValue(int type, const int id, const QVariant &val, const QString &language)
@@ -828,7 +855,7 @@ FormMain *FormMain::createChildForm(const QString &uuid)
     return f;
 }
 
-/** \brief Actually unused */
+/** \brief Currently unused */
 FormPage *FormMain::createPage(const QString &uuid)
 {
     FormPage *p = new FormPage(this);
