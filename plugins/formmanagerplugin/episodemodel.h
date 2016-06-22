@@ -79,7 +79,7 @@ public:
         UserTimeStamp,
         Label,
         IsValid,
-        CreationDate,
+        CreationDateTime,
         Priority,
         UserCreatorName,
         XmlContent,

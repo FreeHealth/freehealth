@@ -109,7 +109,6 @@ EpisodeBase *EpisodeBase::instance()
     return m_Instance;
 }
 
-// TODO: EPISODES_DATEOFCREATION -> use EPISODE_MODIFICATION table instead ??
 EpisodeBase::EpisodeBase(QObject *parent) :
     QObject(parent), Utils::Database(),
     m_initialized(false)
@@ -133,7 +132,8 @@ EpisodeBase::EpisodeBase(QObject *parent) :
     addField(Table_EPISODES, EPISODES_FORM_PAGE_UID, "FORM_PAGE_UID", FieldIsShortText);
     addField(Table_EPISODES, EPISODES_LABEL, "LABEL", FieldIsShortText);
     addField(Table_EPISODES, EPISODES_USERDATE, "USERDATE", FieldIsTimeStamp, "CURRENT_TIMESTAMP");
-    addField(Table_EPISODES, EPISODES_DATEOFCREATION, "DATECREATION", FieldIsDate);
+    addField(Table_EPISODES, EPISODES_EPISODECREATIONDATETIME,
+             "EPISODE_CREATION_DATETIME", FieldIsIsoUtcDateTime);
     addField(Table_EPISODES, EPISODES_USERCREATOR, "CREATOR", FieldIsUUID);
     addField(Table_EPISODES, EPISODES_PRIORITY, "PRIOR", FieldIsInteger, "1"); // Medium
     addIndex(Table_EPISODES, EPISODES_ID);
@@ -373,12 +373,43 @@ bool EpisodeBase::checkDatabaseVersion()
             }
         LOG(tr("Episode database updated from version %1 to version: %2")       
             .arg("0.2")                                                         
-            .arg(Constants::DB_ACTUALVERSION));
+            .arg("1"));
         }
         if (db.driverName()=="QSQLITE") {
         LOG(tr("No change happened but episode database updated from version %1 to version: %2")       
             .arg("0.2")                                                         
-            .arg(Constants::DB_ACTUALVERSION));   
+            .arg("1"));
+        }
+    }
+    // Update from version 1 to version 2
+    if (currentVersion == "1") {
+        QSqlDatabase db = QSqlDatabase::database(DB_NAME);
+        if (!db.isOpen()) {
+            if (!db.open()) {
+                Utils::Log::addError("Update of episode database", tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
+                                     .arg(db.connectionName()).arg(db.lastError().text()),
+                                     __FILE__, __LINE__);
+                return false;
+            }
+        }
+        if (db.driverName()=="QMYSQL") {
+            QString req = "ALTER TABLE EPISODES CHANGE DATECREATION"
+                          " EPISODE_CREATION_DATETIME VARCHAR(20);";
+            QSqlQuery q(db);
+            if (!q.exec(req)) {
+                //LOG_QUERY_ERROR_FOR("Update database episodes from version 1 to 2", q);
+                return false;
+            }
+        LOG(tr("Episode database updated from version %1 to version: %2")
+            .arg("1")
+            .arg("2"));
+        }
+        if (db.driverName()=="QSQLITE") {
+        // SQLite can accept any type of string data, no change required
+        // Name of colum remains the same (code is using ENUM)
+        LOG(tr("No change happened but episode database updated from version %1 to version: %2")
+            .arg("1")
+            .arg("2"));
         }
     }
     // Update the database version
@@ -700,7 +731,8 @@ bool EpisodeBase::saveEpisode(Internal::EpisodeData *episode)
     return saveEpisode(QList<EpisodeData *>() << episode);
 }
 
-/** Save or update a list of Form::Internal::EpisodeData \e episodes to the database. Return true if all goes fine. */
+/** Save or update a list of Form::Internal::EpisodeData \e episodes to the
+ * database. Return true if all goes fine. */
 bool EpisodeBase::saveEpisode(const QList<EpisodeData *> &episodes)
 {
 //    qWarning() << Q_FUNC_INFO << episodes.count();
@@ -734,7 +766,8 @@ bool EpisodeBase::saveEpisode(const QList<EpisodeData *> &episodes)
             query.bindValue(EPISODES_FORM_PAGE_UID, episode->data(EpisodeData::FormUuid));
             query.bindValue(EPISODES_LABEL, episode->data(EpisodeData::Label));
             query.bindValue(EPISODES_USERDATE, episode->data(EpisodeData::UserDate));
-            query.bindValue(EPISODES_DATEOFCREATION, episode->data(EpisodeData::CreationDate));
+            query.bindValue(EPISODES_EPISODECREATIONDATETIME,
+                            episode->data(EpisodeData::EpisodeCreationDateTime));
             query.bindValue(EPISODES_USERCREATOR, episode->data(EpisodeData::UserCreatorUuid));
             if (!query.exec()) {
                 LOG_QUERY_ERROR(query);
@@ -788,7 +821,7 @@ bool EpisodeBase::saveEpisode(const QList<EpisodeData *> &episodes)
                                              << EPISODES_FORM_PAGE_UID
                                              << EPISODES_LABEL
                                              << EPISODES_USERDATE
-                                             << EPISODES_DATEOFCREATION
+                                             << EPISODES_EPISODECREATIONDATETIME
                                              << EPISODES_USERCREATOR
                                              , where));
             query.bindValue(0, episode->data(EpisodeData::PatientUuid));
@@ -796,7 +829,7 @@ bool EpisodeBase::saveEpisode(const QList<EpisodeData *> &episodes)
             query.bindValue(2, episode->data(EpisodeData::FormUuid));
             query.bindValue(3, episode->data(EpisodeData::Label));
             query.bindValue(4, episode->data(EpisodeData::UserDate));
-            query.bindValue(5, episode->data(EpisodeData::CreationDate));
+            query.bindValue(5, episode->data(EpisodeData::EpisodeCreationDateTime));
             query.bindValue(6, episode->data(EpisodeData::UserCreatorUuid));
             if (!query.exec()) {
                 LOG_QUERY_ERROR(query);
@@ -951,7 +984,8 @@ bool EpisodeBase::saveEpisodeValidation(EpisodeValidationData *validation)
     return true;
 }
 
-/** Remove the episode from the database. The episode is marked as non-valid (IsValid field) */
+/** Remove the episode from the database. The episode is marked as non-valid
+ *  (IsValid field) */
 bool EpisodeBase::removeEpisode(const QVariant &uid)
 {
     QSqlDatabase DB = QSqlDatabase::database(DB_NAME);
@@ -1068,7 +1102,8 @@ QList<EpisodeData *> EpisodeBase::getEpisodes(const EpisodeBaseQuery &baseQuery)
             e->setData(EpisodeData::PatientUuid, query.value(EPISODES_PATIENT_UID));
             e->setData(EpisodeData::Label , query.value(EPISODES_LABEL));
             e->setData(EpisodeData::UserDate , query.value(EPISODES_USERDATE));
-            e->setData(EpisodeData::CreationDate , query.value(EPISODES_DATEOFCREATION)); // improve this
+            e->setData(EpisodeData::EpisodeCreationDateTime,
+                       query.value(EPISODES_EPISODECREATIONDATETIME));
             e->setData(EpisodeData::IsValid , query.value(EPISODES_ISVALID));
             e->setData(EpisodeData::IsNewlyCreated , false);
             e->setData(EpisodeData::FormUuid , query.value(EPISODES_FORM_PAGE_UID));

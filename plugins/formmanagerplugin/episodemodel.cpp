@@ -428,7 +428,7 @@ QVariant EpisodeModel::data(const QModelIndex &index, int role) const
         case UserTimeStamp:  sqlColumn = Constants::EPISODES_USERDATE; break;
         case Label: sqlColumn = Constants::EPISODES_LABEL; break;
         case IsValid:  sqlColumn = Constants::EPISODES_ISVALID; break;
-        case CreationDate:  sqlColumn = Constants::EPISODES_DATEOFCREATION; break;
+        case CreationDateTime:  sqlColumn = Constants::EPISODES_EPISODECREATIONDATETIME; break;
         case UserCreatorName:
         {
             QString userUid = d->_sqlModel->data(d->_sqlModel->index(index.row(), Constants::EPISODES_USERCREATOR)).toString();
@@ -459,7 +459,7 @@ QVariant EpisodeModel::data(const QModelIndex &index, int role) const
     case Qt::ToolTipRole :
     {
         // TODO: create a cache?
-        QDate createDate = d->_sqlModel->data(d->_sqlModel->index(index.row(), Constants::EPISODES_DATEOFCREATION)).toDate();
+        QDate createDate = d->_sqlModel->data(d->_sqlModel->index(index.row(), Constants::EPISODES_EPISODECREATIONDATETIME)).toDate();
         QDate userDate = d->_sqlModel->data(d->_sqlModel->index(index.row(), Constants::EPISODES_USERDATE)).toDate();
         QString cDate = QLocale().toString(createDate, settings()->value(Constants::S_EPISODEMODEL_SHORTDATEFORMAT, tkTr(Trans::Constants::DATEFORMAT_FOR_MODEL)).toString());
         QString uDate = QLocale().toString(userDate, settings()->value(Constants::S_EPISODEMODEL_SHORTDATEFORMAT, tkTr(Trans::Constants::DATEFORMAT_FOR_MODEL)).toString());
@@ -566,7 +566,7 @@ bool EpisodeModel::setData(const QModelIndex &index, const QVariant &value, int 
         switch (index.column()) {
         case Label: sqlColumn = Constants::EPISODES_LABEL; break;
         case IsValid: sqlColumn = Constants::EPISODES_ISVALID; break;
-        case CreationDate: sqlColumn = Constants::EPISODES_DATEOFCREATION; break;
+        case CreationDateTime: sqlColumn = Constants::EPISODES_EPISODECREATIONDATETIME; break;
         case UserTimeStamp: sqlColumn = Constants::EPISODES_USERDATE; break;
         case Priority: sqlColumn = Constants::EPISODES_PRIORITY; break;
         case XmlContent:
@@ -629,7 +629,7 @@ QVariant EpisodeModel::headerData(int section, Qt::Orientation orientation, int 
     case Label: return tkTr(Trans::Constants::LABEL);
     case Uuid: return tkTr(Trans::Constants::UNIQUE_IDENTIFIER);
     case IsValid: return tkTr(Trans::Constants::ISVALID);
-    case CreationDate: return tkTr(Trans::Constants::CREATION_DATE);
+    case CreationDateTime: return tkTr(Trans::Constants::CREATION_DATE_TIME);
     case UserCreatorName: return tkTr(Trans::Constants::AUTHOR);
     case XmlContent: return tr("Xml content");
     case Icon: return tkTr(Trans::Constants::ICON);
@@ -670,7 +670,8 @@ void EpisodeModel::populateNewRowWithDefault(int row, QSqlRecord &record)
     record.setValue(Constants::EPISODES_USERCREATOR, user()->uuid());
     record.setValue(Constants::EPISODES_USERDATE, QDateTime::currentDateTime());
     record.setValue(Constants::EPISODES_PATIENT_UID, d->_currentPatientUuid);
-    record.setValue(Constants::EPISODES_DATEOFCREATION, QDateTime::currentDateTime());
+    record.setValue(Constants::EPISODES_EPISODECREATIONDATETIME,
+                    QDateTime::currentDateTimeUtc().toString(Qt::ISODate));
     record.setValue(Constants::EPISODES_ISVALID, 1);
     record.setValue(Constants::EPISODES_PRIORITY, Medium);
 }

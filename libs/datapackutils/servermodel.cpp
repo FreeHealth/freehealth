@@ -193,7 +193,7 @@ QVariant ServerModel::headerData(int section, Qt::Orientation orientation, int r
     case Authors: return tkTr(Trans::Constants::AUTHOR);
     case Vendor: return tkTr(Trans::Constants::VENDOR);
     case NativeUrl: return tkTr(Trans::Constants::URL);
-    case CreationDate: return tkTr(Trans::Constants::CREATION_DATE);
+    case CreationDate: return tkTr(Trans::Constants::CREATION_DATE_TIME);
     case LastUpdateDate: return tkTr(Trans::Constants::LAST_UPDATE_CHECKING);
     case RecommendedUpdateFrequencyIndex: return tkTr(Trans::Constants::RECOMMENDED_UPDATE_FREQUENCY);
     case HtmlDescription: return tkTr(Trans::Constants::DESCRIPTION);

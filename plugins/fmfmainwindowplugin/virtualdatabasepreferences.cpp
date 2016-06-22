@@ -192,7 +192,7 @@ void VirtualDatabasePreferences::on_populateEpisodes_clicked()
                     episodeQuery.bindValue(Constants::EPISODES_LK_TOPRACT_LKID, userLkId);
                 episodeQuery.bindValue(Constants::EPISODES_FORM_PAGE_UID, form);
                 episodeQuery.bindValue(Constants::EPISODES_USERDATE, date);
-                episodeQuery.bindValue(Constants::EPISODES_DATEOFCREATION, date);
+                episodeQuery.bindValue(Constants::EPISODES_EPISODECREATIONDATETIME, date);
                 episodeQuery.bindValue(Constants::EPISODES_USERCREATOR, userUid);
                 QString tmp;
                 for(int z=0; z < r.randomInt(6); ++z)

@@ -195,7 +195,7 @@ public:
         item->setToolTip(item->text());
         packItem->appendRow(item);
         item = new QStandardItem(tkTr(Trans::Constants::_1_COLON_2)
-                                 .arg(tkTr(Trans::Constants::CREATION_DATE))
+                                 .arg(tkTr(Trans::Constants::CREATION_DATE_TIME))
                                  .arg(QLocale().toString(pack.description().data(PackDescription::CreationDate).toDate())));
         item->setToolTip(item->text());
         packItem->appendRow(item);
