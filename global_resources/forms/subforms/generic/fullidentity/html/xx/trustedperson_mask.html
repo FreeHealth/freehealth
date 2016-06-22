@@ -1,0 +1,80 @@
+<html>
+<body>
+<style type="text/css">
+.__trustedident__formContent {
+  font-size: 12pt;
+  color: black;
+  border: 2px solid gray;
+}
+
+.__trustedident__formContent .formHeader {
+}
+
+.__trustedident__formContent .formLabel {
+  font-weight: 600;
+  text-transform: uppercase;
+  background-color: gray;/* #6d8526; #7f9a2c #6d8526 #A7C942*/
+  color: white;
+  padding: 2px;
+  text-align: center;
+}
+
+.__trustedident__formContent .episodeHeader {
+  margin: 0 2em 0 0;
+  padding: 0px;
+}
+
+.__trustedident__formContent .episodeContent {
+  margin-left: 3em;
+}
+
+.__trustedident__formContent .episodeLabel {
+  font-weight: 600;
+  font-size: 14pt;
+  padding: 5px;
+}
+
+.__trustedident__formContent .episodeUserCreator {
+  font-size: 9pt;
+  color: gray;
+  margin-left: 1em;
+}
+
+.__trustedident__formContent .episodeUserDate {
+  font-size: 9pt;
+  color: gray;
+  margin-left: 1em;
+}
+
+.__trustedident__formContent .textContainer {
+  font-size: 12pt;
+  color: black;
+}
+
+.__trustedident__formContent .textContainer #textContent {
+}
+</style>
+
+<div class="__trustedident__formContent">
+
+    <div class="formHeader">
+        <div class="formLabel">[[EpisodeFullFormLabel]]</div>
+    </div> <!-- formHeader -->
+
+    <div class="episodeHeader">
+        [<span class="episodeUserCreator">[EpisodeUserName.createdBy]</span>]
+        [&nbsp;<span class="episodeUserDate">[EpisodeUserDate]</span>]
+    </div> <!-- episodeHeader -->
+
+    <div class="episodeContent">
+        <div class="textContainer">
+            <div id="textContent">
+            [[Subs::Tools::TrustedPerson::Identity]]
+            </div>
+        </div> <!-- textContainer -->
+    </div> <!-- episodeContent -->
+
+</div> <!-- __trustedident__formContent -->
+
+</body>
+</html>
