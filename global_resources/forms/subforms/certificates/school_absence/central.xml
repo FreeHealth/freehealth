@@ -40,14 +40,14 @@
         <options>DontPrintEmptyValues</options>
 
         <Item type="date" name="Start::Date">
-            <uilink label="startDateLabel" widget="startDate" layout=""/>
+            <uilink label="startDateLabel" widget="startDateEdit" layout=""/>
             <options>DontPrintEmptyValues</options>
             <label lang="xx">Date de début</label>
             <label lang="fr">Date de début</label>
         </Item>
 
         <Item type="date" name="End::Date">
-            <uilink label="endDateLabel" widget="endDate" layout=""/>
+            <uilink label="endDateLabel" widget="endDateEdit" layout=""/>
             <options>DontPrintEmptyValues</options>
             <label lang="xx">Date de fin</label>
             <label lang="fr">Date de fin</label>
