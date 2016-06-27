@@ -65,7 +65,7 @@ function today()
 function schoolabsencemedicalcertificate_connectUiElements()
 {
     schoolabsencemedicalcertificate_startDate.textChanged.connect(this, schoolabsencemedicalcertificate_createhtml);
-    schoolabsencemedicalcertificate_endDate.stateChanged.connect(this, schoolabsencemedicalcertificate_createhtml);
+    schoolabsencemedicalcertificate_endDate.textChanged.connect(this, schoolabsencemedicalcertificate_createhtml);
     schoolabsencemedicalcertificate_additionalTextUi.textChanged.connect(this, schoolabsencemedicalcertificate_createhtml);
 }
 
