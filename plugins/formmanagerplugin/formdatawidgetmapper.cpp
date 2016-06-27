@@ -367,8 +367,10 @@ bool FormDataWidgetMapper::submit()
 
     bool ok = d->_episodeModel->submit();
     if (ok) {
-        // Ensure that patientmodel was feeded with the save data
+        // Ensure that patientmodel was fed with the save data
         d->_episodeModel->populateFormWithEpisodeContent(d->_currentEpisode, true);
+        d->_episodeModel->dataChanged(d->_episodeModel->index(d->_currentEpisode.row(), EpisodeModel::Priority),
+                                      d->_episodeModel->index(d->_currentEpisode.row(), EpisodeModel::Label));
     }
     return ok;
 }

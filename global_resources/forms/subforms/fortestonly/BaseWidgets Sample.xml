@@ -46,7 +46,7 @@
       <postload>{post load}</postload>
       <ondemand>{ondemand}</ondemand>
       <onvaluechanged>{onvaluechanged}</onvaluechanged>
-      <onvaluerequiered>{onvaluerequiered}</onvaluerequiered>
+      <onvaluerequired>{onvaluerequired}</onvaluerequired>
       <ondependencieschanged>{ondependencieschanged}</ondependencieschanged>
     </script>
     <script lang="fr">
@@ -54,7 +54,7 @@
       <postload>{FR post load}</postload>
       <ondemand>{FR ondemand}</ondemand>
       <onvaluechanged>{FR onvaluechanged}</onvaluechanged>
-      <onvaluerequiered>{FR onvaluerequiered}</onvaluerequiered>
+      <onvaluerequired>{FR onvaluerequired}</onvaluerequired>
       <ondependencieschanged>{FR ondependencieschanged}</ondependencieschanged>
     </script>
   </Item>

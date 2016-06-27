@@ -43,6 +43,10 @@
 #include <coreplugin/isettings.h>
 
 #include <formmanagerplugin/iformitem.h>
+#include <formmanagerplugin/episodemodel.h>
+#include <formmanagerplugin/formcore.h>
+#include <formmanagerplugin/formmanager.h>
+#include <formmanagerplugin/episodemanager.h>
 
 #include <utils/log.h>
 #include <utils/global.h>
@@ -75,6 +79,7 @@
 
 #include <QtUiTools/QUiLoader>
 #include <QBuffer>
+#include <QDataWidgetMapper>
 
 #include "ui_baseformwidget.h"
 
@@ -86,6 +91,8 @@ static inline Core::IPatient *patient() {return Core::ICore::instance()->patient
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 static inline Core::IScriptManager *scriptManager() {return Core::ICore::instance()->scriptManager();}
 static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
+static inline Form::FormManager &formManager() {return Form::FormCore::instance().formManager();}
+
 
 namespace {
 // TypeEnum must be sync with the widgetsName QStringList
@@ -230,7 +237,7 @@ BaseForm::BaseForm(Form::FormItem *formItem, QWidget *parent) :
     ui->setupUi(header);
 
     m_EpisodeDate = ui->dateTimeEdit;
-    m_EpisodeDate->setDisplayFormat(tkTr(Trans::Constants::DATEFORMAT_FOR_EDITOR));
+    m_EpisodeDate->setDisplayFormat(tkTr(Trans::Constants::DATETIMEFORMAT_FOR_EDITOR));
 
     m_EpisodeDate->setEnabled(false);
     m_EpisodeDate->setCalendarPopup(true);
@@ -298,6 +305,14 @@ BaseForm::BaseForm(Form::FormItem *formItem, QWidget *parent) :
     mainLayout->addWidget(mainWidget);
     createActions();
     hideAndClearValidationMessage();
+
+    //Form::FormMain *form = qobject_cast<Form::FormMain*>(formItem);
+    //Form::EpisodeManager *manager = new Form::EpisodeManager;
+    //Form::EpisodeModel *model = manager->episodeModel(form);
+    //QDataWidgetMapper *mapper = new QDataWidgetMapper;
+    //mapper->setModel(model);
+    //mapper->addMapping(m_EpisodeDate, Form::EpisodeModel::UserTimeStamp);
+    //mapper->toFirst();
 
     // create itemdata
     BaseFormData *baseFormData = new BaseFormData(formItem);

@@ -78,7 +78,7 @@
 
 /**
  * \class Form::FormPage
- * Actually unused.
+ * Not used.
  */
 
 /**
@@ -293,7 +293,7 @@ public:
         new QTreeWidgetItem(l, QStringList() << "PostLoad" << m_Scripts.value(1) );
         new QTreeWidgetItem(l, QStringList() << "OnDemand" << m_Scripts.value(2) );
         new QTreeWidgetItem(l, QStringList() << "OnValueChanged" << m_Scripts.value(3) );
-        new QTreeWidgetItem(l, QStringList() << "OnValueRequiered" << m_Scripts.value(4) );
+        new QTreeWidgetItem(l, QStringList() << "OnValueRequired" << m_Scripts.value(4) );
         new QTreeWidgetItem(l, QStringList() << "OnDependentValueChanged" << m_Scripts.value(5) );
         new QTreeWidgetItem(l, QStringList() << "OnToggled" << m_Scripts.value(6) );
     }
@@ -322,7 +322,7 @@ FormItemScripts::FormItemScripts(
         const QString &postLoad,
         const QString &onDemand,
         const QString &onValChanged,
-        const QString &onValRequiered,
+        const QString &onValRequired,
         const QString &onDependentValuesChanged,
         const QString &onToggled ) :
         d(new FormItemScriptsPrivate)
@@ -332,7 +332,7 @@ FormItemScripts::FormItemScripts(
     s->m_Scripts.insert(Script_PostLoad, postLoad);
     s->m_Scripts.insert(Script_OnDemand, onDemand);
     s->m_Scripts.insert(Script_OnValueChanged, onValChanged);
-    s->m_Scripts.insert(Script_OnValueRequiered, onValRequiered);
+    s->m_Scripts.insert(Script_OnValueRequired, onValRequired);
     s->m_Scripts.insert(Script_OnDependentValueChanged, onDependentValuesChanged);
     s->m_Scripts.insert(Script_OnToggled, onToggled);
 }
@@ -382,7 +382,7 @@ void FormItemScripts::warn() const
             << QString("Script_PostLoad\n") + s->m_Scripts.value(Script_PostLoad)
             << QString("Script_OnDemand\n") + s->m_Scripts.value(Script_OnDemand)
             << QString("Script_OnValueChanged\n") + s->m_Scripts.value(Script_OnValueChanged)
-            << QString("Script_OnValueRequiered\n") + s->m_Scripts.value(Script_OnValueRequiered)
+            << QString("Script_OnValueRequired\n") + s->m_Scripts.value(Script_OnValueRequired)
             << QString("Script_OnDependentValueChanged\n") + s->m_Scripts.value(Script_OnDependentValueChanged)
             );
 }

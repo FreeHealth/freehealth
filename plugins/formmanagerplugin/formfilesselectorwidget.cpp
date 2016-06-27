@@ -334,7 +334,7 @@ QList<Form::FormIODescription *> FormFilesSelectorWidget::selectedForms() const
 }
 
 /** Highlight a specific form in the selector (using its \e uuidOrAbsPath) */
-void FormFilesSelectorWidget::highlighForm(const QString &uuidOrAbsPath)
+void FormFilesSelectorWidget::highlightForm(const QString &uuidOrAbsPath)
 {
     d->m_HightlightUuid = uuidOrAbsPath;
     d->createTreeModel(d->m_ActualTreeModelColumn, true);

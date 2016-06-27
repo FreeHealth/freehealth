@@ -23,7 +23,7 @@
       <postload>{post load}</postload>
       <ondemand>{ondemand}</ondemand>
       <onvaluechanged>{onvaluechanged}</onvaluechanged>
-      <onvaluerequiered>{onvaluerequiered}</onvaluerequiered>
+      <onvaluerequired>{onvaluerequired}</onvaluerequired>
       <ondependencieschanged>{ondependencieschanged}</ondependencieschanged>
     </script>
   </Item>

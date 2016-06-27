@@ -282,7 +282,7 @@ public:
             return;
         // Assuming the _currentEditingForm is defined and the episodeView model is set
         bool visible = true;
-        // Unique épisode || no episode -> hide episodeview
+        // Unique episode || no episode -> hide episodeview
         if (_formTreeModel->isUniqueEpisode(_currentEditingForm)
                 || _formTreeModel->isNoEpisode(_currentEditingForm))
             visible = false;
@@ -340,22 +340,19 @@ public:
         ui->episodeView->showColumn(EpisodeModel::ValidationStateIcon);
         ui->episodeView->showColumn(EpisodeModel::PriorityIcon);
         ui->episodeView->showColumn(EpisodeModel::UserTimeStamp);
+        ui->episodeView->showColumn(EpisodeModel::CreationDateTime);
         ui->episodeView->showColumn(EpisodeModel::Label);
         ui->episodeView->showColumn(EpisodeModel::UserCreatorName);
-#if QT_VERSION < 0x050000
-        ui->episodeView->horizontalHeader()->setResizeMode(EpisodeModel::ValidationStateIcon, QHeaderView::ResizeToContents);
-        ui->episodeView->horizontalHeader()->setResizeMode(EpisodeModel::PriorityIcon, QHeaderView::ResizeToContents);
-        ui->episodeView->horizontalHeader()->setResizeMode(EpisodeModel::UserTimeStamp, QHeaderView::ResizeToContents);
-        ui->episodeView->horizontalHeader()->setResizeMode(EpisodeModel::Label, QHeaderView::Stretch);
-        ui->episodeView->horizontalHeader()->setResizeMode(EpisodeModel::UserCreatorName, QHeaderView::ResizeToContents);
-#else
-    // Qt5
-        ui->episodeView->horizontalHeader()->setSectionResizeMode(EpisodeModel::ValidationStateIcon, QHeaderView::ResizeToContents);
+
+        ui->episodeView->horizontalHeader()->setSectionResizeMode(EpisodeModel::ValidationStateIcon,
+                                                                  QHeaderView::ResizeToContents);
         ui->episodeView->horizontalHeader()->setSectionResizeMode(EpisodeModel::PriorityIcon, QHeaderView::ResizeToContents);
         ui->episodeView->horizontalHeader()->setSectionResizeMode(EpisodeModel::UserTimeStamp, QHeaderView::ResizeToContents);
+        ui->episodeView->horizontalHeader()->setSectionResizeMode(EpisodeModel::CreationDateTime, QHeaderView::ResizeToContents);
         ui->episodeView->horizontalHeader()->setSectionResizeMode(EpisodeModel::Label, QHeaderView::Stretch);
         ui->episodeView->horizontalHeader()->setSectionResizeMode(EpisodeModel::UserCreatorName, QHeaderView::ResizeToContents);
-#endif
+        ui->episodeView->horizontalHeader()->setSectionsMovable(true);
+
         QFont small;
         if (Utils::isRunningOnWin() || Utils::isRunningOnLinux() || Utils::isRunningOnFreebsd())
             small.setPointSize(small.pointSize() - 1);
@@ -373,13 +370,18 @@ public:
         ui->episodeView->selectionModel()->clearSelection();
 
         // set the sort order & column to the view/proxymodel
-        ui->episodeView->sortByColumn(settings()->value(Constants::S_EPISODEVIEW_SORTEDCOLUMN, EpisodeModel::UserTimeStamp).toInt(),
-                                      Qt::SortOrder(settings()->value(Constants::S_EPISODEVIEW_SORTORDER, Qt::DescendingOrder).toInt()));
+        ui->episodeView->sortByColumn(settings()->value(Constants::S_EPISODEVIEW_SORTEDCOLUMN,
+                                                        EpisodeModel::UserTimeStamp).toInt(),
+                                                        Qt::SortOrder(settings()->value(Constants::S_EPISODEVIEW_SORTORDER,
+                                                        Qt::DescendingOrder).toInt()));
         ui->episodeView->setSortingEnabled(true);
 
         checkCurrentEpisodeViewVisibility();
 
-        QObject::connect(ui->episodeView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), q, SLOT(episodeChanged(QModelIndex, QModelIndex)));
+        QObject::connect(ui->episodeView->selectionModel(),
+                         SIGNAL(currentChanged(QModelIndex,QModelIndex)),
+                         q,
+                         SLOT(episodeChanged(QModelIndex, QModelIndex)));
         Q_EMIT q->actionsEnabledStateChanged();
     }
 
@@ -479,7 +481,7 @@ FormPlaceHolder::FormPlaceHolder(QWidget *parent) :
     d->ui->episodeView->setFrameStyle(QFrame::NoFrame);
     d->ui->episodeView->setSelectionMode(QAbstractItemView::SingleSelection);
     d->ui->episodeView->setSelectionBehavior(QAbstractItemView::SelectRows);
-    d->ui->episodeView->setItemDelegateForColumn(EpisodeModel::UserTimeStamp, new Utils::DateTimeDelegate(this, false));
+    d->ui->episodeView->setItemDelegateForColumn(EpisodeModel::UserTimeStamp, new Utils::DateTimeDelegate(this, true));
 
     int width = size().width();
     int third = width/3;
@@ -1023,13 +1025,8 @@ void FormPlaceHolder::onFormTreeModelReset()
     tree->setColumnHidden(FormTreeModel::EmptyColumn1, false);
     tree->header()->hide();
     tree->header()->setStretchLastSection(false);
-#if QT_VERSION < 0x050000
-    tree->header()->setResizeMode(FormTreeModel::Label, QHeaderView::Stretch);
-    tree->header()->setResizeMode(FormTreeModel::EmptyColumn1, QHeaderView::Fixed);
-#else
     tree->header()->setSectionResizeMode(FormTreeModel::Label, QHeaderView::Stretch);
     tree->header()->setSectionResizeMode(FormTreeModel::EmptyColumn1, QHeaderView::Fixed);
-#endif
     tree->header()->resizeSection(FormTreeModel::EmptyColumn1, 16);
     tree->expandAll();
     d->selectAndActivateFirstForm();

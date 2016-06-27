@@ -43,7 +43,7 @@
 namespace Trans {
 /**
  * \brief This template can be used to manage a multilingual data class.
- * It manages a default set for all language, and one for each languages.
+ * It manages a default set for all languages, and one for each language.
  *
  * \code
  * // Declare a class
@@ -85,7 +85,7 @@ public:
         return m_Hash_T_Lang.contains(lang.left(2));
     }
 
-    /** Return all included language. */
+    /** Return all included languages. */
     QStringList languages() const
     {
         return m_Hash_T_Lang.uniqueKeys();
@@ -94,7 +94,7 @@ public:
     /**
         Return a pointer to the data class for one unique \e language,
         or if it does not exist for the default common language.
-        If \e language does not exists return 0.
+        If \e language does not exist return 0.
      */
     T *getLanguage(const QString &language)
     {

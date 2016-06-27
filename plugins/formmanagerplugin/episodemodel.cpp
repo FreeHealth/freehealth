@@ -424,11 +424,21 @@ QVariant EpisodeModel::data(const QModelIndex &index, int role) const
     case Qt::DisplayRole :
     {
         int sqlColumn = -1;
+        QVariant data = QVariant();
         switch (index.column()) {
         case UserTimeStamp:  sqlColumn = Constants::EPISODES_USERDATE; break;
         case Label: sqlColumn = Constants::EPISODES_LABEL; break;
         case IsValid:  sqlColumn = Constants::EPISODES_ISVALID; break;
-        case CreationDateTime:  sqlColumn = Constants::EPISODES_EPISODECREATIONDATETIME; break;
+        case CreationDateTime:
+        {
+            sqlColumn = Constants::EPISODES_EPISODECREATIONDATETIME;
+            QModelIndex sqlIndex = d->_sqlModel->index(index.row(), sqlColumn);
+            QString cDateTime = d->_sqlModel->data(sqlIndex, role).toString();
+            QDateTime creationDateTimeUtc = QDateTime::fromString(cDateTime, Qt::ISODate);
+            QDateTime creationDateTimeLocal = creationDateTimeUtc.toLocalTime();
+            data = creationDateTimeLocal;
+            break;
+        }
         case UserCreatorName:
         {
             QString userUid = d->_sqlModel->data(d->_sqlModel->index(index.row(), Constants::EPISODES_USERCREATOR)).toString();
@@ -450,19 +460,20 @@ QVariant EpisodeModel::data(const QModelIndex &index, int role) const
             break;
         }  // switch (column)
 
-        if (sqlColumn!=-1) {
+        if (sqlColumn!=-1 && data.isNull()) {
             QModelIndex sqlIndex = d->_sqlModel->index(index.row(), sqlColumn);
             return d->_sqlModel->data(sqlIndex, role);
         }
+        return data;
         break;
     }
     case Qt::ToolTipRole :
     {
         // TODO: create a cache?
-        QDate createDate = d->_sqlModel->data(d->_sqlModel->index(index.row(), Constants::EPISODES_EPISODECREATIONDATETIME)).toDate();
-        QDate userDate = d->_sqlModel->data(d->_sqlModel->index(index.row(), Constants::EPISODES_USERDATE)).toDate();
-        QString cDate = QLocale().toString(createDate, settings()->value(Constants::S_EPISODEMODEL_SHORTDATEFORMAT, tkTr(Trans::Constants::DATEFORMAT_FOR_MODEL)).toString());
-        QString uDate = QLocale().toString(userDate, settings()->value(Constants::S_EPISODEMODEL_SHORTDATEFORMAT, tkTr(Trans::Constants::DATEFORMAT_FOR_MODEL)).toString());
+        QDateTime createDateTime = d->_sqlModel->data(d->_sqlModel->index(index.row(), Constants::EPISODES_EPISODECREATIONDATETIME)).toDateTime();
+        QDateTime userDateTime = d->_sqlModel->data(d->_sqlModel->index(index.row(), Constants::EPISODES_USERDATE)).toDateTime();
+        QString cDateTime = QLocale().toString(createDateTime, settings()->value(Constants::S_EPISODEMODEL_SHORTDATEFORMAT, tkTr(Trans::Constants::DATEFORMAT_FOR_MODEL)).toString());
+        QString uDateTime = QLocale().toString(userDateTime, settings()->value(Constants::S_EPISODEMODEL_SHORTDATEFORMAT, tkTr(Trans::Constants::DATEFORMAT_FOR_MODEL)).toString());
         QString label = d->_sqlModel->data(d->_sqlModel->index(index.row(), Constants::EPISODES_LABEL)).toString();
         QString userUid = d->_sqlModel->data(d->_sqlModel->index(index.row(), Constants::EPISODES_USERCREATOR)).toString();
         int priority = d->_sqlModel->data(d->_sqlModel->index(index.row(), Constants::EPISODES_PRIORITY)).toInt();
@@ -480,10 +491,10 @@ QVariant EpisodeModel::data(const QModelIndex &index, int role) const
         // TODO: add validation information in the tooltip
         return QString("<p align=\"right\"><img src=\"%5\">%1&nbsp;-&nbsp;%2<br />"
                        "<span style=\"color:gray;font-size:9pt\">%3<br />%4</span></p>")
-                .arg(uDate.replace(" ", "&nbsp;"))
+                .arg(uDateTime.replace(" ", "&nbsp;"))
                 .arg(label.replace(" ", "&nbsp;"))
                 .arg(tkTr(Trans::Constants::CREATED_BY_1).arg(userUid))
-                .arg(tkTr(Trans::Constants::ON_THE_1).arg(cDate))
+                .arg(tkTr(Trans::Constants::ON_THE_1).arg(cDateTime))
                 .arg(icon);
     }
     case Qt::DecorationRole :
@@ -945,8 +956,9 @@ bool EpisodeModel::populateFormWithLatestValidEpisodeContent()
 }
 
 /**
- * Save the whole model, set the Form::IFormItemData to non-modified if the submition gone
- * right. This does include the root Form::FormMain of this model.
+ * Save the whole model, set the Form::IFormItemData to non-modified if the
+ * submission went right.
+ * This does include the root Form::FormMain of this model.
  * \sa isDirty()
  */
 bool EpisodeModel::submit()
