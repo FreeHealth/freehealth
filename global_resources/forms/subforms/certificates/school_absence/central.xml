@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE FreeMedForms>
+<FreeMedForms>
+
+  <formdescription>
+
+    <!-- Non translatable values -->
+    <authors>Jérôme Pinguet</authors>
+    <version>test</version>
+    <fmfv>0.9.7</fmfv>
+    <cdate>2016-06-27</cdate>
+    <lmdate>2016-06-27</lmdate>
+    <icon>edit.png</icon>
+    <weblink>https://www.medecinelibre.com</weblink>
+    <!-- Translatable values -->
+    <license>GPLv3</license>
+    <description lang="xx">School absence medical certificate</description>
+    <description lang="fr">Certificat médical pour absence scolaire</description>
+    <category lang="xx">Certificates</category>
+    <category lang="fr">Certificats</category>
+
+    <updateinfo>
+
+    </updateinfo>
+
+  </formdescription>
+
+  <file type="script" name="onload">./scripts/xx/schoolabsencemedicalcertificate.js</file>
+
+  <MedForm type="form" name="Subforms::Certificates::School::Absence::Medical::Certificate" uifilename="./ui/xx/schoolabsencemedicalcertificate.ui">
+    <label lang="xx">Certificat médical pour absence scolaire</label>
+    <label lang="fr">Certificat médical pour absence scolaire</label>
+    <icon>__theme__/xray.png</icon>
+    <options>DontPrintEmptyValues;UseFormNameAsNameSpace</options>
+
+      <Item type="group" name="Items::Group">
+        <uilink label="" widget="itemsGroupBox" layout=""/>
+        <label lang="xx">Items à compléter</label>
+        <label lang="fr">Items à compléter</label>
+        <options>DontPrintEmptyValues</options>
+
+        <Item type="date" name="Start::Date">
+            <uilink label="startDateLabel" widget="startDate" layout=""/>
+            <options>DontPrintEmptyValues</options>
+            <label lang="xx">Date de début</label>
+            <label lang="fr">Date de début</label>
+        </Item>
+
+        <Item type="date" name="End::Date">
+            <uilink label="endDateLabel" widget="endDate" layout=""/>
+            <options>DontPrintEmptyValues</options>
+            <label lang="xx">Date de fin</label>
+            <label lang="fr">Date de fin</label>
+        </Item>
+
+        <Item type="shorttext" name="Additional::Text::Shorttext">               
+            <uilink label="additionalTextLabel" widget="additionalTextLineEdit" layout=""/>
+            <options>DontPrintEmptyValues</options>                             
+            <label lang="xx">Texte supplémentaire</label>                               
+            <label lang="fr">Texte supplémentaire</label>                               
+            <placeholder lang="xx"></placeholder>                 
+            <placeholder lang="fr"></placeholder>                 
+        </Item>
+
+      </Item> <!-- end of group Items::Group -->
+
+      <Item type="texteditor" name="Certificate::Texteditor">
+        <uilink label="" widget="" layout="certificateFormLayout"/>
+        <options>DontPrintEmptyValues;fulleditor</options>
+      </Item>
+
+  </MedForm>
+</FreeMedForms>
