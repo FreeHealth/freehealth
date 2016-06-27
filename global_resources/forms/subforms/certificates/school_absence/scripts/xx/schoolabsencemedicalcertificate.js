@@ -116,10 +116,10 @@ function schoolabsencemedicalcertificate_createhtml()
     var patientDateOfBirth = patientDateTimeOfBirth.toString().slice(0, indexEndOfDate);
     html += patientDateOfBirth;
     html += " justifie d'une absence scolaire du ";
-    var startDate = schoolabsencemedicalcertificate_startDateUi.date();
+    var startDate = schoolabsencemedicalcertificate_startDateUi.text;
     html += startDate;
     html += " au ";
-    var endDate = schoolabsencemedicalcertificate_endDateUi.date();
+    var endDate = schoolabsencemedicalcertificate_endDateUi.text;
     html += endDate;
     html += ".";
     html += "</p>";
