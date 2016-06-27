@@ -4,6 +4,8 @@ namespace.module('com.freemedforms.certificates.schoolabsencemedicalcertificate'
   var schoolabsencemedicalcertificate_startDate;
   var schoolabsencemedicalcertificate_endDate;
   var schoolabsencemedicalcertificate_htmlItem;
+  var schoolabsencemedicalcertificate_startDateUi;
+  var schoolabsencemedicalcertificate_endDateUi;
   var html;
   //var mainSites = new Array();
   var signeeText;
@@ -27,8 +29,9 @@ function schoolabsencemedicalcertificate_getUiElements() {
         var formUi = freemedforms.forms.item("Subforms::Certificates::School::Absence::Medical::Certificate");
         freemedforms.forms.namespaceInUse = "Subforms::Certificates::School::Absence::Medical::Certificate";
         var ui = formUi.ui();
-        //schoolabsencemedicalcertificate_nameOfSportUi = ui.findChild("nameOfSportLineEdit");
-        //schoolabsencemedicalcertificate_additionalTextUi = ui.findChild("additionalTextLineEdit");
+        schoolabsencemedicalcertificate_startDateUi = ui.findChild("startDateEdit");
+        schoolabsencemedicalcertificate_endDateUi = ui.findChild("endDateEdit");
+        schoolabsencemedicalcertificate_additionalTextUi = ui.findChild("additionalTextLineEdit");
         //siteSelectorListWidget = ui.findChild("siteSelectorListWidget");
         //raySelectorListWidget = ui.findChild("RaySelectorListWidget");
         //leftCheck = ui.findChild("left");
@@ -64,8 +67,8 @@ function today()
 
 function schoolabsencemedicalcertificate_connectUiElements()
 {
-    schoolabsencemedicalcertificate_startDate.dateChanged.connect(this, schoolabsencemedicalcertificate_createhtml);
-    schoolabsencemedicalcertificate_endDate.dateChanged.connect(this, schoolabsencemedicalcertificate_createhtml);
+    schoolabsencemedicalcertificate_startDateUi.dateChanged.connect(this, schoolabsencemedicalcertificate_createhtml);
+    schoolabsencemedicalcertificate_endDateUi.dateChanged.connect(this, schoolabsencemedicalcertificate_createhtml);
     schoolabsencemedicalcertificate_additionalTextUi.textChanged.connect(this, schoolabsencemedicalcertificate_createhtml);
 }
 
