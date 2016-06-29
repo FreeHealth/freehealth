@@ -6,10 +6,10 @@
 
     <!-- Non translatable values -->
     <authors>Jérôme Pinguet</authors>
-    <version>test</version>
-    <fmfv>0.9.7</fmfv>
+    <version>1.0</version>
+    <fmfv>0.9.8</fmfv>
     <cdate>2016-06-27</cdate>
-    <lmdate>2016-06-27</lmdate>
+    <lmdate>2016-06-29</lmdate>
     <icon>edit.png</icon>
     <weblink>https://www.medecinelibre.com</weblink>
     <!-- Translatable values -->
@@ -32,6 +32,8 @@
     <label lang="fr">Certificat médical pour absence scolaire</label>
     <icon>__theme__/xray.png</icon>
     <options>DontPrintEmptyValues;UseFormNameAsNameSpace</options>
+    <file type="htmlprintmask">./html/xx/schoolabsence_mask.html</file>
+    <file type="htmlexportmask">./html/xx/schoolabsence_mask.html</file>
 
       <Item type="group" name="Items::Group">
         <uilink label="" widget="itemsGroupBox" layout=""/>
@@ -41,9 +43,22 @@
 
         <Item type="date" name="Start::Date">
             <uilink label="startDateLabel" widget="startDateEdit" layout=""/>
-            <options>DontPrintEmptyValues</options>
+            <!--<dateformat>dddd dd/MM/yyyy</dateformat>-->
+            <options>DontPrintEmptyValues;now</options>
             <label lang="xx">Date de début</label>
             <label lang="fr">Date de début</label>
+        </Item>
+
+        <Item type="button" name="Start::Date::Today::Button">
+            <uilink widget="startTodayPushButton"/>
+            <label lang="xx">Today</label>
+            <label lang="fr">Aujourd'hui</label>
+        </Item>
+
+        <Item type="button" name="Start::Date::Clear::Button">
+            <uilink widget="clearStartDatePushButton"/>
+            <label lang="xx">Clear</label>
+            <label lang="fr">Effacer</label>
         </Item>
 
         <Item type="date" name="End::Date">
@@ -51,6 +66,18 @@
             <options>DontPrintEmptyValues</options>
             <label lang="xx">Date de fin</label>
             <label lang="fr">Date de fin</label>
+        </Item>
+
+        <Item type="button" name="End::Date::Today::Button">
+            <uilink widget="endTodayPushButton"/>
+            <label lang="xx">Today</label>
+            <label lang="fr">Aujourd'hui</label>
+        </Item>
+
+        <Item type="button" name="End::Date::Clear::Button">
+            <uilink widget="clearEndDatePushButton"/>
+            <label lang="xx">Clear</label>
+            <label lang="fr">Effacer</label>
         </Item>
 
         <Item type="shorttext" name="Additional::Text::Shorttext">               
