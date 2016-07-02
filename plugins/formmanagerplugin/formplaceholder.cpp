@@ -339,7 +339,7 @@ public:
             ui->episodeView->hideColumn(i);
         ui->episodeView->showColumn(EpisodeModel::ValidationStateIcon);
         ui->episodeView->showColumn(EpisodeModel::PriorityIcon);
-        ui->episodeView->showColumn(EpisodeModel::UserTimeStamp);
+        ui->episodeView->showColumn(EpisodeModel::UserDateTime);
         ui->episodeView->showColumn(EpisodeModel::CreationDateTime);
         ui->episodeView->showColumn(EpisodeModel::Label);
         ui->episodeView->showColumn(EpisodeModel::UserCreatorName);
@@ -347,10 +347,10 @@ public:
         ui->episodeView->horizontalHeader()->setSectionResizeMode(EpisodeModel::ValidationStateIcon,
                                                                   QHeaderView::ResizeToContents);
         ui->episodeView->horizontalHeader()->setSectionResizeMode(EpisodeModel::PriorityIcon, QHeaderView::ResizeToContents);
-        ui->episodeView->horizontalHeader()->setSectionResizeMode(EpisodeModel::UserTimeStamp, QHeaderView::ResizeToContents);
+        ui->episodeView->horizontalHeader()->setSectionResizeMode(EpisodeModel::UserDateTime, QHeaderView::ResizeToContents);
         ui->episodeView->horizontalHeader()->setSectionResizeMode(EpisodeModel::CreationDateTime, QHeaderView::ResizeToContents);
-        ui->episodeView->horizontalHeader()->setSectionResizeMode(EpisodeModel::Label, QHeaderView::Stretch);
-        ui->episodeView->horizontalHeader()->setSectionResizeMode(EpisodeModel::UserCreatorName, QHeaderView::ResizeToContents);
+        ui->episodeView->horizontalHeader()->setSectionResizeMode(EpisodeModel::Label, QHeaderView::ResizeToContents);
+        ui->episodeView->horizontalHeader()->setSectionResizeMode(EpisodeModel::UserCreatorName, QHeaderView::Stretch);
         ui->episodeView->horizontalHeader()->setSectionsMovable(true);
 
         QFont small;
@@ -371,7 +371,7 @@ public:
 
         // set the sort order & column to the view/proxymodel
         ui->episodeView->sortByColumn(settings()->value(Constants::S_EPISODEVIEW_SORTEDCOLUMN,
-                                                        EpisodeModel::UserTimeStamp).toInt(),
+                                                        EpisodeModel::UserDateTime).toInt(),
                                                         Qt::SortOrder(settings()->value(Constants::S_EPISODEVIEW_SORTORDER,
                                                         Qt::DescendingOrder).toInt()));
         ui->episodeView->setSortingEnabled(true);
@@ -481,7 +481,9 @@ FormPlaceHolder::FormPlaceHolder(QWidget *parent) :
     d->ui->episodeView->setFrameStyle(QFrame::NoFrame);
     d->ui->episodeView->setSelectionMode(QAbstractItemView::SingleSelection);
     d->ui->episodeView->setSelectionBehavior(QAbstractItemView::SelectRows);
-    d->ui->episodeView->setItemDelegateForColumn(EpisodeModel::UserTimeStamp, new Utils::DateTimeDelegate(this, true));
+    d->ui->episodeView->setItemDelegateForColumn(EpisodeModel::UserDateTime, new Utils::DateTimeDelegate(this, false));
+    d->ui->episodeView->setItemDelegateForColumn(EpisodeModel::CreationDateTime, new Utils::DateTimeDelegate(this, false));
+
 
     int width = size().width();
     int third = width/3;
@@ -843,7 +845,7 @@ bool FormPlaceHolder::renewEpisode()
 /**
  * Save the currently selected episode (episode content is submitted to its Form::EpisodeModel).
  * Are saved:
- * - the user date
+ * - the user datetime
  * - the user label
  * - the priority
  * - the XML content
@@ -1126,7 +1128,7 @@ void FormPlaceHolder::showEvent(QShowEvent *event)
     if (d->_proxyModel) {
         if (d->_proxyModel->sortColumn() != settings()->value(Constants::S_EPISODEVIEW_SORTEDCOLUMN).toInt()
                 || d->_proxyModel->sortOrder() != Qt::SortOrder(settings()->value(Constants::S_EPISODEVIEW_SORTORDER).toInt())) {
-            d->ui->episodeView->sortByColumn(settings()->value(Constants::S_EPISODEVIEW_SORTEDCOLUMN, EpisodeModel::UserTimeStamp).toInt(),
+            d->ui->episodeView->sortByColumn(settings()->value(Constants::S_EPISODEVIEW_SORTEDCOLUMN, EpisodeModel::UserDateTime).toInt(),
                                              Qt::SortOrder(settings()->value(Constants::S_EPISODEVIEW_SORTORDER, Qt::DescendingOrder).toInt()));
         }
     }

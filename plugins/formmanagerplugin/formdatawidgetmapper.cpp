@@ -356,13 +356,13 @@ bool FormDataWidgetMapper::submit()
     }
 
     QModelIndex userName = d->_episodeModel->index(d->_currentEpisode.row(), EpisodeModel::UserCreatorName);
-    QModelIndex userDate = d->_episodeModel->index(d->_currentEpisode.row(), EpisodeModel::UserTimeStamp);
+    QModelIndex userDate = d->_episodeModel->index(d->_currentEpisode.row(), EpisodeModel::UserDateTime);
     QModelIndex label = d->_episodeModel->index(d->_currentEpisode.row(), EpisodeModel::Label);
     QModelIndex prior = d->_episodeModel->index(d->_currentEpisode.row(), EpisodeModel::Priority);
 
     d->_episodeModel->setData(label, d->_formMain->itemData()->data(IFormItemData::ID_EpisodeLabel));
     d->_episodeModel->setData(userName, d->_formMain->itemData()->data(IFormItemData::ID_UserName));
-    d->_episodeModel->setData(userDate, d->_formMain->itemData()->data(IFormItemData::ID_EpisodeDate));
+    d->_episodeModel->setData(userDate, d->_formMain->itemData()->data(IFormItemData::ID_EpisodeDateTime));
     d->_episodeModel->setData(prior, d->_formMain->itemData()->data(IFormItemData::ID_Priority));
 
     bool ok = d->_episodeModel->submit();

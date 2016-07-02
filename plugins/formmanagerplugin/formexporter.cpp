@@ -136,7 +136,7 @@ public:
         // Add a sortproxymodel wrapper
         QSortFilterProxyModel *proxy = new QSortFilterProxyModel(model);
         proxy->setSourceModel(model);
-        proxy->sort(EpisodeModel::UserTimeStamp, Qt::DescendingOrder);
+        proxy->sort(EpisodeModel::UserDateTime, Qt::DescendingOrder);
 
         // Read all rows of the model
         QString htmlMask = Utils::htmlBodyContent(form->spec()->value(FormItemSpec::Spec_HtmlExportMask).toString().simplified());
@@ -149,7 +149,9 @@ public:
         // Start episode extraction
         for(int i=0; i < proxy->rowCount(); ++i) {
             QModelIndex index = proxy->mapToSource(proxy->index(i, 0));
-            const QDateTime &dt = model->data(model->index(index.row(), EpisodeModel::UserTimeStamp, index.parent())).toDateTime();
+            const QDateTime &dt = model->data(model->index(index.row(),
+                                                           EpisodeModel::UserDateTime,
+                                                           index.parent())).toDateTime().toLocalTime();
 
             // Populate form with data
             model->populateFormWithEpisodeContent(index, false);

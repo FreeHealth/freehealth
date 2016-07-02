@@ -131,9 +131,9 @@ EpisodeBase::EpisodeBase(QObject *parent) :
     addField(Table_EPISODES, EPISODES_ISVALID, "ISVALID", FieldIsBoolean);
     addField(Table_EPISODES, EPISODES_FORM_PAGE_UID, "FORM_PAGE_UID", FieldIsShortText);
     addField(Table_EPISODES, EPISODES_LABEL, "LABEL", FieldIsShortText);
-    addField(Table_EPISODES, EPISODES_USERDATE, "USERDATE", FieldIsTimeStamp, "CURRENT_TIMESTAMP");
+    addField(Table_EPISODES, EPISODES_USERDATETIME, "USERDATE", FieldIsIsoUtcDateTime);
     addField(Table_EPISODES, EPISODES_EPISODECREATIONDATETIME,
-             "EPISODE_CREATION_DATETIME", FieldIsIsoUtcDateTime);
+             "DATECREATION", FieldIsIsoUtcDateTime);
     addField(Table_EPISODES, EPISODES_USERCREATOR, "CREATOR", FieldIsUUID);
     addField(Table_EPISODES, EPISODES_PRIORITY, "PRIOR", FieldIsInteger, "1"); // Medium
     addIndex(Table_EPISODES, EPISODES_ID);
@@ -394,10 +394,17 @@ bool EpisodeBase::checkDatabaseVersion()
         }
         if (db.driverName()=="QMYSQL") {
             QString req = "ALTER TABLE EPISODES CHANGE DATECREATION"
-                          " EPISODE_CREATION_DATETIME VARCHAR(20);";
+                          " DATECREATION VARCHAR(20);";
             QSqlQuery q(db);
             if (!q.exec(req)) {
-                //LOG_QUERY_ERROR_FOR("Update database episodes from version 1 to 2", q);
+                LOG_QUERY_ERROR(q);
+                return false;
+            }
+
+            req = "ALTER TABLE EPISODES CHANGE USERDATE"
+                              " USERDATE VARCHAR(20)";
+            if (!q.exec(req)) {
+                LOG_QUERY_ERROR(q);
                 return false;
             }
         LOG(tr("Episode database updated from version %1 to version: %2")
@@ -765,7 +772,7 @@ bool EpisodeBase::saveEpisode(const QList<EpisodeData *> &episodes)
             query.bindValue(EPISODES_ISVALID, episode->data(EpisodeData::IsValid).toInt());
             query.bindValue(EPISODES_FORM_PAGE_UID, episode->data(EpisodeData::FormUuid));
             query.bindValue(EPISODES_LABEL, episode->data(EpisodeData::Label));
-            query.bindValue(EPISODES_USERDATE, episode->data(EpisodeData::UserDate));
+            query.bindValue(EPISODES_USERDATETIME, episode->data(EpisodeData::UserDate));
             query.bindValue(EPISODES_EPISODECREATIONDATETIME,
                             episode->data(EpisodeData::EpisodeCreationDateTime));
             query.bindValue(EPISODES_USERCREATOR, episode->data(EpisodeData::UserCreatorUuid));
@@ -820,7 +827,7 @@ bool EpisodeBase::saveEpisode(const QList<EpisodeData *> &episodes)
                                              << EPISODES_ISVALID
                                              << EPISODES_FORM_PAGE_UID
                                              << EPISODES_LABEL
-                                             << EPISODES_USERDATE
+                                             << EPISODES_USERDATETIME
                                              << EPISODES_EPISODECREATIONDATETIME
                                              << EPISODES_USERCREATOR
                                              , where));
@@ -1084,7 +1091,7 @@ QList<EpisodeData *> EpisodeBase::getEpisodes(const EpisodeBaseQuery &baseQuery)
 
 //        joins << Utils::Join(Table_VALIDATION, VALIDATION_EPISODE_ID, Table_EPISODES, EPISODES_ID);
 
-    order = QString(" ORDER BY `%1`.`%2` DESC\n").arg(table(Table_EPISODES)).arg(fieldName(Table_EPISODES, EPISODES_USERDATE));
+    order = QString(" ORDER BY `%1`.`%2` DESC\n").arg(table(Table_EPISODES)).arg(fieldName(Table_EPISODES, EPISODES_USERDATETIME));
     if (baseQuery.useLimit()) {
         limit = QString(" LIMIT %1, %2\n").arg(baseQuery.limitStart()).arg(baseQuery.limitEnd());
     }
@@ -1101,7 +1108,7 @@ QList<EpisodeData *> EpisodeBase::getEpisodes(const EpisodeBaseQuery &baseQuery)
             e->setData(EpisodeData::Id , query.value(EPISODES_ID));
             e->setData(EpisodeData::PatientUuid, query.value(EPISODES_PATIENT_UID));
             e->setData(EpisodeData::Label , query.value(EPISODES_LABEL));
-            e->setData(EpisodeData::UserDate , query.value(EPISODES_USERDATE));
+            e->setData(EpisodeData::UserDate , query.value(EPISODES_USERDATETIME));
             e->setData(EpisodeData::EpisodeCreationDateTime,
                        query.value(EPISODES_EPISODECREATIONDATETIME));
             e->setData(EpisodeData::IsValid , query.value(EPISODES_ISVALID));

@@ -73,7 +73,7 @@
  */
 
 /**
- * \var Form::IFormItemData::ID_EpisodeDate
+ * \var Form::IFormItemData::ID_EpisodeDateTime
  */
 
 /**

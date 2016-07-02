@@ -219,7 +219,7 @@ Form::IFormWidget *BaseWidgetsFactory::createWidget(const QString &name, Form::F
 */
 BaseForm::BaseForm(Form::FormItem *formItem, QWidget *parent) :
     Form::IFormWidget(formItem, parent),
-    m_EpisodeDate(0),
+    m_EpisodeDateTime(0),
     m_EpisodeLabel(0),
     m_PriorityButton(new QToolButton(this)),
     m_ContainerLayout(0),
@@ -236,11 +236,11 @@ BaseForm::BaseForm(Form::FormItem *formItem, QWidget *parent) :
     ui = new Ui::BaseFormWidget;
     ui->setupUi(header);
 
-    m_EpisodeDate = ui->dateTimeEdit;
-    m_EpisodeDate->setDisplayFormat(tkTr(Trans::Constants::DATETIMEFORMAT_FOR_EDITOR));
+    m_EpisodeDateTime = ui->dateTimeEdit;
+    m_EpisodeDateTime->setDisplayFormat(tkTr(Trans::Constants::DATETIMEFORMAT_FOR_EDITOR));
 
-    m_EpisodeDate->setEnabled(false);
-    m_EpisodeDate->setCalendarPopup(true);
+    m_EpisodeDateTime->setEnabled(false);
+    m_EpisodeDateTime->setCalendarPopup(true);
 
     m_EpisodeLabel = ui->lineEdit;
     m_EpisodeLabel->setEnabled(false);
@@ -311,7 +311,7 @@ BaseForm::BaseForm(Form::FormItem *formItem, QWidget *parent) :
     //Form::EpisodeModel *model = manager->episodeModel(form);
     //QDataWidgetMapper *mapper = new QDataWidgetMapper;
     //mapper->setModel(model);
-    //mapper->addMapping(m_EpisodeDate, Form::EpisodeModel::UserTimeStamp);
+    //mapper->addMapping(m_EpisodeDateTime, Form::EpisodeModel::UserDateTime);
     //mapper->toFirst();
 
     // create itemdata
@@ -506,10 +506,10 @@ void BaseFormData::setForm(BaseForm *form)
 void BaseFormData::clear()
 {
     m_Data.clear();
-    m_Form->m_EpisodeDate->setDateTime(QDateTime());
+    m_Form->m_EpisodeDateTime->setDateTime(QDateTime());
     m_Form->m_EpisodeLabel->clear();
     m_Form->m_EpisodeLabel->setEnabled(false);
-    m_Form->m_EpisodeDate->setEnabled(false);
+    m_Form->m_EpisodeDateTime->setEnabled(false);
     m_Form->hideAndClearValidationMessage();
 }
 
@@ -520,7 +520,7 @@ bool BaseFormData::isModified() const
         return true;
     // Check values
     QList<int> keys;
-    keys << ID_UserName << ID_EpisodeLabel << ID_EpisodeDate << ID_Priority;
+    keys << ID_UserName << ID_EpisodeLabel << ID_EpisodeDateTime << ID_Priority;
     foreach(int id, keys) {
         if (data(id) != m_OriginalData.value(id)) {
             // qWarning() << "Form Dirty" << id << m_OriginalData.value(id) << data(id);
@@ -535,7 +535,7 @@ void BaseFormData::setModified(bool modified)
     m_Modified = modified;
     if (!modified) {
         QList<int> keys;
-        keys << ID_UserName << ID_EpisodeLabel << ID_EpisodeDate << ID_Priority;
+        keys << ID_UserName << ID_EpisodeLabel << ID_EpisodeDateTime << ID_Priority;
         foreach(int id, keys) {
             m_OriginalData.insert(id, data(id));
         }
@@ -551,13 +551,13 @@ void BaseFormData::setModified(bool modified)
 void BaseFormData::setReadOnly(bool readOnly)
 {
     m_Form->m_EpisodeLabel->setEnabled(!readOnly);
-    m_Form->m_EpisodeDate->setEnabled(!readOnly);
+    m_Form->m_EpisodeDateTime->setEnabled(!readOnly);
     m_Form->m_PriorityButton->setEnabled(!readOnly);
     if (readOnly)
         m_Form->showValidationMessage(
                     QString("<span style='color: maroon;'><span style='font-weight: bold'>%1</span><br />%2</span>")
                     .arg(QApplication::translate("BaseFormData", "This episode is validated."))
-                    .arg(QApplication::translate("BaseFormData", "You can not edit its content, neither remove it."))
+                    .arg(QApplication::translate("BaseFormData", "You cannot edit its content, you cannot remove it."))
                     );
     else
         m_Form->hideAndClearValidationMessage();
@@ -577,9 +577,15 @@ bool BaseFormData::setData(const int ref, const QVariant &data, const int role)
     m_Data.insert(ref, data);
     m_Modified = true;
     switch (ref) {
-    case ID_EpisodeDate:
-        m_Form->m_EpisodeDate->setDateTime(m_Data.value(ref).toDateTime());
-        m_Form->m_EpisodeDate->setEnabled(true);
+    case ID_EpisodeDateTime:
+        // If datetime record is stored as UTC in ISO format, it contains "Z"
+        // and should be converted back to local time. Else, keep the datetime unchanged
+        if (m_Data.value(ref).toString().contains("Z", Qt::CaseSensitive)){
+            m_Form->m_EpisodeDateTime->setDateTime(m_Data.value(ref).toDateTime().toLocalTime());
+        } else {
+            m_Form->m_EpisodeDateTime->setDateTime(m_Data.value(ref).toDateTime());
+        }
+        m_Form->m_EpisodeDateTime->setEnabled(true);
         break;
     case ID_EpisodeLabel:
         m_Form->m_EpisodeLabel->setText(m_Data.value(ref).toString());
@@ -589,12 +595,12 @@ bool BaseFormData::setData(const int ref, const QVariant &data, const int role)
         m_Form->setCurrentPriority(data.toInt());
         break;
     }
-    m_Form->m_EpisodeDate->setToolTip(QString("<p align=\"right\">%1&nbsp;-&nbsp;%2<br /><span style=\"color:gray;font-size:9pt\">%3</span></p>")
-                                      .arg(QLocale().toString(m_Data.value(ID_EpisodeDate).toDateTime(), QLocale::LongFormat).replace(" ","&nbsp;"))
+    m_Form->m_EpisodeDateTime->setToolTip(QString("<p align=\"right\">%1&nbsp;-&nbsp;%2<br /><span style=\"color:gray;font-size:9pt\">%3</span></p>")
+                                      .arg(QLocale().toString(m_Data.value(ID_EpisodeDateTime).toDateTime(), QLocale::LongFormat).replace(" ","&nbsp;"))
                                        .arg(m_Data.value(ID_EpisodeLabel).toString().replace(" ", "&nbsp;"))
                                        .arg(m_Data.value(ID_UserName).toString().replace(" ", "&nbsp;")));
     m_Form->m_EpisodeLabel->setToolTip(QString("<p align=\"right\">%1&nbsp;-&nbsp;%2<br /><span style=\"color:gray;font-size:9pt\">%3</span></p>")
-                                       .arg(QLocale().toString(m_Data.value(ID_EpisodeDate).toDateTime(), QLocale::LongFormat).replace(" ","&nbsp;"))
+                                       .arg(QLocale().toString(m_Data.value(ID_EpisodeDateTime).toDateTime(), QLocale::LongFormat).replace(" ","&nbsp;"))
                                        .arg(m_Data.value(ID_EpisodeLabel).toString().replace(" ", "&nbsp;"))
                                        .arg(m_Data.value(ID_UserName).toString().replace(" ", "&nbsp;")));
     return true;
@@ -604,7 +610,7 @@ QVariant BaseFormData::data(const int ref, const int role) const
 {
     if (role==Qt::DisplayRole || role==Form::IFormItemData::PatientModelRole) {
         switch (ref) {
-        case ID_EpisodeDate: return m_Form->m_EpisodeDate->dateTime();
+        case ID_EpisodeDateTime: return m_Form->m_EpisodeDateTime->dateTime().toUTC().toString(Qt::ISODate);
         case ID_EpisodeLabel: return m_Form->m_EpisodeLabel->text();
         case ID_UserName: return m_Data.value(ID_UserName);
         case ID_Priority: return m_Form->currentPriority();
@@ -625,7 +631,6 @@ QVariant BaseFormData::storableData() const
 {
     return QVariant(m_Modified);
 }
-
 
 //--------------------------------------------------------------------------------------------------------
 //--------------------------------------- BaseGroup implementation ---------------------------------------

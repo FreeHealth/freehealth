@@ -153,7 +153,7 @@ public:
         QString filter = episodeBase()->getWhereClause(Constants::Table_EPISODES, where).remove("WHERE") +
                 " AND (" + episodeBase()->getWhereClause(uuid, Utils::Database::OR) + ")";
         _sqlModel->setFilter(filter);
-        _sqlModel->setSort(Constants::EPISODES_USERDATE, Qt::AscendingOrder);
+        _sqlModel->setSort(Constants::EPISODES_USERDATETIME, Qt::AscendingOrder);
         _sqlModel->select();
     }
 
@@ -426,7 +426,15 @@ QVariant EpisodeModel::data(const QModelIndex &index, int role) const
         int sqlColumn = -1;
         QVariant data = QVariant();
         switch (index.column()) {
-        case UserTimeStamp:  sqlColumn = Constants::EPISODES_USERDATE; break;
+        case UserDateTime:
+        {
+            sqlColumn = Constants::EPISODES_USERDATETIME;
+            QModelIndex sqlIndex = d->_sqlModel->index(index.row(), sqlColumn);
+            QString uDateTime = d->_sqlModel->data(sqlIndex, role).toString();
+            QDateTime uDateTimeLocal = QDateTime::fromString(uDateTime, Qt::ISODate).toLocalTime();
+            data = uDateTimeLocal;
+            break;
+        }
         case Label: sqlColumn = Constants::EPISODES_LABEL; break;
         case IsValid:  sqlColumn = Constants::EPISODES_ISVALID; break;
         case CreationDateTime:
@@ -469,11 +477,12 @@ QVariant EpisodeModel::data(const QModelIndex &index, int role) const
     }
     case Qt::ToolTipRole :
     {
-        // TODO: create a cache?
+        // TODO create a cache?
+        // TODO introduce UTC conversion
         QDateTime createDateTime = d->_sqlModel->data(d->_sqlModel->index(index.row(), Constants::EPISODES_EPISODECREATIONDATETIME)).toDateTime();
-        QDateTime userDateTime = d->_sqlModel->data(d->_sqlModel->index(index.row(), Constants::EPISODES_USERDATE)).toDateTime();
-        QString cDateTime = QLocale().toString(createDateTime, settings()->value(Constants::S_EPISODEMODEL_SHORTDATEFORMAT, tkTr(Trans::Constants::DATEFORMAT_FOR_MODEL)).toString());
-        QString uDateTime = QLocale().toString(userDateTime, settings()->value(Constants::S_EPISODEMODEL_SHORTDATEFORMAT, tkTr(Trans::Constants::DATEFORMAT_FOR_MODEL)).toString());
+        QDateTime userDateTime = d->_sqlModel->data(d->_sqlModel->index(index.row(), Constants::EPISODES_USERDATETIME)).toDateTime();
+        QString cDateTime = QLocale().toString(createDateTime, settings()->value(Constants::S_EPISODEMODEL_LONGDATEFORMAT, tkTr(Trans::Constants::DATEFORMAT_FOR_MODEL)).toString());
+        QString uDateTime = QLocale().toString(userDateTime, settings()->value(Constants::S_EPISODEMODEL_LONGDATEFORMAT, tkTr(Trans::Constants::DATEFORMAT_FOR_MODEL)).toString());
         QString label = d->_sqlModel->data(d->_sqlModel->index(index.row(), Constants::EPISODES_LABEL)).toString();
         QString userUid = d->_sqlModel->data(d->_sqlModel->index(index.row(), Constants::EPISODES_USERCREATOR)).toString();
         int priority = d->_sqlModel->data(d->_sqlModel->index(index.row(), Constants::EPISODES_PRIORITY)).toInt();
@@ -578,7 +587,7 @@ bool EpisodeModel::setData(const QModelIndex &index, const QVariant &value, int 
         case Label: sqlColumn = Constants::EPISODES_LABEL; break;
         case IsValid: sqlColumn = Constants::EPISODES_ISVALID; break;
         case CreationDateTime: sqlColumn = Constants::EPISODES_EPISODECREATIONDATETIME; break;
-        case UserTimeStamp: sqlColumn = Constants::EPISODES_USERDATE; break;
+        case UserDateTime: sqlColumn = Constants::EPISODES_USERDATETIME; break;
         case Priority: sqlColumn = Constants::EPISODES_PRIORITY; break;
         case XmlContent:
         {
@@ -636,7 +645,7 @@ QVariant EpisodeModel::headerData(int section, Qt::Orientation orientation, int 
     switch (section) {
     case ValidationStateIcon: return "V";
     case PriorityIcon: return "P";
-    case UserTimeStamp: return tkTr(Trans::Constants::TIMESTAMP);
+    case UserDateTime: return tkTr(Trans::Constants::EPISODE_DATE_TIME);
     case Label: return tkTr(Trans::Constants::LABEL);
     case Uuid: return tkTr(Trans::Constants::UNIQUE_IDENTIFIER);
     case IsValid: return tkTr(Trans::Constants::ISVALID);
@@ -679,7 +688,7 @@ void EpisodeModel::populateNewRowWithDefault(int row, QSqlRecord &record)
     record.setValue(Constants::EPISODES_LABEL, tr("New episode"));
     record.setValue(Constants::EPISODES_FORM_PAGE_UID, d->_formMain->uuid());
     record.setValue(Constants::EPISODES_USERCREATOR, user()->uuid());
-    record.setValue(Constants::EPISODES_USERDATE, QDateTime::currentDateTime());
+    record.setValue(Constants::EPISODES_USERDATETIME, QDateTime::currentDateTimeUtc().toString(Qt::ISODate));
     record.setValue(Constants::EPISODES_PATIENT_UID, d->_currentPatientUuid);
     record.setValue(Constants::EPISODES_EPISODECREATIONDATETIME,
                     QDateTime::currentDateTimeUtc().toString(Qt::ISODate));
@@ -687,7 +696,9 @@ void EpisodeModel::populateNewRowWithDefault(int row, QSqlRecord &record)
     record.setValue(Constants::EPISODES_PRIORITY, Medium);
 }
 
-/** Invalidate an episode. The episode will stay in database but will not be show in the view (unless you ask for invalid episode not to be filtered). */
+/** Invalidate an episode. The episode will stay in database but will not be
+ * displayed in the view (unless you ask for invalid episode not to be filtered).
+ */
 bool EpisodeModel::removeRows(int row, int count, const QModelIndex &parent)
 {
 #ifdef WITH_EPISODE_REMOVAL
@@ -885,12 +896,12 @@ bool EpisodeModel::populateFormWithEpisodeContent(const QModelIndex &episode, bo
         }
     }
 
-    // Populate the FormMain item data (username, userdate, label)
+    // Populate the FormMain item data (username, userdatetime, label)
     QModelIndex userName = index(episode.row(), EpisodeModel::UserCreatorName);
-    QModelIndex userDate = index(episode.row(), EpisodeModel::UserTimeStamp);
+    QModelIndex userDateTime = index(episode.row(), EpisodeModel::UserDateTime);
     QModelIndex label = index(episode.row(), EpisodeModel::Label);
     QModelIndex prior = index(episode.row(), EpisodeModel::Priority);
-    d->_formMain->itemData()->setData(IFormItemData::ID_EpisodeDate, this->data(userDate));
+    d->_formMain->itemData()->setData(IFormItemData::ID_EpisodeDateTime, this->data(userDateTime));
     d->_formMain->itemData()->setData(IFormItemData::ID_EpisodeLabel, this->data(label));
     d->_formMain->itemData()->setData(IFormItemData::ID_UserName, this->data(userName));
     d->_formMain->itemData()->setData(IFormItemData::ID_Priority, this->data(prior));
@@ -950,7 +961,7 @@ bool EpisodeModel::populateFormWithLatestValidEpisodeContent()
 {
     if (rowCount() == 0)
         return true;
-    // as the SqlModel is sorted on the userdate, we just need to populate with the last index of the model
+    // as the SqlModel is sorted on the userdatetime, we just need to populate with the last index of the model
     QModelIndex index = this->index(rowCount() - 1,0);
     return populateFormWithEpisodeContent(index);
 }

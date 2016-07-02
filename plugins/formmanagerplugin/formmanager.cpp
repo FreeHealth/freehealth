@@ -953,7 +953,7 @@ QHash<QString, QVariant> FormManager::formToTokens(Form::FormMain *form) const
     }
 #endif
     // Create tokens for episode data
-    tokens.insert("EpisodeUserDate", QLocale().toString(form->itemData()->data(Form::IFormItemData::ID_EpisodeDate).toDateTime(), QLocale::LongFormat));
+    tokens.insert("EpisodeUserDate", QLocale().toString(form->itemData()->data(Form::IFormItemData::ID_EpisodeDateTime).toDateTime(), QLocale::LongFormat));
     tokens.insert("EpisodeUserLabel", form->itemData()->data(Form::IFormItemData::ID_EpisodeLabel));
     // Force the full name of the user
     QString userName = form->itemData()->data(Form::IFormItemData::ID_UserName).toString();

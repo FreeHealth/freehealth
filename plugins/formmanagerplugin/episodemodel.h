@@ -76,10 +76,10 @@ public:
     enum DataRepresentation {
         ValidationStateIcon = 0,
         PriorityIcon,
-        UserTimeStamp,
+        UserDateTime, // Date & time of the episode, can be edited by the user
         Label,
         IsValid,
-        CreationDateTime,
+        CreationDateTime, // Date & time of creation of the episode (read-only)
         Priority,
         UserCreatorName,
         XmlContent,
