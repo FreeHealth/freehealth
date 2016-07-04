@@ -1,30 +1,27 @@
-# FreeMedForms 0.9.7 -> 0.9.8
-
-0.9.8 includes 1 severe bug fix, several bug fixes, 1 new feature, many enhancements
-
-## Bug corrections
+Update log
+==========
 
 See https://github.com/FreeMedForms/freemedforms/issues for more details
 
-### All applications
-* issue #89 Mac OS print preview 
-* issue #97 & #98 Qt5.6 support
-* issue #101 preferences tree view
-* issue #103 lupdate error (creation of translation files)
-* issue #105 warn when trying to create a user that already exists in MySQL
-* issue #116 create all MySQL users with '%' as hostname
-* issue #117 MySQL install: removed default host value
-* issue #123 clicking on url in problem reporting dialog now opens browser
+FreeMedForms 0.9.8 -> 0.9.9
+---------------------------
 
-### FreeMedForms
-* issue #88 missing zipcodes.csv file in source package 
-* issue #91 radio button widgets not correctly printed on windows
-* new feature #118  datetime widget
-* issue #121 modify group item behaviour: allow script execution if group is checked or unchecked by user
-* issue #122 PMH: make viewer icdCodes QListView not editable
-* issue #135 weight measurement conversion bug
+### Summary
 
-### FreeDiams & FreeMedForms
+0.9.9 includes  critical bug fix, bug fix, new feature, enhancement
 
-### ICD10 plugin
-* issue #134 search now includes substrings
+### Bugs
+
+#### FreeMedForms
+
+* Issue #129 Episodes: UserDate, CreationDate, timestamp
+* Issue #142 User manager: title changed not processed and saved correctly
+* Issue #140 fmf_admin cannot create new user
+* Issue #137 accessibility features of Qt
+
+#### FreeDiams
+
+* Issue #71 GUI frequency of administration labels not entirely visible
+* Issue #151 Duration value widget need not be doublespinbox
+
+#### ICD10 plugin
