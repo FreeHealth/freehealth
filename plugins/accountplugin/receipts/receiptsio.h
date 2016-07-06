@@ -44,7 +44,7 @@
 #include <QSqlDatabase>
 #include <QSqlTableModel>
 
-using namespace AccountDB;
+using namespace AccountDB; // TODO remove using directive inside header file
 class ACCOUNT_EXPORT receiptsEngine : public QObject
 {
     Q_OBJECT

@@ -9,7 +9,7 @@
 #include <QDebug>
 #include <QTextDocument>
 
-using namespace PreventionEngine;
+using namespace PreventionEngine; // TODO remove using directive inside header file
 
  class TreeItem : public IPreventionEngine
  {
