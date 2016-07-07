@@ -45,7 +45,7 @@
 #include <QtCore>
 #include <QSqlDatabase>
 
-using namespace AccountDB;
+using namespace AccountDB; // TODO remove using directive inside header file
 namespace Ui{
   class findValueDialog;
 }

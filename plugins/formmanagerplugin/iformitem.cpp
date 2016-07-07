@@ -360,7 +360,7 @@ QString FormItemScripts::script(const int type, const QString &lang) const
     if (!s) {
         s = d->getLanguage(Trans::Constants::ALL_LANGUAGE);
         if (!s) {
-            s = d->getLanguage("en");
+            s = d->getLanguage("en"); // TODO check this, default language is xx not en
             if (!s)
                 return QString::null;
         }
