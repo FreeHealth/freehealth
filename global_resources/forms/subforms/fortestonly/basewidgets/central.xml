@@ -156,13 +156,20 @@
      <type>combo</type>
      <label>This a simple combo from the BaseWidgetsForm plugins</label>
      <value>
-       <possible id="0">First Combo's Element</possible>
-       <possible id="1">Second Combo's Element</possible>
-       <possible id="2">Third Combo's Element</possible>
+       <possible id="0" lang="xx">First Combo's Element</possible>
+       <possible id="1" lang="xx">Second Combo's Element</possible>
+       <possible id="2" lang="xx">Third Combo's Element</possible>
+       <possible id="3" lang="xx">Fourth Combo's Element</possible>
+       <possible id="4" lang="xx">Fifth Combo's Element</possible>
+       <possible id="5" lang="xx">Sixth Combo's Element</possible>
        <uuid id="0">firstcombo</uuid>
        <uuid id="1">secondcombo</uuid>
        <uuid id="2">thirdcombo</uuid>
+       <uuid id="3">fourthcombo</uuid>
+       <uuid id="4">fifthcombo</uuid>
+       <uuid id="5">sixthcombo</uuid>
      </value>
+  <default>sixthcombo</default>
   </Item>
 
    <Item>
@@ -275,6 +282,21 @@
          <possible id="1">Second Element</possible>
          <possible id="2">Third Element</possible>
        </value>
+     </Item>
+
+     <Item>
+       <name>combo2</name>
+       <type>combo</type>
+       <label>Combo test with default value (third)</label>
+       <value>
+         <uuid id="0">first</uuid>
+         <uuid id="1">second</uuid>
+         <uuid id="2">third</uuid>
+         <possible id="0">First Element</possible>
+         <possible id="1">Second Element</possible>
+         <possible id="2">Third Element</possible>
+       </value>
+       <default>third</default>
      </Item>
 
      <Item>

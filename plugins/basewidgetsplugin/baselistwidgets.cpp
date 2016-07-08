@@ -475,9 +475,9 @@ BaseCombo::BaseCombo(Form::FormItem *formItem, QWidget *parent) :
 
     // Manage options
     int defaultId = -1;
+    QString defaultVal = m_FormItem->extraData().value("default");
     if (m_FormItem->getOptions().contains("PopulateWithPeriods")) {
         Form::FormItemValues *vals = m_FormItem->valueReferences();
-        QString defaultVal = m_FormItem->extraData().value("default");
         int i = 0;
         QString uid = "second";
         QString p = tkTr(Trans::Constants::SECOND_S);
@@ -550,8 +550,10 @@ BaseCombo::BaseCombo(Form::FormItem *formItem, QWidget *parent) :
         m_Combo->addItem(p);
         if (defaultVal.compare(uid, Qt::CaseInsensitive)==0)
             defaultId = i;
+    } else {
+        // define default index
+        defaultId = m_FormItem->valueReferences()->values(Form::FormItemValues::Value_Uuid).indexOf(defaultVal);
     }
-
     // create FormItemData
     BaseComboData *data = new BaseComboData(m_FormItem);
     data->setBaseCombo(this);
