@@ -278,9 +278,11 @@
          <uuid id="0">first</uuid>
          <uuid id="1">second</uuid>
          <uuid id="2">third</uuid>
+         <uuid id="3">fourth</uuid>
          <possible id="0">First Element</possible>
          <possible id="1">Second Element</possible>
          <possible id="2">Third Element</possible>
+         <possible id="3">Fourth Element</possible>
        </value>
      </Item>
 
@@ -292,12 +294,64 @@
          <uuid id="0">first</uuid>
          <uuid id="1">second</uuid>
          <uuid id="2">third</uuid>
+         <uuid id="3">fourth</uuid>
          <possible id="0">First Element</possible>
          <possible id="1">Second Element</possible>
          <possible id="2">Third Element</possible>
+         <possible id="3">Fourth Element</possible>
        </value>
        <default>third</default>
      </Item>
+
+     <Item>
+       <name>combo3</name>
+       <type>combo</type>
+       <label>Combo test: sorted</label>
+       <value>
+         <uuid id="0">first</uuid>
+         <uuid id="1">second</uuid>
+         <uuid id="2">third</uuid>
+         <uuid id="3">fourth</uuid>
+         <uuid id="4">fifth</uuid>
+         <possible id="0">First Element</possible>
+         <possible id="1">Second Element</possible>
+         <possible id="2">Third Element</possible>
+         <possible id="3">Fourth Element</possible>
+         <possible id="4">Fifth Element (Leelou)</possible>
+       </value>
+       <option>sort</option>
+     </Item>
+
+     <Item>
+       <name>combo4</name>
+       <type>combo</type>
+       <label>Combo test: sorted with defautl value = third</label>
+       <value>
+         <uuid id="0">first</uuid>
+         <uuid id="1">second</uuid>
+         <uuid id="2">third</uuid>
+         <uuid id="3">fourth</uuid>
+         <uuid id="4">fifth</uuid>
+         <possible id="0">First Element</possible>
+         <possible id="1">Second Element</possible>
+         <possible id="2">Third Element</possible>
+         <possible id="3">Fourth Element</possible>
+         <possible id="4">Fifth Element (Leelou)</possible>
+       </value>
+       <default>third</default>
+       <option>sort</option>
+     </Item>
+
+      <Item type="combo" name="combo5">
+        <label>PopulateWithPeriods</label>
+        <options>PopulateWithPeriods;DontPrintEmptyValues</options>
+      </Item>
+
+      <Item type="combo" name="combo6">
+        <label>PopulateWithPeriods, default=year</label>
+        <options>PopulateWithPeriods;DontPrintEmptyValues</options>
+        <default>year</default>
+      </Item>
 
      <Item>
        <name>date1</name>

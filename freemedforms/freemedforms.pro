@@ -4,7 +4,7 @@ TEMPLATE = subdirs
 
 #include(../doc/api-doc.pri)
 
-CONFIG *= ordered
+CONFIG *= ordered C++11
 
 SUBDIRS += \
     appnamedefine \
