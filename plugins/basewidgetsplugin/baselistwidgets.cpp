@@ -523,7 +523,6 @@ BaseCombo::BaseCombo(Form::FormItem *formItem, QWidget *parent) :
     }
     setFocusedWidget(m_Combo);
 
-
     data->clear();
     m_FormItem->setItemData(data);
 
@@ -591,7 +590,7 @@ BaseComboData::BaseComboData(Form::FormItem *item) :
     m_DefaultIndex(-1),
     m_Model(0)
 {
-    m_Model = new QStandardItemModel(0);
+    m_Model = new QStandardItemModel(this);
     m_Model->setColumnCount(2);
 }
 
@@ -710,11 +709,7 @@ void BaseComboData::setStorableData(const QVariant &data)
 
 QVariant BaseComboData::storableData() const
 {
-    int possiblerow = m_BaseCombo->m_Combo->currentIndex();
     int uuidrow = m_FormItem->valueReferences()->values(Form::FormItemValues::Value_Possible).indexOf(m_BaseCombo->m_Combo->currentText());
-
-    if (possiblerow < 0 || possiblerow >= m_FormItem->valueReferences()->values(Form::FormItemValues::Value_Uuid).count())
-        return QVariant();
     if (uuidrow < 0 || uuidrow >= m_FormItem->valueReferences()->values(Form::FormItemValues::Value_Uuid).count())
         return QVariant();
     return m_FormItem->valueReferences()->values(Form::FormItemValues::Value_Uuid).at(uuidrow);
@@ -815,8 +810,6 @@ void BaseComboData::populateWithPeriods()
         vals->setValue(Form::FormItemValues::Value_Possible, i, p);
         m_v_Possibles.push_back(std::unique_ptr<QStandardItem> (new QStandardItem(p)));
         m_v_Uuids.push_back(std::unique_ptr<QStandardItem> (new QStandardItem(uid)));
-        //data->m_Model->setItem(i,0,data->m_v_Possibles[i].get());
-        //data->m_Model->setItem(i,1,data->m_v_Uuids[i].get());
         if (m_DefaultValue.compare(uid, Qt::CaseInsensitive)==0)
             setDefaultIndex(i);
     }
