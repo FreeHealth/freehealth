@@ -92,7 +92,7 @@ BaseList::BaseList(Form::FormItem *formItem, QWidget *parent, bool uniqueList) :
             m_List = le;
         } else {
             LOG_ERROR("Using the QtUiLinkage, item not found in the ui: " + formItem->uuid());
-            // To avoid segfaulting create a fake combo
+            // To avoid segfaulting create a fake QListView
             m_List = new QListView(this);
         }
         // Find Label
@@ -486,9 +486,6 @@ BaseCombo::BaseCombo(Form::FormItem *formItem, QWidget *parent) :
     if (!data->m_DefaultValue.isEmpty())
         m_Default = true;
 
-    qWarning() << "is there a default value? " << m_Default;
-    qWarning() << "the default value is" << data->m_DefaultValue;
-
     if (m_FormItem->getOptions().contains("PopulateWithPeriods", Qt::CaseInsensitive)) {
         data->populateWithPeriods();
      } else {
@@ -657,48 +654,63 @@ bool BaseComboData::isReadOnly() const
 
 bool BaseComboData::setData(const int ref, const QVariant &data, const int role)
 {
-    qWarning() << "***************** inside SetData **************************";
     if (role!=Qt::EditRole)
         return false;
     if (ref==Form::IFormItemData::ID_CurrentUuid) {
         //int id = parentItem()->valueReferences()->values(Form::FormItemValues::Value_Uuid).indexOf(data.toString());
         QModelIndex start = m_Model->index(0, 1, QModelIndex());
-        qWarning() << "start" << start;
         QModelIndexList list = m_Model->match(start,
                                        Qt::DisplayRole,
                                        data,
                                        1,
                                        Qt::MatchExactly);
-        qWarning() << "list" << list;
         QModelIndex index = list.takeFirst();
-        qWarning() << "index" << index;
         int id = index.row();
-        qWarning() << "id: " << id;
         m_BaseCombo->m_Combo->setCurrentIndex(id);
         onValueChanged();
     }
     return true;
 }
 
+/*!
+    \brief return data of a the combo FormItem
+
+    Return data for each role. CalculationsRole return numerical values. Used by
+    scriptwrappers.cpp
+    \sa FormItemScriptWrapper::currentValue()
+*/
 QVariant BaseComboData::data(const int ref, const int role) const
 {
-    int id = m_BaseCombo->m_Combo->currentIndex();
+    if (role==Form::IFormItemData::CalculationsRole) {
+        QString data = m_BaseCombo->m_Combo->currentText();
+        QModelIndex start = m_Model->index(0, 0, QModelIndex());
+        QModelIndexList list = m_Model->match(start,
+                                       Qt::DisplayRole,
+                                       data,
+                                       1,
+                                       Qt::MatchExactly);
+        if (!list.empty()) {
+        QModelIndex index = list.takeFirst();
+        int idx = index.row();
+        const QStringList &vals = parentItem()->valueReferences()->values(Form::FormItemValues::Value_Numerical);
+            if (idx < vals.count() && idx >= 0) {
+                return vals.at(idx);
+            }
+        }
+    }
+
     if (ref==Form::IFormItemData::ID_CurrentUuid) {
+        int id = m_BaseCombo->m_Combo->currentIndex();
         if (id>=0)
             return parentItem()->valueReferences()->values(Form::FormItemValues::Value_Uuid).at(id);
 
     }
     if (role==Qt::DisplayRole
             || role==Form::IFormItemData::PatientModelRole
-            || role==Form::IFormItemData::PrintRole
-            || role==Form::IFormItemData::CalculationsRole)  {
+            || role==Form::IFormItemData::PrintRole)  {
         return m_BaseCombo->m_Combo->currentText();
     }
-    if (role==Form::IFormItemData::CalculationsRole) {
-        const QStringList &vals = parentItem()->valueReferences()->values(Form::FormItemValues::Value_Numerical);
-        if (id < vals.count() && id >= 0)
-            return vals.at(id);
-    }
+
     return QVariant();
 }
 

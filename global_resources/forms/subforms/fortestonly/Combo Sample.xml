@@ -33,14 +33,23 @@
 		<name>sampleCombo</name>
 		<label>This a ComboBox</label>
 		<type>combo</type>
-			<possiblevalues id="0">The first value</possiblevalues>
-			<possiblevalues id="1">The second value</possiblevalues>
-			<possiblevalues id="2">The third value</possiblevalues>
-			<interpretvalues id="0">The first interpreted value</interpretvalues>
-			<interpretvalues id="1">The second interpreted value</interpretvalues>
-			<interpretvalues id="2">The third interpreted value</interpretvalues>
-			<numericalvalues id="0">1</numericalvalues>
-			<numericalvalues id="1">2</numericalvalues>
-			<numericalvalues id="1">4</numericalvalues>
+
+                        <uuid id="0">first</uuid>
+                        <uuid id="1">second</uuid>
+                        <uuid id="2">third</uuid>
+                        <uuid id="3">fourth</uuid>
+                        <uuid id="4">fifth</uuid>
+
+                        <possible id="0">The first value is 1</possible>
+                        <possible id="1">The second value is 2</possible>
+                        <possible id="2">The third value is 3</possible>
+                        <possible id="3">The fourth value is 4</possible>
+                        <possible id="4">The fifth value is 5</possible>
+
+                        <numerical id="0">1</numerical>
+                        <numerical id="1">2</numerical>
+                        <numerical id="2">3</numerical>
+                        <numerical id="3">4</numerical>
+                        <numerical id="4">5</numerical>
 	</MedForm>
 </MedForm>

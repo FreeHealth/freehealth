@@ -201,7 +201,7 @@
     <type>form</type>
     <name>episodeTester_1</name>
     <label>Form1</label>
-    <options>compact</options>
+    <options>UseFormNameAsNameSpace;compact</options>
     <Item>
       <name>s1</name>
       <type>texteditor</type>
@@ -213,8 +213,8 @@
       <type>shorttext</type>
       <label>This a simple shorttext</label>
       <value>
-        <default>The default value</default>
       </value>
+      <default>The default value</default>
    </Item>
 
     <Item>
@@ -222,22 +222,30 @@
       <type>longtext</type>
       <label>This a simple longtext</label>
       <value>
-        <default>The default longtext value</default>
       </value>
+      <default>The default longtext value</default>
    </Item>
 
     <Item>
       <name>check1</name>
       <type>check</type>
-      <label>sample check box 'check'</label>
+      <label>sample check box 'check' °1</label>
       <value>
-        <default>checked</default>
       </value>
     </Item>
 
     <Item>
+      <name>check2</name>
+      <type>check</type>
+      <label>sample check box 'check' °2 (default = checked)</label>
+      <value>
+      </value>
+      <default>checked</default>
+    </Item>
+
+    <Item>
       <name>radio1</name>
-      <label>There are the radio buttons</label>
+      <label>radio buttons °1</label>
       <type>radio</type>
       <value>
         <uuid id="0">first</uuid>
@@ -252,8 +260,36 @@
         <numerical id="0">1</numerical>
         <numerical id="1">2</numerical>
         <numerical id="2">4</numerical>
-        <default>third</default>
       </value>
+    </Item>
+
+    <Item name="sum::radio1" type="sum">
+        <label lang="xx">Value of radio = </label>
+        <sumof_regexp>radio1</sumof_regexp>
+        <options>DontPrintEmptyValues</options>
+    </Item>
+
+
+
+    <Item>
+      <name>radio2</name>
+      <label>radio buttons °2 (default = third)</label>
+      <type>radio</type>
+      <value>
+        <uuid id="0">first</uuid>
+        <uuid id="1">second</uuid>
+        <uuid id="2">third</uuid>
+        <possible id="0">The first value</possible>
+        <possible id="1">The second value</possible>
+        <possible id="2">The third value</possible>
+        <script id="0">The first interpreted value</script>
+        <script id="1">The second interpreted value</script>
+        <script id="2">The third interpreted value</script>
+        <numerical id="0">1</numerical>
+        <numerical id="1">2</numerical>
+        <numerical id="2">4</numerical>
+      </value>
+      <default>third</default>
     </Item>
 
      <Item>
@@ -352,6 +388,72 @@
         <options>PopulateWithPeriods;DontPrintEmptyValues</options>
         <default>year</default>
       </Item>
+
+     <Item>
+       <name>combo7</name>
+       <type>combo</type>
+       <label>Combo test °7: numerical</label>
+       <value>
+                        <uuid id="0">first</uuid>
+                        <uuid id="1">second</uuid>
+                        <uuid id="2">third</uuid>
+                        <uuid id="3">fourth</uuid>
+                        <uuid id="4">fifth</uuid>
+
+                        <possible id="0" lang="xx">The first value is 1</possible>
+                        <possible id="1" lang="xx">The second value is 2</possible>
+                        <possible id="2" lang="xx">The third value is 3</possible>
+                        <possible id="3" lang="xx">The fourth value is 4</possible>
+                        <possible id="4" lang="xx">The fifth value is 5</possible>
+
+                        <numerical id="0">1</numerical>
+                        <numerical id="1">2</numerical>
+                        <numerical id="2">3</numerical>
+                        <numerical id="3">4</numerical>
+                        <numerical id="4">5</numerical>
+
+       </value>
+       <option></option>
+     </Item>
+
+    <Item name="sum::combo7" type="sum">
+        <label lang="xx">Value of combo °7 = </label>
+        <sumof_regexp>combo7</sumof_regexp>
+        <options>DontPrintEmptyValues</options>
+    </Item>
+
+     <Item>
+       <name>combo8</name>
+       <type>combo</type>
+       <label>Combo test °8: numerical, sorted</label>
+       <value>
+                        <uuid id="0">first</uuid>
+                        <uuid id="1">second</uuid>
+                        <uuid id="2">third</uuid>
+                        <uuid id="3">fourth</uuid>
+                        <uuid id="4">fifth</uuid>
+
+                        <possible id="0" lang="xx">The first value is 1</possible>
+                        <possible id="1" lang="xx">The second value is 2</possible>
+                        <possible id="2" lang="xx">The third value is 3</possible>
+                        <possible id="3" lang="xx">The fourth value is 4</possible>
+                        <possible id="4" lang="xx">The fifth value is 5</possible>
+
+                        <numerical id="0">1</numerical>
+                        <numerical id="1">2</numerical>
+                        <numerical id="2">3</numerical>
+                        <numerical id="3">4</numerical>
+                        <numerical id="4">5</numerical>
+
+       </value>
+       <option>sort</option>
+     </Item>
+
+        <Item name="sum::combo8" type="sum">
+            <label lang="xx">Value of combo °8 = </label>
+            <sumof_regexp>combo8</sumof_regexp>
+            <options>DontPrintEmptyValues</options>
+        </Item>
 
      <Item>
        <name>date1</name>
