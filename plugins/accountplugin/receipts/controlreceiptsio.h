@@ -45,7 +45,7 @@ namespace Ui{
     class ControlReceiptsWidget;
 }
 
-using namespace AccountDB;
+using namespace AccountDB; // TODO remove using directive inside header file
 class ACCOUNT_EXPORT ControlReceipts : public QWidget
 {
     Q_OBJECT

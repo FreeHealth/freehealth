@@ -120,7 +120,7 @@ private:
     UserDynamicDataPrivate *d;
 };
 
-using namespace UserPlugin::Constants;
+using namespace UserPlugin::Constants; // TODO remove using directive inside header file
 
 class USER_EXPORT UserData
 {

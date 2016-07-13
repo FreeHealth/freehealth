@@ -78,7 +78,7 @@ private Q_SLOTS:
     void on_fromToIntakesCheck_stateChanged(int state);
     void on_fromToDurationCheck_stateChanged(int state);
     void on_intakesFromSpin_valueChanged(double d);
-    void on_durationFromSpin_valueChanged(double d);
+    void on_durationFromSpin_valueChanged(int d);
     void on_userformsButton_clicked();
     void on_dosageForAllInnCheck_stateChanged(int state);
     void on_aldCheck_stateChanged(int state);

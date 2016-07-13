@@ -163,6 +163,7 @@ public:
         FieldIsTime,
         FieldIsDateTime,
         FieldIsTimeStamp,
+        FieldIsIsoUtcDateTime,      // varchar(20) "YYYY-MM-DDTHH:mm:ssZ"
         FieldIsBlob,                // SQLite: 1,000,000,000 max size
                                     // MySQL:  4Go max size
         FieldIsUUID,                // varchar(32) (see Utils::createUid())

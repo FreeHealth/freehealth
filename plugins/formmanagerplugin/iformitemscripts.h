@@ -65,7 +65,7 @@ public:
         Script_PostLoad,
         Script_OnDemand,
         Script_OnValueChanged,
-        Script_OnValueRequiered,
+        Script_OnValueRequired,
         Script_OnDependentValueChanged,
         Script_OnClicked,
         Script_OnToggled
@@ -78,7 +78,7 @@ public:
                     const QString &postLoad = QString::null,
                     const QString &onDemand = QString::null,
                     const QString &onValChanged = QString::null,
-                    const QString &onValRequiered = QString::null,
+                    const QString &onValRequired = QString::null,
                     const QString &onDependentValuesChanged = QString::null,
                     const QString &onToggled = QString::null);
     ~FormItemScripts();
@@ -92,7 +92,7 @@ public:
     QString postLoadScript() const {return script(Script_PostLoad);}
     QString onDemandScript() const {return script(Script_OnDemand);}
     QString onValueChangedScript() const {return script(Script_OnValueChanged);}
-    QString onValueRequieredScript() const {return script(Script_OnValueRequiered);}
+    QString onValueRequiredScript() const {return script(Script_OnValueRequired);}
     QString onDependentValueChangedScript() const {return script(Script_OnDependentValueChanged);}
     QString onClicked() const {return script(Script_OnClicked);}
     QString onToggledScript() const {return script(Script_OnToggled);}

@@ -132,7 +132,7 @@ private:
 }  // namespace Patients
 
 /**
- * ctor of the widget, uses the Core::IPatient has central model.
+ * ctor of the widget, uses the Core::IPatient as central model.
  * The unique instance is available in Patients::PatientCore::patientBar()
  */
 PatientBar::PatientBar(QWidget *parent) :

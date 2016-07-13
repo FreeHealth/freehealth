@@ -48,7 +48,7 @@ namespace Ui{
     class AccountViewWidget;
 }
 
-using namespace AccountDB;
+using namespace AccountDB; // TODO remove using directive inside header file
 namespace Account {
 namespace Internal {
 class AccountViewPrivate;

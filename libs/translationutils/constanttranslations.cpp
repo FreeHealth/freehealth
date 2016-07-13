@@ -316,6 +316,7 @@ QStringList genders()
             << tkTr(Trans::Constants::MALE)
             << tkTr(Trans::Constants::FEMALE)
             << tkTr(Trans::Constants::HERMAPHRODISM)
+            << tkTr(Trans::Constants::UNKNOWN)
             ;
 }
 

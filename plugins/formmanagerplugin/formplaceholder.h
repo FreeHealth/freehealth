@@ -92,6 +92,7 @@ private:
 class FORM_EXPORT FormPlaceHolder : public Internal::FormContextualWidget
 {
     Q_OBJECT
+    friend class BaseFormData;
     friend class Form::FormManager;
     friend class Form::Internal::FormPlaceHolderPrivate;
     friend class Form::Internal::FormPlaceHolderCoreListener;

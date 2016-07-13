@@ -108,7 +108,7 @@ public Q_SLOTS:
     void retranslate();
 
 public:
-    QDateTimeEdit *m_EpisodeDate;
+    QDateTimeEdit *m_EpisodeDateTime;
     QLineEdit *m_EpisodeLabel;
     QToolButton *m_PriorityButton;
 

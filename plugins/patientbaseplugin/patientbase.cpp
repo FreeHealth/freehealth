@@ -312,11 +312,11 @@ QString PatientBase::patientUuid(const QString &usualname,
     }
     using namespace Patients::Constants;
     QHash<int, QString> where;
-    where.insert(IDENTITY_USUALNAME, QString("='%1'").arg(usualname));
-    where.insert(IDENTITY_FIRSTNAME, QString("='%1'").arg(firstname));
-    where.insert(IDENTITY_OTHERNAMES, QString("='%1'").arg(othernames));
-    where.insert(IDENTITY_GENDER, QString("='%1'").arg(gender));
-    where.insert(IDENTITY_DOB, QString("='%1'").arg(dob.toString(Qt::ISODate)));
+    if (usualname != QString()) where.insert(IDENTITY_USUALNAME, QString("=\"%1\"").arg(usualname));
+    if (othernames != QString()) where.insert(IDENTITY_OTHERNAMES, QString("=\"%1\"").arg(othernames));
+    if (firstname != QString()) where.insert(IDENTITY_FIRSTNAME, QString("=\"%1\"").arg(firstname));
+    if (gender != QString()) where.insert(IDENTITY_GENDER, QString("=\"%1\"").arg(gender));
+    if (dob != QDate()) where.insert(IDENTITY_DOB, QString("= STR_TO_DATE('%1̀', '%Y-%m-%d')").arg(dob.toString(Qt::ISODate)));
     QString req = select(Table_IDENT, IDENTITY_UID, where);
     DB.transaction();
     QSqlQuery query(DB);

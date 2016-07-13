@@ -29,6 +29,9 @@
 
 //#include "basewigets_exporter.h"
 
+#include <memory>
+#include <vector>
+
 #include <QWidget>
 #include <QVariant>
 
@@ -38,7 +41,10 @@
 QT_BEGIN_NAMESPACE
 class QListView;
 class QComboBox;
+class QStandardItem;
+class QStandardItemModel;
 class QStringListModel;
+class QSortFilterProxyModel;
 QT_END_NAMESPACE
 
 /**
@@ -131,7 +137,8 @@ private:
 ///////////////////////////////////////////////////////////////////////////////
 class BaseCombo : public Form::IFormWidget
 {
-     Q_OBJECT
+    friend class BaseComboData;
+    Q_OBJECT
 public:
      BaseCombo(Form::FormItem *linkedObject, QWidget *parent = 0);
      ~BaseCombo();
@@ -141,18 +148,21 @@ public:
 public Q_SLOTS:
      void retranslate();
 
-public:
-     QComboBox *m_Combo;
+private:
+    QComboBox *m_Combo;
+    bool m_Sort;
+    bool m_Default;
 };
 
 class BaseComboData : public Form::IFormItemData
 {
+    friend class BaseCombo;
     Q_OBJECT
 public:
     BaseComboData(Form::FormItem *item);
     ~BaseComboData();
 
-    void setBaseCombo(BaseCombo* combo) {m_Combo = combo; clear();}
+    void setBaseCombo(BaseCombo* combo) {m_BaseCombo = combo; clear();}
     int selectedItem(const QString &s);
     void setDefaultIndex(int index);
     int defaultIndex() const;
@@ -171,15 +181,24 @@ public:
 
     void setStorableData(const QVariant &data);
     QVariant storableData() const;
+    int comboIndexFromUuid(const QString s);
+    void setModel();
+    void setVectors();
+    void populateWithPeriods();
 
 private Q_SLOTS:
     void onValueChanged();
 
 private:
     Form::FormItem *m_FormItem;
-    BaseCombo* m_Combo;
+    BaseCombo* m_BaseCombo;
     int m_OriginalValue;
     int m_DefaultIndex;
+    QString m_DefaultValue;
+    QStandardItemModel *m_Model;
+    QSortFilterProxyModel* m_Proxy;
+    std::vector<std::unique_ptr<QStandardItem>> m_v_Possibles;
+    std::vector<std::unique_ptr<QStandardItem>> m_v_Uuids;
 };
 
 }  // End namespace Internal

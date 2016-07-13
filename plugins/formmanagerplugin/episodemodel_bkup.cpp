@@ -552,7 +552,7 @@ public:
             episode->setData(EpisodeData::XmlContent, createXmlEpisode(formUid));
             episode->setData(EpisodeData::IsXmlContentPopulated, true);
             episode->setData(EpisodeData::Label, form->itemData()->data(IFormItemData::ID_EpisodeLabel));
-            episode->setData(EpisodeData::UserDate, form->itemData()->data(IFormItemData::ID_EpisodeDate));
+            episode->setData(EpisodeData::UserDate, form->itemData()->data(IFormItemData::ID_EpisodeDateTime));
             LOG_FOR("EpisodeModel", "Save episode: " + episode->data(EpisodeData::Label).toString());
             if (!settings()->value(Core::Constants::S_ALWAYS_SAVE_WITHOUT_PROMPTING, true).toBool()) {
                 bool yes = Utils::yesNoMessageBox(QCoreApplication::translate("EpisodeModel", "Save episode?"),
@@ -613,7 +613,7 @@ public:
 
 //        qWarning() << Q_FUNC_INFO << feedPatientModel << form->uuid();
         form->clear();
-        form->itemData()->setData(IFormItemData::ID_EpisodeDate, episode->data(EpisodeData::UserDate));
+        form->itemData()->setData(IFormItemData::ID_EpisodeDateTime, episode->data(EpisodeData::UserDate));
         form->itemData()->setData(IFormItemData::ID_EpisodeLabel, episode->data(EpisodeData::Label));
         const QString &username = user()->fullNameOfUser(episode->data(EpisodeData::UserCreatorUuid)); //value(Core::IUser::FullName).toString();
         if (username.isEmpty())
@@ -1305,7 +1305,7 @@ bool EpisodeModel::activateEpisode(const QModelIndex &index, const QString &form
     if (!form)
         return false;
     form->clear();
-    form->itemData()->setData(IFormItemData::ID_EpisodeDate, episode->data(EpisodeData::UserDate));
+    form->itemData()->setData(IFormItemData::ID_EpisodeDateTime, episode->data(EpisodeData::UserDate));
     form->itemData()->setData(IFormItemData::ID_EpisodeLabel, episode->data(EpisodeData::Label));
     const QString &username = user()->fullNameOfUser(episode->data(EpisodeData::UserCreatorUuid)); //value(Core::IUser::FullName).toString();
     if (username.isEmpty())

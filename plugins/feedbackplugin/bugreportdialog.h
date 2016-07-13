@@ -28,7 +28,7 @@
 #define FEEDBACK_BUGREPORTDIALOG_H
 
 #include <feedbackplugin/feedback_exporter.h>
-
+#include <qglobal.h>
 #include <QDialog>
 
 /**

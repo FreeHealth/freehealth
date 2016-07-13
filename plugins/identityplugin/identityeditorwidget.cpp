@@ -56,8 +56,8 @@
  *    - state/province
  *    - country
  * - full login and password
- * If you don't want the whole information, you can be defined the widget to
- * show/hide using the setAvailableWidgets().
+ * If you don't want the whole information, you can define the widgets to
+ * show or hide using with setAvailableWidgets().
  *
  * Password modification :\n
  * This widget allow users to edit/change their password. You can catch any

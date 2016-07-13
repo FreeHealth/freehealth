@@ -2837,6 +2837,11 @@ QStringList DatabasePrivate::getSQLCreateTable(const int &tableref)
                                 .arg(getTypeOfField(i))// .leftJustified(20, ' '))
                                 .arg(m_DefaultFieldValue.value(i)));
                 break;
+            case Database::FieldIsIsoUtcDateTime :
+                fieldLine.append(QString("%1 %2")
+                                 .arg(fieldName)
+                                 .arg(getTypeOfField(i)));
+                break;
             default :
                 fieldLine.append(QString("%1 %2 DEFAULT '%3'")
                                 .arg(fieldName)
@@ -2905,16 +2910,19 @@ QString DatabasePrivate::getTypeOfField(const int &fieldref) const
         case Database::FieldIsDate :
             toReturn = "date";
             break;
-    case Database::FieldIsTime:
-        toReturn = "time";
-        break;
-    case Database::FieldIsDateTime:
-        toReturn = "datetime";
-        break;
-    case Database::FieldIsTimeStamp:
-        toReturn = "timestamp";
-        break;
-    case Database::FieldIsOneChar :
+        case Database::FieldIsTime:
+            toReturn = "time";
+            break;
+        case Database::FieldIsDateTime:
+            toReturn = "datetime";
+            break;
+        case Database::FieldIsTimeStamp:
+            toReturn = "timestamp";
+            break;
+        case Database::FieldIsIsoUtcDateTime:
+            toReturn = "varchar(20)";
+            break;
+        case Database::FieldIsOneChar :
             toReturn = "varchar(1)";
             break;
         case Database::FieldIsInteger :

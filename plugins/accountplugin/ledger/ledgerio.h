@@ -40,8 +40,8 @@
 #include <QStandardItemModel>
 #include <QVector>
 
-using namespace AccountDB;
-using namespace Constants;
+using namespace AccountDB; // TODO remove using directive inside header file
+using namespace Constants; // TODO remove using directive inside header file
 class LedgerIO : public QObject {
     Q_OBJECT
     public :

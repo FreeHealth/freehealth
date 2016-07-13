@@ -41,7 +41,7 @@
  * You can store any stringified value in the database and receive it exactly as you set it in return.
  * The storable data can be anything you want: serialized values, XML, HTML, JSON... But only strings.
  * This will evolve in future version using QVariant.\n
- * The storable data is saved to the database after beeing tagged with the Form::FormItem uuid. This is
+ * The storable data is saved to the database after being tagged with the Form::FormItem uuid. This is
  * reason why the form item uuid MUST BE persistent in time and unique in all forms.\n
  * The storable data is kept inside the central episode database. When an episode is activated in the
  * form data widget mapper, the data manager will receive its storable data (anything stringified using
@@ -73,7 +73,7 @@
  */
 
 /**
- * \var Form::IFormItemData::ID_EpisodeDate
+ * \var Form::IFormItemData::ID_EpisodeDateTime
  */
 
 /**

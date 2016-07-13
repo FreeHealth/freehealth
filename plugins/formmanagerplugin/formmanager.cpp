@@ -40,7 +40,7 @@
  * - extracting screenshots and files from the 'form set'
  *
  * Form::FormManager also manages :
- * - a cache system to fasten the form's access and construction
+ * - a cache system to accelerate form access and construction
  * - keeps duplicates of each forms to use in specific computation (statistics...).
  * - allow creation of Form::FormPage (createFormPage())
  * - manages all Form::FormTreeModel (one per Form::FormMain empty root)
@@ -953,7 +953,7 @@ QHash<QString, QVariant> FormManager::formToTokens(Form::FormMain *form) const
     }
 #endif
     // Create tokens for episode data
-    tokens.insert("EpisodeUserDate", QLocale().toString(form->itemData()->data(Form::IFormItemData::ID_EpisodeDate).toDateTime(), QLocale::LongFormat));
+    tokens.insert("EpisodeUserDate", QLocale().toString(form->itemData()->data(Form::IFormItemData::ID_EpisodeDateTime).toDateTime(), QLocale::LongFormat));
     tokens.insert("EpisodeUserLabel", form->itemData()->data(Form::IFormItemData::ID_EpisodeLabel));
     // Force the full name of the user
     QString userName = form->itemData()->data(Form::IFormItemData::ID_UserName).toString();

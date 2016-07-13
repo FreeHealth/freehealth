@@ -340,6 +340,8 @@ int UserManagerModel::genderIndex(const QModelIndex &index) const
         return 1;
     else if (g=="H")
         return 2;
+    else if (g=="K")
+        return 3;
     return 0;
 }
 

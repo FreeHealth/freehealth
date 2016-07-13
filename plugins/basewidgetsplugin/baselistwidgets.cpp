@@ -24,6 +24,8 @@
  *       Guillaume DENRY <guillaume.denry@gmail.com>                       *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
+#include <memory>
+#include <vector>
 #include "baselistwidgets.h"
 #include "constants.h"
 
@@ -43,6 +45,9 @@
 #include <QListWidget>
 #include <QComboBox>
 #include <QStringListModel>
+#include <QStandardItemModel>
+#include <QStandardItem>
+#include <QSortFilterProxyModel>
 
 using namespace BaseWidgets;
 using namespace Internal;
@@ -87,7 +92,7 @@ BaseList::BaseList(Form::FormItem *formItem, QWidget *parent, bool uniqueList) :
             m_List = le;
         } else {
             LOG_ERROR("Using the QtUiLinkage, item not found in the ui: " + formItem->uuid());
-            // To avoid segfaulting create a fake combo
+            // To avoid segfaulting create a fake QListView
             m_List = new QListView(this);
         }
         // Find Label
@@ -444,9 +449,15 @@ void BaseListData::onValueChanged()
 ////////////////////////////   BaseCombo   ////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 BaseCombo::BaseCombo(Form::FormItem *formItem, QWidget *parent) :
-    Form::IFormWidget(formItem,parent), m_Combo(0)
+    Form::IFormWidget(formItem,parent), m_Combo(0), m_Sort(false),
+    m_Default(false)
 {
     setObjectName("BaseCombo");
+
+    // create FormItemData
+    BaseComboData *data = new BaseComboData(m_FormItem);
+    data->setBaseCombo(this);
+
     // QtUi Loaded ?
     const QString &widget = formItem->spec()->value(Form::FormItemSpec::Spec_UiWidget).toString();
     if (!widget.isEmpty()) {
@@ -469,95 +480,48 @@ BaseCombo::BaseCombo(Form::FormItem *formItem, QWidget *parent) :
         m_Combo->setObjectName("Combo_" + m_FormItem->uuid());
         hb->addWidget(m_Combo);
     }
-    m_Combo->addItems(m_FormItem->valueReferences()->values(Form::FormItemValues::Value_Possible));
-
-    setFocusedWidget(m_Combo);
 
     // Manage options
-    int defaultId = -1;
-    if (m_FormItem->getOptions().contains("PopulateWithPeriods")) {
-        Form::FormItemValues *vals = m_FormItem->valueReferences();
-        QString defaultVal = m_FormItem->extraData().value("default");
-        int i = 0;
-        QString uid = "second";
-        QString p = tkTr(Trans::Constants::SECOND_S);
-        vals->setValue(Form::FormItemValues::Value_Uuid, i, uid);
-        vals->setValue(Form::FormItemValues::Value_Possible, i, p);
-        m_Combo->addItem(p);
-        if (defaultVal.compare(uid, Qt::CaseInsensitive)==0)
-            defaultId = i;
-        ++i;
-        uid = "minute";
-        p = tkTr(Trans::Constants::MINUTE_S);
-        vals->setValue(Form::FormItemValues::Value_Uuid, i, uid);
-        vals->setValue(Form::FormItemValues::Value_Possible, i, p);
-        m_Combo->addItem(p);
-        if (defaultVal.compare(uid, Qt::CaseInsensitive)==0)
-            defaultId = i;
-        ++i;
-        uid = "hour";
-        p = tkTr(Trans::Constants::HOUR_S);
-        vals->setValue(Form::FormItemValues::Value_Uuid, i, uid);
-        vals->setValue(Form::FormItemValues::Value_Possible, i, p);
-        m_Combo->addItem(p);
-        if (defaultVal.compare(uid, Qt::CaseInsensitive)==0)
-            defaultId = i;
-        ++i;
-        uid = "day";
-        p = tkTr(Trans::Constants::DAY_S);
-        vals->setValue(Form::FormItemValues::Value_Uuid, i, uid);
-        vals->setValue(Form::FormItemValues::Value_Possible, i, p);
-        m_Combo->addItem(p);
-        if (defaultVal.compare(uid, Qt::CaseInsensitive)==0)
-            defaultId = i;
-        ++i;
-        uid = "week";
-        p = tkTr(Trans::Constants::WEEK_S);
-        vals->setValue(Form::FormItemValues::Value_Uuid, i, uid);
-        vals->setValue(Form::FormItemValues::Value_Possible, i, p);
-        m_Combo->addItem(p);
-        if (defaultVal.compare(uid, Qt::CaseInsensitive)==0)
-            defaultId = i;
-        ++i;
-        uid = "month";
-        p = tkTr(Trans::Constants::MONTH_S);
-        vals->setValue(Form::FormItemValues::Value_Uuid, i, uid);
-        vals->setValue(Form::FormItemValues::Value_Possible, i, p);
-        m_Combo->addItem(p);
-        if (defaultVal.compare(uid, Qt::CaseInsensitive)==0)
-            defaultId = i;
-        ++i;
-        uid = "quarter";
-        p = tkTr(Trans::Constants::QUARTER_S);
-        vals->setValue(Form::FormItemValues::Value_Uuid, i, uid);
-        vals->setValue(Form::FormItemValues::Value_Possible, i, p);
-        m_Combo->addItem(p);
-        if (defaultVal.compare(uid, Qt::CaseInsensitive)==0)
-            defaultId = i;
-        ++i;
-        uid = "year";
-        p = tkTr(Trans::Constants::YEAR_S);
-        vals->setValue(Form::FormItemValues::Value_Uuid, i, uid);
-        vals->setValue(Form::FormItemValues::Value_Possible, i, p);
-        m_Combo->addItem(p);
-        if (defaultVal.compare(uid, Qt::CaseInsensitive)==0)
-            defaultId = i;
-        ++i;
-        uid = "decade";
-        p = tkTr(Trans::Constants::DECADE_S);
-        vals->setValue(Form::FormItemValues::Value_Uuid, i, uid);
-        vals->setValue(Form::FormItemValues::Value_Possible, i, p);
-        m_Combo->addItem(p);
-        if (defaultVal.compare(uid, Qt::CaseInsensitive)==0)
-            defaultId = i;
+    data->m_DefaultValue= m_FormItem->extraData().value("default");
+    if (!data->m_DefaultValue.isEmpty())
+        m_Default = true;
+
+    if (m_FormItem->getOptions().contains("PopulateWithPeriods", Qt::CaseInsensitive)) {
+        data->populateWithPeriods();
+     } else {
+        data->setVectors();
+        // define default index
+
+        if (m_Default) {
+            data->m_DefaultIndex = data->comboIndexFromUuid(data->m_DefaultValue);
+        } else {
+            data->m_DefaultIndex=-1;
+        }
     }
 
-    // create FormItemData
-    BaseComboData *data = new BaseComboData(m_FormItem);
-    data->setBaseCombo(this);
-    data->setDefaultIndex(defaultId);
-    m_FormItem->setItemData(data);
+    //set model
+
+
+    // sort?
+    m_Sort= m_FormItem->getOptions().contains("Sort", Qt::CaseInsensitive);
+    if (m_Sort) {
+        data->m_Proxy = new QSortFilterProxyModel(m_Combo);
+        data->setModel();
+        data->m_Proxy->setSourceModel(data->m_Model);
+        m_Combo->setModel(data->m_Proxy);
+        m_Combo->model()->sort(0);
+        int idx = data->comboIndexFromUuid(data->m_DefaultValue);
+        data->setDefaultIndex(idx);
+    } else {
+        data->setModel();
+        m_Combo->setModel(data->m_Model);
+        int idx = m_FormItem->valueReferences()->values(Form::FormItemValues::Value_Uuid).indexOf(data->m_DefaultValue);
+        data->setDefaultIndex(idx);
+    }
+    setFocusedWidget(m_Combo);
+
     data->clear();
+    m_FormItem->setItemData(data);
 
     connect(m_Combo, SIGNAL(currentIndexChanged(int)), data, SLOT(onValueChanged()));
 }
@@ -593,7 +557,7 @@ void BaseCombo::retranslate()
     if (m_Label)
         m_Label->setText(m_FormItem->spec()->label());
     if (m_Combo) {
-        const QStringList &list = m_FormItem->valueReferences()->values(Form::FormItemValues::Value_Possible);
+        QStringList list = m_FormItem->valueReferences()->values(Form::FormItemValues::Value_Possible);
         if (list.count() != m_Combo->count()) {
             Utils::warningMessageBox(
                     tr("Wrong form's translations"),
@@ -603,6 +567,9 @@ void BaseCombo::retranslate()
                     .arg(QLocale().name(), m_FormItem->spec()->label()).arg(list.count()));
             return;
         }
+        //sort?
+        if (m_Sort)
+            list.sort();
         // refresh combo items
         int id = m_Combo->currentIndex();
         m_Combo->clear();
@@ -615,10 +582,13 @@ void BaseCombo::retranslate()
 ////////////////////////////////////////// ItemData /////////////////////////////////////////////
 BaseComboData::BaseComboData(Form::FormItem *item) :
     m_FormItem(item),
-    m_Combo(0),
+    m_BaseCombo(0),
     m_OriginalValue(-1),
-    m_DefaultIndex(-1)
+    m_DefaultIndex(-1),
+    m_Model(0)
 {
+    m_Model = new QStandardItemModel(this);
+    m_Model->setColumnCount(2);
 }
 
 BaseComboData::~BaseComboData()
@@ -627,57 +597,59 @@ BaseComboData::~BaseComboData()
 
 int BaseComboData::selectedItem(const QString &s)
 {
-    m_Combo->m_Combo->setCurrentIndex(-1);
+    m_BaseCombo->m_Combo->setCurrentIndex(-1);
+    int row;
     if (s.isEmpty())
         return -1;
-
-    const QStringList &uuids = m_FormItem->valueReferences()->values(Form::FormItemValues::Value_Uuid);
-    int row = uuids.lastIndexOf(s);
-    m_Combo->m_Combo->setCurrentIndex(row);
+    if (!m_BaseCombo->m_Sort) {
+        const QStringList &uuids = m_FormItem->valueReferences()->values(Form::FormItemValues::Value_Uuid);
+        row = uuids.lastIndexOf(s);
+    } else {
+        row = comboIndexFromUuid(s);
+    }
+    m_BaseCombo->m_Combo->setCurrentIndex(row);
     return row;
 }
 
 void BaseComboData::setDefaultIndex(int index)
 {
+    if (!m_DefaultIndex==-1)
+        return;
     m_DefaultIndex = index;
 }
 
 int BaseComboData::defaultIndex() const
 {
-    if (m_DefaultIndex != -1)
-        return m_DefaultIndex;
-
-    const QStringList &uuids = m_FormItem->valueReferences()->values(Form::FormItemValues::Value_Uuid);
-    return uuids.lastIndexOf(m_FormItem->valueReferences()->defaultValue().toString());
+    return m_DefaultIndex;
 }
 
 /** \brief Set the widget to the default value \sa FormItem::FormItemValue*/
 void BaseComboData::clear()
 {
     m_OriginalValue = -1;
-    m_Combo->m_Combo->setCurrentIndex(-1);
-    m_Combo->m_Combo->setCurrentIndex(defaultIndex());
+    if (m_BaseCombo->m_Combo)
+        m_BaseCombo->m_Combo->setCurrentIndex(m_DefaultIndex);
 }
 
 bool BaseComboData::isModified() const
 {
-    return m_OriginalValue != m_Combo->m_Combo->currentIndex();
+    return m_OriginalValue != m_BaseCombo->m_Combo->currentIndex();
 }
 
 void BaseComboData::setModified(bool modified)
 {
     if (!modified)
-        m_OriginalValue = m_Combo->m_Combo->currentIndex();
+        m_OriginalValue = m_BaseCombo->m_Combo->currentIndex();
 }
 
 void BaseComboData::setReadOnly(bool readOnly)
 {
-    m_Combo->m_Combo->setEnabled(!readOnly);
+    m_BaseCombo->m_Combo->setEnabled(!readOnly);
 }
 
 bool BaseComboData::isReadOnly() const
 {
-    return m_Combo->m_Combo->isEnabled();
+    return m_BaseCombo->m_Combo->isEnabled();
 }
 
 bool BaseComboData::setData(const int ref, const QVariant &data, const int role)
@@ -685,32 +657,60 @@ bool BaseComboData::setData(const int ref, const QVariant &data, const int role)
     if (role!=Qt::EditRole)
         return false;
     if (ref==Form::IFormItemData::ID_CurrentUuid) {
-        int id = parentItem()->valueReferences()->values(Form::FormItemValues::Value_Uuid).indexOf(data.toString());
-        m_Combo->m_Combo->setCurrentIndex(id);
+        //int id = parentItem()->valueReferences()->values(Form::FormItemValues::Value_Uuid).indexOf(data.toString());
+        QModelIndex start = m_Model->index(0, 1, QModelIndex());
+        QModelIndexList list = m_Model->match(start,
+                                       Qt::DisplayRole,
+                                       data,
+                                       1,
+                                       Qt::MatchExactly);
+        QModelIndex index = list.takeFirst();
+        int id = index.row();
+        m_BaseCombo->m_Combo->setCurrentIndex(id);
         onValueChanged();
     }
     return true;
 }
 
+/*!
+    \brief return data of a the combo FormItem
+
+    Return data for each role. CalculationsRole return numerical values. Used by
+    scriptwrappers.cpp
+    \sa FormItemScriptWrapper::currentValue()
+*/
 QVariant BaseComboData::data(const int ref, const int role) const
 {
-    int id = m_Combo->m_Combo->currentIndex();
+    if (role==Form::IFormItemData::CalculationsRole) {
+        QString data = m_BaseCombo->m_Combo->currentText();
+        QModelIndex start = m_Model->index(0, 0, QModelIndex());
+        QModelIndexList list = m_Model->match(start,
+                                       Qt::DisplayRole,
+                                       data,
+                                       1,
+                                       Qt::MatchExactly);
+        if (!list.empty()) {
+        QModelIndex index = list.takeFirst();
+        int idx = index.row();
+        const QStringList &vals = parentItem()->valueReferences()->values(Form::FormItemValues::Value_Numerical);
+            if (idx < vals.count() && idx >= 0) {
+                return vals.at(idx);
+            }
+        }
+    }
+
     if (ref==Form::IFormItemData::ID_CurrentUuid) {
+        int id = m_BaseCombo->m_Combo->currentIndex();
         if (id>=0)
             return parentItem()->valueReferences()->values(Form::FormItemValues::Value_Uuid).at(id);
 
     }
     if (role==Qt::DisplayRole
             || role==Form::IFormItemData::PatientModelRole
-            || role==Form::IFormItemData::PrintRole
-            || role==Form::IFormItemData::CalculationsRole)  {
-        return m_Combo->m_Combo->currentText();
+            || role==Form::IFormItemData::PrintRole)  {
+        return m_BaseCombo->m_Combo->currentText();
     }
-    if (role==Form::IFormItemData::CalculationsRole) {
-        const QStringList &vals = parentItem()->valueReferences()->values(Form::FormItemValues::Value_Numerical);
-        if (id < vals.count() && id >= 0)
-            return vals.at(id);
-    }
+
     return QVariant();
 }
 
@@ -721,10 +721,10 @@ void BaseComboData::setStorableData(const QVariant &data)
 
 QVariant BaseComboData::storableData() const
 {
-    int row = m_Combo->m_Combo->currentIndex();
-    if (row < 0 || row >= m_FormItem->valueReferences()->values(Form::FormItemValues::Value_Uuid).count())
+    int uuidrow = m_FormItem->valueReferences()->values(Form::FormItemValues::Value_Possible).indexOf(m_BaseCombo->m_Combo->currentText());
+    if (uuidrow < 0 || uuidrow >= m_FormItem->valueReferences()->values(Form::FormItemValues::Value_Uuid).count())
         return QVariant();
-    return m_FormItem->valueReferences()->values(Form::FormItemValues::Value_Uuid).at(row);
+    return m_FormItem->valueReferences()->values(Form::FormItemValues::Value_Uuid).at(uuidrow);
 }
 
 void BaseComboData::onValueChanged()
@@ -732,4 +732,97 @@ void BaseComboData::onValueChanged()
 //    WARN_FUNC;
     Constants::executeOnValueChangedScript(m_FormItem);
     Q_EMIT dataChanged(Form::IFormItemData::ID_CurrentUuid);
+}
+
+int BaseComboData::comboIndexFromUuid(const QString s)
+{
+    QModelIndex start = m_BaseCombo->m_Combo->model()->index(0,1,QModelIndex());
+    QModelIndexList list = m_BaseCombo->m_Combo->model()->match(start,
+                                   Qt::DisplayRole,
+                                   s,
+                                   1,
+                                   Qt::MatchExactly);
+    if (!list.isEmpty()) {
+        QModelIndex index = list.takeFirst();
+        return index.row();
+    }
+    return -1;
+}
+
+void BaseComboData::setVectors()
+{
+    if (!m_v_Possibles.empty())
+        m_v_Possibles.clear();
+    if (!m_v_Uuids.empty())
+        m_v_Uuids.clear();
+
+    const QStringList possibles = parentItem()->valueReferences()->values(Form::FormItemValues::Value_Possible);
+    const QStringList uuids = parentItem()->valueReferences()->values(Form::FormItemValues::Value_Uuid);
+
+    if (!possibles.count()==uuids.count()) {
+        Utils::warningMessageBox(
+                    tr("Possibles - Uuids mismatch"),
+                    tr("There are %1 different possibles values.\n"
+                       "There are %2 different uuids values.\n"
+                       "Please correct your form and try again.")
+                    .arg(possibles.count()).arg(uuids.count()));
+        return;
+    }
+
+    QString p;
+    foreach (p, possibles) {
+        m_v_Possibles.push_back(std::unique_ptr<QStandardItem> (new QStandardItem(p)));
+    }
+
+    QString u;
+    foreach (u, uuids) {
+        m_v_Uuids.push_back(std::unique_ptr<QStandardItem> (new QStandardItem(u)));
+    }
+}
+
+void BaseComboData::setModel()
+{
+    if (m_Model)
+        m_Model->clear();
+
+    unsigned int i;
+    for (i = 0; i < m_v_Possibles.size(); i++) {
+            m_Model->setItem(i,0,m_v_Possibles.at(i).get());
+    }
+    for (i = 0; i < m_v_Uuids.size(); i++) {
+            m_Model->setItem(i,1,m_v_Uuids.at(i).get());
+    }
+}
+
+void BaseComboData::populateWithPeriods()
+{
+    Form::FormItemValues *vals = m_FormItem->valueReferences();
+    std::vector<std::unique_ptr<QStandardItem>> v;
+
+    QStringList period_uids = QStringList();
+    period_uids << "second" << "minute" << "hour" << "day" << "week" << "month"
+               << "quarter" << "year" << "decade";
+
+    QStringList period_constants = QStringList();
+    period_constants << tkTr(Trans::Constants::SECOND_S)
+                     << tkTr(Trans::Constants::MINUTE_S)
+                     << tkTr(Trans::Constants::HOUR_S)
+                     << tkTr(Trans::Constants::DAY_S)
+                     << tkTr(Trans::Constants::WEEK_S)
+                     << tkTr(Trans::Constants::MONTH_S)
+                     << tkTr(Trans::Constants::QUARTER_S)
+                     << tkTr(Trans::Constants::YEAR_S)
+                     << tkTr(Trans::Constants::DECADE_S);
+
+    for (int i = 0; i < period_uids.count(); i++)
+    {
+        QString uid = period_uids.at(i);
+        QString p = period_constants.at(i);
+        vals->setValue(Form::FormItemValues::Value_Uuid, i, uid);
+        vals->setValue(Form::FormItemValues::Value_Possible, i, p);
+        m_v_Possibles.push_back(std::unique_ptr<QStandardItem> (new QStandardItem(p)));
+        m_v_Uuids.push_back(std::unique_ptr<QStandardItem> (new QStandardItem(uid)));
+        if (m_DefaultValue.compare(uid, Qt::CaseInsensitive)==0)
+            setDefaultIndex(i);
+    }
 }

@@ -49,7 +49,7 @@ public:
     {
         m_ui->setupUi(q);
         connect(m_ui->repeatRadio, SIGNAL(toggled(bool)), this, SLOT(on_repeatRadio_toggled(bool)));
-        connect(m_ui->distribRadio,SIGNAL(toggled(bool)), this, SLOT(on_distribRadio_toggled(bool)));
+        connect(m_ui->distribRadio, SIGNAL(toggled(bool)), this, SLOT(on_distribRadio_toggled(bool)));
     }
 
     ~DailySchemeViewerPrivate()
@@ -70,12 +70,12 @@ public Q_SLOTS:
         if (checked) {
             m_ui->dailyTableView->setItemDelegateForColumn(DrugsDB::DailySchemeModel::Value, 0);
             m_ui->dailyTableView->hideColumn(1);
-            m_ui->dailyTableView->resizeColumnToContents(0);
+            m_ui->dailyTableView->resizeColumnsToContents();
             q->model()->setMethod(DrugsDB::DailySchemeModel::Repeat);
         } else {
             q->model()->setMethod(DrugsDB::DailySchemeModel::Distribute);
             m_ui->dailyTableView->showColumn(1);
-            m_ui->dailyTableView->resizeColumnToContents(0);
+            m_ui->dailyTableView->resizeColumnsToContents();
             m_ui->dailyTableView->setItemDelegateForColumn(DrugsDB::DailySchemeModel::Value, m_SpinDelegate);
         }
     }
@@ -124,7 +124,7 @@ DailySchemeViewer::~DailySchemeViewer()
 void DailySchemeViewer::setModel(DrugsDB::DailySchemeModel *model)
 {
     d->m_ui->dailyTableView->setModel(model);
-    d->m_ui->dailyTableView->resizeColumnToContents(0);
+    d->m_ui->dailyTableView->resizeColumnsToContents();
     connect(model,SIGNAL(methodChanged()), d, SLOT(on_model_methodchanged()));
     d->on_model_methodchanged();
 }

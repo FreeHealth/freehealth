@@ -79,7 +79,7 @@ public:
 
     QList<Form::FormIODescription *> selectedForms() const;
 
-    void highlighForm(const QString &uuidOrAbsPath);
+    void highlightForm(const QString &uuidOrAbsPath);
 
 private Q_SLOTS:
     void onDescriptionSelected(const QModelIndex &index, const QModelIndex &previous);

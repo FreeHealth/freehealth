@@ -120,7 +120,7 @@ FormPreferencesFileSelectorWidget::FormPreferencesFileSelectorWidget(QWidget *pa
     ui->setupUi(this);
     ui->selector->setIncludeLocalFiles(false);
     ui->selector->setFormType(Form::FormFilesSelectorWidget::CompleteForms);
-    ui->selector->highlighForm(episodeBase()->getGenericFormFile());
+    ui->selector->highlightForm(episodeBase()->getGenericFormFile());
     connect(ui->useButton, SIGNAL(pressed()), this, SLOT(saveFormToBase()));
 }
 
