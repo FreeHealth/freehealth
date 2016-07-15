@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>431</width>
-    <height>348</height>
+    <height>354</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -46,6 +46,13 @@
         </property>
        </widget>
       </item>
+      <item row="3" column="1" colspan="3">
+       <widget class="QComboBox" name="surgicalSpecialtyComboBox">
+        <property name="editable">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
       <item row="2" column="4">
        <widget class="QPushButton" name="medicalSpecialtyClearPushButton">
         <property name="text">
@@ -60,11 +67,15 @@
         </property>
        </widget>
       </item>
-      <item row="3" column="1" colspan="3">
-       <widget class="QComboBox" name="surgicalSpecialtyComboBox"/>
+      <item row="4" column="1" colspan="3">
+       <widget class="QComboBox" name="alliedHealthProfessionsComboBox">
+        <property name="editable">
+         <bool>true</bool>
+        </property>
+       </widget>
       </item>
       <item row="3" column="4">
-       <widget class="QPushButton" name="pushButton_2">
+       <widget class="QPushButton" name="surgicalSpecialtyClearPushButton">
         <property name="text">
          <string>clear</string>
         </property>
@@ -77,27 +88,41 @@
         </property>
        </widget>
       </item>
-      <item row="4" column="1" colspan="3">
-       <widget class="QComboBox" name="alliedHealthProfessionsComboBox"/>
+      <item row="6" column="0" colspan="5">
+       <widget class="QLineEdit" name="address1LineEdit"/>
       </item>
       <item row="4" column="4">
-       <widget class="QPushButton" name="pushButton_3">
+       <widget class="QPushButton" name="alliedHealthProfessionsClearPushButton">
         <property name="text">
          <string>clear</string>
         </property>
        </widget>
       </item>
-      <item row="5" column="0" colspan="5">
-       <widget class="QLineEdit" name="address1LineEdit"/>
-      </item>
-      <item row="6" column="0" colspan="5">
+      <item row="7" column="0" colspan="5">
        <widget class="QLineEdit" name="address2LineEdit"/>
       </item>
-      <item row="7" column="0" colspan="2">
+      <item row="8" column="2" colspan="3">
+       <widget class="QLineEdit" name="cityLineEdit"/>
+      </item>
+      <item row="8" column="0" colspan="2">
        <widget class="QLineEdit" name="zipLineEdit"/>
       </item>
-      <item row="7" column="2" colspan="3">
-       <widget class="QLineEdit" name="cityLineEdit"/>
+      <item row="5" column="0">
+       <widget class="QLabel" name="otherRecipientLabel">
+        <property name="text">
+         <string>other</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="1" colspan="2">
+       <widget class="QLineEdit" name="otherRecipientLineEdit"/>
+      </item>
+      <item row="5" column="4">
+       <widget class="QPushButton" name="otherRecipientClearPushButton">
+        <property name="text">
+         <string>clear</string>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>
@@ -105,5 +130,198 @@
   </layout>
  </widget>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>medicalSpecialtyComboBox</sender>
+   <signal>activated(int)</signal>
+   <receiver>surgicalSpecialtyComboBox</receiver>
+   <slot>clearEditText()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>213</x>
+     <y>115</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>213</x>
+     <y>149</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>medicalSpecialtyComboBox</sender>
+   <signal>activated(int)</signal>
+   <receiver>alliedHealthProfessionsComboBox</receiver>
+   <slot>clearEditText()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>213</x>
+     <y>115</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>213</x>
+     <y>183</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>medicalSpecialtyComboBox</sender>
+   <signal>activated(int)</signal>
+   <receiver>otherRecipientLineEdit</receiver>
+   <slot>clear()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>213</x>
+     <y>115</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>187</x>
+     <y>217</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>surgicalSpecialtyComboBox</sender>
+   <signal>activated(int)</signal>
+   <receiver>medicalSpecialtyComboBox</receiver>
+   <slot>clearEditText()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>213</x>
+     <y>149</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>213</x>
+     <y>115</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>surgicalSpecialtyComboBox</sender>
+   <signal>activated(int)</signal>
+   <receiver>alliedHealthProfessionsComboBox</receiver>
+   <slot>clearEditText()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>213</x>
+     <y>149</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>213</x>
+     <y>183</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>surgicalSpecialtyComboBox</sender>
+   <signal>activated(int)</signal>
+   <receiver>otherRecipientLineEdit</receiver>
+   <slot>clear()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>213</x>
+     <y>149</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>187</x>
+     <y>217</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>alliedHealthProfessionsComboBox</sender>
+   <signal>activated(int)</signal>
+   <receiver>surgicalSpecialtyComboBox</receiver>
+   <slot>clearEditText()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>213</x>
+     <y>183</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>218</x>
+     <y>149</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>alliedHealthProfessionsComboBox</sender>
+   <signal>activated(int)</signal>
+   <receiver>medicalSpecialtyComboBox</receiver>
+   <slot>clearEditText()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>213</x>
+     <y>183</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>213</x>
+     <y>115</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>alliedHealthProfessionsComboBox</sender>
+   <signal>activated(int)</signal>
+   <receiver>otherRecipientLineEdit</receiver>
+   <slot>clear()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>213</x>
+     <y>183</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>187</x>
+     <y>217</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>otherRecipientLineEdit</sender>
+   <signal>textEdited(QString)</signal>
+   <receiver>medicalSpecialtyComboBox</receiver>
+   <slot>clearEditText()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>187</x>
+     <y>217</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>213</x>
+     <y>115</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>otherRecipientLineEdit</sender>
+   <signal>textEdited(QString)</signal>
+   <receiver>surgicalSpecialtyComboBox</receiver>
+   <slot>clearEditText()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>187</x>
+     <y>217</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>213</x>
+     <y>149</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>otherRecipientLineEdit</sender>
+   <signal>textEdited(QString)</signal>
+   <receiver>alliedHealthProfessionsComboBox</receiver>
+   <slot>clearEditText()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>187</x>
+     <y>217</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>213</x>
+     <y>183</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

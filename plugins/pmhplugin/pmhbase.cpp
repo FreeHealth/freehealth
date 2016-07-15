@@ -28,8 +28,8 @@
 /**
   \class PMH::PmhBase
   \brief Provides all read/write access to the PMHx database.
-  No items are deleted in the database, items are putted a trash using the IsValod value. Setting it
-  to false will cause item to be trashed.
+  No items are deleted from the database: they are excluded from view by setting
+  IsValid to false.
 */
 
 #include "pmhbase.h"
@@ -276,7 +276,7 @@ bool PmhBase::createDatabase(const QString &connectionName , const QString &dbNa
     return true;
 }
 
-/** \brief Retreive all PMHx related to a patient. */
+/** \brief Retrieve all PMHx related to a patient. */
 QVector<PmhData *> PmhBase::getPmh(const QString &patientUid) const
 {
     QVector<PmhData *> pmhs;
