@@ -21,9 +21,18 @@
 /***************************************************************************
  *  Main developer: Eric MAEKER, <eric.maeker@gmail.com>                   *
  *  Contributors:                                                          *
- *       NAME <MAIL@ADDRESS.COM>                                           *
+ *       Jerome Pinguet <jerome@jerome.cc>                                 *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
+
+/**
+  \class PmhEpisodeViewer
+  \brief PMHx episode viewer widget. Allow to show, modify, add & remove PMH
+  episodes.
+
+  This class uses TableView class to create the view.
+*/
+
 #include "pmhepisodeviewer.h"
 #include "pmhepisodemodel.h"
 #include "pmhdata.h"
@@ -70,7 +79,8 @@ PmhEpisodeViewer::PmhEpisodeViewer(QWidget *parent) :
     ui->setupUi(this);
 
     // ICD10 coding
-    connect(ui->tableView, SIGNAL(activated(QModelIndex)), this, SLOT(itemActivated(QModelIndex)));
+    connect(ui->tableView, SIGNAL(activated(QModelIndex)),
+            this, SLOT(itemActivated(QModelIndex)));
 }
 
 PmhEpisodeViewer::~PmhEpisodeViewer()
@@ -105,19 +115,24 @@ void PmhEpisodeViewer::setPmhData(Internal::PmhData *pmh)
         pmh->episodeModel()->insertRow(0);
     }
     ui->tableView->setModel(pmh->episodeModel());
+
+    connect(ui->tableView->model(), SIGNAL(rowsInserted(QModelIndex,int,int)),
+            this, SLOT(resizeTableView()));
+    connect(ui->tableView->model(), SIGNAL(rowsRemoved(QModelIndex,int,int)),
+            this, SLOT(resizeTableView()));
+
     ui->tableView->hideColumn(PmhEpisodeModel::IcdXml);
     ui->tableView->hideColumn(PmhEpisodeModel::Contact);
     ui->tableView->hideColumn(PmhEpisodeModel::EmptyColumn);
-#if QT_VERSION < 0x050000
-    ui->tableView->horizontalHeader()->setResizeMode(PmhEpisodeModel::Label, QHeaderView::Stretch);
-    ui->tableView->horizontalHeader()->setResizeMode(PmhEpisodeModel::DateEnd, QHeaderView::Stretch);
-    ui->tableView->horizontalHeader()->setResizeMode(PmhEpisodeModel::DateStart, QHeaderView::Stretch);
-#else
-    // Qt5
-    ui->tableView->horizontalHeader()->setSectionResizeMode(PmhEpisodeModel::Label, QHeaderView::Stretch);
-    ui->tableView->horizontalHeader()->setSectionResizeMode(PmhEpisodeModel::DateEnd, QHeaderView::Stretch);
-    ui->tableView->horizontalHeader()->setSectionResizeMode(PmhEpisodeModel::DateStart, QHeaderView::Stretch);
-#endif
+    //ui->tableView->horizontalHeader()->setSectionResizeMode(PmhEpisodeModel::Label, QHeaderView::Stretch);
+    //ui->tableView->horizontalHeader()->setSectionResizeMode(PmhEpisodeModel::DateEnd, QHeaderView::Stretch);
+    //ui->tableView->horizontalHeader()->setSectionResizeMode(PmhEpisodeModel::DateStart, QHeaderView::Stretch);
+    ui->tableView->horizontalHeader()->setStretchLastSection(true);
+    //ui->tableView->verticalHeader()->setResizeMode(QHeaderView::ResizeToContents);
+    ui->tableView->verticalHeader()->setVisible(false);
+
+    ui->tableView->horizontalHeader()->setResizeMode(QHeaderView::ResizeToContents);
+    resizeTableView();
 }
 
 void PmhEpisodeViewer::clear()
@@ -150,5 +165,22 @@ void PmhEpisodeViewer::changeEvent(QEvent *e)
         break;
     default:
         break;
+    }
+}
+
+/**
+  Resize tableView to display all episodes. Called during view creation and when
+  a new episode is added or removed.
+*/
+void PmhEpisodeViewer::resizeTableView()
+{
+    const int nNumRows = ui->tableView->model()->rowCount();
+    int nRowHeight = ui->tableView->tableView()->rowHeight(0);
+    int nHorizontalHeaderHeight = ui->tableView->horizontalHeader()->height();
+    int nTableHeight = ((nNumRows + 1) * nRowHeight) + nHorizontalHeaderHeight +
+                       2 * ui->tableView->tableView()->lineWidth();
+    if (nNumRows > 0) {
+    ui->tableView->setMinimumHeight(nTableHeight + 2);
+    ui->tableView->setMaximumHeight(nTableHeight + 2);
     }
 }

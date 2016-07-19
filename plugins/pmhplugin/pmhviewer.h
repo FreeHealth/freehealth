@@ -60,7 +60,7 @@ public:
         SimpleMode
     };
 
-    PmhViewer(QWidget *parent = 0, EditMode editMode = ReadOnlyMode, ViewMode viewMode = SimpleMode);
+    PmhViewer(QWidget *parent = 0, EditMode editMode = ReadOnlyMode, ViewMode viewMode = ExtendedMode);
     ~PmhViewer();
 
     void setPatientInfoVisible(bool visible);

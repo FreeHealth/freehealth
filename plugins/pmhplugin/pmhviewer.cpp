@@ -21,7 +21,7 @@
 /***************************************************************************
  *  Main developer: Eric MAEKER, <eric.maeker@gmail.com>                   *
  *  Contributors:                                                          *
- *       NAME <MAIL@ADDRESS.COM>                                           *
+ *       Jerome Pinguet <jerome@jerome.cc>                                 *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 
@@ -175,7 +175,13 @@ private:
 } // End namespace PMH
 
 
-/** \brief Creates a new PMH::PmhViewer with the specified \e editMode. \sa PMH::PmhViewer::EditMode */
+/** \brief Creates a new PMH::PmhViewer with the specified \e editMode.
+ *
+ * ViewMode can be set to SimpleMode or ExtendedMode (with widgetBar:
+ * Episodes, Management, Contacts, Links, Comment)
+ * By default ViewMode is set to ExtendedMode.
+ * \sa PMH::PmhViewer::EditMode
+*/
 PmhViewer::PmhViewer(QWidget *parent, EditMode editMode, ViewMode viewMode) :
     QWidget(parent), d(new PmhViewerPrivate(this))
 {
@@ -201,7 +207,11 @@ PmhViewer::PmhViewer(QWidget *parent, EditMode editMode, ViewMode viewMode) :
     // Manage View Mode
     d->m_ViewMode = viewMode;
     if (viewMode==ExtendedMode) {
-        d->ui->simpleBox->hide();
+        connect(d->ui->personalLabel, SIGNAL(textChanged(QString)), this, SLOT(onSimpleViewLabelChanged(QString)));
+        d->ui->tabWidget->setTabEnabled(1, false); // Management tab disabled
+        d->ui->tabWidget->setTabEnabled(2, false); // Contacts tab disabled
+        d->ui->tabWidget->setTabEnabled(3, false); // Links tab disabled
+        d->ui->icdCodes->setModel(d->m_IcdLabelModel);
     } else {  // SimpleMode
         d->ui->tabWidget->hide();
         d->ui->icdCodes->setModel(d->m_IcdLabelModel);
