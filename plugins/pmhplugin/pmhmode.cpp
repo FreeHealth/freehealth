@@ -338,10 +338,17 @@ void PmhModeWidget::createPmh()
 /** When a PMHx is added to the PmhCategoryModel re-expand all items of the category view */
 void PmhModeWidget::pmhModelRowsInserted(const QModelIndex &parent, int start, int end)
 {
+    qWarning() << "inside PmhModeWidget::pmhModelRowsInserted()";
     ui->treeView->expand(parent);
     for(int i=start; i != end+1; ++i) {
         ui->treeView->expand(catModel()->index(i, PmhCategoryModel::Label, parent));
     }
+    catModel()->refreshSynthesis();
+    if (catModel()->isSynthesis(ui->treeView->currentIndex())) {
+        ui->pmhSynthesisBrowser->setHtml(catModel()->synthesis());
+        ui->stackedWidget->setCurrentWidget(ui->pageSynthesis);
+    }
+
 }
 
 void PmhModeWidget::hideEvent(QHideEvent *event)

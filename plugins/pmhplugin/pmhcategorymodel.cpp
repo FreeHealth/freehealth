@@ -880,6 +880,8 @@ bool PmhCategoryModel::addPmhData(PmhData *pmh)
         // Send to database
         base()->savePmhData(pmh);
         d->_htmlSynthesis.clear();
+        QAbstractItemModel *m = dynamic_cast<QAbstractItemModel*>(this);
+        m->dataChanged(QModelIndex(), QModelIndex());
         return true;
     } else {
         // Add PMH
@@ -908,6 +910,8 @@ bool PmhCategoryModel::addPmhData(PmhData *pmh)
         d->pmhToItem(pmh, item, rowCount(newParentIndex));
         endInsertRows();
         d->_htmlSynthesis.clear();
+        QAbstractItemModel *m = dynamic_cast<QAbstractItemModel*>(this);
+        m->layoutChanged();
     }
     return true;
 }
