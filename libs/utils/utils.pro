@@ -81,7 +81,6 @@ HEADERS += global_exporter.h \
     hprimparser.h \
     databasecsvimportator.h \
     passwordandlogin.h \
-    widgets/qdateeditex/qtableviewex.h \
     widgets/qdateeditex/qdateeditex.h
 
 SOURCES += global.cpp \
