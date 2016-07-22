@@ -21,7 +21,7 @@
 /***************************************************************************
  *  Main developer: Eric MAEKER, <eric.maeker@gmail.com>                   *
  *  Contributors:                                                          *
- *       NAME <MAIL@ADDRESS.COM>                                           *
+ *       Jerome Pinguet <jerome@jerome.cc                                  *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 /**
@@ -159,12 +159,7 @@ PmhModeWidget::PmhModeWidget(QWidget *parent) :
         ui->treeView->hideColumn(i);
     ui->treeView->showColumn(PmhCategoryModel::Label);
     ui->treeView->header()->setStretchLastSection(false);
-#if QT_VERSION < 0x050000
-    ui->treeView->header()->setResizeMode(PmhCategoryModel::Label, QHeaderView::Stretch);
-#else
-    // Qt5
     ui->treeView->header()->setSectionResizeMode(PmhCategoryModel::Label, QHeaderView::Stretch);
-#endif
 
     // connect the aAddPmh action
     cmd = actionManager()->command(Constants::A_PMH_NEW);

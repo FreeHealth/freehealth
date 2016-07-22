@@ -21,7 +21,7 @@
 /***************************************************************************
  *  Main developer: Eric MAEKER, <eric.maeker@gmail.com>                   *
  *  Contributors:                                                          *
- *       NAME <MAIL@ADDRESS.COM>                                           *
+ *       Jerome Pinguet <jerome@jerome.cc>                                 *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 
@@ -276,7 +276,7 @@ bool PmhBase::createDatabase(const QString &connectionName , const QString &dbNa
     return true;
 }
 
-/** \brief Retreive all PMHx related to a patient. */
+/** \brief Retrieve all PMHx related to a patient. */
 QVector<PmhData *> PmhBase::getPmh(const QString &patientUid) const
 {
     QVector<PmhData *> pmhs;

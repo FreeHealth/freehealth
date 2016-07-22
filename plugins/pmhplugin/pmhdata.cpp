@@ -21,7 +21,7 @@
 /***************************************************************************
  *  Main developer: Eric MAEKER, <eric.maeker@gmail.com>                   *
  *  Contributors:                                                          *
- *       NAME <MAIL@ADDRESS.COM>                                           *
+ *       Jerome Pinguet <jerome@jerome.cc>                                 *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #include "pmhdata.h"
@@ -71,8 +71,11 @@ public:
 PmhEpisodeData::PmhEpisodeData() :
         d(new PmhEpisodeDataPrivate)
 {
-    // Default start date is currentDate
-    d->m_Data.insert(PmhEpisodeData::DateStart, QDate::currentDate());
+    // Default start date is invalid date, see DateEditEx class for explanation
+    d->m_Data.insert(PmhEpisodeData::DateStart, QDate());
+    // Default end date is invalid date, see DateEditEx class for explanation
+    d->m_Data.insert(PmhEpisodeData::DateEnd, QDate());
+
     d->m_Data.insert(PmhEpisodeData::DbOnly_IsValid, true);
 }
 

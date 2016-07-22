@@ -80,7 +80,9 @@ HEADERS += global_exporter.h \
     waitforsignal.h \
     hprimparser.h \
     databasecsvimportator.h \
-    passwordandlogin.h
+    passwordandlogin.h \
+    widgets/qdateeditex/qtableviewex.h \
+    widgets/qdateeditex/qdateeditex.h
 
 SOURCES += global.cpp \
     database.cpp \
@@ -145,7 +147,8 @@ SOURCES += global.cpp \
     waitforsignal.cpp \
     hprimparser.cpp \
     databasecsvimportator.cpp \
-    passwordandlogin.cpp
+    passwordandlogin.cpp \
+    widgets/qdateeditex/qdateeditex.cpp
 
 #macx {
 #    OBJECTIVE_SOURCES += iconbadgealert.mm
@@ -155,7 +158,8 @@ SOURCES += global.cpp \
 #}
 
 # resources
-#RESOURCES += $${SOURCES_GLOBAL_RESOURCES}/pixmap/svg/fancytoolbutton.svg
+RESOURCES += \
+    widgets/qdateeditex/widgets.qrc
 
 FORMS += \
     widgets/genericdescriptioneditor.ui \
@@ -163,7 +167,6 @@ FORMS += \
     widgets/genericinformationeditordialog.ui \
     widgets/loginwidget.ui \
     widgets/basiclogindialog.ui
-
 
 # include translations
 TRANSLATION_NAME = utils
