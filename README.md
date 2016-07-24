@@ -12,6 +12,8 @@ FreeMedForms project is an open source medical project:
 - ICD10 coding assistant: FreeICD
 - French specific coding assistant: FreeDRC (in partnership with the SMFG)
 
+[Download FreeMedForms applications]
+
 FreeMedForms and derivatives are coded in C++ / Qt5.
 
 FreeMedForms officially supported OS:
@@ -41,9 +43,10 @@ Feel free to ask any question
 ### Can I make a donation?
     
 Yes! Go to our [Donation page].
-Your money will go to the [french non-profit organization]
+Your money will go to the french non-profit organization [asso.freemedforms.com]
 Donating will speed up the development process
 
+[Download FreeMedForms applications]: https://freemedforms.com/en/downloads
 [website]: https://freemedforms.com/
 [GitHub]: https://github.com/FreeMedForms/freemedforms
 [Build instructions]: https://freemedforms.com/en/code_doc
@@ -53,4 +56,4 @@ Donating will speed up the development process
 [Contribute]: https://freemedforms.com/en/contribute
 [Forum]: https://freemedforms.com/forum
 [Donation page]: https://freemedforms.com/en/donation
-[french non-profit organization]: asso.freemedforms.com](https://freemedforms.com/en/asso/start
+[asso.freemedforms.com]: https://freemedforms.com/en/asso/start
