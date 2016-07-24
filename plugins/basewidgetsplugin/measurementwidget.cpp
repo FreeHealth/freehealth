@@ -285,6 +285,28 @@ void MeasurementWidget::retranslate()
 {
     if (m_Label)
         m_Label->setText(m_FormItem->spec()->label());
+    if (m_isLength) {
+        QStringList length_units;
+        length_units << tkTr(Trans::Constants::CENTIMETER_S)
+                     << tkTr(Trans::Constants::METER_S)
+                     << tkTr(Trans::Constants::INCH_S)
+                     << tkTr(Trans::Constants::FOOT_S);
+        for (int i = 0; i < length_units.count(); i++) {
+            m_units->setItemText(i, length_units.at(i));
+        }
+
+    }
+    if (m_isWeight) {
+        QStringList weight_units;
+        weight_units << tkTr(Trans::Constants::GRAM_S)
+                     << tkTr(Trans::Constants::KILOGRAM_S)
+                     << tkTr(Trans::Constants::OUNCE_S)
+                     << tkTr(Trans::Constants::POUND_S);
+        for (int i = 0; i < weight_units.count(); i++) {
+            m_units->setItemText(i, weight_units.at(i));
+        }
+
+    }
     // TODO: retranslate units combobox
 }
 
