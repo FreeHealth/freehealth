@@ -1,12 +1,13 @@
-# The FreeMedForms Project
+# FreeMedForms
 # Copyright (C) 2008-2016 by Eric MAEKER
 # https://freemedforms.com
 
 
-### What is the FreeMedForms project?
+### What is FreeMedForms?
 
-FreeMedForms project is an open source medical project:
-- Electronic Medical Record: FreeMedForms EMR
+FreeMedForms is a free and open source software community building healthcare
+applications:
+- Electronic Medical Record / Electronic Health Record: FreeMedForms EMR
 - Pharmaceutical drug prescription assistant: FreeDiams
 - Drug and drug-interaction database manager: FreeDDIManager
 - ICD10 coding assistant: FreeICD
@@ -16,14 +17,14 @@ FreeMedForms project is an open source medical project:
 
 FreeMedForms and derivatives are coded in C++ / Qt5.
 
-FreeMedForms officially supported OS:
+Supported OS:
 - Mac OS: 10.9 Mavericks (64 bit), 10.10 Yosemite, 10.11 El Capitan
 - GNU/Linux: Debian, Ubuntu
 - Windows: Windows 7 (32 bit & 64 bit), Windows 8, Windows 10
 
 ### Where can I find informations about FreeMedForms?
 
-- Main [website]
+- [website]
 - Sources and issues are located on [GitHub]
 - [Build instructions]
 - [Code documentation]
