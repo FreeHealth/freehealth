@@ -307,7 +307,6 @@ void MeasurementWidget::retranslate()
         }
 
     }
-    // TODO: retranslate units combobox
 }
 
 ////////////////////////////////////////// ItemData /////////////////////////////////////////////

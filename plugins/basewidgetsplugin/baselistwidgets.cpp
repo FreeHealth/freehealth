@@ -164,7 +164,27 @@ QString BaseList::printableHtml(bool withValues) const
         content.prepend("<ul>");
         content.append("</ul>");
     }
-    return content;
+    if (m_FormItem->getOptions().contains(Constants::DONTPRINTLABEL, Qt::CaseInsensitive)) {
+        return content;
+    } else {
+        return QString("<table width=100% border=1 cellpadding=0 cellspacing=0  style=\"margin: 5px 0px 0px 0px\">"
+                   "<thead>"
+                   "<tr>"
+                   "<td style=\"vertical-align: top; font-weight: bold; padding: 5px\">"
+                   "%1"
+                   "</td>"
+                   "</tr>"
+                   "</thead>"
+                   "<tbody>"
+                   "<tr>"
+                   "<td style=\"vertical-align: top; padding-left:2em; padding-top:5px; padding-bottom: 5px; padding-right:2em\">"
+                   "%2"
+                   "</td>"
+                   "</tr>"
+                   "</tbody>"
+                   "</table>")
+            .arg(m_FormItem->spec()->label()).arg(content);
+    }
 }
 
 void BaseList::retranslate()

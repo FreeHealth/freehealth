@@ -123,7 +123,7 @@
      <option>compact</option>
      <column>1</column>
      <Item>
-       <name>listsample</name>
+       <name>uniquelistsample</name>
        <type>uniquelist</type>
        <label>Unique selection list</label>
         <value>
@@ -134,6 +134,21 @@
           <uuid id="1">second</uuid>
           <uuid id="2">third</uuid>
         </value>
+     </Item>
+
+     <Item>
+       <name>uniquelistsampledontprintlabel</name>
+       <type>uniquelist</type>
+       <label>Unique selection list with dontprintlabel option</label>
+        <value>
+          <possible id="0">First Element (DontPrintLabel)</possible>
+          <possible id="1">Second Element (DontPrintLabel)</possible>
+          <possible id="2">Third Element (DontPrintLabel)</possible>
+          <uuid id="0">first</uuid>
+          <uuid id="1">second</uuid>
+          <uuid id="2">third</uuid>
+        </value>
+        <option>DontPrintLabel</option>
      </Item>
 
      <Item>
