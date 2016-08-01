@@ -21,7 +21,7 @@
 /***************************************************************************
  *  Main developer: Eric MAEKER, <eric.maeker@gmail.com>                   *
  *  Contributors:                                                          *
- *       NAME <MAIL@ADDRESS.COM>                                           *
+ *       Jerome Pinguet <jerome@jerome.cc                                  *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #include "pmhcore.h"
@@ -40,6 +40,8 @@
 #include <extensionsystem/pluginmanager.h>
 
 #include <QApplication>
+
+#include <../tests/modeltest/modeltest.h>
 
 using namespace PMH;
 using namespace Internal;
@@ -60,6 +62,8 @@ PmhCore *PmhCore::instance(QObject *parent)
     }
     return m_Instance;
 }
+
+class ModelTest;
 
 namespace PMH {
 namespace Internal {
