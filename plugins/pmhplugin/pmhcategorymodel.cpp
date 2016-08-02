@@ -21,11 +21,7 @@
 /***************************************************************************
  *  Main developer: Eric MAEKER, <eric.maeker@gmail.com>                   *
  *  Contributors:                                                          *
-<<<<<<< HEAD
- *       Jerome Pinguet <jerome@jerome.cc                                  *
-=======
  *       Jerome Pinguet <jerome@jerome.cc>                                 *
->>>>>>> hotfix-0.9.8-i170
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 
