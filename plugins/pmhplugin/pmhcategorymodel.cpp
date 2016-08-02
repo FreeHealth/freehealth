@@ -21,7 +21,7 @@
 /***************************************************************************
  *  Main developer: Eric MAEKER, <eric.maeker@gmail.com>                   *
  *  Contributors:                                                          *
- *       NAME <MAIL@ADDRESS.COM>                                           *
+ *       Jerome Pinguet <jerome@jerome.cc>                                 *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 
@@ -297,9 +297,16 @@ public:
         }
     }
 
+    /**
+     * \brief Create treeItem items to display pmh data information in the tree
+     * view
+     * \param pmh
+     * \param item
+     * \param childNumber
+     */
     void pmhToItem(PmhData *pmh, TreeItem *item, int childNumber = -1)
     {
-        // Master Item (shows user label)
+        // Master Item (show user label)
         item->setPmhData(pmh);
         item->setLabel(pmh->data(PmhData::Label).toString());
         _pmhToItems.insert(pmh, item);
@@ -307,25 +314,8 @@ public:
         // Add type as child of Master Item
         pmhToItemType(pmh, item);
 
-        // Add status as children of the Master Item
+        // Add status as child of the Master Item
         pmhToItemStatus(pmh, item);
-
-        /** Add episodes
-        if (pmh->episodeModel()->rowCount() == 1) {
-            // One episodeData PMHx
-            PmhEpisodeData *episode = pmh->episodes().at(0);
-
-
-
-            // Add ICD codings
-            foreach(const QString &icd, episode->data(PmhEpisodeData::IcdLabelStringList).toStringList()) {
-                TreeItem *child = new TreeItem(item);
-                child->setLabel(icd);
-                child->setPmhData(pmh);
-                child->setIcon(theme()->icon(Core::Constants::ICONFREEICD));
-            }
-
-        } else {**/
 
         foreach(PmhEpisodeData *episode, pmh->episodes()) {
             // If at least one date exists, create a new item to show it
@@ -333,20 +323,6 @@ public:
                     || !episode->data(PmhEpisodeData::DateEnd).isNull()) {
                 pmhToItemDate(pmh, item, episode);
             }
-            /**TreeItem *child = new TreeItem(item);
-            //child->setLabel(episode->data(PmhEpisodeData::Label).toString());
-            //child->setPmhData(pmh);
-            //QString label;
-            //QString dateEnd = tkTr(Trans::Constants::NOW);
-            //if (!episode->data(PmhEpisodeData::DateEnd).isNull())
-                dateEnd = episode->data(PmhEpisodeData::DateEnd).toDate().toString(QLocale().dateFormat());
-            label = QString("%1 to %2")
-                    .arg(episode->data(PmhEpisodeData::DateStart).toDate().toString(QLocale().dateFormat()))
-                    .arg(dateEnd);
-            child = new TreeItem(child);
-            child->setLabel(label);
-            child->setPmhData(pmh);**/
-
             // Add ICD codings
             foreach(const QString &icd, episode->data(PmhEpisodeData::IcdLabelStringList).toStringList()) {
                 TreeItem *child = new TreeItem(item);
