@@ -304,62 +304,54 @@ public:
         item->setLabel(pmh->data(PmhData::Label).toString());
         _pmhToItems.insert(pmh, item);
 
-        // Add type and status as children of the Master Item
-        TreeItem *child = new TreeItem(item);
-        child->setLabel(Constants::typeToString(pmh->data(PmhData::Type).toInt()));
-        child->setPmhData(pmh);
-        child = new TreeItem(item);
-        child->setLabel(Constants::statusToString(pmh->data(PmhData::State).toInt()));
-        child->setPmhData(pmh);
+        // Add type as child of Master Item
+        pmhToItemType(pmh, item);
 
-        // Add episodes
+        // Add status as children of the Master Item
+        pmhToItemStatus(pmh, item);
+
+        /** Add episodes
         if (pmh->episodeModel()->rowCount() == 1) {
             // One episodeData PMHx
             PmhEpisodeData *episode = pmh->episodes().at(0);
-            QString label = episode->data(PmhEpisodeData::Label).toString();
-            child = new TreeItem(item);
-            child->setPmhData(pmh);
-            if (!episode->data(PmhEpisodeData::DateEnd).isNull()) {
-                label += QString(" (%1 %2 %3)")
-                        .arg(episode->data(PmhEpisodeData::DateStart).toDate().toString(QLocale().dateFormat(QLocale::ShortFormat)))
-                        .arg(tkTr(Trans::Constants::TO))
-                        .arg(episode->data(PmhEpisodeData::DateEnd).toDate().toString(QLocale().dateFormat(QLocale::ShortFormat)));
-            } else {
-                label += QString(" (%1)")
-                        .arg(episode->data(PmhEpisodeData::DateStart).toDate().toString(QLocale().dateFormat(QLocale::ShortFormat)));
-            }
-            child->setLabel(label);
+
+
 
             // Add ICD codings
             foreach(const QString &icd, episode->data(PmhEpisodeData::IcdLabelStringList).toStringList()) {
-                child = new TreeItem(child);
+                TreeItem *child = new TreeItem(item);
                 child->setLabel(icd);
                 child->setPmhData(pmh);
                 child->setIcon(theme()->icon(Core::Constants::ICONFREEICD));
             }
 
-        } else {
-            // Multiple episodeData PMHx
-            foreach(PmhEpisodeData *episode, pmh->episodes()) {
-                child = new TreeItem(item);
-                child->setLabel(episode->data(PmhEpisodeData::Label).toString());
+        } else {**/
+
+        foreach(PmhEpisodeData *episode, pmh->episodes()) {
+            // If at least one date exists, create a new item to show it
+            if (!episode->data(PmhEpisodeData::DateStart).isNull()
+                    || !episode->data(PmhEpisodeData::DateEnd).isNull()) {
+                pmhToItemDate(pmh, item, episode);
+            }
+            /**TreeItem *child = new TreeItem(item);
+            //child->setLabel(episode->data(PmhEpisodeData::Label).toString());
+            //child->setPmhData(pmh);
+            //QString label;
+            //QString dateEnd = tkTr(Trans::Constants::NOW);
+            //if (!episode->data(PmhEpisodeData::DateEnd).isNull())
+                dateEnd = episode->data(PmhEpisodeData::DateEnd).toDate().toString(QLocale().dateFormat());
+            label = QString("%1 to %2")
+                    .arg(episode->data(PmhEpisodeData::DateStart).toDate().toString(QLocale().dateFormat()))
+                    .arg(dateEnd);
+            child = new TreeItem(child);
+            child->setLabel(label);
+            child->setPmhData(pmh);**/
+
+            // Add ICD codings
+            foreach(const QString &icd, episode->data(PmhEpisodeData::IcdLabelStringList).toStringList()) {
+                TreeItem *child = new TreeItem(item);
+                child->setLabel(icd);
                 child->setPmhData(pmh);
-                QString label;
-                QString dateEnd = tkTr(Trans::Constants::NOW);
-                if (!episode->data(PmhEpisodeData::DateEnd).isNull())
-                    dateEnd = episode->data(PmhEpisodeData::DateEnd).toDate().toString(QLocale().dateFormat());
-                label = QString("%1 to %2")
-                        .arg(episode->data(PmhEpisodeData::DateStart).toDate().toString(QLocale().dateFormat()))
-                        .arg(dateEnd);
-                child = new TreeItem(child);
-                child->setLabel(label);
-                child->setPmhData(pmh);
-                // Add ICD codings
-                foreach(const QString &icd, episode->data(PmhEpisodeData::IcdLabelStringList).toStringList()) {
-                    child = new TreeItem(child);
-                    child->setLabel(icd);
-                    child->setPmhData(pmh);
-                }
             }
         }
 
@@ -385,6 +377,60 @@ public:
         } else {
             _rootItem->insertChild(childNumber,item);
         }
+    }
+
+    /**
+     * \brief pmhToItemType: create a child TreeItem for a pmh TreeItem item
+     * representing pmhdata "type" (Chronic disease, ...) in treeView
+     * \param pmh
+     * \param item
+     * If pmh type is not defined, do not create any item.
+     */
+    void pmhToItemType(PmhData *pmh, TreeItem *item)
+    {
+        if (pmh->data(PmhData::Type).toInt()
+                != PMH::Constants::MHType::NoTypeDefined) {
+            TreeItem *child = new TreeItem(item);
+            child->setLabel(Constants::typeToString(pmh->data(PmhData::Type).toInt()));
+            child->setPmhData(pmh);
+        }
+    }
+
+    /**
+     * \brief pmhToItemStatus: create a child TreeItem for a pmh TreeItem item
+     * representing pmhdata "status" (Active, In remission...) in treeView
+     * \param pmh
+     * \param item
+     * If pmh status is not defined, do not create any item.
+     */
+    void pmhToItemStatus(PmhData *pmh, TreeItem *item)
+    {
+        if (pmh->data(PmhData::State).toInt()
+                != PMH::Constants::MHStatus::NoStatusDefined) {
+            TreeItem *child = new TreeItem(item);
+            child->setLabel(Constants::statusToString(pmh->data(PmhData::State).toInt()));
+            child->setPmhData(pmh);
+        }
+    }
+
+    /**
+     * \brief pmhToItemDate add a child item to a PMH item showing start and end
+     * dates
+     * \param pmh
+     * \param item
+     * Rightwards (or leftwards for right to left languages) arrow is added.
+     */
+    void pmhToItemDate(PmhData *pmh, TreeItem *item, PmhEpisodeData *episode)
+    {
+        QString label;
+        TreeItem *child = new TreeItem(item);
+        child->setPmhData(pmh);
+        label = QString("%1%2%3%4")
+                .arg((pmh->episodes().indexOf(episode)==0) ? QString() : (episode->data(PmhEpisodeData::Label).toString() + ":"))
+                .arg(episode->data(PmhEpisodeData::DateStart).toDate().toString(QLocale().dateFormat(QLocale::ShortFormat)))
+                .arg(((QGuiApplication::isLeftToRight()) ? QString("\u279D") : QString("\u2190")))
+                .arg(episode->data(PmhEpisodeData::DateEnd).toDate().toString(QLocale().dateFormat(QLocale::ShortFormat)));
+        child->setLabel(label);
     }
 
     Category::CategoryItem *findCategory(const int id)
