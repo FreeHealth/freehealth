@@ -48,13 +48,8 @@
 #include <QFileDialog>
 #include <QToolButton>
 #include <QAction>
-#if QT_VERSION < 0x050000
-#include <QPrinterInfo>
-#include <QPrinter>
-#else
 #include <QtPrintSupport/QPrinterInfo>
 #include <QtPrintSupport/QPrinter>
-#endif
 
 #include <QDebug>
 
@@ -75,6 +70,16 @@ PrintDialog::PrintDialog(QWidget *parent) :
 {
     ui->setupUi(this);
 //    setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+    m_previewLabel = new QLabel();
+    m_previewLabel->setScaledContents(true);
+    ui->gridLayout->addWidget(m_previewLabel, 0, 0);
+    // temporary fix to respect A4 aspect ratio
+    //this->resize(this->parentWidget()->height()*0.7, this->parentWidget()->height()*0.9);
+    m_previewLabel->setFixedSize(this->parentWidget()->height()*0.9*0.707070707,
+                                 this->parentWidget()->height()*0.9);
+
+    //m_previewLabel->setScaledContents(false);
+
     ui->labelPresets->hide();
     ui->presetsCombo->hide();
 
@@ -118,6 +123,7 @@ PrintDialog::PrintDialog(QWidget *parent) :
     connect(toolButton, SIGNAL(triggered(QAction*)), this, SLOT(toFile(QAction*)));
 
     ui->buttonBox->addButton(tkTr(Trans::Constants::FILEPRINT_TEXT).remove("&"), QDialogButtonBox::YesRole);
+    this->adjustSize();
 }
 
 PrintDialog::~PrintDialog()
@@ -269,19 +275,19 @@ void PrintDialog::previewPage(int n)
     m_PreviewingPage = n;
 
     if (!ui->nup->isChecked()) {
-        ui->preview->setMinimumSize(onePageSize());
-        ui->preview->setMaximumSize(onePageSize());
-        ui->preview->setPixmap(onePagePreview(m_Printer->printer()->paperRect().size(),
+        m_previewLabel->setMinimumSize(onePageSize());
+        //ui->preview->setMaximumSize(onePageSize());
+        m_previewLabel->setPixmap(onePagePreview(m_Printer->printer()->paperRect().size(),
                                               m_Printer->printer()->pageRect().size(),
-                                              ui->preview->size(),
+                                              m_previewLabel->size(),
                                               n+1, m_Printer));
         ui->viewPageLabel->setText(QString("%1 of %2").arg(n+1).arg(m_Printer->pages().count()));
     } else {
-        ui->preview->setMinimumSize(twoNUpPagesSize());
-        ui->preview->setMaximumSize(twoNUpPagesSize());
-        ui->preview->setPixmap(twoNUpPreview(m_Printer->printer()->paperRect().size(),
+        m_previewLabel->setMinimumSize(twoNUpPagesSize());
+        //m_previewLabel->setMaximumSize(twoNUpPagesSize());
+        m_previewLabel->setPixmap(twoNUpPreview(m_Printer->printer()->paperRect().size(),
                                              m_Printer->printer()->pageRect().size(),
-                                             ui->preview->size(),
+                                             m_previewLabel->size(),
                                              n+1, m_Printer));
         ui->viewPageLabel->setText(QString("%1-%2 of %3").arg(n+1).arg(n+2).arg(m_Printer->pages().count()));
     }
