@@ -339,20 +339,25 @@ void EpisodeBase::populateWithDefaultValues()
 
 /**
  * Checks the current version of the database.
- * Returns \e true if the version is the lastest one.
+ * Returns \e true if the version is the latest one.
  */
 bool EpisodeBase::checkDatabaseVersion()
 {
     Utils::Field vField(Constants::Table_VERSION, Constants::VERSION_TEXT);
     QString currentVersion = getVersion(vField);
-    // Updates from 0.1
+    if (currentVersion == Constants::DB_ACTUALVERSION) {
+        return true;
+    }
+    // Updates from 0.1 to 0.2
     if (currentVersion == "0.1") {
         if (!alterTableForNewField(Constants::Table_EPISODES, Constants::EPISODES_PRIORITY))
             return false;
+        setVersion(vField, "0.2");
         LOG(tr("Episode database updated from version %1 to version: %2")
             .arg("0.1")
-            .arg(Constants::DB_ACTUALVERSION));
+            .arg("0.2"));
     }
+
     // Update from version 0.2 to version 1
     if (currentVersion == "0.2") {
         QSqlDatabase db = QSqlDatabase::database(DB_NAME);
@@ -368,14 +373,16 @@ bool EpisodeBase::checkDatabaseVersion()
             QString req = "ALTER TABLE EPISODES MODIFY USERDATE TIMESTAMP DEFAULT CURRENT_TIMESTAMP;";
             QSqlQuery q(db);
             if (!q.exec(req)) {                                                 
-                //LOG_QUERY_ERROR_FOR("Update database episodes from version 0.2 to 1", q);
+                LOG_QUERY_ERROR_FOR("Update database episodes from version 0.2 to 1", q);
                 return false;                       
             }
+        setVersion(vField, "1");
         LOG(tr("Episode database updated from version %1 to version: %2")       
             .arg("0.2")                                                         
             .arg("1"));
         }
         if (db.driverName()=="QSQLITE") {
+        setVersion(vField, "1");
         LOG(tr("No change happened but episode database updated from version %1 to version: %2")       
             .arg("0.2")                                                         
             .arg("1"));
