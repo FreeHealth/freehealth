@@ -348,7 +348,7 @@ void PmhViewer::onSimpleViewIcdClicked()
         const QStringList &icdLabels = d->m_Pmh->episodeModel()->index(0, PmhEpisodeModel::IcdLabelStringList).data().toStringList();
         d->m_IcdLabelModel->setStringList(icdLabels);
         // if pmh does not have a label -> populate label with ICD labels
-        if (d->m_Pmh->data(PmhData::Label).toString().isEmpty()) {
+        if (d->m_Pmh->data(PmhData::Label).toString().isEmpty() && d->ui->personalLabel->text().isEmpty()) {
             d->m_Pmh->setData(PmhData::Label, icdLabels.join(", "));
             d->ui->personalLabel->setText(d->m_Pmh->data(PmhData::Label).toString());
         }
