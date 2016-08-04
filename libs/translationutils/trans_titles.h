@@ -46,6 +46,7 @@ const char* const GENDER        = QT_TRANSLATE_NOOP("tkConstants", "Gender");
 const char* const MALE          = QT_TRANSLATE_NOOP("tkConstants", "Male");
 const char* const FEMALE        = QT_TRANSLATE_NOOP("tkConstants", "Female");
 const char* const HERMAPHRODISM = QT_TRANSLATE_NOOP("tkConstants", "Hermaphrodism");
+const char* const OTHER         = QT_TRANSLATE_NOOP("tkConstants", "Other");
 
 // Titles && professions
 const char* const MISTER      = QT_TRANSLATE_NOOP("tkConstants", "Mister");
