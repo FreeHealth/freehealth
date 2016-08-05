@@ -87,6 +87,9 @@ private:
     void changeEvent(QEvent *e);
     void retranslate();
 
+private slots:
+    void sqliteWarn(int i);
+
 private:
     QLabel *langLabel, *typeLabel;
     Utils::LanguageComboBox *combo;

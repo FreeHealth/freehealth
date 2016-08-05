@@ -86,9 +86,9 @@ namespace {
 
     // Keep these constants sync with the AppConfigWizard typeOfInstall combo order
     enum typeOfInstallComboOrder {
-        INSTALLING_SQLITE = 0,
+        INSTALLING_MYSQL_SERVER = 0,
         INSTALLING_MYSQL_CLIENT,
-        INSTALLING_MYSQL_SERVER
+        INSTALLING_SQLITE
     };
 
     class CoreFirstRunPage : public Core::IFirstConfigurationPage
@@ -160,7 +160,7 @@ namespace {
         // get grants on database for the user
         Utils::Database::Grants grants = Utils::Database::getConnectionGrants(connection);
 
-        // if grants not suffisant -> warning dialog
+        // if grants not sufficient -> warning dialog
         if (!((grants & Utils::Database::Grant_Select) &&
               (grants & Utils::Database::Grant_Update) &&
               (grants & Utils::Database::Grant_Insert) &&
@@ -333,6 +333,8 @@ CoreConfigPage::CoreConfigPage(QWidget *parent) :
     registerField(::FIELD_TYPEOFINSTALL, installCombo, "currentIndex");
 
     retranslate();
+    QObject::connect(installCombo, static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
+                     this, &CoreConfigPage::sqliteWarn);
 }
 
 void CoreConfigPage::retranslate()
@@ -347,13 +349,13 @@ void CoreConfigPage::retranslate()
 
     installCombo->clear();
     // Keep typeOfInstall combo order sync with the constants:
-    // INSTALLING_SQLITE, INSTALLING_MYSQL_CLIENT, INSTALLING_MYSQL_SERVER
-    installCombo->addItem(theme()->icon(Constants::ICONCOMPUTER), tr("Single computer"));
+    // INSTALLING_MYSQL_SERVER, INSTALLING_MYSQL_CLIENT, INSTALLING_SQLITE
     if (QSqlDatabase::drivers().contains("QMYSQL")) {
         // FIXME: test if mysql-client/mysql-server is available on this machine
-        installCombo->addItem(theme()->icon(Constants::ICONNETWORK), tr("Network (as client)"));
-        installCombo->addItem(theme()->icon(Constants::ICONNETWORK), tr("Network (as server)"));
+        installCombo->addItem(theme()->icon(Constants::ICONNETWORK), tr("Create MySQL databases"));
+        installCombo->addItem(theme()->icon(Constants::ICONNETWORK), tr("Connect to MySQL databases"));
     }
+    installCombo->addItem(theme()->icon(Constants::ICONCOMPUTER), tr("Test without MySQL"));
 }
 
 bool CoreConfigPage::validatePage()
@@ -368,7 +370,7 @@ bool CoreConfigPage::validatePage()
         connector.setClearPass("fmf_admin");
         connector.setDriver(Utils::Database::SQLite);
         connector.setAccessMode(Utils::DatabaseConnector::ReadWrite);
-        // Path are automatically informed by settings()
+        // Paths are automatically informed by settings()
         settings()->setDatabaseConnector(connector);
         break;
     }
@@ -421,6 +423,41 @@ void CoreConfigPage::changeEvent(QEvent *e)
     default:
         break;
     }
+}
+
+void CoreConfigPage::sqliteWarn(int i)
+{
+    if (i==INSTALLING_SQLITE) {
+        QMessageBox msgBox;
+        msgBox.setIcon(QMessageBox::Warning);
+        msgBox.setText("Test FreeMedForms without MySQL");
+        msgBox.setInformativeText(tr("<b>This simplified installation procedure is"
+                                     " for testing  only.</b> \n"
+                                     "It is using SQLite as a temporary"
+                                     " database. We do not recommand to use"
+                                     " SQLite for medical data because its"
+                                     " support will end soon. If you want to"
+                                     " install FreeMedForms for professional use,"
+                                     " please choose <b>MySQL installation</b> instead.\n"
+                                     "Click Ok to test FreeMedForms, or click Cancel"
+                                     " to install FreeMedForms with MySQL."));
+        msgBox.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
+        msgBox.setDefaultButton(QMessageBox::Cancel);
+        int ret = msgBox.exec();
+
+        switch (ret) {
+          case QMessageBox::Ok:
+              // Save was clicked
+              break;
+          case QMessageBox::Cancel:
+              installCombo->setCurrentIndex(INSTALLING_MYSQL_SERVER);
+              break;
+          default:
+              // should never be reached
+              break;
+        }
+    }
+    return;
 }
 
 
