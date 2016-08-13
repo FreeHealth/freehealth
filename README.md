@@ -33,9 +33,9 @@ Supported OS:
 - [Code documentation]
 - [Source code analysis]
 
-### How to contribute to FreeHealth EHR?
+### I want to contribute to FreeHealth EHR!
 
-- [En] [Contribute]!
+- [Contribute]
 
 ### Contact
 - [Contact form]
