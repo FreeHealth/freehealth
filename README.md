@@ -1,6 +1,7 @@
 # FreeHealth EHR [1]
 # https://freehealth.io 
-# FreeHealh EHR is a fork of FreeMedForms [2]
+
+## FreeHealh EHR is a fork of FreeMedForms [2]
 
 ### What is FreeHealth EHR?
 
