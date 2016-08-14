@@ -203,7 +203,7 @@ private:
     QComboBox *comboDb;
     QLabel *lblVirtual;
     QComboBox *comboVirtual;
-    QLabel *lbl1, *lbl1_1, *lbl2, *lbl2_1;
+    QLabel *label_message, *label_url;
 
 };
 

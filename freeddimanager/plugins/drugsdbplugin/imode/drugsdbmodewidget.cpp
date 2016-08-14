@@ -467,8 +467,8 @@ void DrugsDbModeWidget::onCreateDatapackFiles()
     // TODO: update.setFromVersion();
     update.setToVersion(packVersion);
     update.setText("Complete update of the database. "
-                   "For more information, please check the FreeMedForms project website: "
-                   "http://freemedforms.com/");
+                   "For more information, please check the FreeHealth website: "
+                   "https://freehealth.io/");
     descr.addUpdateInformation(update);
     pack.setPackDescription(descr);
 

@@ -1350,8 +1350,8 @@ Emplacement : %2</translation>
         <translation>Initialise les bases de données...</translation>
     </message>
     <message>
-        <source>Welcome to FreeMedForms, you are now connected.</source>
-        <translation>Bienvenue dans FreeMedForms, vous êtes maintenant connecté.</translation>
+        <source>Welcome to FreeHealth, you are now connected.</source>
+        <translation>Bienvenue dans FreeHealth, vous êtes maintenant connecté.</translation>
     </message>
     <message>
         <source>No user connected.</source>

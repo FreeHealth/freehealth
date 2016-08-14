@@ -271,7 +271,7 @@
 
 namespace {
 
-    const char* const WEBSITE              = "http://www.freemedforms.org/";
+    const char* const WEBSITE              = "https://freehealth.io/";
 
     // BUNDLE RESOURCES  --> located inside the bundle. Location calculated from BundleRootPath
     // const char* const READONLYRESOURCES    = "";

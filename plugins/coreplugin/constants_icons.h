@@ -37,7 +37,7 @@ namespace Core {
 
 namespace Constants {
 
-const char * const  FREEMEDFORMS_SPLASHSCREEN = "freemedforms.png";
+const char * const  FREEHEALTH_SPLASHSCREEN = "freehealth.png";
 const char * const  FREEDIAMS_SPLASHSCREEN    = "freediams.png";
 const char * const  FREEACCOUNT_SPLASHSCREEN  = "freeaccount.png";
 const char * const  FREEICD_SPLASHSCREEN      = "freeicd.png";

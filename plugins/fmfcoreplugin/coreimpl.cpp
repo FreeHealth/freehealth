@@ -86,7 +86,7 @@ CoreImpl::CoreImpl(QObject *parent) :
 {
     setObjectName("Core");
     m_Settings = new SettingsPrivate(this);
-    m_Settings->setPath(ISettings::UpdateUrl, Utils::Constants::FREEMEDFORMS_UPDATE_URL);
+    m_Settings->setPath(ISettings::UpdateUrl, Utils::Constants::FREEHEALTH_UPDATE_URL);
 
     m_Theme = new ThemePrivate(this);
     m_Theme->setThemeRootPath(m_Settings->path(ISettings::ThemeRootPath));
@@ -98,8 +98,8 @@ CoreImpl::CoreImpl(QObject *parent) :
     if (logChrono)
         Utils::Log::logTimeElapsed(chrono, "Core", "command line parsing");
 
-    m_Theme->createSplashScreen(Constants::FREEMEDFORMS_SPLASHSCREEN);
-    m_Settings->setPath(ISettings::SplashScreen, Constants::FREEMEDFORMS_SPLASHSCREEN);
+    m_Theme->createSplashScreen(Constants::FREEHEALTH_SPLASHSCREEN);
+    m_Settings->setPath(ISettings::SplashScreen, Constants::FREEHEALTH_SPLASHSCREEN);
 
     // add translators
     m_Theme->messageSplashScreen(tkTr(Trans::Constants::INITIALIZING_TRANSLATIONS));
@@ -269,7 +269,7 @@ bool CoreImpl::initialize(const QStringList &arguments, QString *errorString)
 //                Utils::LicenseTerms::GPLv3 ))
 //            return false;
 //#endif
-        m_Theme->createSplashScreen(Constants::FREEMEDFORMS_SPLASHSCREEN);
+        m_Theme->createSplashScreen(Constants::FREEHEALTH_SPLASHSCREEN);
     }
 
     return true;
