@@ -25,7 +25,7 @@ Supported OS:
 - Mac OS: 10.9 Mavericks (64 bit), 10.10 Yosemite, 10.11 El Capitan
 - Windows: Windows 7 (32 bit & 64 bit), Windows 8, Windows 10
 
-### Where can I find informations about FreeMedForms?
+### Where can I find information about FreeHealth?
 
 - [website]
 - Sources and issues are located on [GitHub]
@@ -33,7 +33,7 @@ Supported OS:
 - [Code documentation]
 - [Source code analysis]
 
-### I want to contribute to FreeHealth EHR!
+### I want to contribute to FreeHealth!
 
 - [Contribute]
 
