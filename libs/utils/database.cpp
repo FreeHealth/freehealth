@@ -2207,13 +2207,25 @@ QString Database::prepareInsertQuery(const int tableref) const
     }
     fields.chop(2);
     values.chop(2);
-    toReturn = QString("INSERT INTO `%1` \n(%2) \nVALUES (%3);")
+    toReturn = QString("INSERT INTO `%1` (%2) VALUES (%3)")
             .arg(table(tableref))
             .arg(fields)
             .arg(values);
     if (WarnSqlCommands)
         qWarning() << toReturn;
     return toReturn;
+}
+
+QString Database::getLastExecutedQuery(const QSqlQuery& query)
+{
+ QString str = query.lastQuery();
+ QMapIterator<QString, QVariant> it(query.boundValues());
+ while (it.hasNext())
+ {
+  it.next();
+  str.replace(it.key(),it.value().toString());
+ }
+ return str;
 }
 
 /** Return a SQL command usable for QSqlQuery::prepareUpdateQuery(). Fields are ordered. */
