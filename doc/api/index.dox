@@ -12,17 +12,18 @@
  * \subsection intro_en English
  * 
  * FreeHealth EHR (FHio):
- *   - 2016 fork of FreeMedForms (FreeMedForms' creator & main dev: Eric Maeker)
+ *   - 2016 fork of FreeMedForms (FreeMedForms' creator, main dev & copyright 2008-2015: Eric Maeker)
  *   - multi-platform: macOS, Linux, Windows
  *   - developed in English (code variables, strings & documentation are 100% English)
  *   - fully translated in French
  *   - partially translated in German, Italian, ...
  *   - free and open source
- *   - released under the GPLv3 license.
+ *   - released under the GPLv3 license
+ *   - Web: <a href="https://freehealth.io">freehealth.io</a>
  *
  * FreeHealth is developed by medical doctors and is
- * mainly intended for healthcare professionals. The main objective of FreeMedForms
- * is to manage the electronic health records for medical practices,
+ * mainly intended for healthcare professionals. The main objective of FreeHealth
+ * is to manage the electronic health records of medical practices,
  * healthcare centers, clinics, hospitals or clinical
  * research groups. Your records will be fully customizable thanks to XML forms
  * and the use of plugins. FreeHealth code is used by healthcare professionals
@@ -30,7 +31,7 @@
  * 
  * 
  * FreeRx electronic prescribing app is a FreeHealth plugin built into a standalone app.
- * FreeRx is multi-platform (macOS, GNU/Linux, Windows), free and open
+ * FreeRx is multi-OS (macOS, GNU/Linux, Windows), free and open
  * source, published under the GPLv3 license.
  * It can be used alone to write and print prescriptions and / or test drug
  * interactions.
@@ -39,14 +40,14 @@
  * synchronized with data from the french drug agency ANSM. Drug databases are
  * available for USA, Canada and South-Africa.
  * 
- * \subsection intro_platforms Available platforms
+ * \subsection intro_os Available OS
  * 
- * FreeMedForms and derivatives are available for:
  *   - GNU/Linux
  *   - macOS
  *   - Windows 7 and later
- * 
- * FreeMedForms and derivatives use:
+ *
+ * \subsection intro_languages Programming languages
+ *
  *   - C++
  *   - Qt5
  *   - MySQL
@@ -54,12 +55,6 @@
  *   - HTML
  *   - JavaScript
  *   - Bash
- * 
- * 
- * \section mainwebsite Website
- * 
- * <a href="https://freehealth.io">freehealth.io</a>
- * 
  * 
  *    \section toc Table of contents
  * 
