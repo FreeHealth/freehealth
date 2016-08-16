@@ -1,0 +1,14 @@
+isudo: required
+dist: trusty
+
+before_install:
+  - sudo add-apt-repository --yes ppa:beineri/opt-qt561-trusty
+  - sudo apt-get update -qq
+
+install:
+  - sudo apt-get -y install qt56[QTPACKAGE]
+
+script:
+  - source /opt/qt56/bin/qt56-env.sh
+  - /opt/qt56/bin/qmake freemedforms/freemedforms.pro
+  - make
