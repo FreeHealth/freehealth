@@ -8,8 +8,6 @@
  * 
  * \section introduction Introduction
  * 
- * \subsection intro_en English
- * 
  * FreeHealth EHR (FHio):
  *   - 2016 fork of FreeMedForms (FreeMedForms' creator, main dev & copyright 2008-2015: Eric Maeker)
  *   - multi-platform: macOS, Linux, Windows
@@ -53,7 +51,7 @@
  *   - JavaScript
  *   - Bash
  * 
- *    \section toc Table of contents
+ * \section toc Table of contents
  * 
  *    \li \ref coderules
  *    \li \ref buildinstructions
@@ -61,13 +59,13 @@
  *    \li \ref participate
  *    \li \ref license_terms
  * 
- *    \section testing Testing and bug submission
+ * \section testing Testing and bug submission
+ *
  *     <b>Please make sure you are using the LATEST version before sending a bug report.</b> \n
  *     You have 3 possibilities for bug submission :
  *     - <a href="https://github.com/FreeHealth/freehealth/issues">Open a GitHub issue</a>
  *     - Debug dialog inside the app
  *     - <a href="mailto:dev@freehealth.io">dev mailing list</a>
- * 
  */
   
  /** \page getting_latest_version Getting the latest version
@@ -81,14 +79,9 @@
  * \ref index
  */
   
- /**    \page contribute Contribute to FreeHealth
+ /** \page contribute Contribute to FreeHealth
  * 
- * \section redirection This page has moved
- * 
- * Follow this link
- * 
- *   - <a href="https://freehealth.io/en/contribute">Contribute [En]</a>
- * 
- *   \ref index
- * 
+ * Please read how to <a href="https://freehealth.io/en/contribute">Contribute</a> on our website.
+ *
+ * \ref index
  */
