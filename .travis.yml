@@ -6,7 +6,7 @@ before_install:
   - sudo apt-get update -qq
 
 install:
-  - sudo apt-get -y install qt56[QTPACKAGE]
+  - sudo apt-get -y install qt56[QTPACKAGE] libqt5svg5-dev
 
 script:
   - source /opt/qt56/bin/qt56-env.sh
