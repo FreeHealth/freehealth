@@ -56,7 +56,7 @@
  *    \li \ref coderules
  *    \li \ref buildinstructions
  *    \li \ref getting_latest_version
- *    \li \ref participate
+ *    \li \ref contribute
  *    \li \ref testing
  *    \li \ref license_terms
  *
@@ -64,11 +64,13 @@
 
  /** \page testing Testing and bug submission
  *
- *     <b>Please make sure you are using the LATEST version before sending a bug report.</b> \n
- *     You have 3 possibilities for bug submission :
- *     - <a href="https://github.com/FreeHealth/freehealth/issues">Open a GitHub issue</a>
- *     - Debug dialog inside the app
- *     - <a href="mailto:dev@freehealth.io">dev mailing list</a>
+ * Please make sure you are using the LATEST version before sending a bug report.
+ *
+ * You have 3 possibilities for bug submission :
+ *   - <a href="https://github.com/FreeHealth/freehealth/issues">Open a GitHub issue</a>
+ *   - Debug dialog inside the app
+ *   - <a href="mailto:dev@freehealth.io">dev mailing list</a>
+ *
  * \ref index
  */
   
