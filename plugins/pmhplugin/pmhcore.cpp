@@ -41,8 +41,6 @@
 
 #include <QApplication>
 
-#include <../tests/modeltest/modeltest.h>
-
 using namespace PMH;
 using namespace Internal;
 
