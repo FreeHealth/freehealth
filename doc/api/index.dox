@@ -1,99 +1,64 @@
  /*!
- * \mainpage FreeMedForms - a free and open source medical files manager.
+ * \mainpage FreeHealth - free and open source electronic health record
  * \author   Main author, administrator: Eric Maeker, MD
  * \author   Accountancy:  Christian A. Reiter, MD (was Pierre-Marie Desombre, MD)
  * \author   Agenda, FreePad: Eric Maeker, MD (was Guillaume Denry)
  * \author   WebCam: Christian A. Reiter, MD
- * \version  FreeMedForms: GIT version
+ * \version  FreeHealth: GIT version
  * 
  * 
  * \section introduction Introduction
  * 
- * \subsection intro_fr Français
- * 
- * FreeMedForms (FMF) est une suite logicielle multi-plateforme (disponible pour MacOs, Linux, FreeBSD, Windows),
- * multilingue, gratuite et en code ouvert sous licence libre GPLv3.
- * FreeMedForms est développée par des médecins et est essentiellement destiné
- * aux professionnels de la santé.
- * Le principal objectif de FreeMedForms est de gérer les dossiers médicaux
- * électroniques pour votre pratique médicale ou la pratique des groupes de recherche clinique.
- * Vos dossiers seront intégralement personnalisables grâce à fes fichiers XML
- * et à l'utilisation de plugins. FreeMedForms est opérationnel et utilisable en
- * pratique courante.
- * 
- * FreeDiams est le plugins prescripteur de la suite FreeMedForms construit en une application à part entière.
- * FreeDiams est un logiciel multi-plateforme (MacOs, Linux, FreeBSD, Windows), gratuit et en code ouvert sous
- * licence libre GPLv3. Il est développé par des médecins et se destine à une utilisation par ces mêmes professionnels.
- * Il peut être utilisé seul pour prescrire et/ou tester les interactions médicamenteuses d'une prescription.
- * Il peut être lié à n'importe quelle application grâce à ses paramétres de ligne de commande. La base de données
- * thérapeutique et des interactions est synchronisée aux données de l'AFSSAPS.
- * 
  * \subsection intro_en English
  * 
- * FreeMedForms (FMF) is a multi-platform software (available on MacOS, Linux, FreeBSD, Windows), multilingual,
- * free and open source, released under the GPLv3 license. FreeMedForms is developed by medical doctors and is
- * mainly intended for health professionals. The main objective of FreeMedForms
- * is to manage the electronic medical records for medical practices or clinical
+ * FreeHealth EHR (FHio):
+ *   - 2016 fork of FreeMedForms (FreeMedForms' creator & main dev: Eric Maeker)
+ *   - multi-platform: macOS, Linux, Windows
+ *   - developed in English (code variables, strings & documentation are 100% English)
+ *   - fully translated in French
+ *   - partially translated in German, Italian, ...
+ *   - free and open source
+ *   - released under the GPLv3 license.
+ *
+ * FreeHealth is developed by medical doctors and is
+ * mainly intended for healthcare professionals. The main objective of FreeMedForms
+ * is to manage the electronic health records for medical practices,
+ * healthcare centers, clinics, hospitals or clinical
  * research groups. Your records will be fully customizable thanks to XML forms
- * and the use of plugins. FreeMedForms EMR is ready for your daily practice.
+ * and the use of plugins. FreeHealth code is used by healthcare professionals
+ * since 2008.
  * 
  * 
- * FreeDiams prescriber is the result of FreeMedForms prescriber plugins built into a standalone application.
- * FreeDiams is multi-platform (MacOS, Linux, FreeBSD, Windows), free and open
- * source released under the GPLv3 license.
- * It is developed by medical doctors and is intended for use by these same
- * professionals. It can be used alone to prescribe and / or test drug interactions
- * within a prescription. It can be linked to any application thanks to its
+ * FreeRx electronic prescribing app is a FreeHealth plugin built into a standalone app.
+ * FreeRx is multi-platform (macOS, GNU/Linux, Windows), free and open
+ * source, published under the GPLv3 license.
+ * It can be used alone to write and print prescriptions and / or test drug
+ * interactions.
+ * It can be linked to any application thanks to its
  * command line parameters. The therapeutic and interactions databases are
  * synchronized with data from the french drug agency ANSM. Drug databases are
  * available for USA, Canada and South-Africa.
- * 
- * \subsection intro_de Deutsch
- * 
- * FreeMedForms (FMF) ist eine Multiplattform-Software (verfügbar auf
- * MacOS, Linux, FreeBSD und Windows), sie ist multilingual, frei und
- * Open-Source und veröffentlicht unter der GPLv3-Lizenz. FreeMedForms wurde
- * von Medizinern entwickelt und richtet sich an Professionelle im
- * Gesundheitswesen.
- * Momentan ist die Sofware in Entwicklung, und steht nur zu
- * Testzwecken zur Verfügung. Das erklärte Hauptziel von FreeMedForms ist
- * die Verwaltung von elektronischen medizinischen Daten, basierend auf
- * unserer medizinischen Praxis oder der Praxis die wir in klinischen
- * Studien erworben haben. Die Eingaben sind voll anpassbar durch die
- * Benutzung von Plugins. Einige Teile der Suite sind bereits voll
- * benutzbar und auch in der Praxis zum Verschreiben von Rezepten nutzbar
- * (FreeDiams).
- * 
- * FreeDiams ist das Resultat des FreeMedForms-Rezept-Plugins, das als
- * eigenständige Applikation designed wurde. FreeDiams ist eine multi-
- * Plattform (MacOS, Linux, FreeBSD, Windows) freie und Open-Source
- * Anwendung, die unter der GPLv3-Lizenz veröffentlicht wurde. Sie wird
- * von Medizinern entwickelt, und richtet sich an das professionelle
- * Umfeld. Es kann benutzt werden, um Rezepte zu verschreiben, oder aber
- * zum Testen von Wechselwirkungen verschiedener Medikamente. Es kann dank
- * der Kommandozeile mit jedem Programm verknüpft werden. Die
- * therapeutische und Neben-/Wechselwirkungsdatenbank wird mit den Daten des
- * französischen AFSSAPS synchronisiert.
  * 
  * \subsection intro_platforms Available platforms
  * 
  * FreeMedForms and derivatives are available for:
  *   - GNU/Linux
- *   - FreeBSD (need some adaptation, please contact development team)
- *   - MacOS X universal
+ *   - macOS
  *   - Windows 7 and later
  * 
  * FreeMedForms and derivatives use:
- *   - C++ language
- *   - Qt libraries (mainly Qt 4.8.6, compatible with latest Qt 5 version)
- *   - SQLite / MySQL
- *   - XML / HTML / ECMA Script
- *   - Bash for some scripts
+ *   - C++
+ *   - Qt5
+ *   - MySQL
+ *   - XML
+ *   - HTML
+ *   - JavaScript
+ *   - Bash
  * 
  * 
  * \section mainwebsite Website
  * 
- * <a href="https://www.freemedforms.org">freemedforms.com</a>
+ * <a href="https://freehealth.io">freehealth.io</a>
  * 
  * 
  *    \section toc Table of contents
@@ -105,33 +70,32 @@
  *    \li \ref license_terms
  * 
  *    \section testing Testing and bug submission
- *     <b>Please, before sending us a bug verify that you are using the LATEST version.</b> \n
- *     You have three possibilities for bug submission :
- *     - <a href="https://github.com/FreeMedForms/freemedforms/issues">GitHub Issues</a>
- *     - Debug dialog inside the application, information sending is available only if the application detects an error
- *     - <a href="mailto:freemedforms-dev@googlegroups.com">FMF dev mailing list</a>
+ *     <b>Please make sure you are using the LATEST version before sending a bug report.</b> \n
+ *     You have 3 possibilities for bug submission :
+ *     - <a href="https://github.com/FreeHealth/freehealth/issues">Open a GitHub issue</a>
+ *     - Debug dialog inside the app
+ *     - <a href="mailto:dev@freehealth.io">dev mailing list</a>
  * 
  */
   
  /** \page getting_latest_version Getting the latest version
  * 
- * FreeMedForms and derivatives include an automatic update checking over the web.\n
- * While you are running applications of FreeMedForms suite, if an update is found, the menubar shows 'Update available'.\n
+ * FreeHealth and derivatives automatically check for updates through https at startup.\n
+ * If a new version is available, the menubar shows 'Update available'.\n
  * 
  * If you want to test the latest development snapshot please checkout our
- * <a href="https://github.com/FreeMedForms/freemedforms">GIT repository</a>.
+ * <a href="https://github.com/FreeHealth/freehealth">Git</a>.
  *      
  * \ref index
  */
   
- /**    \page contribute Contribute to FreeMedForms and derivatives
+ /**    \page contribute Contribute to FreeHealth
  * 
  * \section redirection This page has moved
  * 
  * Follow this link
  * 
- *   - <a href="http://www.freemedforms.com/en/contribute">Contribute [En]</a>
- *   - <a href="http://www.freemedforms.com/fr/contribute">Contribuez [Fr]</a>
+ *   - <a href="https://freehealth.io/en/contribute">Contribute [En]</a>
  * 
  *   \ref index
  * 

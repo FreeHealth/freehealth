@@ -31,14 +31,12 @@ QT *= xml \
     sql
 
 macx {
-  ICON=$${SOURCES_GLOBAL_RESOURCES}/pixmap/svg/freemedforms.icns
+  ICON=$${SOURCES_GLOBAL_RESOURCES}/pixmap/svg/ehr.icns
   QMAKE_INFO_PLIST=Info.plist
 }
-win32:RC_FILE=freemedforms_win32_icon.rc
+win32:RC_FILE=ehr_win32_icon.rc
 
 # Compile project
 SOURCES += main.cpp
 
-OTHER_FILES += Info.plist freemedforms_win32_icon.rc
-
-
+OTHER_FILES += Info.plist ehr_win32_icon.rc
