@@ -1,9 +1,8 @@
  /*!
  * \mainpage FreeHealth - free and open source electronic health record
- * \author   Main author, administrator: Eric Maeker, MD
- * \author   Accountancy:  Christian A. Reiter, MD (was Pierre-Marie Desombre, MD)
- * \author   Agenda, FreePad: Eric Maeker, MD (was Guillaume Denry)
- * \author   WebCam: Christian A. Reiter, MD
+ * \author Original author & main developer (FreeMedForms 2008-2015): Eric Maeker, MD
+ * \author Main developer since 2015: Jerome Pinguet
+ * \author See https://freehealth.io/team for the full list of past and present contributors
  * \version  FreeHealth: GIT version
  * 
  * 
@@ -21,14 +20,12 @@
  *   - released under the GPLv3 license
  *   - Web: <a href="https://freehealth.io">freehealth.io</a>
  *
- * FreeHealth is developed by medical doctors and is
- * mainly intended for healthcare professionals. The main objective of FreeHealth
+ * FreeHealth is developed for healthcare professionals. The main objective of FreeHealth
  * is to manage the electronic health records of medical practices,
  * healthcare centers, clinics, hospitals or clinical
- * research groups. Your records will be fully customizable thanks to XML forms
+ * research groups. Health records will be fully customizable thanks to XML forms
  * and the use of plugins. FreeHealth code is used by healthcare professionals
  * since 2008.
- * 
  * 
  * FreeRx electronic prescribing app is a FreeHealth plugin built into a standalone app.
  * FreeRx is multi-OS (macOS, GNU/Linux, Windows), free and open
