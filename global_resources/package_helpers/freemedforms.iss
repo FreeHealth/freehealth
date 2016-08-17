@@ -23,7 +23,7 @@ ChangesAssociations=yes
 ;WizardSmallImageFile=mysmallimage.bmp
 ;You may need to manually set SourceDir and SetupIconFile
 ;SourceDir=
-SetupIconFile=freemedforms.ico
+SetupIconFile=ehr.ico
 ;WizardSmallImageFile=c:\freemedforms-0.9.6\global_resources\pixmap\svg\freemedforms-128.bmp
 ;WizardImageFile=c:\freemedforms-0.9.6\global_resources\pixmap\svg\freemedforms-128.bmp
 ;WizardImageStretch=no

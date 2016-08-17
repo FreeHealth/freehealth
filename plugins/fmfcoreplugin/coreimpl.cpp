@@ -86,7 +86,7 @@ CoreImpl::CoreImpl(QObject *parent) :
 {
     setObjectName("Core");
     m_Settings = new SettingsPrivate(this);
-    m_Settings->setPath(ISettings::UpdateUrl, Utils::Constants::FREEHEALTH_UPDATE_URL);
+    m_Settings->setPath(ISettings::UpdateUrl, Utils::Constants::EHR_UPDATE_URL);
 
     m_Theme = new ThemePrivate(this);
     m_Theme->setThemeRootPath(m_Settings->path(ISettings::ThemeRootPath));

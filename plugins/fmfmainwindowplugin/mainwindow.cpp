@@ -231,7 +231,7 @@ void MainWindow::extensionsInitialized()
 
     // Start the update checker
     if (updateChecker()->needsUpdateChecking(settings()->getQSettings())) {
-        settings()->setPath(Core::ISettings::UpdateUrl, Utils::Constants::FREEHEALTH_UPDATE_URL);
+        settings()->setPath(Core::ISettings::UpdateUrl, Utils::Constants::EHR_UPDATE_URL);
         if (checkUpdate())
             settings()->setValue(Utils::Constants::S_LAST_CHECKUPDATE, QDate::currentDate());
     }
