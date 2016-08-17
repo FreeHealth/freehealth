@@ -58,6 +58,8 @@ private Q_SLOTS:
     void onPatientActivated(const QModelIndex &index);
     void onPatientRemoved(const QModelIndex &index);
     void onAddCurrentClicked();
+    void onAddAllClicked();
+    void onRemoveAllClicked();
     void onExportRequested();
 
 private:

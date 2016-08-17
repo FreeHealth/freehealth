@@ -139,6 +139,7 @@ bool PatientDataExtractorDialog::initialize()
     d->ui->setupUi(this);
     setWindowTitle(tr("Patient data extractor"));
     setWindowIcon(theme()->icon(Core::Constants::ICONFREEMEDFORMS));
+    d->ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
     d->_exportButton = d->ui->buttonBox->addButton(tr("Export..."), QDialogButtonBox::ActionRole);
     connect(d->_exportButton, SIGNAL(clicked()), this, SLOT(onExportRequested()));
 
@@ -158,23 +159,11 @@ bool PatientDataExtractorDialog::initialize()
     d->ui->availablePatients->showColumn(Core::IPatient::UsualName);
     d->ui->availablePatients->showColumn(Core::IPatient::OtherNames);
     d->ui->availablePatients->showColumn(Core::IPatient::Firstname);
-    d->ui->availablePatients->showColumn(Core::IPatient::IconizedGender);
     d->ui->availablePatients->showColumn(Core::IPatient::Title);
     d->ui->availablePatients->showColumn(Core::IPatient::DateOfBirth);
     d->ui->availablePatients->showColumn(Core::IPatient::FullAddress);
     d->ui->availablePatients->horizontalHeader()->setStretchLastSection(false);
-#if QT_VERSION < 0x050000
-    d->ui->availablePatients->horizontalHeader()->setResizeMode(Core::IPatient::UsualName, QHeaderView::Stretch);
-    d->ui->availablePatients->horizontalHeader()->setResizeMode(Core::IPatient::OtherNames, QHeaderView::Stretch);
-    d->ui->availablePatients->horizontalHeader()->setResizeMode(Core::IPatient::Firstname, QHeaderView::Stretch);
-    d->ui->availablePatients->horizontalHeader()->setResizeMode(Core::IPatient::FullName, QHeaderView::ResizeToContents);
-    d->ui->availablePatients->horizontalHeader()->setResizeMode(Core::IPatient::IconizedGender, QHeaderView::ResizeToContents);
-    d->ui->availablePatients->horizontalHeader()->setResizeMode(Core::IPatient::Title, QHeaderView::ResizeToContents);
-    d->ui->availablePatients->horizontalHeader()->setResizeMode(Core::IPatient::DateOfBirth, QHeaderView::ResizeToContents);
-    d->ui->availablePatients->horizontalHeader()->setResizeMode(Core::IPatient::FullAddress, QHeaderView::Stretch);
-    d->ui->availablePatients->horizontalHeader()->setResizeMode(Core::IPatient::PractitionnerLkID, QHeaderView::ResizeToContents);
-#else
-    // Qt5
+
     d->ui->availablePatients->horizontalHeader()->setSectionResizeMode(Core::IPatient::UsualName, QHeaderView::Stretch);
     d->ui->availablePatients->horizontalHeader()->setSectionResizeMode(Core::IPatient::OtherNames, QHeaderView::Stretch);
     d->ui->availablePatients->horizontalHeader()->setSectionResizeMode(Core::IPatient::Firstname, QHeaderView::Stretch);
@@ -184,12 +173,24 @@ bool PatientDataExtractorDialog::initialize()
     d->ui->availablePatients->horizontalHeader()->setSectionResizeMode(Core::IPatient::DateOfBirth, QHeaderView::ResizeToContents);
     d->ui->availablePatients->horizontalHeader()->setSectionResizeMode(Core::IPatient::FullAddress, QHeaderView::Stretch);
     d->ui->availablePatients->horizontalHeader()->setSectionResizeMode(Core::IPatient::PractitionnerLkID, QHeaderView::ResizeToContents);
-#endif
-    connect(d->ui->availablePatients, SIGNAL(activated(QModelIndex)), this, SLOT(onPatientActivated(QModelIndex)));
 
-    connect(d->ui->addCurrent, SIGNAL(clicked()), this, SLOT(onAddCurrentClicked()), Qt::UniqueConnection);
+    connect(d->ui->availablePatients, SIGNAL(activated(QModelIndex)),
+            this, SLOT(onPatientActivated(QModelIndex)));
+
+    connect(d->ui->addCurrent, SIGNAL(clicked()),
+            this, SLOT(onAddCurrentClicked()), Qt::UniqueConnection);
+
+    connect(d->ui->addAll, SIGNAL(clicked()),
+            this, SLOT(onAddAllClicked()));
+
     d->ui->selectedPatients->setModel(d->_selectedModel);
-    connect(d->ui->selectedPatients, SIGNAL(clicked(const QModelIndex)), this, SLOT(onPatientRemoved(QModelIndex)));
+
+    connect(d->ui->selectedPatients, SIGNAL(doubleClicked(QModelIndex)),
+            this, SLOT(onPatientRemoved(QModelIndex)));
+
+    connect(d->ui->removeAll, SIGNAL(clicked(bool)),
+            this, SLOT(onRemoveAllClicked()));
+
     return true;
 }
 
@@ -245,6 +246,19 @@ void PatientDataExtractorDialog::onAddCurrentClicked()
         return;
     list << toAdd;
     d->_selectedModel->setStringList(list);
+}
+
+void PatientDataExtractorDialog::onAddAllClicked()
+{
+    for (int row = 0; row < d->_patientModel->rowCount(); ++row) {
+        QModelIndex patient_idx = d->_patientModel->index(row, 0);
+        onPatientActivated(patient_idx);
+    }
+}
+
+void PatientDataExtractorDialog::onRemoveAllClicked()
+{
+    d->_selectedModel->setStringList(QStringList());
 }
 
 static QString getUid(const QString &selected)
@@ -309,13 +323,9 @@ void PatientDataExtractorDialog::onExportRequested()
 
     // Get patient uids to extract
     QStringList uids;
-    if (d->ui->exportAll->isChecked()) {
-//        uids << patient()->allValidPatientUids();
-    } else {
-        const QStringList &list = d->_selectedModel->stringList();
-        foreach(const QString &patient, list) {
-            uids << getUid(patient);
-        }
+    const QStringList &list = d->_selectedModel->stringList();
+    foreach(const QString &patient, list) {
+        uids << getUid(patient);
     }
     Utils::Log::logTimeElapsed(chr, objectName(), "Getting patient uids to extract");
 
@@ -449,4 +459,5 @@ void PatientDataExtractorDialog::onExportRequested()
 //    b->setHtml(finalMessage.join("<br/><br/>"));
 //    b->show();
     d->_exportButton->setEnabled(true);
+    d->ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(true);
 }

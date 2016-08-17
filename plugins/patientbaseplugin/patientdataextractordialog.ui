@@ -40,27 +40,31 @@
    <item row="2" column="0">
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
-      <string>Select patients</string>
+      <string/>
      </property>
      <layout class="QGridLayout" name="gridLayout_2">
-      <item row="0" column="0">
-       <widget class="QCheckBox" name="exportAll">
-        <property name="enabled">
-         <bool>false</bool>
-        </property>
+      <item row="1" column="0">
+       <widget class="QPushButton" name="addAll">
         <property name="text">
-         <string>Export all patients</string>
+         <string>Add all patients</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="0">
+      <item row="4" column="0">
+       <widget class="QPushButton" name="removeAll">
+        <property name="text">
+         <string>Remove all patients</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0">
        <widget class="QPushButton" name="addCurrent">
         <property name="text">
          <string>Add current patient</string>
         </property>
        </widget>
       </item>
-      <item row="2" column="0">
+      <item row="3" column="0">
        <widget class="QSplitter" name="splitter">
         <property name="orientation">
          <enum>Qt::Vertical</enum>
@@ -71,7 +75,11 @@
            <number>0</number>
           </property>
           <item>
-           <widget class="Utils::QButtonLineEdit" name="search"/>
+           <widget class="Utils::QButtonLineEdit" name="search">
+            <property name="placeholderText">
+             <string/>
+            </property>
+           </widget>
           </item>
           <item>
            <widget class="QTableView" name="availablePatients">
@@ -128,10 +136,17 @@
         </widget>
        </widget>
       </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="label_4">
+        <property name="text">
+         <string>Double-click to add patient for export</string>
+        </property>
+       </widget>
+      </item>
      </layout>
     </widget>
    </item>
-   <item row="3" column="0">
+   <item row="4" column="0">
     <widget class="QGroupBox" name="groupBox_2">
      <property name="title">
       <string>Select file format and exportation path</string>
@@ -190,7 +205,7 @@
      </layout>
     </widget>
    </item>
-   <item row="4" column="0">
+   <item row="5" column="0">
     <widget class="QDialogButtonBox" name="buttonBox">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
