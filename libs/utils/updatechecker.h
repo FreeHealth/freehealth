@@ -39,7 +39,7 @@ QT_END_NAMESPACE
 
 namespace Utils {
 namespace Constants {
-    const char* const  FREEHEALTH_UPDATE_URL  = "https://freehealth.io/update/update-fhio.txt";
+    const char* const  EHR_UPDATE_URL  = "https://freehealth.io/update/update-ehr.txt";
     const char* const  FREEDIAMS_UPDATE_URL     = "https://freehealth.io/update/update-di.txt";
     const char* const  FREEACCOUNT_UPDATE_URL   = "https://freehealth.io/update/update-freeaccount.txt";
     const char* const  FREEICD_UPDATE_URL       = "https://freehealth.io/update/update-freeicd.txt";
