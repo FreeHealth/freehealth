@@ -88,7 +88,7 @@ contains(FREEMEDFORMS,1){
     # *                                  Patientimport Plugin                                      *
     # ***************************************************************************************
     # Uncomment the following line to build the plugin
-      CONFIG *= with-patientimport
+    #  CONFIG *= with-patientimport
     # ***************************************************************************************
 
     # The following lines must not be modified
