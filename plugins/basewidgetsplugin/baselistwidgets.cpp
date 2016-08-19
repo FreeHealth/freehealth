@@ -779,7 +779,7 @@ void BaseComboData::setVectors()
     const QStringList possibles = parentItem()->valueReferences()->values(Form::FormItemValues::Value_Possible);
     const QStringList uuids = parentItem()->valueReferences()->values(Form::FormItemValues::Value_Uuid);
 
-    if (!possibles.count()==uuids.count()) {
+    if (!(possibles.count()==uuids.count())) {
         Utils::warningMessageBox(
                     tr("Possibles - Uuids mismatch"),
                     tr("There are %1 different possibles values.\n"
