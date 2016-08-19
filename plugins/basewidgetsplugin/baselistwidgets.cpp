@@ -633,7 +633,7 @@ int BaseComboData::selectedItem(const QString &s)
 
 void BaseComboData::setDefaultIndex(int index)
 {
-    if (!m_DefaultIndex==-1)
+    if (!(m_DefaultIndex==-1))
         return;
     m_DefaultIndex = index;
 }
