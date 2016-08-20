@@ -178,11 +178,11 @@
 */
 
 /*! \var Core::ISettings::Paths Core::ISettings::CompleteFormsPath
- * Defines the Bundled full patient forms (used only with FreeMedForms).
+ * Defines the Bundled full patient forms (used only with EHR).
 */
 
 /*! \var Core::ISettings::Paths Core::ISettings::SubFormsPath
- * Defines the Bundled sub-forms (used only with FreeMedForms).
+ * Defines the Bundled sub-forms (used only with EHR).
 */
 
 /*! \var Core::ISettings::Paths Core::ISettings::DocumentationPath
@@ -501,7 +501,7 @@ void SettingsPrivate::sync()
 
 /**
   \fn void Core::ISettings::setPath(const int type, const QString & absPath)
-  \brief defines a path \e absPath with the index \e type refering to the enumarator \e Settings::Paths.
+  \brief defines a path \e absPath with the index \e type referring to the enumerator \e Settings::Paths.
   When setting ApplicationPath, some paths are automatically recalculated : BundleRootPath, QtFrameWorksPath, FMFPlugInsPath, QtPlugInsPath.\n
   When setting BundleResourcesPath, some paths are automatically recalculated : ReadOnlyDatabasesPath, TranslationsPath, SmallPixmapPath, MediumPixmapPath, BigPixmapPath, CompleteFormsPath, SubFormsPath.\n
   When setting UserResourcesPath, some paths are automatically recalculated : ReadWriteDatabasesPath.\n
@@ -597,7 +597,7 @@ void SettingsPrivate::setPath(const int type, const QString & absPath)
                 else
                     pluginPath = "/../plugins";
                 m_Enum_Path.insert(QtFrameWorksPath, QDir::cleanPath(absPath + MAC_QTFRAMEWORKPATH));
-                m_Enum_Path.insert(FMFPlugInsPath, QDir::cleanPath(absPath + pluginPath));
+                m_Enum_Path.insert(AppPluginsPath, QDir::cleanPath(absPath + pluginPath));
                 m_Enum_Path.insert(QtPlugInsPath, QDir::cleanPath(absPath + pluginPath + ALL_QTPLUGINSPATH));
                 m_Enum_Path.insert(BundleRootPath, QDir::cleanPath(absPath + MAC_TOBUNDLEROOTPATH));
             } else if (Utils::isRunningOnLinux()) {
@@ -608,16 +608,16 @@ void SettingsPrivate::setPath(const int type, const QString & absPath)
                 m_Enum_Path.insert(QtFrameWorksPath, QDir::cleanPath(LINUX_QT_PATH));
                 m_Enum_Path.insert(QtPlugInsPath, QDir::cleanPath(LINUX_QT_PLUGINS_PATH));
 #endif
-                m_Enum_Path.insert(FMFPlugInsPath, QDir::cleanPath(absPath + NONMAC_PLUGINSPATH));
+                m_Enum_Path.insert(AppPluginsPath, QDir::cleanPath(absPath + NONMAC_PLUGINSPATH));
                 m_Enum_Path.insert(BundleRootPath, QDir::cleanPath(absPath + NUX_TOBUNDLEROOTPATH));
             } else if (Utils::isRunningOnWin()) {
                 m_Enum_Path.insert(QtFrameWorksPath, QDir::cleanPath(absPath + WIN_QTFRAMEWORKPATH));
-                m_Enum_Path.insert(FMFPlugInsPath, QDir::cleanPath(absPath + NONMAC_PLUGINSPATH));
+                m_Enum_Path.insert(AppPluginsPath, QDir::cleanPath(absPath + NONMAC_PLUGINSPATH));
                 m_Enum_Path.insert(QtPlugInsPath, QDir::cleanPath(absPath + NONMAC_PLUGINSPATH + ALL_QTPLUGINSPATH));
                 m_Enum_Path.insert(BundleRootPath, QDir::cleanPath(absPath + WIN_TOBUNDLEROOTPATH));
             } else if (Utils::isRunningOnFreebsd()) {
                 m_Enum_Path.insert(QtFrameWorksPath, QDir::cleanPath(absPath + UNIX_QTFRAMEWORKPATH));
-                m_Enum_Path.insert(FMFPlugInsPath, QDir::cleanPath(absPath + NONMAC_PLUGINSPATH));
+                m_Enum_Path.insert(AppPluginsPath, QDir::cleanPath(absPath + NONMAC_PLUGINSPATH));
                 m_Enum_Path.insert(QtPlugInsPath, QDir::cleanPath(absPath + NONMAC_PLUGINSPATH + ALL_QTPLUGINSPATH));
                 m_Enum_Path.insert(BundleRootPath, QDir::cleanPath(absPath + BSD_TOBUNDLEROOTPATH));
             }
@@ -1016,7 +1016,7 @@ QTreeWidget* SettingsPrivate::getTreeWidget(QWidget *parent) const
     paths.insert(tr("Translations path"), path(TranslationsPath));
     paths.insert(tr("Qt Plugins path"), path(QtPlugInsPath));
     paths.insert(tr("Qt FrameWorks path"), path(QtFrameWorksPath));
-    paths.insert(tr("FreeMedForms PlugIns path"), path(FMFPlugInsPath));
+    paths.insert(tr("Application Plugins path"), path(AppPluginsPath));
     paths.insert(tr("SmallPixmapPath"), path(SmallPixmapPath));
     paths.insert(tr("MediumPixmapPath"), path(MediumPixmapPath));
     paths.insert(tr("BigPixmapPath"), path(BigPixmapPath));
@@ -1129,7 +1129,7 @@ QString SettingsPrivate::toString() const
     paths.insert(tr("Translations path"), path(TranslationsPath));
     paths.insert(tr("Qt Plugins path"), path(QtPlugInsPath));
     paths.insert(tr("Qt FrameWorks path"), path(QtFrameWorksPath));
-    paths.insert(tr("FreeMedForms PlugIns path"), path(FMFPlugInsPath));
+    paths.insert(tr("Application Plugins path"), path(AppPluginsPath));
     paths.insert(tr("SmallPixmapPath"), path(SmallPixmapPath));
     paths.insert(tr("MediumPixmapPath"), path(MediumPixmapPath));
     paths.insert(tr("BigPixmapPath"), path(BigPixmapPath));

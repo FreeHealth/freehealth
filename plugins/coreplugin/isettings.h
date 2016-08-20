@@ -69,7 +69,7 @@ public:
         TranslationsPath,
         QtPlugInsPath,
         QtFrameWorksPath,
-        FMFPlugInsPath,
+        AppPluginsPath,
         DocumentationPath,
         // Theme path
         ThemeRootPath,
