@@ -1,7 +1,6 @@
 # first definitions
 TEMPLATE = app
-macx:win32:TARGET = $$quote(FreeMedForms)
-else:TARGET = $$quote(freemedforms)
+TARGET = $$quote(freehealth)
 
 # Prepare installation
 FMF_BUILD = 1

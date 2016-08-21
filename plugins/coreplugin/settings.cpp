@@ -96,7 +96,7 @@
 */
 
 /*! \var Core::ISettings::Paths Core::ISettings::UserResourcesPath
- * Defines the users' resources path. This path is readable and writable for the user.
+ * Defines the user resources path. This path is readable and writable for the user.
  * When setting this path, the Core::ISettings::ReadWriteDatabasesPath is automatically calculated.
 */
 
@@ -259,6 +259,7 @@
 #include <utils/log.h>
 
 #include <utils/global.h>
+#include <utils/fileutils.h>
 
 #include <QApplication>
 #include <QMainWindow>
@@ -357,6 +358,7 @@ SettingsPrivate::SettingsPrivate(QObject *parent, const QString &appName, const 
     setPath(ApplicationTempPath, QString("%1/%2-%3").arg(QDir::tempPath()).arg(qApp->applicationName()).arg(Utils::createUid()));
     setPath(SystemTempPath, path(ApplicationTempPath));
     setPath(WebSiteUrl, WEBSITE);
+
     setPath(UserDocumentsPath, QDir::homePath() + QDir::separator() + applicationName.remove("-alpha").remove("_alpha").remove("_debug").remove("-debug") + QDir::separator() + "Documents");
 
     // Create paths
@@ -626,6 +628,37 @@ void SettingsPrivate::setPath(const int type, const QString & absPath)
     case UserDocumentsPath:
     {
         const QString &cleanPath = QDir::cleanPath(absPath);
+        const QString &freemedformsUserDirPath = QString("%1/freemedforms").arg(QDir::homePath());
+        const QString &ehrUserDir = QString("%1/freehealth").arg(QDir::homePath());
+
+        if (Utils::checkDir(freemedformsUserDirPath, false, "FMF user dir")
+            && Utils::checkDir((freemedformsUserDirPath + "/Documents/forms"), false, "FMF user Documents dir")
+            && !Utils::checkDir(cleanPath, false, "FreeHealth Settings::UserDocumentsPath"))
+        {
+            QMessageBox msgBox;
+            msgBox.setIcon(QMessageBox::Question);
+            msgBox.setText(tr("We found a FreeMedForms user directory."));
+            msgBox.setInformativeText(tr("Do you want to use this directory with FreeHealth?"));
+            msgBox.setDetailedText(tr("We found a freemedforms directory inside your user directory. "
+                                      "If you want to use it with FreeHealth, click Yes and "
+                                      "we will make a copy of it named freehealth. "
+                                      "If you want to start a new installation from scratch, click No."));
+            msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+            msgBox.setDefaultButton(QMessageBox::Yes);
+            int ret = msgBox.exec();
+            if (ret == QMessageBox::Yes)
+            {
+                qWarning() << "freemedforms user dir detected";
+                qWarning() << "cleanPath: " << cleanPath;
+                qWarning() << "freemedformsUserDocumentsPath: " << freemedformsUserDirPath;
+                bool ok = Utils::copyRecursively(freemedformsUserDirPath, ehrUserDir);
+                if (ok) {
+                    qWarning() << "copy of freemedforms user dir ok";
+                } else {
+                    qWarning() << "copy of freemedforms user dir failed";
+                }
+            }
+        }
         Utils::checkDir(cleanPath, true, "Settings::UserDocumentsPath");
         Utils::checkDir(cleanPath + USER_SUBFORMSPATH, true, "Settings::UserSubFormsPath");
         Utils::checkDir(cleanPath + USER_COMPLETEFORMSPATH, true, "Settings::UserCompleteFormsPath");
@@ -867,10 +900,66 @@ QString SettingsPrivate::getIniFile(const QString & appName, const QString & fil
     QDir dir(QFileInfo(iniFile).absolutePath());
 
     if (!dir.exists()) {
+
+        // if .freemedforms dir exists, copy it to .freehealth
+        QString freemedforms = QString("%1/.freemedforms").arg(QDir::homePath());
+        QString freemedforms_debug = QString("%1/.freemedforms_debug").arg(QDir::homePath());
+        QString freehealth = QString("%1/.freehealth").arg(QDir::homePath());
+        QString freehealth_debug = QString("%1/.freehealth_debug").arg(QDir::homePath());
+
+        if (QDir(freemedforms).exists()) {
+            QMessageBox msgBox;
+            msgBox.setIcon(QMessageBox::Question);
+            msgBox.setText(tr("We found a .freemedforms parameter directory."));
+            msgBox.setInformativeText(tr("Do you want to use this directory with FreeHealth?"));
+            msgBox.setDetailedText(tr("We found a .freemedforms hidden directory inside your user directory. "
+                                      "It contains the connection parameters for your existing databases. "
+                                      "If you want to use these databases with FreeHealth, click Yes and "
+                                      "we will make a copy of of the directory named .freehealth. "
+                                      "If you want to start a new installation from scratch, click No."));
+            msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+            msgBox.setDefaultButton(QMessageBox::Yes);
+            int ret = msgBox.exec();
+            if (ret == QMessageBox::Yes)
+            {
+                qWarning() << "trying to copy: " << freemedforms << " into " << freehealth;
+                bool ok = Utils::copyRecursively(freemedforms, freehealth);
+                if (!ok) {
+                    qWarning() << "copyRecursively : error" << freemedforms << freehealth;
+                } else {
+                    return QString("%1/%2").arg(freehealth).arg(tmpFileName);
+                }
+            }
+        }
+        if (QDir(freemedforms_debug).exists()) {
+            QMessageBox msgBox;
+            msgBox.setIcon(QMessageBox::Question);
+            msgBox.setText(tr("We found a .freemedforms_debug parameter directory."));
+            msgBox.setInformativeText(tr("Do you want to use this directory with FreeHealth?"));
+            msgBox.setDetailedText(tr("We found a .freemedforms_debug hidden directory inside your user directory. "
+                                      "It contains the connection parameters for your existing databases. "
+                                      "If you want to use these databases with FreeHealth, click Yes and "
+                                      "we will make a copy of of the directory named .freehealth_debug. "
+                                      "If you want to start a new installation from scratch, click No."));
+            msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+            msgBox.setDefaultButton(QMessageBox::Yes);
+            int ret = msgBox.exec();
+            if (ret == QMessageBox::Yes)
+            {
+                qWarning() << "trying to copy: " << freemedforms_debug << " into " << freehealth_debug;
+                bool ok = Utils::copyRecursively(freemedforms_debug, freehealth_debug);
+                if (!ok) {
+                    qWarning() << "copyRecursively : error" << freemedforms_debug << freehealth_debug;
+                } else {
+                    return QString("%1/%2").arg(freehealth_debug).arg(tmpFileName);
+                }
+            }
+        }
+        qWarning() << "Couldn't find any FreeMedForms folders";
         dir.cdUp();
         if (!dir.mkdir(tmpAppName)) {
-            LOG_ERROR_FOR("Settings" , tr("Unable to create dir: %1, no Ini File can be used.").arg(dir.absolutePath() + QDir::separator() + tmpAppName));
-            return QString::null;
+                LOG_ERROR_FOR("Settings" , tr("Unable to create dir: %1, no Ini File can be used.").arg(dir.absolutePath() + QDir::separator() + tmpAppName));
+                return QString::null;
         }
     }
 

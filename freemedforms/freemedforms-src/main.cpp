@@ -95,7 +95,6 @@ static const QString HELP_MESSAGE =
 int main(int argc, char *argv[])
 {
      QApplication app(argc, argv);
-
      app.setApplicationName(BINARY_NAME);
      app.setOrganizationName(BINARY_NAME);
      app.setApplicationVersion(PACKAGE_VERSION);

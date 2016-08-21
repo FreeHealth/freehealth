@@ -81,7 +81,8 @@ HEADERS += global_exporter.h \
     hprimparser.h \
     databasecsvimportator.h \
     passwordandlogin.h \
-    widgets/qdateeditex/qdateeditex.h
+    widgets/qdateeditex/qdateeditex.h \
+    fileutils.h
 
 SOURCES += global.cpp \
     database.cpp \
@@ -147,7 +148,8 @@ SOURCES += global.cpp \
     hprimparser.cpp \
     databasecsvimportator.cpp \
     passwordandlogin.cpp \
-    widgets/qdateeditex/qdateeditex.cpp
+    widgets/qdateeditex/qdateeditex.cpp \
+    fileutils.cpp
 
 #macx {
 #    OBJECTIVE_SOURCES += iconbadgealert.mm
