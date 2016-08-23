@@ -69,6 +69,14 @@
     <equivalent old="GP::Basic::Identity::ContactGroup::Fax" new="Subs::Tools::Identity::ContactGroup::Fax" setInVersion=""/>
     <equivalent old="GP::Basic::Identity::ContactGroup::Mail" new="Subs::Tools::Identity::ContactGroup::Mail" setInVersion=""/>
 
+    <equivalent old="GP::Basic::MultiModes::RiskFactors" new="GP::Basic::MultiModes::RiskFactors::v2" setInVersion=""/>
+    <equivalent old="GP::Basic::MultiModes::Perso" new="GP::Basic::MultiModes::Perso::v2" setInVersion=""/>
+    <equivalent old="GP::Basic::MultiModes::Med" new="GP::Basic::MultiModes::Med::v2" setInVersion=""/>
+    <equivalent old="GP::Basic::MultiModes::Surg" new="GP::Basic::MultiModes::Surg::v2" setInVersion=""/>
+    <equivalent old="GP::Basic::MultiModes::Obst" new="GP::Basic::MultiModes::Obst::v2" setInVersion=""/>
+    <equivalent old="GP::Basic::MultiModes::Family" new="GP::Basic::MultiModes::Family::v2" setInVersion=""/>
+
+
     <equivalent old="GP::Basic::SOAP" new="Subs::Tools::SOAP::WithBio" setInVersion=""/>
     <equivalent old="GP::Basic::SOAP::S" new="Subs::Tools::SOAP::WithBio::SubjectiveGroup::Subjective" setInVersion=""/>
     <equivalent old="GP::Basic::SOAP::O" new="Subs::Tools::SOAP::WithBio::ObjectiveGroup::Objective" setInVersion=""/>
