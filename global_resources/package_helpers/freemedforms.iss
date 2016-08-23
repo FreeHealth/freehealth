@@ -3,20 +3,20 @@
 ; (C) Eric Maeker, MD, GPLv3, FreeMedForms project
 
 [Setup]
-AppName=FreeMedForms
-AppId=FreeMedForms
-AppVerName=FreeMedForms,__version__
-DefaultDirName={pf}\FreeMedForms
-DefaultGroupName=FreeMedForms
-UninstallDisplayIcon={app}\freemedforms.exe
-VersionInfoDescription=FreeMedForms __version__
-VersionInfoProductName=FreeMedForms
+AppName=FreeHealth
+AppId=FreeHealth
+AppVerName=FreeHealth,0.9.9
+DefaultDirName={pf}\FreeHealth
+DefaultGroupName=FreeHealth
+UninstallDisplayIcon={app}\freehealth.exe
+VersionInfoDescription=FreeHealth 0.9.9
+VersionInfoProductName=FreeHealth
 ;OutputDir=
 ;ShowLanguageDialog=no
 ;ShowUndisplayableLanguages=yes
-AppCopyright=Copyright (C) 2008-2016 Eric Maeker, MD, {cm:FreeMedFormsProject}
-AppPublisher={cm:FreeMedFormsProject}
-AppPublisherURL=https://www.freemedforms.com/
+AppCopyright=Copyright (C) 2008-2016 Eric Maeker, MD, The FreeMedForms project. Copyright © 20016 Jerome Pinguet {cm:FreeHealth}
+AppPublisher={cm:FreeHealth}
+AppPublisherURL=https://freehealth.io/
 ChangesAssociations=yes
 ;LicenseFile=
 ;OutputDir=SourceDir
@@ -44,9 +44,9 @@ en.FreeDiamsSetup=Free pharmaceutical prescriber and drugs interactions checker.
 fr.FreeDiamsSetup=Assistant de prescription médicamenteuse et de recherche d'interactions médicamenteuse.
 de.FreeDiamsSetup=Freie Arzt-und pharmazeutischen Medikamenten Wechselwirkungen checker.
 
-en.FreeMedFormsProject=The FreeMedForms project
-fr.FreeMedFormsProject=Le projet FreeMedForms
-de.FreeMedFormsProject=Das Projekt FreeMedForms
+en.FreeHealth=FreeHealth
+fr.FreeHealth=FreeHealth
+de.FreeHealth=FreeHealth
 
 en.FullInstall=Full Install
 de.FullInstall=Vollständige Installation
@@ -62,7 +62,7 @@ de.UninstallProgram=Deinstallieren %1
 
 en.CompDbFr=Drugs database
 de.CompDbFr=Drugs database
-fr.CompDbFr=Base de données thérapeutique
+fr.CompDbFr=Base de données thérapeutiques
 
 en.CompHelpEn=English help
 de.CompHelpEn=Englisch Hilfe
@@ -72,9 +72,9 @@ en.CompHelpFr=French help translations
 de.CompHelpFr=Französisch Hilfe
 fr.CompHelpFr=Aide française
 
-en.StartApplication=Launch FreeMedForms
-de.StartApplication=Starten FreeMedForms
-fr.StartApplication=Démarrer FreeMedForms
+en.StartApplication=Launch FreeHealth
+de.StartApplication=Starten FreeHealth
+fr.StartApplication=Démarrer FreeHealth
 
 [Types]
 Name: "full"; Description: {cm:FullInstall}
@@ -82,13 +82,13 @@ Name: "full"; Description: {cm:FullInstall}
 Name: "custom"; Description: {cm:CustomInstall}; Flags: iscustom
 
 [Components]
-Name: "program"; Description: "FreeMedForms"; Types: full custom; Flags: fixed
+Name: "program"; Description: "FreeHealth"; Types: full custom; Flags: fixed
 Name: "helpEn"; Description: {cm:CompHelpEn}; Types: full custom
 Name: "helpFr"; Description: {cm:CompHelpFr}; Types: full custom
 
 
 [Files]
-Source: "freemedforms.exe"; DestDir: "{app}"; Components: program
+Source: "freehealth.exe"; DestDir: "{app}"; Components: program
 Source: "*.dll"; DestDir: "{app}"; Components: program
 Source: "plugins/*"; DestDir: "{app}/plugins"; Components: program; Flags: recursesubdirs
 Source: "platforms/*"; DestDir: "{app}/platforms"; Components: program; Flags: recursesubdirs
@@ -101,15 +101,15 @@ Source: "Resources/profiles/*"; DestDir: "{app}/Resources/profiles"; Components:
 Source: "Resources/sql/*"; DestDir: "{app}/Resources/sql"; Components: program; Flags: recursesubdirs
 Source: "Resources/textfiles/*"; DestDir: "{app}/Resources/textfiles"; Components: program; Flags: recursesubdirs
 Source: "Resources/translations/*"; DestDir: "{app}/Resources/translations"; Components: program; Flags: recursesubdirs
-Source: "Resources/doc/freemedforms/en/*"; DestDir: "{app}/Resources/doc/freemedforms/en"; Components: helpEn; Flags: recursesubdirs
-Source: "Resources/doc/freemedforms/fr/*"; DestDir: "{app}/Resources/doc/freemedforms/fr"; Components: helpFr; Flags: recursesubdirs
-Source: "Resources/package_helpers/freemedforms.url"; DestDir: "{app}"
+Source: "Resources\doc\freehealth\en\*"; DestDir: "{app}\Resources\doc\freehealth\en"; Components: helpEn; Flags: recursesubdirs
+Source: "Resources\doc\freehealth\fr\*"; DestDir: "{app}\Resources\doc\freehealth\fr"; Components: helpFr; Flags: recursesubdirs
+Source: "Resources\package_helpers\freehealth.url"; DestDir: "{app}"
 Source: "README.txt"; DestDir: "{app}"; Components: program  ; Flags: isreadme
 Source: "COPYING.txt"; DestDir: "{app}"; Components: program
 
 [Icons]
-Name: "{group}\FreeMedForms"; Filename: "{app}\FreeMedForms.exe"
-Name: "{group}\{cm:UninstallProgram,FreeMedForms}"; Filename: "{uninstallexe}"
-Name: "{group}\{cm:FreeMedFormsProject}"; FileName: "{app}\freemedforms.url"
+Name: "{group}\FreeHealth"; Filename: "{app}\FreeHealth.exe"
+Name: "{group}\{cm:UninstallProgram,FreeHealth}"; Filename: "{uninstallexe}"
+Name: "{group}\website"; FileName: "{app}\freehealth.url"
 Name: "{group}\README.txt"; FileName: "{app}\README.txt"
 Name: "{group}\COPYING.txt"; FileName: "{app}\COPYING.txt"
