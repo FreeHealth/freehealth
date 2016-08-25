@@ -16,11 +16,11 @@
    sodipodi:version="0.32"
    inkscape:version="0.48.5 r10040"
    version="1.0"
-   sodipodi:docname="freediams.svg"
+   sodipodi:docname="erx.svg"
    inkscape:output_extension="org.inkscape.output.svg.inkscape"
-   inkscape:export-filename="/Users/eric/Desktop/Programmation/freemedforms/global_resources/pixmap/svg/freediams-16.png"
-   inkscape:export-xdpi="30"
-   inkscape:export-ydpi="30">
+   inkscape:export-filename="/home/elkcloner/git/freehealth/global_resources/pixmap/1024x1024/erx.png"
+   inkscape:export-xdpi="1920"
+   inkscape:export-ydpi="1920">
   <defs
      id="defs2460">
     <linearGradient
@@ -238,7 +238,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
         <cc:license
            rdf:resource="http://creativecommons.org/licenses/publicdomain/" />
       </cc:Work>

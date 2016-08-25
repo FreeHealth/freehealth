@@ -41,7 +41,7 @@
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
-    app.setApplicationName( QCoreApplication::translate("main", "FreeMedForms    Users Manager") );
+    app.setApplicationName( QCoreApplication::translate("main", "User Manager") );
     app.setApplicationVersion( "0.0.2" );
 
     // init settings

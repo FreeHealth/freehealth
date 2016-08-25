@@ -96,7 +96,7 @@
 */
 
 /*! \var Core::ISettings::Paths Core::ISettings::UserResourcesPath
- * Defines the users' resources path. This path is readable and writable for the user.
+ * Defines the user resources path. This path is readable and writable for the user.
  * When setting this path, the Core::ISettings::ReadWriteDatabasesPath is automatically calculated.
 */
 
@@ -178,11 +178,11 @@
 */
 
 /*! \var Core::ISettings::Paths Core::ISettings::CompleteFormsPath
- * Defines the Bundled full patient forms (used only with FreeMedForms).
+ * Defines the Bundled full patient forms (used only with EHR).
 */
 
 /*! \var Core::ISettings::Paths Core::ISettings::SubFormsPath
- * Defines the Bundled sub-forms (used only with FreeMedForms).
+ * Defines the Bundled sub-forms (used only with EHR).
 */
 
 /*! \var Core::ISettings::Paths Core::ISettings::DocumentationPath
@@ -259,6 +259,7 @@
 #include <utils/log.h>
 
 #include <utils/global.h>
+#include <utils/fileutils.h>
 
 #include <QApplication>
 #include <QMainWindow>
@@ -357,6 +358,7 @@ SettingsPrivate::SettingsPrivate(QObject *parent, const QString &appName, const 
     setPath(ApplicationTempPath, QString("%1/%2-%3").arg(QDir::tempPath()).arg(qApp->applicationName()).arg(Utils::createUid()));
     setPath(SystemTempPath, path(ApplicationTempPath));
     setPath(WebSiteUrl, WEBSITE);
+
     setPath(UserDocumentsPath, QDir::homePath() + QDir::separator() + applicationName.remove("-alpha").remove("_alpha").remove("_debug").remove("-debug") + QDir::separator() + "Documents");
 
     // Create paths
@@ -501,7 +503,7 @@ void SettingsPrivate::sync()
 
 /**
   \fn void Core::ISettings::setPath(const int type, const QString & absPath)
-  \brief defines a path \e absPath with the index \e type refering to the enumarator \e Settings::Paths.
+  \brief defines a path \e absPath with the index \e type referring to the enumerator \e Settings::Paths.
   When setting ApplicationPath, some paths are automatically recalculated : BundleRootPath, QtFrameWorksPath, FMFPlugInsPath, QtPlugInsPath.\n
   When setting BundleResourcesPath, some paths are automatically recalculated : ReadOnlyDatabasesPath, TranslationsPath, SmallPixmapPath, MediumPixmapPath, BigPixmapPath, CompleteFormsPath, SubFormsPath.\n
   When setting UserResourcesPath, some paths are automatically recalculated : ReadWriteDatabasesPath.\n
@@ -597,7 +599,7 @@ void SettingsPrivate::setPath(const int type, const QString & absPath)
                 else
                     pluginPath = "/../plugins";
                 m_Enum_Path.insert(QtFrameWorksPath, QDir::cleanPath(absPath + MAC_QTFRAMEWORKPATH));
-                m_Enum_Path.insert(FMFPlugInsPath, QDir::cleanPath(absPath + pluginPath));
+                m_Enum_Path.insert(AppPluginsPath, QDir::cleanPath(absPath + pluginPath));
                 m_Enum_Path.insert(QtPlugInsPath, QDir::cleanPath(absPath + pluginPath + ALL_QTPLUGINSPATH));
                 m_Enum_Path.insert(BundleRootPath, QDir::cleanPath(absPath + MAC_TOBUNDLEROOTPATH));
             } else if (Utils::isRunningOnLinux()) {
@@ -608,16 +610,16 @@ void SettingsPrivate::setPath(const int type, const QString & absPath)
                 m_Enum_Path.insert(QtFrameWorksPath, QDir::cleanPath(LINUX_QT_PATH));
                 m_Enum_Path.insert(QtPlugInsPath, QDir::cleanPath(LINUX_QT_PLUGINS_PATH));
 #endif
-                m_Enum_Path.insert(FMFPlugInsPath, QDir::cleanPath(absPath + NONMAC_PLUGINSPATH));
+                m_Enum_Path.insert(AppPluginsPath, QDir::cleanPath(absPath + NONMAC_PLUGINSPATH));
                 m_Enum_Path.insert(BundleRootPath, QDir::cleanPath(absPath + NUX_TOBUNDLEROOTPATH));
             } else if (Utils::isRunningOnWin()) {
                 m_Enum_Path.insert(QtFrameWorksPath, QDir::cleanPath(absPath + WIN_QTFRAMEWORKPATH));
-                m_Enum_Path.insert(FMFPlugInsPath, QDir::cleanPath(absPath + NONMAC_PLUGINSPATH));
+                m_Enum_Path.insert(AppPluginsPath, QDir::cleanPath(absPath + NONMAC_PLUGINSPATH));
                 m_Enum_Path.insert(QtPlugInsPath, QDir::cleanPath(absPath + NONMAC_PLUGINSPATH + ALL_QTPLUGINSPATH));
                 m_Enum_Path.insert(BundleRootPath, QDir::cleanPath(absPath + WIN_TOBUNDLEROOTPATH));
             } else if (Utils::isRunningOnFreebsd()) {
                 m_Enum_Path.insert(QtFrameWorksPath, QDir::cleanPath(absPath + UNIX_QTFRAMEWORKPATH));
-                m_Enum_Path.insert(FMFPlugInsPath, QDir::cleanPath(absPath + NONMAC_PLUGINSPATH));
+                m_Enum_Path.insert(AppPluginsPath, QDir::cleanPath(absPath + NONMAC_PLUGINSPATH));
                 m_Enum_Path.insert(QtPlugInsPath, QDir::cleanPath(absPath + NONMAC_PLUGINSPATH + ALL_QTPLUGINSPATH));
                 m_Enum_Path.insert(BundleRootPath, QDir::cleanPath(absPath + BSD_TOBUNDLEROOTPATH));
             }
@@ -626,6 +628,37 @@ void SettingsPrivate::setPath(const int type, const QString & absPath)
     case UserDocumentsPath:
     {
         const QString &cleanPath = QDir::cleanPath(absPath);
+        const QString &freemedformsUserDirPath = QString("%1/freemedforms").arg(QDir::homePath());
+        const QString &ehrUserDir = QString("%1/freehealth").arg(QDir::homePath());
+
+        if (Utils::checkDir(freemedformsUserDirPath, false, "FMF user dir")
+            && Utils::checkDir((freemedformsUserDirPath + "/Documents/forms"), false, "FMF user Documents dir")
+            && !Utils::checkDir(cleanPath, false, "FreeHealth Settings::UserDocumentsPath"))
+        {
+            QMessageBox msgBox;
+            msgBox.setIcon(QMessageBox::Question);
+            msgBox.setText(tr("We found a FreeMedForms user directory."));
+            msgBox.setInformativeText(tr("Do you want to use this directory with FreeHealth?"));
+            msgBox.setDetailedText(tr("We found a freemedforms directory inside your user directory. "
+                                      "If you want to use it with FreeHealth, click Yes and "
+                                      "we will make a copy of it named freehealth. "
+                                      "If you want to start a new installation from scratch, click No."));
+            msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+            msgBox.setDefaultButton(QMessageBox::Yes);
+            int ret = msgBox.exec();
+            if (ret == QMessageBox::Yes)
+            {
+                qWarning() << "freemedforms user dir detected";
+                qWarning() << "cleanPath: " << cleanPath;
+                qWarning() << "freemedformsUserDocumentsPath: " << freemedformsUserDirPath;
+                bool ok = Utils::copyRecursively(freemedformsUserDirPath, ehrUserDir);
+                if (ok) {
+                    qWarning() << "copy of freemedforms user dir ok";
+                } else {
+                    qWarning() << "copy of freemedforms user dir failed";
+                }
+            }
+        }
         Utils::checkDir(cleanPath, true, "Settings::UserDocumentsPath");
         Utils::checkDir(cleanPath + USER_SUBFORMSPATH, true, "Settings::UserSubFormsPath");
         Utils::checkDir(cleanPath + USER_COMPLETEFORMSPATH, true, "Settings::UserCompleteFormsPath");
@@ -867,10 +900,66 @@ QString SettingsPrivate::getIniFile(const QString & appName, const QString & fil
     QDir dir(QFileInfo(iniFile).absolutePath());
 
     if (!dir.exists()) {
+
+        // if .freemedforms dir exists, copy it to .freehealth
+        QString freemedforms = QString("%1/.freemedforms").arg(QDir::homePath());
+        QString freemedforms_debug = QString("%1/.freemedforms_debug").arg(QDir::homePath());
+        QString freehealth = QString("%1/.freehealth").arg(QDir::homePath());
+        QString freehealth_debug = QString("%1/.freehealth_debug").arg(QDir::homePath());
+
+        if (QDir(freemedforms).exists()) {
+            QMessageBox msgBox;
+            msgBox.setIcon(QMessageBox::Question);
+            msgBox.setText(tr("We found a .freemedforms parameter directory."));
+            msgBox.setInformativeText(tr("Do you want to use this directory with FreeHealth?"));
+            msgBox.setDetailedText(tr("We found a .freemedforms hidden directory inside your user directory. "
+                                      "It contains the connection parameters for your existing databases. "
+                                      "If you want to use these databases with FreeHealth, click Yes and "
+                                      "we will make a copy of of the directory named .freehealth. "
+                                      "If you want to start a new installation from scratch, click No."));
+            msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+            msgBox.setDefaultButton(QMessageBox::Yes);
+            int ret = msgBox.exec();
+            if (ret == QMessageBox::Yes)
+            {
+                qWarning() << "trying to copy: " << freemedforms << " into " << freehealth;
+                bool ok = Utils::copyRecursively(freemedforms, freehealth);
+                if (!ok) {
+                    qWarning() << "copyRecursively : error" << freemedforms << freehealth;
+                } else {
+                    return QString("%1/%2").arg(freehealth).arg(tmpFileName);
+                }
+            }
+        }
+        if (QDir(freemedforms_debug).exists()) {
+            QMessageBox msgBox;
+            msgBox.setIcon(QMessageBox::Question);
+            msgBox.setText(tr("We found a .freemedforms_debug parameter directory."));
+            msgBox.setInformativeText(tr("Do you want to use this directory with FreeHealth?"));
+            msgBox.setDetailedText(tr("We found a .freemedforms_debug hidden directory inside your user directory. "
+                                      "It contains the connection parameters for your existing databases. "
+                                      "If you want to use these databases with FreeHealth, click Yes and "
+                                      "we will make a copy of of the directory named .freehealth_debug. "
+                                      "If you want to start a new installation from scratch, click No."));
+            msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+            msgBox.setDefaultButton(QMessageBox::Yes);
+            int ret = msgBox.exec();
+            if (ret == QMessageBox::Yes)
+            {
+                qWarning() << "trying to copy: " << freemedforms_debug << " into " << freehealth_debug;
+                bool ok = Utils::copyRecursively(freemedforms_debug, freehealth_debug);
+                if (!ok) {
+                    qWarning() << "copyRecursively : error" << freemedforms_debug << freehealth_debug;
+                } else {
+                    return QString("%1/%2").arg(freehealth_debug).arg(tmpFileName);
+                }
+            }
+        }
+        qWarning() << "Couldn't find any FreeMedForms folders";
         dir.cdUp();
         if (!dir.mkdir(tmpAppName)) {
-            LOG_ERROR_FOR("Settings" , tr("Unable to create dir: %1, no Ini File can be used.").arg(dir.absolutePath() + QDir::separator() + tmpAppName));
-            return QString::null;
+                LOG_ERROR_FOR("Settings" , tr("Unable to create dir: %1, no Ini File can be used.").arg(dir.absolutePath() + QDir::separator() + tmpAppName));
+                return QString::null;
         }
     }
 
@@ -1016,7 +1105,7 @@ QTreeWidget* SettingsPrivate::getTreeWidget(QWidget *parent) const
     paths.insert(tr("Translations path"), path(TranslationsPath));
     paths.insert(tr("Qt Plugins path"), path(QtPlugInsPath));
     paths.insert(tr("Qt FrameWorks path"), path(QtFrameWorksPath));
-    paths.insert(tr("FreeMedForms PlugIns path"), path(FMFPlugInsPath));
+    paths.insert(tr("Application Plugins path"), path(AppPluginsPath));
     paths.insert(tr("SmallPixmapPath"), path(SmallPixmapPath));
     paths.insert(tr("MediumPixmapPath"), path(MediumPixmapPath));
     paths.insert(tr("BigPixmapPath"), path(BigPixmapPath));
@@ -1129,7 +1218,7 @@ QString SettingsPrivate::toString() const
     paths.insert(tr("Translations path"), path(TranslationsPath));
     paths.insert(tr("Qt Plugins path"), path(QtPlugInsPath));
     paths.insert(tr("Qt FrameWorks path"), path(QtFrameWorksPath));
-    paths.insert(tr("FreeMedForms PlugIns path"), path(FMFPlugInsPath));
+    paths.insert(tr("Application Plugins path"), path(AppPluginsPath));
     paths.insert(tr("SmallPixmapPath"), path(SmallPixmapPath));
     paths.insert(tr("MediumPixmapPath"), path(MediumPixmapPath));
     paths.insert(tr("BigPixmapPath"), path(BigPixmapPath));

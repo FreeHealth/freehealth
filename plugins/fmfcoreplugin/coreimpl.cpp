@@ -98,8 +98,8 @@ CoreImpl::CoreImpl(QObject *parent) :
     if (logChrono)
         Utils::Log::logTimeElapsed(chrono, "Core", "command line parsing");
 
-    m_Theme->createSplashScreen(Constants::FREEHEALTH_SPLASHSCREEN);
-    m_Settings->setPath(ISettings::SplashScreen, Constants::FREEHEALTH_SPLASHSCREEN);
+    m_Theme->createSplashScreen(Constants::EHR_SPLASHSCREEN);
+    m_Settings->setPath(ISettings::SplashScreen, Constants::EHR_SPLASHSCREEN);
 
     // add translators
     m_Theme->messageSplashScreen(tkTr(Trans::Constants::INITIALIZING_TRANSLATIONS));
@@ -269,7 +269,7 @@ bool CoreImpl::initialize(const QStringList &arguments, QString *errorString)
 //                Utils::LicenseTerms::GPLv3 ))
 //            return false;
 //#endif
-        m_Theme->createSplashScreen(Constants::FREEHEALTH_SPLASHSCREEN);
+        m_Theme->createSplashScreen(Constants::EHR_SPLASHSCREEN);
     }
 
     return true;
