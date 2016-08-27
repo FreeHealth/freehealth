@@ -1,5 +1,0 @@
-version=0.9.8
-{
-    * 2016-04-14
-    * New stable version with bug fixes, enhancements and a new feature
-}
