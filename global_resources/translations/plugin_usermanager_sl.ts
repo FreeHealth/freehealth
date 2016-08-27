@@ -299,22 +299,22 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>UserPlugin::Internal::UserIdentityAndLoginPage</name>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/useridentityandloginpage.cpp" line="146"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/useridentityandloginpage.cpp" line="149"/>
         <source>Login error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/useridentityandloginpage.cpp" line="146"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/useridentityandloginpage.cpp" line="149"/>
         <source>Login already in use. Please select another login</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/useridentityandloginpage.cpp" line="187"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/useridentityandloginpage.cpp" line="190"/>
         <source>Create a new user</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/useridentityandloginpage.cpp" line="188"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/useridentityandloginpage.cpp" line="191"/>
         <source>Please enter your identity.</source>
         <translation type="unfinished"></translation>
     </message>

@@ -151,14 +151,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>General information</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Episodes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Management</source>
         <translation type="unfinished"></translation>
     </message>
@@ -171,15 +163,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Comment</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Category</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>ICD 10</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -188,10 +172,6 @@
     </message>
     <message>
         <source>&amp;Label:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&amp;Date:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -215,11 +195,27 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&amp;Confidence index:</source>
+        <source>&amp;Start date:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Label and date</source>
+        <source>&amp;End date</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>E&amp;pisodes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Confidence</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Created by</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>userName</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

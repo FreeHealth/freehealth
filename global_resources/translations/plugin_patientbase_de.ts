@@ -234,14 +234,6 @@ Warning: If you are using FreeMedForms over a network, this can lead to heavy ne
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Select patients</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Export all patients</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Add current patient</source>
         <translation type="unfinished"></translation>
     </message>
@@ -323,6 +315,18 @@ Warning: If you are using FreeMedForms over a network, this can lead to heavy ne
     </message>
     <message>
         <source>Double-click to remove</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add all patients</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove all patients</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Double-click to add patient for export</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

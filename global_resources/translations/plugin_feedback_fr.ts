@@ -1,61 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="fr_FR">
+<TS version="2.0" language="fr_FR">
 <context>
     <name>Feedback::BugReportDialog</name>
     <message>
-        <location filename="../../plugins/feedbackplugin/bugreportdialog.cpp" line="160"/>
-        <location filename="../../plugins/feedbackplugin/bugreportdialog.cpp" line="262"/>
+        <location filename="../../plugins/feedbackplugin/bugreportdialog.cpp" line="158"/>
+        <location filename="../../plugins/feedbackplugin/bugreportdialog.cpp" line="259"/>
         <source>&amp;Send report</source>
         <translation>Envoyer le &amp;rapport</translation>
     </message>
     <message>
-        <location filename="../../plugins/feedbackplugin/bugreportdialog.cpp" line="161"/>
+        <location filename="../../plugins/feedbackplugin/bugreportdialog.cpp" line="159"/>
         <source>Problem reporting dialog</source>
         <translation>Rapport d&apos;anomalie</translation>
     </message>
     <message>
-        <location filename="../../plugins/feedbackplugin/bugreportdialog.cpp" line="192"/>
-        <source>The email address you entered is not valid.</source>
-        <translation>L&apos;adresse courriel saisie n&apos;est pas valide.</translation>
+        <location filename="../../plugins/feedbackplugin/bugreportdialog.cpp" line="189"/>
+        <source>Please enter your email address.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/feedbackplugin/bugreportdialog.cpp" line="199"/>
+        <location filename="../../plugins/feedbackplugin/bugreportdialog.cpp" line="196"/>
         <source>Please choose the issue category.</source>
         <translation>Veuillez sélectionner une catégorie d&apos;anomalie.</translation>
     </message>
     <message>
-        <location filename="../../plugins/feedbackplugin/bugreportdialog.cpp" line="208"/>
+        <location filename="../../plugins/feedbackplugin/bugreportdialog.cpp" line="205"/>
         <source>Please select the severity of the issue.</source>
         <translation>Veuillez sélectionner une sévérité d&apos;anomalie.</translation>
     </message>
     <message>
-        <location filename="../../plugins/feedbackplugin/bugreportdialog.cpp" line="217"/>
+        <location filename="../../plugins/feedbackplugin/bugreportdialog.cpp" line="214"/>
         <source>Describe the problem you have in short, pregnant words.&lt;br/&gt;The more information you provide, the easier we can help.</source>
         <translation>Décrivez votre problème en quelques mots.&lt;br/&gt;Plus vous fournissez d&apos;informations, plus l&apos;aide sera pertinente.</translation>
     </message>
     <message>
-        <location filename="../../plugins/feedbackplugin/bugreportdialog.cpp" line="226"/>
+        <location filename="../../plugins/feedbackplugin/bugreportdialog.cpp" line="223"/>
         <source>Check/uncheck the documentation checkbox.</source>
         <translation>Cochez/décochez la question sur la documentation.</translation>
     </message>
     <message>
-        <location filename="../../plugins/feedbackplugin/bugreportdialog.cpp" line="236"/>
+        <location filename="../../plugins/feedbackplugin/bugreportdialog.cpp" line="233"/>
         <source>Please confirm that you have looked up the documentation</source>
         <translation>Veuillez confirmer que vous avez vérifié la documentation</translation>
     </message>
     <message>
-        <location filename="../../plugins/feedbackplugin/bugreportdialog.cpp" line="238"/>
+        <location filename="../../plugins/feedbackplugin/bugreportdialog.cpp" line="235"/>
         <source>The following problems occurred:</source>
         <translation>Les problèmes suivants ont été détectés :</translation>
     </message>
     <message>
-        <location filename="../../plugins/feedbackplugin/bugreportdialog.cpp" line="272"/>
+        <location filename="../../plugins/feedbackplugin/bugreportdialog.cpp" line="269"/>
         <source>The application has requested the operating system to open the URL in an external browser but something went wrong.</source>
         <translation>L&apos;application a demandé au système d&apos;exploitation d&apos;ouvrir l&apos;URL dans un navigateur externe mais une erreur est survenue</translation>
     </message>
     <message>
-        <location filename="../../plugins/feedbackplugin/bugreportdialog.cpp" line="273"/>
+        <location filename="../../plugins/feedbackplugin/bugreportdialog.cpp" line="270"/>
         <source>Please verify that you have a default browser enabled or go directly to https://freemedforms.com and check the documentation.</source>
         <translation>Merci de vérifier que vous avez réglé le navigateur par défaut ou allez directement sur le site https://freemedforms.com et consultez la documentation</translation>
     </message>
@@ -83,11 +83,6 @@
         <translation>Application :</translation>
     </message>
     <message>
-        <location filename="../../plugins/feedbackplugin/bugreportdialog.ui" line="76"/>
-        <source>yourname@gmail.com</source>
-        <translation>votrenom@gmail.com</translation>
-    </message>
-    <message>
         <location filename="../../plugins/feedbackplugin/bugreportdialog.ui" line="66"/>
         <source>OS:</source>
         <translation>OS :</translation>
@@ -96,6 +91,11 @@
         <location filename="../../plugins/feedbackplugin/bugreportdialog.ui" line="46"/>
         <source>&amp;Email:</source>
         <translation>Cou&amp;rriel :</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/feedbackplugin/bugreportdialog.ui" line="76"/>
+        <source>your@email.com</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/feedbackplugin/bugreportdialog.ui" line="117"/>
@@ -109,8 +109,8 @@
     </message>
     <message>
         <location filename="../../plugins/feedbackplugin/bugreportdialog.ui" line="202"/>
-        <source>FreeMedForms Project website</source>
-        <translation>le site du projet FreeMedForms</translation>
+        <source>FreeHealth website</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/feedbackplugin/bugreportdialog.ui" line="221"/>

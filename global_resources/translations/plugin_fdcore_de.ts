@@ -419,10 +419,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>FreeMedForms PlugIns path</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>SmallPixmapPath</source>
         <translation type="unfinished"></translation>
     </message>
@@ -556,6 +552,38 @@
     </message>
     <message>
         <source>DocumentationPath</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>We found a FreeMedForms user directory.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Do you want to use this directory with FreeHealth?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>We found a freemedforms directory inside your user directory. If you want to use it with FreeHealth, click Yes and we will make a copy of it named freehealth. If you want to start a new installation from scratch, click No.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>We found a .freemedforms parameter directory.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>We found a .freemedforms hidden directory inside your user directory. It contains the connection parameters for your existing databases. If you want to use these databases with FreeHealth, click Yes and we will make a copy of of the directory named .freehealth. If you want to start a new installation from scratch, click No.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>We found a .freemedforms_debug parameter directory.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>We found a .freemedforms_debug hidden directory inside your user directory. It contains the connection parameters for your existing databases. If you want to use these databases with FreeHealth, click Yes and we will make a copy of of the directory named .freehealth_debug. If you want to start a new installation from scratch, click No.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Application Plugins path</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
