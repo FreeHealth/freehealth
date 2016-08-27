@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="fr_FR">
+<TS version="2.1" language="fr_FR">
 <context>
     <name>tkConstants</name>
     <message>
@@ -2766,23 +2766,23 @@ Text Align Justify shortcut key : Mac specific</extracomment>
     </message>
     <message>
         <source>Creation date &amp; time</source>
-        <translation type="unfinished"></translation>
+        <translation>Date et heure de création</translation>
     </message>
     <message>
         <source>Episode date &amp; time</source>
-        <translation type="unfinished"></translation>
+        <translation>Date et heure de l&apos;épisode</translation>
     </message>
     <message>
         <source>&lt;h2&gt;Welcome to FreeHealth&lt;/h2&gt;&lt;h3&gt;Â© %1 Jerome Pinguet&lt;/h3&gt;&lt;h3&gt;(C) 2008-2015 by Dr Eric Maeker (France)&lt;/h3&gt;&lt;p&gt;This software is released without any warranty, for testing purposes only.&lt;br/&gt;Please refer to our &lt;a href=&quot;%2&quot;&gt;web site&lt;/a&gt; for more information.&lt;br /&gt;FreeHealth is based on FreeMedForms created by Eric Maeker.&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;h2&gt;Bienvenue dans FreeHealth&lt;/h2&gt;&lt;h3&gt;Â© %1 Jerome Pinguet&lt;/h3&gt;&lt;h3&gt;(C) 2008-2015 by Dr Eric Maeker (France)&lt;/h3&gt;&lt;p&gt;Ce logiciel est publié sans aucune garantie à fin de test uniquement.&lt;br/&gt;Merci de vous référer à notre &lt;a href=&quot;%2&quot;&gt;site web&lt;/a&gt; pour plus d&apos;information.&lt;br /&gt;FreeHealth est basé sur FreeMedForms créé par Eric Maeker.&lt;/p&gt;</translation>
     </message>
     <message>
         <source>Other</source>
-        <translation type="unfinished"></translation>
+        <translation>Autre</translation>
     </message>
     <message>
         <source>Welcome to FreeMedForms, you are now connected.</source>
-        <translation type="unfinished"></translation>
+        <translation>Bienvenue dans FreeHealth, vous êtes maintenant connecté(e).</translation>
     </message>
 </context>
 </TS>

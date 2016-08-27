@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="fr_FR">
+<TS version="2.1" language="fr_FR">
 <context>
     <name>PMH</name>
     <message>
@@ -196,27 +196,27 @@
     </message>
     <message>
         <source>&amp;Start date:</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Date de début:</translation>
     </message>
     <message>
         <source>&amp;End date</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Date de fin</translation>
     </message>
     <message>
         <source>E&amp;pisodes</source>
-        <translation type="unfinished"></translation>
+        <translation>É&amp;pisodes</translation>
     </message>
     <message>
         <source>&amp;Confidence</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Confiance</translation>
     </message>
     <message>
         <source>Created by</source>
-        <translation type="unfinished"></translation>
+        <translation>Créé par</translation>
     </message>
     <message>
-        <source>userName</source>
-        <translation type="unfinished"></translation>
+        <source>User name</source>
+        <translation type="unfinished">Nom de l&apos;utilisateur</translation>
     </message>
 </context>
 <context>

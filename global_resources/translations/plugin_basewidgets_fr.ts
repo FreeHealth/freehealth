@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="fr_FR">
+<TS version="2.1" language="fr_FR">
 <context>
     <name>BaseFormData</name>
     <message>
         <location filename="../../plugins/basewidgetsplugin/baseformwidgets.cpp" line="559"/>
         <source>This episode is validated.</source>
-        <translation>Cette épisode est signé.</translation>
+        <translation>Cet épisode est validé.</translation>
     </message>
     <message>
         <location filename="../../plugins/basewidgetsplugin/baseformwidgets.cpp" line="560"/>
         <source>You cannot edit its content, you cannot remove it.</source>
-        <translation type="unfinished"></translation>
+        <translation>Vous ne pouvez pas modifier son contenu, vous ne pouvez pas l&apos;effacer.</translation>
     </message>
 </context>
 <context>
@@ -44,14 +44,16 @@ Le nombre d&apos;items est erronné (%3).</translation>
     <message>
         <location filename="../../plugins/basewidgetsplugin/baselistwidgets.cpp" line="784"/>
         <source>Possibles - Uuids mismatch</source>
-        <translation type="unfinished"></translation>
+        <translation>Le nombre des Possibles ne correspond pas au nombre des Uuids</translation>
     </message>
     <message>
         <location filename="../../plugins/basewidgetsplugin/baselistwidgets.cpp" line="785"/>
         <source>There are %1 different possibles values.
 There are %2 different uuids values.
 Please correct your form and try again.</source>
-        <translation type="unfinished"></translation>
+        <translation>Il y a %1 valeurs différentes pour les Possibles.
+Il y a %2 valeurs différentes pour les Uuids.
+Merci de corriger votre formulaire et d&apos;essayer à nouveau.</translation>
     </message>
 </context>
 <context>

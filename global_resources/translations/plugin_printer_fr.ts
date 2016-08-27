@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="fr_FR">
+<TS version="2.1" language="fr_FR">
 <context>
     <name>Print</name>
     <message>
@@ -113,19 +113,19 @@ Troisièmement, imprimez une page test &lt;u&gt;avec&lt;/u&gt; les corrections e
     </message>
     <message>
         <source>Correct margins</source>
-        <translation type="unfinished"></translation>
+        <translation>Corriger les marges</translation>
     </message>
     <message>
         <source>Printing direction</source>
-        <translation type="unfinished"></translation>
+        <translation>Sens de l&apos;impression</translation>
     </message>
     <message>
         <source>From top down</source>
-        <translation type="unfinished"></translation>
+        <translation>Du haut vers le bas</translation>
     </message>
     <message>
         <source>From bottom up</source>
-        <translation type="unfinished"></translation>
+        <translation>Du bas vers le haut</translation>
     </message>
 </context>
 <context>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="fr_FR">
+<TS version="2.1" language="fr_FR">
 <context>
     <name>Database</name>
     <message>
@@ -199,7 +199,7 @@
     <message>
         <location filename="../../libs/utils/global.cpp" line="1201"/>
         <source>You can send an email to developers and explain your difficulties: dev@freehealth.io</source>
-        <translation type="unfinished"></translation>
+        <translation>Vous pouvez envoyer un email aux développeurs et leur expliquer vos difficultés: dev@freehealth.io</translation>
     </message>
     <message>
         <location filename="../../libs/utils/global.cpp" line="1254"/>

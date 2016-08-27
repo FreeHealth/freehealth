@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="fr_FR">
+<TS version="2.1" language="fr_FR">
 <context>
     <name>Feedback::BugReportDialog</name>
     <message>
@@ -17,7 +17,7 @@
     <message>
         <location filename="../../plugins/feedbackplugin/bugreportdialog.cpp" line="189"/>
         <source>Please enter your email address.</source>
-        <translation type="unfinished"></translation>
+        <translation>Merci d&apos;indiquer votre adresse mail</translation>
     </message>
     <message>
         <location filename="../../plugins/feedbackplugin/bugreportdialog.cpp" line="196"/>
@@ -95,7 +95,7 @@
     <message>
         <location filename="../../plugins/feedbackplugin/bugreportdialog.ui" line="76"/>
         <source>your@email.com</source>
-        <translation type="unfinished"></translation>
+        <translation>vous@mail.com</translation>
     </message>
     <message>
         <location filename="../../plugins/feedbackplugin/bugreportdialog.ui" line="117"/>
@@ -110,7 +110,7 @@
     <message>
         <location filename="../../plugins/feedbackplugin/bugreportdialog.ui" line="202"/>
         <source>FreeHealth website</source>
-        <translation type="unfinished"></translation>
+        <translation>Site web FreeHealth</translation>
     </message>
     <message>
         <location filename="../../plugins/feedbackplugin/bugreportdialog.ui" line="221"/>

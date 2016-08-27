@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="fr_FR">
+<TS version="2.1" language="fr_FR">
 <context>
     <name>PatientBar</name>
     <message>
@@ -310,27 +310,27 @@ Attention : Si vous utilisez FreeMedForms en réseau, cela peut causer une surch
     </message>
     <message>
         <source>Patient file exportation - %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Exportation du fichier patient - %1</translation>
     </message>
     <message>
         <source>Double-click to add</source>
-        <translation type="unfinished"></translation>
+        <translation>Double-cliquer pour ajouter</translation>
     </message>
     <message>
         <source>Double-click to remove</source>
-        <translation type="unfinished"></translation>
+        <translation>Double-cliquer pour enlever</translation>
     </message>
     <message>
         <source>Add all patients</source>
-        <translation type="unfinished"></translation>
+        <translation>Ajouter tous les patients</translation>
     </message>
     <message>
         <source>Remove all patients</source>
-        <translation type="unfinished"></translation>
+        <translation>Enlever tous les patients</translation>
     </message>
     <message>
         <source>Double-click to add patient for export</source>
-        <translation type="unfinished"></translation>
+        <translation>Double-cliquer pour ajouter le patient pour exportation</translation>
     </message>
 </context>
 <context>

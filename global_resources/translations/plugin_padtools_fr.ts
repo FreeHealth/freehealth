@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="fr_FR">
+<TS version="2.1" language="fr_FR">
 <context>
     <name>PadTools::Internal::PadWriter</name>
     <message>
@@ -20,11 +20,11 @@
     <name>PadTools::Internal::TokenEditor</name>
     <message>
         <source>Dialog</source>
-        <translation type="unfinished"></translation>
+        <translation>Dialogue</translation>
     </message>
     <message>
         <source>Token editor</source>
-        <translation type="unfinished">Éditeur d&apos;étiquette</translation>
+        <translation>Éditeur d&apos;étiquette</translation>
     </message>
 </context>
 <context>
