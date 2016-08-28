@@ -105,7 +105,7 @@ public:
             path = settings()->dataPackInstallPath() + "/pdfcompletion/win/bin/pdftk.exe";
             return path;
         } else {
-            // Other (mainly unices like linux/freebsd)
+            // Other (mainly unices like linux)
             return "/usr/bin/pdftk";
         }
         return QString::null;
@@ -198,7 +198,7 @@ bool PdfTkWrapper::initialize()
             return false;
         }
     } else if (Utils::isRunningOnLinux()) {
-        // TODO: check linux/freebsd binaries
+        // TODO: check linux binaries
     }
 
     // Check file permission

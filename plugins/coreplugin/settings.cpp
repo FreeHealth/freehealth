@@ -302,7 +302,6 @@ namespace {
     const char* const MAC_TOBUNDLEROOTPATH = "/../../..";
     const char* const WIN_TOBUNDLEROOTPATH = "/..";
     const char* const NUX_TOBUNDLEROOTPATH = "/..";
-    const char* const BSD_TOBUNDLEROOTPATH = "/..";
 
     // USER WRITABLE RESOURCES  --> located inside/outside the bundle. Location calculated from UserResourcesPath (where stands the ini file)
     // const char* const WRITABLEDATABASE     = "/databases";
@@ -617,11 +616,6 @@ void SettingsPrivate::setPath(const int type, const QString & absPath)
                 m_Enum_Path.insert(AppPluginsPath, QDir::cleanPath(absPath + NONMAC_PLUGINSPATH));
                 m_Enum_Path.insert(QtPlugInsPath, QDir::cleanPath(absPath + NONMAC_PLUGINSPATH + ALL_QTPLUGINSPATH));
                 m_Enum_Path.insert(BundleRootPath, QDir::cleanPath(absPath + WIN_TOBUNDLEROOTPATH));
-            } else if (Utils::isRunningOnFreebsd()) {
-                m_Enum_Path.insert(QtFrameWorksPath, QDir::cleanPath(absPath + UNIX_QTFRAMEWORKPATH));
-                m_Enum_Path.insert(AppPluginsPath, QDir::cleanPath(absPath + NONMAC_PLUGINSPATH));
-                m_Enum_Path.insert(QtPlugInsPath, QDir::cleanPath(absPath + NONMAC_PLUGINSPATH + ALL_QTPLUGINSPATH));
-                m_Enum_Path.insert(BundleRootPath, QDir::cleanPath(absPath + BSD_TOBUNDLEROOTPATH));
             }
             break;
         }

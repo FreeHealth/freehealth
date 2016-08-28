@@ -34,7 +34,6 @@ exists(__nonfree__):include(__nonfree__/config_nonfree.pri)
 
 macx:include(config_mac.pri)
 else:linux*:include(config_linux.pri)
-else:freebsd*:include(config_freebsd.pri)
 else:win32:include(config_win.pri)
 include(githash.pri)
 

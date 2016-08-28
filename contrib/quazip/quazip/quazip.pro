@@ -20,7 +20,7 @@ DEFINES += QUAZIP_BUILD
 CONFIG(staticlib): DEFINES += QUAZIP_STATIC
 
 CONFIG(dontbuildquazip) {
-  # On some OS (mainly Linux/FreeBSD) we do not want to build a duplicate of the quazip lib.
+  # On Linux we do not want to build a duplicate of the quazip lib.
   # Using CONFIG+=dontbuildquazip (or using the buildspecs/optionalfeatures.pri config)
   # will avoid to build duplicate code and will link the present lib
   # to the existing quazip
