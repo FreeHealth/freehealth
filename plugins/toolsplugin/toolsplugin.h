@@ -41,7 +41,7 @@ class HprimPreferencesPage;
 class ToolsPlugin : public ExtensionSystem::IPlugin
 {
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID "org.freemedforms.FreeMedForms.ToolsPlugin" FILE "Tools.json")
+    Q_PLUGIN_METADATA(IID "io.freehealth.ehr.ToolsPlugin" FILE "Tools.json")
 
 public:
     ToolsPlugin();

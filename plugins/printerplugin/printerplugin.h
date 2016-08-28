@@ -46,7 +46,7 @@ class DocumentPrinter;
 class PrinterPlugin : public ExtensionSystem::IPlugin
 {
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID "org.freemedforms.FreeMedForms.PrintPlugin" FILE "Printer.json")
+    Q_PLUGIN_METADATA(IID "io.freehealth.ehr.PrintPlugin" FILE "Printer.json")
 
 public:
     PrinterPlugin();

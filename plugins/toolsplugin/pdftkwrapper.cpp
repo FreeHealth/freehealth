@@ -495,7 +495,7 @@ function franceDeclarationMedTraitant()
 
     pdf.addFdfValue("date déclaration", freemedforms.tools.dateToString(new Date(), "ddMMyyyy"));
 
-    var filename = "/Volumes/RamDisk/eric/freemedforms/global_resources/declarationMT.pdf"
+    var filename = "~/git/freehealth/global_resources/declarationMT.pdf"
     pdf.endFdfEncoding(filename);
 
     print(pdf.getFdfContent());

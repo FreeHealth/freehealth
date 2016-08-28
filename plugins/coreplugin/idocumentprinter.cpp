@@ -82,8 +82,7 @@
   Use the Core::IDocumentPrinter::TokensWhere enumerator to define the \e tokenWhere value.
   The tokens are represented in a hash of QString (key), QVariant (value).
   For more information about the token management and usage please refer to the web site:
-  - French: http://www.freemedforms.com/fr/manuals/freemedforms/tokenmanager
-  - English: http://www.freemedforms.com/en/manuals/freemedforms/tokenmanager
+  https://freehealth.io/en/manuals/tokenmanager/tokenmanager
  */
 
 /** \fn virtual bool Core::IDocumentPrinter::print(const QTextDocument &text, const int papers = Papers_Generic_User, bool printDuplicata = false) const = 0;

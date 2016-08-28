@@ -261,9 +261,9 @@ HprimFileModel::HprimFileModel(QObject *parent) :
 
     // FIXME: using full path in settings is not crossplatform:
     // Create a patient db under macos, set HPRIM preferences
-    //      default is /Users/name/freemedforms/Documents/Hprim
+    //      default is /Users/name/freehealth/Documents/Hprim
     // Go to Linux with the same database -> Error because under Linux
-    //      default is /home/name/freemedforms/Documents/Hprim
+    //      default is /home/name/freehealth/Documents/Hprim
     // The fix -> considere usage of relatives path inside the
     //      Core::ISettings::UserDocumentsPath
 

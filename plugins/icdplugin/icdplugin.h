@@ -43,7 +43,7 @@ namespace Internal {
 class IcdPlugin : public ExtensionSystem::IPlugin
 {
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID "org.freemedforms.FreeMedForms.IcdPlugin" FILE "ICD.json")
+    Q_PLUGIN_METADATA(IID "io.freehealth.ehr.IcdPlugin" FILE "ICD.json")
 
 public:
     IcdPlugin();

@@ -27,7 +27,7 @@
 #include "edrccore.h"
 #include <edrcplugin/widgets/edrcpreferences.h>
 #ifdef FREEMEDFORMS
-#include <edrcplugin/freemedforms/edrcwidgetfactory.h>
+#include <edrcplugin/ehr/edrcwidgetfactory.h>
 #endif
 
 #include <coreplugin/icore.h>

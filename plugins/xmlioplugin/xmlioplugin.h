@@ -46,7 +46,7 @@ class XmlFormContentReader;
 class XmlFormIOPlugin : public ExtensionSystem::IPlugin
 {
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID "org.freemedforms.FreeMedForms.XmlIOPlugin" FILE "XmlIO.json")
+    Q_PLUGIN_METADATA(IID "io.freehealth.ehr.XmlIOPlugin" FILE "XmlIO.json")
 
 public:
     XmlFormIOPlugin();

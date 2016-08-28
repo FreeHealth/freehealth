@@ -45,7 +45,7 @@ namespace Internal {
 class Account2Plugin : public ExtensionSystem::IPlugin
 {
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID "org.freemedforms.FreeMedForms.Account2Plugin" FILE "Account2.json")
+    Q_PLUGIN_METADATA(IID "io.freehealth.ehr.Account2Plugin" FILE "Account2.json")
 
 public:
     Account2Plugin();
