@@ -136,7 +136,6 @@ private slots:
     {
         Utils::Database::setDatabasePrefix("pref_");
         QVERIFY(Utils::Database::prefixedDatabaseName(Utils::Database::MySQL, "DbName") == "pref_fmf_DbName");
-        QVERIFY(Utils::Database::prefixedDatabaseName(Utils::Database::PostSQL, "DbName") == "pref_fmf_DbName");
         QVERIFY(Utils::Database::prefixedDatabaseName(Utils::Database::SQLite, "DbName") == "pref_DbName");
         Utils::Database::setDatabasePrefix(QString::null);
     }

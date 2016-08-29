@@ -296,8 +296,6 @@ bool UserBase::updateLastloginTypeToTimeStamp()
         case Utils::Database::SQLite: {
             return true; // No change required for SQLite
         }
-        case Utils::Database::PostSQL:                                              
-            return false;                                                           
         default: return false;
     }
 }
@@ -594,8 +592,6 @@ bool UserBase::checkLogin(const QString &clearLogin, const QString &clearPasswor
         }
         break;
     }
-    case Utils::Database::PostSQL:
-        return false;
     default: return false;
     }
 
@@ -708,10 +704,6 @@ bool UserBase::userExists(const QString &clearLogin) const
         case Utils::Database::SQLite:                                               
         {                                                                           
             return false;                                                                  
-        }
-        case Utils::Database::PostSQL:                                              
-        {                                                                           
-            return false;                                                           
         }
         default: return false;
     }
@@ -1274,9 +1266,6 @@ QDateTime UserBase::recordLastLoggedIn(const QString &log, const QString &pass)
         LOG(tr("Last recorded user login: %1 ").arg(now.toString()));
         return now;
     }
-    case Utils::Database::PostSQL: {                                              
-        return QDateTime();                                                           
-    }
     }
    return QDateTime(); 
 }
@@ -1305,10 +1294,6 @@ bool UserBase::createUser(UserData *user)
     case Utils::Database::SQLite:
     {
         break;
-    }
-    case Utils::Database::PostSQL:
-    {
-        return false;
     }
     }
 
@@ -1615,10 +1600,6 @@ bool UserBase::purgeUser(const QString &uuid)
     case Utils::Database::SQLite:
         {
             break;
-        }
-    case Utils::Database::PostSQL:
-        {
-            return false;
         }
     }
 

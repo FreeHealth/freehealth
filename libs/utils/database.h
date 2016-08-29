@@ -129,7 +129,6 @@ public:
     {
         SQLite,   /*!< \brief Uses SQLite driver. */
         MySQL,    /*!< \brief Uses MySQL driver. */
-        PostSQL   /*!< \brief Uses PostGre driver. */
     };
 
     /**

@@ -106,10 +106,6 @@ public:
             }
             break;
         }
-        case Database::PostSQL:
-        {
-            return false;
-        }
         default: return false;
         } // switch
         return true;
@@ -448,7 +444,6 @@ QString DatabaseConnector::toString() const
     switch (driver()) {
     case Database::SQLite: dr="SQLite"; break;
     case Database::MySQL: dr="MySQL"; break;
-    case Database::PostSQL: dr="PostSQL"; break;
     default: dr="NoDriver";
     }
     dr.append(QString("%1").arg(isDriverValid()?"(Ok)":"(**Invalid**)"));
