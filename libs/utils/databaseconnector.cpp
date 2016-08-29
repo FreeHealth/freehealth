@@ -26,7 +26,7 @@
  ***************************************************************************/
 /**
   \class Utils::DatabaseConnector
-  This class owns all params needed to connect to the databases.\n
+  This class owns all parameters needed to connect to the databases.\n
   The Core::ISettings is in charge of populating paths for the SQLite driver.\n
   Default params are:
   - log: empty
