@@ -10,4 +10,4 @@ SUBDIRS += \
     appnamedefine \
     libs \
     plugins \
-    freemedforms-src
+    ehr-src

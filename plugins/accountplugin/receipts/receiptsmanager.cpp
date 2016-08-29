@@ -608,7 +608,7 @@ QString ReceiptsManager::getStringPerferedActAndValues(const QString & act){
 
 bool ReceiptsManager::isMedintuxArg()
 {
-#ifdef FREEMEDFORMS
+#ifdef FREEHEALTH
     return false;
 #else
     return commandLine()->value(Core::Constants::CL_MedinTux).toBool();
@@ -624,7 +624,7 @@ QString ReceiptsManager::getFullName()
 
 bool ReceiptsManager::isFreaccountIndependant()
 {
-#ifdef FREEMEDFORMS
+#ifdef FREEHEALTH
     return false;
 #else
     return commandLine()->value(Core::Constants::CL_Independant).toBool();

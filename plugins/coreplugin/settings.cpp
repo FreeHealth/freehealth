@@ -288,7 +288,7 @@ namespace {
     const char* const DEFAULTTHEME_PIXMAP  = "/pixmap";
     // const char* const DEFAULTTHEME_SPLASH  = "/pixmap/splashscreens";
     const char* const USERMANUAL_PATH      = "/doc/%1";
-    const char* const LINUX_USERMANUAL_PATH  = "/usr/share/doc/freemedforms-project/%1/html";
+    const char* const LINUX_USERMANUAL_PATH  = "/usr/share/doc/freehealth/%1/html";
     // User documents sub-paths
     const char* const USER_SUBFORMSPATH       = "/forms/subforms";
     const char* const USER_COMPLETEFORMSPATH  = "/forms/completeforms";
@@ -388,7 +388,7 @@ SettingsPrivate::SettingsPrivate(QObject *parent, const QString &appName, const 
     } else {
         // RELEASE OR DEBUG INSTALLED BUILD
         if (Utils::isLinuxIntegratedCompilation()) {
-            setPath(BundleResourcesPath, QString("/usr/share/freemedforms"));
+            setPath(BundleResourcesPath, QString("/usr/share/freehealth"));
         } else {
             QString bundleResourcesPath;
             if (!Utils::isDebugWithoutInstallCompilation())

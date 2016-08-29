@@ -4,4 +4,4 @@ include( ../coreplugin/coreplugin.pri )
 include( ../listviewplugin/listviewplugin.pri )
 include( ../datapackplugin/datapackplugin.pri )
 
-!isEmpty(FREEMEDFORMS):include( ../formmanagerplugin/formmanagerplugin.pri )
+!isEmpty(FREEHEALTH):include( ../formmanagerplugin/formmanagerplugin.pri )

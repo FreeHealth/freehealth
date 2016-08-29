@@ -462,7 +462,7 @@ QStringList applicationPluginsPath(const QString &binaryName, const QString &lib
 
     // With the Linux integrated compilation, the 'make install' process is mandatory.
     // Bins are installed in : /usr/bin (or prefixed path)
-    // Libs are installed in : /usr/lib(arch)/freemedforms-common
+    // Libs are installed in : /usr/lib(arch)/freehealth-common
     // Plugins are installed in : /usr/lib(arch)/applicationname
     if (isLinuxIntegratedCompilation()) {
         app = QString("/usr/%1/%2")

@@ -44,7 +44,7 @@
 #include "drugspreferences/protocolpreferencespage.h"
 #include "drugspreferences/drugenginespreferences.h"
 
-#ifdef FREEMEDFORMS
+#ifdef FREEHEALTH
 #    include "drugswidgetfactory.h"
 #    include "drugsmode.h"
 #endif
@@ -82,7 +82,7 @@ DrugsPlugin::DrugsPlugin() :
 {
     setObjectName("DrugsPlugin");
     if (Utils::Log::debugPluginsCreation())
-#ifdef FREEMEDFORMS
+#ifdef FREEHEALTH
         qWarning() << "creating FREEMEDFORMS::DrugsPlugin";
 #endif
 #ifdef FREEDIAMS
@@ -132,7 +132,7 @@ bool DrugsPlugin::initialize(const QStringList &arguments, QString *errorMessage
 
     addAutoReleasedObject(new Core::PluginAboutPage(this->pluginSpec(), this));
 
-#ifdef FREEMEDFORMS
+#ifdef FREEHEALTH
     addAutoReleasedObject(new DrugsWidgetsFactory(this));
 #endif
 
@@ -176,7 +176,7 @@ void DrugsPlugin::extensionsInitialized()
         enginePage->checkSettingsValidity();
     }
 
-#ifdef FREEMEDFORMS
+#ifdef FREEHEALTH
     // Add drug mode. DrugsMode manages its inclusion in pluginManager itself.
     DrugsMode *mode = new DrugsMode(this);
     Q_UNUSED(mode);

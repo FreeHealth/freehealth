@@ -1,2 +1,2 @@
-CAMELCASE_APPNAME=FreeMedForms
+CAMELCASE_APPNAME=FreeHealth
 include(../../buildspecs/define_appname.pri)
