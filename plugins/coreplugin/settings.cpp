@@ -358,7 +358,7 @@ SettingsPrivate::SettingsPrivate(QObject *parent, const QString &appName, const 
     setPath(SystemTempPath, path(ApplicationTempPath));
     setPath(WebSiteUrl, WEBSITE);
 
-    setPath(UserDocumentsPath, QDir::homePath() + QDir::separator() + applicationName.remove("-alpha").remove("_alpha").remove("_debug").remove("-debug") + QDir::separator() + "Documents");
+    setPath(UserDocumentsPath, QDir::homePath() + QDir::separator() + applicationName.remove("-alpha").remove("_alpha").remove("_debug").remove("-debug").remove("_d") + QDir::separator() + "Documents");
 
     // Create paths
     if (!QDir(path(ApplicationTempPath)).exists()) {
@@ -373,7 +373,7 @@ SettingsPrivate::SettingsPrivate(QObject *parent, const QString &appName, const 
 //        setPath(FMFPluginsPath, LIBRARY_BASENAME);
 
     if (Utils::isDebugWithoutInstallCompilation()) {
-        LOG("Compiled with the debug_and_release configuration");
+        LOG("Compiled with the debug_without_install configuration");
         // DEBUG WITHOUT INSTALL BUILD
         QString res;
         if (Utils::isRunningOnMac())
@@ -817,7 +817,7 @@ QString SettingsPrivate::getIniFile(const QString & appName, const QString & fil
                 LOG_ERROR_FOR("Settings", tr("Ini file %1 is not writable. Can not use it.").arg(iniFileName));
             }
         } else {
-            // can we create and access to ini file ?
+            // can we create and access ini file ?
             QFile file(iniFileName);
             if (file.open(QIODevice::ReadWrite | QIODevice::Text)) {
                 LOG_FOR("Settings", tr("Using ini file %1").arg(iniFileName));
@@ -830,7 +830,7 @@ QString SettingsPrivate::getIniFile(const QString & appName, const QString & fil
 
     // No config file was passed in the command line
     // Or the param config file does not exist
-    // -> try to use read the 'pathtoconfig.ini' inside the bundle
+    // -> try to read the 'pathtoconfig.ini' inside the bundle
     if (QFile(QString("%1/pathtoconfig.ini").arg(qApp->applicationDirPath())).exists()) {
         QString content = Utils::readTextFile(QString("%1/pathtoconfig.ini").arg(qApp->applicationDirPath()), Utils::DontWarnUser);
         content = content.trimmed();
@@ -898,55 +898,55 @@ QString SettingsPrivate::getIniFile(const QString & appName, const QString & fil
         // if .freemedforms dir exists, copy it to .freehealth
         QString freemedforms = QString("%1/.freemedforms").arg(QDir::homePath());
         QString freemedforms_debug = QString("%1/.freemedforms_debug").arg(QDir::homePath());
+        QString freemedforms_d = QString("%1/.freemedforms_d").arg(QDir::homePath());
         QString freehealth = QString("%1/.freehealth").arg(QDir::homePath());
         QString freehealth_debug = QString("%1/.freehealth_debug").arg(QDir::homePath());
+        QString freehealth_d = QString("%1/.freehealth_d").arg(QDir::homePath());
+        bool fmf = QDir(freemedforms).exists();
+        bool fmf_debug = QDir(freemedforms_debug).exists();
+        bool fmf_d = QDir(freemedforms_d).exists();
+        if ( fmf || fmf_debug || fmf_d) {
+            QMessageBox msgBox;
+            msgBox.setIcon(QMessageBox::Question);
+            msgBox.setText(tr("We found a FreeMedforms parameter directory."));
+            msgBox.setInformativeText(tr("Do you want to use this directory with FreeHealth?"));
+            msgBox.setDetailedText(tr("We found a FreeMedForms parameter directory inside your user directory. "
+                                      "It contains the connection parameters for your existing databases. "
+                                      "If you want to use these databases with FreeHealth, click Yes. "
+                                      "If you want to start a new installation from scratch, click No."));
+            msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+            msgBox.setDefaultButton(QMessageBox::Yes);
+            int ret = msgBox.exec();
+            if (ret == QMessageBox::Yes)
+            {
+                if (fmf) {
+                    qWarning() << "trying to copy: " << freemedforms << " into " << freehealth;
+                    bool ok = Utils::copyRecursively(freemedforms, freehealth);
+                    if (!ok) {
+                        qWarning() << "copyRecursively : error" << freemedforms << freehealth;
+                    } else {
+                        return QString("%1/%2").arg(freehealth).arg(tmpFileName);
+                    }
+                }
+                else if (fmf_debug) {
+                    qWarning() << "trying to copy: " << freemedforms_debug << " into " << freehealth_debug;
+                    bool ok = Utils::copyRecursively(freemedforms_debug, freehealth_debug);
+                    if (!ok) {
+                        qWarning() << "copyRecursively : error" << freemedforms_debug << freehealth_debug;
+                    } else {
+                        return QString("%1/%2").arg(freehealth_debug).arg(tmpFileName);
+                    }
+                }
+                else if (fmf_d) {
+                    qWarning() << "trying to copy: " << freemedforms_d << " into " << freehealth_d;
+                    bool ok = Utils::copyRecursively(freemedforms_d, freehealth_d);
+                    if (!ok) {
+                        qWarning() << "copyRecursively : error" << freemedforms_d << freehealth_d;
+                    } else {
+                        return QString("%1/%2").arg(freehealth_d).arg(tmpFileName);
+                    }
+                }
 
-        if (QDir(freemedforms).exists()) {
-            QMessageBox msgBox;
-            msgBox.setIcon(QMessageBox::Question);
-            msgBox.setText(tr("We found a .freemedforms parameter directory."));
-            msgBox.setInformativeText(tr("Do you want to use this directory with FreeHealth?"));
-            msgBox.setDetailedText(tr("We found a .freemedforms hidden directory inside your user directory. "
-                                      "It contains the connection parameters for your existing databases. "
-                                      "If you want to use these databases with FreeHealth, click Yes and "
-                                      "we will make a copy of of the directory named .freehealth. "
-                                      "If you want to start a new installation from scratch, click No."));
-            msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
-            msgBox.setDefaultButton(QMessageBox::Yes);
-            int ret = msgBox.exec();
-            if (ret == QMessageBox::Yes)
-            {
-                qWarning() << "trying to copy: " << freemedforms << " into " << freehealth;
-                bool ok = Utils::copyRecursively(freemedforms, freehealth);
-                if (!ok) {
-                    qWarning() << "copyRecursively : error" << freemedforms << freehealth;
-                } else {
-                    return QString("%1/%2").arg(freehealth).arg(tmpFileName);
-                }
-            }
-        }
-        if (QDir(freemedforms_debug).exists()) {
-            QMessageBox msgBox;
-            msgBox.setIcon(QMessageBox::Question);
-            msgBox.setText(tr("We found a .freemedforms_debug parameter directory."));
-            msgBox.setInformativeText(tr("Do you want to use this directory with FreeHealth?"));
-            msgBox.setDetailedText(tr("We found a .freemedforms_debug hidden directory inside your user directory. "
-                                      "It contains the connection parameters for your existing databases. "
-                                      "If you want to use these databases with FreeHealth, click Yes and "
-                                      "we will make a copy of of the directory named .freehealth_debug. "
-                                      "If you want to start a new installation from scratch, click No."));
-            msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
-            msgBox.setDefaultButton(QMessageBox::Yes);
-            int ret = msgBox.exec();
-            if (ret == QMessageBox::Yes)
-            {
-                qWarning() << "trying to copy: " << freemedforms_debug << " into " << freehealth_debug;
-                bool ok = Utils::copyRecursively(freemedforms_debug, freehealth_debug);
-                if (!ok) {
-                    qWarning() << "copyRecursively : error" << freemedforms_debug << freehealth_debug;
-                } else {
-                    return QString("%1/%2").arg(freehealth_debug).arg(tmpFileName);
-                }
             }
         }
         qWarning() << "Couldn't find any FreeMedForms folders";
