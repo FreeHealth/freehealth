@@ -585,7 +585,7 @@ bool ClientConfigPage::validatePage()
     }
 
     // Test server configuration
-    // all freemedforms databases are prefixed with fmf_
+    // all databases are prefixed with fmf_
     // test the fmf_* databases existence
     QSqlQuery query(mysql);
     int tries = 0;
@@ -603,13 +603,13 @@ bool ClientConfigPage::validatePage()
         }
         if (query.size() < 5) {
             ok = false;
-            Utils::warningMessageBox(tr("No FreeMedForms server configuration detected"),
-                                     tr("You are trying to configure a network client of FreeMedForms. "
-                                        "It is manadatory to connect to a FreeMedForms network server.\n"
-                                        "While the host connection is valid, no FreeMedForms configuration was "
+            Utils::warningMessageBox(tr("No server configuration detected"),
+                                     tr("You are trying to configure a network client. "
+                                        "It is manadatory to connect to a network server.\n"
+                                        "While the host connection is valid, no configuration was "
                                         "found on this host.\n\n"
-                                        "Please check that this host contains a FreeMedForms server configuration."));
-            LOG_ERROR("No FreeMedForms configuration detected on the server");
+                                        "Please check that this host contains a server configuration."));
+            LOG_ERROR("No configuration detected on the server");
         } else {
             ok = true;
             query.finish();

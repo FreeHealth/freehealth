@@ -1,7 +1,5 @@
-# Qt 5.1 cache system
-qt:greaterThan(QT_MAJOR_VERSION, 4) {
-    cache()
-}
+# Qt5 cache system
+cache()
 
 TEMPLATE  = lib
 TARGET    = freemedforms-quazip-wrapper

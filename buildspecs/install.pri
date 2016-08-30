@@ -15,7 +15,6 @@ CONFIG(debug_without_install) {
 mac:INSTALL_BASENAME_PATH          = mac
 else:linux*:INSTALL_BASENAME_PATH  = linux
 else:win32:INSTALL_BASENAME_PATH   = win
-else:freebsd*:INSTALL_BASENAME_PATH   = freebsd
 
 # binary wrapper (bw) installer --> leave empty == no bw installation, otherwise specify the filename
 # the bw should be located in SOURCES_RESOURCES_TEXTFILES
@@ -28,14 +27,13 @@ INSTALL_QT_PLUGINS_PATH   = $${INSTALL_PLUGINS_PATH}/qt
 # some help for file copying
 LIB_EXTENSION             = so*
 
-# install Qt libs and plugins inside the bundle ; leave it empty if you don't want to install QT libs and plugs inside the bundle
+# install Qt libs and plugins inside the bundle ; leave it empty if you don't want to install Qt libs and plugs inside the bundle
 INSTALL_QT_INSIDE_BUNDLE = true
 
 # These inclusions modify the default path for the installation process
 macx:include(install_mac.pri)
 else:linux*|hurd*|glibc*:include(install_linux.pri)
 else:win32:include(install_win.pri)
-else:freebsd*:include(install_freebsd.pri)
 
 # by default package is constructed inside the git trunk under
 # packages/yourOs/Application
@@ -82,7 +80,7 @@ message( Plugins: $$[QT_INSTALL_PLUGINS])
 message( Spec file in use: env spec: $$QMAKESPEC)
 message( Spec file in use: qmake spec: $$QMAKE_MKSPECS)
 message( ******************************************************************************** )
-message( **************************    FreeMedForms Config   **************************** )
+message( **************************    FreeHealth Config   **************************** )
 message( ******************************************************************************** )
 CONFIG(LINUX_INTEGRATED):message( Building Linux Integrated version )
 CONFIG(debug,debug|release):message( Building pure debug version )
@@ -217,7 +215,7 @@ macx {
   pixsvg.files = $${SOURCES_GLOBAL_RESOURCES}/pixmap/svg/*.svg
   INSTALLS+=screens pix16 pix16flags pix32 pix64 pix64jpg pixother pixsvg
 
-  # Install forms && FreeMedForms Profiles
+  # Install forms && profiles
   !isEmpty(INSTALL_FORMS_PATH):!isEmpty(SOURCES_FORMS){
     forms.path = $${INSTALL_FORMS_PATH}
     forms.files = $${SOURCES_FORMS}
@@ -355,9 +353,9 @@ macx {
                         $$[QT_INSTALL_BINS]/libwinpthread-1.$${LIB_EXTENSION} \
                         $$[QT_INSTALL_BINS]/libgcc_s_dw2-1.$${LIB_EXTENSION} \
                         $$[QT_INSTALL_BINS]/libstdc++-6.$${LIB_EXTENSION} \
-                        $$[QT_INSTALL_BINS]/icuin52.$${LIB_EXTENSION} \
-                        $$[QT_INSTALL_BINS]/icuuc52.$${LIB_EXTENSION} \
-                        $$[QT_INSTALL_BINS]/icudt52.$${LIB_EXTENSION} \
+                        $$[QT_INSTALL_BINS]/icuin54.$${LIB_EXTENSION} \
+                        $$[QT_INSTALL_BINS]/icuuc54.$${LIB_EXTENSION} \
+                        $$[QT_INSTALL_BINS]/icudt54.$${LIB_EXTENSION} \
                         $$[QT_INSTALL_BINS]/.$${LIB_EXTENSION} \
     }
 
@@ -396,11 +394,9 @@ macx {
 
    # install platforms/qwindows.dll qminimal.dll & qoffscreen.dll
    win32 {
-       greaterThan(QT_MAJOR_VERSION, 4) {     
            qt_platforms.path = $${INSTALL_QT_LIBS_PATH}
            qt_platforms.files = $${QTPLUGINS_PATH}/platforms
            INSTALLS+=qt_platforms
-       }
    }
 
  }
