@@ -31,7 +31,7 @@ GIT_REVISION=""
 PROJECT_VERSION=""
 PACKPATH=""
 SOURCES_ROOT_PATH=""
-GPG_KEY="0x75D4AE85B9520933"    # Long ID of Eric Maeker new OpenPGP key (default key)
+GPG_KEY=""
 SED_INPLACE="-ibkup" # on macos change to "-i bkup"
 
 # Some path definition
@@ -47,13 +47,13 @@ SOURCES_ROOT_PATH=$SCRIPT_PATH"/../"
 PROJECT_VERSION=`cat $SOURCES_ROOT_PATH/buildspecs/projectversion.pri | grep "PACKAGE_VERSION" | cut -d = -s -f2 | tr -d ' '`
 
 # file naming
-ZIP_FILENAME="freemedforms-project-src_$PROJECT_VERSION.tgz"
-PARENT_PATH="freemedforms-project-$PROJECT_VERSION" # root dir name in the zipfile
+ZIP_FILENAME="freehealth-src_$PROJECT_VERSION.tgz"
+PARENT_PATH="freehealth-$PROJECT_VERSION" # root dir name in the zipfile
 ZIP_PATH="source_package/"`date "+%F-%s"` # Path where to store the source zip file starting from the RootSourcePath
 
 showHelp()
 {
-    echo "$SCRIPT_NAME builds FreeMedForms source package, GIT branches and tags."
+    echo "$SCRIPT_NAME builds FreeHealth source package, GIT branches and tags."
     echo "Project version: $PROJECT_VERSION"
     echo
     echo "Usage: $SCRIPT_NAME"
@@ -173,7 +173,7 @@ freedrc \
 freeicd.pro \
 freeicd \
 freehealth.pro \
-freemedforms \
+freehealth \
 freepad.pro \
 freepad \
 freetoolbox.pro \

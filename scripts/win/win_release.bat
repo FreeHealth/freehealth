@@ -38,7 +38,7 @@ lrelease *.ts
 cd ../..
 
 REM # Go to application source tree
-cd freemedforms
+cd %1
 
 REM # Compil application && install it
 qmake.exe %1.pro -r -spec win32-g++ CONFIG+=release CONFIG-=debug_and_release
