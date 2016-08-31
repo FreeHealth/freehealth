@@ -1603,7 +1603,7 @@ bool UserBase::purgeUser(const QString &uuid)
         }
     }
 
-    // delete table USERS
+    // delete user row from table USERS
     DB.transaction();
     QSqlQuery query(DB);
     QHash<int,QString> where;
@@ -1616,6 +1616,7 @@ bool UserBase::purgeUser(const QString &uuid)
     }
     query.finish();
     where.clear();
+    // delete user rows from table RIGHTS
     where.insert(Constants::DATA_USER_UUID, QString("='%1'").arg(uuid));
     if (!query.exec(prepareDeleteQuery(Table_RIGHTS, where))) {
         LOG_QUERY_ERROR(query);
@@ -1625,6 +1626,7 @@ bool UserBase::purgeUser(const QString &uuid)
     }
     query.finish();
     where.clear();
+    // delete user rows from table DATA
     where.insert(Constants::RIGHTS_USER_UUID, QString("='%1'").arg(uuid));
     if (!query.exec(prepareDeleteQuery(Table_DATA, where))) {
         LOG_QUERY_ERROR(query);
@@ -1634,6 +1636,7 @@ bool UserBase::purgeUser(const QString &uuid)
     }
     query.finish();
     where.clear();
+    // delete user rows from table LK_USERS
     where.insert(Constants::LK_USER_UUID, QString("='%1'").arg(uuid));
     if (!query.exec(prepareDeleteQuery(Table_USER_LK_ID, where))) {
         LOG_QUERY_ERROR(query);

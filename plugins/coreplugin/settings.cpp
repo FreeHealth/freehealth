@@ -48,7 +48,7 @@
 
        homeDir (/Users/name)                homeDir (/home/name)
        |                                    |
-       `- .ApplicationName                   `- .ApplicationName
+       `- .applicationname                   `- .applicationname
         |                                     |
         |- config.ini                         |- config.ini             == user settings for non-networked apps
         |- config-network.ini                 |- config-network.ini
@@ -104,14 +104,15 @@
  * Defines the application path. This path is to be considered as read-only for the application.
  * When this path is defined, some paths are automatically calculated:
      - Core::ISettings::QtFrameworkPath
-     - Core::ISettings::FMFPlugInsPath
-     - Core::ISettings::QtPlugInsPath
+     - Core::ISettings::AppPluginsPath
+     - Core::ISettings::QtPluginsPath
      - Core::ISettings::BundleRootPath
 */
 
 /*! \var Core::ISettings::Paths Core::ISettings::BundleRootPath
- * Defines the root path of the bundle. On MacOs, the path is the one where lies the \e Application.app. On other OS,
- * the path is the path where stands the \e Application path.
+ * Defines the root path of the bundle:
+ * - macOs: path of Application.app
+ * - GNU/Linux, Windows: path of the Application
 */
 
 /*! \var Core::ISettings::Paths Core::ISettings::BundleResourcesPath
@@ -141,7 +142,7 @@
  * Defines the translations dictionaries path.
 */
 
-/*! \var Core::ISettings::Paths Core::ISettings::QtPlugInsPath
+/*! \var Core::ISettings::Paths Core::ISettings::QtPluginsPath
  * Linked to the application path. Represents the application linked Qt plugins path.
 */
 
@@ -149,7 +150,7 @@
  * Linked to the application path. Represents the application linked Qt framework path.
 */
 
-/*! \var Core::ISettings::Paths Core::ISettings::FMFPlugInsPath
+/*! \var Core::ISettings::Paths Core::ISettings::AppPluginsPath
  * Linked to the application path. Represents the application plugin path.
 */
 
@@ -301,7 +302,7 @@ namespace {
     const char* const UNIX_QTFRAMEWORKPATH = "/../libs";
     const char* const MAC_TOBUNDLEROOTPATH = "/../../..";
     const char* const WIN_TOBUNDLEROOTPATH = "/..";
-    const char* const NUX_TOBUNDLEROOTPATH = "/..";
+    const char* const LINUX_TOBUNDLEROOTPATH = "/..";
 
     // USER WRITABLE RESOURCES  --> located inside/outside the bundle. Location calculated from UserResourcesPath (where stands the ini file)
     // const char* const WRITABLEDATABASE     = "/databases";
@@ -370,7 +371,7 @@ SettingsPrivate::SettingsPrivate(QObject *parent, const QString &appName, const 
 //    }
 
 //    if (Utils::isRunningOnLinux())
-//        setPath(FMFPluginsPath, LIBRARY_BASENAME);
+//        setPath(AppPluginsPath, LIBRARY_BASENAME);
 
     if (Utils::isDebugWithoutInstallCompilation()) {
         LOG("Compiled with the debug_without_install configuration");
@@ -503,7 +504,7 @@ void SettingsPrivate::sync()
 /**
   \fn void Core::ISettings::setPath(const int type, const QString & absPath)
   \brief defines a path \e absPath with the index \e type referring to the enumerator \e Settings::Paths.
-  When setting ApplicationPath, some paths are automatically recalculated : BundleRootPath, QtFrameworkPath, FMFPlugInsPath, QtPlugInsPath.\n
+  When setting ApplicationPath, some paths are automatically recalculated : BundleRootPath, QtFrameworkPath, AppPluginsPath, QtPluginsPath.\n
   When setting BundleResourcesPath, some paths are automatically recalculated : ReadOnlyDatabasesPath, TranslationsPath, SmallPixmapPath, MediumPixmapPath, BigPixmapPath, CompleteFormsPath, SubFormsPath.\n
   When setting UserResourcesPath, some paths are automatically recalculated : ReadWriteDatabasesPath.\n
 */
@@ -599,22 +600,22 @@ void SettingsPrivate::setPath(const int type, const QString & absPath)
                     pluginPath = "/../plugins";
                 m_Enum_Path.insert(QtFrameworkPath, QDir::cleanPath(absPath + MAC_QTFRAMEWORKPATH));
                 m_Enum_Path.insert(AppPluginsPath, QDir::cleanPath(absPath + pluginPath));
-                m_Enum_Path.insert(QtPlugInsPath, QDir::cleanPath(absPath + pluginPath + ALL_QTPLUGINSPATH));
+                m_Enum_Path.insert(QtPluginsPath, QDir::cleanPath(absPath + pluginPath + ALL_QTPLUGINSPATH));
                 m_Enum_Path.insert(BundleRootPath, QDir::cleanPath(absPath + MAC_TOBUNDLEROOTPATH));
             } else if (Utils::isRunningOnLinux()) {
 #ifndef LINUX_INTEGRATED
                 m_Enum_Path.insert(QtFrameworkPath, QDir::cleanPath(absPath + UNIX_QTFRAMEWORKPATH));
-                m_Enum_Path.insert(QtPlugInsPath, QDir::cleanPath(absPath + NONMAC_PLUGINSPATH + ALL_QTPLUGINSPATH));
+                m_Enum_Path.insert(QtPluginsPath, QDir::cleanPath(absPath + NONMAC_PLUGINSPATH + ALL_QTPLUGINSPATH));
 #else
                 m_Enum_Path.insert(QtFrameworkPath, QDir::cleanPath(LINUX_QT_PATH));
-                m_Enum_Path.insert(QtPlugInsPath, QDir::cleanPath(LINUX_QT_PLUGINS_PATH));
+                m_Enum_Path.insert(QtPluginsPath, QDir::cleanPath(LINUX_QT_PLUGINS_PATH));
 #endif
                 m_Enum_Path.insert(AppPluginsPath, QDir::cleanPath(absPath + NONMAC_PLUGINSPATH));
-                m_Enum_Path.insert(BundleRootPath, QDir::cleanPath(absPath + NUX_TOBUNDLEROOTPATH));
+                m_Enum_Path.insert(BundleRootPath, QDir::cleanPath(absPath + LINUX_TOBUNDLEROOTPATH));
             } else if (Utils::isRunningOnWin()) {
                 m_Enum_Path.insert(QtFrameworkPath, QDir::cleanPath(absPath + WIN_QTFRAMEWORKPATH));
                 m_Enum_Path.insert(AppPluginsPath, QDir::cleanPath(absPath + NONMAC_PLUGINSPATH));
-                m_Enum_Path.insert(QtPlugInsPath, QDir::cleanPath(absPath + NONMAC_PLUGINSPATH + ALL_QTPLUGINSPATH));
+                m_Enum_Path.insert(QtPluginsPath, QDir::cleanPath(absPath + NONMAC_PLUGINSPATH + ALL_QTPLUGINSPATH));
                 m_Enum_Path.insert(BundleRootPath, QDir::cleanPath(absPath + WIN_TOBUNDLEROOTPATH));
             }
             break;
@@ -1097,7 +1098,7 @@ QTreeWidget* SettingsPrivate::getTreeWidget(QWidget *parent) const
     paths.insert(tr("Bundle root path"), path(BundleRootPath));
     paths.insert(tr("Bundle resources path"), path(BundleResourcesPath));
     paths.insert(tr("Translations path"), path(TranslationsPath));
-    paths.insert(tr("Qt Plugins path"), path(QtPlugInsPath));
+    paths.insert(tr("Qt Plugins path"), path(QtPluginsPath));
     paths.insert(tr("Qt FrameWorks path"), path(QtFrameworkPath));
     paths.insert(tr("Application Plugins path"), path(AppPluginsPath));
     paths.insert(tr("SmallPixmapPath"), path(SmallPixmapPath));
@@ -1210,7 +1211,7 @@ QString SettingsPrivate::toString() const
     paths.insert(tr("Bundle root path"), path(BundleRootPath));
     paths.insert(tr("Bundle resources path"), path(BundleResourcesPath));
     paths.insert(tr("Translations path"), path(TranslationsPath));
-    paths.insert(tr("Qt Plugins path"), path(QtPlugInsPath));
+    paths.insert(tr("Qt Plugins path"), path(QtPluginsPath));
     paths.insert(tr("Qt FrameWorks path"), path(QtFrameworkPath));
     paths.insert(tr("Application Plugins path"), path(AppPluginsPath));
     paths.insert(tr("SmallPixmapPath"), path(SmallPixmapPath));
@@ -1270,7 +1271,7 @@ QString SettingsPrivate::toString() const
     return tmp;
 }
 
-/** Returns all server connection's params */
+/** Returns RDBMS server connection parameters */
 Utils::DatabaseConnector SettingsPrivate::databaseConnector() const
 {
     return m_DbConnector;
