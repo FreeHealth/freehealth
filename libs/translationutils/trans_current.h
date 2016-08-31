@@ -32,7 +32,7 @@ namespace Trans {
 namespace Constants {
 
 // Widely used words
-const char* const THE_FREEMEDFORMS_COMMUNITY         = QT_TRANSLATE_NOOP("tkConstants", "The FreeMedForms community");
+const char* const THE_FREEMEDFORMS_COMMUNITY         = QT_TRANSLATE_NOOP("tkConstants", "FreeHealth community");
 const char* const CONTACT_DEV_TEAM                   = QT_TRANSLATE_NOOP("tkConstants", "Please contact the development team.");
 const char* const TYPE                               = QT_TRANSLATE_NOOP("tkConstants", "Type");
 const char* const STATUS                             = QT_TRANSLATE_NOOP("tkConstants", "Status");

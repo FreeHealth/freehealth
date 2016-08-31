@@ -96,7 +96,7 @@ global_resources/doc/freeaccount \
 global_resources/doc/freediams \
 global_resources/doc/freedrc \
 global_resources/doc/freeicd \
-global_resources/doc/freemedforms \
+global_resources/doc/freehealth \
 global_resources/doc/freepad \
 global_resources/doc/freetoolbox \
 global_resources/forms \

@@ -127,9 +127,7 @@ HttpServerEngine::HttpServerEngine(QObject *parent)  :
     // Connect authentication request
     connect(m_NetworkAccessManager, SIGNAL(authenticationRequired(QNetworkReply*,QAuthenticator*)), this, SLOT(authenticationRequired(QNetworkReply*,QAuthenticator*)));
     connect(m_NetworkAccessManager, SIGNAL(proxyAuthenticationRequired(QNetworkProxy,QAuthenticator*)), this, SLOT(proxyAuthenticationRequired(QNetworkProxy,QAuthenticator*)));
-#if QT_VERSION >= 0x050000
-    m_NetworkAccessManager->clearAccessCache();
-#endif
+m_NetworkAccessManager->clearAccessCache();
 }
 
 HttpServerEngine::~HttpServerEngine()
@@ -594,7 +592,7 @@ void HttpServerEngine::createPackAndRegisterToServerManager(const Server &server
 QNetworkRequest HttpServerEngine::createRequest(const QString &url)
 {
     QNetworkRequest request(url);
-    request.setRawHeader("User-Agent", QString("FreeMedForms:%1;%2")
+    request.setRawHeader("User-Agent", QString("FreeHealth:%1;%2")
                          .arg(qApp->applicationName())
                          .arg(qApp->applicationVersion()).toUtf8());
     return request;

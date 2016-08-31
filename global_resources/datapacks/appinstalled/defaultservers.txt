@@ -2,5 +2,5 @@
 -- Add your servers using a CSV format
 -- The first item is the server URL, the second represents the server type
 -- (see file: libs/datapackutils/server.h; UrlStyle enumerator)
-http://packs.freemedforms.com;1
-http://packs.freemedforms.com/nonfree;1
+https://freehealth.io/packs/;1
+https://freehealth.io/packs/nonfree;1
