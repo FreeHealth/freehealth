@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="fr_FR">
+<TS version="2.0" language="fr_FR">
 <context>
     <name>Core::AppConfigWizard</name>
     <message>
@@ -15,20 +15,6 @@
         <translation>Configuration réseau en tant que client</translation>
     </message>
     <message>
-        <source>No FreeMedForms server configuration detected</source>
-        <translation>Aucune configuration serveur de FreeMedForms détectée</translation>
-    </message>
-    <message>
-        <source>You are trying to configure a network client of FreeMedForms. It is manadatory to connect to a FreeMedForms network server.
-While the host connection is valid, no FreeMedForms configuration was found on this host.
-
-Please check that this host contains a FreeMedForms server configuration.</source>
-        <translation>Vous essayez de configurer un client réseau de FreeMedForms. Vous devez obligatoirement vous connecter à un serveur FreeMedForms.
-Alors que la configuration à l&apos;hôte est valide, aucune configuration serveur de FreeMedForms n&apos;a été détectée sur l&apos;hôte.
-
-Veuillez vérfier que l&apos;hôte contient bien une configuration serveur de FreeMedForms.</translation>
-    </message>
-    <message>
         <source>You must configure the server using your personnal login and password to connect the database.</source>
         <translation>Vous devez configurer le serveur en utilisant vos identifiant et mot de passe personnels que vous utilisez pour vous connecter à la base de données.</translation>
     </message>
@@ -39,6 +25,17 @@ Veuillez vérfier que l&apos;hôte contient bien une configuration serveur de Fr
     <message>
         <source>Please specify the database prefix to use (please ask your software administrator)</source>
         <translation>Merci d&apos;indiquer le préfixe de base de données à utiliser (merci de demander à l&apos;adminstrateur de votre base de données)</translation>
+    </message>
+    <message>
+        <source>No server configuration detected</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You are trying to configure a network client. It is manadatory to connect to a network server.
+While the host connection is valid, no configuration was found on this host.
+
+Please check that this host contains a server configuration.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -679,24 +676,16 @@ Cliquez Ok pour tester FreeHealth, ou Annuler pour installer FreeHealth avec MyS
         <translation>Nous avons trouvé un dossier freemedforms à l&apos;intérieur de votre dossier utilisateur. Si vous souhaitez utiliser ce dossier avec FreeHealth, cliquez sur Oui et nous en ferons une copie nommée freehealth. Si vous voulez procéder à une nouvelle installation en partant de zéro, cliquez sur Non.</translation>
     </message>
     <message>
-        <source>We found a .freemedforms parameter directory.</source>
-        <translation>Nous avons trouvé un dossier .freemedforms contenant vos paramètres habituels.</translation>
-    </message>
-    <message>
-        <source>We found a .freemedforms hidden directory inside your user directory. It contains the connection parameters for your existing databases. If you want to use these databases with FreeHealth, click Yes and we will make a copy of of the directory named .freehealth. If you want to start a new installation from scratch, click No.</source>
-        <translation>Nous avons trouvé un dossier caché .freemedforms à l&apos;intérieur de votre dossier utilisateur. Il contient les paramètres de connexion à vos bases de données actuelles. Si vous souhaitez continuer à utiliser vos données avec FreeHealth, cliquez sur Oui et nous ferons une copie de ce dossier nommée .freehealth. Si vous souhaitez démarrer une nouvelle installation en partant de zéro, cliquez sur Non.</translation>
-    </message>
-    <message>
-        <source>We found a .freemedforms_debug parameter directory.</source>
-        <translation>Nous avons trouvé un dossier caché .freemedforms_debug contenant des paramètres de connexion.</translation>
-    </message>
-    <message>
-        <source>We found a .freemedforms_debug hidden directory inside your user directory. It contains the connection parameters for your existing databases. If you want to use these databases with FreeHealth, click Yes and we will make a copy of of the directory named .freehealth_debug. If you want to start a new installation from scratch, click No.</source>
-        <translation>Nous avons trouvé un dossier caché .freemedforms_debug à l&apos;intérieur de votre dossier utilisateur. Il contient les paramètres de connexion à vos bases de données actuelles. Si vous souhaitez continuer à utiliser vos données avec FreeHealth, cliquez sur Oui et nous ferons une copie de ce dossier nommée .freehealth_debug. Si vous souhaitez démarrer une nouvelle installation en partant de zéro, cliquez sur Non.</translation>
-    </message>
-    <message>
         <source>Application Plugins path</source>
         <translation>Chemin vers les plugins de l&apos;application</translation>
+    </message>
+    <message>
+        <source>We found a FreeMedforms parameter directory.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>We found a FreeMedForms parameter directory inside your user directory. It contains the connection parameters for your existing databases. If you want to use these databases with FreeHealth, click Yes. If you want to start a new installation from scratch, click No.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

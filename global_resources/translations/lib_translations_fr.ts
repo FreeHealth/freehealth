@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="fr_FR">
+<TS version="2.0" language="fr_FR">
 <context>
     <name>tkConstants</name>
     <message>
@@ -860,10 +860,6 @@ Emplacement : %2</translation>
     <message>
         <source>Recommended update frequency</source>
         <translation>Fréquence recommandée de contrôle de mise à jour</translation>
-    </message>
-    <message>
-        <source>The FreeMedForms community</source>
-        <translation>La communauté FreeMedForms</translation>
     </message>
     <message>
         <source>Please contact the development team.</source>
@@ -2783,6 +2779,10 @@ Text Align Justify shortcut key : Mac specific</extracomment>
     <message>
         <source>Welcome to FreeMedForms, you are now connected.</source>
         <translation>Bienvenue dans FreeHealth, vous êtes maintenant connecté(e).</translation>
+    </message>
+    <message>
+        <source>FreeHealth community</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

@@ -272,11 +272,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="35"/>
-        <source>The FreeMedForms community</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../libs/translationutils/trans_current.h" line="36"/>
         <source>Please contact the development team.</source>
         <translation type="unfinished"></translation>
@@ -705,6 +700,11 @@
     <message>
         <location filename="../../libs/translationutils/trans_current.h" line="126"/>
         <source>Date</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_current.h" line="35"/>
+        <source>FreeHealth community</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

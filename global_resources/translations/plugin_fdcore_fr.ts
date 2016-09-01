@@ -567,23 +567,15 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>We found a .freemedforms parameter directory.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>We found a .freemedforms hidden directory inside your user directory. It contains the connection parameters for your existing databases. If you want to use these databases with FreeHealth, click Yes and we will make a copy of of the directory named .freehealth. If you want to start a new installation from scratch, click No.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>We found a .freemedforms_debug parameter directory.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>We found a .freemedforms_debug hidden directory inside your user directory. It contains the connection parameters for your existing databases. If you want to use these databases with FreeHealth, click Yes and we will make a copy of of the directory named .freehealth_debug. If you want to start a new installation from scratch, click No.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Application Plugins path</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>We found a FreeMedforms parameter directory.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>We found a FreeMedForms parameter directory inside your user directory. It contains the connection parameters for your existing databases. If you want to use these databases with FreeHealth, click Yes. If you want to start a new installation from scratch, click No.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -4,23 +4,23 @@
 <context>
     <name>UserBase</name>
     <message>
-        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="748"/>
-        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="777"/>
+        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="740"/>
+        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="769"/>
         <source>Can not create a new user&apos;s UUID, database access error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="814"/>
+        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="806"/>
         <source>Can not retrieve login from the uuid</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="853"/>
+        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="845"/>
         <source>Can not retrieve crypted password from the login %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="989"/>
+        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="981"/>
         <source>Trying to create empty user database.
        Location: %1
        FileName: %2
@@ -28,7 +28,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="1497"/>
+        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="1482"/>
         <source>User %1 successfully updated.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -216,19 +216,19 @@
 <context>
     <name>UserPlugin::Internal::UserBase</name>
     <message>
-        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="584"/>
-        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="592"/>
+        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="582"/>
+        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="590"/>
         <source>Unable to initialize the database with the login: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="625"/>
+        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="621"/>
         <source>Login not found: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="1254"/>
-        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="1274"/>
+        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="1246"/>
+        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="1266"/>
         <source>Last recorded user login: %1 </source>
         <translation type="unfinished"></translation>
     </message>
