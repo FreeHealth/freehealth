@@ -137,7 +137,7 @@ HttpServerEngine::~HttpServerEngine()
 bool HttpServerEngine::managesServer(const Server &server)
 {
     if (core().isInternetConnectionAvailable())
-        return server.nativeUrl().startsWith("http://");
+        return server.nativeUrl().startsWith("https://");
     return false;
 }
 
@@ -424,7 +424,7 @@ ServerEngineStatus *HttpServerEngine::getStatus(const ReplyData &data)
     return &m_PackStatus[statusKey(data.pack)];
 }
 
-/** Reads Server description XML file and start the dowloading of pack description if needed. */
+/** Reads Server description XML file and start the downloading of pack description if needed. */
 void HttpServerEngine::afterServerConfigurationDownload(const ReplyData &data)
 {
     qWarning() << "afterServerConfigurationDownload" << data.server->uuid() << data.response.size();
@@ -595,6 +595,8 @@ QNetworkRequest HttpServerEngine::createRequest(const QString &url)
     request.setRawHeader("User-Agent", QString("FreeHealth:%1;%2")
                          .arg(qApp->applicationName())
                          .arg(qApp->applicationVersion()).toUtf8());
+    qDebug() << QString("FreeHealth:%1;%2").arg(qApp->applicationName())
+                .arg(qApp->applicationVersion()).toUtf8();
     return request;
 }
 
