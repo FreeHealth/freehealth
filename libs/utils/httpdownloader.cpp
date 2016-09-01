@@ -139,7 +139,7 @@ void HttpDownloader::setOutputPath(const QString &absolutePath)
 /*!
   * \brief Sets the output file name.
   *
-  * By default, the output filename is the filename of the URL. This method sets a custom out put filename.
+  * By default, the output filename is the filename of the URL. This method sets a custom output filename.
   * If you want to clear the output file name just pass an empty QString to this method.
   * \sa setUrl(), setOutputPath()
   */
@@ -372,6 +372,7 @@ void HttpDownloaderPrivate::httpFinished()
     }
 
     if (!_useBuffer) {
+        qDebug() << "Not using buffer";
         file->flush();
         file->close();
     }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="fr_FR">
+<TS version="2.1" language="fr_FR">
 <context>
     <name>Alert::AlertCore</name>
     <message>
@@ -84,43 +84,43 @@
     </message>
     <message>
         <source>About to show alert</source>
-        <translation type="unfinished"></translation>
+        <translation>Sur le point d&apos;afficher une alerte</translation>
     </message>
     <message>
         <source>During the alert presentation</source>
-        <translation type="unfinished"></translation>
+        <translation>Pendant l&apos;affichage de l&apos;alerte</translation>
     </message>
     <message>
         <source>About to validate the alert</source>
-        <translation type="unfinished"></translation>
+        <translation>Sur le point de valider l&apos;alerte</translation>
     </message>
     <message>
         <source>On alert about to be overridden</source>
-        <translation type="unfinished"></translation>
+        <translation>Lorsque l&apos;alerte est sur le point d&apos;être ignorée</translation>
     </message>
     <message>
         <source>On alert overridden</source>
-        <translation type="unfinished"></translation>
+        <translation>Lorsque l&apos;alerte est ignorée</translation>
     </message>
     <message>
         <source>On patient about to change</source>
-        <translation type="unfinished"></translation>
+        <translation>Lorsque le patient est sur le point de changer</translation>
     </message>
     <message>
         <source>On user about to change</source>
-        <translation type="unfinished"></translation>
+        <translation>Lorsque l&apos;utilisateur est sur le point de changer</translation>
     </message>
     <message>
         <source>On episode about to save</source>
-        <translation type="unfinished"></translation>
+        <translation>Lorsque l&apos;épisode est sur le point d&apos;être sauvegardé</translation>
     </message>
     <message>
         <source>On episode loaded</source>
-        <translation type="unfinished"></translation>
+        <translation>Lorsque l&apos;épisode est chargé</translation>
     </message>
     <message>
         <source>On remind later requested</source>
-        <translation type="unfinished"></translation>
+        <translation>Lorsqu&apos;un rappel différé est demandé</translation>
     </message>
 </context>
 <context>

@@ -243,7 +243,7 @@ void UserManagerPlugin::extensionsInitialized()
 #endif
 
     // add UserManager toogler action to plugin menu
-#ifdef FREEMEDFORMS
+#ifdef FREEHEALTH
     const char * const menuId = Core::Constants::M_GENERAL;
     const char * const menuNewId = Core::Constants::M_GENERAL_NEW;
     const char * const groupUsers = Core::Constants::G_GENERAL_USERS;

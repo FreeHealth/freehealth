@@ -67,9 +67,9 @@ public:
         ReadOnlyDatabasesPath,
         ReadWriteDatabasesPath,
         TranslationsPath,
-        QtPlugInsPath,
-        QtFrameWorksPath,
-        FMFPlugInsPath,
+        QtPluginsPath,
+        QtFrameworkPath,
+        AppPluginsPath,
         DocumentationPath,
         // Theme path
         ThemeRootPath,

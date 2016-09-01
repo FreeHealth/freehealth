@@ -1,0 +1,13 @@
+[Desktop Entry]
+Terminal=false
+Version=1.0
+Type=Application
+Categories=Education;Science;MedicalSoftware;
+Name=FreeHealth EHR
+GenericName=FreeHealth
+Comment=Free and open source Electronic Health Record
+Comment[fr]=Gestionnaire de dossiers patients libre et open source
+TryExec=freehealth
+Exec=freehealth
+Icon=ehr
+

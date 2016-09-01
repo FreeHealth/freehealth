@@ -36,10 +36,6 @@ Deuxièmement, renseignez les correctifs.&lt;br/&gt;
 Troisièmement, imprimez une page test &lt;u&gt;avec&lt;/u&gt; les corrections et re-vérifiez les marques.&lt;br/&gt;</translation>
     </message>
     <message>
-        <source>Correction de l&apos;impression</source>
-        <translation>Correction de l&apos;impression</translation>
-    </message>
-    <message>
         <source>To your right (-&gt;)</source>
         <translation>Vers votre droite (-&gt;)</translation>
     </message>
@@ -60,24 +56,12 @@ Troisièmement, imprimez une page test &lt;u&gt;avec&lt;/u&gt; les corrections e
         <translation>Décalage vertical</translation>
     </message>
     <message>
-        <source>Sens de l&apos;impression</source>
-        <translation>Sens de l&apos;impression</translation>
-    </message>
-    <message>
         <source>Distance between horizontal line and the left border of the page, in millimeters</source>
         <translation>Distance entre les lignes horizontales et le bord gauche de la page en millimètres</translation>
     </message>
     <message>
         <source>Your print</source>
         <translation>Votre impression</translation>
-    </message>
-    <message>
-        <source>Du haut vers le bas</source>
-        <translation>Du haut vers le bas</translation>
-    </message>
-    <message>
-        <source>Du bas vers le haut</source>
-        <translation>Du bas vers le haut</translation>
     </message>
     <message>
         <source>To the top of the page</source>
@@ -126,6 +110,22 @@ Troisièmement, imprimez une page test &lt;u&gt;avec&lt;/u&gt; les corrections e
     <message>
         <source>The line is printed at %1mm to the left of the page</source>
         <translation>La ligne est imprimée à %1 mm du bord gauche de la page</translation>
+    </message>
+    <message>
+        <source>Correct margins</source>
+        <translation>Corriger les marges</translation>
+    </message>
+    <message>
+        <source>Printing direction</source>
+        <translation>Sens de l&apos;impression</translation>
+    </message>
+    <message>
+        <source>From top down</source>
+        <translation>Du haut vers le bas</translation>
+    </message>
+    <message>
+        <source>From bottom up</source>
+        <translation>Du bas vers le haut</translation>
     </message>
 </context>
 <context>

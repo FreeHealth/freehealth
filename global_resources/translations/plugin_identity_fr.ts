@@ -1,65 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="fr_FR">
+<TS version="2.0" language="fr_FR">
 <context>
     <name>Identity::IdentityEditorWidget</name>
     <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="795"/>
+        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="797"/>
         <source>You must specify a usualName.</source>
         <translation>Vous devez spécifier un nom usuel.</translation>
     </message>
     <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="796"/>
+        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="798"/>
         <source>You can not create a patient without a usualName</source>
         <translation>Vous ne pouvez pas créer un patient sans nom usuel</translation>
     </message>
     <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="797"/>
+        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="799"/>
         <source>No usualName</source>
         <translation>Pas de nom usuel</translation>
     </message>
     <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="803"/>
+        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="805"/>
         <source>You must specify a first name.</source>
         <translation>You devez spécifier un prénom.</translation>
     </message>
     <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="804"/>
+        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="806"/>
         <source>You can not create a patient without a first name</source>
         <translation>Vous ne pouvez pas créer un patient sans prénom</translation>
     </message>
     <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="805"/>
+        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="807"/>
         <source>No firstname</source>
         <translation>Pas de prénom</translation>
     </message>
     <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="811"/>
+        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="813"/>
         <source>You must specify a date of birth.</source>
         <translation>Vous devez spécifier un date de naissance.</translation>
     </message>
     <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="812"/>
+        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="814"/>
         <source>You can not create a patient without a date of birth</source>
         <translation>Vous ne pouvez pas créer un patient sans date de naissance</translation>
     </message>
     <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="813"/>
+        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="815"/>
         <source>No date of birth</source>
         <translation>Pas de date de naissance</translation>
     </message>
     <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="819"/>
+        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="821"/>
         <source>You must specify a gender.</source>
         <translation>Vous devez spécifier un genre.</translation>
     </message>
     <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="820"/>
+        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="822"/>
         <source>You can not create a patient without a gender</source>
         <translation>Vous ne pouvez pas créer un patient sans genre</translation>
     </message>
     <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="821"/>
+        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="823"/>
         <source>No gender</source>
         <translation>Pas de genre</translation>
     </message>

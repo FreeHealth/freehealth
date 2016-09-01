@@ -110,8 +110,11 @@ namespace {
         }
         int childNumber() const
         {
-            if (m_Parent)
+            qDebug() << Q_FUNC_INFO;
+            if (m_Parent) {
+                qDebug() << m_Parent->m_Children.indexOf(const_cast<TreeItem*>(this));
                 return m_Parent->m_Children.indexOf(const_cast<TreeItem*>(this));
+            }
             return 0;
         }
     //    void sortChildren()
@@ -136,7 +139,7 @@ namespace {
 
         bool setData(int column, const QVariant &value)
         {
-            //        qWarning()<< data(column) << value << (data(column)==value);
+            qDebug()<< data(column) << value << (data(column)==value);
             if (data(column)==value)
                 return true;
             m_Datas.insert(column, value);
@@ -329,7 +332,7 @@ public:
         } else {
             Utils::Log::addQueryError(q,query,__FILE__,__LINE__);
         }
-        qWarning() << req;
+        qDebug() << req;
 
         return true;
     }

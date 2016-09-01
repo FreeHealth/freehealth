@@ -26,8 +26,8 @@
 #include "edrcplugin.h"
 #include "edrccore.h"
 #include <edrcplugin/widgets/edrcpreferences.h>
-#ifdef FREEMEDFORMS
-#include <edrcplugin/freemedforms/edrcwidgetfactory.h>
+#ifdef FREEHEALTH
+#include <edrcplugin/ehr/edrcwidgetfactory.h>
 #endif
 
 #include <coreplugin/icore.h>
@@ -118,7 +118,7 @@ bool EdrcPlugin::initialize(const QStringList &arguments, QString *errorString)
     // Initialize database here
     // Initialize the drugs engines
     // Add your Form::IFormWidgetFactory here to the plugin manager object pool
-#ifdef FREEMEDFORMS
+#ifdef FREEHEALTH
     _factory = new eDRC::Internal::EdrcWidgetFactory(this);
     _factory->initialize(arguments, errorString);
     addObject(_factory);
@@ -151,7 +151,7 @@ void EdrcPlugin::extensionsInitialized()
 
     // At this point, user is connected
     _core->extensionInitialized();
-#ifdef FREEMEDFORMS
+#ifdef FREEHEALTH
     _factory->extensionInitialized();
 #endif
 

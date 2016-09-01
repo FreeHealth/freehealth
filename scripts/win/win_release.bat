@@ -1,11 +1,14 @@
-REM # This script is part of FreeMedForms project : http://www.freemedforms.com
-REM # (C) 2008-2016 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>
-REM # License: BSD 3-clause
-REM #
-REM # This script compiles and create the installer for any FreeMedForms application
+REM # FreeHealth windows build script
+REM # Based on:
+REM #############################################################################
+REM # This script is part of FreeMedForms project : http://www.freemedforms.com #
+REM # (C) 2008-2016 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>         #
+REM # License: BSD 3-clause                                                     #
+REM #############################################################################
+REM # This script compiles and creates the installer for any FreeHealth application
 REM # 
 REM # The script supposes that:
-REM # - freemedforms-project source package is decompressed here
+REM # - freehealth-project source package is decompressed here
 REM # - MinGW is installed (see %PATH_TO_MINGW%)
 REM # - most recent MySQL is installed (see %PATH_TO_MYSQL%)
 REM # - most recent OpenCV must be installed in the contrib path 
@@ -13,16 +16,16 @@ REM # - Inno Setup 5 is installed on the machine (see %PATH_TO_INNOSETUP%)
 REM # - unix2dos.exe is installed on the machine in the %PATH%
 REM # - Win 32 OpenSSL is installed on the machine (see %PATH_TO_OPENSSL%)
 REM # You can get OpenSSL from https://www.slproweb.com/products/Win32OpenSSL.html
-REM # (current version as ok 05/2015 is Win32 OpenSSL v1.0.2a Light) or build it yourself.
 REM # 
 REM # After the compilation, you will find the installer in the source root dir
 
 REM # Var definition
-set VERSION=__version__
-set PATH_TO_MYSQL=C:\Progra~1\MySQL\MYSQLS~1.5\lib
+set VERSION=0.9.9
+set PATH_TO_MYSQL=C:\PROGRA~1\MySQL\MYSQLS~1.5\lib
 set PATH_TO_INNOSETUP=C:\Progra~1\InnoSe~1\iscc.exe
 set WORKING_DIRECTORY=%CD%
-set PATH_TO_MINGW=C:\Progra~1\mingw-w64\i686-4.9.1-posix-dwarf-rt_v3-rev2\mingw32\bin
+set PATH_TO_MINGW=C:\Qt\QT56~1.1\Tools\MINGW4~1\I686-W~1\lib
+set PATH_TO_QT_ICU=C:\Qt\QT56~1.1\5.6\MINGW4~1\bin
 set PATH_TO_OPENSSL=C:\OPENSS~1
 set PATH_TO_SYSTEM32=C:\Windows\System32
 
@@ -46,13 +49,19 @@ REM # Go to source root dir
 cd ..
 
 REM # Copy MySQL lib into package dir
-copy %PATH_TO_MYSQL%\libmySQL.dll packages\win\%1\libmySQL.dll
-copy %PATH_TO_MYSQL%\libmySQL.dll packages\win\%1\plugins\libmySQL.dll
+copy %PATH_TO_MYSQL%\libmysql.dll packages\win\%1\libmysql.dll
+copy %PATH_TO_MYSQL%\libmysql.dll packages\win\%1\plugins\libmysql.dll
 
 REM # Copy MinGW lib into package dir
 copy %PATH_TO_MINGW%\libgcc_s_dw2-1.dll packages\win\%1\
-copy %PATH_TO_MINGW%\libstdc*-6.dll packages\win\%1\
-copy %PATH_TO_MINGW%\mingwm10.dll packages\win\%1\
+copy %PATH_TO_MINGW%\libstdc++-6.dll packages\win\%1\
+
+REM # Copy ICU libraries into package dir
+REM # ICU is a mature, widely used set of C/C++ and Java libraries providing
+REM # Unicode and Globalization support for software applications
+copy %PATH_TO_QT_ICU%\icudt54.dll packages\win\%1\
+copy %PATH_TO_QT_ICU%\icuin54.dll packages\win\%1\
+copy %PATH_TO_QT_ICU%\icuuc54.dll packages\win\%1\
 
 REM # Copy OpenSSL lib into package dir
 copy %PATH_TO_OPENSSL%\ssleay32.dll packages\win\%1\
@@ -67,18 +76,19 @@ unix2dos packages\win\%1\README.txt
 unix2dos packages\win\%1\COPYING.txt
 
 REM # Create the installer
-copy global_resources\package_helpers\%1.iss packages\win\%1\
-copy %1\%1-src\%1.ico packages\win\%1\
+copy global_resources\package_helpers\%1.iss packages\win\%1\%1.iss
+copy %\ehr-src\ehr.ico packages\win\%1\
 %PATH_TO_INNOSETUP% packages\win\%1\%1.iss"
 del packages\win\%1\%1.iss
 
 REM # Rename and move the setup.exe file
-copy packages\win\%1\setup.exe %1-%VERSION%.exe
+copy packages\win\%1\Output\setup.exe %1-%VERSION%.exe
 
 REM # Unset var
 set PATH_TO_MYSQL=
 set PATH_TO_OPENCV=
 set PATH_TO_INNOSETUP=
 set WORKING_DIRECTORY=
+set PATH_TO_QT_ICU=
 
 cd %WORKING_DIRECTORY%

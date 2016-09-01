@@ -354,7 +354,7 @@ public:
         ui->episodeView->horizontalHeader()->setSectionsMovable(true);
 
         QFont small;
-        if (Utils::isRunningOnWin() || Utils::isRunningOnLinux() || Utils::isRunningOnFreebsd())
+        if (Utils::isRunningOnWin() || Utils::isRunningOnLinux())
             small.setPointSize(small.pointSize() - 1);
         else
             small.setPointSize(small.pointSize() - 4);

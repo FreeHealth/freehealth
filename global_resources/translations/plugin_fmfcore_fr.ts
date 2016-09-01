@@ -56,22 +56,30 @@ Veuillez vérfier que l&apos;hôte contient bien une configuration serveur de Fr
         <translation>Sélectionnez le type d&apos;installation</translation>
     </message>
     <message>
-        <source>Single computer</source>
-        <translation>Mono-poste</translation>
-    </message>
-    <message>
-        <source>Network (as client)</source>
-        <translation>Réseau (en tant que client)</translation>
-    </message>
-    <message>
-        <source>Network (as server)</source>
-        <translation>Réseau (en tant que serveur)</translation>
-    </message>
-    <message>
-        <source>This wizard will help you to configure the base parameters of the application.
+        <source>This wizard will help you configure the base parameters of the application.
 Select your preferred language and the installation type.</source>
-        <translation>Cet assistant va vous aider à configurer les paramètres de la base de données de l&apos;application.
-Sélectionnez votre langage préféré et le type d&apos;installation.</translation>
+        <translation>Cet installateur va vous aider à configurer les paramètres de base de l&apos;application.
+Sélectionnez votre langue et votre type d&apos;installation.</translation>
+    </message>
+    <message>
+        <source>Create MySQL databases</source>
+        <translation>Créer les bases de données MySQL</translation>
+    </message>
+    <message>
+        <source>Connect to MySQL databases</source>
+        <translation>Se connecter aux bases de données MySQL</translation>
+    </message>
+    <message>
+        <source>Test without MySQL</source>
+        <translation>Tester sans MySQL</translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;This simplified installation procedure is for testing purposes only.&lt;/b&gt; 
+It is using SQLite as a temporary database. We do not recommend that you use SQLite to store medical data because  FreeHealth support of SQLite will end soon. If you want to install FreeHealth for professional use, please choose &lt;b&gt;Create MySQL databases&lt;/b&gt; instead.
+Click Ok to test FreeHealth, or click Cancel to install FreeHealth with MySQL.</source>
+        <translation>&lt;b&gt;Cette procédure d&apos;installation simplifiée permet de tester le logiciel rapidement.&lt;/b&gt; 
+Elle utilise des fichiers SQLite comme bases de données temporaires. Nous ne recommandons pas l&apos;utilisation de SQLite car le support de SQLite sera bientôt interrompu. Si vous souhaitez installer FreeHealth pour un usage professionnel, merci d&apos;installer le logiciel libre et gratuit MySQL puis choisissez &lt;b&gt;Créer les bases de données MySQL&lt;/b&gt;.
+Cliquez Ok pour tester FreeHealth, ou Annuler pour installer FreeHealth avec MySQL.</translation>
     </message>
 </context>
 <context>
@@ -116,10 +124,6 @@ Sélectionnez votre langage préféré et le type d&apos;installation.</translat
         <translation>%1 est maintenant configuré</translation>
     </message>
     <message>
-        <source>Please read the user&apos;s manual. If you have any question, you can ask them to the mailing list.</source>
-        <translation>Veuillez vous reporter au manuel de l&apos;utilisateur. Si vous avez des question, vous pouvez les poser sur notre liste de diffusion.</translation>
-    </message>
-    <message>
         <source>Don&apos;t clean databases</source>
         <translation>Ne pas nettoyer les bases</translation>
     </message>
@@ -140,16 +144,16 @@ Sélectionnez votre langage préféré et le type d&apos;installation.</translat
         <translation>Créer les données virtuelles</translation>
     </message>
     <message>
-        <source>French/english mailing list</source>
-        <translation>Liste de diffusion française/anglaise</translation>
-    </message>
-    <message>
-        <source>Application main web site</source>
-        <translation>Site internet de l&apos;application</translation>
-    </message>
-    <message>
         <source>You can clean and recreate all your databases. Select the option above. If you select the clean option, all databases will be erased with &lt;b&gt;definitive data loss&lt;/b&gt;.</source>
         <translation>Vous pouvez effacer et recréer toutes vos bases de données. Sélectionnez l&apos;option ci-dessous. Si vous sélectionnez cette option, toutes vos bases de données seront effacées avec &lt;b&gt;une perte définitive des données&lt;/b&gt;.</translation>
+    </message>
+    <message>
+        <source>Please read the online user guide.</source>
+        <translation>Merci de lire le manuel de l&apos;utilisateur en ligne.</translation>
+    </message>
+    <message>
+        <source>Help, support and information:</source>
+        <translation>Aide, assistance et information:</translation>
     </message>
 </context>
 <context>
@@ -399,7 +403,7 @@ Sélectionnez votre langage préféré et le type d&apos;installation.</translat
     <name>Core::Internal::ServerPreferencesWidgetPrivate</name>
     <message>
         <source>Enter host name...</source>
-        <translation>Entrer le nom d&apos;hôte</translation>
+        <translation>Entrer le nom d&apos;hôte...</translation>
     </message>
 </context>
 <context>
@@ -505,10 +509,6 @@ Sélectionnez votre langage préféré et le type d&apos;installation.</translat
     <message>
         <source>Qt FrameWorks path</source>
         <translation>Répertoire des bibliothèques Qt</translation>
-    </message>
-    <message>
-        <source>FreeMedForms PlugIns path</source>
-        <translation>Répertoire des plugins de FreeMedForms</translation>
     </message>
     <message>
         <source>Default installed datapack path</source>
@@ -666,6 +666,38 @@ Sélectionnez votre langage préféré et le type d&apos;installation.</translat
         <source>DocumentationPath</source>
         <translation></translation>
     </message>
+    <message>
+        <source>We found a FreeMedForms user directory.</source>
+        <translation>Nous avons trouvé un dossier utilisateur de FreeMedForms.</translation>
+    </message>
+    <message>
+        <source>Do you want to use this directory with FreeHealth?</source>
+        <translation>Souhaitez-vous utiliser ce dossier avec FreeHealth?</translation>
+    </message>
+    <message>
+        <source>We found a freemedforms directory inside your user directory. If you want to use it with FreeHealth, click Yes and we will make a copy of it named freehealth. If you want to start a new installation from scratch, click No.</source>
+        <translation>Nous avons trouvé un dossier freemedforms à l&apos;intérieur de votre dossier utilisateur. Si vous souhaitez utiliser ce dossier avec FreeHealth, cliquez sur Oui et nous en ferons une copie nommée freehealth. Si vous voulez procéder à une nouvelle installation en partant de zéro, cliquez sur Non.</translation>
+    </message>
+    <message>
+        <source>We found a .freemedforms parameter directory.</source>
+        <translation>Nous avons trouvé un dossier .freemedforms contenant vos paramètres habituels.</translation>
+    </message>
+    <message>
+        <source>We found a .freemedforms hidden directory inside your user directory. It contains the connection parameters for your existing databases. If you want to use these databases with FreeHealth, click Yes and we will make a copy of of the directory named .freehealth. If you want to start a new installation from scratch, click No.</source>
+        <translation>Nous avons trouvé un dossier caché .freemedforms à l&apos;intérieur de votre dossier utilisateur. Il contient les paramètres de connexion à vos bases de données actuelles. Si vous souhaitez continuer à utiliser vos données avec FreeHealth, cliquez sur Oui et nous ferons une copie de ce dossier nommée .freehealth. Si vous souhaitez démarrer une nouvelle installation en partant de zéro, cliquez sur Non.</translation>
+    </message>
+    <message>
+        <source>We found a .freemedforms_debug parameter directory.</source>
+        <translation>Nous avons trouvé un dossier caché .freemedforms_debug contenant des paramètres de connexion.</translation>
+    </message>
+    <message>
+        <source>We found a .freemedforms_debug hidden directory inside your user directory. It contains the connection parameters for your existing databases. If you want to use these databases with FreeHealth, click Yes and we will make a copy of of the directory named .freehealth_debug. If you want to start a new installation from scratch, click No.</source>
+        <translation>Nous avons trouvé un dossier caché .freemedforms_debug à l&apos;intérieur de votre dossier utilisateur. Il contient les paramètres de connexion à vos bases de données actuelles. Si vous souhaitez continuer à utiliser vos données avec FreeHealth, cliquez sur Oui et nous ferons une copie de ce dossier nommée .freehealth_debug. Si vous souhaitez démarrer une nouvelle installation en partant de zéro, cliquez sur Non.</translation>
+    </message>
+    <message>
+        <source>Application Plugins path</source>
+        <translation>Chemin vers les plugins de l&apos;application</translation>
+    </message>
 </context>
 <context>
     <name>Core::Internal::SimpleTextDialog</name>
@@ -801,16 +833,6 @@ Veuillez vérifier et valider les données de paramétrage.</translation>
         <translation>Fichiers manquants.</translation>
     </message>
     <message>
-        <source>Connection to the server: User rights inadequate</source>
-        <translation>Connexion au serveur : droits d&apos;utilisateur inadéquat</translation>
-    </message>
-    <message>
-        <source>You need to connect with another user that have rights to select, udpate, delete, insert, create, drop, alter and create user.
-Please contact your server administrator.</source>
-        <translation>Vous devez vous connecter avec un autre utilisateur qui les droits suivants : select, udpate, delete, insert, create, drop, alter and create user.
-Veuillez contacter votre administrateur réseau.</translation>
-    </message>
-    <message>
         <source>An error occured...</source>
         <translation>Une erreur est survenue...</translation>
     </message>
@@ -843,6 +865,16 @@ Veuillez vérifier les fichiers journaux et contacter votre administrateur.</tra
     <message>
         <source>The configuration script is missing. You can not configure the server without this script.&lt;br&gt;&lt;br&gt;&lt;b&gt;%1&lt;/b&gt;</source>
         <translation>Impossible de trouver le script de configuration. Vous ne pouvez pas configurer le serveur sans ce script.&lt;br&gt;&lt;br&gt;&lt;b&gt;%1&lt;/b&gt;</translation>
+    </message>
+    <message>
+        <source>Connection to the server: User privileges inadequate</source>
+        <translation>Connexion au serveur: privilèges utilisateur incorrects</translation>
+    </message>
+    <message>
+        <source>You need to connect with another user that has the following global privileges: select, udpate, delete, insert, create, drop, alter and create user.
+Please contact your server administrator.</source>
+        <translation>Vous devez vous connecter avec un autre utilisateur qui a les privilèges globaux suivants: select, update, delete, insert, create, drop, alter and create user.
+Merci de contacter l&apos;administrateur de votre serveur de bases de données.</translation>
     </message>
 </context>
 <context>

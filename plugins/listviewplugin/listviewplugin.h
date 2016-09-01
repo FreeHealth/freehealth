@@ -43,7 +43,7 @@ namespace Internal {
 class ListViewPlugin : public ExtensionSystem::IPlugin
 {
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID "org.freemedforms.FreeMedForms.ListViewPlugin" FILE "ListView.json")
+    Q_PLUGIN_METADATA(IID "io.freehealth.ehr.ListViewPlugin" FILE "ListView.json")
 
 public:
     ListViewPlugin();

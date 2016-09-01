@@ -1,7 +1,5 @@
-# Qt 5.1 cache system
-qt:greaterThan(QT_MAJOR_VERSION, 4) {
-    cache()
-}
+# Qt5 cache system
+cache()
 
 # include general workbench
 include(../buildspecs/config.pri)

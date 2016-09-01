@@ -37,8 +37,8 @@ namespace Core {
 
 namespace Constants {
 
-const char * const  FREEMEDFORMS_SPLASHSCREEN = "freemedforms.png";
-const char * const  FREEDIAMS_SPLASHSCREEN    = "freediams.png";
+const char * const  EHR_SPLASHSCREEN = "freehealth.png";
+const char * const  ERX_SPLASHSCREEN    = "erx.png";
 const char * const  FREEACCOUNT_SPLASHSCREEN  = "freeaccount.png";
 const char * const  FREEICD_SPLASHSCREEN      = "freeicd.png";
 const char * const  FREEGIR_SPLASHSCREEN      = "freegir.png";
@@ -49,8 +49,8 @@ const char * const  FREEDDIMANAGER_SPLASHSCREEN = "freeddimanager.png";
 const char * const  FREEGUARD_SPLASHSCREEN      = "freeguard.png";
 
 // application icons
-const char * const  ICONFREEMEDFORMS   = "freemedforms.png";
-const char * const  ICONFREEDIAMS      = "freediams.png";
+const char * const  ICONFREEMEDFORMS   = "ehr.png";
+const char * const  ICONFREEDIAMS      = "erx.png";
 const char * const  ICONFREEACCOUNT    = "freeaccount.png";
 const char * const  ICONFREEICD        = "freeicd.png";
 const char * const  ICONFREEGIR        = "freegir.png";
@@ -177,7 +177,7 @@ const char * const  ICONDEBUGHELPER =  "";
 #if defined(FREEMEDFORMS)
 const char * const  ICONABOUT =        "freemedforms.png";
 #elif defined(FREEDIAMS)
-const char * const  ICONABOUT =        "freediams.png";
+const char * const  ICONABOUT =        "erx.png";
 #elif defined(FREEACCOUNT)
 const char * const  ICONABOUT =        "freemedforms.png";
 #elif defined(FREEPAD)
@@ -199,7 +199,7 @@ const char * const  ICONFORMS    =  "forms.png";
 const char * const  ICONFORMS_ADD    =  "form-new.png";
 const char * const  ICONPATIENTOVERVIEW  =  "patientsynthesis.png";
 const char * const  ICONTAKESCREENSHOT  =  "takescreenshot.png";
-const char * const  ICONEXPORTPATIENTFILE  =  "export-patient-file.png";
+const char * const  ICONEXPORTPATIENTFILE  =  "export.png";
 const char * const  ICONCHEQUE       = "bank-cheque.png";
 const char * const  ICONNEWMAIL       = "mail_new.png";
 const char * const  ICONSENDMAIL       = "mail_send.png";

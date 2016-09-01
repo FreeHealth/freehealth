@@ -3,9 +3,7 @@ TARGET = Printer
 
 DEFINES += PRINTER_LIBRARY
 
-greaterThan(QT_MAJOR_VERSION, 4) {
-    QT *= printsupport
-}
+QT *= printsupport
 
 include($${PWD}/../fmf_plugins.pri)
 include( $${PWD}/printerplugin_dependencies.pri )

@@ -39,14 +39,14 @@ namespace eDRC {
 class EdrcCore;
 namespace Internal {
 class EdrcPreferencesPage;
-#ifdef FREEMEDFORMS
+#ifdef FREEHEALTH
 class EdrcWidgetFactory;
 #endif
 
 class EdrcPlugin : public ExtensionSystem::IPlugin
 {
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID "org.freemedforms.FreeMedForms.ToolsPlugin"  FILE "eDRC.json")
+    Q_PLUGIN_METADATA(IID "io.freehealth.ehr.ToolsPlugin"  FILE "eDRC.json")
 
 public:
     EdrcPlugin();
@@ -74,7 +74,7 @@ private Q_SLOTS:
 private:
     EdrcCore *_core;
     EdrcPreferencesPage *_pref;
-#ifdef FREEMEDFORMS
+#ifdef FREEHEALTH
     EdrcWidgetFactory *_factory;
 #endif
 };

@@ -4,47 +4,47 @@
 <context>
     <name>Database</name>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="768"/>
+        <location filename="../../libs/utils/database.cpp" line="739"/>
         <source>WARNING: %1 database already in use</source>
         <translation>ATTENTION: base de données %1 déjà en cours d&apos;utilisation</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="912"/>
+        <location filename="../../libs/utils/database.cpp" line="883"/>
         <source>ERROR: Database `%1` is not readable. Path: %2</source>
         <translation>ERREUR: base de données %1 n&apos;est pas lisible. Chemin %2</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="923"/>
+        <location filename="../../libs/utils/database.cpp" line="894"/>
         <source>ERROR: Database %1 is not readable. Host: %2</source>
         <translation>ERREUR: base de données %1 n&apos;est pas lisible. Hôte %2</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="932"/>
+        <location filename="../../libs/utils/database.cpp" line="903"/>
         <source>ERROR: Database %1 is not readable. Path: %2</source>
         <translation>ERREUR: base de données %1 n&apos;est pas lisible. Chemin : %2</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="961"/>
+        <location filename="../../libs/utils/database.cpp" line="932"/>
         <source>ERROR: Database %1 is not writable. Path: %2.</source>
         <translation>ERREUR: base de données %1 n&apos;est pas inscriptible. Chemin : %2.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="1013"/>
+        <location filename="../../libs/utils/database.cpp" line="984"/>
         <source>INFO: database %1 connection = %2</source>
         <translation>INFO : base de données %1 connexion %2</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="1241"/>
+        <location filename="../../libs/utils/database.cpp" line="1212"/>
         <source>Database Scheme Error: wrong number of fields for table %1 (expected: %2; current: %3)</source>
         <translation>Erreur de schéma de base de données: nombre de champs incorrect pour la table %1 (attendus: %2, actuels: %3)</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="1253"/>
+        <location filename="../../libs/utils/database.cpp" line="1224"/>
         <source>Database Scheme Error: field number %1 differs: %2 instead of %3 in table %4</source>
         <translation>Schema de base erroné : champs numéro %1 différe : %2 au lieu de %3 dans la table %4</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="2428"/>
+        <location filename="../../libs/utils/database.cpp" line="2411"/>
         <source>Can not create table %1</source>
         <translation>Impossible de créer la table %1</translation>
     </message>
@@ -180,11 +180,6 @@
         <translation>Cette fonction n&apos;est pas disponible dans cette version.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="1201"/>
-        <source>You can send an email to developers and explain your difficulties: freemedforms@googlegroups.com.</source>
-        <translation>Vous pouvez envoyer un courriel aux développeurs et expliquer vos difficultées : freemedforms@googlegroups.com.</translation>
-    </message>
-    <message>
         <location filename="../../libs/utils/global.cpp" line="1262"/>
         <source>Do you agree these terms?</source>
         <translation>Acceptez vous ces termes ?</translation>
@@ -200,6 +195,11 @@
         <location filename="../../libs/utils/global.cpp" line="787"/>
         <source>%1 successfully saved (%2)</source>
         <translation>%1 correctement sauvegardé (%2)</translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/global.cpp" line="1201"/>
+        <source>You can send an email to developers and explain your difficulties: dev@freehealth.io</source>
+        <translation>Vous pouvez envoyer un email aux développeurs et leur expliquer vos difficultés: dev@freehealth.io</translation>
     </message>
     <message>
         <location filename="../../libs/utils/global.cpp" line="1254"/>

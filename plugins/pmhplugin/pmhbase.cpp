@@ -21,7 +21,7 @@
 /***************************************************************************
  *  Main developer: Eric MAEKER, <eric.maeker@gmail.com>                   *
  *  Contributors:                                                          *
- *       NAME <MAIL@ADDRESS.COM>                                           *
+ *       Jerome Pinguet <jerome@jerome.cc>                                 *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 
@@ -392,6 +392,7 @@ bool PmhBase::linkPmhWithCategory(const QVector<Category::CategoryItem *> &cats,
 */
 bool PmhBase::savePmhData(PmhData *pmh)
 {
+    qDebug() << Q_FUNC_INFO;
     QSqlDatabase DB = QSqlDatabase::database(Constants::DB_NAME);
     if (!connectDatabase(DB, __LINE__)) {
         return false;
@@ -440,6 +441,7 @@ bool PmhBase::savePmhData(PmhData *pmh)
 */
 bool PmhBase::updatePmhData(PmhData *pmh)
 {
+    qDebug() << Q_FUNC_INFO;
     QSqlDatabase DB = QSqlDatabase::database(Constants::DB_NAME);
     if (!connectDatabase(DB, __LINE__)) {
         return false;
@@ -528,6 +530,7 @@ bool PmhBase::savePmhEpisodeData(PmhEpisodeData *episode)
 */
 bool PmhBase::updatePmhEpsisodeData(PmhEpisodeData *episode)
 {
+    qDebug() << Q_FUNC_INFO;
     // we are inside a transaction
     if (episode->data(PmhEpisodeData::DbOnly_Id).isNull()) {
         return savePmhEpisodeData(episode);

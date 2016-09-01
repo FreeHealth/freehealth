@@ -285,7 +285,7 @@ void ThemePrivate::messageSplashScreen(const QString &msg)
 {
     Q_ASSERT(m_Splash);
     if (m_Splash)
-        m_Splash->showMessage(msg, Qt::AlignLeft | Qt::AlignBottom, Qt::black);
+        m_Splash->showMessage(msg, Qt::AlignRight | Qt::AlignBottom, Qt::black);
 }
 
 void ThemePrivate::finishSplashScreen(QWidget *widget)

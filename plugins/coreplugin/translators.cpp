@@ -167,7 +167,7 @@ bool Translators::addNewTranslator(const QString & fileMask, bool fromDefaultPat
     QString lang = QLocale().name().left(2).toLower();
     QString path;
     if (fileMask.compare("qt", Qt::CaseInsensitive) == 0) {
-        if (Utils::isLinuxIntegratedCompilation() || Utils::isRunningOnLinux() || Utils::isRunningOnFreebsd())
+        if (Utils::isLinuxIntegratedCompilation() || Utils::isRunningOnLinux())
             path = QLibraryInfo::location(QLibraryInfo::TranslationsPath);
     }
     QFileInfo file(fileMask);

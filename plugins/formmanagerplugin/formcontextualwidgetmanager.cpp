@@ -227,7 +227,7 @@ FormActionHandler::FormActionHandler(QObject *parent) :
         menu->setTranslations(Form::Constants::M_FORM_TEXT);
 
         // Add the menu to the menubar or to the plugin menu
-#ifdef FREEMEDFORMS
+#ifdef FREEHEALTH
         actionManager()->actionContainer(Core::Id(Core::Constants::M_PLUGINS))->addMenu(menu, Core::Constants::G_PLUGINS_FORM);
 #else
         actionManager()->actionContainer(Core::Id(Core::Constants::MENUBAR))->addMenu(menu, Core::Constants::G_PLUGINS);

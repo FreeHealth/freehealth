@@ -48,7 +48,7 @@ class VirtualPatientBasePage;
 class MainWinPlugin : public ExtensionSystem::IPlugin
 {
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID "org.freemedforms.FreeMedForms.MainWindowPlugin" FILE "MainWindow.json")
+    Q_PLUGIN_METADATA(IID "io.freehealth.ehr.MainWindowPlugin" FILE "MainWindow.json")
 
 public:
     MainWinPlugin();

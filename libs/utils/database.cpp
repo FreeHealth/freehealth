@@ -351,8 +351,8 @@ QString Database::prefixedDatabaseName(AvailableDrivers driver, const QString &d
     // Append global prefix whatever is the driver
     if (!_prefix.isEmpty()) {
         if (!toReturn.startsWith(_prefix)) {
-            // Prepend MySQL / MariaDB / PostGre prefix if required
-            if ((driver==MySQL || driver==PostSQL)
+            // Prepend MySQL
+            if ((driver==MySQL)
                     && !toReturn.startsWith("fmf_"))
                 toReturn.prepend("fmf_");
             // Prepend global prefix
@@ -360,8 +360,8 @@ QString Database::prefixedDatabaseName(AvailableDrivers driver, const QString &d
         }
     } else {
         // No global prefix
-        // MySQL / MariaDB / PostGre -> add "fmf_"
-        if ((driver==MySQL || driver==PostSQL)
+        // MySQL -> add "fmf_"
+        if ((driver==MySQL)
                 && !toReturn.startsWith("fmf_"))
             toReturn.prepend("fmf_");
     }
@@ -791,7 +791,6 @@ bool Database::createConnection(const QString &connectionName, const QString &no
                 LOG_FOR("Database", QString("Connected to host %1").arg(connector.host()));
             break;
         }
-        case PostSQL: break;
         }
         createOption = CreateDatabase;
     }
@@ -816,11 +815,6 @@ bool Database::createConnection(const QString &connectionName, const QString &no
         }
         if (WarnLogMessages)
             LOG_FOR("Database", QString("Connected to host %1").arg(connector.host()));
-        break;
-    }
-    case PostSQL:
-    {
-        // TODO: Check PostSQL connection
         break;
     }
     } // switch
@@ -867,11 +861,6 @@ bool Database::createConnection(const QString &connectionName, const QString &no
             LOG_FOR("Database", tkTr(Trans::Constants::CONNECTED_TO_DATABASE_1_DRIVER_2).arg(prefixedDbName).arg(DB.driverName()));
         break;
     }
-    case PostSQL:
-    {
-        // TODO: Test database existence
-        break;
-    }
     }
 
     qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
@@ -915,11 +904,6 @@ bool Database::createConnection(const QString &connectionName, const QString &no
         }
         break;
     }
-    case PostSQL:
-    {
-        // TODO: Test database connection PostSQL
-        break;
-    }
     }
 
     qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
@@ -939,11 +923,6 @@ bool Database::createConnection(const QString &connectionName, const QString &no
         case MySQL:
         {
             // TODO: test write access to MySQL database
-            break;
-        }
-        case PostSQL:
-        {
-            // TODO: test write access to PostGreSQL database
             break;
         }
         }
@@ -974,9 +953,6 @@ bool Database::createConnection(const QString &connectionName, const QString &no
     {
         break;
     }
-    case PostSQL :
-        // TODO: manage PostGre SQL
-        return false;
     }
 
     qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
@@ -1086,7 +1062,6 @@ Database::Grants Database::getConnectionGrants(const QString &connectionName) //
         DB.commit();
         return DatabasePrivate::getGrants(connectionName, grants);
     }
-    // TODO: code here : PostGreSQL and other drivers
     return Grant_NoGrant;
 }
 
@@ -2207,13 +2182,25 @@ QString Database::prepareInsertQuery(const int tableref) const
     }
     fields.chop(2);
     values.chop(2);
-    toReturn = QString("INSERT INTO `%1` \n(%2) \nVALUES (%3);")
+    toReturn = QString("INSERT INTO `%1` (%2) VALUES (%3)")
             .arg(table(tableref))
             .arg(fields)
             .arg(values);
     if (WarnSqlCommands)
         qWarning() << toReturn;
     return toReturn;
+}
+
+QString Database::getLastExecutedQuery(const QSqlQuery& query)
+{
+ QString str = query.lastQuery();
+ QMapIterator<QString, QVariant> it(query.boundValues());
+ while (it.hasNext())
+ {
+  it.next();
+  str.replace(it.key(),it.value().toString());
+ }
+ return str;
 }
 
 /** Return a SQL command usable for QSqlQuery::prepareUpdateQuery(). Fields are ordered. */
@@ -2992,13 +2979,6 @@ void Database::toTreeWidget(QTreeWidget *tree) const
     }
     else if (DB.driverName()=="QMYSQL") {
         new QTreeWidgetItem(drv, QStringList() << "Driver" << "MySQL");
-        new QTreeWidgetItem(drv, QStringList() << "Host" << DB.hostName());
-        new QTreeWidgetItem(drv, QStringList() << "Port" << QString::number(DB.port()));
-        new QTreeWidgetItem(drv, QStringList() << "Login" << "****");
-        new QTreeWidgetItem(drv, QStringList() << "Password" << "****");
-    }
-    else if (DB.driverName()=="QPSQL") {
-        new QTreeWidgetItem(drv, QStringList() << "Driver" << "PostGreSQL");
         new QTreeWidgetItem(drv, QStringList() << "Host" << DB.hostName());
         new QTreeWidgetItem(drv, QStringList() << "Port" << QString::number(DB.port()));
         new QTreeWidgetItem(drv, QStringList() << "Login" << "****");

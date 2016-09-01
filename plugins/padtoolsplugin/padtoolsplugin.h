@@ -46,7 +46,7 @@ class PadToolsImpl;
 class PadToolsPlugin : public ExtensionSystem::IPlugin
 {
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID "org.freemedforms.FreeMedForms.PadToolsPlugin" FILE "PadTools.json")
+    Q_PLUGIN_METADATA(IID "io.freehealth.ehr.PadToolsPlugin" FILE "PadTools.json")
 
 public:
     PadToolsPlugin();

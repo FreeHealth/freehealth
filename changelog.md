@@ -1,42 +1,31 @@
-Changelog of FreeMedForms
-=========================
+Changelog
+=========
 
-See https://github.com/FreeMedForms/freemedforms/issues for more details
+See https://github.com/FreeHealth/freehealth/issues for more details
 
-0.9.8
+0.9.9
 -----
 
 ### Summary
 
-1 severe bug fix, several bug fixes, 1 new feature, many enhancements
+FreeHealth is a fork of FreeMedForms. You can upgrade automatically from
+FreeMedForms EMR 0.9.8 to FreeHealth EHR 0.9.9 just by installing FreeHealth 0.9.9
 
-### New feature
+Several bug fixes, somes new feature, many enhancements.
 
-* new feature #118  datetime widget
-                                                                                
-### Bug                                                       
-                                                                                
-#### All applications                                                            
+### New features
+  * forms: combo items can be listed in alphabetical order
+  * forms: embed prescription widget inside a form with ui file
+  * added administrative gender: Unknown
+  * episodes: differentiate episode date and time (can be modified by user) and episode
+  creation date and time (timestamp, cannot be modified)
 
-* issue #89 Mac OS print preview                                                
-* issue #97 & #98 Qt5.6 support                                                 
-* issue #101 preferences tree view                                              
-* issue #103 lupdate error (creation of translation files)                      
-* issue #105 warn when trying to create a user that already exists in MySQL     
-* issue #116 create all MySQL users with '%' as hostname                        
-* issue #117 MySQL install: removed default host value                          
-* issue #123 clicking on url in problem reporting dialog now opens browser      
+### Enhancements
+  * improved print preview
+  * improved PMHx dialog (you can now add comment text) and tree view
+  * administrative gender: "hermaphrodite" becomes "Other"
                                                                                 
-#### FreeMedForms                                                                
-
-* issue #88 missing zipcodes.csv file in source package                         
-* issue #91 radio button widgets not correctly printed on windows               
-* issue #121 modify group item behaviour: allow script execution if group is checked or unchecked by user
-* issue #122 PMH: make viewer icdCodes QListView not editable                   
-* issue #135 weight measurement conversion bug                                  
-                                                                                
-#### FreeDiams                                                    
-                                                                                
-#### ICD10 plugin
-                                                                
-* issue #134 search now includes substrings
+### Bug
+  * PMHx modifications and deletions are now correctly recorded
+  * FreeRx: GUI of frequency of administration https://github.com/FreeMedForms/freemedforms/issues/152
+  * forms: translation of measurement widgets

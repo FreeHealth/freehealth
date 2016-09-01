@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE FreeMedForms>
+<FreeMedForms>
+
+    <MedForm name="GP::Basic::Drugs::Chronic">
+      <label lang="xx">Long-term medication</label>
+      <label lang="fr">Traitement chronique</label>
+      <label lang="de">Dauermedikation</label>
+      <icon>__theme__/drugs.png</icon>
+      <options>DontPrintEmptyValues</options>
+      <file type="htmlprintmask">./html/xx/padtools_drugs_chronic_mask.html</file>
+      <file type="htmlexportmask">./html/xx/padtools_drugs_chronic_mask.html</file>
+
+      <Item name="GP::Basic::Drugs::Chronic::Content" type="prescriptor">
+        <label lang="xx">Long-term medication</label>
+        <label lang="fr">Traitement chronique</label>
+        <label lang="de">Dauermedikation</label>
+        <options>DontPrintEmptyValues</options>
+        <patientdata>DrugsChronicTherapeutics</patientdata>
+      </Item>
+      <Item name="GP::Basic::Drugs::Chronic::Comment" type="texteditor">
+        <label lang="xx">Comments</label>
+        <label lang="fr">Remarques</label>
+        <label lang="de">Kommentare</label>
+        <options>DontPrintEmptyValues</options>
+      </Item>
+    </MedForm>
+
+    <MedForm name="GP::Basic::Drugs::Allergies">
+      <label lang="xx">Allergies</label>
+      <icon>__theme__/drugs.png</icon>
+      <options>DontPrintEmptyValues</options>
+      <file type="htmlprintmask">./html/xx/padtools_drugs_allergies_mask.html</file>
+      <file type="htmlexportmask">./html/xx/padtools_drugs_allergies_mask.html</file>
+
+      <Item name="GP::Basic::Drugs::Allergies::Content" type="drugselector">
+        <label lang="xx">Known drug allergies</label>
+        <label lang="fr">Allergies médicamenteuses connues</label>
+        <options>hideselector;nointeractionchecking;DontPrintEmptyValues</options>
+        <patientdata>DrugsAtcAllergies</patientdata>
+      </Item>
+      <Item name="GP::Basic::Drugs::Allergies::Comment" type="texteditor">
+        <label lang="xx">Comments</label>
+        <label lang="fr">Remarques</label>
+        <label lang="de">Kommentare</label>
+        <options>DontPrintEmptyValues</options>
+      </Item>
+    </MedForm>
+
+</FreeMedForms>

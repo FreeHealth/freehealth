@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>814</width>
-    <height>575</height>
+    <width>720</width>
+    <height>565</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -73,7 +73,7 @@
       <item row="0" column="3">
        <widget class="Utils::QButtonLineEdit" name="emailEdit">
         <property name="placeholderText">
-         <string>yourname@gmail.com</string>
+         <string>your@email.com</string>
         </property>
        </widget>
       </item>
@@ -199,7 +199,7 @@ padding: 0px;
 spacing: 0px;</string>
           </property>
           <property name="text">
-           <string>FreeMedForms Project website</string>
+           <string>FreeHealth website</string>
           </property>
           <property name="iconSize">
            <size>

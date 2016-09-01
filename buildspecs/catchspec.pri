@@ -31,18 +31,6 @@ darwin-g++{
   !isEmpty(WARN_SPEC):message(darwin-g++)
   CURRENT_SPEC=darwin-gpp
 }
-freebsd-g++{
-  !isEmpty(WARN_SPEC):message(freebsd-g++)
-  CURRENT_SPEC=freebsd-gpp
-}
-freebsd-g++46{
-  !isEmpty(WARN_SPEC):message(freebsd-g++46)
-  CURRENT_SPEC=freebsd-gpp46
-}
-freebsd-icc{
-  !isEmpty(WARN_SPEC):message(freebsd-icc)
-  CURRENT_SPEC=freebsd-icc
-}
 glibc-g++{
   !isEmpty(WARN_SPEC):message(glibc-g++)
   CURRENT_SPEC=glibc-gpp

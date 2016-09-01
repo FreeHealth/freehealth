@@ -1,8 +1,11 @@
 #!/bin/bash
-# This script is part of FreeMedForms project : http://www.freemedforms.com
-# (c) 2008 - 2016  Eric MAEKER, MD
+# FreeHealth https://freehealth.io
 #
-# This script helps on the compilation on unices machines
+# FreeHealth is a fork of:
+# FreeMedForms
+# (c) 2008 - 2015  Eric MAEKER, MD
+#
+# This script helps compilation on Unix derivatives
 #
 
 SCRIPT_VERSION=1.3-1406796656 # see date "+%s"

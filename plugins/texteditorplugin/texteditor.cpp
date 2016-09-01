@@ -290,7 +290,7 @@ public:
     {
         QString str = Utils::readTextFile(file, Utils::WarnUser);
         // run token if FreeMedForms
-    #ifdef FREEMEDFORMS
+    #ifdef FREEHEALTH
         patient()->replaceTokens(str);
         user()->replaceTokens(str);
 

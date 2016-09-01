@@ -1,7 +1,5 @@
-# Qt 5.1 cache system
-qt:greaterThan(QT_MAJOR_VERSION, 4) {
-    cache()
-}
+# Qt5 cache system
+cache()
 
 TEMPLATE  = lib
 TARGET    = freemedforms-quazip-wrapper
@@ -20,7 +18,7 @@ DEFINES += QUAZIP_BUILD
 CONFIG(staticlib): DEFINES += QUAZIP_STATIC
 
 CONFIG(dontbuildquazip) {
-  # On some OS (mainly Linux/FreeBSD) we do not want to build a duplicate of the quazip lib.
+  # On Linux we do not want to build a duplicate of the quazip lib.
   # Using CONFIG+=dontbuildquazip (or using the buildspecs/optionalfeatures.pri config)
   # will avoid to build duplicate code and will link the present lib
   # to the existing quazip

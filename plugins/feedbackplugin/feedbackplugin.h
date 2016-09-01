@@ -34,7 +34,7 @@ namespace Internal {
 class FeedbackPlugin : public ExtensionSystem::IPlugin
 {
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID "org.freemedforms.FreeMedForms.FeedbackPlugin" FILE "Feedback.json")
+    Q_PLUGIN_METADATA(IID "io.freehealth.ehr.FeedbackPlugin" FILE "Feedback.json")
 
 public:
     FeedbackPlugin();

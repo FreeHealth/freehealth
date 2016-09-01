@@ -39,9 +39,9 @@ enum {
 
 /**
  * \class Utils::PasswordCrypter
- * Owns all the intelligence of password encryption.
+ * Password encryption.
  * Note: unsalted passwords are insecure.
- * TO DO: introduce PBKDF2 key derivation function. See RFC2898 http://tools.ietf.org/html/rfc2898#section-5.2
+ * TODO: introduce PBKDF2 key derivation function. See RFC2898 http://tools.ietf.org/html/rfc2898#section-5.2
  * Standard library for PBKDF2 used in highly secure and reviewed projects such as Bitcoin is OpenSSL (C language).
  * See http://git.openssl.org/gitweb/?p=openssl.git;a=blob;f=crypto/evp/p5_crpt2.c
  */
@@ -183,29 +183,41 @@ bool PasswordCrypter::checkPassword(const QString &clear, const QString &crypted
 }
 
 /**
- * Destructive string encryption using SHA1 algorithm.
+ * String hashing using SHA1 algorithm.
  * The output is base64 encoded.
+ * TODO: rename cryptPassword() to hashPassphrase()
  */
 QString cryptPassword(const QString &toCrypt)
 {
-    // FIXME: How to improve the paswword security (currently using SHA1)
+    // FIXME: How to improve the password security (currently using SHA1)
     // NOTE: Hash methods > SHA1 was introduced in Qt5
-    // SEE: Issue 366
+    // SEE: Issue #1 https://github.com/FreeHealth/freehealth/issues/1
     QCryptographicHash crypter(QCryptographicHash::Sha1);
     crypter.addData(toCrypt.toUtf8());
     return crypter.result().toBase64();
 }
 
 /**
- * Non-destructive string encryption.
+ * String "encryption".
  * \sa decrypt()
 */
 QByteArray nonDestructiveEncryption(const QString &text, const QString &key)
 {
     QByteArray texteEnBytes = text.toUtf8();
     QString k = key;
-    if (key.isEmpty())
-        k = QCryptographicHash::hash(qApp->applicationName().left(qApp->applicationName().indexOf("_d")).toUtf8(), QCryptographicHash::Sha1);
+    if (key.isEmpty()) {
+        qDebug() << "Key is empty."
+                   << "Using sha1 of: qApp->applicationName().left(qApp->applicationName().indexOf(\"_d\")).toUtf8() "
+                   << qApp->applicationName().left(qApp->applicationName().indexOf("_d")).toUtf8();
+
+        //k = QCryptographicHash::hash(qApp->applicationName().left(qApp->applicationName().indexOf("_d")).toUtf8(), QCryptographicHash::Sha1);
+        // On FreeMedForms RDBMS parameters were "encrypted" with a key
+        // equal to the application name (minus _d or _debug).
+        // To ensure compatibility we will hardcode the key to "freemedforms"
+        // before revamping encryption, hashing and security for FreeHealth
+        k = QCryptographicHash::hash("freemedforms", QCryptographicHash::Sha1);
+        qDebug() << "Key used: " << k;
+    }
     QByteArray cle = k.toUtf8().toBase64();
     QByteArray codeFinal;
     int tailleCle = cle.length();
@@ -215,8 +227,6 @@ QByteArray nonDestructiveEncryption(const QString &text, const QString &key)
     return codeFinal.toHex().toBase64();
 }
 
-// "MTEwZjI5MGQxODNhNDQwODMzMmI=" "CacaBoudin"
-
 /**
  * Decrypt a string encrypted with the Utils::crypt() method
 */
@@ -224,8 +234,14 @@ QString decrypt(const QByteArray &texte, const QString &key)
 {
     QByteArray texteEnBytes = QByteArray::fromHex(QByteArray::fromBase64(texte));
     QString k = key;
-    if (key.isEmpty())
-        k = QCryptographicHash::hash(qApp->applicationName().left(qApp->applicationName().indexOf("_d")).toUtf8(), QCryptographicHash::Sha1);
+    if (key.isEmpty()) {
+        //k = QCryptographicHash::hash(qApp->applicationName().left(qApp->applicationName().indexOf("_d")).toUtf8(), QCryptographicHash::Sha1);
+        // On FreeMedForms RDBMS parameters were "encrypted" with a key
+        // equal to the application name (minus _d or _debug).
+        // To ensure compatibility we will hardcode the key to "freemedforms"
+        // before revamping encryption, hashing and security for FreeHealth
+        k = QCryptographicHash::hash("freemedforms", QCryptographicHash::Sha1);
+    }
     QByteArray cle = k.toUtf8().toBase64();
     QByteArray codeFinal;
     int tailleCle = cle.length();

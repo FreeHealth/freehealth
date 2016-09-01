@@ -32,7 +32,7 @@ class DrugAllergyEngine;
 class DrugInteractionsPlugin : public ExtensionSystem::IPlugin
 {
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID "org.freemedforms.FreeMedForms.DrugInteractionsPlugin" FILE "DrugInteractions.json")
+    Q_PLUGIN_METADATA(IID "io.freehealth.ehr.DrugInteractionsPlugin" FILE "DrugInteractions.json")
 
 public:
     DrugInteractionsPlugin();

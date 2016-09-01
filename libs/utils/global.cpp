@@ -319,6 +319,7 @@ namespace Utils {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////   LIB AND OS FUNCTIONS   ///////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 bool isDebugWithoutInstallCompilation()
 {
 #ifdef DEBUG_WITHOUT_INSTALL
@@ -327,6 +328,7 @@ bool isDebugWithoutInstallCompilation()
     return false;
 #endif
 }
+
 bool isReleaseCompilation()
 {
 #ifdef RELEASE
@@ -335,6 +337,7 @@ bool isReleaseCompilation()
     return false;
 #endif
 }
+
 bool isGitBuild()
 {
 #ifdef FULLAPPLICATION_BUILD
@@ -343,6 +346,7 @@ bool isGitBuild()
     return true;
 #endif
 }
+
 bool isFullApplication()
 {
 #ifdef FULLAPPLICATION_BUILD
@@ -351,18 +355,22 @@ bool isFullApplication()
     return false;
 #endif
 }
+
 bool isAlpha()
 {
     return qApp->applicationVersion().contains("alpha", Qt::CaseInsensitive);
 }
+
 bool isBeta()
 {
     return qApp->applicationVersion().contains("beta", Qt::CaseInsensitive);
 }
+
 bool isReleaseCandidate()
 {
     return qApp->applicationVersion().contains("rc", Qt::CaseInsensitive);
 }
+
 bool isRunningOnMac()
 {
 #ifdef Q_OS_MAC
@@ -371,6 +379,7 @@ bool isRunningOnMac()
     return false;
 #endif
 }
+
 bool isRunningOnWin()
 {
 #ifdef Q_OS_WIN
@@ -379,6 +388,7 @@ bool isRunningOnWin()
     return false;
 #endif
 }
+
 bool isRunningOnLinux()
 {
 #ifdef Q_OS_LINUX
@@ -387,14 +397,7 @@ bool isRunningOnLinux()
     return false;
 #endif
 }
-bool isRunningOnFreebsd()
-{
-#ifdef Q_OS_FREEBSD
-    return true;
-#else
-    return false;
-#endif
-}
+
 bool isLinuxIntegratedCompilation()
 {
 #ifdef LINUX_INTEGRATED
@@ -403,6 +406,7 @@ bool isLinuxIntegratedCompilation()
     return false;
 #endif
 }
+
 QString uname()
 {
     QString system;
@@ -410,8 +414,6 @@ QString uname()
         system = "MacOs";
     else if (isRunningOnLinux())
         system = "Linux";
-    else if (isRunningOnFreebsd())
-        system = "FreeBSD";
     else if (isRunningOnWin())
         system = "Windows";
     if (system.isEmpty())
@@ -426,6 +428,7 @@ QString uname()
     system += uname.readAll();
     return system.remove("\n");
 }
+
 QString osName()
 {
     if (isRunningOnLinux())
@@ -434,8 +437,6 @@ QString osName()
         return "MacOs";
     else if (isRunningOnWin())
         return "Windows";
-    else if (isRunningOnFreebsd())
-        return "FreeBSD";
     return QString();
 }
 
@@ -461,7 +462,7 @@ QStringList applicationPluginsPath(const QString &binaryName, const QString &lib
 
     // With the Linux integrated compilation, the 'make install' process is mandatory.
     // Bins are installed in : /usr/bin (or prefixed path)
-    // Libs are installed in : /usr/lib(arch)/freemedforms-common
+    // Libs are installed in : /usr/lib(arch)/freehealth-common
     // Plugins are installed in : /usr/lib(arch)/applicationname
     if (isLinuxIntegratedCompilation()) {
         app = QString("/usr/%1/%2")
@@ -484,8 +485,6 @@ QStringList applicationPluginsPath(const QString &binaryName, const QString &lib
         // Idem by default
         app += "/plugins/";
     }
-
-    // TODO: Manage FreeBSD pluginPath
 
     // When the application is installed force Qt to search for libs/plugins/QtPlugins inside
     // the application bundle.
@@ -1198,7 +1197,7 @@ bool functionNotAvailableMessageBox(const QString &functionText)
 {
     informativeMessageBox(functionText,
                            QCoreApplication::translate("Utils", "This function is not available in this version."),
-                           QCoreApplication::translate("Utils", "You can send an email to developers and explain your difficulties: freemedforms@googlegroups.com.")
+                           QCoreApplication::translate("Utils", "You can send an email to developers and explain your difficulties: dev@freehealth.io")
                         );
 //                           .arg(qApp->organizationDomain()));
 //                         .arg(tkSettings::instance()->path(tkSettings::WebSiteUrl)));

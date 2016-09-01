@@ -81,6 +81,7 @@ const char * const  SPIN_EXTRAS_KEY_STEP        = "step";
 const char * const  LABEL_ALIGN_TOP      = "labelontop";
 const char * const  LABEL_ALIGN_LEFT     = "labelonleft";
 const char * const  DONTPRINTEMPTYVALUES = "DontPrintEmptyValues";
+const char * const  DONTPRINTLABEL       = "DontPrintLabel";
 const char * const  HIDEHEADERONUNIQUEEPISODE = "HideHeaderOnUniqueEpisode";
 const char * const  NOT_PRINTABLE        = "notprintable";
 const char * const  SUMMARY_FONT_BOLD    = "SummaryFontBold";

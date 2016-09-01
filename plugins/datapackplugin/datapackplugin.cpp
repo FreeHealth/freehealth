@@ -132,7 +132,7 @@ void DataPackPluginIPlugin::extensionsInitialized()
 
     // Send the server manager configuration from the settings of the user/application
     QString xmlConfig;
-#ifdef FREEMEDFORMS
+#ifdef FREEHEALTH
     if (user())
         xmlConfig = user()->value(Core::IUser::DataPackConfig).toString();
 #endif
@@ -219,7 +219,7 @@ void DataPackPluginIPlugin::coreAboutToClose()
     // Core is about to close
     // Core::user() is still available
     DataPack::DataPackCore &core = DataPack::DataPackCore::instance(this);
-#ifdef FREEMEDFORMS
+#ifdef FREEHEALTH
     if (user())
         user()->setValue(Core::IUser::DataPackConfig, core.serverManager()->xmlConfiguration());
 #endif
@@ -269,7 +269,7 @@ ExtensionSystem::IPlugin::ShutdownFlag DataPackPluginIPlugin::aboutToShutdown()
     // Core is about to close
     // Core::user() is still available
     DataPack::DataPackCore &core = DataPack::DataPackCore::instance(this);
-#ifdef FREEMEDFORMS
+#ifdef FREEHEALTH
     if (user()) {
         user()->setValue(Core::IUser::DataPackConfig, core.serverManager()->xmlConfiguration());
         user()->saveChanges();

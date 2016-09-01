@@ -279,7 +279,7 @@ IcdActionHandler::IcdActionHandler(QObject *parent) :
     connect(a, SIGNAL(triggered()), this, SLOT(removeItem()));
 
     // TODO: code here
-//#ifdef FREEMEDFORMS
+//#ifdef FREEHEALTH
 //    const char * const filemenuId = Core::Constants::M_GENERAL;
 //    const char * const printGroupId = Core::Constants::G_GENERAL_PRINT;
 //#else

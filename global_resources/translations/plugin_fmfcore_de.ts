@@ -53,20 +53,26 @@ Please check that this host contains a FreeMedForms server configuration.</sourc
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Single computer</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Network (as client)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Network (as server)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>This wizard will help you to configure the base parameters of the application.
+        <source>This wizard will help you configure the base parameters of the application.
 Select your preferred language and the installation type.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Create MySQL databases</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Connect to MySQL databases</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Test without MySQL</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;This simplified installation procedure is for testing purposes only.&lt;/b&gt; 
+It is using SQLite as a temporary database. We do not recommend that you use SQLite to store medical data because  FreeHealth support of SQLite will end soon. If you want to install FreeHealth for professional use, please choose &lt;b&gt;Create MySQL databases&lt;/b&gt; instead.
+Click Ok to test FreeHealth, or click Cancel to install FreeHealth with MySQL.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -112,10 +118,6 @@ Select your preferred language and the installation type.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Please read the user&apos;s manual. If you have any question, you can ask them to the mailing list.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>You can clean and recreate all your databases. Select the option above. If you select the clean option, all databases will be erased with &lt;b&gt;definitive data loss&lt;/b&gt;.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -140,11 +142,11 @@ Select your preferred language and the installation type.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>French/english mailing list</source>
+        <source>Please read the online user guide.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Application main web site</source>
+        <source>Help, support and information:</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -523,10 +525,6 @@ Select your preferred language and the installation type.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>FreeMedForms PlugIns path</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>SmallPixmapPath</source>
         <translation type="unfinished"></translation>
     </message>
@@ -662,6 +660,38 @@ Select your preferred language and the installation type.</source>
         <source>DocumentationPath</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>We found a FreeMedForms user directory.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Do you want to use this directory with FreeHealth?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>We found a freemedforms directory inside your user directory. If you want to use it with FreeHealth, click Yes and we will make a copy of it named freehealth. If you want to start a new installation from scratch, click No.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>We found a .freemedforms parameter directory.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>We found a .freemedforms hidden directory inside your user directory. It contains the connection parameters for your existing databases. If you want to use these databases with FreeHealth, click Yes and we will make a copy of of the directory named .freehealth. If you want to start a new installation from scratch, click No.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>We found a .freemedforms_debug parameter directory.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>We found a .freemedforms_debug hidden directory inside your user directory. It contains the connection parameters for your existing databases. If you want to use these databases with FreeHealth, click Yes and we will make a copy of of the directory named .freehealth_debug. If you want to start a new installation from scratch, click No.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Application Plugins path</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Core::Internal::SimpleTextDialog</name>
@@ -793,15 +823,6 @@ Please check and validate the proxy settings.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Connection to the server: User rights inadequate</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>You need to connect with another user that have rights to select, udpate, delete, insert, create, drop, alter and create user.
-Please contact your server administrator.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>An error occured...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -832,6 +853,15 @@ Please check out the log files and contact your administrator.</source>
     </message>
     <message>
         <source>The configuration script is missing. You can not configure the server without this script.&lt;br&gt;&lt;br&gt;&lt;b&gt;%1&lt;/b&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Connection to the server: User privileges inadequate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You need to connect with another user that has the following global privileges: select, udpate, delete, insert, create, drop, alter and create user.
+Please contact your server administrator.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

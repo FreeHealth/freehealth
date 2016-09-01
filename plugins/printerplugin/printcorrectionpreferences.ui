@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>470</width>
-    <height>455</height>
+    <height>460</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -49,7 +49,7 @@ Thrid step, print the test page &lt;u&gt;with&lt;/u&gt; the correction and re-ch
    <item row="3" column="0" colspan="3">
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
-      <string>Correction de l'impression</string>
+      <string>Correct margins</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_2">
       <item row="0" column="3">
@@ -109,7 +109,7 @@ Thrid step, print the test page &lt;u&gt;with&lt;/u&gt; the correction and re-ch
       <item row="6" column="0" colspan="3">
        <widget class="QLabel" name="label_6">
         <property name="text">
-         <string>Sens de l'impression</string>
+         <string>Printing direction</string>
         </property>
        </widget>
       </item>
@@ -198,12 +198,12 @@ Thrid step, print the test page &lt;u&gt;with&lt;/u&gt; the correction and re-ch
        <widget class="QComboBox" name="direction">
         <item>
          <property name="text">
-          <string>Du haut vers le bas</string>
+          <string>From top down</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>Du bas vers le haut</string>
+          <string>From bottom up</string>
          </property>
         </item>
        </widget>

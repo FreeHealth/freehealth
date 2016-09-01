@@ -67,7 +67,7 @@ UserCreationPage::UserCreationPage(QWidget *parent) :
     ui->userManagerButton->setIcon(theme()->icon(Core::Constants::ICONUSERMANAGER, Core::ITheme::MediumIcon));
     ui->completeWizButton->setIcon(theme()->icon(Core::Constants::ICONNEWUSER, Core::ITheme::MediumIcon));
 
-    QPixmap pix = theme()->splashScreenPixmap("freemedforms-wizard-users.png");
+    QPixmap pix = theme()->splashScreenPixmap("wizard-users.png");
     setPixmap(QWizard::BackgroundPixmap, pix);
     setPixmap(QWizard::WatermarkPixmap, pix);
 

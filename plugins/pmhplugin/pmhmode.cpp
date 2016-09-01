@@ -21,7 +21,7 @@
 /***************************************************************************
  *  Main developer: Eric MAEKER, <eric.maeker@gmail.com>                   *
  *  Contributors:                                                          *
- *       NAME <MAIL@ADDRESS.COM>                                           *
+ *       Jerome Pinguet <jerome@jerome.cc                                  *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 /**
@@ -36,6 +36,7 @@
  * with a PMH::Internal::PmhViewer and/or a Form::FormPlaceHolder.
  */
 
+#include "pmhbase.h"
 #include "pmhmode.h"
 #include "pmhmodel.h"
 #include "pmhcore.h"
@@ -80,6 +81,8 @@ static inline PmhCategoryModel *catModel() {return PmhCore::instance()->pmhCateg
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline Core::IPatient *patient()  { return Core::ICore::instance()->patient(); }
 static inline Core::ActionManager *actionManager() {return Core::ICore::instance()->actionManager();}
+static inline PmhCore *pmhCore() {return PmhCore::instance();}
+static inline PmhBase *base() {return PmhBase::instance();}
 
 namespace {
 
@@ -127,6 +130,7 @@ PmhModeWidget::PmhModeWidget(QWidget *parent) :
         ui(new Ui::PmhModeWidget),
         m_EditButton(0)
 {
+    qDebug() << Q_FUNC_INFO;
     ui->setupUi(this);
     ui->pmhViewer->setEditMode(PmhViewer::ReadOnlyMode);
     ui->treeViewLayout->setMargin(0);
@@ -159,12 +163,7 @@ PmhModeWidget::PmhModeWidget(QWidget *parent) :
         ui->treeView->hideColumn(i);
     ui->treeView->showColumn(PmhCategoryModel::Label);
     ui->treeView->header()->setStretchLastSection(false);
-#if QT_VERSION < 0x050000
-    ui->treeView->header()->setResizeMode(PmhCategoryModel::Label, QHeaderView::Stretch);
-#else
-    // Qt5
     ui->treeView->header()->setSectionResizeMode(PmhCategoryModel::Label, QHeaderView::Stretch);
-#endif
 
     // connect the aAddPmh action
     cmd = actionManager()->command(Constants::A_PMH_NEW);
@@ -189,6 +188,7 @@ PmhModeWidget::~PmhModeWidget()
 /** Return the current selected category id in the category view */
 int PmhModeWidget::currentSelectedCategory() const
 {
+    qDebug() << Q_FUNC_INFO;
     if (!ui->treeView->selectionModel()->hasSelection())
         return -1;
     QModelIndex item = ui->treeView->selectionModel()->currentIndex();
@@ -205,6 +205,7 @@ int PmhModeWidget::currentSelectedCategory() const
 /** Reacts on the currentChanged signal of the category tree view */
 void PmhModeWidget::currentChanged(const QModelIndex &current, const QModelIndex &previous)
 {
+    qDebug() << Q_FUNC_INFO;
     // Auto-saved form content
     if (previous.isValid()) {
         if (catModel()->isForm(previous)) {
@@ -245,6 +246,7 @@ void PmhModeWidget::currentChanged(const QModelIndex &current, const QModelIndex
 
 void PmhModeWidget::onButtonClicked(QAbstractButton *button)
 {
+    qDebug() << Q_FUNC_INFO;
     if (button==m_EditButton) {
         ui->pmhViewer->setEditMode(PmhViewer::ReadWriteMode);
         ui->buttonBox->button(QDialogButtonBox::Cancel)->setEnabled(true);
@@ -256,9 +258,10 @@ void PmhModeWidget::onButtonClicked(QAbstractButton *button)
     case QDialogButtonBox::Save:
         {
             // Get the modified PmhData
-            PmhData *pmh = ui->pmhViewer->modifiedPmhData();
-            // Inform the model
-            catModel()->addPmhData(pmh);
+            Internal::PmhData *pmh = ui->pmhViewer->modifiedPmhData();
+            // Inform the model (twice... ??? WTF)
+            pmhCore()->pmhCategoryModel()->addPmhData(pmh);
+            pmhCore()->pmhCategoryModel()->addPmhData(pmh);
             // Expand the first level of the PMHx
             QModelIndex idx = catModel()->indexForPmhData(pmh);
             ui->treeView->expand(idx);
@@ -283,6 +286,7 @@ void PmhModeWidget::onButtonClicked(QAbstractButton *button)
 /** Create a new category in the PMHx using the Category::CategoryDialog */
 void PmhModeWidget::createCategory()
 {
+    qDebug() << Q_FUNC_INFO;
     Category::CategoryDialog dlg(this);
     dlg.setModal(true);
     dlg.setCategoryModel(catModel(), PmhCategoryModel::Label);
@@ -291,6 +295,7 @@ void PmhModeWidget::createCategory()
 
 void PmhModeWidget::removeItem()
 {
+    qDebug() << Q_FUNC_INFO;
     if (!ui->treeView->selectionModel()->hasSelection())
         return;
     QModelIndex item = ui->treeView->selectionModel()->currentIndex();
@@ -300,17 +305,24 @@ void PmhModeWidget::removeItem()
         return;
 
     // Get the Root PMHx index
+    QModelIndex category;
     while (true) {
-        if (catModel()->isCategory(item.parent()))
+        if (catModel()->isCategory(item.parent())) {
+            category = item.parent();
             break;
-        item = item.parent();
+        }
     }
+    qDebug() << "item: " << item;
+    qDebug() << "item category: " << category;
 
     // Ask user
     bool yes = Utils::yesNoMessageBox(tr("Remove PMHx"),
                                       tr("Do you really want to remove the PMHx called <br />&nbsp;&nbsp;&nbsp;<b>%1</b>?").arg(item.data().toString()));
-    if (yes)
+    if (yes) {
+        qDebug() << "item.row(): " << item.row()
+                 << "item.parent(): " << item.parent();
         catModel()->removeRow(item.row(), item.parent());
+    }
 }
 
 /** When a new patient is selected, select the synthesis item and re-expand the category view */
@@ -328,6 +340,7 @@ void PmhModeWidget::onCurrentPatientChanged()
 /** Create a new PMHx using the PMH::PmhCreatorDialog */
 void PmhModeWidget::createPmh()
 {
+    qDebug() << Q_FUNC_INFO;
     PmhCreatorDialog dlg(this);
     if (ui->treeView->selectionModel()->hasSelection()) {
         QModelIndex item = ui->treeView->selectionModel()->currentIndex();
@@ -343,10 +356,17 @@ void PmhModeWidget::createPmh()
 /** When a PMHx is added to the PmhCategoryModel re-expand all items of the category view */
 void PmhModeWidget::pmhModelRowsInserted(const QModelIndex &parent, int start, int end)
 {
+    qDebug() << Q_FUNC_INFO;
     ui->treeView->expand(parent);
     for(int i=start; i != end+1; ++i) {
         ui->treeView->expand(catModel()->index(i, PmhCategoryModel::Label, parent));
     }
+    catModel()->refreshSynthesis();
+    if (catModel()->isSynthesis(ui->treeView->currentIndex())) {
+        ui->pmhSynthesisBrowser->setHtml(catModel()->synthesis());
+        ui->stackedWidget->setCurrentWidget(ui->pageSynthesis);
+    }
+
 }
 
 void PmhModeWidget::hideEvent(QHideEvent *event)

@@ -1350,10 +1350,6 @@ Emplacement : %2</translation>
         <translation>Initialise les bases de données...</translation>
     </message>
     <message>
-        <source>Welcome to FreeMedForms, you are now connected.</source>
-        <translation>Bienvenue dans FreeMedForms, vous êtes maintenant connecté.</translation>
-    </message>
-    <message>
         <source>No user connected.</source>
         <translation>Pas d&apos;utilisateur connecté.</translation>
     </message>
@@ -1977,10 +1973,6 @@ Emplacement : %2</translation>
     <message>
         <source>You</source>
         <translation>Vous</translation>
-    </message>
-    <message>
-        <source>Creation date</source>
-        <translation>Date de création</translation>
     </message>
     <message>
         <source>Date</source>
@@ -2717,10 +2709,6 @@ Text Align Justify shortcut key : Mac specific</extracomment>
         <translation>Ajouter la date courante (format court)</translation>
     </message>
     <message>
-        <source>&lt;p align=center&gt;&lt;b&gt;Welcome to FreeMedForms project&lt;/b&gt;&lt;br /&gt;(C) 2008-%1 by Eric MAEKER, MD (France)&lt;/p&gt;&lt;p align=left&gt;This software is released without any warranty and only for testing purposal.&lt;br/&gt;Please refer to our &lt;a href=&quot;%2&quot;&gt;web site&lt;/a&gt; for more information.&lt;br /&gt;&lt;/p&gt;</source>
-        <translation>&lt;p align=center&gt;&lt;b&gt;Bienvenue dans le projet FreeMedForms&lt;/b&gt;&lt;br /&gt;(C) 2008-%1 par Dr Eric MAEKER (France)&lt;/p&gt;&lt;p align=left&gt;Ce logiciel est distribué sans aucune garantie et uniquement pour des fins de tests.&lt;br/&gt;Pour plus d&apos;informations, vous pouvez vous référer à notre &lt;a href=&quot;%2&quot;&gt;site internet&lt;/a&gt;.&lt;br /&gt;&lt;/p&gt;</translation>
-    </message>
-    <message>
         <source>History</source>
         <translation>Historique</translation>
     </message>
@@ -2775,6 +2763,26 @@ Text Align Justify shortcut key : Mac specific</extracomment>
     <message>
         <source>Connecting database</source>
         <translation>Connexion à la base de données en cours</translation>
+    </message>
+    <message>
+        <source>Creation date &amp; time</source>
+        <translation>Date et heure de création</translation>
+    </message>
+    <message>
+        <source>Episode date &amp; time</source>
+        <translation>Date et heure de l&apos;épisode</translation>
+    </message>
+    <message>
+        <source>&lt;h2&gt;Welcome to FreeHealth&lt;/h2&gt;&lt;h3&gt;Â© %1 Jerome Pinguet&lt;/h3&gt;&lt;h3&gt;(C) 2008-2015 by Dr Eric Maeker (France)&lt;/h3&gt;&lt;p&gt;This software is released without any warranty, for testing purposes only.&lt;br/&gt;Please refer to our &lt;a href=&quot;%2&quot;&gt;web site&lt;/a&gt; for more information.&lt;br /&gt;FreeHealth is based on FreeMedForms created by Eric Maeker.&lt;/p&gt;</source>
+        <translation>&lt;h2&gt;Bienvenue dans FreeHealth&lt;/h2&gt;&lt;h3&gt;Â© %1 Jerome Pinguet&lt;/h3&gt;&lt;h3&gt;(C) 2008-2015 by Dr Eric Maeker (France)&lt;/h3&gt;&lt;p&gt;Ce logiciel est publié sans aucune garantie à fin de test uniquement.&lt;br/&gt;Merci de vous référer à notre &lt;a href=&quot;%2&quot;&gt;site web&lt;/a&gt; pour plus d&apos;information.&lt;br /&gt;FreeHealth est basé sur FreeMedForms créé par Eric Maeker.&lt;/p&gt;</translation>
+    </message>
+    <message>
+        <source>Other</source>
+        <translation>Autre</translation>
+    </message>
+    <message>
+        <source>Welcome to FreeMedForms, you are now connected.</source>
+        <translation>Bienvenue dans FreeHealth, vous êtes maintenant connecté(e).</translation>
     </message>
 </context>
 </TS>

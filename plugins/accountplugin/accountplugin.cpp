@@ -32,7 +32,7 @@
 #include "accountplugin.h"
 #include "accountwidgetmanager.h"
 
-#ifdef FREEMEDFORMS
+#ifdef FREEHEALTH
 #    include "accountmode.h"
 #endif
 
@@ -149,7 +149,7 @@ void AccountPlugin::extensionsInitialized()
 #endif
 
     // FreeMedForms specific code
-#ifdef FREEMEDFORMS
+#ifdef FREEHEALTH
     addAutoReleasedObject(new Account::Internal::AccountMode(this));
 #endif
 

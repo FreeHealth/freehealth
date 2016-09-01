@@ -7,7 +7,7 @@ linux*{
                 "LINUX_QT_PLUGINS_PATH=\"\\\"$$[QT_INSTALL_PLUGINS]\\\"\""
 
      # the library base name is used only during the install procedure to locate the path
-    # the application's librairies and plugins should be installed
+    # the application's libraries and plugins should be installed
     # you can specify it when compiling = qmake -r -config release "LIBRARY_BASENAME=lib64" for 64bit compilation
     # this value is only used with linux compilation
     isEmpty(LIBRARY_BASENAME):LIBRARY_BASENAME = lib

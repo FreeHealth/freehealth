@@ -9,20 +9,9 @@ include(../buildspecs/optionalplugins.pri)
 # manage pre tag translations
 PRE_TRANSLATION  = plugin
 
-isEqual(QT_MAJOR_VERSION, 5) {
-
-    defineReplace(stripOutDir) {
-        return($$relative_path($$1, $$OUT_PWD))
-    }
-
-} else { # qt5
-
-    defineReplace(stripOutDir) {
-        1 ~= s|^$$re_escape($$OUT_PWD/)||$$i_flag
-        return($$1)
-    }
-
-} # qt5
+defineReplace(stripOutDir) {
+    return($$relative_path($$1, $$OUT_PWD))
+}
 
 PLUGINSPEC = $${_PRO_FILE_PWD_}/$${TARGET}.pluginspec
 JSON = $${TARGET}.json
@@ -43,21 +32,19 @@ QMAKE_EXTRA_COMPILERS += copy2build
 
 include(../libs/rpath.pri)
 
-greaterThan(QT_MAJOR_VERSION, 4) {
 #   Create a Json file containing the plugin information required by
 #   Qt 5's plugin system by running a XSLT sheet on the
 #   pluginspec file before moc runs.
-    XMLPATTERNS = $$targetPath($$[QT_INSTALL_BINS]/xmlpatterns)
+XMLPATTERNS = $$targetPath($$[QT_INSTALL_BINS]/xmlpatterns)
 
-    pluginspec2json.name = Create Qt 5 plugin json file
-    pluginspec2json.input = PLUGINSPEC
-    pluginspec2json.variable_out = GENERATED_FILES
-    pluginspec2json.output = $${JSON}
-    pluginspec2json.commands = $$XMLPATTERNS -no-format -output $$pluginspec2json.output $$SOURCES_PLUGINS_PATH/pluginjsonmetadata.xsl $$PLUGINSPEC
-    pluginspec2json.CONFIG += no_link
-    moc_header.depends += $$pluginspec2json.output
-    QMAKE_EXTRA_COMPILERS += pluginspec2json
-}
+pluginspec2json.name = Create Qt 5 plugin json file
+pluginspec2json.input = PLUGINSPEC
+pluginspec2json.variable_out = GENERATED_FILES
+pluginspec2json.output = $${JSON}
+pluginspec2json.commands = $$XMLPATTERNS -no-format -output $$pluginspec2json.output $$SOURCES_PLUGINS_PATH/pluginjsonmetadata.xsl $$PLUGINSPEC
+pluginspec2json.CONFIG += no_link
+moc_header.depends += $$pluginspec2json.output
+QMAKE_EXTRA_COMPILERS += pluginspec2json
 
 #macx {
 #    QMAKE_LFLAGS_SONAME = -Wl,-install_name,@executable_path/$${RPATH_LIBS_BIN}/

@@ -85,7 +85,7 @@ double MovementsManager::getCalculatedValue(double value, double percentage)
 
 bool MovementsManager::isMedintuxArg()
 {
-#ifdef FREEMEDFORMS
+#ifdef FREEHEALTH
     return false;
 #else
     return commandLine()->value(Core::Constants::CL_MedinTux).toBool();
@@ -94,7 +94,7 @@ bool MovementsManager::isMedintuxArg()
 
 bool MovementsManager::isFreaccountIndependant()
 {
-#ifdef FREEMEDFORMS
+#ifdef FREEHEALTH
     return false;
 #else
     return commandLine()->value(Core::Constants::CL_Independant).toBool();

@@ -4,47 +4,47 @@
 <context>
     <name>Database</name>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="768"/>
+        <location filename="../../libs/utils/database.cpp" line="739"/>
         <source>WARNING: %1 database already in use</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="912"/>
+        <location filename="../../libs/utils/database.cpp" line="883"/>
         <source>ERROR: Database `%1` is not readable. Path: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="923"/>
+        <location filename="../../libs/utils/database.cpp" line="894"/>
         <source>ERROR: Database %1 is not readable. Host: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="932"/>
+        <location filename="../../libs/utils/database.cpp" line="903"/>
         <source>ERROR: Database %1 is not readable. Path: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="961"/>
+        <location filename="../../libs/utils/database.cpp" line="932"/>
         <source>ERROR: Database %1 is not writable. Path: %2.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="1013"/>
+        <location filename="../../libs/utils/database.cpp" line="984"/>
         <source>INFO: database %1 connection = %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="1241"/>
+        <location filename="../../libs/utils/database.cpp" line="1212"/>
         <source>Database Scheme Error: wrong number of fields for table %1 (expected: %2; current: %3)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="1253"/>
+        <location filename="../../libs/utils/database.cpp" line="1224"/>
         <source>Database Scheme Error: field number %1 differs: %2 instead of %3 in table %4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="2428"/>
+        <location filename="../../libs/utils/database.cpp" line="2411"/>
         <source>Can not create table %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -186,7 +186,7 @@
     </message>
     <message>
         <location filename="../../libs/utils/global.cpp" line="1201"/>
-        <source>You can send an email to developers and explain your difficulties: freemedforms@googlegroups.com.</source>
+        <source>You can send an email to developers and explain your difficulties: dev@freehealth.io</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

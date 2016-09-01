@@ -15,7 +15,6 @@ CONFIG(debug_without_install) {
 mac:INSTALL_BASENAME_PATH          = mac
 else:linux*:INSTALL_BASENAME_PATH  = linux
 else:win32:INSTALL_BASENAME_PATH   = win
-else:freebsd*:INSTALL_BASENAME_PATH   = freebsd
 
 # binary wrapper (bw) installer --> leave empty == no bw installation, otherwise specify the filename
 # the bw should be located in SOURCES_RESOURCES_TEXTFILES
@@ -28,14 +27,13 @@ INSTALL_QT_PLUGINS_PATH   = $${INSTALL_PLUGINS_PATH}/qt
 # some help for file copying
 LIB_EXTENSION             = so*
 
-# install Qt libs and plugins inside the bundle ; leave it empty if you don't want to install QT libs and plugs inside the bundle
+# install Qt libs and plugins inside the bundle ; leave it empty if you don't want to install Qt libs and plugs inside the bundle
 INSTALL_QT_INSIDE_BUNDLE = true
 
 # These inclusions modify the default path for the installation process
 macx:include(install_mac.pri)
 else:linux*|hurd*|glibc*:include(install_linux.pri)
 else:win32:include(install_win.pri)
-else:freebsd*:include(install_freebsd.pri)
 
 # by default package is constructed inside the git trunk under
 # packages/yourOs/Application
@@ -82,7 +80,7 @@ message( Plugins: $$[QT_INSTALL_PLUGINS])
 message( Spec file in use: env spec: $$QMAKESPEC)
 message( Spec file in use: qmake spec: $$QMAKE_MKSPECS)
 message( ******************************************************************************** )
-message( **************************    FreeMedForms Config   **************************** )
+message( **************************    FreeHealth Config   **************************** )
 message( ******************************************************************************** )
 CONFIG(LINUX_INTEGRATED):message( Building Linux Integrated version )
 CONFIG(debug,debug|release):message( Building pure debug version )
@@ -108,9 +106,9 @@ message(    * Extension: $${LIB_EXTENSION})
 !isEmpty(INSTALL_QT_PLUGINS_PATH):message( Qt Plugins: $${INSTALL_QT_PLUGINS_PATH} )
 
 !CONFIG(dontinstallresources) {
-    message( ******************************************************************************** )
-    message( *************************    FreeMedForms Resources   ************************** )
-    message( ******************************************************************************** )
+    message( ******************************************************************* )
+    message( *************************    Resources    ************************* )
+    message( ******************************************************************* )
     message( Resources: $${INSTALL_RESOURCES_PATH} )
     message( Translations: $${INSTALL_TRANSLATIONS_PATH} )
     !isEmpty(INSTALL_FREEDATAPACK_PATH):message( Free datapack path: $${INSTALL_FREEDATAPACK_PATH} )
@@ -128,9 +126,9 @@ message(    * Extension: $${LIB_EXTENSION})
 !isEmpty(INSTALL_DESKTOP_ICON_PATH):message( DesktopIcon: $${INSTALL_DESKTOP_ICON_PATH} )
 
 !CONFIG(dontinstallresources) {
-    message( ******************************************************************************** )
-    message( *************************    FreeMedForms Databases   ************************** )
-    message( ******************************************************************************** )
+    message( ****************************************************************** )
+    message( *************************   Databases   ************************** )
+    message( ****************************************************************** )
     contains(INSTALL_DRUGS,1):message( Installing drugs database )
     contains(INSTALL_PROFILES_FILES,1):message( Installing user default Profiles files)
     contains(INSTALL_ICD_DATABASE,1):message( Installing ICD10 database )
@@ -217,7 +215,7 @@ macx {
   pixsvg.files = $${SOURCES_GLOBAL_RESOURCES}/pixmap/svg/*.svg
   INSTALLS+=screens pix16 pix16flags pix32 pix64 pix64jpg pixother pixsvg
 
-  # Install forms && FreeMedForms Profiles
+  # Install forms && profiles
   !isEmpty(INSTALL_FORMS_PATH):!isEmpty(SOURCES_FORMS){
     forms.path = $${INSTALL_FORMS_PATH}
     forms.files = $${SOURCES_FORMS}
@@ -341,37 +339,25 @@ macx {
                   $$[QT_INSTALL_LIBS]/*QtSvg.so.4 \
                   $$[QT_INSTALL_LIBS]/*QtNetwork.so.4
    }
-   win32 {
-       equals(QT_MAJOR_VERSION, 4) {
-           qt_libs.files = $$[QT_INSTALL_BINS]/QtCore4.$${LIB_EXTENSION} \
-                  $$[QT_INSTALL_BINS]/QtGui4.$${LIB_EXTENSION} \
-                  $$[QT_INSTALL_BINS]/QtSql4.$${LIB_EXTENSION} \
-                  $$[QT_INSTALL_BINS]/QtScript4.$${LIB_EXTENSION} \
-                  $$[QT_INSTALL_BINS]/QtXml4.$${LIB_EXTENSION} \
-                  $$[QT_INSTALL_BINS]/QtSvg4.$${LIB_EXTENSION} \
-                  $$[QT_INSTALL_BINS]/QtNetwork4.$${LIB_EXTENSION} \
-                  $$[QT_INSTALL_BINS]/mingw*.$${LIB_EXTENSION} \
-                  $$[QT_INSTALL_BINS]/libgcc_s_dw2-1.$${LIB_EXTENSION} \
-       }
-       greaterThan(QT_MAJOR_VERSION, 4) {
-           qt_libs.files = $$[QT_INSTALL_BINS]/Qt5Core.$${LIB_EXTENSION} \
-               $$[QT_INSTALL_BINS]/Qt5Gui.$${LIB_EXTENSION} \
-               $$[QT_INSTALL_BINS]/Qt5Sql.$${LIB_EXTENSION} \
-               $$[QT_INSTALL_BINS]/Qt5Script.$${LIB_EXTENSION} \
-               $$[QT_INSTALL_BINS]/Qt5Xml.$${LIB_EXTENSION} \
-               $$[QT_INSTALL_BINS]/Qt5Svg.$${LIB_EXTENSION} \
-               $$[QT_INSTALL_BINS]/Qt5Network.$${LIB_EXTENSION} \
-               $$[QT_INSTALL_BINS]/Qt5PrintSupport.$${LIB_EXTENSION} \
-               $$[QT_INSTALL_BINS]/Qt5Widgets.$${LIB_EXTENSION} \
-               $$[QT_INSTALL_BINS]/libwinpthread-1.$${LIB_EXTENSION} \
-               $$[QT_INSTALL_BINS]/libgcc_s_dw2-1.$${LIB_EXTENSION} \
-               $$[QT_INSTALL_BINS]/libstdc++-6.$${LIB_EXTENSION} \
-               $$[QT_INSTALL_BINS]/icuin52.$${LIB_EXTENSION} \
-               $$[QT_INSTALL_BINS]/icuuc52.$${LIB_EXTENSION} \
-               $$[QT_INSTALL_BINS]/icudt52.$${LIB_EXTENSION} \
-               $$[QT_INSTALL_BINS]/.$${LIB_EXTENSION} \
-       }
-   }
+    win32 {
+
+        qt_libs.files = $$[QT_INSTALL_BINS]/Qt5Core.$${LIB_EXTENSION} \
+                        $$[QT_INSTALL_BINS]/Qt5Gui.$${LIB_EXTENSION} \
+                        $$[QT_INSTALL_BINS]/Qt5Sql.$${LIB_EXTENSION} \
+                        $$[QT_INSTALL_BINS]/Qt5Script.$${LIB_EXTENSION} \
+                        $$[QT_INSTALL_BINS]/Qt5Xml.$${LIB_EXTENSION} \
+                        $$[QT_INSTALL_BINS]/Qt5Svg.$${LIB_EXTENSION} \
+                        $$[QT_INSTALL_BINS]/Qt5Network.$${LIB_EXTENSION} \
+                        $$[QT_INSTALL_BINS]/Qt5PrintSupport.$${LIB_EXTENSION} \
+                        $$[QT_INSTALL_BINS]/Qt5Widgets.$${LIB_EXTENSION} \
+                        $$[QT_INSTALL_BINS]/libwinpthread-1.$${LIB_EXTENSION} \
+                        $$[QT_INSTALL_BINS]/libgcc_s_dw2-1.$${LIB_EXTENSION} \
+                        $$[QT_INSTALL_BINS]/libstdc++-6.$${LIB_EXTENSION} \
+                        $$[QT_INSTALL_BINS]/icuin54.$${LIB_EXTENSION} \
+                        $$[QT_INSTALL_BINS]/icuuc54.$${LIB_EXTENSION} \
+                        $$[QT_INSTALL_BINS]/icudt54.$${LIB_EXTENSION} \
+                        $$[QT_INSTALL_BINS]/.$${LIB_EXTENSION} \
+    }
 
    INSTALLS+=qt_libs
 
@@ -401,20 +387,16 @@ macx {
 
    # install printsupport
    win32 {
-       greaterThan(QT_MAJOR_VERSION, 4) {
            qt_printsupport.path = $${INSTALL_QT_LIBS_PATH}/plugins
            qt_printsupport.files = $${QTPLUGINS_PATH}/printsupport
            INSTALLS+=qt_printsupport
-       }
    }
 
    # install platforms/qwindows.dll qminimal.dll & qoffscreen.dll
    win32 {
-       greaterThan(QT_MAJOR_VERSION, 4) {     
            qt_platforms.path = $${INSTALL_QT_LIBS_PATH}
            qt_platforms.files = $${QTPLUGINS_PATH}/platforms
            INSTALLS+=qt_platforms
-       }
    }
 
  }

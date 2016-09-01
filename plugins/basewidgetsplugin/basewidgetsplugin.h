@@ -47,7 +47,7 @@ class BaseWidgetsFactory;
 class BaseWidgetsPlugin : public ExtensionSystem::IPlugin
 {
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID "org.freemedforms.FreeMedForms.BaseWidgetsPlugin" FILE "BaseWidgets.json")
+    Q_PLUGIN_METADATA(IID "io.freehealth.ehr.BaseWidgetsPlugin" FILE "BaseWidgets.json")
 
 public:
     BaseWidgetsPlugin();

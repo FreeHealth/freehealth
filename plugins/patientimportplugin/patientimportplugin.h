@@ -35,7 +35,7 @@ namespace Internal {
 class PatientimportPlugin : public ExtensionSystem::IPlugin
 {
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID "org.freemedforms.FreeMedForms.patientimportPlugin" FILE "patientimport.json")
+    Q_PLUGIN_METADATA(IID "io.freehealth.ehr.patientimportPlugin" FILE "patientimport.json")
 
 public:
     PatientimportPlugin();

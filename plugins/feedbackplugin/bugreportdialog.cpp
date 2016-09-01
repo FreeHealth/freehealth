@@ -34,7 +34,6 @@
 
 #include <utils/log.h>
 #include <utils/global.h>
-#include <utils/emailvalidator.h>
 #include <utils/widgets/qbuttonlineedit.h>
 
 #include <coreplugin/itheme.h>
@@ -76,7 +75,6 @@ public:
     {
         ui = new Ui::BugReportDialog;
         ui->setupUi(q);
-        ui->emailEdit->setValidator(new Utils::EmailValidator(q));
         _sendButton = new QPushButton(q);
         _sendButton->setDisabled(true);
         ui->buttonBox->addButton(_sendButton, QDialogButtonBox::ActionRole);
@@ -183,13 +181,12 @@ void BugReportDialog::validateInputs()
     bool enabled = true;
     QString toolTip;
 
-    // qWarning() << d->ui->emailEdit->hasAcceptableInput();
-    // Check email
-    if (d->ui->emailEdit->hasAcceptableInput()) {
+    // Check that email is not empty
+    if (!d->ui->emailEdit->text().isEmpty()) {
         d->ui->emailState->setPixmap(theme()->icon(Core::Constants::ICONOK, Core::ITheme::SmallIcon).pixmap(16, 16));
     } else {
         enabled = false;
-        toolTip += QString("<li>%1</li>").arg(tr("The email address you entered is not valid."));
+        toolTip += QString("<li>%1</li>").arg(tr("Please enter your email address."));
         d->ui->emailState->setPixmap(theme()->icon(Core::Constants::ICONWARNING, Core::ITheme::SmallIcon).pixmap(16, 16));
     }
 
@@ -270,6 +267,6 @@ void BugReportDialog::openFmfDocUrl()
 {
     if(!QDesktopServices::openUrl(QUrl(Utils::Constants::URL_ONLINEDOCUMENTATION))) {
         Utils::warningMessageBox(tr("The application has requested the operating system to open the URL in an external browser but something went wrong."),
-                                 tr("Please verify that you have a default browser enabled or go directly to https://freemedforms.com and check the documentation."));
+                                 tr("Please verify that you have a default browser enabled or go directly to https://freehealth.io and check the documentation."));
     }
 }
