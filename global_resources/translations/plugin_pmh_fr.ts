@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="fr_FR">
+<TS version="2.1" language="fr_FR">
 <context>
     <name>PMH</name>
     <message>
@@ -216,7 +216,7 @@
     </message>
     <message>
         <source>userName</source>
-        <translation type="unfinished"></translation>
+        <translation>Nom de l&apos;utilisateur</translation>
     </message>
 </context>
 <context>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="fr_FR">
+<TS version="2.1" language="fr_FR">
 <context>
     <name>Core::AppConfigWizard</name>
     <message>
@@ -28,14 +28,16 @@
     </message>
     <message>
         <source>No server configuration detected</source>
-        <translation type="unfinished"></translation>
+        <translation>Aucune configuration serveur détectée</translation>
     </message>
     <message>
         <source>You are trying to configure a network client. It is manadatory to connect to a network server.
 While the host connection is valid, no configuration was found on this host.
 
 Please check that this host contains a server configuration.</source>
-        <translation type="unfinished"></translation>
+        <translation>Vous essayez de configurer le logiciel pour qu&apos;il se connecte à des bases de données existantes.
+Le nom d&apos;hôte est valide mais aucune configuration correcte n&apos;a été trouvée sur cet hôte.
+Merci de vérifier que cet hôte contient bien une configuration correcte.</translation>
     </message>
 </context>
 <context>
@@ -681,11 +683,11 @@ Cliquez Ok pour tester FreeHealth, ou Annuler pour installer FreeHealth avec MyS
     </message>
     <message>
         <source>We found a FreeMedforms parameter directory.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nous avons trouvé un dossier contenant les paramètres de FreeMedForms.</translation>
     </message>
     <message>
         <source>We found a FreeMedForms parameter directory inside your user directory. It contains the connection parameters for your existing databases. If you want to use these databases with FreeHealth, click Yes. If you want to start a new installation from scratch, click No.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nous avons trouvé un dossier contenant des paramètres de connexion à des bases de données FreeMedForms dans votre répertoire utilisateur. Si vous souhaitez continuer à utiliser ces bases de données avec FreeHealth, cliquez sur Oui. Si vous souhaitez effectuer une installation de FreeHealth en partant de zéro (avec de nouvelles bases de données), cliquez sur Non.</translation>
     </message>
 </context>
 <context>

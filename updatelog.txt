@@ -1,7 +1,10 @@
 Update log
 ==========
 
-See https://github.com/FreeMedForms/freemedforms/issues for more details
+For more details see
+  * changelog
+  * https://github.com/FreeHealth/freehealth/issues
+  * https://github.com/FreeMedForms/freemedforms/issues
 
 FreeMedForms 0.9.8 -> FreeHealth 0.9.9
 --------------------------------------

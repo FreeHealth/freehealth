@@ -1,5 +1,5 @@
 # FreeHealth EHR [1]
-# https://freehealth.io
+# https://freehealth.io 
 
 ## FreeHealh EHR is a fork of FreeMedForms [2]
 
@@ -13,7 +13,7 @@ A free and open source electronic health record
 - healthcare centers
 - hospitals
 - clinics
-- doctors
+- medical doctors
 - nurses
 - physiotherapists
 - allied health professionals
@@ -43,7 +43,7 @@ Supported OS:
 
 
 ### Can I make a donation?
-
+    
 Yes! Go to our [Donation page].
 Your money will speed up the development process
 

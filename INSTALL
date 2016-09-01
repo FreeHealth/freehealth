@@ -9,11 +9,11 @@ I. What is FreeHealth ?
 
 Electronic Health Record.
 FreeHealth is also a lot of derivatives sub-project, which are
-just standalone compilation of FreeHealth plugins, such as FreeRx, the electronic
+just standalone compilations of FreeHealth plugins, such as FreeRx, the electronic
 prescribing plugin.
 
 This project is a free and open source project. A community grows up
-around it. FreeMedForms and derivatives is released under the terms
+around it. FreeMedForms and derivatives are released under the terms
 of the GPLv3 License. Some parts of the code are LGPL v2.1.
 
 FreeHealth EHR and derived apps are coded in C++/Qt5
@@ -37,3 +37,6 @@ https://freehealth.io/en/manuals/ehr/install/server
 We recommand that you install FreeHealth EHR with a MySQL database, as the
 alternative installation procedure using SQLite database is deprecated. SQlite
 support will be discontinued in a future release and MySQL will become mandatory.
+You can install FreeHealth 0.9.9 over FreeMedFoms 0.9.8, the upgrade process is
+automatic, you just need to answer Yes to 2 questions about copying FreeMedForms
+parameters folder and user folder.
