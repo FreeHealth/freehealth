@@ -215,8 +215,8 @@
         <translation>Créé par</translation>
     </message>
     <message>
-        <source>User name</source>
-        <translation type="unfinished">Nom de l&apos;utilisateur</translation>
+        <source>userName</source>
+        <translation>Nom de l&apos;utilisateur</translation>
     </message>
 </context>
 <context>

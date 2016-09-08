@@ -15,17 +15,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>No FreeMedForms server configuration detected</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>You are trying to configure a network client of FreeMedForms. It is manadatory to connect to a FreeMedForms network server.
-While the host connection is valid, no FreeMedForms configuration was found on this host.
-
-Please check that this host contains a FreeMedForms server configuration.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>You must configure the server using your personnal login and password to connect the database.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -35,6 +24,17 @@ Please check that this host contains a FreeMedForms server configuration.</sourc
     </message>
     <message>
         <source>Please specify the database prefix to use (please ask your software administrator)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No server configuration detected</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You are trying to configure a network client. It is manadatory to connect to a network server.
+While the host connection is valid, no configuration was found on this host.
+
+Please check that this host contains a server configuration.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -673,23 +673,15 @@ Click Ok to test FreeHealth, or click Cancel to install FreeHealth with MySQL.</
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>We found a .freemedforms parameter directory.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>We found a .freemedforms hidden directory inside your user directory. It contains the connection parameters for your existing databases. If you want to use these databases with FreeHealth, click Yes and we will make a copy of of the directory named .freehealth. If you want to start a new installation from scratch, click No.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>We found a .freemedforms_debug parameter directory.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>We found a .freemedforms_debug hidden directory inside your user directory. It contains the connection parameters for your existing databases. If you want to use these databases with FreeHealth, click Yes and we will make a copy of of the directory named .freehealth_debug. If you want to start a new installation from scratch, click No.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Application Plugins path</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>We found a FreeMedforms parameter directory.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>We found a FreeMedForms parameter directory inside your user directory. It contains the connection parameters for your existing databases. If you want to use these databases with FreeHealth, click Yes. If you want to start a new installation from scratch, click No.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

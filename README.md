@@ -13,7 +13,7 @@ A free and open source electronic health record
 - healthcare centers
 - hospitals
 - clinics
-- doctors
+- medical doctors
 - nurses
 - physiotherapists
 - allied health professionals

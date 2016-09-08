@@ -821,10 +821,6 @@ Ort: %2</translation>
         <translation>Empfohlene Aktualisierungsfrequenz</translation>
     </message>
     <message>
-        <source>The FreeMedForms community</source>
-        <translation>FreeMedForms-Community</translation>
-    </message>
-    <message>
         <source>Please contact the development team.</source>
         <translation>Bitte kontaktieren Sie das Entwicklerteam.</translation>
     </message>
@@ -2787,6 +2783,10 @@ Text Align Justify shortcut key : Mac specific</extracomment>
     </message>
     <message>
         <source>Other</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>FreeHealth community</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

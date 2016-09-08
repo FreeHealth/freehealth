@@ -56,7 +56,7 @@
     </message>
     <message>
         <location filename="../../plugins/feedbackplugin/bugreportdialog.cpp" line="270"/>
-        <source>Please verify that you have a default browser enabled or go directly to https://freemedforms.com and check the documentation.</source>
+        <source>Please verify that you have a default browser enabled or go directly to https://freehealth.io and check the documentation.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

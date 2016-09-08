@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="fr_FR">
+<TS version="2.0" language="fr_FR">
 <context>
     <name>Feedback::BugReportDialog</name>
     <message>
@@ -56,8 +56,8 @@
     </message>
     <message>
         <location filename="../../plugins/feedbackplugin/bugreportdialog.cpp" line="270"/>
-        <source>Please verify that you have a default browser enabled or go directly to https://freemedforms.com and check the documentation.</source>
-        <translation>Merci de vérifier que vous avez réglé le navigateur par défaut ou allez directement sur le site https://freemedforms.com et consultez la documentation</translation>
+        <source>Please verify that you have a default browser enabled or go directly to https://freehealth.io and check the documentation.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

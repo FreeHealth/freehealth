@@ -136,8 +136,10 @@ HttpServerEngine::~HttpServerEngine()
 /** Returns true if this engine manages this server */
 bool HttpServerEngine::managesServer(const Server &server)
 {
-    if (core().isInternetConnectionAvailable())
-        return server.nativeUrl().startsWith("https://");
+    if (core().isInternetConnectionAvailable()) {
+        return (server.nativeUrl().startsWith("https://")
+                || server.nativeUrl().startsWith("http://"));
+    }
     return false;
 }
 

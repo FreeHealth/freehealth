@@ -38,7 +38,10 @@ Erreur : %2</translation>
        Location: %1
        FileName: %2
        Driver: %3</source>
-        <translation type="unfinished"></translation>
+        <translation>Essai de création d&apos;une base de données vide.
+       Emplacement: %1
+       Nom du fichier: %2
+       Pilote: %3</translation>
     </message>
 </context>
 </TS>

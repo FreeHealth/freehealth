@@ -19,10 +19,14 @@ Several bug fixes, somes new feature, many enhancements.
   * added administrative gender: Unknown
   * episodes: differentiate episode date and time (can be modified by user) and episode
   creation date and time (timestamp, cannot be modified)
+  * problem oriented medical record: BMI calculator
 
 ### Enhancements
   * improved print preview
-  * improved PMHx dialog (you can now add comment text) and tree view
+  * improved PMHx dialog:
+    * you can now add comment text
+    * empty items don't appear in tree view
+    * display name of PMH entry creator 
   * administrative gender: "hermaphrodite" becomes "Other"
                                                                                 
 ### Bug

@@ -5,13 +5,13 @@
 
   <formdescription>
     <!-- Non translatable values -->
-    <authors>Eric Maeker, MD</authors>
+    <authors>Eric Maeker, MD; Jerome Pinguet</authors>
     <version>test</version>
-    <fmfv>0.8.2</fmfv>
+    <fmfv>0.9.9</fmfv>
     <cdate>2012-09-03</cdate>
-    <lmdate>2013-02-05</lmdate>
+    <lmdate>2016-09-01</lmdate>
     <icon>generalpractitioner.png</icon>
-    <weblink></weblink>
+    <weblink>https://freehealh.io</weblink>
     <bibliography/>
 
     <!-- Translatable values -->
@@ -23,6 +23,14 @@
     <specialties lang="fr">Médecine générale</specialties>
     <specialties lang="xx">General practice</specialties>
     <updateinfo>
+        <updateversion from="0.8.4" to="0.9.9">
+            <text lang="en">
+            Added BMI computation.
+            </text>
+            <text lang="fr">
+            Ajout du calcul de l'IMC.
+            </text>
+        </updateversion>
         <updateversion from="0.8.2" to="0.8.4">
             <text lang="fr">
             Ajout des masques HTML d'exportation et d'impression plus modernes.

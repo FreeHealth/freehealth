@@ -193,23 +193,7 @@ Do you want to add them to the file?</source>
 <context>
     <name>DrugsDB::Internal::DosageModel</name>
     <message>
-        <source>complet tab.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>half tab.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>quater tab.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>dose per kilograms</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>reference spoon</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -234,18 +218,6 @@ Do you want to add them to the file?</source>
     </message>
     <message>
         <source>inhalation</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>application</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>washing</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>shampooing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -274,6 +246,34 @@ Do you want to add them to the file?</source>
     </message>
     <message>
         <source>The duration&apos;s scheme must be defined.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>full tab.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>quarter tab.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>dose per kilogram</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>measuring spoon</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>apply</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>enema</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>shampoo</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
