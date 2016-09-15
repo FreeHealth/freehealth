@@ -178,6 +178,8 @@ PmhModeWidget::PmhModeWidget(QWidget *parent) :
     connect(ui->buttonBox, SIGNAL(clicked(QAbstractButton*)), this, SLOT(onButtonClicked(QAbstractButton*)));
 
     connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(onCurrentPatientChanged()));
+    // by default show synthesis when entering PMH
+    ui->stackedWidget->setCurrentWidget(ui->pageSynthesis);
 }
 
 PmhModeWidget::~PmhModeWidget()
@@ -337,14 +339,17 @@ void PmhModeWidget::removeItem()
 /** When a new patient is selected, select the synthesis item and re-expand the category view */
 void PmhModeWidget::onCurrentPatientChanged()
 {
+    qDebug() << Q_FUNC_INFO;
     // Auto-saved form content
     if (ui->formDataMapper->isDirty()) {
         ui->formDataMapper->submit();
+        ui->formDataMapper->clear();
+        catModel()->refreshSynthesis();
     }
     ui->formDataMapper->clear();
-    catModel()->refreshSynthesis();
     ui->treeView->selectionModel()->select(catModel()->index(0,0), QItemSelectionModel::SelectCurrent);
     ui->treeView->expandAll();
+    ui->stackedWidget->setCurrentWidget(ui->pageSynthesis);
 }
 
 /** Create a new PMHx using the PMH::PmhCreatorDialog */
