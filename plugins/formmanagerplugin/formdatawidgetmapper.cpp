@@ -251,8 +251,10 @@ bool FormDataWidgetMapper::isDirty() const
 {
     if (!d->_formMain)
         return false;
-    if (!d->_currentEpisode.isValid())
+    if (!d->_currentEpisode.isValid()) {
+        qDebug() << "current episode not valid: " << d->_formMain->uuid();
         return false;
+    }
 
     // form main is readonly ?
     if (d->_formMain->itemData() && d->_formMain->itemData()->isReadOnly()) {
@@ -263,19 +265,23 @@ bool FormDataWidgetMapper::isDirty() const
     // form main isModified() ?
     if (d->_formMain->itemData() && d->_formMain->itemData()->isModified()) {
         if (WarnDirty)
-            LOG(QString("isDirty (form) %1 %2").arg(d->_formMain->uuid()).arg(d->_formMain->itemData()->isModified()));
+            LOG(QString("isDirty (form) Uuid: %1 itemData()->isModified(): %2").arg(d->_formMain->uuid()).arg(d->_formMain->itemData()->isModified()));
         return true;
     }
     // ask all current form item data
     foreach(FormItem *it, d->_formMain->flattenedFormItemChildren()) {
         if (it->itemData() && it->itemData()->isModified()) {
-            if (WarnDirty)
+            if (WarnDirty) {
                 LOG(QString("isDirty (item) %1 %2").arg(it->uuid()).arg(+it->itemData()->isModified()));
+                qDebug() << QString("isDirty (item) %1 %2").arg(it->uuid()).arg(+it->itemData()->isModified());
+            }
             return true;
         }
     }
-    if (WarnDirty)
-        LOG(QString("isDirty false, Form: %1").arg(d->_formMain->uuid()));
+    if (WarnDirty) {
+        LOG(QString("isDirty = FALSE, Form: %1").arg(d->_formMain->uuid()));
+        qDebug() << QString("isDirty = FALSE, Form: %1").arg(d->_formMain->uuid());
+    }
     return false;
 }
 

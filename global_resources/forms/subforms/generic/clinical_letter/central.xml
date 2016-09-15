@@ -26,13 +26,14 @@
 
   <file type="script" name="onload">./scripts/xx/clinical_letter.js</file>
 
+
   <MedForm type="form" name="Subforms::Generic::Clinical::Letter" uifilename="./ui/xx/clinical_letter.ui">
     <label lang="xx">Clinical letter</label>
     <label lang="fr">Lettre à un confrère</label>
     <icon>__theme__/xray.png</icon>
     <options>DontPrintEmptyValues;UseFormNameAsNameSpace</options>
-    <!--<file type="htmlprintmask">./html/xx/clinical_letter_mask.html</file>
-    <file type="htmlexportmask">./html/xx/clinical_letter_mask.html</file>-->
+    <file type="htmlprintmask">./html/xx/clinical_letter_mask.html</file>
+    <!--<file type="htmlexportmask">./html/xx/clinical_letter_mask.html</file>-->
 
     <Item type="group" name="Recipient::Group">
       <uilink label="" widget="recipientGroupBox" layout=""/>

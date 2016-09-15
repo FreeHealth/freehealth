@@ -100,6 +100,11 @@
         <label lang="xx">Type 2 diabetes</label>
         <options>PrintOnlyChecked</options>
       </Item>
+      <Item name="Risk::Factors::Test" type="ShortText">
+        <label lang="xx">Test</label>
+        <label lang="en">Test</label>
+      </Item>
+
 
 <!--
     </Item>

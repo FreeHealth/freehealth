@@ -208,18 +208,25 @@ void PmhModeWidget::currentChanged(const QModelIndex &current, const QModelIndex
     qDebug() << Q_FUNC_INFO;
     // Auto-saved form content
     if (previous.isValid()) {
+        qDebug() << "previous is valid";
         if (catModel()->isForm(previous)) {
             if (ui->formDataMapper->isDirty())
                 ui->formDataMapper->submit();
             ui->formDataMapper->clear();
             catModel()->refreshSynthesis();
         }
+    } else {
+        qDebug() << "previous is not valid";
     }
-    if (!current.isValid())
+    if (!current.isValid()) {
+        qDebug() << "current is not valid";
         return;
+    }
     // No active patient ?
-    if (patient()->uuid().isEmpty())
+    if (patient()->uuid().isEmpty()) {
+        qDebug() << "no active patient";
         return;
+    }
 
     ui->formDataMapper->setCurrentForm(0);
 
@@ -232,6 +239,7 @@ void PmhModeWidget::currentChanged(const QModelIndex &current, const QModelIndex
     } else if (catModel()->isForm(current)) {
         // Show the form's widget
         const QString &formUid = catModel()->index(current.row(), PmhCategoryModel::Id, current.parent()).data().toString();
+        qDebug() << "formUid: " << formUid;
         ui->stackedWidget->setCurrentWidget(ui->formPage);
         ui->formDataMapper->setCurrentForm(formUid);
         ui->formDataMapper->setLastEpisodeAsCurrent();

@@ -76,7 +76,7 @@ QString Server::uuid() const
     const QString &uuid = m_Desc.data(ServerDescription::Uuid).toString();
     if (uuid.isEmpty()) {
         if (!m_Url.isEmpty())
-            return m_Url.toUtf8().toBase64();
+            return m_Url.toUtf8().toBase64(Base64);
     }
     return uuid;
 }
