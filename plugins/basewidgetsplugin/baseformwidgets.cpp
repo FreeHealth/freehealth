@@ -387,8 +387,6 @@ void BaseForm::addWidgetToContainer(IFormWidget *widget)
         return;
     col = (i % numberColumns);
     row = (i / numberColumns);
-//    qWarning() << "ADDING to" << m_FormItem->uuid() << "widget" << widget->formItem()->uuid()
-//               << "i" << i << "col" << col << "row" << row;
     m_ContainerLayout->addWidget(widget , row, col);
     i++;
 }
@@ -418,14 +416,9 @@ QString BaseForm::printableHtml(bool withValues) const
             html << Utils::htmlBodyContent(w->printableHtml(withValues));
     }
     html.removeAll("");
-
-//    qWarning() << m_FormItem->spec()->label() << Constants::dontPrintEmptyValues(m_FormItem) << html.count();
-//    qWarning() << m_FormItem->getOptions();
-
-    if (html.isEmpty() && Constants::dontPrintEmptyValues(m_FormItem))
+    if (html.isEmpty() && Constants::dontPrintEmptyValues(m_FormItem)){
         return QString();
-
-//    qWarning() << html;
+    }
 
     int i = 0;
 //    int c = 0;
@@ -523,7 +516,6 @@ bool BaseFormData::isModified() const
     keys << ID_UserName << ID_EpisodeLabel << ID_EpisodeDateTime << ID_Priority;
     foreach(int id, keys) {
         if (data(id) != m_OriginalData.value(id)) {
-            // qWarning() << "Form Dirty" << id << m_OriginalData.value(id) << data(id);
             return true;
         }
     }
@@ -570,7 +562,6 @@ bool BaseFormData::isReadOnly() const
 
 bool BaseFormData::setData(const int ref, const QVariant &data, const int role)
 {
-//    qWarning() << "Form::setData" << ref << data << role;
     if (role!=Qt::EditRole)
         return false;
 
@@ -1047,12 +1038,15 @@ void BaseCheckData::clear()
         m_Check->setChecked(true);
     else if (s.compare("unchecked", Qt::CaseInsensitive)==0)
         m_Check->setChecked(false);
-    else if (s.compare("partial", Qt::CaseInsensitive)==0)
-        m_Check->setCheckState(Qt::PartiallyChecked);
 }
 
 bool BaseCheckData::isModified() const
 {
+    qDebug() << Q_FUNC_INFO
+             << m_FormItem->uuid()
+             << "m_OriginalValue != m_Check->checkState()"
+             << (m_OriginalValue != m_Check->checkState());
+
     return m_OriginalValue != m_Check->checkState();
 }
 
@@ -1072,10 +1066,17 @@ bool BaseCheckData::isReadOnly() const
     return (!m_Check->isEnabled());
 }
 
+/**
+ * To keep compatibility with FreeMedForms:
+ *   - Qt::Checked is recorded as 2 in the database
+ *   - Qt::Unchecked is recored as 0 in the database
+ *   - Qt::PartiallyChecked is not used in FreeHealth
+ * Tristate was never implemented in FreeMedForms as the default property
+ * isTristate() for a QCheckBox is false.
+ */
 bool BaseCheckData::setData(const int ref, const QVariant &data, const int role)
 {
     Q_UNUSED(ref);
-//    qWarning() << "BaseCheckData::setData" << data << role;
     if (!m_Check)
         return false;
     if (role==Qt::EditRole || role==Qt::CheckStateRole) {
@@ -1085,7 +1086,6 @@ bool BaseCheckData::setData(const int ref, const QVariant &data, const int role)
                 m_Check->setCheckState(Qt::Unchecked);
                 break;
             case 1:
-                m_Check->setCheckState(Qt::PartiallyChecked);
                 break;
             case 2:
                 m_Check->setCheckState(Qt::Checked);
@@ -1188,10 +1188,6 @@ BaseRadio::BaseRadio(Form::FormItem *formItem, QWidget *parent) :
 
     m_ButGroup = new QButtonGroup(this);
     int i = 0;
-
-//    qWarning() << m_FormItem->valueReferences()->values(Form::FormItemValues::Value_Possible);
-//    qWarning() << m_FormItem->valueReferences()->values(Form::FormItemValues::Value_Uuid);
-
     const QStringList &uids = m_FormItem->valueReferences()->values(Form::FormItemValues::Value_Uuid);
     foreach (const QString &v, m_FormItem->valueReferences()->values(Form::FormItemValues::Value_Possible)) {
         QRadioButton *rb = new QRadioButton(this);
@@ -1362,7 +1358,6 @@ bool BaseRadioData::isModified() const
 {
     foreach(QRadioButton *but, m_Radio->m_RadioList) {
         if (but->isChecked()) {
-//            qWarning() << "Radio selected" << but->property("id").toString() << "modified" << (m_OriginalValue != but->property("id").toString());
             return m_OriginalValue != but->property("id").toString();
         }
     }
@@ -1398,8 +1393,6 @@ bool BaseRadioData::setData(const int ref, const QVariant &data, const int role)
 {
     Q_UNUSED(ref);
     Q_UNUSED(data);
-    // receive ref=0; data=uid of activated radio; role=IFormItemData::RoleRepresentation
-//    qWarning() << "BaseRadioData::setData" << data << role;
     if (role==Form::IFormItemData::CalculationsRole) {
         Q_EMIT dataChanged(ref); // just emit the dataChanged signal
         onValueChanged();
@@ -1459,7 +1452,6 @@ void BaseRadioData::setStorableData(const QVariant &data)
     }
     m_OriginalValue = id;
     Q_EMIT dataChanged(0); // just emit the dataChanged signal
-//    qWarning() << "Radio orig" << id;
 //    onValueChanged(); ?
 }
 
@@ -2040,7 +2032,6 @@ BaseDateTime::BaseDateTime(Form::FormItem *formItem, QWidget *parent) :
         // Find widget
         QDateTimeEdit *le = formItem->parentFormMain()->formWidget()->findChild<QDateTimeEdit*>(widget);
         if (le) {
-            qWarning() << "le =" << le;
             m_DateTime = le;
         } else {
             LOG_ERROR("Using the QtUiLinkage, item not found in the ui: " + formItem->uuid());
