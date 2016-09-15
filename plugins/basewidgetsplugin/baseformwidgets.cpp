@@ -992,14 +992,11 @@ QString BaseCheck::printableHtml(bool withValues) const
 
     // ⍌⎕☒☑
     if (withValues) {
-        if (m_Check->isChecked())
-#if QT_VERSION >= 0x05000
+        if (m_Check->isChecked()) {
             return QString("%1&nbsp;%2").arg("&#10003;").arg(m_FormItem->spec()->label());
-#else
-            return QString("%1&nbsp;%2").arg("☒").arg(m_FormItem->spec()->label());
-#endif
-        else if (!m_FormItem->getOptions().contains("printonlychecked", Qt::CaseInsensitive))
+        } else if (!m_FormItem->getOptions().contains("printonlychecked", Qt::CaseInsensitive)) {
             return QString("%1&nbsp;%2").arg("⎕").arg(m_FormItem->spec()->label());
+        }
     } else {
         return QString("%1&nbsp;%2").arg("⎕").arg(m_FormItem->spec()->label());
     }
@@ -1121,13 +1118,9 @@ QVariant BaseCheckData::data(const int ref, const int role) const
         if (vals.count() >= 2 && !vals.at(1).isEmpty())
             toPrint = vals.at(1);
 
-        // ⍌⎕☒☑
+        // ⍌⎕☑
         if (m_Check->isChecked()) {
-#if QT_VERSION >= 0x05000
             return QString("%1&nbsp;%2").arg("&#10003;").arg(toPrint);
-#else
-            return QString("%1&nbsp;%2").arg("☒").arg(toPrint);
-#endif
         } else {
             if (!m_FormItem->getOptions().contains("printonlychecked", Qt::CaseInsensitive))
                 return QString("%1&nbsp;%2").arg("⎕").arg(toPrint);

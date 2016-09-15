@@ -185,6 +185,7 @@ namespace {
         {
             m_Form = form;
             m_FormEpisodeModel = model;
+            m_FormEpisodeModel->setReadOnly(false); // allow submit (issue fhio-12)
         }
         Form::FormMain *form() const {return m_Form;}
         Form::EpisodeModel *formEpisodeModel() const {return m_FormEpisodeModel;}

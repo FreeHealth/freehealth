@@ -210,10 +210,11 @@ void PmhModeWidget::currentChanged(const QModelIndex &current, const QModelIndex
     if (previous.isValid()) {
         qDebug() << "previous is valid";
         if (catModel()->isForm(previous)) {
-            if (ui->formDataMapper->isDirty())
+            if (ui->formDataMapper->isDirty()) {
                 ui->formDataMapper->submit();
-            ui->formDataMapper->clear();
-            catModel()->refreshSynthesis();
+                ui->formDataMapper->clear();
+                catModel()->refreshSynthesis();
+            }
         }
     } else {
         qDebug() << "previous is not valid";
@@ -337,8 +338,9 @@ void PmhModeWidget::removeItem()
 void PmhModeWidget::onCurrentPatientChanged()
 {
     // Auto-saved form content
-    if (ui->formDataMapper->isDirty())
+    if (ui->formDataMapper->isDirty()) {
         ui->formDataMapper->submit();
+    }
     ui->formDataMapper->clear();
     catModel()->refreshSynthesis();
     ui->treeView->selectionModel()->select(catModel()->index(0,0), QItemSelectionModel::SelectCurrent);
@@ -380,7 +382,7 @@ void PmhModeWidget::pmhModelRowsInserted(const QModelIndex &parent, int start, i
 void PmhModeWidget::hideEvent(QHideEvent *event)
 {
     // Auto-saved form content
-    if (isVisible() && ui->formDataMapper->isDirty()) {
+    if (ui->formDataMapper->isDirty()) {
         ui->formDataMapper->submit();
         catModel()->refreshSynthesis();
     }

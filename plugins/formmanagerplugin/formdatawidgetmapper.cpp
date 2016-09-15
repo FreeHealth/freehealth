@@ -249,13 +249,21 @@ void FormDataWidgetMapper::clear()
  */
 bool FormDataWidgetMapper::isDirty() const
 {
-    if (!d->_formMain)
-        return false;
-    if (!d->_currentEpisode.isValid()) {
-        qDebug() << "current episode not valid: " << d->_formMain->uuid();
+    if (!d->_formMain) {
+        qDebug() << Q_FUNC_INFO << "d->_formMain == false";
         return false;
     }
 
+/*    if (!d->_currentEpisode.isValid()) {
+        qDebug() << Q_FUNC_INFO << "current episode" << d->_currentEpisode
+                 << "row: " << d->_currentEpisode.row()
+                 << "column: " << d->_currentEpisode.column()
+                << "model: " << d->_currentEpisode.model()
+                 << "not valid: " << d->_formMain->uuid()
+                << "name: " << d->_formMain->spec()->label();
+        return false;
+    }
+*/
     // form main is readonly ?
     if (d->_formMain->itemData() && d->_formMain->itemData()->isReadOnly()) {
         LOG(QString("isDirty (form) %1 isReadOnly").arg(d->_formMain->uuid()));
