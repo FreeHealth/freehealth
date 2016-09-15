@@ -1042,11 +1042,6 @@ void BaseCheckData::clear()
 
 bool BaseCheckData::isModified() const
 {
-    qDebug() << Q_FUNC_INFO
-             << m_FormItem->uuid()
-             << "m_OriginalValue != m_Check->checkState()"
-             << (m_OriginalValue != m_Check->checkState());
-
     return m_OriginalValue != m_Check->checkState();
 }
 

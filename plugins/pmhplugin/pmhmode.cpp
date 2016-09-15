@@ -130,7 +130,6 @@ PmhModeWidget::PmhModeWidget(QWidget *parent) :
         ui(new Ui::PmhModeWidget),
         m_EditButton(0)
 {
-    qDebug() << Q_FUNC_INFO;
     ui->setupUi(this);
     ui->pmhViewer->setEditMode(PmhViewer::ReadOnlyMode);
     ui->treeViewLayout->setMargin(0);
@@ -190,7 +189,6 @@ PmhModeWidget::~PmhModeWidget()
 /** Return the current selected category id in the category view */
 int PmhModeWidget::currentSelectedCategory() const
 {
-    qDebug() << Q_FUNC_INFO;
     if (!ui->treeView->selectionModel()->hasSelection())
         return -1;
     QModelIndex item = ui->treeView->selectionModel()->currentIndex();
@@ -207,10 +205,7 @@ int PmhModeWidget::currentSelectedCategory() const
 /** Reacts on the currentChanged signal of the category tree view */
 void PmhModeWidget::currentChanged(const QModelIndex &current, const QModelIndex &previous)
 {
-    qDebug() << Q_FUNC_INFO;
-    // Auto-saved form content
     if (previous.isValid()) {
-        qDebug() << "previous is valid";
         if (catModel()->isForm(previous)) {
             if (ui->formDataMapper->isDirty()) {
                 ui->formDataMapper->submit();
@@ -218,16 +213,12 @@ void PmhModeWidget::currentChanged(const QModelIndex &current, const QModelIndex
                 catModel()->refreshSynthesis();
             }
         }
-    } else {
-        qDebug() << "previous is not valid";
     }
     if (!current.isValid()) {
-        qDebug() << "current is not valid";
         return;
     }
     // No active patient ?
     if (patient()->uuid().isEmpty()) {
-        qDebug() << "no active patient";
         return;
     }
 
@@ -242,7 +233,6 @@ void PmhModeWidget::currentChanged(const QModelIndex &current, const QModelIndex
     } else if (catModel()->isForm(current)) {
         // Show the form's widget
         const QString &formUid = catModel()->index(current.row(), PmhCategoryModel::Id, current.parent()).data().toString();
-        qDebug() << "formUid: " << formUid;
         ui->stackedWidget->setCurrentWidget(ui->formPage);
         ui->formDataMapper->setCurrentForm(formUid);
         ui->formDataMapper->setLastEpisodeAsCurrent();
@@ -257,7 +247,6 @@ void PmhModeWidget::currentChanged(const QModelIndex &current, const QModelIndex
 
 void PmhModeWidget::onButtonClicked(QAbstractButton *button)
 {
-    qDebug() << Q_FUNC_INFO;
     if (button==m_EditButton) {
         ui->pmhViewer->setEditMode(PmhViewer::ReadWriteMode);
         ui->buttonBox->button(QDialogButtonBox::Cancel)->setEnabled(true);
@@ -297,7 +286,6 @@ void PmhModeWidget::onButtonClicked(QAbstractButton *button)
 /** Create a new category in the PMHx using the Category::CategoryDialog */
 void PmhModeWidget::createCategory()
 {
-    qDebug() << Q_FUNC_INFO;
     Category::CategoryDialog dlg(this);
     dlg.setModal(true);
     dlg.setCategoryModel(catModel(), PmhCategoryModel::Label);
@@ -306,7 +294,6 @@ void PmhModeWidget::createCategory()
 
 void PmhModeWidget::removeItem()
 {
-    qDebug() << Q_FUNC_INFO;
     if (!ui->treeView->selectionModel()->hasSelection())
         return;
     QModelIndex item = ui->treeView->selectionModel()->currentIndex();
@@ -339,8 +326,6 @@ void PmhModeWidget::removeItem()
 /** When a new patient is selected, select the synthesis item and re-expand the category view */
 void PmhModeWidget::onCurrentPatientChanged()
 {
-    qDebug() << Q_FUNC_INFO;
-    // Auto-saved form content
     if (ui->formDataMapper->isDirty()) {
         ui->formDataMapper->submit();
         ui->formDataMapper->clear();
@@ -355,7 +340,6 @@ void PmhModeWidget::onCurrentPatientChanged()
 /** Create a new PMHx using the PMH::PmhCreatorDialog */
 void PmhModeWidget::createPmh()
 {
-    qDebug() << Q_FUNC_INFO;
     PmhCreatorDialog dlg(this);
     if (ui->treeView->selectionModel()->hasSelection()) {
         QModelIndex item = ui->treeView->selectionModel()->currentIndex();
@@ -371,7 +355,6 @@ void PmhModeWidget::createPmh()
 /** When a PMHx is added to the PmhCategoryModel re-expand all items of the category view */
 void PmhModeWidget::pmhModelRowsInserted(const QModelIndex &parent, int start, int end)
 {
-    qDebug() << Q_FUNC_INFO;
     ui->treeView->expand(parent);
     for(int i=start; i != end+1; ++i) {
         ui->treeView->expand(catModel()->index(i, PmhCategoryModel::Label, parent));
@@ -386,7 +369,6 @@ void PmhModeWidget::pmhModelRowsInserted(const QModelIndex &parent, int start, i
 
 void PmhModeWidget::hideEvent(QHideEvent *event)
 {
-    // Auto-saved form content
     if (ui->formDataMapper->isDirty()) {
         ui->formDataMapper->submit();
         catModel()->refreshSynthesis();
