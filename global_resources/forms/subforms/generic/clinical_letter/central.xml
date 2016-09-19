@@ -23,7 +23,7 @@
     </updateinfo>
 
   </formdescription>
-
+  <papers>Prescription</papers>
   <file type="script" name="onload">./scripts/xx/clinical_letter.js</file>
 
 
@@ -32,6 +32,7 @@
     <label lang="fr">Lettre à un confrère</label>
     <icon>__theme__/xray.png</icon>
     <options>DontPrintEmptyValues;UseFormNameAsNameSpace</options>
+    <papers>Prescription</papers>
     <file type="htmlprintmask">./html/xx/clinical_letter_mask.html</file>
     <!--<file type="htmlexportmask">./html/xx/clinical_letter_mask.html</file>-->
 
@@ -39,7 +40,7 @@
       <uilink label="" widget="recipientGroupBox" layout=""/>
       <label lang="xx">Recipient</label>
       <label lang="fr">Destinataire</label>
-      <options>DontPrintEmptyValues</options>
+      <options>DontPrintEmptyValues;collapsible</options>
 
         <Item type="combo" name="Recipient::Title::Combo">
                 <uilink label="" widget="titleComboBox"/>
