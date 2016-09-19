@@ -291,7 +291,7 @@ IcdActionHandler::IcdActionHandler(QObject *parent) :
 //    if (!fmenu)
 //        return;
 //    a = aPrint = new QAction(this);
-//    a->setIcon(th->icon(Core::Constants::ICONPRINT));
+//    a->setIcon(th->icon(Core::Constants::ICONPRINTDARK));
 //    cmd = actionManager()->registerAction(a, Constants::A_PRINT_COLLECTION, ctx);
 //    cmd->setTranslations(Constants::PRINTCOLLECTION_TEXT, "", Constants::ICDCONSTANTS_TR_CONTEXT);
 //#ifdef FREEICD

@@ -395,7 +395,7 @@ DrugsActionHandler::DrugsActionHandler(QObject *parent) :
 
     Core::ActionContainer *fmenu = actionManager()->actionContainer(Core::Id(Core::Constants::M_FILE));
 //#ifdef FREEDIAMS
-    aPrintPrescription = createAction(this, "aPrintPrescription", Core::Constants::ICONPRINT,
+    aPrintPrescription = createAction(this, "aPrintPrescription", Core::Constants::ICONPRINTDARK,
                                       A_PRINT_PRESCRIPTION,
                                       ctx,
                                       PRINTPRESCRIPTION_TEXT, DRUGCONSTANTS_TR_CONTEXT,
@@ -404,7 +404,7 @@ DrugsActionHandler::DrugsActionHandler(QObject *parent) :
                                       QKeySequence::Print,
                                       false);
 //#else
-//    aPrintPrescription = createAction(this, "aPrintPrescription", Core::Constants::ICONPRINT,
+//    aPrintPrescription = createAction(this, "aPrintPrescription", Core::Constants::ICONPRINTDARK,
 //                                      A_PRINT_PRESCRIPTION,
 //                                      ctx,
 //                                      PRINTPRESCRIPTION_TEXT, DRUGCONSTANTS_TR_CONTEXT,

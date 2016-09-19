@@ -90,7 +90,7 @@ LedgerEdit::LedgerEdit(QWidget * parent):QWidget(parent),ui(new Ui::LedgerEditWi
     ui->showButton->setIcon(theme()->icon(Core::Constants::ICONEYES));
     ui->printButton->setShortcut(QKeySequence::Print);
     ui->printButton->setToolTip(QKeySequence(QKeySequence::Print).toString());
-    ui->printButton->setIcon(theme()->icon(Core::Constants::ICONPRINT));
+    ui->printButton->setIcon(theme()->icon(Core::Constants::ICONPRINTDARK));
     m_doc = new QTextDocument(ui->textEdit);
     QPalette p = palette();
     p.setColor(QPalette::Active, QPalette::Base, QColor ("#DDDDDD"));
