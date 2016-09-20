@@ -31,7 +31,7 @@
     <label lang="xx">Clinical letter</label>
     <label lang="fr">Lettre à un confrère</label>
     <icon>__theme__/xray.png</icon>
-    <options>DontPrintEmptyValues;UseFormNameAsNameSpace</options>
+    <options>DontPrintEmptyValues;UseFormNameAsNameSpace;GenericHeader</options>
     <file type="htmlprintmask">./html/xx/clinical_letter_mask.html</file>
     <!--<file type="htmlexportmask">./html/xx/clinical_letter_mask.html</file>-->
 

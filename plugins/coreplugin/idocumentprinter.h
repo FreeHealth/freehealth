@@ -75,7 +75,8 @@ public:
     enum PapersToUse {
         Papers_Generic_User = 0,
         Papers_Administrative_User,
-        Papers_Prescription_User
+        Papers_Prescription_User,
+        Papers_Empty_User
     };
 
     enum TokensWhere {

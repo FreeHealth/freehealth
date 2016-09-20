@@ -115,6 +115,7 @@ void DocumentPrinter::prepareHeader(Print::Printer *p, const int papers) const
         case Core::IDocumentPrinter::Papers_Administrative_User: header = user()->value(Core::IUser::AdministrativeHeader).toString(); break;
         case Core::IDocumentPrinter::Papers_Prescription_User: header = user()->value(Core::IUser::PrescriptionHeader).toString(); break;
         case Core::IDocumentPrinter::Papers_Generic_User: header = user()->value(Core::IUser::GenericHeader).toString(); break;
+        case Core::IDocumentPrinter::Papers_Empty_User: header = QString(); break;
         }
 #endif
 #endif
