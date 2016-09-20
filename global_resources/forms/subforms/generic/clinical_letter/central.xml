@@ -633,5 +633,61 @@
 
     </Item> <!-- end of group Recipient::Group -->
 
-  </MedForm>
+    <Item type="TextEditor" name="Body::TextEditor">
+      <uilink layout="letterFormLayout"/>
+      <options>FullEditor</options>
+      <label lang="xx">Letter</label>
+      <label lang="fr">Lettre</label>
+    </Item>
+
+    <Item type="group" name="Carbon::Copy::Group">
+      <uilink label="" widget="carbonCopyGroupBox" layout=""/>
+      <label lang="xx">Carbon Copy</label>
+      <label lang="fr">Copie Carbone</label>
+      <options>DontPrintEmptyValues;collapsible</options>
+
+      <Item type="ShortText" name="CC1::LineEdit">
+        <uilink widget="cC1LineEdit"/>
+        <placeholder lang="xx">CC 1</placeholder>
+      </Item>
+
+      <Item type="ShortText" name="CC2::LineEdit">
+        <uilink widget="cC2LineEdit"/>
+        <placeholder lang="xx">CC 2</placeholder>
+      </Item>
+
+      <Item type="ShortText" name="CC3::LineEdit">
+        <uilink widget="cC3LineEdit"/>
+        <placeholder lang="xx">CC 3</placeholder>
+        </Item>
+      </Item>
+
+      <Item type="combo" name="Sign::Off::Combo">
+        <uilink label="" widget="signOffComboBox"/>
+        <label lang="xx"></label>
+        <label lang="fr"></label>
+        <value>
+            <uuid id="0">Not done</uuid>
+            <uuid id="1">Doctor</uuid>
+            <uuid id="2">Professor</uuid>
+            <uuid id="3">Ms</uuid>
+            <uuid id="4">Mr</uuid>
+
+            <possible id="0" lang="xx">ø</possible>
+            <possible id="1" lang="xx">Dr</possible>
+            <possible id="2" lang="xx">Pr</possible>
+            <possible id="3" lang="xx">Ms</possible>
+            <possible id="4" lang="xx">Mr</possible>
+
+            <possible id="0" lang="fr">ø</possible>
+            <possible id="1" lang="fr">Bien confraternellement,</possible>
+            <possible id="2" lang="fr">Bien confraternellement,</possible>
+            <possible id="3" lang="fr">Sincères salutations,</possible>
+            <possible id="4" lang="fr">Sincères salutations,</possible>
+        </value>
+        <default>Doctor</default>
+        <option>DontPrintEmptyValues</option>
+      </Item>
+
+    </MedForm>
 </FreeMedForms>

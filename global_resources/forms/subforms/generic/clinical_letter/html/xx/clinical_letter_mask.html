@@ -69,12 +69,42 @@ div.pmh {
 [[DATE]]
 </p>
 
-<h1>{{~Patient.Identity.FullName~}}</h1>
+<p>
+{{Dear ~Form.Data.Print.Subforms::Generic::Clinical::Letter::Recipient::Title::Combo~}}
+</p>
+
+<p>
+{{~Patient.Identity.FullName~}}
+{{~Patient.Age.FullAge~}}
+({{~Patient.Age.DateOfBirth~}})
+{{~Patient.Address.FullAddress~}}
+</p>
 
 <p>{{~Patient.Pmhx.Html~}}</p>
 
 <p>
 {{~Patient.Drugs.ChronicTherapeutics.Html~}}
+</p>
+
+<p>
+{{~Form.Data.Print.Subforms::Generic::Clinical::Letter::Body::TextEditor~}}
+</p>
+
+<p>
+{{~Form.Data.Print.Subforms::Generic::Clinical::Letter::Sign::Off::Combo~}}
+</p>
+
+<p>
+{{~User.Identity.FullName~}}
+</p>
+
+<p>
+Cc:
+<ul>
+{{<li>~Form.Data.Print.Subforms::Generic::Clinical::Letter::CC1::LineEdit~</li>}}
+{{<li>~Form.Data.Print.Subforms::Generic::Clinical::Letter::CC2::LineEdit~</li>}}
+{{<li>~Form.Data.Print.Subforms::Generic::Clinical::Letter::CC3::LineEdit~</li>}}
+</ul>
 </p>
 
 </body>

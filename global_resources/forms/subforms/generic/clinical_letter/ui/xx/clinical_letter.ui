@@ -7,13 +7,13 @@
     <x>0</x>
     <y>0</y>
     <width>431</width>
-    <height>393</height>
+    <height>883</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
+  <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
     <widget class="QGroupBox" name="recipientGroupBox">
      <property name="title">
@@ -135,6 +135,30 @@
       </item>
      </layout>
     </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="carbonCopyGroupBox">
+     <property name="title">
+      <string>carbon copy</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <item>
+       <widget class="QLineEdit" name="cC1LineEdit"/>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="cC2LineEdit"/>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="cC3LineEdit"/>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <layout class="QFormLayout" name="letterFormLayout"/>
+   </item>
+   <item>
+    <widget class="QComboBox" name="signOffComboBox"/>
    </item>
   </layout>
  </widget>
@@ -329,6 +353,22 @@
     <hint type="destinationlabel">
      <x>213</x>
      <y>183</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>titleComboBox</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>signOffComboBox</receiver>
+   <slot>setCurrentIndex(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>67</x>
+     <y>50</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>215</x>
+     <y>859</y>
     </hint>
    </hints>
   </connection>
