@@ -45,28 +45,37 @@ div.pmh {
 
 <p>
 {{~Form.Data.Print.Subforms::Generic::Clinical::Letter::Recipient::Title::Combo~}}
+{{~Form.Data.Print.Subforms::Generic::Clinical::Letter::Recipient::Given::Name::Shorttext~}}
+{{~Form.Data.Print.Subforms::Generic::Clinical::Letter::Recipient::Surname::Shorttext~}}
+{{~Form.Data.Print.Subforms::Generic::Clinical::Letter::Health::Facility::Shorttext~}}
+{{~Form.Data.Print.Subforms::Generic::Clinical::Letter::Medical::Specialty::Combo~}}
+{{~Form.Data.Print.Subforms::Generic::Clinical::Letter::Surgical::Specialty::Combo~}}
+{{~Form.Data.Print.Subforms::Generic::Clinical::Letter::Allied::Health::Professions::Combo~}}
+{{~Form.Data.Print.Subforms::Generic::Clinical::Letter::Other::Recipient::Shorttext~}}
+{{~Form.Data.Print.Subforms::Generic::Clinical::Letter::Address1::Shorttext~}}
+{{~Form.Data.Print.Subforms::Generic::Clinical::Letter::Address2::Shorttext~}}
+{{~Form.Data.Print.Subforms::Generic::Clinical::Letter::Zip::Shorttext~}}
+{{~Form.Data.Print.Subforms::Generic::Clinical::Letter::City::Shorttext~}}
+<!--
+{{~Form.Data.Print.Subforms::Generic::Clinical::Letter::~}}
+{{~Form.Data.Print.Subforms::Generic::Clinical::Letter::~}}
+{{~Form.Data.Print.Subforms::Generic::Clinical::Letter::~}}
+{{~Form.Data.Print.Subforms::Generic::Clinical::Letter::~}}
+{{~Form.Data.Print.Subforms::Generic::Clinical::Letter::~}}
+-->
 </p>
 
 <p>
 [[DATE]]
-{{~DATE~}}
-{{DATE}}
 </p>
+
 <h1>{{~Patient.Identity.FullName~}}</h1>
 
-<ul>
-{{<li>~Form.Data.Print.Subs::Cardiology::RiskFactors::Modifiable::PhysicalInactivity~</li>}}
-{{<li>~Form.Data.Print.Subs::Cardiology::RiskFactors::Modifiable::FamilyHistory~</li>}}
-{{<li>~Form.Data.Print.Subs::Cardiology::RiskFactors::Modifiable::Stress~</li>}}
-{{<li>~Form.Data.Print.Subs::Cardiology::RiskFactors::Modifiable::Obesity~</li>}}
-{{<li>~Form.Data.Print.Subs::Cardiology::RiskFactors::Modifiable::Smoking~</li>}}
-{{<li>~Form.Data.Print.Subs::Cardiology::RiskFactors::Modifiable::Diet~</li>}}
-{{<li>~Form.Data.Print.Subs::Cardiology::RiskFactors::Modifiable::Cholesterol~</li>}}
-{{<li>~Form.Data.Print.Subs::Cardiology::RiskFactors::Modifiable::Hypertension~</li>}}
-{{<li>~Form.Data.Print.Subs::Cardiology::RiskFactors::Modifiable::Diabetes~</li>}}
-</ul>
-
 <p>{{~Patient.Pmhx.Html~}}</p>
+
+<p>
+{{~Patient.Drugs.ChronicTherapeutics.Html~}}
+</p>
 
 </body>
 
