@@ -287,6 +287,7 @@ bool DocumentPrinter::print(const QString &html, const int papers, bool printDup
         doc.setHtml(html);
     } else {
         QString _html = html;
+        Utils::replaceToken(_html, Core::Constants::TOKEN_DATE, QLocale().toString(QDate::currentDate(), QLocale().dateFormat()));
         Utils::replaceTokens(_html, globalTokens);
 #ifdef WITH_PAD
         if (padTools())
