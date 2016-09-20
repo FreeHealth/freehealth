@@ -131,14 +131,14 @@ InteractionSynthesisDialog::InteractionSynthesisDialog(DrugsDB::DrugsModel *drug
     d->aPrintAll = new QAction(this);
     d->aPrintAll->setText(tr("Print all interactions"));
     d->aPrintAll->setShortcut(QKeySequence::Print);
-    d->aPrintAll->setIcon(theme()->icon(Core::Constants::ICONPRINT, Core::ITheme::MediumIcon));
+    d->aPrintAll->setIcon(theme()->icon(Core::Constants::ICONPRINTDARK, Core::ITheme::MediumIcon));
     d->aPrintAll->setData(-1);
 //    bar->addAction(d->aPrintAll);
 
     d->aPrintOne = new QAction(this);
     d->aPrintOne->setText(tr("Print selected interaction"));
     d->aPrintOne->setShortcut(QKeySequence::Print);
-    d->aPrintOne->setIcon(theme()->icon(Core::Constants::ICONPRINT, Core::ITheme::MediumIcon));
+    d->aPrintOne->setIcon(theme()->icon(Core::Constants::ICONPRINTDARK, Core::ITheme::MediumIcon));
     d->aPrintOne->setData(-1);
 //    bar->addAction(d->aPrintOne);
 

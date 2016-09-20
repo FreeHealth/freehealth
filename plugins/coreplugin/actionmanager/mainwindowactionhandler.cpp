@@ -222,7 +222,7 @@ void MainWindowActionHandler::createGeneralActions(const int actions)
     // Print Action
     if (actions & Core::MainWindowActions::A_FilePrint) {
         a = aGeneralPrint = new QAction(this);
-        a->setIcon(theme()->icon(Constants::ICONPRINT));
+        a->setIcon(theme()->icon(Constants::ICONPRINTDARK));
         cmd = actionManager()->registerAction(a, Constants::A_FILE_PRINT, ctx);
         cmd->setDefaultKeySequence(QKeySequence::Print);
         cmd->setTranslations(Trans::Constants::FILEPRINT_TEXT );
@@ -724,7 +724,7 @@ void MainWindowActionHandler::createFileActions(int actions)
     // Print Action
     if (actions & Core::MainWindowActions::A_FilePrint) {
         a = aPrint = new QAction(this);
-        a->setIcon(theme()->icon(Constants::ICONPRINT));
+        a->setIcon(theme()->icon(Constants::ICONPRINTDARK));
         cmd = actionManager()->registerAction(a, Constants::A_FILE_PRINT, ctx);
         cmd->setDefaultKeySequence(QKeySequence::Print);
         cmd->setTranslations(Trans::Constants::FILEPRINT_TEXT );

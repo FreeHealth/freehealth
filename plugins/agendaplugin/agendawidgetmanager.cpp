@@ -218,7 +218,7 @@ AgendaActionHandler::AgendaActionHandler(QObject *parent) :
 //    connect(aNewEvent,SIGNAL(triggered()), this, SLOT(newEvent()));
 
     a = aPrintSelection = new QAction(this);
-    a->setIcon(theme()->icon(Core::Constants::ICONPRINT));
+    a->setIcon(theme()->icon(Core::Constants::ICONPRINTDARK));
     //    a->setShortcut(tkTr(Trans::Constants::K_PRINT_PRESCRIPTION));
     cmd = actionManager()->registerAction(a, Core::Id(Constants::A_PRINT_SELECTION), ctx);
     cmd->setTranslations(Constants::PRINTSELECTION_TEXT, Constants::PRINTSELECTION_TEXT, AGENDA_TR_CONTEXT);

@@ -1013,8 +1013,15 @@ bool FormPlaceHolder::printFormOrEpisode()
     p->addTokens(Core::IDocumentPrinter::Tokens_Global, tokens);
 
     // print
-    // TODO: manage UserPapers as spec option of FormMain
-    p->print(htmlToPrint, Core::IDocumentPrinter::Papers_Generic_User, false);
+    if (formMain->isNoHeader()) {
+        p->print(htmlToPrint, Core::IDocumentPrinter::Papers_Empty_User, false);
+    } else if (formMain->isAdministrativeHeader()) {
+        p->print(htmlToPrint, Core::IDocumentPrinter::Papers_Administrative_User, false);
+    } else if (formMain->isPrescriptionHeader()) {
+        p->print(htmlToPrint, Core::IDocumentPrinter::Papers_Prescription_User, false);
+    } else {
+        p->print(htmlToPrint, Core::IDocumentPrinter::Papers_Generic_User, false);
+    }
     return true;
 }
 

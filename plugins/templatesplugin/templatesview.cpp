@@ -195,7 +195,7 @@ TemplatesViewActionHandler::TemplatesViewActionHandler(QObject *parent) :
     connect(aEdit, SIGNAL(triggered()), this, SLOT(editCurrentItem()));
 
     // Edit
-    aPrint = registerAction("TemplatesView.aPrint", cmenu, Core::Constants::ICONPRINT,
+    aPrint = registerAction("TemplatesView.aPrint", cmenu, Core::Constants::ICONPRINTDARK,
                             Core::Constants::A_TEMPLATE_PRINT, Core::Constants::G_EDIT_TEMPLATES,
                             Trans::Constants::FILEPRINT_TEXT, printContext, this);
     connect(aPrint, SIGNAL(triggered()), this, SLOT(print()));
