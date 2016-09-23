@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>431</width>
-    <height>883</height>
+    <height>644</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -32,13 +32,13 @@
       <item row="0" column="0">
        <widget class="QComboBox" name="titleComboBox"/>
       </item>
-      <item row="0" column="1" colspan="2">
+      <item row="0" column="2" colspan="2">
        <widget class="QLineEdit" name="givenNameLineEdit"/>
       </item>
-      <item row="0" column="3" colspan="2">
+      <item row="0" column="4" colspan="2">
        <widget class="QLineEdit" name="surnameLineEdit"/>
       </item>
-      <item row="1" column="0" colspan="5">
+      <item row="1" column="0" colspan="6">
        <widget class="QLineEdit" name="healthFacilityLineEdit"/>
       </item>
       <item row="2" column="0">
@@ -48,21 +48,21 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="1" colspan="3">
+      <item row="2" column="2" colspan="3">
        <widget class="QComboBox" name="medicalSpecialtyComboBox">
         <property name="editable">
          <bool>true</bool>
         </property>
        </widget>
       </item>
-      <item row="3" column="1" colspan="3">
+      <item row="3" column="2" colspan="3">
        <widget class="QComboBox" name="surgicalSpecialtyComboBox">
         <property name="editable">
          <bool>true</bool>
         </property>
        </widget>
       </item>
-      <item row="2" column="4">
+      <item row="2" column="5">
        <widget class="QPushButton" name="medicalSpecialtyClearPushButton">
         <property name="text">
          <string>clear</string>
@@ -76,14 +76,17 @@
         </property>
        </widget>
       </item>
-      <item row="4" column="1" colspan="3">
+      <item row="4" column="2" colspan="3">
        <widget class="QComboBox" name="alliedHealthProfessionsComboBox">
         <property name="editable">
          <bool>true</bool>
         </property>
        </widget>
       </item>
-      <item row="3" column="4">
+      <item row="6" column="0" colspan="6">
+       <widget class="QLineEdit" name="address1LineEdit"/>
+      </item>
+      <item row="3" column="5">
        <widget class="QPushButton" name="surgicalSpecialtyClearPushButton">
         <property name="text">
          <string>clear</string>
@@ -97,24 +100,24 @@
         </property>
        </widget>
       </item>
-      <item row="6" column="0" colspan="5">
-       <widget class="QLineEdit" name="address1LineEdit"/>
+      <item row="7" column="0" colspan="6">
+       <widget class="QLineEdit" name="address2LineEdit"/>
       </item>
-      <item row="4" column="4">
+      <item row="4" column="5">
        <widget class="QPushButton" name="alliedHealthProfessionsClearPushButton">
         <property name="text">
          <string>clear</string>
         </property>
        </widget>
       </item>
-      <item row="7" column="0" colspan="5">
-       <widget class="QLineEdit" name="address2LineEdit"/>
+      <item row="8" column="0" colspan="3">
+       <widget class="QLineEdit" name="zipLineEdit"/>
       </item>
-      <item row="8" column="2" colspan="3">
+      <item row="8" column="3" colspan="3">
        <widget class="QLineEdit" name="cityLineEdit"/>
       </item>
-      <item row="8" column="0" colspan="2">
-       <widget class="QLineEdit" name="zipLineEdit"/>
+      <item row="5" column="2" colspan="2">
+       <widget class="QLineEdit" name="otherRecipientLineEdit"/>
       </item>
       <item row="5" column="0">
        <widget class="QLabel" name="otherRecipientLabel">
@@ -123,13 +126,32 @@
         </property>
        </widget>
       </item>
-      <item row="5" column="1" colspan="2">
-       <widget class="QLineEdit" name="otherRecipientLineEdit"/>
-      </item>
-      <item row="5" column="4">
+      <item row="5" column="5">
        <widget class="QPushButton" name="otherRecipientClearPushButton">
         <property name="text">
          <string>clear</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QComboBox" name="titlePrintComboBox">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>0</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="editable">
+         <bool>false</bool>
         </property>
        </widget>
       </item>
@@ -138,6 +160,12 @@
    </item>
    <item>
     <widget class="QGroupBox" name="carbonCopyGroupBox">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
      <property name="title">
       <string>carbon copy</string>
      </property>
@@ -155,7 +183,10 @@
     </widget>
    </item>
    <item>
-    <layout class="QFormLayout" name="letterFormLayout"/>
+    <widget class="QComboBox" name="salutationComboBox"/>
+   </item>
+   <item>
+    <layout class="QGridLayout" name="letterGridLayout"/>
    </item>
    <item>
     <widget class="QComboBox" name="signOffComboBox"/>
@@ -358,7 +389,23 @@
   </connection>
   <connection>
    <sender>titleComboBox</sender>
-   <signal>currentIndexChanged(int)</signal>
+   <signal>activated(int)</signal>
+   <receiver>salutationComboBox</receiver>
+   <slot>setCurrentIndex(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>67</x>
+     <y>50</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>219</x>
+     <y>574</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>titleComboBox</sender>
+   <signal>activated(int)</signal>
    <receiver>signOffComboBox</receiver>
    <slot>setCurrentIndex(int)</slot>
    <hints>
@@ -367,8 +414,24 @@
      <y>50</y>
     </hint>
     <hint type="destinationlabel">
-     <x>215</x>
-     <y>859</y>
+     <x>219</x>
+     <y>617</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>titleComboBox</sender>
+   <signal>activated(int)</signal>
+   <receiver>titlePrintComboBox</receiver>
+   <slot>setCurrentIndex(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>67</x>
+     <y>50</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>156</x>
+     <y>50</y>
     </hint>
    </hints>
   </connection>
