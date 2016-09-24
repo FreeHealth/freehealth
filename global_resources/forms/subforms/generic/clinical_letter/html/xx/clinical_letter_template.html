@@ -1,10 +1,7 @@
 <!DOCTYPE html>
 <html>
-
 <body>
-
 <style type="text/css">
-
 body {
     font-family: Verdana,sans-serif;
     font-size: 0.9em;
@@ -44,7 +41,7 @@ div.pmh {
 </p>
 
 <p>
-{{~Form.Data.Print.Subforms::Generic::Clinical::Letter::Recipient::Title::Combo~}}
+{{~Form.Data.Print.Subforms::Generic::Clinical::Letter::Recipient::Title::Print::Combo~}}
 {{~Form.Data.Print.Subforms::Generic::Clinical::Letter::Recipient::Given::Name::Shorttext~}}
 {{~Form.Data.Print.Subforms::Generic::Clinical::Letter::Recipient::Surname::Shorttext~}}
 {{~Form.Data.Print.Subforms::Generic::Clinical::Letter::Health::Facility::Shorttext~}}
@@ -82,6 +79,8 @@ div.pmh {
 
 <p>{{~Patient.Pmhx.Html~}}</p>
 
+<p>{{~Patient.Pmhx.PlainText~}}</p>
+
 <p>
 {{~Patient.Drugs.ChronicTherapeutics.Html~}}
 </p>
@@ -99,14 +98,12 @@ div.pmh {
 </p>
 
 <p>
-Cc:
 <ul>
-{{<li>~Form.Data.Print.Subforms::Generic::Clinical::Letter::CC1::LineEdit~</li>}}
+{{{{~Form.Label.Subforms::Generic::Clinical::Letter::Carbon::Copy::Group~}}<li>~Form.Data.Print.Subforms::Generic::Clinical::Letter::CC1::LineEdit~</li>}}
 {{<li>~Form.Data.Print.Subforms::Generic::Clinical::Letter::CC2::LineEdit~</li>}}
 {{<li>~Form.Data.Print.Subforms::Generic::Clinical::Letter::CC3::LineEdit~</li>}}
 </ul>
 </p>
 
 </body>
-
 </html>

@@ -27,19 +27,19 @@
   <file type="script" name="onload">./scripts/xx/clinical_letter.js</file>
 
 
-  <MedForm type="form" name="Subforms::Generic::Clinical::Letter" uifilename="./ui/xx/clinical_letter.ui">
+  <MedForm type="form" name="Subforms::Generic::Clinical::Letter" uifilename="./ui/xx/clinical_letter_2.ui">
     <label lang="xx">Clinical letter</label>
     <label lang="fr">Lettre à un confrère</label>
     <icon>__theme__/xray.png</icon>
     <options>DontPrintEmptyValues;UseFormNameAsNameSpace;NoHeader</options>
-    <file type="htmlprintmask">./html/xx/clinical_letter_mask.html</file>
+    <file type="htmlprintmask">./html/xx/clinical_letter_template.html</file>
     <!--<file type="htmlexportmask">./html/xx/clinical_letter_mask.html</file>-->
 
     <Item type="group" name="Recipient::Group">
       <uilink label="" widget="recipientGroupBox" layout=""/>
       <label lang="xx">Recipient</label>
       <label lang="fr">Destinataire</label>
-      <options>DontPrintEmptyValues;collapsible</options>
+      <options>DontPrintEmptyValues</options>
 
         <Item type="combo" name="Recipient::Title::Combo">
                 <uilink label="" widget="titleComboBox"/>
@@ -714,7 +714,7 @@
       <uilink label="" widget="carbonCopyGroupBox" layout=""/>
       <label lang="xx">Carbon Copy</label>
       <label lang="fr">Copie Carbone</label>
-      <options>DontPrintEmptyValues;collapsible</options>
+      <options>DontPrintEmptyValues</options>
 
       <Item type="ShortText" name="CC1::LineEdit">
         <uilink widget="cC1LineEdit"/>

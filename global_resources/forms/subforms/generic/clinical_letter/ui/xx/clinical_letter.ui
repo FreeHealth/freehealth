@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>431</width>
-    <height>644</height>
+    <width>437</width>
+    <height>660</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -183,13 +183,28 @@
     </widget>
    </item>
    <item>
-    <widget class="QComboBox" name="salutationComboBox"/>
-   </item>
-   <item>
-    <layout class="QGridLayout" name="letterGridLayout"/>
-   </item>
-   <item>
-    <widget class="QComboBox" name="signOffComboBox"/>
+    <widget class="QGroupBox" name="bodyGroupBox">
+     <property name="title">
+      <string/>
+     </property>
+     <property name="flat">
+      <bool>false</bool>
+     </property>
+     <property name="checkable">
+      <bool>false</bool>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_3">
+      <item>
+       <widget class="QComboBox" name="salutationComboBox"/>
+      </item>
+      <item>
+       <layout class="QGridLayout" name="letterGridLayout"/>
+      </item>
+      <item>
+       <widget class="QComboBox" name="signOffComboBox"/>
+      </item>
+     </layout>
+    </widget>
    </item>
   </layout>
  </widget>
@@ -206,8 +221,8 @@
      <y>115</y>
     </hint>
     <hint type="destinationlabel">
-     <x>213</x>
-     <y>149</y>
+     <x>327</x>
+     <y>178</y>
     </hint>
    </hints>
   </connection>
@@ -222,8 +237,8 @@
      <y>115</y>
     </hint>
     <hint type="destinationlabel">
-     <x>213</x>
-     <y>183</y>
+     <x>327</x>
+     <y>215</y>
     </hint>
    </hints>
   </connection>
@@ -238,8 +253,8 @@
      <y>115</y>
     </hint>
     <hint type="destinationlabel">
-     <x>187</x>
-     <y>217</y>
+     <x>266</x>
+     <y>255</y>
     </hint>
    </hints>
   </connection>
@@ -250,8 +265,8 @@
    <slot>clearEditText()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>213</x>
-     <y>149</y>
+     <x>327</x>
+     <y>178</y>
     </hint>
     <hint type="destinationlabel">
      <x>213</x>
@@ -266,12 +281,12 @@
    <slot>clearEditText()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>213</x>
-     <y>149</y>
+     <x>327</x>
+     <y>178</y>
     </hint>
     <hint type="destinationlabel">
-     <x>213</x>
-     <y>183</y>
+     <x>327</x>
+     <y>215</y>
     </hint>
    </hints>
   </connection>
@@ -282,12 +297,12 @@
    <slot>clear()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>213</x>
-     <y>149</y>
+     <x>327</x>
+     <y>178</y>
     </hint>
     <hint type="destinationlabel">
-     <x>187</x>
-     <y>217</y>
+     <x>266</x>
+     <y>255</y>
     </hint>
    </hints>
   </connection>
@@ -298,12 +313,12 @@
    <slot>clearEditText()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>213</x>
-     <y>183</y>
+     <x>327</x>
+     <y>215</y>
     </hint>
     <hint type="destinationlabel">
-     <x>218</x>
-     <y>149</y>
+     <x>327</x>
+     <y>178</y>
     </hint>
    </hints>
   </connection>
@@ -314,8 +329,8 @@
    <slot>clearEditText()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>213</x>
-     <y>183</y>
+     <x>327</x>
+     <y>215</y>
     </hint>
     <hint type="destinationlabel">
      <x>213</x>
@@ -330,12 +345,12 @@
    <slot>clear()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>213</x>
-     <y>183</y>
+     <x>327</x>
+     <y>215</y>
     </hint>
     <hint type="destinationlabel">
-     <x>187</x>
-     <y>217</y>
+     <x>266</x>
+     <y>255</y>
     </hint>
    </hints>
   </connection>
@@ -346,8 +361,8 @@
    <slot>clearEditText()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>187</x>
-     <y>217</y>
+     <x>266</x>
+     <y>255</y>
     </hint>
     <hint type="destinationlabel">
      <x>213</x>
@@ -362,12 +377,12 @@
    <slot>clearEditText()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>187</x>
-     <y>217</y>
+     <x>266</x>
+     <y>255</y>
     </hint>
     <hint type="destinationlabel">
-     <x>213</x>
-     <y>149</y>
+     <x>327</x>
+     <y>178</y>
     </hint>
    </hints>
   </connection>
@@ -378,12 +393,12 @@
    <slot>clearEditText()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>187</x>
-     <y>217</y>
+     <x>266</x>
+     <y>255</y>
     </hint>
     <hint type="destinationlabel">
-     <x>213</x>
-     <y>183</y>
+     <x>327</x>
+     <y>215</y>
     </hint>
    </hints>
   </connection>
@@ -430,8 +445,24 @@
      <y>50</y>
     </hint>
     <hint type="destinationlabel">
-     <x>156</x>
-     <y>50</y>
+     <x>114</x>
+     <y>49</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>bodyGroupBox</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>recipientGroupBox</receiver>
+   <slot>setChecked(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>215</x>
+     <y>580</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>215</x>
+     <y>188</y>
     </hint>
    </hints>
   </connection>
