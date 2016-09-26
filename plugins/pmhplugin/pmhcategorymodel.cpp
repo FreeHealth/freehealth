@@ -671,15 +671,20 @@ QVariant PmhCategoryModel::data(const QModelIndex &index, int role) const
                 PmhData *pmh = it->pmhData();
                 if (!pmh)
                     return QVariant();
-                QString ret = QString("<b>%1</b><br />"
-                                      "%2: %3<br />"
-                                      "%4: %5")
-                        .arg(pmh->data(PmhData::Label).toString())
-                        .arg(tkTr(Trans::Constants::TYPE))
-                        .arg(Constants::typeToString(pmh->data(PmhData::Type).toInt()))
-                        .arg(tkTr(Trans::Constants::STATUS))
-                        .arg(Constants::statusToString(pmh->data(PmhData::State).toInt()))
-                        ;
+                QString ret = QString("<b>%1</b>")
+                        .arg(pmh->data(PmhData::Label).toString());
+                // display type only if PmhData::Type enum > 0 (not undefined)
+                if (pmh->data(PmhData::Type).toInt()) {
+                        ret.append(QString("<br />%1: %2")
+                                   .arg(tkTr(Trans::Constants::TYPE))
+                                   .arg(Constants::typeToString(pmh->data(PmhData::Type).toInt())));
+                }
+                // display status only if PmhData::State enum > 0 (not undefined)
+                if (pmh->data(PmhData::State).toInt()) {
+                        ret.append(QString("<br />%1: %2")
+                                    .arg(tkTr(Trans::Constants::STATUS))
+                                    .arg(Constants::statusToString(pmh->data(PmhData::State ).toInt())));
+                }
                 return ret;
             }
             return QVariant();

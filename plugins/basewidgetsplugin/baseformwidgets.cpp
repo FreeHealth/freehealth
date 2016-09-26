@@ -1772,6 +1772,7 @@ BaseHelpText::BaseHelpText(Form::FormItem *formItem, QWidget *parent) :
         m_Label->setObjectName("HelpText_" + m_FormItem->uuid());
         hb->addWidget(m_Label);
     }
+    m_Label->setToolTip(m_FormItem->spec()->tooltip());
 }
 
 BaseHelpText::~BaseHelpText()
