@@ -65,7 +65,7 @@
                     <possible id="0" lang="fr"></possible>
                     <possible id="1" lang="fr">Mme</possible>
                     <possible id="2" lang="fr">M.</possible>
-                    <possible id="3" lang="fr">Dr<p>(féminin)</p></possible>
+                    <possible id="3" lang="fr">Dr (féminin)</possible>
                     <possible id="4" lang="fr">Dr (masculin)</possible>
                     <possible id="5" lang="fr">Pr (féminin)</possible>
                     <possible id="6" lang="fr">Pr (masculin)</possible>
