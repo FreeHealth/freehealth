@@ -117,7 +117,7 @@ public:
     virtual QString mime() const;
 
     // Patient synthesis
-    QString indexToHtml(const QModelIndex &index, int indent = 0) const;
+    QString indexToHtml(const QModelIndex &index) const;
     void refreshSynthesis();
     QString synthesis(const QModelIndex &parent = QModelIndex()) const;
 

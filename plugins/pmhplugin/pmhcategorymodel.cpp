@@ -1254,29 +1254,44 @@ QString PmhCategoryModel::mime() const
     return QString("%1@%2").arg(Constants::CATEGORY_MIME).arg(d->_rootUid);
 }
 
-QString PmhCategoryModel::indexToHtml(const QModelIndex &index, int indent) const
+QString PmhCategoryModel::indexToHtml(const QModelIndex &index) const
 {
     QString html;
-    if (isSynthesis(index))
+    if (isSynthesis(index)) {
         return QString();
+    }
+
+    int _rowCount = rowCount(index);
+    int _pmhCount = pmhCount(index);
+
+    QModelIndex idx = index;
+    int depth = 2;
+    while ( idx.parent().isValid() )
+    {
+      idx = idx.parent();
+      depth++;
+    }
 
     if (isCategory(index)) {
-        int _rowCount = rowCount(index);
-        int _pmhCount = pmhCount(index);
+
         if (!_pmhCount)
             return QString();
-        html = QString("<p style=\"margin:0px 0px 0px %1px\"><span style=\"font-weight:bold;\">%2 (%3)</span><br />")
-                .arg(indent*10)
-                .arg(index.data(Qt::DisplayRole).toString()).arg(_pmhCount);
+        html = QString("<h%1 id=\"pmhcategory%2\">%3</h%1>")
+                .arg(depth)
+                .arg(d->getItem(index)->pmhCategory()->id())
+                .arg(index.data(Qt::DisplayRole).toString())
+                /*.arg(_pmhCount)*/;
         for(int i=0; i < _rowCount; ++i) {
-            html += indexToHtml(this->index(i, 0, index), indent+2);
+            html += indexToHtml(this->index(i, 0, index));
         }
-        html += "</p>";
     } else if (isPmhx(index)) {
-        QString id;
-        for(int i=0; i < indent; ++i)
-            id += "&nbsp;&nbsp;";
-        html += QString("•&nbsp;%1<br />").arg(index.data(Qt::ToolTipRole).toString().replace("<br />","; "));
+        /*if (index.row() == 0) {
+            html += QString("<ol>");
+        }*/
+        html += QString("<li>%1</li>").arg(index.data(Qt::ToolTipRole).toString().replace("<br />","; "));
+        /*if ((_rowCount-index.row()) == 1) {
+            html += QString("</ol>");
+        }*/
     } else if (isForm(index)) {
         // populate form
         activateFormEpisode(index);
@@ -1301,10 +1316,19 @@ void PmhCategoryModel::refreshSynthesis()
 /** Return the synthesis of the whole model of a specific category \e index */
 QString PmhCategoryModel::synthesis(const QModelIndex &parent) const
 {
+    QModelIndex idx = parent;
+    int depth = 2;
+    while ( idx.parent().isValid() )
+    {
+      idx = idx.parent();
+      depth++;
+    }
+
     if (parent==QModelIndex() || isSynthesis(parent)) {
         if (d->_htmlSynthesis.isEmpty()) {
-            d->_htmlSynthesis ="<html><style>p{margin:0 0 0 0}</style><body>";
-            d->_htmlSynthesis += QString("<p align=center style=\"font-weight:bold;font-size:16pt\">%1<hr/></p>").arg(tr("Patient PMHx synthesis"));
+            d->_htmlSynthesis ="<html><body>";
+            d->_htmlSynthesis += QString("<h1 id=\"pmhtitle\">%1</h1>")
+                    .arg(tr("Past Medical History"));
             for(int i=0; i < rowCount(parent); ++i) {
                 d->_htmlSynthesis += indexToHtml(index(i, 0, parent));
             }
@@ -1312,9 +1336,11 @@ QString PmhCategoryModel::synthesis(const QModelIndex &parent) const
         }
         return d->_htmlSynthesis;
     } else if (isCategory(parent)) {
-        QString html ="<html><style>p{margin:0 0 0 0}</style><body>";
-        html += QString("<p align=center style=\"font-weight:bold;font-size:16pt\">%1<br />%2<hr/></p>")
-                .arg(tr("Patient PMHx synthesis"))
+        QString html ="<html><body>";
+        html += QString("<h1 id=\"pmhtitle\">%1</h1><h%2 id=\"pmhcategory%3\">%4</h%2>")
+                .arg(tr("Past Medical History"))
+                .arg(depth)
+                .arg(d->getItem(parent)->pmhCategory()->id())
                 .arg(data(parent).toString());
         for(int i=0; i < rowCount(parent); ++i) {
             html += indexToHtml(index(i, 0, parent));
