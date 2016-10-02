@@ -10,6 +10,11 @@ namespace.module('com.freemedforms.certificates.sportsmedicalcertificate', funct
   var signeeArray = ["soussigné", "soussignée"];
   var sportsmedicalcertificate_additionalTextUi;
   //var raySelector = new Array("xx", "fr");
+  var daysFr = ["dimanche","lundi","mardi","mercredi","jeudi","vendredi","samedi"];
+  var monthsFr = ["janvier","février","mars","avril","mai","juin","juillet","août","septembre","octobre","novembre","décembre"];
+    var daysEn = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+    var daysEn3 = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+    var monthsEn3 = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
 
   exports.extend({
     'setupUi': setupUi
@@ -71,6 +76,43 @@ function sportsmedicalcertificate_reTranslateUi()
 
 }
 
+    // take a date object and return a string
+    function sportsmedicalcertificate_printDateFr(date)
+    {
+        if (date === undefined) {
+              date = new Date("1900-01-01");
+        }
+        var output = daysFr[date.getDay()];
+        output += " ";
+        output += date.getDate();
+        output += " ";
+        var monthFr = monthsFr[date.getMonth()];
+        output += monthFr
+        output += " ";
+        var year = date.getFullYear();
+        output += year;
+        return output;
+    }
+
+
+// take a date formatted as "Sun Apr 01 1928 01:00:00 GMT+0300 (EEST)"
+// (like DoB returned by FreeHealth token)
+// return a JavaScript date object
+function sportsmedicalcertificate_dobToDateObj(date)
+{
+    var day = date.slice(0,3);
+    var month = date.slice(4,7);
+    var number = date.slice(8,10);
+    var year = date.slice(11,15);
+    var dayInt = daysEn3.indexOf(day);
+    var monthInt = monthsEn3.indexOf(month);
+    var numberInt = parseInt(number,10);
+    var yearInt = parseInt(year,10);
+    var d = new Date();
+    d.setFullYear(yearInt, monthInt, numberInt);
+    return d;
+}
+
 function sportsmedicalcertificate_createhtml()
 {
     html = "<div style=\"font-weight:bold;"
@@ -103,12 +145,13 @@ function sportsmedicalcertificate_createhtml()
         html += "e";
     }
     html += " le ";
+
     var patientDateTimeOfBirth = freemedforms.patient.dateOfBirth;
-    print(patientDateTimeOfBirth);
-    var indexOfColon = patientDateTimeOfBirth.toString().indexOf(':');
-    var indexEndOfDate = indexOfColon - 3;
-    var patientDateOfBirth = patientDateTimeOfBirth.toString().slice(0, indexEndOfDate);
+    var patientDateOfBirth = patientDateTimeOfBirth.toString();
+    var patientDoB = sportsmedicalcertificate_dobToDateObj(patientDateOfBirth);
+    patientDateOfBirth = sportsmedicalcertificate_printDateFr(patientDoB);
     html += patientDateOfBirth;
+
     html += " et n’avoir pas constaté, à la date de ce jour, de signes cliniques apparents contre-indiquant la pratique ";
     var sports = sportsmedicalcertificate_nameOfSportUi.text;
     html += sports;

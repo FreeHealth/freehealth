@@ -170,30 +170,19 @@ function samc_printDateFr(date)
 
 // take a date formatted as "Sun Apr 01 1928 01:00:00 GMT+0300 (EEST)"
 // (like DoB returned by FreeHealth token)
-// return a date object
+// return a JavaScript date object
 function samc_dobToDateObj(date)
 {
-    print("Inside samc_dobToDateObj()");
-    print(date);    
     var day = date.slice(0,3);
     var month = date.slice(4,7);
     var number = date.slice(8,10);
     var year = date.slice(11,15);
-
-    print(day);
     var dayInt = daysEn3.indexOf(day);
-    print(dayInt);
     var monthInt = monthsEn3.indexOf(month);
-    print(monthInt);
     var numberInt = parseInt(number,10);
-    print(numberInt);
     var yearInt = parseInt(year,10);
-    print(yearInt);
-
     var d = new Date();
-    print(d);
     d.setFullYear(yearInt, monthInt, numberInt);
-    print(d);
     return d;
 }
 
