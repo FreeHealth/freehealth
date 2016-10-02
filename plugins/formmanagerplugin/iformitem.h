@@ -196,6 +196,13 @@ public:
         MultiEpisode
     };
 
+    enum FormHeader {
+        NoHeader = 0,
+        GenericHeader,
+        AdministrativeHeader,
+        PrescriptionHeader
+    };
+
     FormMain(QObject *parent = 0);
     ~FormMain();
 
@@ -228,6 +235,13 @@ public:
     bool isNoEpisode() const {return m_Episode == NoEpisode;}
     bool isMultiEpisode() const {return m_Episode == MultiEpisode;}
 
+    virtual void setFormPrintHeader(const int i) {m_Header = i;}
+    virtual int formPrintHeader() const {return m_Header;}
+    bool isNoHeader() const {return m_Header == NoHeader;}
+    bool isGenericHeader() const {return m_Header == GenericHeader;}
+    bool isAdministrativeHeader() const {return m_Header == AdministrativeHeader;}
+    bool isPrescriptionHeader() const {return m_Header == PrescriptionHeader;}
+
     QString printableHtml(bool withValues = true) const;
 
     // Specific to FormMain
@@ -245,6 +259,7 @@ private:
     Form::IFormIO *m_Reader;
     FormMainDebugPage *m_DebugPage;
     int m_Episode;
+    int m_Header;
     QString m_ModeName;
     QList<QPixmap> m_Shots;
     bool m_UseNameAsNSForSubItems;

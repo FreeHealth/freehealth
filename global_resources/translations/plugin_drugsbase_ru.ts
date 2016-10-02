@@ -236,28 +236,8 @@ Do you want to add them to the file?</source>
 <context>
     <name>DrugsDB::Internal::DosageModel</name>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/dosagemodel.cpp" line="127"/>
-        <source>complet tab.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../plugins/drugsbaseplugin/dosagemodel.cpp" line="128"/>
         <source>half tab.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/drugsbaseplugin/dosagemodel.cpp" line="129"/>
-        <source>quater tab.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/drugsbaseplugin/dosagemodel.cpp" line="133"/>
-        <source>dose per kilograms</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/drugsbaseplugin/dosagemodel.cpp" line="134"/>
-        <source>reference spoon</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -291,18 +271,38 @@ Do you want to add them to the file?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../plugins/drugsbaseplugin/dosagemodel.cpp" line="127"/>
+        <source>full tab.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/drugsbaseplugin/dosagemodel.cpp" line="129"/>
+        <source>quarter tab.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/drugsbaseplugin/dosagemodel.cpp" line="133"/>
+        <source>dose per kilogram</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/drugsbaseplugin/dosagemodel.cpp" line="134"/>
+        <source>measuring spoon</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../plugins/drugsbaseplugin/dosagemodel.cpp" line="141"/>
-        <source>application</source>
+        <source>apply</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/drugsbaseplugin/dosagemodel.cpp" line="142"/>
-        <source>washing</source>
+        <source>enema</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/drugsbaseplugin/dosagemodel.cpp" line="143"/>
-        <source>shampooing</source>
+        <source>shampoo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

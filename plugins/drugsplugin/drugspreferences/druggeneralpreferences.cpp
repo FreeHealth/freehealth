@@ -61,7 +61,7 @@ DrugGeneralPreferencesWidget::DrugGeneralPreferencesWidget(QWidget *parent) :
     setupUi(this);
     setDataToUi();
     testerBox->hide();
-#ifdef FREEMEDFORMS
+#ifdef FREEHEALTH
     patientNameOrder->hide();
     patientNameOrderLabel->hide();
 #endif

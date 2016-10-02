@@ -1,7 +1,5 @@
-# Qt 5.1 cache system
-qt:greaterThan(QT_MAJOR_VERSION, 4) {
-    cache()
-}
+# Qt5 cache system
+cache()
 
 TEMPLATE = subdirs
 
@@ -14,7 +12,7 @@ TEMPLATE = subdirs
 
     # On Windows* there are no available precompiled zlib.
 
-    # For all Linux/FreeBSD version, user will install FreeMedForms' apps using his prefered
+    # For all Linux version, user will install FreeHealth' apps using his prefered
     # package manager, and all apps will depend on a compatible zlib version.
 
 macx|win32 {

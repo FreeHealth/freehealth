@@ -399,10 +399,6 @@
         <translation>Répertoire des bibliothèques Qt</translation>
     </message>
     <message>
-        <source>FreeMedForms PlugIns path</source>
-        <translation>Répertoire des plugins de FreeMedForms</translation>
-    </message>
-    <message>
         <source>Default installed datapack path</source>
         <translation>Répertoire d&apos;installation des paquets de données distribués par défaut</translation>
     </message>
@@ -557,6 +553,30 @@
     <message>
         <source>DocumentationPath</source>
         <translation></translation>
+    </message>
+    <message>
+        <source>We found a FreeMedForms user directory.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Do you want to use this directory with FreeHealth?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>We found a freemedforms directory inside your user directory. If you want to use it with FreeHealth, click Yes and we will make a copy of it named freehealth. If you want to start a new installation from scratch, click No.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Application Plugins path</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>We found a FreeMedforms parameter directory.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>We found a FreeMedForms parameter directory inside your user directory. It contains the connection parameters for your existing databases. If you want to use these databases with FreeHealth, click Yes. If you want to start a new installation from scratch, click No.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

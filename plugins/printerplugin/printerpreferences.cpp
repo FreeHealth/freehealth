@@ -39,11 +39,7 @@
 #include <QFileDialog>
 #include <QDir>
 
-#if QT_VERSION < 0x050000
-#include <QPrinterInfo>
-#else
 #include <QtPrintSupport/QPrinterInfo>
-#endif
 
 using namespace Print::Internal;
 using namespace Trans::ConstantTranslations;

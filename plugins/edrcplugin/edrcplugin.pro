@@ -6,15 +6,13 @@ include(shared_sources.pri)
     message(Building eDRC plugin)
 }
 
-greaterThan(QT_MAJOR_VERSION, 4) {
-    QT *= printsupport
-}
+QT *= printsupport
 
-# include FreeMedForms specific sources
+# include EHR specific sources
 HEADERS += \
-    freemedforms/edrcwidgetfactory.h
+    ehr/edrcwidgetfactory.h
 
 SOURCES += \
-    freemedforms/edrcwidgetfactory.cpp
+    ehr/edrcwidgetfactory.cpp
 
 OTHER_FILES += eDRC.pluginspec

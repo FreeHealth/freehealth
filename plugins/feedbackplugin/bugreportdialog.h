@@ -40,7 +40,7 @@
 
 namespace Utils {
 namespace Constants {
-const char * const URL_ONLINEDOCUMENTATION     = "http://www.freemedforms.com/en/manuals/freemedforms/toc";
+const char * const URL_ONLINEDOCUMENTATION     = "https://freehealth.io/en/guide/user/toc";
 }  // End Constants
 }  // End Utils
 

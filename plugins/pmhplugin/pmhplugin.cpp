@@ -59,7 +59,7 @@ PmhPlugin::PmhPlugin() :
     mode(0)
 {
     if (Utils::Log::debugPluginsCreation())
-        qWarning() << "creating PmhPlugin";
+        qDebug() << "creating PmhPlugin";
 
     // Add Translator to the Application
     Core::ICore::instance()->translators()->addNewTranslator("plugin_pmh");
@@ -80,7 +80,7 @@ PmhPlugin::~PmhPlugin()
 bool PmhPlugin::initialize(const QStringList &arguments, QString *errorString)
 {
     if (Utils::Log::debugPluginsCreation())
-        qWarning() << "PmhPlugin::initialize";
+        qDebug() << "PmhPlugin::initialize";
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
 
@@ -92,7 +92,7 @@ bool PmhPlugin::initialize(const QStringList &arguments, QString *errorString)
 void PmhPlugin::extensionsInitialized()
 {
     if (Utils::Log::debugPluginsCreation())
-        qWarning() << "PmhPlugin::extensionsInitialized";
+        qDebug() << "PmhPlugin::extensionsInitialized";
 
     // no user -> end
     if (!user())

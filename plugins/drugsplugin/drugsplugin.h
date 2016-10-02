@@ -50,7 +50,7 @@ class DrugEnginesPreferencesPage;
 class DrugsPlugin : public ExtensionSystem::IPlugin
 {
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID "org.freemedforms.FreeMedForms.DrugsPlugin" FILE "Drugs.json")
+    Q_PLUGIN_METADATA(IID "io.freehealth.ehr.DrugsPlugin" FILE "Drugs.json")
 
 public:
     DrugsPlugin();

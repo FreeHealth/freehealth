@@ -1,10 +1,7 @@
 TARGET = Tools
 TEMPLATE = lib
 
-# Manage Qt >= 5
-greaterThan(QT_MAJOR_VERSION, 4) {
-    QT *= printsupport
-}
+QT *= printsupport
 
 DEFINES += TOOLS_LIBRARY
 BUILD_PATH_POSTFIXE = FreeMedForms
@@ -108,4 +105,3 @@ PROVIDER = FreeMedForms
 # include translations
 TRANSLATION_NAME = tools
 include($${SOURCES_ROOT_PATH}/buildspecs/translations.pri)
-

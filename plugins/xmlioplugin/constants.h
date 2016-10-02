@@ -152,10 +152,14 @@ const char* const TAG_SCRIPT_ONTOGGLED          = "ontoggled";
 
 const char* const TAG_DATAPATIENT                = "patientdata";
 
-const char* const TAG_OPTIONS                   = "options";
-const char* const TAG_OPTION                    = "option";
-const char* const TAG_OPTIONS_UNIQUE_EPISODE    = "unique";
-const char* const TAG_OPTIONS_NO_EPISODE        = "noepisode";
+const char* const TAG_OPTIONS                       = "options";
+const char* const TAG_OPTION                        = "option";
+const char* const TAG_OPTIONS_UNIQUE_EPISODE        = "unique";
+const char* const TAG_OPTIONS_NO_EPISODE            = "noepisode";
+const char* const TAG_OPTIONS_NO_HEADER             = "noheader";
+const char* const TAG_OPTIONS_GENERIC_HEADER        = "genericheader";
+const char* const TAG_OPTIONS_ADMINISTRATIVE_HEADER = "administrativeheader";
+const char* const TAG_OPTIONS_PRESCRIPTION_HEADER   = "prescriptionheader";
 
 const char* const ATTRIB_ID             = "id";
 const char* const ATTRIB_UUID           = "uuid";

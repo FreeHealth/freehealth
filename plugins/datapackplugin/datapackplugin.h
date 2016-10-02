@@ -44,7 +44,7 @@ class DataPackPreferencePage;
 class DataPackPluginIPlugin : public ExtensionSystem::IPlugin
 {
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID "org.freemedforms.FreeMedForms.DataPackPlugin" FILE "DataPackPlugin.json")
+    Q_PLUGIN_METADATA(IID "io.freehealth.ehr.DataPackPlugin" FILE "DataPackPlugin.json")
 
 public:
     DataPackPluginIPlugin();

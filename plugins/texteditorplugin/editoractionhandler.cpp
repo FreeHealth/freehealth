@@ -240,7 +240,7 @@ void EditorActionHandler::createActions()
 
     // Print
     if (!actionManager()->command(Core::Constants::A_FILE_PRINT)) {
-        aPrint = createAction(this, "aPrint", ICONPRINT, A_FILE_PRINT, printContext, FILEPRINT_TEXT, cmd, m_EditMenu, G_FILE_PRINT, QKeySequence::Print);
+        aPrint = createAction(this, "aPrint", ICONPRINTDARK, A_FILE_PRINT, printContext, FILEPRINT_TEXT, cmd, m_EditMenu, G_FILE_PRINT, QKeySequence::Print);
         aPrint->setEnabled(false);
     } else {
         aPrint = registerAction(Core::Constants::A_FILE_PRINT, printContext, this);

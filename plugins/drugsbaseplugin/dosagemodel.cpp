@@ -124,23 +124,23 @@ void DosageModel::retranslate()
 
     m_ScoredTabletScheme =
             QStringList()
-            << tr("complet tab.")
+            << tr("full tab.")
             << tr("half tab.")
-            << tr("quater tab.");
+            << tr("quarter tab.");
 
     m_PreDeterminedForms =
             QStringList()
-            << tr("dose per kilograms")
-            << tr("reference spoon")
+            << tr("dose per kilogram")
+            << tr("measuring spoon")
             << tr("2.5 ml spoon")
             << tr("5 ml spoon")
             << tr("puffs")
             << tr("dose")
             << tr("mouthwash")
             << tr("inhalation")
-            << tr("application")
-            << tr("washing")
-            << tr("shampooing")
+            << tr("apply")
+            << tr("enema")
+            << tr("shampoo")
             << tr("eyewash")
             << tr("instillation")
             << tr("pulverization");

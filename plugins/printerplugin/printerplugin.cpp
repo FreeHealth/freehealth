@@ -38,11 +38,7 @@
 #include <coreplugin/translators.h>
 
 #include <QtPlugin>
-#if QT_VERSION < 0x050000
-#include <QPrinterInfo>
-#else
 #include <QtPrintSupport/QPrinterInfo>
-#endif
 
 #include <QDebug>
 

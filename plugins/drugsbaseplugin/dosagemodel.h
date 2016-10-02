@@ -54,22 +54,22 @@ class DRUGSBASE_EXPORT DosageModel : public QSqlTableModel
     {
         CompletTablet = 0,
         HalfTablet,
-        QuaterTablet
+        QuarterTablet
     };
 
     enum PreDeterminedForms
     {
-        DosePerKilo=0,
-        SpoonReference,     // cuillère-mesure
+        DosePerKilo=0, // dose per kilogram
+        SpoonReference,     // measuring spoon
         Spoon2_5ml,
         Spoon5ml,
-        Puffs,              // bouffées
+        Puffs,              // puff
         Dose,
-        Mouthwash,          // bain de bouche
+        Mouthwash,          // mouth wash
         Inhalation,
-        Application,
-        Washing,            // lavement
-        EyeWash,            // lavage oculaire
+        Application,        // topical
+        Washing,            // enema, TODO rename enum
+        EyeWash,            // eyewash
         Instillation
     };
 

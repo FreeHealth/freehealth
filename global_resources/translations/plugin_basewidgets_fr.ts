@@ -4,14 +4,14 @@
 <context>
     <name>BaseFormData</name>
     <message>
-        <location filename="../../plugins/basewidgetsplugin/baseformwidgets.cpp" line="544"/>
+        <location filename="../../plugins/basewidgetsplugin/baseformwidgets.cpp" line="559"/>
         <source>This episode is validated.</source>
-        <translation>Cette épisode est signé.</translation>
+        <translation>Cet épisode est validé.</translation>
     </message>
     <message>
-        <location filename="../../plugins/basewidgetsplugin/baseformwidgets.cpp" line="545"/>
-        <source>You can not edit its content, neither remove it.</source>
-        <translation>Vous ne pouvez plus l&apos;éditer, ni le supprimer.</translation>
+        <location filename="../../plugins/basewidgetsplugin/baseformwidgets.cpp" line="560"/>
+        <source>You cannot edit its content, you cannot remove it.</source>
+        <translation>Vous ne pouvez pas modifier son contenu, vous ne pouvez pas l&apos;effacer.</translation>
     </message>
 </context>
 <context>
@@ -25,18 +25,35 @@
 <context>
     <name>BaseWidgets::Internal::BaseCombo</name>
     <message>
-        <location filename="../../plugins/basewidgetsplugin/baselistwidgets.cpp" line="599"/>
+        <location filename="../../plugins/basewidgetsplugin/baselistwidgets.cpp" line="583"/>
         <source>Wrong form&apos;s translations</source>
         <translation>Mauvaise traduction de formulaire</translation>
     </message>
     <message>
-        <location filename="../../plugins/basewidgetsplugin/baselistwidgets.cpp" line="600"/>
+        <location filename="../../plugins/basewidgetsplugin/baselistwidgets.cpp" line="584"/>
         <source>You asked to change the language of the form to %1.
 But this an error while reading translation of %2.
 Number of items of the translation (%3) are wrong.</source>
         <translation>Vous avez demandé de changer le langage du formulaire en %1.
 Une erreur est survenue durant la traduction de %2.
 Le nombre d&apos;items est erronné (%3).</translation>
+    </message>
+</context>
+<context>
+    <name>BaseWidgets::Internal::BaseComboData</name>
+    <message>
+        <location filename="../../plugins/basewidgetsplugin/baselistwidgets.cpp" line="784"/>
+        <source>Possibles - Uuids mismatch</source>
+        <translation>Le nombre des Possibles ne correspond pas au nombre des Uuids</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/basewidgetsplugin/baselistwidgets.cpp" line="785"/>
+        <source>There are %1 different possibles values.
+There are %2 different uuids values.
+Please correct your form and try again.</source>
+        <translation>Il y a %1 valeurs différentes pour les Possibles.
+Il y a %2 valeurs différentes pour les Uuids.
+Merci de corriger votre formulaire et d&apos;essayer à nouveau.</translation>
     </message>
 </context>
 <context>
@@ -78,12 +95,12 @@ Le nombre d&apos;items est erronné (%3).</translation>
 <context>
     <name>BaseWidgets::Internal::BaseList</name>
     <message>
-        <location filename="../../plugins/basewidgetsplugin/baselistwidgets.cpp" line="173"/>
+        <location filename="../../plugins/basewidgetsplugin/baselistwidgets.cpp" line="198"/>
         <source>Wrong form&apos;s translations</source>
         <translation>Mauvaise traduction de formulaire</translation>
     </message>
     <message>
-        <location filename="../../plugins/basewidgetsplugin/baselistwidgets.cpp" line="174"/>
+        <location filename="../../plugins/basewidgetsplugin/baselistwidgets.cpp" line="199"/>
         <source>You asked to change the language of the form to %1.
 But this an error while reading translation of %2.
 Number of items of the translation (%3) are wrong.</source>
@@ -95,12 +112,12 @@ Le nombre d&apos;items est erronné (%3).</translation>
 <context>
     <name>BaseWidgets::Internal::BaseRadio</name>
     <message>
-        <location filename="../../plugins/basewidgetsplugin/baseformwidgets.cpp" line="1301"/>
+        <location filename="../../plugins/basewidgetsplugin/baseformwidgets.cpp" line="1321"/>
         <source>Wrong form&apos;s translations</source>
         <translation>Mauvaise traduction de formulaire</translation>
     </message>
     <message>
-        <location filename="../../plugins/basewidgetsplugin/baseformwidgets.cpp" line="1302"/>
+        <location filename="../../plugins/basewidgetsplugin/baseformwidgets.cpp" line="1322"/>
         <source>You asked to change the language of the form to %1.
 But this an error while reading translation of %2.
 Number of items of the translation (%3) are wrong.</source>

@@ -31,7 +31,7 @@
 #include <translationutils/trans_current.h>
 #include <translationutils/trans_spashandupdate.h>
 
-// TODO: improve this, rename the fmfcoreplugin -> coreplugin and move it into the freemedforms/plugins subdir
+// TODO: improve this, rename the fmfcoreplugin -> coreplugin and move it into the plugins subdir
 #include <fmfcoreplugin/coreimpl.h>
 
 #include <QLabel>

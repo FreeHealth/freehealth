@@ -26,7 +26,7 @@
  ***************************************************************************/
 /**
   \class Utils::DatabaseConnector
-  This class owns all params needed to connect to the databases.\n
+  This class owns all parameters needed to connect to the databases.\n
   The Core::ISettings is in charge of populating paths for the SQLite driver.\n
   Default params are:
   - log: empty
@@ -105,10 +105,6 @@ public:
                 return false;
             }
             break;
-        }
-        case Database::PostSQL:
-        {
-            return false;
         }
         default: return false;
         } // switch
@@ -243,8 +239,8 @@ void DatabaseConnector::clear()
  * Check validity of the connector:
  * - a driver is correctly defined and available
  * - a login is defined
- * - for SQLite configuration: path to database are defined and exist
- * - for MySQL configuratin: a host and a port are defined
+ * - for SQLite configuration: path to database is defined and exists
+ * - for MySQL configuration: a host and a port are defined
  */
 bool DatabaseConnector::isValid() const
 {
@@ -352,9 +348,9 @@ QString DatabaseConnector::globalDatabasePrefix() const
 /**
  * Serialize the object to a string suitable for the settings storing. \n
  * NOTE: We have a compilation option: \e WITH_LOGINANDPASSWORD_CACHING.
- * When this DEFINE is activated, the login & the password are not stored in the
- * Utils::DatabaseConnector serialization. In the other case, clear password and clear
- * login are stored in the setting string.
+ * If this DEFINE is activated, the login & the password are stored in the
+ * Utils::DatabaseConnector serialization. If the DEFINE is not used, clear
+ * password and clear login are not stored in the setting string.
  */
 QString DatabaseConnector::forSettings() const
 {
@@ -448,7 +444,6 @@ QString DatabaseConnector::toString() const
     switch (driver()) {
     case Database::SQLite: dr="SQLite"; break;
     case Database::MySQL: dr="MySQL"; break;
-    case Database::PostSQL: dr="PostSQL"; break;
     default: dr="NoDriver";
     }
     dr.append(QString("%1").arg(isDriverValid()?"(Ok)":"(**Invalid**)"));

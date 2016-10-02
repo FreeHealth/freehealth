@@ -158,7 +158,7 @@ PatientActionHandler::PatientActionHandler(QObject *parent) :
 
     QAction *a = 0;
     Core::Command *cmd = 0;
-    Core::Context ctx(Patients::Constants::C_PATIENTS);
+    Core::Context ctx(Core::Constants::C_GLOBAL);
     Core::Context searchcontext(Patients::Constants::C_PATIENTS_SEARCH, Core::Constants::C_GLOBAL);
     Core::Context globalcontext(Core::Constants::C_GLOBAL);
 

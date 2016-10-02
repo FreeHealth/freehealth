@@ -87,8 +87,7 @@ void HourRangeWidget::paintEvent(QPaintEvent *)
     QPainter bodyPainter(&bodyPixmap);
     bodyPainter.setRenderHint(QPainter::Antialiasing);
     QColor lightBase = baseColor;
-    lightBase.lighter();
-    bodyPainter.setPen(lightBase);
+    bodyPainter.setPen(lightBase.lighter(125));
     brush = bodyPainter.brush();
     brush.setStyle(Qt::SolidPattern);
     brush.setColor(baseColor);

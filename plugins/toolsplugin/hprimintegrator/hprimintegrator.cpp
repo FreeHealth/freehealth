@@ -100,7 +100,7 @@ public:
         QString encoding;
         switch (settings()->value(Constants::S_DEFAULT_FILE_ENCODING).toInt()) {
         case Constants::AutoDetect:
-            if (Utils::isRunningOnLinux() || Utils::isRunningOnFreebsd())
+            if (Utils::isRunningOnLinux())
                 encoding = "UTF-8";
             else if (Utils::isRunningOnMac())
                 encoding = "MacRoman";

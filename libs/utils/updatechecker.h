@@ -39,16 +39,16 @@ QT_END_NAMESPACE
 
 namespace Utils {
 namespace Constants {
-    const char* const  FREEMEDFORMS_UPDATE_URL  = "https://freemedforms.com/update/update-fmf.txt";
-    const char* const  FREEDIAMS_UPDATE_URL     = "https://freemedforms.com/update/update-di.txt";
-    const char* const  FREEACCOUNT_UPDATE_URL   = "https://freemedforms.com/update/update-freeaccount.txt";
-    const char* const  FREEICD_UPDATE_URL       = "https://freemedforms.com/update/update-freeicd.txt";
-    const char* const  FREEGIR_UPDATE_URL       = "https://freemedforms.com/update/update-freegir.txt";
-    const char* const  FREETOOLBOX_UPDATE_URL   = "https://freemedforms.com/update/update-freetoolbox.txt";
-    const char* const  FREEPAD_UPDATE_URL       = "https://freemedforms.com/update/update-freepad.txt";
-    const char* const  FREEDRC_UPDATE_URL       = "https://freemedforms.com/update/update-freedrc.txt";
-    const char* const  FREEDDIMANAGER_UPDATE_URL= "https://freemedforms.com/update/update-freeddi.txt";
-    const char* const  FREEGUARD_UPDATE_URL     = "https://freemedforms.com/update/update-freeguard.txt";
+    const char* const  EHR_UPDATE_URL  = "https://freehealth.io/update/update-ehr.txt";
+    const char* const  FREEDIAMS_UPDATE_URL     = "https://freehealth.io/update/update-di.txt";
+    const char* const  FREEACCOUNT_UPDATE_URL   = "https://freehealth.io/update/update-freeaccount.txt";
+    const char* const  FREEICD_UPDATE_URL       = "https://freehealth.io/update/update-freeicd.txt";
+    const char* const  FREEGIR_UPDATE_URL       = "https://freehealth.io/update/update-freegir.txt";
+    const char* const  FREETOOLBOX_UPDATE_URL   = "https://freehealth.io/update/update-freetoolbox.txt";
+    const char* const  FREEPAD_UPDATE_URL       = "https://freehealth.io/update/update-freepad.txt";
+    const char* const  FREEDRC_UPDATE_URL       = "https://freehealth.io/update/update-freedrc.txt";
+    const char* const  FREEDDIMANAGER_UPDATE_URL= "https://freehealth.io/update/update-freeddi.txt";
+    const char* const  FREEGUARD_UPDATE_URL     = "https://freehealth.io/update/update-freeguard.txt";
 
     const char* const  S_CHECKUPDATE       = "CheckUpdate";
     const char* const  S_LAST_CHECKUPDATE  = "LastCheckUpdate";

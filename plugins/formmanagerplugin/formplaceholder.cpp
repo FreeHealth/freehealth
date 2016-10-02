@@ -243,12 +243,16 @@ public:
     {
         if (!ui->formDataMapper->currentEditingEpisodeIndex().isValid()) {
             LOG_FOR(q, "Episode not saved, no current editing episode");
+            qDebug() << "Episode not saved, no current editing episode";
+
             return true;
         }
 
         // Something to save?
         if (!ui->formDataMapper->isDirty()) {
             LOG_FOR(q, "Episode not saved, episode is not dirty");
+            qDebug() << "Episode not saved, episode is not dirty";
+
             return true;
         }
 
@@ -272,6 +276,8 @@ public:
             patient()->patientBar()->showMessage(QApplication::translate("Form::FormPlaceHolder", "WARNING: Episode (%1) from form (%2) can not be saved")
                     .arg(ui->formDataMapper->currentEpisodeLabel())
                     .arg(ui->formDataMapper->currentFormName()));
+            qDebug() << QString("WARNING: Episode (%1) from form (%2) can not be saved").arg(ui->formDataMapper->currentEpisodeLabel())
+                        .arg(ui->formDataMapper->currentFormName());
         }
         return ok;
     }
@@ -354,7 +360,7 @@ public:
         ui->episodeView->horizontalHeader()->setSectionsMovable(true);
 
         QFont small;
-        if (Utils::isRunningOnWin() || Utils::isRunningOnLinux() || Utils::isRunningOnFreebsd())
+        if (Utils::isRunningOnWin() || Utils::isRunningOnLinux())
             small.setPointSize(small.pointSize() - 1);
         else
             small.setPointSize(small.pointSize() - 4);
@@ -687,7 +693,7 @@ void FormPlaceHolder::currentSelectedFormChanged(const QModelIndex &current, con
 }
 
 /**
- * When using a FormTreeModel you can set the current for with this.
+ * When using a FormTreeModel you can set the current form with this.
  * \sa setCurrentForm()
  */
 void FormPlaceHolder::setCurrentEditingFormItem(const QModelIndex &index)
@@ -778,8 +784,10 @@ bool FormPlaceHolder::validateCurrentEpisode()
         return false;
 
     // get the episodeModel corresponding to the currently selected form
-    if (!d->_currentEpisodeModel)
+    if (!d->_currentEpisodeModel) {
+        qDebug() << "_currentEpisodeModel is false";
         return false;
+    }
     if (!d->saveCurrentEditingEpisode()) {
         LOG_ERROR("Unable to save current episode");
         return false;
@@ -1005,8 +1013,15 @@ bool FormPlaceHolder::printFormOrEpisode()
     p->addTokens(Core::IDocumentPrinter::Tokens_Global, tokens);
 
     // print
-    // TODO: manage UserPapers as spec option of FormMain
-    p->print(htmlToPrint, Core::IDocumentPrinter::Papers_Generic_User, false);
+    if (formMain->isNoHeader()) {
+        p->print(htmlToPrint, Core::IDocumentPrinter::Papers_Empty_User, false);
+    } else if (formMain->isAdministrativeHeader()) {
+        p->print(htmlToPrint, Core::IDocumentPrinter::Papers_Administrative_User, false);
+    } else if (formMain->isPrescriptionHeader()) {
+        p->print(htmlToPrint, Core::IDocumentPrinter::Papers_Prescription_User, false);
+    } else {
+        p->print(htmlToPrint, Core::IDocumentPrinter::Papers_Generic_User, false);
+    }
     return true;
 }
 

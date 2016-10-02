@@ -23,16 +23,17 @@
     </updateinfo>
 
   </formdescription>
-
+  <papers>Prescription</papers>
   <file type="script" name="onload">./scripts/xx/clinical_letter.js</file>
 
-  <MedForm type="form" name="Subforms::Generic::Clinical::Letter" uifilename="./ui/xx/clinical_letter.ui">
+
+  <MedForm type="form" name="Subforms::Generic::Clinical::Letter" uifilename="./ui/xx/clinical_letter_2.ui">
     <label lang="xx">Clinical letter</label>
     <label lang="fr">Lettre à un confrère</label>
     <icon>__theme__/xray.png</icon>
-    <options>DontPrintEmptyValues;UseFormNameAsNameSpace</options>
-    <!--<file type="htmlprintmask">./html/xx/clinical_letter_mask.html</file>
-    <file type="htmlexportmask">./html/xx/clinical_letter_mask.html</file>-->
+    <options>DontPrintEmptyValues;UseFormNameAsNameSpace;NoHeader</options>
+    <file type="htmlprintmask">./html/xx/clinical_letter_template.html</file>
+    <!--<file type="htmlexportmask">./html/xx/clinical_letter_mask.html</file>-->
 
     <Item type="group" name="Recipient::Group">
       <uilink label="" widget="recipientGroupBox" layout=""/>
@@ -46,25 +47,62 @@
                 <label lang="fr"></label>
                 <value>
                     <uuid id="0">Not done</uuid>
-                    <uuid id="1">Doctor</uuid>
-                    <uuid id="2">Professor</uuid>
-                    <uuid id="3">Ms</uuid>
-                    <uuid id="4">Mr</uuid>
+                    <uuid id="1">Ms</uuid>
+                    <uuid id="2">Mr</uuid>
+                    <uuid id="3">Doctor female</uuid>
+                    <uuid id="4">Doctor male</uuid>
+                    <uuid id="5">Professor female</uuid>
+                    <uuid id="6">Professor male</uuid>
 
-                    <possible id="0" lang="xx">ø</possible>
-                    <possible id="1" lang="xx">Dr</possible>
-                    <possible id="2" lang="xx">Pr</possible>
-                    <possible id="3" lang="xx">Ms</possible>
-                    <possible id="4" lang="xx">Mr</possible>
+                    <possible id="0" lang="xx"></possible>
+                    <possible id="1" lang="xx">Ms</possible>
+                    <possible id="2" lang="xx">Mr</possible>
+                    <possible id="3" lang="xx">Dr</possible>
+                    <possible id="4" lang="xx">Dr</possible>
+                    <possible id="5" lang="xx">Pr</possible>
+                    <possible id="6" lang="xx">Pr</possible>
 
-                    <possible id="0" lang="fr">ø</possible>
-                    <possible id="1" lang="fr">Dr</possible>
-                    <possible id="2" lang="fr">Pr</possible>
-                    <possible id="3" lang="fr">Mme</possible>
-                    <possible id="4" lang="fr">M.</possible>
+                    <possible id="0" lang="fr"></possible>
+                    <possible id="1" lang="fr">Mme</possible>
+                    <possible id="2" lang="fr">M.</possible>
+                    <possible id="3" lang="fr">Dr (féminin)</possible>
+                    <possible id="4" lang="fr">Dr (masculin)</possible>
+                    <possible id="5" lang="fr">Pr (féminin)</possible>
+                    <possible id="6" lang="fr">Pr (masculin)</possible>
                 </value>
-                <default>Doctor</default>
                 <option>DontPrintEmptyValues</option>
+        </Item>
+
+        <Item type="combo" name="Recipient::Title::Print::Combo">
+        <uilink label="" widget="titlePrintComboBox"/>
+        <label lang="xx"></label>
+        <label lang="fr"></label>
+        <value>
+            <uuid id="0">Not done</uuid>
+            <uuid id="1">Ms</uuid>
+            <uuid id="2">Mr</uuid>
+            <uuid id="3">Doctor female</uuid>
+            <uuid id="4">Doctor male</uuid>
+            <uuid id="5">Professor female</uuid>
+            <uuid id="6">Professor male</uuid>
+
+            <possible id="0" lang="xx"></possible>
+            <possible id="1" lang="xx">Ms</possible>
+            <possible id="2" lang="xx">Mr</possible>
+            <possible id="3" lang="xx">Dr</possible>
+            <possible id="4" lang="xx">Dr</possible>
+            <possible id="5" lang="xx">Pr</possible>
+            <possible id="6" lang="xx">Pr</possible>
+
+            <possible id="0" lang="fr"></possible>
+            <possible id="1" lang="fr">Mme</possible>
+            <possible id="2" lang="fr">M.</possible>
+            <possible id="3" lang="fr">Dr</possible>
+            <possible id="4" lang="fr">Dr</possible>
+            <possible id="5" lang="fr">Pr</possible>
+            <possible id="6" lang="fr">Pr</possible>
+        </value>
+        <option>DontPrintEmptyValues</option>
         </Item>
 
         <Item type="shorttext" name="Recipient::Given::Name::Shorttext">
@@ -632,5 +670,99 @@
 
     </Item> <!-- end of group Recipient::Group -->
 
-  </MedForm>
+    <Item type="combo" name="Salutation::Combo">
+            <uilink label="" widget="salutationComboBox"/>
+            <label lang="xx"></label>
+            <label lang="fr"></label>
+            <value>
+                <uuid id="0">Not done</uuid>
+                <uuid id="1">Ms</uuid>
+                <uuid id="2">Mr</uuid>
+                <uuid id="3">Dr female</uuid>
+                <uuid id="4">Dr male</uuid>
+                <uuid id="5">Pr female</uuid>
+                <uuid id="6">Pr male</uuid>
+
+                <possible id="0" lang="xx">ø</possible>
+                <possible id="1" lang="xx">Dear Madam</possible>
+                <possible id="2" lang="xx">Dear Sir</possible>
+                <possible id="3" lang="xx">Dear Doctor,</possible>
+                <possible id="4" lang="xx">Dear Doctor,</possible>
+                <possible id="5" lang="xx">Dear Professor,</possible>
+                <possible id="6" lang="xx">Dear Professor,</possible>
+
+                <possible id="0" lang="fr">ø</possible>
+                <possible id="1" lang="fr">Cher Madame,</possible>
+                <possible id="2" lang="fr">Chère Monsieur,</possible>
+                <possible id="3" lang="fr">Chère Consœur,</possible>
+                <possible id="4" lang="fr">Cher Confrère,</possible>
+                <possible id="5" lang="fr">Chère Madame le Professeur,</possible>
+                <possible id="6" lang="fr">Cher Monsieur le Professeur,</possible>
+            </value>
+            <default>Doctor</default>
+            <option>DontPrintEmptyValues</option>
+    </Item>
+
+    <Item type="TextEditor" name="Body::TextEditor">
+      <uilink layout="letterGridLayout"/>
+      <options>FullEditor;Expanded</options>
+      <label lang="xx">Letter</label>
+      <label lang="fr">Lettre</label>
+    </Item>
+
+    <Item type="group" name="Carbon::Copy::Group">
+      <uilink label="" widget="carbonCopyGroupBox" layout=""/>
+      <label lang="xx">Carbon Copy</label>
+      <label lang="fr">Copie Carbone</label>
+      <options>DontPrintEmptyValues</options>
+
+      <Item type="ShortText" name="CC1::LineEdit">
+        <uilink widget="cC1LineEdit"/>
+        <placeholder lang="xx">CC 1</placeholder>
+      </Item>
+
+      <Item type="ShortText" name="CC2::LineEdit">
+        <uilink widget="cC2LineEdit"/>
+        <placeholder lang="xx">CC 2</placeholder>
+      </Item>
+
+      <Item type="ShortText" name="CC3::LineEdit">
+        <uilink widget="cC3LineEdit"/>
+        <placeholder lang="xx">CC 3</placeholder>
+        </Item>
+      </Item>
+
+      <Item type="combo" name="Sign::Off::Combo">
+        <uilink label="" widget="signOffComboBox"/>
+        <label lang="xx"></label>
+        <label lang="fr"></label>
+        <value>
+            <uuid id="0">Not done</uuid>
+            <uuid id="1">Ms</uuid>
+            <uuid id="2">Mr</uuid>
+            <uuid id="3">Doctor (female)</uuid>
+            <uuid id="4">Doctor (male)</uuid>
+            <uuid id="5">Professor (female)</uuid>
+            <uuid id="6">Professor (male)</uuid>
+
+            <possible id="0" lang="xx"></possible>
+            <possible id="1" lang="xx">With kind regards<![CDATA[<br/>]]>Yours sincerely</possible>
+            <possible id="2" lang="xx">With kind regards<![CDATA[<br/>]]>Yours sincerely</possible>
+            <possible id="3" lang="xx">With kind regards<![CDATA[<br/>]]>Yours sincerely</possible>
+            <possible id="4" lang="xx">With kind regards<![CDATA[<br/>]]>Yours sincerely</possible>
+            <possible id="5" lang="xx">With kind regards<![CDATA[<br/>]]>Yours sincerely</possible>
+            <possible id="6" lang="xx">With kind regards<![CDATA[<br/>]]>Yours sincerely</possible>
+
+            <possible id="0" lang="fr"></possible>
+            <possible id="1" lang="fr">Sincères salutations,</possible>
+            <possible id="2" lang="fr">Sincères salutations,</possible>
+            <possible id="3" lang="fr">Bien confraternellement,</possible>
+            <possible id="4" lang="fr">Bien confraternellement,</possible>
+            <possible id="5" lang="fr">Je vous prie d'agréer, Madame le Professeur, l'assurance de mes sentiments confraternels</possible>
+            <possible id="6" lang="fr">Je vous prie d'agréer, Monsieur le Professeur, l'assurance de mes sentiments confraternels</possible>
+        </value>
+        <option>DontPrintEmptyValues</option>
+      </Item>
+
+    </MedForm>
 </FreeMedForms>

@@ -146,7 +146,7 @@ void VirtualDatabasePreferences::on_populateEpisodes_clicked()
     Utils::Randomizer r;
     r.setPathToFiles(settings()->path(Core::ISettings::BundleResourcesPath) + "/textfiles/");
 
-    // Retreive all patients and create n episodes for them
+    // Retrieve all patients and create n episodes for each patient
     QSet<QString> patients;
     if (query.exec(patientBase()->selectDistinct(Patients::Constants::Table_IDENT, Patients::Constants::IDENTITY_UID))) {
         while (query.next())
@@ -160,11 +160,11 @@ void VirtualDatabasePreferences::on_populateEpisodes_clicked()
     dlg.setWindowModality(Qt::WindowModal);
 
     QList<QString> testingForms;
-    testingForms << "episodeTester_1" << "episodeTester_2" << "episodeTester_2.1"
-            << "episodeTester_2.1.1" << "episodeTester_2.2";
+    testingForms << "episodeTester_1" << "baseWidgetsFormSample";
 
     int zz = 0;
     int userLkId = userModel()->practionnerLkIds(userModel()->currentUserData(Core::IUser::Uuid).toString()).at(0);
+    qDebug() << "episodeBase()->database()" << episodeBase()->database();
     QSqlQuery episodeQuery(episodeBase()->database());
 
     const QString &userUid = user()->uuid();
@@ -190,16 +190,20 @@ void VirtualDatabasePreferences::on_populateEpisodes_clicked()
                     episodeQuery.bindValue(Constants::EPISODES_LK_TOPRACT_LKID, userLkId + 1);
                 else
                     episodeQuery.bindValue(Constants::EPISODES_LK_TOPRACT_LKID, userLkId);
+                episodeQuery.bindValue(Constants::EPISODES_ISVALID, QVariant(1));
                 episodeQuery.bindValue(Constants::EPISODES_FORM_PAGE_UID, form);
-                episodeQuery.bindValue(Constants::EPISODES_USERDATETIME, date);
-                episodeQuery.bindValue(Constants::EPISODES_EPISODECREATIONDATETIME, date);
-                episodeQuery.bindValue(Constants::EPISODES_USERCREATOR, userUid);
                 QString tmp;
                 for(int z=0; z < r.randomInt(6); ++z)
                     tmp += r.randomName() + " ";
                 tmp.chop(1);
                 episodeQuery.bindValue(Constants::EPISODES_LABEL, tmp);
+                episodeQuery.bindValue(Constants::EPISODES_USERDATETIME, date);
+                episodeQuery.bindValue(Constants::EPISODES_EPISODECREATIONDATETIME, date);
+                episodeQuery.bindValue(Constants::EPISODES_USERCREATOR, userUid);
+                episodeQuery.bindValue(Constants::EPISODES_PRIORITY, 1);
 
+                qDebug() << episodeQuery.lastQuery();
+                qDebug() << episodeBase()->getLastExecutedQuery(episodeQuery);
                 if (!episodeQuery.exec()) {
                     LOG_QUERY_ERROR(episodeQuery);
                 }

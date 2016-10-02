@@ -553,6 +553,27 @@ bool XmlFormContentReader::loadElement(Form::FormItem *item, QDomElement &rootEl
                 if (item==m_ActualForm)
                     m_ActualForm->setUseNameAsNSForSubItems(true);
             }
+            if (options.contains((Constants::TAG_OPTIONS_NO_HEADER),
+                                 Qt::CaseInsensitive)) {
+                if (item==m_ActualForm) {
+                    m_ActualForm->setFormPrintHeader(Form::FormMain::NoHeader);
+                }
+            } else if (options.contains((Constants::TAG_OPTIONS_GENERIC_HEADER),
+                                        Qt::CaseInsensitive)) {
+                if (item==m_ActualForm) {
+                    m_ActualForm->setFormPrintHeader(Form::FormMain::GenericHeader);
+                }
+            } else if (options.contains((Constants::TAG_OPTIONS_ADMINISTRATIVE_HEADER),
+                                        Qt::CaseInsensitive)) {
+                if (item==m_ActualForm) {
+                    m_ActualForm->setFormPrintHeader(Form::FormMain::AdministrativeHeader);
+                }
+            } else if (options.contains((Constants::TAG_OPTIONS_PRESCRIPTION_HEADER),
+                                        Qt::CaseInsensitive)) {
+                if (item==m_ActualForm) {
+                    m_ActualForm->setFormPrintHeader(Form::FormMain::PrescriptionHeader);
+                }
+            }
             item->addExtraData(element.tagName(), options);
             element = element.nextSiblingElement();
             continue;

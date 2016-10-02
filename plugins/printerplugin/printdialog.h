@@ -23,11 +23,11 @@
 
 #include <QDialog>
 #include <QList>
-#if QT_VERSION < 0x050000
-#include <QPrinterInfo>
-#else
 #include <QtPrintSupport/QPrinterInfo>
-#endif
+
+QT_BEGIN_NAMESPACE
+class QLabel;
+QT_END_NAMESPACE
 
 /**
  * \file printdialog.h
@@ -81,6 +81,7 @@ private Q_SLOTS:
 
 private:
     Ui::PrintDialog *ui;
+    QLabel *m_previewLabel;
     Print::Printer *m_Printer;
     int m_PreviewingPage;
     QList<QPrinterInfo> m_AvailPrinterAtDialogOpens;

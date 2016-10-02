@@ -30,6 +30,7 @@
 
 #include <QObject>
 #include <QSqlDatabase>
+#include <QSqlQuery>
 #include <QString>
 #include <QStringList>
 #include <QVariant>
@@ -128,7 +129,6 @@ public:
     {
         SQLite,   /*!< \brief Uses SQLite driver. */
         MySQL,    /*!< \brief Uses MySQL driver. */
-        PostSQL   /*!< \brief Uses PostGre driver. */
     };
 
     /**
@@ -353,6 +353,7 @@ public:
     double sum(const int tableRef, const int fieldRef) const;
 
     virtual QString prepareInsertQuery(const int tableref) const;
+    virtual QString getLastExecutedQuery(const QSqlQuery& query);
 
     virtual QString prepareUpdateQuery(const int tableref, const int fieldref, const QHash<int, QString> &conditions);
     virtual QString prepareUpdateQuery(const int tableref, const int fieldref);

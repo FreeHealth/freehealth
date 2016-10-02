@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="fr_FR">
+<TS version="2.0" language="fr_FR">
 <context>
     <name>UserBase</name>
     <message>
@@ -144,11 +144,11 @@
     <name>UserPlugin::Internal::DefaultUserContactWidget</name>
     <message>
         <source>Password correctly changed.</source>
-        <translation>Phrase de passe correctement modifiée</translation>
+        <translation>Phrase de passe correctement modifiée.</translation>
     </message>
     <message>
         <source>Your password was correctly modified in the server and the database.</source>
-        <translation>Votre phrase de passe a été correctement modifiée (utilisateur MySQL et utilisateur FreeMedForms)</translation>
+        <translation>Votre phrase de passe a été correctement modifiée (utilisateur MySQL et utilisateur logiciel).</translation>
     </message>
 </context>
 <context>

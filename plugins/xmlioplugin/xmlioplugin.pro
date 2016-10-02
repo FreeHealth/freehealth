@@ -3,7 +3,8 @@ TARGET          = XmlIO
 
 DEFINES += XMLIO_LIBRARY
 
-QT *= xml sql
+QT *= xml \
+      sql
 
 BUILD_PATH_POSTFIXE = FreeMedForms
 

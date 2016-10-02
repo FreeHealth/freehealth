@@ -2,7 +2,7 @@
 # This file only apply for the FreeMedForms EMR Application
 
 include(compiling.pri)
-contains(FREEMEDFORMS,1){
+contains(FREEHEALTH,1){
 
     # In fact, you can use two methods:
     # 1) add to the qmake commande line:
@@ -88,7 +88,7 @@ contains(FREEMEDFORMS,1){
     # *                                  Patientimport Plugin                                      *
     # ***************************************************************************************
     # Uncomment the following line to build the plugin
-      CONFIG *= with-patientimport
+    #  CONFIG *= with-patientimport
     # ***************************************************************************************
 
     # The following lines must not be modified

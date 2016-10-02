@@ -21,7 +21,7 @@
 /***************************************************************************
  *  Main developer: Eric MAEKER, <eric.maeker@gmail.com>                   *
  *  Contributors:                                                          *
- *       NAME <MAIL@ADDRESS.COM>                                           *
+ *       Jerome Pinguet <jerome@jerome.cc>                                 *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 
@@ -33,6 +33,8 @@
   - set the PMH::Internal::PmhData to use
   - get it back after the edition
   - then send it to the PMH::PmhCategoryModel
+  UI form pmhviewer.ui uses QDateEditEx class, a subclass of QDateEdit that
+  manages null dates. Use Utils::QDateEditEx as classname in ui form file.
 */
 
 #include "pmhviewer.h"
@@ -44,6 +46,7 @@
 
 #include <coreplugin/icore.h>
 #include <coreplugin/ipatient.h>
+#include <coreplugin/iuser.h>
 
 #include <icdplugin/icdcollectiondialog.h>
 #include <icdplugin/icdio.h>
@@ -65,8 +68,10 @@ using namespace PMH;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
+static inline Core::IUser *user() {return Core::ICore::instance()->user();}
 static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
 static inline PMH::PmhCore *pmhCore() { return PMH::PmhCore::instance(); }
+
 
 namespace PMH {
 namespace Internal {
@@ -98,6 +103,7 @@ public:
     {
         m_Pmh = pmh;
         ui->personalLabel->setText(pmh->data(PmhData::Label).toString());
+        ui->userNameLabel->setText(user()->fullNameOfUser(pmh->data(PmhData::UserOwner)));
         ui->typeCombo->setCurrentIndex(pmh->data(PmhData::Type).toInt());
         ui->statusCombo->setCurrentIndex(pmh->data(PmhData::State).toInt());
         ui->confIndexSlider->setValue(pmh->data(PmhData::ConfidenceIndex).toInt());
@@ -112,12 +118,14 @@ public:
         ui->episodeViewer->setPmhData(pmh);
 
         // SimpleView -> Populate SimpleGroup widgets
-        ui->simple_date->clear();
+        ui->simple_start_date->clear();
+        ui->simple_end_date->clear();
         m_IcdLabelModel->setStringList(QStringList());
         if (pmh->episodeModel()->rowCount()) {
             // TODO: improve this
             // use only the first row
-            ui->simple_date->setDate(pmh->episodeModel()->index(0, PmhEpisodeModel::DateStart).data().toDate());
+            ui->simple_start_date->setDate(pmh->episodeModel()->index(0, PmhEpisodeModel::DateStart).data().toDate());
+            ui->simple_end_date->setDate(pmh->episodeModel()->index(0, PmhEpisodeModel::DateEnd).data().toDate());
             m_IcdLabelModel->setStringList(pmh->episodeModel()->index(0, PmhEpisodeModel::IcdLabelStringList).data().toStringList());
         }
 
@@ -129,6 +137,7 @@ public:
 
     void populatePmhWithUi()
     {
+        qDebug() << Q_FUNC_INFO;
         m_Pmh->setData(PmhData::Label, ui->personalLabel->text());
         m_Pmh->setData(PmhData::Type, ui->typeCombo->currentIndex());
         m_Pmh->setData(PmhData::State, ui->statusCombo->currentIndex());
@@ -137,14 +146,17 @@ public:
         m_Pmh->setData(PmhData::IsPrivate, ui->makePrivateBox->isChecked());
         // Get category
         QModelIndex cat = pmhCore()->pmhCategoryModel()->categoryOnlyModel()->mapToSource(ui->categoryTreeView->currentIndex());
+        qDebug() << cat;
         cat = pmhCore()->pmhCategoryModel()->index(cat.row(), PmhCategoryModel::Id, cat.parent());
         m_Pmh->setData(PmhData::CategoryId, cat.data().toInt());
+        qDebug() << cat;
         // TODO: improve this : pmhx only manages one episode
         if (m_Pmh->episodeModel()->rowCount() == 0) {
             m_Pmh->episodeModel()->insertRow(0);
         }
         // use only the first row
-        m_Pmh->episodeModel()->setData(m_Pmh->episodeModel()->index(0, PmhEpisodeModel::DateStart), ui->simple_date->date());
+        m_Pmh->episodeModel()->setData(m_Pmh->episodeModel()->index(0, PmhEpisodeModel::DateStart), ui->simple_start_date->date());
+        m_Pmh->episodeModel()->setData(m_Pmh->episodeModel()->index(0, PmhEpisodeModel::DateEnd), ui->simple_end_date->date());
         m_Pmh->episodeModel()->setData(m_Pmh->episodeModel()->index(0, PmhEpisodeModel::IcdLabelStringList), m_IcdLabelModel->stringList());
     }
 
@@ -175,14 +187,27 @@ private:
 } // End namespace PMH
 
 
-/** \brief Creates a new PMH::PmhViewer with the specified \e editMode. \sa PMH::PmhViewer::EditMode */
+/** \brief Creates a new PMH::PmhViewer with the specified \e editMode.
+ *
+ * ViewMode can be set to SimpleMode or ExtendedMode (with widgetBar:
+ * Episodes, Management, Contacts, Links, Comment)
+ * By default ViewMode is set to ExtendedMode.
+ * tabWidget is hidden for now until we fully implement episode management.
+ * \sa PMH::PmhViewer::EditMode
+*/
 PmhViewer::PmhViewer(QWidget *parent, EditMode editMode, ViewMode viewMode) :
     QWidget(parent), d(new PmhViewerPrivate(this))
 {
     // Create Ui
     d->ui = new Internal::Ui::PmhViewer;
     d->ui->setupUi(this);
-    d->ui->simple_date->setDisplayFormat(tkTr(Trans::Constants::DATEFORMAT_FOR_EDITOR));
+    // QDateEditEx
+    d->ui->simple_start_date->setNullable(true);
+    d->ui->simple_start_date->setCalendarPopup(true);
+    d->ui->simple_start_date->setDate(QDate()); // Set date as null with QDate()
+    d->ui->simple_end_date->setNullable(true);
+    d->ui->simple_end_date->setCalendarPopup(true);
+    d->ui->simple_end_date->setDate(QDate()); // Set date as null with QDate()
     d->ui->simple_icd10->setEnabled(ICD::IcdIO::isDatabaseInitialized());
     d->m_IcdLabelModel = new QStringListModel(this);
 
@@ -201,7 +226,13 @@ PmhViewer::PmhViewer(QWidget *parent, EditMode editMode, ViewMode viewMode) :
     // Manage View Mode
     d->m_ViewMode = viewMode;
     if (viewMode==ExtendedMode) {
-        d->ui->simpleBox->hide();
+        connect(d->ui->personalLabel, SIGNAL(textChanged(QString)), this, SLOT(onSimpleViewLabelChanged(QString)));
+        d->ui->tabWidget->setTabEnabled(0, false); // Episodes tab disabled
+        d->ui->tabWidget->setTabEnabled(1, false); // Management tab disabled
+        d->ui->tabWidget->setTabEnabled(2, false); // Contacts tab disabled
+        d->ui->tabWidget->setTabEnabled(3, false); // Links tab disabled
+        d->ui->tabWidget->hide();
+        d->ui->icdCodes->setModel(d->m_IcdLabelModel);
     } else {  // SimpleMode
         d->ui->tabWidget->hide();
         d->ui->icdCodes->setModel(d->m_IcdLabelModel);
@@ -290,6 +321,7 @@ void PmhViewer::revert()
 /** \brief Return the PMH::Internal::PmhData pointer modified or not according to the actual EditMode of the viewer. */
 Internal::PmhData *PmhViewer::modifiedPmhData() const
 {
+    qDebug() << Q_FUNC_INFO;
     // Read only == return the unchanged PmhData
     if (d->m_Mode==ReadOnlyMode) {
         return d->m_Pmh;
@@ -316,7 +348,7 @@ void PmhViewer::onSimpleViewIcdClicked()
         const QStringList &icdLabels = d->m_Pmh->episodeModel()->index(0, PmhEpisodeModel::IcdLabelStringList).data().toStringList();
         d->m_IcdLabelModel->setStringList(icdLabels);
         // if pmh does not have a label -> populate label with ICD labels
-        if (d->m_Pmh->data(PmhData::Label).toString().isEmpty()) {
+        if (d->m_Pmh->data(PmhData::Label).toString().isEmpty() && d->ui->personalLabel->text().isEmpty()) {
             d->m_Pmh->setData(PmhData::Label, icdLabels.join(", "));
             d->ui->personalLabel->setText(d->m_Pmh->data(PmhData::Label).toString());
         }

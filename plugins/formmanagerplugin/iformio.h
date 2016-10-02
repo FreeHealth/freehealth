@@ -126,7 +126,7 @@ public:
         IsSubForm,                                                                      //!< form is a subform
         IsPage,                                                                         //!< form is a page
         ScreenShotsPath,                                                                //!< (relative) path to form screenshots directory
-        FromDatabase,                                                                   //!< form is recieved from database
+        FromDatabase,                                                                   //!< form is received from database
         HasScreenShot,                                                                  //!< form has a screenshot
         UpdateAvailable_OldVersion,                                                     //!< an update of this form is available
         MaxParam,

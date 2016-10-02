@@ -272,11 +272,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="35"/>
-        <source>The FreeMedForms community</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../libs/translationutils/trans_current.h" line="36"/>
         <source>Please contact the development team.</source>
         <translation type="unfinished"></translation>
@@ -338,7 +333,7 @@
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_current.h" line="48"/>
-        <location filename="../../libs/translationutils/trans_current.h" line="157"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="158"/>
         <source>Subforms</source>
         <translation type="unfinished"></translation>
     </message>
@@ -689,153 +684,163 @@
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_current.h" line="124"/>
-        <source>Creation date</source>
+        <source>Creation date &amp; time</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_current.h" line="125"/>
-        <source>Date</source>
+        <source>Episode date &amp; time</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_current.h" line="168"/>
+        <source>&lt;h2&gt;Welcome to FreeHealth&lt;/h2&gt;&lt;h3&gt;Â© %1 Jerome Pinguet&lt;/h3&gt;&lt;h3&gt;(C) 2008-2015 by Dr Eric Maeker (France)&lt;/h3&gt;&lt;p&gt;This software is released without any warranty, for testing purposes only.&lt;br/&gt;Please refer to our &lt;a href=&quot;%2&quot;&gt;web site&lt;/a&gt; for more information.&lt;br /&gt;FreeHealth is based on FreeMedForms created by Eric Maeker.&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_current.h" line="126"/>
-        <source>Created by: %1</source>
+        <source>Date</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_current.h" line="35"/>
+        <source>FreeHealth community</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_current.h" line="127"/>
-        <source>On the: %1</source>
+        <source>Created by: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_current.h" line="128"/>
-        <source>Timestamp</source>
+        <source>On the: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_current.h" line="129"/>
+        <source>Timestamp</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_current.h" line="130"/>
         <source>Please wait</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="133"/>
-        <location filename="../../libs/translationutils/trans_current.h" line="135"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="134"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="136"/>
         <source>Settings recovered</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="134"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="135"/>
         <source>Reading settings file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="136"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="137"/>
         <source>Creating default settings for %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="137"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="138"/>
         <source>Show details</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="138"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="139"/>
         <source>More information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="139"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="140"/>
         <source>Hide extra information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="142"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="143"/>
         <source>Header</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="143"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="144"/>
         <source>Footer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="144"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="145"/>
         <source>Watermark</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="145"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="146"/>
         <source>Printing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="148"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="149"/>
         <source>Data pack</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="149"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="150"/>
         <source>Data pack manager</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="150"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="151"/>
         <source>Last modification</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="151"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="152"/>
         <source>Data type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="154"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="155"/>
         <source>Zip codes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="155"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="156"/>
         <source>User documents</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="156"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="157"/>
         <source>Full set of forms</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="158"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="159"/>
         <source>International classification of diseases</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="159"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="160"/>
         <source>Diseases classifications</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="160"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="161"/>
         <source>Alert packs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="161"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="162"/>
         <source>Binary packs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="162"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="163"/>
         <source>Various</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="163"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="164"/>
         <source>No item</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="167"/>
-        <source>&lt;p align=center&gt;&lt;b&gt;Welcome to FreeMedForms project&lt;/b&gt;&lt;br /&gt;(C) 2008-%1 by Eric MAEKER, MD (France)&lt;/p&gt;&lt;p align=left&gt;This software is released without any warranty and only for testing purposal.&lt;br/&gt;Please refer to our &lt;a href=&quot;%2&quot;&gt;web site&lt;/a&gt; for more information.&lt;br /&gt;&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3226,57 +3231,62 @@ Text Align Justify shortcut key : Mac specific</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_titles.h" line="51"/>
-        <source>Mister</source>
+        <location filename="../../libs/translationutils/trans_titles.h" line="49"/>
+        <source>Other</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_titles.h" line="52"/>
-        <source>Miss</source>
+        <source>Mister</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_titles.h" line="53"/>
-        <source>Madam</source>
+        <source>Miss</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_titles.h" line="54"/>
-        <source>Doctor</source>
+        <source>Madam</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_titles.h" line="55"/>
-        <source>Professor</source>
+        <source>Doctor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_titles.h" line="56"/>
-        <source>Captain</source>
+        <source>Professor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_titles.h" line="57"/>
-        <source>Nurse</source>
+        <source>Captain</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_titles.h" line="58"/>
-        <source>Secretary</source>
+        <source>Nurse</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_titles.h" line="59"/>
-        <source>Caregiver</source>
+        <source>Secretary</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_titles.h" line="60"/>
-        <source>Medical student</source>
+        <source>Caregiver</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_titles.h" line="61"/>
+        <source>Medical student</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_titles.h" line="62"/>
         <source>Software administrator</source>
         <translation type="unfinished"></translation>
     </message>

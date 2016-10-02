@@ -38,7 +38,7 @@
 #include "icddatabase.h"
 #include "icddownloader.h"
 
-#ifdef FREEMEDFORMS
+#ifdef FREEHEALTH
 #    include "icdwidgetfactory.h"
 #endif
 
@@ -95,7 +95,7 @@ void IcdPlugin::extensionsInitialized()
 
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
 
-#ifdef FREEMEDFORMS
+#ifdef FREEHEALTH
     addAutoReleasedObject(new IcdWidgetFactory(this));
 #endif
 

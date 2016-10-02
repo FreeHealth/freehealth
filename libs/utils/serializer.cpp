@@ -117,7 +117,6 @@ QString variantToString(const QVariant &v)
                 result.prepend(QLatin1Char('@'));
             break;
         }
-#ifndef QT_NO_GEOM_VARIANT
         case QVariant::Rect: {
             QRect r = qvariant_cast<QRect>(v);
             result += QLatin1String("@Rect(");
@@ -149,10 +148,7 @@ QString variantToString(const QVariant &v)
             result += QLatin1Char(')');
             break;
         }
-#endif // !QT_NO_GEOM_VARIANT
-
     default: {
-#ifndef QT_NO_DATASTREAM
             QByteArray a;
             {
                 QDataStream s(&a, QIODevice::WriteOnly);
@@ -163,9 +159,6 @@ QString variantToString(const QVariant &v)
             result = QLatin1String("@Variant(");
             result += QString::fromLatin1(a.constData(), a.size());
             result += QLatin1Char(')');
-#else
-            Q_ASSERT(!"QSettings: Cannot save custom types without QDataStream support");
-#endif
             break;
         }
     }
@@ -179,17 +172,12 @@ QVariant stringToVariant(const QString &s)
             if (s.startsWith(QLatin1String("@ByteArray("))) {
                 return QVariant(s.toLatin1().mid(11, s.size() - 12));
             } else if (s.startsWith(QLatin1String("@Variant("))) {
-#ifndef QT_NO_DATASTREAM
                 QByteArray a(s.toLatin1().mid(9));
                 QDataStream stream(&a, QIODevice::ReadOnly);
                 stream.setVersion(QDataStream::Qt_4_0);
                 QVariant result;
                 stream >> result;
                 return result;
-#else
-                Q_ASSERT(!"QSettings: Cannot load custom types without QDataStream support");
-#endif
-#ifndef QT_NO_GEOM_VARIANT
             } else if (s.startsWith(QLatin1String("@Rect("))) {
                 QStringList args = splitArgs(s, 5);
                 if (args.size() == 4)
@@ -202,7 +190,6 @@ QVariant stringToVariant(const QString &s)
                 QStringList args = splitArgs(s, 6);
                 if (args.size() == 2)
                     return QVariant(QPoint(args[0].toInt(), args[1].toInt()));
-#endif
             } else if (s == QLatin1String("@Invalid()")) {
                 return QVariant();
     }

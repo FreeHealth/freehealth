@@ -177,7 +177,7 @@ public:
         if (!model)
             return;
 
-        // Reload the lastepisode from database
+        // Reload the latest episode from database
         model->refreshFilter();
         model->populateFormWithLatestValidEpisodeContent();
     }

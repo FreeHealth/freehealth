@@ -45,7 +45,7 @@ namespace Internal {
 class AgendaPlugin : public ExtensionSystem::IPlugin
 {
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID "org.freemedforms.FreeMedForms.AgendaPlugin" FILE "Agenda.json")
+    Q_PLUGIN_METADATA(IID "io.freehealth.ehr.AgendaPlugin" FILE "Agenda.json")
 
 public:
     AgendaPlugin();

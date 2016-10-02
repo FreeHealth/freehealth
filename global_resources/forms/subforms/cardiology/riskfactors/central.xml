@@ -8,7 +8,7 @@
     <version>test</version>
     <fmfv>0.7.0</fmfv>
     <cdate>2011-09-15</cdate>
-    <lmdate>2013-04-22</lmdate>
+    <lmdate>2016-09-26</lmdate>
     <icon>cardiology.png</icon>
     <weblink></weblink>
     <bibliography/>
@@ -31,21 +31,15 @@
   <MedForm name="Subs::Cardiology::RiskFactors">
     <label lang="xx">Cardiovascular risk factors</label>
     <label lang="fr">Facteurs de risque cardio-vasculaire</label>
-    <options>compact;UseFormNameAsNameSpace</options>
+    <options>compact;UseFormNameAsNameSpace;HideHeaderOnUniqueEpisode</options>
     <file type="htmlprintmask">./html/xx/padtools_print_export_mask.html</file>
     <file type="htmlexportmask">./html/xx/padtools_print_export_mask.html</file>
 
-<!--
-    <Item name="NonModifiable" type="group">
-      <label lang="fr">Non-modifiables</label>
-      <label lang="xx">Non modifiable</label>
-    </Item>
-
-    <Item name="Modifiable" type="group">
-      <label lang="fr">Modifiables</label>
-      <label lang="xx">Modifiable</label>
-      <column>1</column>
--->
+      <Item type="helptext" name="Record::Name" >
+        <label lang="xx"><![CDATA[<b>Cardiovascular risk factors</b>]]></label>
+        <label lang="fr"><![CDATA[<b>Facteurs de risque cardio-vasculaires</b>]]></label>
+        <options>notprintable</options>
+      </Item>
 
       <Item name="Modifiable::PhysicalInactivity" type="check">
         <label lang="fr">Sédentarité</label>
@@ -100,10 +94,6 @@
         <label lang="xx">Type 2 diabetes</label>
         <options>PrintOnlyChecked</options>
       </Item>
-
-<!--
-    </Item>
--->
 
   </MedForm>
 

@@ -305,7 +305,6 @@ void PatientSearchEdit::onPatientSelected(const QModelIndex &index)
     Q_EMIT patientSelected(index.data().toString(), uid);
 }
 
-// Work through bug: http://code.google.com/p/freemedforms/issues/detail?id=197
 void PatientSearchEdit::focusInEvent(QFocusEvent *event)
 {
     // connect with Qt::UniqueConnection: if connection exists already, don't connect another time

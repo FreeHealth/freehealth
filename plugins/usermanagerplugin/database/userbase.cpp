@@ -296,8 +296,6 @@ bool UserBase::updateLastloginTypeToTimeStamp()
         case Utils::Database::SQLite: {
             return true; // No change required for SQLite
         }
-        case Utils::Database::PostSQL:                                              
-            return false;                                                           
         default: return false;
     }
 }
@@ -594,8 +592,6 @@ bool UserBase::checkLogin(const QString &clearLogin, const QString &clearPasswor
         }
         break;
     }
-    case Utils::Database::PostSQL:
-        return false;
     default: return false;
     }
 
@@ -708,10 +704,6 @@ bool UserBase::userExists(const QString &clearLogin) const
         case Utils::Database::SQLite:                                               
         {                                                                           
             return false;                                                                  
-        }
-        case Utils::Database::PostSQL:                                              
-        {                                                                           
-            return false;                                                           
         }
         default: return false;
     }
@@ -1274,9 +1266,6 @@ QDateTime UserBase::recordLastLoggedIn(const QString &log, const QString &pass)
         LOG(tr("Last recorded user login: %1 ").arg(now.toString()));
         return now;
     }
-    case Utils::Database::PostSQL: {                                              
-        return QDateTime();                                                           
-    }
     }
    return QDateTime(); 
 }
@@ -1305,10 +1294,6 @@ bool UserBase::createUser(UserData *user)
     case Utils::Database::SQLite:
     {
         break;
-    }
-    case Utils::Database::PostSQL:
-    {
-        return false;
     }
     }
 
@@ -1616,13 +1601,9 @@ bool UserBase::purgeUser(const QString &uuid)
         {
             break;
         }
-    case Utils::Database::PostSQL:
-        {
-            return false;
-        }
     }
 
-    // delete table USERS
+    // delete user row from table USERS
     DB.transaction();
     QSqlQuery query(DB);
     QHash<int,QString> where;
@@ -1635,6 +1616,7 @@ bool UserBase::purgeUser(const QString &uuid)
     }
     query.finish();
     where.clear();
+    // delete user rows from table RIGHTS
     where.insert(Constants::DATA_USER_UUID, QString("='%1'").arg(uuid));
     if (!query.exec(prepareDeleteQuery(Table_RIGHTS, where))) {
         LOG_QUERY_ERROR(query);
@@ -1644,6 +1626,7 @@ bool UserBase::purgeUser(const QString &uuid)
     }
     query.finish();
     where.clear();
+    // delete user rows from table DATA
     where.insert(Constants::RIGHTS_USER_UUID, QString("='%1'").arg(uuid));
     if (!query.exec(prepareDeleteQuery(Table_DATA, where))) {
         LOG_QUERY_ERROR(query);
@@ -1653,6 +1636,7 @@ bool UserBase::purgeUser(const QString &uuid)
     }
     query.finish();
     where.clear();
+    // delete user rows from table LK_USERS
     where.insert(Constants::LK_USER_UUID, QString("='%1'").arg(uuid));
     if (!query.exec(prepareDeleteQuery(Table_USER_LK_ID, where))) {
         LOG_QUERY_ERROR(query);

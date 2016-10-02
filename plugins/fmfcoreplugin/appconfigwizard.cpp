@@ -86,9 +86,9 @@ namespace {
 
     // Keep these constants sync with the AppConfigWizard typeOfInstall combo order
     enum typeOfInstallComboOrder {
-        INSTALLING_SQLITE = 0,
+        INSTALLING_MYSQL_SERVER = 0,
         INSTALLING_MYSQL_CLIENT,
-        INSTALLING_MYSQL_SERVER
+        INSTALLING_SQLITE
     };
 
     class CoreFirstRunPage : public Core::IFirstConfigurationPage
@@ -160,7 +160,7 @@ namespace {
         // get grants on database for the user
         Utils::Database::Grants grants = Utils::Database::getConnectionGrants(connection);
 
-        // if grants not suffisant -> warning dialog
+        // if grants not sufficient -> warning dialog
         if (!((grants & Utils::Database::Grant_Select) &&
               (grants & Utils::Database::Grant_Update) &&
               (grants & Utils::Database::Grant_Insert) &&
@@ -258,7 +258,7 @@ AppConfigWizard::AppConfigWizard(QWidget *parent) :
            << QWizard::NextButton << QWizard::FinishButton;
     setButtonLayout(layout);
 
-    QPixmap pix = theme()->splashScreenPixmap("freemedforms-wizard-first.png");
+    QPixmap pix = theme()->splashScreenPixmap("wizard-first.png");
     setPixmap(QWizard::BackgroundPixmap, pix);
     setPixmap(QWizard::WatermarkPixmap, pix);
 
@@ -333,12 +333,14 @@ CoreConfigPage::CoreConfigPage(QWidget *parent) :
     registerField(::FIELD_TYPEOFINSTALL, installCombo, "currentIndex");
 
     retranslate();
+    QObject::connect(installCombo, static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
+                     this, &CoreConfigPage::sqliteWarn);
 }
 
 void CoreConfigPage::retranslate()
 {
     setTitle(tr("Welcome to %1").arg(qApp->applicationName() + " v" + qApp->applicationVersion()));
-    setSubTitle(tr("This wizard will help you to configure the base parameters "
+    setSubTitle(tr("This wizard will help you configure the base parameters "
                    "of the application.\n"
                    "Select your preferred language and the installation type."));
 
@@ -347,13 +349,13 @@ void CoreConfigPage::retranslate()
 
     installCombo->clear();
     // Keep typeOfInstall combo order sync with the constants:
-    // INSTALLING_SQLITE, INSTALLING_MYSQL_CLIENT, INSTALLING_MYSQL_SERVER
-    installCombo->addItem(theme()->icon(Constants::ICONCOMPUTER), tr("Single computer"));
+    // INSTALLING_MYSQL_SERVER, INSTALLING_MYSQL_CLIENT, INSTALLING_SQLITE
     if (QSqlDatabase::drivers().contains("QMYSQL")) {
         // FIXME: test if mysql-client/mysql-server is available on this machine
-        installCombo->addItem(theme()->icon(Constants::ICONNETWORK), tr("Network (as client)"));
-        installCombo->addItem(theme()->icon(Constants::ICONNETWORK), tr("Network (as server)"));
+        installCombo->addItem(theme()->icon(Constants::ICONNETWORK), tr("Create MySQL databases"));
+        installCombo->addItem(theme()->icon(Constants::ICONNETWORK), tr("Connect to MySQL databases"));
     }
+    installCombo->addItem(theme()->icon(Constants::ICONCOMPUTER), tr("Test without MySQL"));
 }
 
 bool CoreConfigPage::validatePage()
@@ -368,7 +370,7 @@ bool CoreConfigPage::validatePage()
         connector.setClearPass("fmf_admin");
         connector.setDriver(Utils::Database::SQLite);
         connector.setAccessMode(Utils::DatabaseConnector::ReadWrite);
-        // Path are automatically informed by settings()
+        // Paths are automatically informed by settings()
         settings()->setDatabaseConnector(connector);
         break;
     }
@@ -421,6 +423,41 @@ void CoreConfigPage::changeEvent(QEvent *e)
     default:
         break;
     }
+}
+
+void CoreConfigPage::sqliteWarn(int i)
+{
+    if (i==INSTALLING_SQLITE) {
+        QMessageBox msgBox;
+        msgBox.setIcon(QMessageBox::Warning);
+        msgBox.setText("Test FreeMedForms without MySQL");
+        msgBox.setInformativeText(tr("<b>This simplified installation procedure is"
+                                     " for testing purposes only.</b> \n"
+                                     "It is using SQLite as a temporary"
+                                     " database. We do not recommend that you use"
+                                     " SQLite to store medical data because "
+                                     " FreeHealth support of SQLite will end soon. If you want to"
+                                     " install FreeHealth for professional use,"
+                                     " please choose <b>Create MySQL databases</b> instead.\n"
+                                     "Click Ok to test FreeHealth, or click Cancel"
+                                     " to install FreeHealth with MySQL."));
+        msgBox.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
+        msgBox.setDefaultButton(QMessageBox::Cancel);
+        int ret = msgBox.exec();
+
+        switch (ret) {
+          case QMessageBox::Ok:
+              // Save was clicked
+              break;
+          case QMessageBox::Cancel:
+              installCombo->setCurrentIndex(INSTALLING_MYSQL_SERVER);
+              break;
+          default:
+              // should never be reached
+              break;
+        }
+    }
+    return;
 }
 
 
@@ -497,7 +534,7 @@ ClientConfigPage::ClientConfigPage(QWidget *parent) :
     layout->addWidget(serverWidget, 0, 0);
     setLayout(layout);
 
-    QPixmap pix = theme()->splashScreenPixmap("freemedforms-wizard-network.png");
+    QPixmap pix = theme()->splashScreenPixmap("wizard-network.png");
     setPixmap(QWizard::BackgroundPixmap, pix);
     setPixmap(QWizard::WatermarkPixmap, pix);
 
@@ -548,7 +585,7 @@ bool ClientConfigPage::validatePage()
     }
 
     // Test server configuration
-    // all freemedforms databases are prefixed with fmf_
+    // all databases are prefixed with fmf_
     // test the fmf_* databases existence
     QSqlQuery query(mysql);
     int tries = 0;
@@ -566,13 +603,13 @@ bool ClientConfigPage::validatePage()
         }
         if (query.size() < 5) {
             ok = false;
-            Utils::warningMessageBox(tr("No FreeMedForms server configuration detected"),
-                                     tr("You are trying to configure a network client of FreeMedForms. "
-                                        "It is manadatory to connect to a FreeMedForms network server.\n"
-                                        "While the host connection is valid, no FreeMedForms configuration was "
+            Utils::warningMessageBox(tr("No server configuration detected"),
+                                     tr("You are trying to configure a network client. "
+                                        "It is manadatory to connect to a network server.\n"
+                                        "While the host connection is valid, no configuration was "
                                         "found on this host.\n\n"
-                                        "Please check that this host contains a FreeMedForms server configuration."));
-            LOG_ERROR("No FreeMedForms configuration detected on the server");
+                                        "Please check that this host contains a server configuration."));
+            LOG_ERROR("No configuration detected on the server");
         } else {
             ok = true;
             query.finish();
@@ -636,7 +673,7 @@ ServerConfigPage::ServerConfigPage(QWidget *parent) :
     layout->addWidget(serverWidget, 0, 0);
     setLayout(layout);
 
-    QPixmap pix = theme()->splashScreenPixmap("freemedforms-wizard-network.png");
+    QPixmap pix = theme()->splashScreenPixmap("wizard-network.png");
     setPixmap(QWizard::BackgroundPixmap, pix);
     setPixmap(QWizard::WatermarkPixmap, pix);
 
@@ -852,20 +889,14 @@ EndConfigPage::EndConfigPage(QWidget *parent) :
     l->addWidget(comboVirtual, 4, 1);
 
     // add infos
-    lbl1 = new QLabel(this);
-    lbl1->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-    lbl1_1 = new QLabel(this);
-    lbl1_1->setOpenExternalLinks(true);
-    lbl1_1->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
-    lbl2 = new QLabel(this);
-    lbl2->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
-    lbl2_1 = new QLabel(this);
-    lbl2_1->setOpenExternalLinks(true);
-    lbl2_1->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
-    l->addWidget(lbl1, 5, 0, 1, 2);
-    l->addWidget(lbl1_1, 6, 1);
-    l->addWidget(lbl2, 8, 0, 1, 2);
-    l->addWidget(lbl2_1, 9, 1);
+    label_message = new QLabel(this);
+    label_message->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    label_url = new QLabel(this);
+    label_url->setOpenExternalLinks(true);
+    label_url->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+    l->addWidget(label_message, 5, 0, 1, 2);
+    l->addWidget(label_url, 6, 1);
+
     retranslate();
     // Set indexes to combos
     if (comboDb) {
@@ -924,9 +955,7 @@ void EndConfigPage::comboVirtualActivated(int index)
 void EndConfigPage::retranslate()
 {
     setTitle(tr("%1 is now configured").arg(qApp->applicationName() + " v"+qApp->applicationVersion()));
-    setSubTitle(tr("Please read the user's manual. "
-                   "If you have any question, you can ask them to "
-                   "the mailing list."));
+    setSubTitle(tr("Please read the online user guide."));
     if (lblDb)
         lblDb->setText(tr("You can clean and recreate all your databases. Select the option above. If you select the clean option, all databases will be erased with <b>definitive data loss</b>."));
     int current = 0;
@@ -941,11 +970,8 @@ void EndConfigPage::retranslate()
     comboVirtual->clear();
     comboVirtual->addItems(QStringList() << tr("Don't create virtual data") << tr("Create virtual data"));
     comboVirtual->setCurrentIndex(current);
-    lbl1->setText(tr("French/english mailing list"));
-    lbl1_1->setText("<a href=\"mailto:freemedforms@googlegroups.com\">"
-                                "freemedforms@googlegroups.com</a>");
-    lbl2->setText(tr("Application main web site"));
-    lbl2_1->setText(QString("<a href=\"%1\">%1</a>").arg(settings()->path(Core::ISettings::WebSiteUrl)));
+    label_message->setText(tr("Help, support and information:"));
+    label_url->setText(QString("<a href=\"%1\">%1</a>").arg(settings()->path(Core::ISettings::WebSiteUrl)));
 }
 
 void EndConfigPage::changeEvent(QEvent *e)

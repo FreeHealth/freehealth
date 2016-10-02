@@ -32,8 +32,8 @@ Veuillez vérifier vos répartitions journalières et vos relations avec le repa
     <message>
         <source>Your dosage database needs to be updated from version 0.5.4 to version 1.
 This will be automatically done.</source>
-        <translation type="unfinished">Votre base de données de protocoles nécessite une mise à jour depuis la version 0.2.0 vers la version 0.4.0.
-Ceci va êetre réalisé automatiquement. {0.5.4 ?} {1.?}</translation>
+        <translation>Votre base de données de protocoles nécessite une mise à jour depuis la version 0.5.4 vers la version 1.
+Cette mise à jour va être réalisée automatiquement.</translation>
     </message>
 </context>
 <context>
@@ -213,72 +213,72 @@ Voulez-vous les sauvegarder aussi ?</translation>
         <translation>Le schema de durée doit être défini.</translation>
     </message>
     <message>
-        <source>complet tab.</source>
-        <translation type="unfinished"></translation>
+        <source>full tab.</source>
+        <translation>comprimé entier</translation>
     </message>
     <message>
         <source>half tab.</source>
-        <translation type="unfinished"></translation>
+        <translation>demi comprimé</translation>
     </message>
     <message>
-        <source>quater tab.</source>
-        <translation type="unfinished"></translation>
+        <source>quarter tab.</source>
+        <translation>quart de comprimé</translation>
     </message>
     <message>
-        <source>dose per kilograms</source>
-        <translation type="unfinished"></translation>
+        <source>dose per kilogram</source>
+        <translation>dose par kilogramme</translation>
     </message>
     <message>
-        <source>reference spoon</source>
-        <translation type="unfinished"></translation>
+        <source>measuring spoon</source>
+        <translation>cuillère mesure</translation>
     </message>
     <message>
         <source>2.5 ml spoon</source>
-        <translation type="unfinished"></translation>
+        <translation>cuillère 2,5 mL</translation>
     </message>
     <message>
         <source>5 ml spoon</source>
-        <translation type="unfinished"></translation>
+        <translation>cuillère 5 mL</translation>
     </message>
     <message>
         <source>puffs</source>
-        <translation type="unfinished"></translation>
+        <translation>bouffée</translation>
     </message>
     <message>
         <source>dose</source>
-        <translation type="unfinished"></translation>
+        <translation>dose</translation>
     </message>
     <message>
         <source>mouthwash</source>
-        <translation type="unfinished"></translation>
+        <translation>bain de bouche</translation>
     </message>
     <message>
         <source>inhalation</source>
-        <translation type="unfinished"></translation>
+        <translation>inhalation</translation>
     </message>
     <message>
-        <source>application</source>
-        <translation type="unfinished"></translation>
+        <source>apply</source>
+        <translation>application</translation>
     </message>
     <message>
-        <source>washing</source>
-        <translation type="unfinished"></translation>
+        <source>enema</source>
+        <translation>lavement</translation>
     </message>
     <message>
-        <source>shampooing</source>
-        <translation type="unfinished"></translation>
+        <source>shampoo</source>
+        <translation>shampooing</translation>
     </message>
     <message>
         <source>eyewash</source>
-        <translation type="unfinished"></translation>
+        <translation>lavage oculaire</translation>
     </message>
     <message>
         <source>instillation</source>
-        <translation type="unfinished"></translation>
+        <translation>instillation</translation>
     </message>
     <message>
         <source>pulverization</source>
-        <translation type="unfinished"></translation>
+        <translation>pulvérisation</translation>
     </message>
     <message>
         <source>Model Error: unable to insert a row</source>

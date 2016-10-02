@@ -4,13 +4,13 @@
 <context>
     <name>BaseFormData</name>
     <message>
-        <location filename="../../plugins/basewidgetsplugin/baseformwidgets.cpp" line="544"/>
+        <location filename="../../plugins/basewidgetsplugin/baseformwidgets.cpp" line="559"/>
         <source>This episode is validated.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/basewidgetsplugin/baseformwidgets.cpp" line="545"/>
-        <source>You can not edit its content, neither remove it.</source>
+        <location filename="../../plugins/basewidgetsplugin/baseformwidgets.cpp" line="560"/>
+        <source>You cannot edit its content, you cannot remove it.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -25,15 +25,30 @@
 <context>
     <name>BaseWidgets::Internal::BaseCombo</name>
     <message>
-        <location filename="../../plugins/basewidgetsplugin/baselistwidgets.cpp" line="599"/>
+        <location filename="../../plugins/basewidgetsplugin/baselistwidgets.cpp" line="583"/>
         <source>Wrong form&apos;s translations</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/basewidgetsplugin/baselistwidgets.cpp" line="600"/>
+        <location filename="../../plugins/basewidgetsplugin/baselistwidgets.cpp" line="584"/>
         <source>You asked to change the language of the form to %1.
 But this an error while reading translation of %2.
 Number of items of the translation (%3) are wrong.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>BaseWidgets::Internal::BaseComboData</name>
+    <message>
+        <location filename="../../plugins/basewidgetsplugin/baselistwidgets.cpp" line="784"/>
+        <source>Possibles - Uuids mismatch</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/basewidgetsplugin/baselistwidgets.cpp" line="785"/>
+        <source>There are %1 different possibles values.
+There are %2 different uuids values.
+Please correct your form and try again.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -76,12 +91,12 @@ Number of items of the translation (%3) are wrong.</source>
 <context>
     <name>BaseWidgets::Internal::BaseList</name>
     <message>
-        <location filename="../../plugins/basewidgetsplugin/baselistwidgets.cpp" line="173"/>
+        <location filename="../../plugins/basewidgetsplugin/baselistwidgets.cpp" line="198"/>
         <source>Wrong form&apos;s translations</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/basewidgetsplugin/baselistwidgets.cpp" line="174"/>
+        <location filename="../../plugins/basewidgetsplugin/baselistwidgets.cpp" line="199"/>
         <source>You asked to change the language of the form to %1.
 But this an error while reading translation of %2.
 Number of items of the translation (%3) are wrong.</source>
@@ -91,12 +106,12 @@ Number of items of the translation (%3) are wrong.</source>
 <context>
     <name>BaseWidgets::Internal::BaseRadio</name>
     <message>
-        <location filename="../../plugins/basewidgetsplugin/baseformwidgets.cpp" line="1301"/>
+        <location filename="../../plugins/basewidgetsplugin/baseformwidgets.cpp" line="1321"/>
         <source>Wrong form&apos;s translations</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/basewidgetsplugin/baseformwidgets.cpp" line="1302"/>
+        <location filename="../../plugins/basewidgetsplugin/baseformwidgets.cpp" line="1322"/>
         <source>You asked to change the language of the form to %1.
 But this an error while reading translation of %2.
 Number of items of the translation (%3) are wrong.</source>

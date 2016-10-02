@@ -131,7 +131,7 @@ void PrescriptionViewer::createActionsAndToolbar()
     m_ToolBar->setIconSize(QSize(iconSize, iconSize));
     QStringList actionsToAdd;
 
-#ifdef FREEMEDFORMS
+#ifdef FREEHEALTH
     actionsToAdd
             << Constants::A_TOGGLE_DRUGSELECTOR
             << Core::Constants::A_FILE_OPEN

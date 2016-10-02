@@ -253,8 +253,8 @@ bool PatientCore::setCurrentPatientUuid(const QString &uuid)
 }
 
 /**
- * Force refreshing of all registered PatientModel. This can be CPU consuming has
- * all the PatientModel will re-select the SQL database.
+ * Force refreshing of all registered PatientModel. This can be CPU intensive
+ * because all the PatientModel will re-select the SQL database.
  * \sa registerPatientModel()
  */
 void PatientCore::refreshAllPatientModel() const
@@ -274,7 +274,9 @@ void PatientCore::refreshAllPatientModel() const
  * This member does only remove a patient and does not interact with the user. \n
  * All registered patient model will be refreshed. \n
  * If the removed patient is the current one, the view will switch to the
- * patient selector mode and the current patient will be unvalidated.
+ * patient selector mode and the current patient will be unvalidated:
+ * IDENT_ISACTIVE is set to 0 in table PATIENT_IDENTITY, patient data is NOT
+ * deleted.
  */
 bool PatientCore::removePatient(const QString &uuid)
 {

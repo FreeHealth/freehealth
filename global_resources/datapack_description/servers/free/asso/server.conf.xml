@@ -21,10 +21,10 @@
 
     <!-- Translatable values -->
     <license>GPLv3</license>
-    <label lang="fr">Serveur libre de l'association asso.freemedforms.com pour le projet FreeMedForms</label>
-    <label lang="xx">Free server of the french association asso.freemedforms.com for the FreeMedForms project</label>
-    <description lang="fr">Données libres pour FreeMedForms</description>
-    <description lang="xx">Free data for FreeMedForms</description>
+    <label lang="fr">Serveur de la communauté FreeHealth</label>
+    <label lang="xx">FreeHealth community server</label>
+    <description lang="fr">Données libres pour FreeHealth</description>
+    <description lang="xx">Free data for FreeHealth</description>
     <updateinfo>
       <updateversion from="0.7.0">
         <text lang="fr">Première mise à disposition.</text>

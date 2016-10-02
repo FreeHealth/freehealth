@@ -43,7 +43,7 @@ namespace Internal {
 class CategoryPlugin : public ExtensionSystem::IPlugin
 {
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID "org.freemedforms.FreeMedForms.CategoryPlugin" FILE "Category.json")
+    Q_PLUGIN_METADATA(IID "io.freehealth.ehr.CategoryPlugin" FILE "Category.json")
 
 public:
     CategoryPlugin();

@@ -1,5 +1,5 @@
 /*!
-\page coderules FreeMedForms Coding Rules
+\page coderules Coding Rules
 
 \section coderule_intro Introduction
 
@@ -7,14 +7,14 @@ When several people are working on the same software, it is extremely important 
 common coding style for inter-readability and exchange.
 Therefore we are publishing this "code rules" / "rules of conduct".
 
-Before making any changes in the code or the FreeMedForms libs, it is essential
-to discuss the intents on the mailing list (freemedforms@googlegroups.com). Any change made without
+Before making any changes in the code or the libs, it is essential
+to discuss the intents on the mailing list (dev@freehealth.io). Any change made without
 consultation can induce unwanted and unexpected behavior on plugins or applications derived from
-the base FreeMedForms.
+the base EHR.
 
 \section headers Source headers
 
-Each .h and .cpp file \e must contain the FreeMedForms header.
+Each .h and .cpp file \e must contain the FreeHealth header.
 
 If you are writing some code that is inspired by some other (free and open
 source) software, you must include the following paragraph in the header file
@@ -27,7 +27,7 @@ source) software, you must include the following paragraph in the header file
  *   NAME_OF_ORIGINAL_AUTHOR, MAIL_ADRESS_OF_THE_ORIGINAL_AUTHOR           *
  *   LICENSE_OF_THE_ORIGINAL_SOFTWARE                                      *
  *                                                                         *
- *   Adaptation to FreeMedForms by:                                       *
+ *   Adaptation to FreeHealth by:                                       *
  *       YOUR_NAME <MAIL@ADRESS>                                           *
  ***************************************************************************\/
 \endverbatim
@@ -45,7 +45,7 @@ To record your participation, you can add this comment:
 
 \section indentation Code Indentation
 
-Commits and pull requests must follow thos indentation rules:
+Commits and pull requests must follow those indentation rules:
 - One instruction per line
 \code
 //BAD:
@@ -106,12 +106,12 @@ Read the code that is already there and try to submit your code in the same way.
 
 \section export Exporter/Importer for win32
 
-When you add a new class to FreeMedForms or one of its toolkits, make sure you export your class properly.
+When you add a new class to the EHR or one of its toolkits, make sure you export your class properly.
     - Include a file for import/export, which is properly called xxxxxxx_exporter.h
-        - pluginname_exporter.h for FreeMedForms
+        - pluginname_exporter.h for EHR (FreeMedForms)
         - libraryname_exporter.h for libraries
     - Then use the macro XXXX_EXPORT to import/export
-        - \e CORE_EXPORT for objects within FreeMedForms
+        - \e CORE_EXPORT for objects within the EHR (FreeMedForms)
         - e.g. \e UTILS_EXPORT for libraries and plugins (here e.g. of the \e Utils library)
 
 \Hint: With QtCreator, you can automatically create these files with provided
@@ -165,7 +165,7 @@ private:
 \section objects Object Structure
 
 - Public interfaces must be simple and clear.
-- When a member is sufficiently general to apply to several subprojects of FreeMedForms,
+- When a member is sufficiently general to apply to several subprojects of the EHR,
 it should be introduced in the global library 'Utils' (\e utils/global.h).
 - When a whole object is general enough to be reused by other subprojects
 it should be added to a library or a plugin (Editor for example).
@@ -182,7 +182,7 @@ We use Doxygen. Documentation: <a href="http://doxygen.org">doxygen.org</a>.
 To facilitate bug fixing please add the following framework documentation block in the header file of your
 code (\e version is the release version of the object).
 
-\e Hint: If you use QtCreator and create classes using the template wizards provided by FreeMedForms
+\e Hint: If you use Creator and create classes using the template wizards provided by FreeHealth
 this will be done automatically.
 
 \verbatim
@@ -230,7 +230,7 @@ database value - this is obvious by the name.
 
 - For reading convenience, use the following order for inclusion of headers:
     -# Plugins (grouped into blocks by plugins)
-    -# FreeMedForms libraries (grouped into blocks by libraries)
+    -# FreeHealth libraries (grouped into blocks by libraries)
     -# Qt headers
 
 \code
@@ -298,7 +298,7 @@ will be unavoidable.
 
 Two functions are used to identify the application compilation mode: \e isDebugCompilation() and
 \e isFullApplication(). These functions use macros defined in \e config.pri which is used by all
- FreeMedForms projects.
+ FreeHealth projects.
 
 \section optimizations Optimizations
 

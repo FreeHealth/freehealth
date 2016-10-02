@@ -32,7 +32,7 @@ namespace Trans {
 namespace Constants {
 
 // Widely used words
-const char* const THE_FREEMEDFORMS_COMMUNITY         = QT_TRANSLATE_NOOP("tkConstants", "The FreeMedForms community");
+const char* const THE_FREEMEDFORMS_COMMUNITY         = QT_TRANSLATE_NOOP("tkConstants", "FreeHealth community");
 const char* const CONTACT_DEV_TEAM                   = QT_TRANSLATE_NOOP("tkConstants", "Please contact the development team.");
 const char* const TYPE                               = QT_TRANSLATE_NOOP("tkConstants", "Type");
 const char* const STATUS                             = QT_TRANSLATE_NOOP("tkConstants", "Status");
@@ -166,13 +166,14 @@ const char* const NO_ITEM                           = QT_TRANSLATE_NOOP("tkConst
 // About page
 const char* const APPLICATION_ABOUT_YEAR_1_WEB_2 =
         QT_TRANSLATE_NOOP("tkConstants",
-                          "<p align=center><b>Welcome to FreeMedForms project</b><br />"
-                          "(C) 2008-%1 by Eric MAEKER, MD (France)</p>"
-                          "<p align=left>"
-                          "This software is released without any warranty and only "
-                          "for testing purposal.<br/>"
+                          "<h2>Welcome to FreeHealth</h2>"
+                          "<h3>© %1 Jerome Pinguet</h3>"
+                          "<h3>(C) 2008-2015 by Dr Eric Maeker (France)</h3>"
+                          "<p>This software is released without any warranty, "
+                          "for testing purposes only.<br/>"
                           "Please refer to our <a href=\"%2\">web site</a> for more "
                           "information.<br />"
+                          "FreeHealth is based on FreeMedForms created by Eric Maeker."
                           "</p>");
 
 } // namespace Constants

@@ -132,7 +132,7 @@ void DataPackPluginIPlugin::extensionsInitialized()
 
     // Send the server manager configuration from the settings of the user/application
     QString xmlConfig;
-#ifdef FREEMEDFORMS
+#ifdef FREEHEALTH
     if (user())
         xmlConfig = user()->value(Core::IUser::DataPackConfig).toString();
 #endif
@@ -174,7 +174,7 @@ void DataPackPluginIPlugin::extensionsInitialized()
         if (!core.serverManager()->setGlobalConfiguration(xmlConfig))
             LOG_ERROR("Unable to set the datapack server manager configuration");
         // Always unsure that the freemedforms datapack server is available
-        DataPack::Server http("http://packs.freemedforms.com");
+        DataPack::Server http("https://freehealth.io/packs");
         http.setUrlStyle(DataPack::Server::HttpPseudoSecuredAndZipped);
         // FIXME: missing server version to avoid duplicates
         core.serverManager()->addServer(http);
@@ -219,7 +219,7 @@ void DataPackPluginIPlugin::coreAboutToClose()
     // Core is about to close
     // Core::user() is still available
     DataPack::DataPackCore &core = DataPack::DataPackCore::instance(this);
-#ifdef FREEMEDFORMS
+#ifdef FREEHEALTH
     if (user())
         user()->setValue(Core::IUser::DataPackConfig, core.serverManager()->xmlConfiguration());
 #endif
@@ -269,7 +269,7 @@ ExtensionSystem::IPlugin::ShutdownFlag DataPackPluginIPlugin::aboutToShutdown()
     // Core is about to close
     // Core::user() is still available
     DataPack::DataPackCore &core = DataPack::DataPackCore::instance(this);
-#ifdef FREEMEDFORMS
+#ifdef FREEHEALTH
     if (user()) {
         user()->setValue(Core::IUser::DataPackConfig, core.serverManager()->xmlConfiguration());
         user()->saveChanges();

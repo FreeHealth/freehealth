@@ -20,11 +20,11 @@
     <name>PadTools::Internal::TokenEditor</name>
     <message>
         <source>Dialog</source>
-        <translation type="unfinished"></translation>
+        <translation>Dialogue</translation>
     </message>
     <message>
         <source>Token editor</source>
-        <translation type="unfinished">Éditeur d&apos;étiquette</translation>
+        <translation>Éditeur d&apos;étiquette</translation>
     </message>
 </context>
 <context>

@@ -1,56 +1,61 @@
-# The FreeMeForms Project
-# Copyright (C) 2008-2016 by Eric MAEKER
-# [https://freemedforms.com]
+# FreeHealth EHR [1]
+# https://freehealth.io 
 
+## FreeHealh EHR is a fork of FreeMedForms [2]
 
-### What is the FreeMedForms project?
+### What is FreeHealth EHR?
 
-FreeMedForms project is a fully open source medical project. It includes:
-- an Electronic Medical Record Manager: FreeMedForms EMR
-- a pharmaceutical drug prescription assistant: FreeDiams
-- a drug and drug-interaction database manager: FreeDDIManager
-- an ICD10 coding assistant: FreeICD
-- a french specific coding assistant: FreeDRC (in partnership with the SMFG)
+A free and open source electronic health record
 
-FreeMedForms and Derivatives are coded in C++/Qt4.8/Qt5.
+[Download FreeHealth EHR]
 
-FreeMedForms officially supported OS:
-- Mac OS: 10.9 Mavericks (64 bit), 10.10 Yosemite, 10.11 El Capitan
+### Who can benefit from FreeHealth EHR?
+- healthcare centers
+- hospitals
+- clinics
+- medical doctors
+- nurses
+- physiotherapists
+- allied health professionals
+
+FreeHealth EHR is coded in C++ / Qt5.
+
+Supported OS:
 - GNU/Linux: Debian, Ubuntu
+- Mac OS: 10.9 Mavericks (64 bit), 10.10 Yosemite, 10.11 El Capitan
 - Windows: Windows 7 (32 bit & 64 bit), Windows 8, Windows 10
 
-### Where can I find informations about FreeMedForms?
+### Where can I find information about FreeHealth?
 
-- Main [website]
-- Sources and issues are located on
-- [GitHub]
-- [Build instructions] and [Code documentation]
+- [website]
+- Sources and issues are located on [GitHub]
+- [Build instructions]
+- [Code documentation]
 - [Source code analysis]
 
-### How to contribute to FreeMedForms?
+### I want to contribute to FreeHealth!
 
-All contributors are welcome, find all information
-- [En] [Contribute]
-- [Fr] [Participez]
+- [Contribute]
 
-Feel free to ask any question 
-- Mailing list (English or French): freemedforms@googlegroups.com
+### Contact
+- [Contact form]
 - [Forum]
 
 
 ### Can I make a donation?
     
 Yes! Go to our [Donation page].
-Your money will go to the [french non-profit organization]
-Donating will speed up the development process
+Your money will speed up the development process
 
-[website]: https://freemedforms.com/
-[GitHub]: https://github.com/FreeMedForms/freemedforms
-[Build instructions]: https://freemedforms.com/en/code_doc
-[Code documentation]: https://freemedforms.com/fr/developers
-[Source code analysis]: https://www.openhub.net/p/freemedforms/
-[Participez]: https://freemedforms.com/fr/contribute
-[Contribute]: https://freemedforms.com/en/contribute
-[Forum]: https://freemedforms.com/forum
-[Donation page]: https://freemedforms.com/en/donation
-[french non-profit organization]: asso.freemedforms.com](https://freemedforms.com/en/asso/start
+[1]: copyright © 2016 Jerome Pinguet
+[2]: Copyright (C) 2008-2015 by Eric MAEKER https://freemedforms.com
+[Download FreeHealth EHR]: https://freehealth.io/en/downloads
+[website]: https://freehealth.io/
+[GitHub]: https://github.com/FreeHealth/freehealth
+[Build instructions]: https://freehealth.io/en/code_doc
+[Code documentation]: https://freehealth.io/en/developers
+[Source code analysis]: https://www.openhub.net/p/freehealth/
+[Contribute]: https://freehealth.io/en/contribute
+[Forum]: https://freehealth.io/forum
+[Donation page]: https://freehealth.io/en/donate
+[Contact form]: https://freehealth.io/en/contact

@@ -11,7 +11,7 @@
   <lmdate>2011-12-21</lmdate>
   <icon></icon>
   <weblink></weblink>
-  <bibliography pmid=""></bibliography>
+  <bibliography></bibliography>
 
   <!-- Translatable values -->
   <license>GPLv3</license>
@@ -24,20 +24,9 @@
 
   </formdescription>
 
-<MedForm>
-  <name>baseWidgetsFormSample</name>
-  <label>BaseWidgets examples</label>
-  <type>form</type>
-  <creationdate>27-08-2009</creationdate>
-  <categorie>samples</categorie>
-
+<MedForm name="baseWidgetsFormSample">
+  <label lang="xx">BaseWidgets examples</label>
   <label lang="fr">Exemple de BaseWidgets</label>
-  <categorie lang="fr">samples</categorie>
-  <authors lang="fr">Dr Eric Maeker</authors>
-  <description lang="fr">Petite description ici</description>
-  <bibliography lang="fr">Bibliographie ici</bibliography>
-  <license lang="fr">Termes de la license</license>
-
   <column>1</column>
   <option>compact</option>
 
@@ -77,7 +66,7 @@
 
   <Item>
     <name>sampleRadio</name>
-    <label>There are the radio buttons</label>
+    <label>radio buttons</label>
     <type>radio</type>
     <value>
       <uuid id="0">first</uuid>
@@ -123,7 +112,7 @@
      <option>compact</option>
      <column>1</column>
      <Item>
-       <name>listsample</name>
+       <name>uniquelistsample</name>
        <type>uniquelist</type>
        <label>Unique selection list</label>
         <value>
@@ -134,6 +123,21 @@
           <uuid id="1">second</uuid>
           <uuid id="2">third</uuid>
         </value>
+     </Item>
+
+     <Item>
+       <name>uniquelistsampledontprintlabel</name>
+       <type>uniquelist</type>
+       <label>Unique selection list with dontprintlabel option</label>
+        <value>
+          <possible id="0">First Element (DontPrintLabel)</possible>
+          <possible id="1">Second Element (DontPrintLabel)</possible>
+          <possible id="2">Third Element (DontPrintLabel)</possible>
+          <uuid id="0">first</uuid>
+          <uuid id="1">second</uuid>
+          <uuid id="2">third</uuid>
+        </value>
+        <option>DontPrintLabel</option>
      </Item>
 
      <Item>

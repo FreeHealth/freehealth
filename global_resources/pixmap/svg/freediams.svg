@@ -14,7 +14,7 @@
    height="48"
    id="svg2458"
    sodipodi:version="0.32"
-   inkscape:version="0.48.2 r9819"
+   inkscape:version="0.48.5 r10040"
    version="1.0"
    sodipodi:docname="freediams.svg"
    inkscape:output_extension="org.inkscape.output.svg.inkscape"
@@ -220,16 +220,16 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="8.6547416"
-     inkscape:cx="-6.6395042"
+     inkscape:cx="-6.408417"
      inkscape:cy="21.133584"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
-     inkscape:window-width="1280"
-     inkscape:window-height="752"
+     inkscape:window-width="1920"
+     inkscape:window-height="1014"
      inkscape:window-x="0"
-     inkscape:window-y="0"
-     inkscape:window-maximized="0" />
+     inkscape:window-y="27"
+     inkscape:window-maximized="1" />
   <metadata
      id="metadata2463">
     <rdf:RDF>
@@ -238,7 +238,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
         <cc:license
            rdf:resource="http://creativecommons.org/licenses/publicdomain/" />
       </cc:Work>
@@ -343,32 +343,6 @@
     </g>
     <text
        xml:space="preserve"
-       style="font-size:48px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Georgia;-inkscape-font-specification:Georgia;opacity:0.41884817"
-       x="-3.5514758"
-       y="30.676418"
-       id="text3487"
-       sodipodi:linespacing="100%"
-       transform="matrix(0.7167847,-0.6972946,0.6972946,0.7167847,0,0)"><tspan
-         sodipodi:role="line"
-         id="tspan3489"
-         x="-3.5514758"
-         y="30.676418"
-         style="font-size:6px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Georgia;-inkscape-font-specification:Georgia">FreeDiams</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-size:37.4622345px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;opacity:0.41884819;fill:#000000;fill-opacity:1;stroke:none;font-family:Georgia;-inkscape-font-specification:Georgia"
-       x="-47.421555"
-       y="-10.799168"
-       id="text3491"
-       sodipodi:linespacing="100%"
-       transform="matrix(-0.66323755,-0.74811134,0.75085604,-0.66081313,0,0)"><tspan
-         sodipodi:role="line"
-         id="tspan3493"
-         x="-47.421555"
-         y="-10.799168"
-         style="font-size:4.68277931px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Georgia;-inkscape-font-specification:Georgia">Interactions</tspan></text>
-    <text
-       xml:space="preserve"
        style="font-size:48px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Georgia;-inkscape-font-specification:Georgia"
        x="72.321426"
        y="33.357143"
@@ -376,18 +350,5 @@
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan3497" /></text>
-    <text
-       xml:space="preserve"
-       style="font-size:35.22721481px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;opacity:0.41884819;fill:#000000;fill-opacity:1;stroke:none;font-family:Georgia;-inkscape-font-specification:Georgia"
-       x="1.6125933"
-       y="-43.463425"
-       id="text3499"
-       sodipodi:linespacing="100%"
-       transform="matrix(-0.29663406,0.94851446,-0.96289795,-0.29220303,0,0)"><tspan
-         sodipodi:role="line"
-         id="tspan3501"
-         x="1.6125933"
-         y="-43.463425"
-         style="font-size:4.40340185px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Georgia;-inkscape-font-specification:Georgia">FreeMedForms</tspan></text>
   </g>
 </svg>

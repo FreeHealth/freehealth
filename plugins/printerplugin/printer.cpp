@@ -52,17 +52,10 @@
 #include <QPointer>
 #include <QFileInfo>
 
-#if QT_VERSION < 0x050000
-#include <QPrinterInfo>
-#include <QPrinter>
-#include <QPrintDialog>
-#include <QPrintPreviewDialog>
-#else
 #include <QtPrintSupport/QPrinterInfo>
 #include <QtPrintSupport/QPrinter>
 #include <QtPrintSupport/QPrintDialog>
 #include <QtPrintSupport/QPrintPreviewDialog>
-#endif
 
 // For test
 #include <QTextBrowser>

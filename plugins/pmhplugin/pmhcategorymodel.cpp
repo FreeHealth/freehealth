@@ -21,7 +21,7 @@
 /***************************************************************************
  *  Main developer: Eric MAEKER, <eric.maeker@gmail.com>                   *
  *  Contributors:                                                          *
- *       NAME <MAIL@ADDRESS.COM>                                           *
+ *       Jerome Pinguet <jerome@jerome.cc>                                 *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 
@@ -66,6 +66,7 @@
 #include <QDomDocument>
 
 #include <QDebug>
+
 
 using namespace PMH;
 using namespace Internal;
@@ -121,6 +122,7 @@ namespace {
         void setParent(TreeItem *parent) { m_Parent = parent; }
         bool addChildren(TreeItem *child)
         {
+            //qDebug() << Q_FUNC_INFO;
             if (!m_Children.contains(child))
                 m_Children.append(child);
             return true;
@@ -134,8 +136,14 @@ namespace {
         }
         int childNumber() const
         {
-            if (m_Parent)
+            //qDebug() << Q_FUNC_INFO;
+            if (m_Parent!=nullptr) {
+                //qDebug() << m_Parent;
+                //qDebug() << m_Children;
+                //qDebug() << const_cast<TreeItem*>(this);
+                //qDebug() << m_Parent->m_Children.indexOf(const_cast<TreeItem*>(this));
                 return m_Parent->m_Children.indexOf(const_cast<TreeItem*>(this));
+            }
             return 0;
         }
         bool removeChild(TreeItem *child)
@@ -177,6 +185,7 @@ namespace {
         {
             m_Form = form;
             m_FormEpisodeModel = model;
+            m_FormEpisodeModel->setReadOnly(false); // allow submit (issue fhio-12)
         }
         Form::FormMain *form() const {return m_Form;}
         Form::EpisodeModel *formEpisodeModel() const {return m_FormEpisodeModel;}
@@ -188,7 +197,7 @@ namespace {
             QString sp;
             if (indent)
                 sp.fill(' ', indent);
-            qWarning() << sp + label();
+            //qDebug() << sp + label();
             for(int i = 0; i < m_Children.count(); ++i) {
                 m_Children.at(i)->warn(indent+2);
             }
@@ -216,7 +225,7 @@ public:
     PmhCategoryModelPrivate(PmhCategoryModel */*parent*/) :
         _rootItem(0),
         _overview(0) // ,q(parent)
-    {
+    {     
         clearTree();
     }
 
@@ -297,69 +306,37 @@ public:
         }
     }
 
+    /**
+     * \brief Create treeItem items to display pmh data information in the tree
+     * view
+     * \param pmh
+     * \param item
+     * \param childNumber
+     */
     void pmhToItem(PmhData *pmh, TreeItem *item, int childNumber = -1)
     {
-        // Master Item (shows user label)
+        // Master Item (show user label)
         item->setPmhData(pmh);
         item->setLabel(pmh->data(PmhData::Label).toString());
         _pmhToItems.insert(pmh, item);
 
-        // Add type and status as children of the Master Item
-        TreeItem *child = new TreeItem(item);
-        child->setLabel(Constants::typeToString(pmh->data(PmhData::Type).toInt()));
-        child->setPmhData(pmh);
-        child = new TreeItem(item);
-        child->setLabel(Constants::statusToString(pmh->data(PmhData::State).toInt()));
-        child->setPmhData(pmh);
+        // Add type as child of Master Item
+        pmhToItemType(pmh, item);
 
-        // Add episodes
-        if (pmh->episodeModel()->rowCount() == 1) {
-            // One episodeData PMHx
-            PmhEpisodeData *episode = pmh->episodes().at(0);
-            QString label = episode->data(PmhEpisodeData::Label).toString();
-            child = new TreeItem(item);
-            child->setPmhData(pmh);
-            if (!episode->data(PmhEpisodeData::DateEnd).isNull()) {
-                label += QString(" (%1 %2 %3)")
-                        .arg(episode->data(PmhEpisodeData::DateStart).toDate().toString(QLocale().dateFormat(QLocale::ShortFormat)))
-                        .arg(tkTr(Trans::Constants::TO))
-                        .arg(episode->data(PmhEpisodeData::DateEnd).toDate().toString(QLocale().dateFormat(QLocale::ShortFormat)));
-            } else {
-                label += QString(" (%1)")
-                        .arg(episode->data(PmhEpisodeData::DateStart).toDate().toString(QLocale().dateFormat(QLocale::ShortFormat)));
+        // Add status as child of the Master Item
+        pmhToItemStatus(pmh, item);
+
+        foreach(PmhEpisodeData *episode, pmh->episodes()) {
+            // If at least one date exists, create a new item to show it
+            if (!episode->data(PmhEpisodeData::DateStart).isNull()
+                    || !episode->data(PmhEpisodeData::DateEnd).isNull()) {
+                pmhToItemDate(pmh, item, episode);
             }
-            child->setLabel(label);
-
             // Add ICD codings
             foreach(const QString &icd, episode->data(PmhEpisodeData::IcdLabelStringList).toStringList()) {
-                child = new TreeItem(child);
+                TreeItem *child = new TreeItem(item);
                 child->setLabel(icd);
                 child->setPmhData(pmh);
-                child->setIcon(theme()->icon(Core::Constants::ICONFREEICD));
-            }
-
-        } else {
-            // Multiple episodeData PMHx
-            foreach(PmhEpisodeData *episode, pmh->episodes()) {
-                child = new TreeItem(item);
-                child->setLabel(episode->data(PmhEpisodeData::Label).toString());
-                child->setPmhData(pmh);
-                QString label;
-                QString dateEnd = tkTr(Trans::Constants::NOW);
-                if (!episode->data(PmhEpisodeData::DateEnd).isNull())
-                    dateEnd = episode->data(PmhEpisodeData::DateEnd).toDate().toString(QLocale().dateFormat());
-                label = QString("%1 to %2")
-                        .arg(episode->data(PmhEpisodeData::DateStart).toDate().toString(QLocale().dateFormat()))
-                        .arg(dateEnd);
-                child = new TreeItem(child);
-                child->setLabel(label);
-                child->setPmhData(pmh);
-                // Add ICD codings
-                foreach(const QString &icd, episode->data(PmhEpisodeData::IcdLabelStringList).toStringList()) {
-                    child = new TreeItem(child);
-                    child->setLabel(icd);
-                    child->setPmhData(pmh);
-                }
             }
         }
 
@@ -385,6 +362,60 @@ public:
         } else {
             _rootItem->insertChild(childNumber,item);
         }
+    }
+
+    /**
+     * \brief pmhToItemType: create a child TreeItem for a pmh TreeItem item
+     * representing pmhdata "type" (Chronic disease, ...) in treeView
+     * \param pmh
+     * \param item
+     * If pmh type is not defined, do not create any item.
+     */
+    void pmhToItemType(PmhData *pmh, TreeItem *item)
+    {
+        if (pmh->data(PmhData::Type).toInt()
+                != PMH::Constants::MHType::NoTypeDefined) {
+            TreeItem *child = new TreeItem(item);
+            child->setLabel(Constants::typeToString(pmh->data(PmhData::Type).toInt()));
+            child->setPmhData(pmh);
+        }
+    }
+
+    /**
+     * \brief pmhToItemStatus: create a child TreeItem for a pmh TreeItem item
+     * representing pmhdata "status" (Active, In remission...) in treeView
+     * \param pmh
+     * \param item
+     * If pmh status is not defined, do not create any item.
+     */
+    void pmhToItemStatus(PmhData *pmh, TreeItem *item)
+    {
+        if (pmh->data(PmhData::State).toInt()
+                != PMH::Constants::MHStatus::NoStatusDefined) {
+            TreeItem *child = new TreeItem(item);
+            child->setLabel(Constants::statusToString(pmh->data(PmhData::State).toInt()));
+            child->setPmhData(pmh);
+        }
+    }
+
+    /**
+     * \brief pmhToItemDate add a child item to a PMH item showing start and end
+     * dates
+     * \param pmh
+     * \param item
+     * Rightwards (or leftwards for right to left languages) arrow is added.
+     */
+    void pmhToItemDate(PmhData *pmh, TreeItem *item, PmhEpisodeData *episode)
+    {
+        QString label;
+        TreeItem *child = new TreeItem(item);
+        child->setPmhData(pmh);
+        label = QString("%1%2%3%4")
+                .arg((pmh->episodes().indexOf(episode)==0) ? QString() : (episode->data(PmhEpisodeData::Label).toString() + ":"))
+                .arg(episode->data(PmhEpisodeData::DateStart).toDate().toString(QLocale().dateFormat(QLocale::ShortFormat)))
+                .arg(((QGuiApplication::isLeftToRight()) ? QString("\u279D") : QString("\u2190")))
+                .arg(episode->data(PmhEpisodeData::DateEnd).toDate().toString(QLocale().dateFormat(QLocale::ShortFormat)));
+        child->setLabel(label);
     }
 
     Category::CategoryItem *findCategory(const int id)
@@ -482,7 +513,7 @@ void PmhCategoryModel::setRootFormUid(const QString &uid)
     d->_rootUid = uid;
 }
 
-/** Define the uid of the root form that contains the categories to use in the model. */
+/** Return the uid of the root form that contains the categories to use in the model. */
 QString PmhCategoryModel::rootFormUid() const
 {
     return d->_rootUid;
@@ -544,6 +575,11 @@ QModelIndex PmhCategoryModel::parent(const QModelIndex &index) const
     return createIndex(parentItem->childNumber(), 0, parentItem);
 }
 
+/**
+ * \brief PmhCategoryModel::pmhCount
+ * \param parent item
+ * \return number parent's items children (PMH item or form item)
+ */
 int PmhCategoryModel::pmhCount(const QModelIndex &parent) const
 {
     if (!parent.isValid())
@@ -635,15 +671,20 @@ QVariant PmhCategoryModel::data(const QModelIndex &index, int role) const
                 PmhData *pmh = it->pmhData();
                 if (!pmh)
                     return QVariant();
-                QString ret = QString("<b>%1</b><br />"
-                                      "%2: %3<br />"
-                                      "%4: %5")
-                        .arg(pmh->data(PmhData::Label).toString())
-                        .arg(tkTr(Trans::Constants::TYPE))
-                        .arg(Constants::typeToString(pmh->data(PmhData::Type).toInt()))
-                        .arg(tkTr(Trans::Constants::STATUS))
-                        .arg(Constants::statusToString(pmh->data(PmhData::State).toInt()))
-                        ;
+                QString ret = QString("<b>%1</b>")
+                        .arg(pmh->data(PmhData::Label).toString());
+                // display type only if PmhData::Type enum > 0 (not undefined)
+                if (pmh->data(PmhData::Type).toInt()) {
+                        ret.append(QString("<br />%1: %2")
+                                   .arg(tkTr(Trans::Constants::TYPE))
+                                   .arg(Constants::typeToString(pmh->data(PmhData::Type).toInt())));
+                }
+                // display status only if PmhData::State enum > 0 (not undefined)
+                if (pmh->data(PmhData::State).toInt()) {
+                        ret.append(QString("<br />%1: %2")
+                                    .arg(tkTr(Trans::Constants::STATUS))
+                                    .arg(Constants::statusToString(pmh->data(PmhData::State ).toInt())));
+                }
                 return ret;
             }
             return QVariant();
@@ -755,32 +796,38 @@ Qt::ItemFlags PmhCategoryModel::flags(const QModelIndex &index) const
 /** Remove PMHx or Categories. */
 bool PmhCategoryModel::removeRows(int row, int count, const QModelIndex &parent)
 {
-//    d->_rootItem->warn();
+    //qDebug() << Q_FUNC_INFO;
+    d->_rootItem->warn();
     int max = row+count;
     TreeItem *parentItem = 0;
-//    qWarning() << "beforeRemoveRows" << row << count << max;
+    //qDebug() << "beforeRemoveRows" << row << count << max;
 
     for(int i = row; i < max; ++i) {
         QModelIndex indexToDelete = index(row, 0, parent);
-//        qWarning() << i << indexToDelete;
+        //qDebug() << i << indexToDelete;
         if (!indexToDelete.isValid())
             continue;
+
+        parentItem = d->getItem(indexToDelete.parent());
+
         TreeItem *item = d->getItem(indexToDelete);
         if (!item)
             continue;
 
-//        qWarning() << "itemIsCat" << item->isPmh() << item->label();
+        //qDebug() << "itemIsCat" << item->isPmh() << item->label();
 
         // Item is a PMH
         if (item->isPmh()) {
+            QModelIndex pmhcategory;
             // Get the root index of the PMH
             while (true) {
                 if (isCategory(indexToDelete.parent()))
                     break;
-                indexToDelete = indexToDelete.parent();
+                pmhcategory = indexToDelete.parent();
             }
-            beginRemoveRows(indexToDelete.parent(), indexToDelete.row(), indexToDelete.row()+1);
+            beginRemoveRows(pmhcategory, indexToDelete.row(), indexToDelete.row());
             item = d->getItem(indexToDelete);
+            //qDebug() << "item: " << item;
             if (!item)
                 continue;
             PmhData *pmh = item->pmhData();
@@ -788,18 +835,21 @@ bool PmhCategoryModel::removeRows(int row, int count, const QModelIndex &parent)
                 if (pmh->data(PmhData::IsValid).toBool()) {
                     pmh->setData(PmhData::IsValid, false);
                     base()->updatePmhData(pmh);
-                    if (d->_pmh.contains(pmh))
-                        d->_pmh.remove(d->_pmh.indexOf(pmh));
+                    //base()->updatePmhData(pmh);
+                    //if (d->_pmh.contains(pmh))
+                        //d->_pmh.remove(d->_pmh.indexOf(pmh));
                 }
             }
-            // remove from treeItems
-            parentItem = d->getItem(indexToDelete.parent());
-            if (!parentItem)
-                continue;
-            parentItem->removeChild(item);
-            delete item;
-            item = 0;
+
             endRemoveRows();
+            // remove from treeItems
+            //if (parentItem && item) {
+            //    parentItem->removeChild(item);
+            //    delete item;
+            //    item = 0;
+            //}
+            refreshFromDatabase();
+
         } else {
             // Item is a category
             // Remove children
@@ -825,7 +875,6 @@ bool PmhCategoryModel::removeRows(int row, int count, const QModelIndex &parent)
             endRemoveRows();
         }
     }
-//    qWarning() << "afterRemoveRows";
 //    d->_rootItem->warn();
     d->_htmlSynthesis.clear();
     return true;
@@ -837,8 +886,15 @@ bool PmhCategoryModel::removeRows(int row, int count, const QModelIndex &parent)
 */
 bool PmhCategoryModel::addPmhData(PmhData *pmh)
 {
+    //qDebug()<< Q_FUNC_INFO;
+    QStringList pmhdata;
+    for (int i = 0; i < 8; i++) {
+        pmhdata << pmh->data(i).toString();
+    }
+    //qDebug() << "pmhdata 1 " << pmh << "values: " << pmhdata;
+
     if (d->_pmh.contains(pmh)) {
-        // Update PMH
+        //qDebug() << "inside addPmhData: Update PMH";
         TreeItem *oldItem = d->_pmhToItems.value(pmh, 0);
         Q_ASSERT(oldItem);
         if (!oldItem)
@@ -850,11 +906,11 @@ bool PmhCategoryModel::addPmhData(PmhData *pmh)
         Category::CategoryItem *cat = d->findCategory(pmh->categoryId());
 
         if (!cat) {
-            qWarning() << "NO CATEGORY";
+            //qDebug() << "NO CATEGORY";
             return false;
         }
         newParentIndex = indexForCategory(cat);
-        pmh->setCategory(cat);
+        //pmh->setCategory(cat);
 
         if (!newParentIndex.isValid()) {
             LOG_ERROR("Unable to update PmhCategoryModel");
@@ -863,32 +919,73 @@ bool PmhCategoryModel::addPmhData(PmhData *pmh)
 
         QModelIndex pmhOldIndex = indexForPmhData(pmh);
 
-//        qWarning() << "ADD PMH DATA" << cat->label() << cat->id() << newParentIndex.data() << pmhOldIndex.data();
+        /*qDebug() << "ADD PMH DATA"
+                   << "cat->label()" << cat->label()
+                   <<  "cat->id()" << cat->id()
+                   << "newParentIndex.data()" << newParentIndex.data()
+                   << "pmhOldIndex.data();" << pmhOldIndex.data();
+
+        qDebug() << "beginInsertRows ("
+                   << newParentIndex
+                   << ", " << rowCount(newParentIndex)
+                   << ", " << rowCount(newParentIndex)
+                   << ")";
+        */
+        TreeItem *item = new TreeItem;
 
         beginInsertRows(newParentIndex, rowCount(newParentIndex), rowCount(newParentIndex));
-        TreeItem *item = new TreeItem;
-        d->pmhToItem(pmh, item, rowCount(newParentIndex));
+
         endInsertRows();
 
+        d->pmhToItem(pmh, item, rowCount(newParentIndex));
+
+        pmhdata.clear();
+        for (int i = 0; i < 8; i++) {
+            pmhdata << pmh->data(i).toString();
+        }
+        //qDebug() << "pmhdata 2 " << pmh << "values: " << pmhdata;
+
         // Remove the row
+        /*qDebug() << "beginRemoveRows ("
+                   << pmhOldIndex.parent()
+                   << ", " << pmhOldIndex.row()
+                   << ", " << pmhOldIndex.row()
+                   << ")";
+        */
         beginRemoveRows(pmhOldIndex.parent(), pmhOldIndex.row(), pmhOldIndex.row());
+        //qDebug() << "parentOldItem: " << parentOldItem;
         parentOldItem->removeChild(oldItem);
         delete oldItem;
         oldItem = 0;
         endRemoveRows();
 
-        // Send to database
-        base()->savePmhData(pmh);
+        pmhdata.clear();
+        for (int i=0; i < 8; i++) {
+            pmhdata << pmh->data(i).toString();
+        }
+        //qDebug() << "pmhdata 3 " << pmh << "values: " <<pmhdata;
+
         d->_htmlSynthesis.clear();
+        QAbstractItemModel *m = dynamic_cast<QAbstractItemModel*>(this);
+        m->dataChanged(QModelIndex(), QModelIndex());
+        // Send to database
+
+        pmhdata.clear();
+        for (int i=0; i < 8; i++) {
+            pmhdata << pmh->data(i).toString();
+        }
+        //qDebug() << "pmhdata 4 " << pmh << "values: " <<pmhdata;
+
+        base()->savePmhData(pmh);
         return true;
     } else {
-        // Add PMH
+        //qDebug() << "Add PMH";
         QModelIndex newParentIndex;
 
         // Insert the row to the right category
         Category::CategoryItem *cat = d->findCategory(pmh->categoryId());
         if (!cat) {
-            qWarning() << "NO CATEGORY";
+            //qDebug() << "NO CATEGORY";
             return false;
         }
         newParentIndex = indexForCategory(cat);
@@ -908,6 +1005,8 @@ bool PmhCategoryModel::addPmhData(PmhData *pmh)
         d->pmhToItem(pmh, item, rowCount(newParentIndex));
         endInsertRows();
         d->_htmlSynthesis.clear();
+        QAbstractItemModel *m = dynamic_cast<QAbstractItemModel*>(this);
+        m->layoutChanged();
     }
     return true;
 }
@@ -927,8 +1026,9 @@ Internal::PmhData *PmhCategoryModel::pmhDataforIndex(const QModelIndex &item) co
 /** Return the QModelIndex corresponding to the \e pmh starting the search from the \e rootStart QModelIndex */
 QModelIndex PmhCategoryModel::indexForPmhData(const Internal::PmhData *pmh, const QModelIndex &rootStart) const
 {
+    //qDebug() << Q_FUNC_INFO;
     // get TreeItem
-    TreeItem *item = d->_pmhToItems.value((Internal::PmhData *)pmh);
+    TreeItem *item = d->_pmhToItems.value((Internal::PmhData *)pmh, 0);
     for(int i = 0; i < rowCount(rootStart); ++i) {
         if (d->getItem(index(i,0,rootStart))==item) {
             return index(i,0,rootStart);

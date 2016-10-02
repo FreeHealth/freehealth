@@ -60,6 +60,7 @@ public:
 
 private Q_SLOTS:
     void itemActivated(const QModelIndex &item);
+    void resizeTableView();
 
 protected:
     void changeEvent(QEvent *e);

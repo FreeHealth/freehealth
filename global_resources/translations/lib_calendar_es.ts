@@ -78,7 +78,7 @@
 <context>
     <name>Calendar::Internal::HourRangeWidget</name>
     <message>
-        <location filename="../../libs/calendar/dayview/hour_range_widget.cpp" line="101"/>
+        <location filename="../../libs/calendar/dayview/hour_range_widget.cpp" line="100"/>
         <source>(untitled)</source>
         <translation type="unfinished"></translation>
     </message>

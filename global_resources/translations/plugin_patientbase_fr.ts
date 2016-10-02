@@ -237,14 +237,6 @@ Attention : Si vous utilisez FreeMedForms en réseau, cela peut causer une surch
         <translation>Exportation de dossier patient</translation>
     </message>
     <message>
-        <source>Select patients</source>
-        <translation>Sélectionnez les patients</translation>
-    </message>
-    <message>
-        <source>Export all patients</source>
-        <translation>Exporter tous les patients</translation>
-    </message>
-    <message>
         <source>Add current patient</source>
         <translation>Ajouter le patient courant</translation>
     </message>
@@ -318,15 +310,27 @@ Attention : Si vous utilisez FreeMedForms en réseau, cela peut causer une surch
     </message>
     <message>
         <source>Patient file exportation - %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Exportation du fichier patient - %1</translation>
     </message>
     <message>
         <source>Double-click to add</source>
-        <translation type="unfinished"></translation>
+        <translation>Double-cliquer pour ajouter</translation>
     </message>
     <message>
         <source>Double-click to remove</source>
-        <translation type="unfinished"></translation>
+        <translation>Double-cliquer pour enlever</translation>
+    </message>
+    <message>
+        <source>Add all patients</source>
+        <translation>Ajouter tous les patients</translation>
+    </message>
+    <message>
+        <source>Remove all patients</source>
+        <translation>Enlever tous les patients</translation>
+    </message>
+    <message>
+        <source>Double-click to add patient for export</source>
+        <translation>Double-cliquer pour ajouter le patient pour exportation</translation>
     </message>
 </context>
 <context>

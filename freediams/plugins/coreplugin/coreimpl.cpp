@@ -107,7 +107,7 @@ CoreImpl::CoreImpl(QObject *parent) :
     if (logChrono)
         Utils::Log::logTimeElapsed(chrono, "Core", "Command line parsing");
 
-    m_Theme->createSplashScreen(Constants::FREEDIAMS_SPLASHSCREEN);
+    m_Theme->createSplashScreen(Constants::ERX_SPLASHSCREEN);
 
     // add translators
     m_Theme->messageSplashScreen(tkTr(Trans::Constants::INITIALIZING_TRANSLATIONS));

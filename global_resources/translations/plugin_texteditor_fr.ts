@@ -170,7 +170,7 @@
     <name>Editor::Internal::TextEditorDialogWidget</name>
     <message>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Formulaire</translation>
     </message>
 </context>
 <context>

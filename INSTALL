@@ -1,33 +1,42 @@
-                  Welcome to FreeMedForms
-           Copyright (C) 2008-2016 by Eric MAEKER
-                   eric.maeker@gmail.com
-                  All rights reserved.
+Welcome to FreeHealth
+copyright © 2016 Jerome Pinguet
 
+Copyright (C) 2008-2016 by Eric MAEKER
+eric.maeker@gmail.com
+All rights reserved.
 
+I. What is FreeHealth ?
 
-I. What is FreeMedForms ?
-
-FreeMedForms aims to be a open Electronic Medical Record Manager.
-FreeMedForms is also a lot of derivatives sub-project, which are
-just standalone compilation of FreeMedForms plugins.
+Electronic Health Record.
+FreeHealth is also a lot of derivatives sub-project, which are
+just standalone compilations of FreeHealth plugins, such as FreeRx, the electronic
+prescribing plugin.
 
 This project is a free and open source project. A community grows up
-around it. FreeMedForms and derivatives is released under the terms
+around it. FreeMedForms and derivatives are released under the terms
 of the GPLv3 License. Some parts of the code are LGPL v2.1.
 
-FreeMedForms and Derivatives are coded in C++/Qt5
-FreeMedForms and Derivatives are available for :
-- Mac Os
+FreeHealth EHR and derived apps are coded in C++/Qt5
+Supported OS:
+
 - GNU/Linux : Ubuntu, Debian
+- Mac Os X
 - Windows
 
 
 II. Build specification
 
 Build instructions are described here:
-    http://freemedforms.com/en/code/buildsystem
+    https://freehealth.io/en/code/buildsystem
 
 
-III. Install procedure
+III. Installation
 
-Install procedure is described in the build instructions.
+See online documentation:
+https://freehealth.io/en/manuals/ehr/install/server
+We recommand that you install FreeHealth EHR with a MySQL database, as the
+alternative installation procedure using SQLite database is deprecated. SQlite
+support will be discontinued in a future release and MySQL will become mandatory.
+You can install FreeHealth 0.9.9 over FreeMedFoms 0.9.8, the upgrade process is
+automatic, you just need to answer Yes to 2 questions about copying FreeMedForms
+parameters folder and user folder.

@@ -127,9 +127,7 @@ HttpServerEngine::HttpServerEngine(QObject *parent)  :
     // Connect authentication request
     connect(m_NetworkAccessManager, SIGNAL(authenticationRequired(QNetworkReply*,QAuthenticator*)), this, SLOT(authenticationRequired(QNetworkReply*,QAuthenticator*)));
     connect(m_NetworkAccessManager, SIGNAL(proxyAuthenticationRequired(QNetworkProxy,QAuthenticator*)), this, SLOT(proxyAuthenticationRequired(QNetworkProxy,QAuthenticator*)));
-#if QT_VERSION >= 0x050000
-    m_NetworkAccessManager->clearAccessCache();
-#endif
+m_NetworkAccessManager->clearAccessCache();
 }
 
 HttpServerEngine::~HttpServerEngine()
@@ -138,8 +136,10 @@ HttpServerEngine::~HttpServerEngine()
 /** Returns true if this engine manages this server */
 bool HttpServerEngine::managesServer(const Server &server)
 {
-    if (core().isInternetConnectionAvailable())
-        return server.nativeUrl().startsWith("http://");
+    if (core().isInternetConnectionAvailable()) {
+        return (server.nativeUrl().startsWith("https://")
+                || server.nativeUrl().startsWith("http://"));
+    }
     return false;
 }
 
@@ -426,7 +426,7 @@ ServerEngineStatus *HttpServerEngine::getStatus(const ReplyData &data)
     return &m_PackStatus[statusKey(data.pack)];
 }
 
-/** Reads Server description XML file and start the dowloading of pack description if needed. */
+/** Reads Server description XML file and start the downloading of pack description if needed. */
 void HttpServerEngine::afterServerConfigurationDownload(const ReplyData &data)
 {
     qWarning() << "afterServerConfigurationDownload" << data.server->uuid() << data.response.size();
@@ -594,9 +594,11 @@ void HttpServerEngine::createPackAndRegisterToServerManager(const Server &server
 QNetworkRequest HttpServerEngine::createRequest(const QString &url)
 {
     QNetworkRequest request(url);
-    request.setRawHeader("User-Agent", QString("FreeMedForms:%1;%2")
+    request.setRawHeader("User-Agent", QString("FreeHealth:%1;%2")
                          .arg(qApp->applicationName())
                          .arg(qApp->applicationVersion()).toUtf8());
+    qDebug() << QString("FreeHealth:%1;%2").arg(qApp->applicationName())
+                .arg(qApp->applicationVersion()).toUtf8();
     return request;
 }
 

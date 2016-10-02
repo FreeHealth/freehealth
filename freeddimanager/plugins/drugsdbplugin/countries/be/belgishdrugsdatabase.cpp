@@ -62,7 +62,7 @@ namespace {
 // First version, download at:
 //    http://www.fagg-afmps.be/fr/items-HOME/Bases_de_donnees/index.jsp
 // New version, download at:
-//    http://www.cbip.be/login freemedforms/freemedforms
+//    http://www.cbip.be/login
 //    http://www.cbip.be/download/downloadfile.cfm?filepath=EMD%2F&filename=csv4Emd%5FFr%2Ezip
 const char* const DOWNLOAD_URL = "http://www.cbip.be/download/downloadfile.cfm?filepath=EMD%2F&filename=csv4Emd%5FFr%2Ezip";
 }

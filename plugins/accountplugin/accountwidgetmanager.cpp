@@ -40,7 +40,7 @@
 #include <accountplugin/movements/movementsviewer.h>
 #include <accountplugin/accountview.h>
 
-#ifdef FREEMEDFORMS
+#ifdef FREEHEALTH
 #    include <accountplugin/accountmode.h>
 #endif
 

@@ -33,10 +33,6 @@ Thrid step, print the test page &lt;u&gt;with&lt;/u&gt; the correction and re-ch
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Correction de l&apos;impression</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>To your right (-&gt;)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -57,23 +53,11 @@ Thrid step, print the test page &lt;u&gt;with&lt;/u&gt; the correction and re-ch
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Sens de l&apos;impression</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Distance between horizontal line and the left border of the page, in millimeters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Your print</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Du haut vers le bas</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Du bas vers le haut</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -122,6 +106,22 @@ Thrid step, print the test page &lt;u&gt;with&lt;/u&gt; the correction and re-ch
     </message>
     <message>
         <source>The line is printed at %1mm to the left of the page</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Correct margins</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Printing direction</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>From top down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>From bottom up</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

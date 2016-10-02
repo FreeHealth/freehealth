@@ -9,10 +9,8 @@ isEmpty(LOWERED_APPNAME) {
     error(Missing LOWERED_APPNAME in qmake command line. Eg: qmake -r freediams.pro LOWERED_APPNAME=freediams)
 }
 
-# Qt 5.1 cache system
-qt:greaterThan(QT_MAJOR_VERSION, 4) {
-    cache()
-}
+# Qt cache system
+cache()
 
 # auto-test for plugins
 isEmpty(TEST):CONFIG(debug, debug|release) {
@@ -36,7 +34,6 @@ exists(__nonfree__):include(__nonfree__/config_nonfree.pri)
 
 macx:include(config_mac.pri)
 else:linux*:include(config_linux.pri)
-else:freebsd*:include(config_freebsd.pri)
 else:win32:include(config_win.pri)
 include(githash.pri)
 
@@ -77,11 +74,9 @@ CONFIG(debug, debug|release) {
 #              QT_NO_DEBUG
 }
 
-qt:greaterThan(QT_MAJOR_VERSION, 4) {
-    contains(QT, core): QT += concurrent
-    contains(QT, gui): QT += widgets
-    DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x040900
-}
+contains(QT, core): QT += concurrent
+contains(QT, gui): QT += widgets
+DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x040900
 
 TARGET   = $${BINARY_TARGET}
 DESTDIR  = $${BUILD_BINARY_PATH}

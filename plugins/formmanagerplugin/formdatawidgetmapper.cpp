@@ -249,11 +249,21 @@ void FormDataWidgetMapper::clear()
  */
 bool FormDataWidgetMapper::isDirty() const
 {
-    if (!d->_formMain)
+    if (!d->_formMain) {
+        qDebug() << Q_FUNC_INFO << "d->_formMain == false";
         return false;
-    if (!d->_currentEpisode.isValid())
-        return false;
+    }
 
+/*    if (!d->_currentEpisode.isValid()) {
+        qDebug() << Q_FUNC_INFO << "current episode" << d->_currentEpisode
+                 << "row: " << d->_currentEpisode.row()
+                 << "column: " << d->_currentEpisode.column()
+                << "model: " << d->_currentEpisode.model()
+                 << "not valid: " << d->_formMain->uuid()
+                << "name: " << d->_formMain->spec()->label();
+        return false;
+    }
+*/
     // form main is readonly ?
     if (d->_formMain->itemData() && d->_formMain->itemData()->isReadOnly()) {
         LOG(QString("isDirty (form) %1 isReadOnly").arg(d->_formMain->uuid()));
@@ -263,19 +273,23 @@ bool FormDataWidgetMapper::isDirty() const
     // form main isModified() ?
     if (d->_formMain->itemData() && d->_formMain->itemData()->isModified()) {
         if (WarnDirty)
-            LOG(QString("isDirty (form) %1 %2").arg(d->_formMain->uuid()).arg(d->_formMain->itemData()->isModified()));
+            LOG(QString("isDirty (form) Uuid: %1 itemData()->isModified(): %2").arg(d->_formMain->uuid()).arg(d->_formMain->itemData()->isModified()));
         return true;
     }
     // ask all current form item data
     foreach(FormItem *it, d->_formMain->flattenedFormItemChildren()) {
         if (it->itemData() && it->itemData()->isModified()) {
-            if (WarnDirty)
+            if (WarnDirty) {
                 LOG(QString("isDirty (item) %1 %2").arg(it->uuid()).arg(+it->itemData()->isModified()));
+                qDebug() << QString("isDirty (item) %1 %2").arg(it->uuid()).arg(+it->itemData()->isModified());
+            }
             return true;
         }
     }
-    if (WarnDirty)
-        LOG(QString("isDirty false, Form: %1").arg(d->_formMain->uuid()));
+    if (WarnDirty) {
+        LOG(QString("isDirty = FALSE, Form: %1").arg(d->_formMain->uuid()));
+        qDebug() << QString("isDirty = FALSE, Form: %1").arg(d->_formMain->uuid());
+    }
     return false;
 }
 

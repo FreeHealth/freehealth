@@ -44,7 +44,7 @@ namespace Internal {
 class ZipCodesPlugin : public ExtensionSystem::IPlugin
 {
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID "org.freemedforms.FreeMedForms.ZipCodesPlugin" FILE "ZipCodes.json")
+    Q_PLUGIN_METADATA(IID "io.freehealth.ehr.ZipCodesPlugin" FILE "ZipCodes.json")
 
 public:
     ZipCodesPlugin();

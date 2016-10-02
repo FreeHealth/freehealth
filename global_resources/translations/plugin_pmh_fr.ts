@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="fr_FR">
+<TS version="2.1" language="fr_FR">
 <context>
     <name>PMH</name>
     <message>
@@ -147,20 +147,8 @@
 <context>
     <name>PMH::Internal::PmhViewer</name>
     <message>
-        <source>General information</source>
-        <translation>Informations générales</translation>
-    </message>
-    <message>
         <source>Category</source>
         <translation>Catégorie</translation>
-    </message>
-    <message>
-        <source>Episodes</source>
-        <translation>Épisodes</translation>
-    </message>
-    <message>
-        <source>Comment</source>
-        <translation>Commentaire</translation>
     </message>
     <message>
         <source>Management</source>
@@ -179,20 +167,12 @@
         <translation></translation>
     </message>
     <message>
-        <source>ICD 10</source>
-        <translation>CIM 10</translation>
-    </message>
-    <message>
         <source>Manage &amp;ICD10 Codes</source>
         <translation>&amp;Gérer les codes CIM10</translation>
     </message>
     <message>
         <source>&amp;Label:</source>
         <translation>&amp;Libellé :</translation>
-    </message>
-    <message>
-        <source>&amp;Date:</source>
-        <translation>&amp;Date :</translation>
     </message>
     <message>
         <source>This PMHx is &amp;private</source>
@@ -215,12 +195,28 @@
         <translation>prouvé</translation>
     </message>
     <message>
-        <source>&amp;Confidence index:</source>
-        <translation>&amp;Indice de confiance :</translation>
+        <source>&amp;Start date:</source>
+        <translation>&amp;Date de début:</translation>
     </message>
     <message>
-        <source>Label and date</source>
-        <translation>Libellé et date</translation>
+        <source>&amp;End date</source>
+        <translation>&amp;Date de fin</translation>
+    </message>
+    <message>
+        <source>E&amp;pisodes</source>
+        <translation>É&amp;pisodes</translation>
+    </message>
+    <message>
+        <source>&amp;Confidence</source>
+        <translation>&amp;Confiance</translation>
+    </message>
+    <message>
+        <source>Created by</source>
+        <translation>Créé par</translation>
+    </message>
+    <message>
+        <source>userName</source>
+        <translation>Nom de l&apos;utilisateur</translation>
     </message>
 </context>
 <context>

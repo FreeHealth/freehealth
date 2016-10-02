@@ -19,10 +19,10 @@
 
     <!-- Translatable values -->
     <license>GPLv3</license>
-    <label lang="fr">Données locales du projet FreeMedForms</label>
-    <label lang="xx">FreeMedForms project local data</label>
-    <description lang="fr">Données par défaut pour FreeMedForms</description>
-    <description lang="xx">Default data for FreeMedForms</description>
+    <label lang="fr">Données locales de FreeHealth</label>
+    <label lang="xx">FreeHealth local data</label>
+    <description lang="fr">Données par défaut pour FreeHealth</description>
+    <description lang="xx">Default data for FreeHealth</description>
     <updateinfo>
       <updateversion from="0.6.0">
         <text lang="fr">Première mise à disposition.</text>
@@ -30,7 +30,7 @@
       </updateversion>
     </updateinfo>
     <htmldescription lang="fr">
-        &lt;p>&lt;b>Le serveur de données par défaut du projet FreeMedForms&lt;/b> est disponible en version
+        &lt;p>&lt;b>Le serveur de données par défaut de FreeHealth&lt;/b> est disponible en version
         internet ou en version locale.&lt;br />
         &lt;br />
         Il donne accès aux différentes bases de données libres ou distribuées à but non commercial telles que&nbsp;:&lt;br />
@@ -42,7 +42,7 @@
         &lt;br />
         &lt;br />
         Il est impératif de mettre à jour régulièrement vos paquets de données par le biais de ce
-        serveur ou de ses mirroirs sur l'Internet.
+        serveur ou de ses miroirs sur l'Internet.
         &lt;/p>
     </htmldescription>
 

@@ -107,7 +107,7 @@ SegmentedButton::SegmentedButton(QWidget *parent) :
     lay->setMargin(0);
     if (Utils::isRunningOnMac()) {
         lay->setSpacing(11);
-    } else if (Utils::isRunningOnLinux() || Utils::isRunningOnFreebsd()) {
+    } else if (Utils::isRunningOnLinux()) {
         lay->setSpacing(0);
     } else {
         lay->setSpacing(0);

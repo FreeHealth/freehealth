@@ -49,7 +49,7 @@ class FormPreferencesFileSelectorPage;
 class FormManagerPlugin : public ExtensionSystem::IPlugin
 {
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID "org.freemedforms.FreeMedForms.FormManagerPlugin" FILE "FormManager.json")
+    Q_PLUGIN_METADATA(IID "io.freehealth.ehr.FormManagerPlugin" FILE "FormManager.json")
 
 public:
     FormManagerPlugin();

@@ -47,7 +47,7 @@ namespace Internal {
 class WebcamPlugin : public ExtensionSystem::IPlugin
 {
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID "org.freemedforms.FreeMedForms.WebcamPlugin" FILE "Webcam.json")
+    Q_PLUGIN_METADATA(IID "io.freehealth.ehr.WebcamPlugin" FILE "Webcam.json")
 
 public:
     WebcamPlugin();

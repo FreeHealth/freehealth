@@ -1,52 +1,15 @@
-isEqual(QT_MAJOR_VERSION, 5) {
+defineReplace(cleanPath) {
+    return($$clean_path($$1))
+}
 
-    defineReplace(cleanPath) {
-        return($$clean_path($$1))
-    }
+defineReplace(targetPath) {
+    return($$shell_path($$1))
+}
 
-    defineReplace(targetPath) {
-        return($$shell_path($$1))
-    }
-
-    # For use in custom compilers which just copy files
-    defineReplace(stripSrcDir) {
-        return($$relative_path($$absolute_path($$1, $$OUT_PWD), $$_PRO_FILE_PWD_))
-    }
-
-} else {
-    # not-qt5
-
-    defineReplace(cleanPath) {
-        win32:1 ~= s|\\\\|/|g
-        contains(1, ^/.*):pfx = /
-        else:pfx =
-        segs = $$split(1, /)
-        out =
-        for(seg, segs) {
-            equals(seg, ..):out = $$member(out, 0, -2)
-            else:!equals(seg, .):out += $$seg
-        }
-        return($$join(out, /, $$pfx))
-    }
-
-    defineReplace(targetPath) {
-        return($$replace(1, /, $$QMAKE_DIR_SEP))
-    }
-
-    # For use in custom compilers which just copy files
-    win32:i_flag = i
-    defineReplace(stripSrcDir) {
-        win32 {
-            !contains(1, ^.:.*):1 = $$OUT_PWD/$$1
-        } else {
-            !contains(1, ^/.*):1 = $$OUT_PWD/$$1
-        }
-        out = $$cleanPath($$1)
-        out ~= s|^$$re_escape($$_PRO_FILE_PWD_/)||$$i_flag
-        return($$out)
-    }
-
-} # qt5
+# For use in custom compilers which just copy files
+defineReplace(stripSrcDir) {
+    return($$relative_path($$absolute_path($$1, $$OUT_PWD), $$_PRO_FILE_PWD_))
+}
 
 # define some paths related to application sources
 #SOURCES_ROOT_PATH is defined in config.pri

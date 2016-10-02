@@ -306,7 +306,6 @@ ServerPackEditor::ServerPackEditor(QWidget *parent) :
     connect(d->ui->serverListView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(serverCurrentChanged(QModelIndex,QModelIndex)));
 
     connect(serverManager(), SIGNAL(allServerDescriptionAvailable()), this, SLOT(selectFirstRow()));
-    // file://Users/eric/Desktop/Programmation/freemedforms/global_resources/datapacks/default/
 
     //refreshServerContent();
     //selectFirstRow();
