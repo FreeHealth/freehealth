@@ -20,8 +20,9 @@ namespace.module('com.freemedforms.certificates.samc', function (exports, requir
   //var raySelector = new Array("xx", "fr");
   var daysEn = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
   var daysFr = ["dimanche","lundi","mardi","mercredi","jeudi","vendredi","samedi"];
-  var monthsFr = ["janvier","février","mars","avril","mai","juin","juillet","août","septembre","octobre","novembre","décembre"]
-
+  var monthsFr = ["janvier","février","mars","avril","mai","juin","juillet","août","septembre","octobre","novembre","décembre"];
+  var daysEn3 = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  var monthsEn3 = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
   exports.extend({
     'setupUi': setupUi
   });
@@ -167,6 +168,37 @@ function samc_printDateFr(date)
     return output;
 }
 
+// take a date formatted as "Sun Apr 01 1928 01:00:00 GMT+0300 (EEST)"
+// (like DoB returned by FreeHealth token)
+// return a date object
+function samc_dobToDateObj(date)
+{
+    print("Inside samc_dobToDateObj()");
+    print(date);    
+    var day = date.slice(0,3);
+    var month = date.slice(4,7);
+    var number = date.slice(8,10);
+    var year = date.slice(11,15);
+
+    print(day);
+    var dayInt = daysEn3.indexOf(day);
+    print(dayInt);
+    var monthInt = monthsEn3.indexOf(month);
+    print(monthInt);
+    var numberInt = parseInt(number,10);
+    print(numberInt);
+    var yearInt = parseInt(year,10);
+    print(yearInt);
+
+    var d = new Date();
+    print(d);
+    d.setFullYear(yearInt, monthInt, numberInt);
+    print(d);
+    return d;
+}
+
+
+
 function samc_createhtml()
 {
     var startDateString = samc_startDateUi.text;
@@ -208,9 +240,14 @@ function samc_createhtml()
     }
     html += " le ";
     var patientDateTimeOfBirth = freemedforms.patient.dateOfBirth;
-    var indexOfColon = patientDateTimeOfBirth.toString().indexOf(':');
-    var indexEndOfDate = indexOfColon - 3;
-    var patientDateOfBirth = patientDateTimeOfBirth.toString().slice(0, indexEndOfDate);
+    print(patientDateTimeOfBirth);
+    var patientDateOfBirth = patientDateTimeOfBirth.toString();
+    print(patientDateOfBirth);
+    //var indexEndOfDate = indexOfColon - 3;
+    //var patientDateOfBirth = patientDateTimeOfBirth.toString().slice(0, indexEndOfDate);
+    var patientDoB = samc_dobToDateObj(patientDateOfBirth);
+    print(patientDoB);
+    patientDateOfBirth = samc_printDateFr(patientDoB);
     html += patientDateOfBirth;
 
     var start = onlyDate(startDate);
