@@ -74,15 +74,17 @@ namespace.module('com.freemedforms.generic.soapWithBio', function (exports, requ
         var gramToKilogram = 0.001;
         var kilogram = "Kilogram";
         var gram = "Gram";
-        var ounce = "Ounce";
-        var pound = "Pound";
+        var ounce_en = "Ounce";
+        var ounce_fr = "Once";
+        var pound_en = "Pound";
+        var pound_fr = "Livre";
         if (~weightUnit.indexOf(gram)) {
             return weightValue*gramToKilogram;
         } else if (~weightUnit.indexOf(kilogram)) {
             return weightValue;
-        } else if (~weightUnit.indexOf(ounce)) {
+        } else if (~weightUnit.indexOf(ounce_en)||~weightUnit.indexOf(ounce_fr)) {
             return weightValue*ounceToKilogram;
-        } else if (~weightUnit.indexOf(pound)) {
+        } else if (~weightUnit.indexOf(pound_en)||~weightUnit.indexOf(pound_fr)) {
             return weightValue*poundToKilogram;
         }
     }
@@ -91,36 +93,32 @@ namespace.module('com.freemedforms.generic.soapWithBio', function (exports, requ
         var centimeterToMeter = 0.01;
         var inchToMeter = 0.0254;
         var footToMeter = 0.3048;
-        var centimeter = "Centimeter";
-        var meter = "Meter";
-        var inch = "Inch";
-        var foot = "Foot";
-        if (~heightUnit.indexOf(centimeter)) {
+        var centimeter_en = "Centimeter";
+        var centimeter_fr = "Centimètre";
+        var meter_en = "Meter";
+        var meter_fr = "Mètre";
+        var inch_en = "Inch";
+        var inch_fr = "Pouce";
+        var foot_en = "Foot";
+        var foot_fr = "Pied";
+        if (~heightUnit.indexOf(centimeter_en) || ~heightUnit.indexOf(centimeter_fr)) {
             return heightValue*centimeterToMeter;
-        } else if (~heightUnit.indexOf(meter)) {
+        } else if (~heightUnit.indexOf(meter_en) || ~heightUnit.indexOf(meter_fr)) {
             return heightValue;
-        } else if (~heightUnit.indexOf(inch)) {
+        } else if (~heightUnit.indexOf(inch_en) || ~heightUnit.indexOf(inch_fr)) {
             return heightValue*inchToMeter;
-        } else if (~heightUnit.indexOf(foot)) {
+        } else if (~heightUnit.indexOf(foot_en) || ~heightUnit.indexOf(foot_fr)) {
             return heightValue*footToMeter;
         }
     }
 
     function computeBMI() {
-        //Number.prototype.round = function(places) {
-        //return +(Math.round(this + "e+" + places)  + "e-" + places);
-        //}
-        var bmi = Number(textbmi);
-        // weight unit kilogram
-        // height unit meter
         var weightUnit = weightUnitItem.currentText;
         var weightValue = Number(weight.value);
-        weightKilogram = weightToKilogram(weightUnit, weightValue);
-
+        var weightKilogram = weightToKilogram(weightUnit, weightValue);
         var heightUnit = heightUnitItem.currentText;
         var heightValue = Number(height.value);
-        heightMeter = heightToMeter(heightUnit, heightValue);
-
+        var heightMeter = heightToMeter(heightUnit, heightValue);
         var bmi  = (weightKilogram) / ((heightMeter) * (heightMeter));
         bmi = roundToOne(bmi);
         var textbmi = bmi.toString();

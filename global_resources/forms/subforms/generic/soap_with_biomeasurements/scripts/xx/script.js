@@ -102,13 +102,13 @@ namespace.module('com.freemedforms.generic.soapWithBio', function (exports, requ
         var inch_fr = "Pouce";
         var foot_en = "Foot";
         var foot_fr = "Pied";
-        if (~heightUnit.indexOf(centimeter_en)||~heightUnit.indexOf(centimeter_fr)) {
+        if (~heightUnit.indexOf(centimeter_en) || ~heightUnit.indexOf(centimeter_fr)) {
             return heightValue*centimeterToMeter;
-        } else if (~heightUnit.indexOf(meter_en)||~heightUnit.indexOf(meter_fr)) {
+        } else if (~heightUnit.indexOf(meter_en) || ~heightUnit.indexOf(meter_fr)) {
             return heightValue;
-        } else if (~heightUnit.indexOf(inch_en)||~heightUnit.indexOf(inch_fr)) {
+        } else if (~heightUnit.indexOf(inch_en) || ~heightUnit.indexOf(inch_fr)) {
             return heightValue*inchToMeter;
-        } else if (~heightUnit.indexOf(foot_en)||~heightUnit.indexOf(foot_fr)) {
+        } else if (~heightUnit.indexOf(foot_en) || ~heightUnit.indexOf(foot_fr)) {
             return heightValue*footToMeter;
         }
     }
