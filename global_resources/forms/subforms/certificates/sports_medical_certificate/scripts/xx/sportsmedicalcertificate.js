@@ -115,6 +115,7 @@ function sportsmedicalcertificate_dobToDateObj(date)
 
 function sportsmedicalcertificate_createhtml()
 {
+/*
     html = "<div style=\"font-weight:bold;"
             + "font-size:large;"
             + "font-variant:small-caps;"
@@ -123,8 +124,8 @@ function sportsmedicalcertificate_createhtml()
             + "margin-right:auto;\">";
     html += "Certificat médical de non contre-indication à la pratique sportive";
     html += "</div>";
-
-    html += "<p>";
+*/
+    html = "<p>";
     html += "Je ";
     if (freemedforms.user.isMale) {
         signeeText = signeeArray[0];

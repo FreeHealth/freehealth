@@ -7,9 +7,9 @@
     <!-- Non translatable values -->
     <authors>Jérôme Pinguet</authors>
     <version>test</version>
-    <fmfv>0.9.8</fmfv>
+    <fmfv>0.9.9</fmfv>
     <cdate>2016-07-04</cdate>
-    <lmdate>2016-10-02</lmdate>
+    <lmdate>2016-10-04</lmdate>
     <icon>edit.png</icon>
     <weblink>https://www.medecinelibre.com</weblink>
     <!-- Translatable values -->
@@ -30,7 +30,7 @@
   <MedForm type="form" name="Subforms::Generic::Clinical::Letter" uifilename="./ui/xx/clinical_letter_2.ui">
     <label lang="xx">Clinical letter</label>
     <label lang="fr">Lettre à un confrère</label>
-    <icon>__theme__/xray.png</icon>
+    <icon>__theme__/typewriter.png</icon>
     <options>DontPrintEmptyValues;UseFormNameAsNameSpace;NoHeader</options>
     <file type="htmlprintmask">./html/xx/clinical_letter_template.html</file>
     <!--<file type="htmlexportmask">./html/xx/clinical_letter_mask.html</file>-->
