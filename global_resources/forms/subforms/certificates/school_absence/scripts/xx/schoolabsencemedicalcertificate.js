@@ -229,13 +229,10 @@ function samc_createhtml()
     }
     html += " le ";
     var patientDateTimeOfBirth = freemedforms.patient.dateOfBirth;
-    print(patientDateTimeOfBirth);
     var patientDateOfBirth = patientDateTimeOfBirth.toString();
-    print(patientDateOfBirth);
     //var indexEndOfDate = indexOfColon - 3;
     //var patientDateOfBirth = patientDateTimeOfBirth.toString().slice(0, indexEndOfDate);
     var patientDoB = samc_dobToDateObj(patientDateOfBirth);
-    print(patientDoB);
     patientDateOfBirth = samc_printDateFr(patientDoB);
     html += patientDateOfBirth;
 
