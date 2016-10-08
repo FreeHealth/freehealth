@@ -41,7 +41,7 @@
 #include <QNetworkProxyQuery>
 #include <QAuthenticator>
 #include <QHash>
-
+#include <QProcess>
 #include <QDebug>
 
 // Create datapacks with FreeToolBox
@@ -136,8 +136,10 @@ HttpServerEngine::~HttpServerEngine()
 /** Returns true if this engine manages this server */
 bool HttpServerEngine::managesServer(const Server &server)
 {
-    if (core().isInternetConnectionAvailable())
-        return server.nativeUrl().startsWith("https://");
+    if (core().isInternetConnectionAvailable()) {
+        return (server.nativeUrl().startsWith("https://")
+	|| server.nativeUrl().startsWith("http://"));
+    }
     return false;
 }
 
@@ -479,6 +481,19 @@ void HttpServerEngine::afterServerConfigurationDownload(const ReplyData &data)
         zip.close();
 
         // unzip file
+#ifdef Q_OS_OSX
+        if (!QuaZipTools::macOsUnzipFile(zipName)) {
+            LOG_ERROR("Unable to unzip file: " + zipName);
+            status->errorMessages << tr("Server description file can not be unzipped.");
+            status->hasError = true;
+            status->isSuccessful = false;
+            return;
+        }
+        //QString path = QFileInfo(zipName).absolutePath();
+        //QString oldfile = path + QDir::separator() + "server.conf.xml";
+        //QString newfile = path + QDir::separator() + Server::serverConfigurationFileName();
+        //QFile::copy(oldfile, newfile);
+#else
         if (!QuaZipTools::unzipFile(zipName)) {
             LOG_ERROR("Unable to unzip file: " + zipName);
             status->errorMessages << tr("Server description file can not be unzipped.");
@@ -486,9 +501,14 @@ void HttpServerEngine::afterServerConfigurationDownload(const ReplyData &data)
             status->isSuccessful = false;
             return;
         }
-
+#endif
         // read server configuration file
-        QString serverConfFile = QFileInfo(zipName).absolutePath() + QDir::separator() + Server::serverConfigurationFileName();
+        qWarning() << QFileInfo(zipName).absolutePath();
+        qWarning() << Server::serverConfigurationFileName();
+        QString serverConfFile = QFileInfo(zipName).absolutePath()
+                + QDir::separator()
+                + Server::serverConfigurationFileName();
+        qWarning() << serverConfFile;
         server->fromXml(Utils::readTextFile(serverConfFile, Utils::DontWarnUser));
 
         // test downloaded zip files for all pack description

@@ -36,7 +36,7 @@
 #include <QStringList>
 #include <QProgressBar>
 #include <QApplication>
-
+#include <QProcess>
 #include <QDebug>
 
 /**
@@ -167,6 +167,45 @@ bool unzipFile(const QString &fileName, const QString &pathToUnZippedFiles, QPro
 
     return true;
 }
+
+/**
+ * @brief unzip on macOS only with built-in command line
+ * @param filepath
+ */
+bool macOsUnzipFile(const QString &fileName, const QString &pathToUnZippedFiles, QProgressBar *bar)
+{
+    Q_UNUSED (bar);
+    if (!QFile(fileName).exists()) {
+        qWarning() << QString("QuaZip: File %1 does not exist").arg(fileName);
+        return false;
+    }
+    QString outputDir = pathToUnZippedFiles;
+    if (pathToUnZippedFiles.isEmpty()) {
+        QString outputDir = QFileInfo(fileName).absolutePath();
+    }
+    QString filepath = fileName;
+    QString program = "unzip";
+    QStringList arguments;
+    arguments << filepath;
+    QString dest = "-d" + outputDir;
+    arguments << dest;
+    QProcess *process = new QProcess();
+    qDebug() << "program: " << program << " arguments: " << arguments;
+    process->start(program, arguments);
+    bool success = process->waitForStarted();
+    if (!success) {
+        int error = process->error();
+        qWarning() << "error: " << error;
+        return false;
+    }
+    QByteArray array = process->readAllStandardError();
+    qDebug() << array;
+    process->waitForFinished();
+    qWarning() << "process finished, about to be closed";
+    process->close();
+    return true;
+}
+
 
 bool unzipAllFilesIntoDirs(const QStringList &paths)
 {

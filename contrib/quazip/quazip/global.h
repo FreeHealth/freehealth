@@ -38,6 +38,8 @@ namespace QuaZipTools {
 
     QUAZIP_EXPORT bool unzipFile(const QString &fileName, const QString &pathToUnZippedFiles = QString::null, QProgressBar *bar = 0);
 
+    QUAZIP_EXPORT bool macOsUnzipFile(const QString &fileName, const QString &pathToUnZippedFiles = QString::null, QProgressBar *bar = 0);
+
     QUAZIP_EXPORT bool unzipAllFilesIntoDirs(const QStringList &paths);
 
     QUAZIP_EXPORT QStringList zipFileNameContent(const QString &absFileName);
