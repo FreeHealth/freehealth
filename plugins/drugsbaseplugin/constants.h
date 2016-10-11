@@ -383,44 +383,52 @@ namespace Constants {
     /** \brief Used by DosageModel for column representation. */
     enum Dosage
     {
-        Id = 0,                 /*!< \brief Identifiant du dosage. integer. */
-        Uuid,                   /*!< \brief Identifiant unique --> varchar(40) */
-        DrugsDatabaseIdentifiant,    /*!< \brief Unique FreeDiams identifiant */
-        INN_LK,                 /*!< \brief Si la prescription est la même pour toutes les DCI alors le champs est renseigné, sinon laissé à -1. integer */
-        InnLinkedDosage,        /*!< \brief Linked dosage of the Inn. */
-        DrugUid_LK,                 /*!< \brief Si la prescription est unique valable pour ce médicament le code CIS et renseigné, sinon laissé à -1. integer */
-        CIP_LK,                 /*!< \brief Code CIP           --> int */
-        Label,                  /*!< \brief Libellé            --> varchar( 300 ) */
+        Id = 0,                 /*!< \brief Dose Identifier. Integer.*/
+        Uuid,                   /*!< \brief Unique identifier. Varchar(40).*/
+        DrugsDatabaseIdentifiant,    /*!< \brief Unique FreeRx identifier.*/
+        INN_LK,                 /*!< \brief If the prescription is the same for
+                                   all INNs, then this field  is used. If not,
+                                   it defaults to -1. Integer.*/
+        InnLinkedDosage,        /*!< \brief Linked dosage of the INN.*/
+        DrugUid_LK,                 /*!< \brief If the prescription is valid only
+                                    only for this drug, the CIS code is used. If
+                                    not, it defaults to -1. Integer.*/
+        CIP_LK,                 /*!< \brief CIP code. Integer.*/
+        Label,                  /*!< \brief Label. Varchar(300).*/
 
-        IntakesFrom,             /*!< \brief Nb de prises       --> double */
-        IntakesTo,               /*!< \brief Nb de prises       --> double  */
-        IntakesUsesFromTo,       /*!< \brief bool : intake uses the "from x to y" scheme */
-        IntakesScheme,           /*!< \brief Forme sélectionnée */
-        IntakesIntervalOfTime,  /*!< \brief temps entre chaque prise --> int */
-        IntakesIntervalScheme,  /*!< \brief schéma de temps --> int cf enum */
+        IntakesFrom,             /*!< \brief Minimum number of intakes. Double.*/
+        IntakesTo,               /*!< \brief Maximum number of intakes. Double.*/
+        IntakesUsesFromTo,       /*!< \brief Intake uses the minium/maximum
+                                    "from x to y" scheme. Bool.*/
+        IntakesScheme,           /*!< \brief Selected pharmaceutical formulation.*/
+        IntakesIntervalOfTime,  /*!< \brief Time interval between intakes. Integer.*/
+        IntakesIntervalScheme,  /*!< \brief Time interval unit. Integer. cf enum */
         RouteId,
 
-        DurationFrom,           /*!< \brief espacement prises  --> double */
-        DurationTo,             /*!< \brief espacement prises  --> double */
-        DurationUsesFromTo,     /*!< \brief bool : duration uses the "from x to y" scheme */
-        DurationScheme,         /*!< \brief codage             --> int cf enum Period */
+        DurationFrom,           /*!< \brief Minimum duration of treatment. Integer.*/
+        DurationTo,             /*!< \brief Maximum duration of treatment. Integer.*/
+        DurationUsesFromTo,     /*!< \brief Duration uses the "from x to y" scheme. Bool.*/
+        DurationScheme,         /*!< \brief Duration unit encoding. Integer cf enum Period.*/
 
         Period,
         PeriodScheme,
         AdministrationScheme,
         SerializedDailyScheme,
-        MealScheme,             /*!< \brief Schéma de prise par rapport aux repas // cf enum mfDrugDosage::MealTime */
-        IsALD,                  /*!< \brief Prescription en ALD */
-        TypeOfTreatment,        /*!< \brief Type de traitement (chronique, aiguë...) enumerator à créer  \todo this */
-
-        MinAge,                 /*!< \brief Limite d'âge en mois */
-        MaxAge,                 /*!< \brief Limite d'âge en mois */
-        MinAgeReferenceIndex,   /*!< \brief Reference pour la limite d'âge : heures, jours, semaines, mois, années      --> int cf Enum Period */
-        MaxAgeReferenceIndex,   /*!< \brief Reference pour la limite d'âge : heures, jours, semaines, mois, années      --> int cf Enum Period */
-        MinWeight,              /*!< \brief Poids minimal      --> int                     40 (kg) */
+        MealScheme,             /*!< \brief Time of intake relative to meal/food
+                                    cf enum mfDrugDosage::MealTime */
+        IsALD,                  /*!< \brief ALD prescription (French social security specific.)*/
+        TypeOfTreatment,        /*!< \brief Drugs prescription type (acute, long-term medication)
+                                      \todo this */
+        MinAge,                 /*!< \brief Minimum age in months.*/
+        MaxAge,                 /*!< \brief Maximum age in months.*/
+        MinAgeReferenceIndex,   /*!< \brief Reference (unit) for minimum age: hours,
+                                days, weeks, months, years. Integer. cf Enum Period */
+        MaxAgeReferenceIndex,   /*!< \brief Reference (unit) for maximum age: hours,
+                                days, weeks, months, years. Integer. cf Enum Period */
+        MinWeight,              /*!< \brief Minimum weight in kilograms. Integer.*/
         SexLimitedIndex,        /*!< \brief int 0 = M / 1 = F */
-        MinClearance,           /*!< \brief Clearance de la créatinine minimale pour la prescription */
-        MaxClearance,           /*!< \brief Clearance de la créatinine maximale pour la prescription (définition d'interval). Eg : HBPM */
+        MinClearance,           /*!< \brief Minimum creatinine clearance to allow prescription.*/
+        MaxClearance,           /*!< \brief Maximum creatinine clearance. TODO: Is this relevant?*/
         PregnancyLimitsFlag,    /*!< \brief Limits for pregnancy flaged from tkConstants::Physiology::PregnancyLimits. */
         BreastFeedingLimitsIndex, /*!< \brief Limits for pregnancy flaged from tkConstants::Physiology::BreastFeedingLimits. */
         PhysiologicalLimitsFlag,  /*!< \brief Physiological limits flaged from tkConstants::Physiology::PhysiologicalLimitsFlag. */
@@ -432,13 +440,14 @@ namespace Constants {
         EDRCLinks,              /*!< \brief EDRC codes related to the prescription. Codes are separated by a ';'.  \todo this  */
 
         Extras,                 /*!< \brief blob that contains extra data, XML formatted (not used by now) */
-        UserValidatorName,      /*!< \brief nom de celui qui a validé la posologie */
+        UserValidatorName,      /*!< \brief Name of user who validated the dosage.*/
         CreationDate,           /*!< \brief Creation date --> date */
         ModificationDate,       /*!< \brief Modification date --> date */
-        Transmitted,            /*!< \brief Sera utilisé pour récupérer via internet les dosages référencés en local. date */
+        Transmitted,            /*!< \brief Could be used for Internet transmission of local dosages. Date.*/
         Route,                  /*!< \brief Outside SQL */
         Refill,                  /*!< \brief Outside SQL */
-        MaxParam                /*!< \brief Nombre maximum de colonnes du modèle (et de la table SQL) */
+        MaxParam                /*!< \brief Maximal number of columns of the model
+                                (and of the SQL table).*/
     };
 
 }  // End namespace Dosages::Constants
