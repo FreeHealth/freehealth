@@ -429,9 +429,9 @@ namespace Constants {
         SexLimitedIndex,        /*!< \brief int 0 = M / 1 = F */
         MinClearance,           /*!< \brief Minimum creatinine clearance to allow prescription.*/
         MaxClearance,           /*!< \brief Maximum creatinine clearance. TODO: Is this relevant?*/
-        PregnancyLimitsFlag,    /*!< \brief Limits for pregnancy flaged from tkConstants::Physiology::PregnancyLimits. */
-        BreastFeedingLimitsIndex, /*!< \brief Limits for pregnancy flaged from tkConstants::Physiology::BreastFeedingLimits. */
-        PhysiologicalLimitsFlag,  /*!< \brief Physiological limits flaged from tkConstants::Physiology::PhysiologicalLimitsFlag. */
+        PregnancyLimitsFlag,    /*!< \brief Limits for pregnancy flagged from tkConstants::Physiology::PregnancyLimits. */
+        BreastFeedingLimitsIndex, /*!< \brief Limits for pregnancy flagged from tkConstants::Physiology::BreastFeedingLimits. */
+        PhysiologicalLimitsFlag,  /*!< \brief Physiological limits flagged from tkConstants::Physiology::PhysiologicalLimitsFlag. */
 
         Note,                   /*!< \brief note               --> varchar ( 500 ) */
 
@@ -440,7 +440,7 @@ namespace Constants {
         EDRCLinks,              /*!< \brief EDRC codes related to the prescription. Codes are separated by a ';'.  \todo this  */
 
         Extras,                 /*!< \brief blob that contains extra data, XML formatted (not used by now) */
-        UserValidatorName,      /*!< \brief Name of user who validated the dosage.*/
+        UserValidatorName,      /*!< \brief Name of the user who validated the dosage.*/
         CreationDate,           /*!< \brief Creation date --> date */
         ModificationDate,       /*!< \brief Modification date --> date */
         Transmitted,            /*!< \brief Could be used for Internet transmission of local dosages. Date.*/
