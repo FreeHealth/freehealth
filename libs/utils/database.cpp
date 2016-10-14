@@ -109,15 +109,15 @@ struct DbIndex {
     QString name;
 };
 
-// Managing defaults
-// For each new FMF user account, FMF creates 4 almost identical MySQL
-// users: 1 that can connect from "localhost", 1 that can connect from
-// 127.0.0.1 (ipv4 loopback), 1 that can connect from ::1 (ipv6 loopback)
-// and 1 that can connect from "%" (any host).
-// This behaviour could be fine tuned in the future but access from any
-// host should be default behaviour for now.
-// Make sure your MySQL server is not accessible from the wide area network.
-// For secure access through the wide area network we recommend SSH tunnels.
+/*
+    Managing defaults
+    For each new user account, create 1 MySQL user that can connect from "%"
+    (any host).
+    This behaviour could be fine tuned in the future but access from any
+    host should be default behaviour for now.
+    Make sure your MySQL server is not accessible from the wide area network.
+    For secure access through the wide area network we recommend SSH tunnels.
+*/
 static QString mySqlHost()
 {
     return QString("%");
@@ -1242,13 +1242,79 @@ QString Database::getVersion(const Field &field) const
 }
 
 /**
- * Set the database version to \e version using the field
+ * Returns the current version number of the database using
+ * the specified \e field.\n
+ * \sa getVersion(), setVersion()
+ */
+quint32 Database::getVersionNumber(const Field &field) const
+{
+    QSqlDatabase DB = database();
+    if (!connectedDatabase(DB, __LINE__)){
+        return quint32(0);
+    }
+    DB.transaction();
+    quint32 value;
+    QSqlQuery query(DB);
+    if (query.exec(select(field.table, field.field))) {
+        if (query.next()){
+            value = query.value(0).toUInt();
+        }
+    }
+    query.finish();
+    DB.commit();
+    return value;
+}
+
+/**
+ * Set the database version to \e version text (QString) using the field
  * \e field.
  * \warning The table containing this field will be totally
  * deleted and a new row will be inserted with the new version value.
  * \sa getVersion(), setVersion()
  */
 bool Database::setVersion(const Field &field, const QString &version)
+{
+    QSqlDatabase DB = database();
+    if (!connectedDatabase(DB, __LINE__)) {
+        return false;
+    }
+    DB.transaction();
+    QSqlQuery query(DB);
+
+    // Delete all values in the version table
+    query.prepare(prepareDeleteQuery(field.table));
+    if (!query.exec()) {
+        LOG_QUERY_ERROR_FOR("Database", query);
+        query.finish();
+        DB.rollback();
+        return false;
+    }
+
+    // Insert a new row with the new version
+    query.prepare(prepareInsertQuery(field.table));
+    FieldList fields = this->fields(field.table);
+    foreach(const Field f, fields)
+        query.bindValue(f.field, QVariant());
+    query.bindValue(field.field, version);
+    if (!query.exec()) {
+        LOG_QUERY_ERROR_FOR("Database", query);
+        query.finish();
+        DB.rollback();
+        return false;
+    }
+    query.finish();
+    DB.commit();
+    return true;
+}
+
+/**
+ * Set the database version to \e version number (integer) using the field
+ * \e field.
+ * \warning The table containing this field will be totally
+ * deleted and a new row will be inserted with the new version value.
+ * \sa getVersion(), setVersion()
+ */
+bool Database::setVersion(const Field &field, const int &version)
 {
     QSqlDatabase DB = database();
     if (!connectedDatabase(DB, __LINE__)) {

@@ -971,13 +971,7 @@ void informativeMessageBox(const QString &text, const QString &infoText, const Q
 void warningMessageBox(const QString &text, const QString &infoText, const QString &detail, const QString &title)
 {
     LOG_FOR("Warning Dialog", infoText);
-#if QT_VERSION < 0x050000
-    // Qt4
-    if (qApp->type() == QApplication::Tty) {
-#else
-    // Qt5
     if (!qobject_cast<QApplication*>(qApp)) {  // Equals to not GUI app
-#endif
         qWarning() << "  * Text:" << text << "\n  * detail" << detail << "\n  * title:" << title;
         return;
     }

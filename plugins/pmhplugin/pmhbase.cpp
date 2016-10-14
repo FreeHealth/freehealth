@@ -60,6 +60,7 @@
 #include <QSqlRecord>
 #include <QSqlField>
 #include <QDir>
+#include <QDebug>
 
 using namespace PMH::Internal;
 using namespace Trans::ConstantTranslations;
@@ -125,10 +126,9 @@ PmhBase::PmhBase(QObject *parent) :
     m_Instance = this;
     setObjectName("PmhBase");
     using namespace PMH::Constants;
-    addTable(Table_MASTER,        "PMH_MASTER");
-    addTable(Table_EPISODE,       "PMH_EPISODE");
-    // TODO: add table version && version management of the database
-//    addTable(Table_VERSION, "VERSION");
+    addTable(Table_MASTER, "PMH_MASTER");
+    addTable(Table_EPISODE, "PMH_EPISODE");
+    addTable(Table_VERSION, "VERSION");
 
     addField(Table_MASTER, MASTER_ID,            "ID",             FieldIsUniquePrimaryKey);
     addField(Table_MASTER, MASTER_PATIENT_UID,   "PATIENT_UUID",   FieldIsUUID);
@@ -144,6 +144,7 @@ PmhBase::PmhBase(QObject *parent) :
     addField(Table_MASTER, MASTER_ISVALID,       "VALID",          FieldIsBoolean, "1");
     addField(Table_MASTER, MASTER_PRIVATE,       "PRIV",           FieldIsBoolean);
     addField(Table_MASTER, MASTER_COMMENT,       "COMMENT",        FieldIsLongText);
+    addField(Table_MASTER, MASTER_CREATIONDATETIME, "CREATIONDATETIME", FieldIsIsoUtcDateTime);
     addIndex(Table_MASTER, MASTER_ID);
     addIndex(Table_MASTER, MASTER_PATIENT_UID);
     addIndex(Table_MASTER, MASTER_USER_UID);
@@ -161,6 +162,8 @@ PmhBase::PmhBase(QObject *parent) :
     addIndex(Table_EPISODE, EPISODE_ID);
     addIndex(Table_EPISODE, EPISODE_MASTER_ID);
     addIndex(Table_EPISODE, EPISODE_TRACE_ID);
+
+    addField(Table_VERSION, VERSION_NUMBER, "VERSION_NUMBER", FieldIsInteger);
 
     // Connect first run database creation requested
     connect(Core::ICore::instance(), SIGNAL(firstRunDatabaseCreation()), this, SLOT(onCoreFirstRunCreationRequested()));
@@ -185,6 +188,10 @@ bool PmhBase::initialize()
         createConnection(Constants::DB_NAME, Constants::DB_NAME,
                          settings()->databaseConnector(),
                          Utils::Database::CreateDatabase);
+    }
+
+    if (!checkDatabaseVersion()) {
+        return false;
     }
 
     if (!checkDatabaseScheme()) {
@@ -267,13 +274,85 @@ bool PmhBase::createDatabase(const QString &connectionName , const QString &dbNa
         return false;
     }
 
-    // TODO: add database versionning
-//    // Add version number
-//    if (!setVersion(Utils::Field(Constants::Table_VERSION, Constants::VERSION_TEXT), Constants::DB_ACTUALVERSION)) {
-//        LOG_ERROR_FOR("PmhBase", "Unable to set version");
-//    }
+    if (!setVersion(Utils::Field(Constants::Table_VERSION, Constants::VERSION_NUMBER), Constants::DB_CURRENTVERSION)) {
+        LOG_ERROR_FOR("PmhBase", "Unable to set version");
+    }
 
     return true;
+}
+
+/**
+  \brief Check database version. If PmhData already exists in database, PmhData is updated.
+  \sa updatePmhData()
+*/
+bool PmhBase::checkDatabaseVersion()
+{
+    using namespace PMH::Constants;
+    QSqlDatabase DB = QSqlDatabase::database(Constants::DB_NAME);
+    if (!connectDatabase(DB, __LINE__)) {
+        return false;
+    }
+    //if it doesn't exist, add version table and set version to 0
+    if(!DB.tables().contains(QLatin1String("VERSION"))) {
+
+        DB.transaction();
+        QSqlQuery query(DB);
+        if(!query.exec("CREATE TABLE VERSION (VERSION_NUMBER INTEGER DEFAULT 0);")) {
+            LOG_QUERY_ERROR(query);
+        }
+        if(!query.exec("INSERT INTO VERSION VALUES (0);")) {
+            LOG_QUERY_ERROR(query);
+        }
+        query.finish();
+        if(!DB.commit()) {
+            LOG("Attempt to create VERSION table and set it to 0 failed. "
+                "Contact your system administrator.");
+            return false;
+        }
+        LOG("VERSION table successfully created, VERSION set to 0.");
+    }
+
+    // 0.9.9 -> 0.9.10 : add field "CREATIONDATETIME" to table "PMH_MASTER"
+    Utils::Field vField(Constants::Table_VERSION, Constants::VERSION_NUMBER);
+    if(getVersionNumber(vField) < 1) {
+        QSqlQuery query(DB);
+        if (settings()->databaseConnector().driver()==
+                Utils::Database::AvailableDrivers::MySQL) {
+            if(!query.exec("ALTER TABLE PMH_MASTER"
+                           " ADD CREATIONDATETIME VARCHAR(20);")) {
+                LOG_QUERY_ERROR(query);
+                return false;
+            }
+        }
+        if (settings()->databaseConnector().driver()==
+                Utils::Database::AvailableDrivers::SQLite) {
+            if(!query.exec("ALTER TABLE PMH_MASTER"
+                           " ADD CREATIONDATETIME TEXT;")) {
+                LOG_QUERY_ERROR(query);
+                return false;
+            }
+        }
+        LOG(tkTr("Field CREATIONDATETIME of type varchar(20) added to table PMH_MASTER"));
+
+        if (!setVersion(Utils::Field(Constants::Table_VERSION, Constants::VERSION_NUMBER), 1)) {
+            LOG_ERROR_FOR("PmhBase", "Unable to set version");
+            return false;
+        }
+        LOG(tkTr("Version of database %1 set to 1.").arg(DB.databaseName()));
+
+    }
+    bool OK(getVersionNumber(vField) == DB_CURRENTVERSION);
+    if(!OK) {
+        QString error(tkTr("Database error: actual version of database %1 is %2, it should"
+                           " be %3. Contact your system administrator"
+                           " immediately to avoid database corruption.")
+                               .arg(DB.databaseName())
+                               .arg(getVersionNumber(vField))
+                               .arg(DB_CURRENTVERSION));
+        LOG_ERROR(error);
+        Utils::warningMessageBox(error,"","","Database version error");
+    }
+    return OK;
 }
 
 /** \brief Retrieve all PMHx related to a patient. */
@@ -316,6 +395,7 @@ QVector<PmhData *> PmhBase::getPmh(const QString &patientUid) const
             pmh->setData(PmhData::IsPrivate, query.value(Constants::MASTER_PRIVATE));
             pmh->setData(PmhData::DbOnly_MasterEpisodeId, query.value(Constants::MASTER_EPISODE_ID));
             pmh->setData(PmhData::DbOnly_MasterContactId, query.value(Constants::MASTER_CONTACTS_ID));
+            pmh->setData(PmhData::CreationDateTime, query.value(Constants::MASTER_CREATIONDATETIME));
             pmhs << pmh;
         }
     } else {
@@ -418,6 +498,7 @@ bool PmhBase::savePmhData(PmhData *pmh)
     query.bindValue(Constants::MASTER_ISVALID, pmh->data(PmhData::IsValid).toInt());
     query.bindValue(Constants::MASTER_PRIVATE, pmh->data(PmhData::IsPrivate).toInt());
     query.bindValue(Constants::MASTER_EPISODE_ID, QVariant());
+    query.bindValue(Constants::MASTER_CREATIONDATETIME, pmh->data(PmhData::CreationDateTime));
     if (query.exec()) {
         pmh->setData(PmhData::Uid, query.lastInsertId());
     } else {
@@ -465,7 +546,8 @@ bool PmhBase::updatePmhData(PmhData *pmh)
                                      << Constants::MASTER_CONTACTS_ID
                                      << Constants::MASTER_EPISODE_ID
                                      << Constants::MASTER_ISVALID
-                                     << Constants::MASTER_PRIVATE, where));
+                                     << Constants::MASTER_PRIVATE
+                                     << Constants::MASTER_CREATIONDATETIME, where));
     query.bindValue(0, pmh->data(PmhData::Label));
     query.bindValue(1, pmh->data(PmhData::Type));
     query.bindValue(2, pmh->data(PmhData::State));
@@ -476,6 +558,7 @@ bool PmhBase::updatePmhData(PmhData *pmh)
     query.bindValue(7, QVariant());
     query.bindValue(8, pmh->data(PmhData::IsValid).toInt());
     query.bindValue(9, pmh->data(PmhData::IsPrivate).toInt());
+    query.bindValue(10, pmh->data(PmhData::CreationDateTime));
     if (!query.exec()) {
         LOG_QUERY_ERROR(query);
         query.finish();

@@ -75,6 +75,7 @@ public:
     bool savePmhEpisodeData(PmhEpisodeData *episode);
     bool updatePmhEpsisodeData(PmhEpisodeData *episode);
     bool savePmhCategory(Category::CategoryItem *category);
+    bool checkDatabaseVersion();
 
 private:
     bool createDatabase(const QString &connectionName, const QString &dbName,

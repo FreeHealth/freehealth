@@ -46,8 +46,8 @@ namespace Constants {
     // Database
     const char * const  DB_NAME            = "pmh";
     const char * const  DB_FILENAME        = "pmh.db";
-    const char * const  DB_ACTUALVERSION   = "0.1";
     const char * const  CATEGORY_MIME      = "PMHx";
+    const int DB_CURRENTVERSION = 1;
 
     // Help pages
     const char * const  H_PMH_CREATOR_PAGE  = "";
@@ -74,8 +74,10 @@ namespace Constants {
         MASTER_ISVALID,
         MASTER_PRIVATE,
         MASTER_COMMENT,
-        MASTER_TRACE_ID,
+        MASTER_CREATIONDATETIME,
+        MASTER_TRACE_ID, // Do not add new enum after this one TODO implement or delete
         MASTER_MaxParam
+
     };
 
     enum EpisodeFields {
@@ -93,7 +95,7 @@ namespace Constants {
     };
 
     enum VersionFields {
-        VERSION_TEXT = 0
+        VERSION_NUMBER = 0
     };
 
 

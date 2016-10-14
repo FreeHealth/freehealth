@@ -104,6 +104,15 @@ public:
         m_Pmh = pmh;
         ui->personalLabel->setText(pmh->data(PmhData::Label).toString());
         ui->userNameLabel->setText(user()->fullNameOfUser(pmh->data(PmhData::UserOwner)));
+        QString sCDT = pmh->data(PmhData::CreationDateTime).toString();
+        // If there is no creation date, don't display "on" QLabel
+        ui->creationDateTimeOn->setVisible(!sCDT.isEmpty());
+        QDateTime creationDateTimeUtc = QDateTime::fromString(sCDT, Qt::ISODate);
+        QDateTime CDTL = creationDateTimeUtc.toLocalTime();
+        QDate CDL = CDTL.date();
+        QString sCDL = CDL.toString(Qt::TextDate);
+        ui->creationDateTimeLabel->setText(sCDL);
+        ui->creationDateTimeLabel->setToolTip(CDTL.toString());
         ui->typeCombo->setCurrentIndex(pmh->data(PmhData::Type).toInt());
         ui->statusCombo->setCurrentIndex(pmh->data(PmhData::State).toInt());
         ui->confIndexSlider->setValue(pmh->data(PmhData::ConfidenceIndex).toInt());
@@ -258,7 +267,7 @@ void PmhViewer::setPatientInfoVisible(bool visible)
 {
     QString text;
     if (visible) {
-        text = QString("%1, %2").arg(
+        text = QString("%1 %2").arg(
                     patient()->data(Core::IPatient::FullName).toString(),
                     patient()->data(Core::IPatient::DateOfBirth).toString());
     } else {

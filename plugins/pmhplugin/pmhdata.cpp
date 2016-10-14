@@ -166,6 +166,7 @@ PmhData::PmhData() :
     populateWithCurrentData();
     d->m_Data.insert(ConfidenceIndex, 5);
     d->m_Data.insert(IsValid, true);
+    d->m_Data.insert(CreationDateTime, QDateTime::currentDateTimeUtc().toString(Qt::ISODate));
 }
 
 PmhData::~PmhData()

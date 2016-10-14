@@ -253,7 +253,7 @@ bool CategoryBase::createDatabase(const QString &connectionName , const QString 
     }
 
     // Add version number
-    if (!setVersion(Utils::Field(Constants::Table_VERSION, Constants::VERSION_TEXT), Constants::DB_ACTUALVERSION)) {
+    if (!setVersion(Utils::Field(Constants::Table_VERSION, Constants::VERSION_TEXT), Constants::DB_CURRENTVERSION)) {
         LOG_ERROR_FOR("CategoryBase", "Unable to set version");
     }
 

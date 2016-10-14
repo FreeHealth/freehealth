@@ -99,6 +99,7 @@ public:
         IsPrivate,
         DbOnly_MasterEpisodeId,
         DbOnly_MasterContactId,
+        CreationDateTime
     };
 
     PmhData();
