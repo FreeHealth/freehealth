@@ -146,6 +146,12 @@ void ProcessPatientImport::modifyGestcab()
 void ProcessPatientImport::importGestcab()
 {
     qWarning() << d_ptr->m_import->size() << "d_ptr->m_import->size()";
+
+    // partial duplicate lists
+    QStringList usualname_firstname;
+    QStringList usualname_dob;
+    QStringList firstname_dob;
+
     for (int j = 0; j < d_ptr->m_import->size(); ++j) {
         QStringList patientdata;
         foreach (QString s, d_ptr->m_import->at(j)) {
@@ -189,14 +195,15 @@ void ProcessPatientImport::importGestcab()
             break;
         }
 
-        // Check for duplicate
+        // Check for duplicates
+        // exact match (Usual name, First name, DoB):
+        // warn and skip patient creation
         if (patientBase()->isPatientExists(UsualName,
                                            QString(),
                                            Firstname,
                                            QString(),
                                            datedob)) {
-            qWarning() << UsualName << OtherNames << Firstname << GenderIndex
-                     << DateOfBirth << "Patient" << j << "already exists !!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
+
             QString duplicate = QString("The patient number %1 %2 %3 %4 %5 %6 already exists: skipping!")
                                 .arg(j)
                                 .arg(UsualName)
@@ -205,9 +212,65 @@ void ProcessPatientImport::importGestcab()
                                 .arg(GenderIndex)
                                 .arg(stringdob);
             d_ptr->m_duplicate << duplicate;
+            qWarning() << duplicate;
             continue;
         }
 
+        // warn about partial match
+        // Usual name, First name
+        if (patientBase()->isPatientExists(UsualName,
+                                           QString(),
+                                           Firstname,
+                                           QString(),
+                                           QDate())) {
+            QString duplicate = QString("The patient number %1 %2 %3 %4 %5 %6"
+                                        " has a partial id match: same usual name"
+                                        " and first name")
+                                .arg(j)
+                                .arg(UsualName)
+                                .arg(OtherNames)
+                                .arg(Firstname)
+                                .arg(GenderIndex)
+                                .arg(stringdob);
+            usualname_firstname << duplicate;
+            qWarning() << duplicate;
+        }
+        // Usual name, DoB
+        if (patientBase()->isPatientExists(UsualName,
+                                           QString(),
+                                           QString(),
+                                           QString(),
+                                           datedob)) {
+            QString duplicate = QString("The patient number %1 %2 %3 %4 %5 %6"
+                                        " has a partial id match: same usual name"
+                                        " and DoB.")
+                                .arg(j)
+                                .arg(UsualName)
+                                .arg(OtherNames)
+                                .arg(Firstname)
+                                .arg(GenderIndex)
+                                .arg(stringdob);
+            usualname_dob << duplicate;
+            qWarning() << duplicate;
+        }
+        // Usual first name, DoB
+        if (patientBase()->isPatientExists(QString(),
+                                           QString(),
+                                           Firstname,
+                                           QString(),
+                                           datedob)) {
+            QString duplicate = QString("The patient number %1 %2 %3 %4 %5 %6"
+                                        " has a partial id match: same first name"
+                                        " and DoB.")
+                                .arg(j)
+                                .arg(UsualName)
+                                .arg(OtherNames)
+                                .arg(Firstname)
+                                .arg(GenderIndex)
+                                .arg(stringdob);
+            firstname_dob << duplicate;
+            qWarning() << duplicate;
+        }
 
         qWarning()  << "***** Importing patient " << j << " *****";
         d_ptr->m_patientModel = new Patients::PatientModel(this);
@@ -241,10 +304,22 @@ void ProcessPatientImport::importGestcab()
             delete d_ptr->m_patientModel;
             d_ptr->m_patientModel=NULL;
         }
-        //if (j == 50) break;
     }
-    qWarning() << "Duplicates";
+
+    qWarning() << "Exact match duplicates:";
     foreach (QString s, d_ptr->m_duplicate) {
+        qWarning() << s;
+    }
+    qWarning() << "Exact match duplicates: usual name, first name";
+    foreach (QString s, usualname_firstname) {
+        qWarning() << s;
+    }
+    qWarning() << "Exact match duplicates: usual name, dob";
+    foreach (QString s, usualname_dob) {
+        qWarning() << s;
+    }
+    qWarning() << "Exact match duplicates: first name, dob";
+    foreach (QString s, firstname_dob) {
         qWarning() << s;
     }
 }
