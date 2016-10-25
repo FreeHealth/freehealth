@@ -143,6 +143,7 @@ void RecordImportDialog::matchPatientWidget() {
         QComboBox *combo = new QComboBox;
         combo->setObjectName(label);
         combo->addItems(m_field);
+        combo->setCurrentIndex(-1);
         matchPatientGridLayout->addWidget(combo, i, 1);
 
     }
@@ -175,6 +176,7 @@ void RecordImportDialog::matchFormWidget() {
             matchFormGridLayout->addWidget(new QLabel(labelPlugin), j, 1);
             QComboBox *combo = new QComboBox;
             combo->addItems(m_field);
+            combo->setCurrentIndex(-1);
             m_comboFormList.append(combo);
             matchFormGridLayout->addWidget(m_comboFormList.at(j), j, 2);
         }
