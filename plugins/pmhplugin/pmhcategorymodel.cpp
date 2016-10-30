@@ -1167,7 +1167,7 @@ bool PmhCategoryModel::activateFormEpisode(const QModelIndex &formIndex) const
 
     if (model->rowCount() == 0) {
         // Create the unique episode
-        model->insertRow(0);
+        //model->insertRow(0);
     }
 
     return model->populateFormWithEpisodeContent(model->index(0, 0), true);

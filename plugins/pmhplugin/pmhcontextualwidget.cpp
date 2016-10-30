@@ -17,27 +17,13 @@
 #include <QDebug>
 
 using namespace PMH;
+using namespace Internal;
 
 static inline Core::ContextManager *contextManager() { return Core::ICore::instance()->contextManager(); }
 
-namespace PMH {
-namespace Internal {
-
-class PmhContext : public Core::IContext
-{
-public:
-    PmhContext(PmhContextualWidget *w) : Core::IContext(w)
-    {
-        setObjectName("PmhContext");
-        setWidget(w);
-    }
-};
-
-}  // End namespace Internal
-}  // End namespace PMH
-
 PmhContextualWidget::PmhContextualWidget(QWidget *parent) :
-    QWidget(parent), m_Context(0)
+    QWidget(parent),
+    m_Context(0)
 {
     m_Context = new Internal::PmhContext(this);
     m_Context->setContext(Core::Context(Constants::C_PMH_PLUGINS));
@@ -50,4 +36,9 @@ PmhContextualWidget::~PmhContextualWidget()
 {
     // Remove contextual object
     contextManager()->removeContextObject(m_Context);
+}
+
+Core::IContext *PmhContextualWidget::context() const
+{
+    return m_Context;
 }

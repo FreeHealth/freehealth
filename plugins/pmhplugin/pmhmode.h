@@ -40,6 +40,7 @@ class QModelIndex;
 class QAbstractButton;
 class QPushButton;
 class QToolBar;
+class QSortFilterProxyModel;
 QT_END_NAMESPACE
 
 /**
@@ -48,14 +49,16 @@ QT_END_NAMESPACE
  * \version 0.7.2
  * \date 05 May 2012
 */
-
+namespace Form {
+class EpisodeModel;
+}
 namespace PMH {
 namespace Internal {
 namespace Ui {
 class PmhModeWidget;
 }
 
-class PmhModeWidget : public PMH::PmhContextualWidget
+class PmhModeWidget : public PmhContextualWidget
 {
     Q_OBJECT
 public:
@@ -63,7 +66,19 @@ public:
     ~PmhModeWidget();
 
     int currentSelectedCategory() const;
+    bool enableAction(WidgetAction action) const;
 
+public Q_SLOTS:
+    bool clear();
+
+protected Q_SLOTS:
+    bool createEpisode();
+    bool validateCurrentEpisode();
+    bool renewEpisode();
+    bool saveCurrentEpisode();
+    bool removeCurrentEpisode();
+    bool takeScreenshotOfCurrentEpisode();
+    bool printFormOrEpisode();
 
 private Q_SLOTS:
     void currentChanged(const QModelIndex &current, const QModelIndex &previous);
@@ -75,6 +90,8 @@ private Q_SLOTS:
     void pmhModelRowsInserted(const QModelIndex &parent, int start, int end);
 
 private:
+    bool saveCurrentEditingEpisode();
+    void createEpisodeToolbar();
     void hideEvent(QHideEvent *event);
     void changeEvent(QEvent *e);
 //    bool eventFilter(QObject *o, QEvent *e);
@@ -83,6 +100,10 @@ private:
     Ui::PmhModeWidget *ui;
     QToolBar *m_ToolBar;
     QPushButton *m_EditButton;
+    Form::EpisodeModel *m_currentEpisodeModel;
+    QModelIndex m_currentFormIndex;
+    QSortFilterProxyModel *m_proxyModel;
+    QToolBar *m_episodeToolBar;
 };
 
 class PmhMode : public Core::IMode

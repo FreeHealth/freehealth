@@ -257,7 +257,7 @@ public:
         }
 
         // Autosave or ask user?
-        if (!isAutosaveOn()) {
+        if (!settings()->value(Core::Constants::S_ALWAYS_SAVE_WITHOUT_PROMPTING, false).toBool()) {
             // Ask user
             bool save = Utils::yesNoMessageBox(QApplication::translate("Form::FormPlaceHolder",
                                                                        "Save episode?"),
