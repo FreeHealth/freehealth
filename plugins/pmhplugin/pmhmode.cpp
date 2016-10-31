@@ -327,7 +327,7 @@ void PmhModeWidget::currentChanged(const QModelIndex &current, const QModelIndex
                          SIGNAL(currentChanged(QModelIndex,QModelIndex)),
                          this,
                          SLOT(episodeChanged(QModelIndex, QModelIndex)));
-        //Q_EMIT actionsEnabledStateChanged();
+        Q_EMIT actionsEnabledStateChanged();
     } else if (catModel()->isPmhx(current)) {
         ui->stackedWidget->setCurrentWidget(ui->pageEditor);
         ui->pmhViewer->setPmhData(catModel()->pmhDataforIndex(current));
@@ -633,21 +633,124 @@ bool PmhModeWidget::createEpisode()
 
 bool PmhModeWidget::validateCurrentEpisode()
 {
-    return true;
+    if (!ui->episodeView->selectionModel()->hasSelection())
+        return false;
+
+    // message box
+    bool yes = Utils::yesNoMessageBox(tr("Validate the current episode"),
+                                      tr("When you validate an episode, you"
+                                         " freeze it permanently. The episode"
+                                         " will still be visible but no"
+                                         " modification will be possible.\n"
+                                         "Do you really want to validate the current episode?"));
+    if (!yes)
+        return false;
+
+    // get the episodeModel corresponding to the currently selected form
+    if (!m_currentEpisodeModel) {
+        qDebug() << "_currentEpisodeModel is false";
+        return false;
+    }
+    if (!saveCurrentEditingEpisode()) {
+        LOG_ERROR("Unable to save current episode");
+        return false;
+    }
+
+    // validate episode
+    bool ok = m_currentEpisodeModel->validateEpisode(ui->formDataMapper->currentEditingEpisodeIndex());
+    if (ok) {
+        patient()->patientBar()->showMessage(tr("Episode (%1) from form (%2) signed")
+                                             .arg(ui->formDataMapper->currentEpisodeLabel())
+                                             .arg(ui->formDataMapper->currentFormName()));
+    }
+    Q_EMIT actionsEnabledStateChanged();
+    return ok;
 }
 
+/*!
+  Renew the currently selected episode. This member takes the content of
+  the current episode and use it to create a new one. Only the date, episode label
+  and user creator changes.
+  \sa EpisodeModel::renewEpisode
+  \sa FormPlaceHolder::renewEpisode
+  */
 bool PmhModeWidget::renewEpisode()
 {
-    return true;
+    if (!ui->episodeView->selectionModel()->hasSelection())
+        return false;
+
+    // message box
+    bool yes = Utils::yesNoMessageBox(tr("Renew the current episode"),
+                                      tr("Create a new episode with today's date"
+                                         " and the same content as the"
+                                         " selected episode.<br />"
+                                         "Do you want to renew the selected episode?"));
+    if (!yes)
+        return false;
+
+
+    // get the episodeModel corresponding to the currently selected form
+    if (!m_currentEpisodeModel)
+        return false;
+    if (!saveCurrentEditingEpisode()) {
+        LOG_ERROR("Unable to save current episode");
+        return false;
+    }
+
+    // renew an episode
+    QModelIndex newEpisode = m_currentEpisodeModel->renewEpisode(ui->formDataMapper->currentEditingEpisodeIndex());
+    if (newEpisode.isValid()) {
+        // message
+        patient()->patientBar()->showMessage(tr("Episode (%1) from form (%2) renewed")
+                                             .arg(ui->formDataMapper->currentEpisodeLabel())
+                                             .arg(ui->formDataMapper->currentFormName()));
+
+        // select the newly created episode
+        QModelIndex proxy = m_proxyModel->mapFromSource(newEpisode);
+        ui->episodeView->selectRow(proxy.row());
+        //d->_formTreeModel->updateFormCount(d->_currentEditingForm);
+    }
+    Q_EMIT actionsEnabledStateChanged();
+    return newEpisode.isValid();
 }
+
 bool PmhModeWidget::saveCurrentEpisode()
 {
     return true;
 }
 
+/*!
+  Remove the currently selected episode
+  Return false in case of error.
+  Connected to Form::Internal::FormActionHandler.
+  \sa Form::EpisodeModel::removeEpisode()
+  */
 bool PmhModeWidget::removeCurrentEpisode()
 {
-    return true;
+#ifdef WITH_EPISODE_REMOVAL
+    // message box
+    bool yes = Utils::yesNoMessageBox(tr("Remove the current episode"),
+                                      tr("You cannot completely destroy an episode, "
+                                         "but you can remove it from the views.\n"
+                                         "The episode will not be shown anymore, but will still be "
+                                         "recorded in the database.\n"
+                                         "Do you really want to remove the current episode?"));
+    if (!yes)
+        return false;
+    bool ok = m_currentEpisodeModel->removeEpisode(ui->formDataMapper->currentEditingEpisodeIndex());
+    if (ok)
+        patient()->patientBar()->showMessage(tr("Episode (%1) from form (%2) removed")
+                                             .arg(ui->formDataMapper->currentEpisodeLabel())
+                                             .arg(ui->formDataMapper->currentFormName()));
+
+    //d->_formTreeModel->updateFormCount(d->_currentEditingForm);
+    ui->formDataMapper->clear();
+    ui->formDataMapper->setEnabled(false);
+    Q_EMIT actionsEnabledStateChanged();
+    return ok;
+#else
+    return false;
+#endif
 }
 
 bool PmhModeWidget::takeScreenshotOfCurrentEpisode()
@@ -678,6 +781,26 @@ PmhMode::PmhMode(QObject *parent) :
     setWidget(m_Widget);
     onCurrentPatientChanged();
     connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(onCurrentPatientChanged()));
+}
+
+void PmhModeWidget::episodeChanged(const QModelIndex &current, const QModelIndex &previous)
+{
+    LOG(QString("episodeChanged: current(valid:%1) ; previous(valid:%2)").arg(current.isValid()).arg(previous.isValid()));
+    // Autosave is problematic when patient changed
+    QModelIndex sourceCurrent = m_proxyModel->mapToSource(current);
+    QModelIndex sourcePrevious = m_proxyModel->mapToSource(previous);
+    if (sourcePrevious.isValid())
+        saveCurrentEditingEpisode();
+    clear();
+    if (sourceCurrent.isValid()) {
+        ui->formDataMapper->setCurrentEpisode(sourceCurrent);
+        ui->formDataMapper->setEnabled(true);
+    } else {
+        ui->formDataMapper->clear();
+        ui->formDataMapper->setEnabled(false);
+    }
+    //    warnPatient();
+    Q_EMIT actionsEnabledStateChanged();
 }
 
 PmhMode::~PmhMode()

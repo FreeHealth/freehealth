@@ -261,7 +261,8 @@ PmhActionHandler::PmhActionHandler(QObject *parent) :
     }
     connect(aPmhDatabaseInformation, SIGNAL(triggered()), this, SLOT(showPmhDatabaseInformation()));
 
-    // create forms actions
+    // create and connect forms actions
+    // create episode
     aCreateEpisode = createAction(this, "aCreateEpisode", Core::Constants::ICONADD,
                                   Form::Constants::A_ADDEPISODE,
                                   ctx,
@@ -270,6 +271,36 @@ PmhActionHandler::PmhActionHandler(QObject *parent) :
                                   0, "",
                                   QKeySequence::UnknownKey, false);
     connect(aCreateEpisode, SIGNAL(triggered()), this, SLOT(onCreateEpisodeRequested()));
+
+    // validate episode
+    a = aValidateEpisode = new QAction(this);
+    a->setObjectName("aValidateEpisode");
+    a->setIcon(theme()->icon(Core::Constants::ICONVALIDATEDARK));
+    cmd = actionManager()->registerAction(a, Form::Constants::A_VALIDATEEPISODE, ctx);
+    cmd->setTranslations(Form::Constants::VALIDATEEPISODE_TEXT, Form::Constants::VALIDATEEPISODE_TEXT, Form::Constants::FORM_TR_CONTEXT);
+    connect(aValidateEpisode, SIGNAL(triggered()), this, SLOT(onValidateEpisodeRequested()));
+
+    // renew episode
+    aRenewEpisode = createAction(this, "aRenewEpisode", Core::Constants::ICONRENEW,
+                                  Form::Constants::A_RENEWEPISODE,
+                                  ctx,
+                                  Trans::Constants::RENEW_EPISODE, "",
+                                  cmd,
+                                  0, "",
+                                  QKeySequence::UnknownKey, false);
+    connect(aRenewEpisode, SIGNAL(triggered()), this, SLOT(onRenewEpisodeRequested()));
+
+    //remove episode
+#ifdef WITH_EPISODE_REMOVAL
+    aRemoveEpisode = createAction(this, "aRemoveEpisode", Core::Constants::ICONREMOVE,
+                                  Form::Constants::A_REMOVEEPISODE,
+                                  ctx,
+                                  Trans::Constants::REMOVE_EPISODE, "",
+                                  cmd,
+                                  0, "",
+                                  QKeySequence::UnknownKey, false);
+    connect(aRemoveEpisode, SIGNAL(triggered()), this, SLOT(onRemoveEpisodeRequested()));
+#endif
 
     contextManager()->updateContext();
     actionManager()->retranslateMenusAndActions();

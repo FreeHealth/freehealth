@@ -88,6 +88,7 @@ private Q_SLOTS:
     void onCurrentPatientChanged();
     void createPmh();
     void pmhModelRowsInserted(const QModelIndex &parent, int start, int end);
+    void episodeChanged(const QModelIndex &current, const QModelIndex &previous);
 
 private:
     bool saveCurrentEditingEpisode();
