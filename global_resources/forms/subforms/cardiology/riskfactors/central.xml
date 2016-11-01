@@ -31,7 +31,7 @@
   <MedForm name="Subs::Cardiology::RiskFactors">
     <label lang="xx">Cardiovascular risk factors</label>
     <label lang="fr">Facteurs de risque cardio-vasculaire</label>
-    <options>compact;UseFormNameAsNameSpace</options>
+    <options>compact;UseFormNameAsNameSpace;Unique</options>
     <file type="htmlprintmask">./html/xx/padtools_print_export_mask.html</file>
     <file type="htmlexportmask">./html/xx/padtools_print_export_mask.html</file>
 

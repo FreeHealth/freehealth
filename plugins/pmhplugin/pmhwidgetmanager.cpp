@@ -82,6 +82,15 @@ static PmhContextualWidget *parentPmhWidget(QWidget  *widget)
     return 0;
 }
 
+// Register an existing Core action
+static QAction *registerAction(const QString &id, const Core::Context &ctx, QObject *parent)
+{
+    QAction *a = new QAction(parent);
+    Core::Command *cmd = Core::ICore::instance()->actionManager()->registerAction(a, Core::Id(id), ctx);
+    Q_UNUSED(cmd);
+    return a;
+}
+
 // Create an action
 static inline QAction *createAction(QObject *parent, const QString &name, const QString &icon,
                                     const QString &actionName,
@@ -301,6 +310,24 @@ PmhActionHandler::PmhActionHandler(QObject *parent) :
                                   QKeySequence::UnknownKey, false);
     connect(aRemoveEpisode, SIGNAL(triggered()), this, SLOT(onRemoveEpisodeRequested()));
 #endif
+
+    // save episode
+    aSaveEpisode = registerAction(Core::Constants::A_FILE_SAVE, ctx, this);
+    connect(aSaveEpisode, SIGNAL(triggered()), this, SLOT(onSaveEpisodeRequested()));
+
+    // take screenshot
+    aTakeScreenshot = createAction(this, "aTakeScreenshot", Core::Constants::ICONTAKESCREENSHOT,
+                                   Form::Constants::A_TAKESCREENSHOT,
+                                   ctx,
+                                   Trans::Constants::TAKE_SCREENSHOT, "",
+                                   cmd,
+                                   0, "",
+                                   QKeySequence::UnknownKey, false);
+    connect(aTakeScreenshot, SIGNAL(triggered()), this, SLOT(onTakeScreenshotRequested()));
+
+    // print form
+    aPrintForm = registerAction(Core::Constants::A_FILE_PRINT, ctx, this);
+    connect(aPrintForm, SIGNAL(triggered()), this, SLOT(onPrintFormRequested()));
 
     contextManager()->updateContext();
     actionManager()->retranslateMenusAndActions();

@@ -46,6 +46,7 @@
 #include "constants.h"
 
 #include <coreplugin/icore.h>
+#include <coreplugin/idocumentprinter.h>
 #include <coreplugin/ipatient.h>
 #include <coreplugin/ipatientbar.h>
 #include <coreplugin/imainwindow.h>
@@ -63,6 +64,7 @@
 #include <formmanagerplugin/constants_settings.h>
 #include <formmanagerplugin/formcontextualwidget.h>
 #include <formmanagerplugin/formcore.h>
+#include <formmanagerplugin/formmanager.h>
 #include <formmanagerplugin/iformitem.h>
 #include <formmanagerplugin/iformwidgetfactory.h>
 #include <formmanagerplugin/episodemodel.h>
@@ -71,6 +73,7 @@
 
 #include <utils/global.h>
 #include <utils/log.h>
+#include <utils/widgets/datetimedelegate.h>
 #include <translationutils/constanttranslations.h>
 #include <extensionsystem/pluginmanager.h>
 
@@ -79,6 +82,7 @@
 #include <QPushButton>
 #include <QScrollBar>
 #include <QSortFilterProxyModel>
+#include <QFileDialog>
 
 #include "ui_pmhmodewidget.h"
 
@@ -95,6 +99,8 @@ static inline Core::IPatient *patient()  { return Core::ICore::instance()->patie
 static inline Core::ActionManager *actionManager() {return Core::ICore::instance()->actionManager();}
 static inline PmhCore *pmhCore() {return PmhCore::instance();}
 static inline PmhBase *base() {return PmhBase::instance();}
+static inline Core::IDocumentPrinter *printer() {return ExtensionSystem::PluginManager::instance()->getObject<Core::IDocumentPrinter>();}
+static inline Form::FormManager &formManager() {return Form::FormCore::instance().formManager();}
 
 namespace {
 
@@ -161,6 +167,13 @@ PmhModeWidget::PmhModeWidget(QWidget *parent) :
     ui->treeView->setModel(catModel());
     ui->treeView->header()->hide();
     ui->treeView->setStyleSheet(::TREEVIEW_SHEET);
+
+    ui->episodeView->verticalHeader()->hide();
+    ui->episodeView->setFrameStyle(QFrame::NoFrame);
+    ui->episodeView->setSelectionMode(QAbstractItemView::SingleSelection);
+    ui->episodeView->setSelectionBehavior(QAbstractItemView::SelectRows);
+    ui->episodeView->setItemDelegateForColumn(Form::EpisodeModel::UserDateTime, new Utils::DateTimeDelegate(this, false));
+    ui->episodeView->setItemDelegateForColumn(Form::EpisodeModel::CreationDateTime, new Utils::DateTimeDelegate(this, false));
 
     // Actions connected in local widget context
     Core::Command *cmd = 0;
@@ -714,9 +727,22 @@ bool PmhModeWidget::renewEpisode()
     return newEpisode.isValid();
 }
 
+/*!
+  Save the currently selected episode (episode content is submitted to its Form::EpisodeModel).
+  Are saved:
+  - the user datetime
+  - the user label
+  - the priority
+  - the XML content
+  Return false in case of error.
+  Connected to Form::Internal::FormActionHandler.
+  \sa Form::EpisodeModel::submit()
+  */
 bool PmhModeWidget::saveCurrentEpisode()
 {
-    return true;
+    bool ok = saveCurrentEditingEpisode();
+    Q_EMIT actionsEnabledStateChanged();
+    return ok;
 }
 
 /*!
@@ -753,13 +779,64 @@ bool PmhModeWidget::removeCurrentEpisode()
 #endif
 }
 
+
+/*!
+  Take a screenshot of the currently selected form and episode.
+  Return false in case of error.
+  Connected to Form::Internal::FormActionHandler.
+  */
 bool PmhModeWidget::takeScreenshotOfCurrentEpisode()
 {
-    return true;
+    QString fileName = QFileDialog::getSaveFileName(this, tkTr(Trans::Constants::SAVE_FILE),
+                                                    settings()->path(Core::ISettings::UserDocumentsPath),
+                                                    tr("Images (*.png)"));
+    if (!fileName.isEmpty()) {
+        QFileInfo info(fileName);
+        if (info.completeSuffix().isEmpty())
+            fileName.append(".png");
+        QPixmap pix = ui->formDataMapper->screenshot();
+        return pix.save(fileName);
+    }
+    return false;
 }
 
+/*!
+  Print the current editing episode. Return false in case of error.
+  In order to print an episode (not an empty form), this member uses the
+  Form::FormItemSpec::Spec_HtmlPrintMask of the current editing form. \n
+  Connected to Form::Internal::FormActionHandler
+  */
 bool PmhModeWidget::printFormOrEpisode()
 {
+    if (!m_currentFormIndex.isValid())
+        return false;
+    Form::FormMain *formMain = catModel()->formForIndex(m_currentFormIndex);
+    if (!formMain)
+        return false;
+    Core::IDocumentPrinter *p = printer();
+    if (!p) {
+        LOG_ERROR("No IDocumentPrinter found");
+        return false;
+    }
+
+    QString title = formMain->spec()->label();
+    QString htmlToPrint = formManager().formPrintHtmlOutput(formMain);
+
+    p->clearTokens();
+    QHash<QString, QVariant> tokens;
+    tokens.insert(Core::Constants::TOKEN_DOCUMENTTITLE, title);
+    p->addTokens(Core::IDocumentPrinter::Tokens_Global, tokens);
+
+    // print
+    if (formMain->isNoHeader()) {
+        p->print(htmlToPrint, Core::IDocumentPrinter::Papers_Empty_User, false);
+    } else if (formMain->isAdministrativeHeader()) {
+        p->print(htmlToPrint, Core::IDocumentPrinter::Papers_Administrative_User, false);
+    } else if (formMain->isPrescriptionHeader()) {
+        p->print(htmlToPrint, Core::IDocumentPrinter::Papers_Prescription_User, false);
+    } else {
+        p->print(htmlToPrint, Core::IDocumentPrinter::Papers_Generic_User, false);
+    }
     return true;
 }
 
