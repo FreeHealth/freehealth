@@ -68,12 +68,12 @@ private Q_SLOTS:
     void onActionEnabledStateUpdated(PMH::Internal::PmhContextualWidget::WidgetAction action);
 
 protected:
+    QAction *aClear;
     QAction *aAddPmh;
     QAction *aRemovePmh;
     QAction *aAddCat;
     QAction *aCategoryManager;
     QAction *aPmhDatabaseInformation;
-    QAction *aClear;
     QAction *aCreateEpisode, *aValidateEpisode, *aRenewEpisode, *aRemoveEpisode, *aSaveEpisode;
     QAction *aTakeScreenshot;
     QAction *aPrintForm;

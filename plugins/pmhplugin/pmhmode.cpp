@@ -574,8 +574,77 @@ bool PmhModeWidget::saveCurrentEditingEpisode()
 /** Return the enabled state of an action. \sa Form::Internal::FormActionHandler */
 bool PmhModeWidget::enableAction(WidgetAction action) const
 {
-    Q_UNUSED(action);
-    return true;
+    if (!m_currentEpisodeModel) {
+        qDebug() << Q_FUNC_INFO << "return false";
+        return false;
+    }
+    switch (action) {
+    case Action_Clear:
+        // Clear only if a form && an episode are selected
+        return (ui->episodeView->selectionModel()->hasSelection()
+                && catModel()->isForm(ui->treeView->currentIndex()));
+    case Action_CreateEpisode:
+    {
+        // No form
+                if (catModel()->formForIndex(m_currentFormIndex)->episodePossibilities() == Form::FormMain::NoEpisode) {
+                 return false;
+                }
+
+        // Unique episode, already 1 episode
+        if ((catModel()->formForIndex(m_currentFormIndex)->episodePossibilities() == Form::FormMain::UniqueEpisode)
+              && (m_currentEpisodeModel->rowCount() > 0)) {
+            return false;
+        }
+        return true;
+    }
+    case Action_ValidateCurrentEpisode:
+    {
+        // Validate episode only if
+        // - an episode is selected
+        // - && episode not already validated
+        // - && form is not unique episode
+        bool unique = catModel()->formForIndex(m_currentFormIndex)->episodePossibilities() == Form::FormMain::UniqueEpisode;
+        return (ui->episodeView->selectionModel()->hasSelection()
+                && !m_currentEpisodeModel->isEpisodeValidated(ui->formDataMapper->currentEditingEpisodeIndex())
+                && !unique);
+    }
+    case Action_SaveCurrentEpisode:
+        // Save episode only if
+        // - an episode is selected
+        //TODO: - episode is not validated
+        return (ui->episodeView->selectionModel()->hasSelection()
+                && !m_currentEpisodeModel->isEpisodeValidated(ui->formDataMapper->currentEditingEpisodeIndex()));
+    case Action_RemoveCurrentEpisode:
+    {
+        // Remove episode only if
+        // - not NoEpisode
+        // - an episode is selected
+        bool modelPopulated = (m_currentEpisodeModel->rowCount() > 0);
+        bool noEpisode = catModel()->formForIndex(m_currentFormIndex)->episodePossibilities() == Form::FormMain::NoEpisode;
+        return (modelPopulated
+                && !noEpisode
+                && ui->episodeView->selectionModel()->hasSelection());
+    }
+    case Action_RenewCurrentEpisode:
+    {
+        // Renew an episode only if
+        // - form is multi-episode
+        // - an episode is selected
+        bool multiEpisode = catModel()->formForIndex(m_currentFormIndex)->episodePossibilities() == Form::FormMain::MultiEpisode;
+        bool hasSelection = ui->episodeView->selectionModel()->hasSelection();
+        return (multiEpisode && hasSelection);
+    }
+    case Action_TakeScreenShot:
+    {
+        // Take screenshot / Renew an episode only if
+        // - an episode is selected
+        return (ui->episodeView->selectionModel()->hasSelection());
+    }
+    case Action_PrintCurrentFormEpisode:
+        // Print episode only if an episode is selected
+        return ui->episodeView->selectionModel()->hasSelection();
+    }  // end switch
+    return false;
 }
 
 /** Clear the form content. The current episode (if one was selected) is not submitted to the model. */

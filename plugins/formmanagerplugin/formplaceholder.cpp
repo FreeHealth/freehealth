@@ -574,11 +574,16 @@ bool FormPlaceHolder::enableAction(WidgetAction action) const
     case Action_RemoveCurrentEpisode:
     {
         // Save episode only if
-        // - form is multi episode
+        // - form is not an identity form
+        // - form is not NoEpisode form
+        // - form model is populated
         // - an episode is selected
+        bool identity = d->_formTreeModel->isIdentity(d->_currentEditingForm);
         bool modelPopulated = (d->_currentEpisodeModel->rowCount() > 0);
-        bool multiEpisode = d->_formTreeModel->isMultiEpisode(d->_currentEditingForm);
-        return (multiEpisode && modelPopulated
+        bool noEpisode = d->_formTreeModel->isNoEpisode(d->_currentEditingForm);
+        return (!identity
+                && !noEpisode
+                && modelPopulated
                 && d->ui->episodeView->selectionModel()->hasSelection());
     }
     case Action_RenewCurrentEpisode:

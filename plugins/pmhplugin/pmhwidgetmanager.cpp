@@ -189,15 +189,24 @@ PmhContextualWidget *PmhWidgetManager::currentView() const
     return PmhActionHandler::m_CurrentView;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////  ACTION HANDLER   ///////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////  ACTION HANDLER   ////////////////////
+////////////////////////////////////////////////////////////////////////////////
 PmhActionHandler::PmhActionHandler(QObject *parent) :
         QObject(parent),
-        aAddPmh(0),aRemovePmh(0),
+        aClear(0),
+        aAddPmh(0),
+        aRemovePmh(0),
         aAddCat(0),
         aCategoryManager(0),
         aPmhDatabaseInformation(0),
+        aCreateEpisode(0),
+        aValidateEpisode(0),
+        aRenewEpisode(0),
+        aRemoveEpisode(0),
+        aSaveEpisode(0),
+        aTakeScreenshot(0),
+        aPrintForm(0),
         m_CurrentView(0)
 {
     setObjectName("PmhActionHandler");
@@ -223,6 +232,9 @@ PmhActionHandler::PmhActionHandler(QObject *parent) :
     }
 
     // Create local actions
+    aClear = registerAction(Core::Constants::A_LIST_CLEAR, ctx, this);
+    connect(aClear, SIGNAL(triggered()), this, SLOT(onClearRequested()));
+
     a = aAddPmh = new QAction(this);
     aAddPmh->setEnabled(false);
     a->setObjectName("aAddPmh");
@@ -342,7 +354,18 @@ void PmhActionHandler::setCurrentView(PmhContextualWidget *view)
         LOG_ERROR("setCurrentView: no view");
         return;
     }
+    // disconnect old view
+    if (m_CurrentView) {
+        disconnect(m_CurrentView, SIGNAL(actionsEnabledStateChanged()), this, SLOT(updateActions()));
+        disconnect(m_CurrentView, SIGNAL(actionEnabledStateChanged(PMH::Internal::PmhContextualWidget::WidgetAction)), this, SLOT(onActionEnabledStateUpdated(PMH::Internal::PmhContextualWidget::WidgetAction)));
+    }
     m_CurrentView = view;
+
+    // connect new view
+    connect(m_CurrentView, SIGNAL(actionsEnabledStateChanged()), this, SLOT(updateActions()));
+    connect(m_CurrentView, SIGNAL(actionEnabledStateChanged(Form::Internal::FormContextualWidget::WidgetAction)), this, SLOT(onActionEnabledStateUpdated(PMH::Internal::PmhContextualWidget::WidgetAction)));
+
+    // update actions according to the current view
     updateActions();
 }
 
@@ -363,14 +386,14 @@ void PmhActionHandler::onActionEnabledStateUpdated(PMH::Internal::PmhContextualW
     if (m_CurrentView) {
         QAction *a = 0;
         switch (action) {
-        case PMH::Internal::PmhContextualWidget::Action_Clear: /*a = aClear;*/ break;
+        case PMH::Internal::PmhContextualWidget::Action_Clear: a = aClear; break;
         case PMH::Internal::PmhContextualWidget::Action_CreateEpisode: a = aCreateEpisode; break;
-        case PMH::Internal::PmhContextualWidget::Action_ValidateCurrentEpisode: /*a = aValidateEpisode;*/ break;
-        case PMH::Internal::PmhContextualWidget::Action_SaveCurrentEpisode: /*a = aSaveEpisode;*/ break;
-        case PMH::Internal::PmhContextualWidget::Action_RenewCurrentEpisode: /*a = aRenewEpisode;*/ break;
-        case PMH::Internal::PmhContextualWidget::Action_RemoveCurrentEpisode: /*a = aRemoveEpisode;*/ break;
-        case PMH::Internal::PmhContextualWidget::Action_TakeScreenShot: /*a = aTakeScreenshot;*/ break;
-        case PMH::Internal::PmhContextualWidget::Action_PrintCurrentFormEpisode: /*a = aPrintForm;*/ break;
+        case PMH::Internal::PmhContextualWidget::Action_ValidateCurrentEpisode: a = aValidateEpisode; break;
+        case PMH::Internal::PmhContextualWidget::Action_SaveCurrentEpisode: a = aSaveEpisode; break;
+        case PMH::Internal::PmhContextualWidget::Action_RenewCurrentEpisode: a = aRenewEpisode; break;
+        case PMH::Internal::PmhContextualWidget::Action_RemoveCurrentEpisode: a = aRemoveEpisode; break;
+        case PMH::Internal::PmhContextualWidget::Action_TakeScreenShot: a = aTakeScreenshot; break;
+        case PMH::Internal::PmhContextualWidget::Action_PrintCurrentFormEpisode: a = aPrintForm; break;
         }  // end switch
         if(a)
             if(m_CurrentView)
