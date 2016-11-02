@@ -135,7 +135,9 @@ PmhCore::~PmhCore()
 
 PmhCategoryModel *PmhCore::pmhCategoryModel() const
 {
-    return d->m_PmhCategoryModel;
+    if (d->m_PmhCategoryModel)
+        return d->m_PmhCategoryModel;
+    return 0;
 }
 
 void PmhCore::onPatientFormsLoaded()

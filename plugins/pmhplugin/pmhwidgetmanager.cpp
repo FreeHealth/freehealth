@@ -363,7 +363,7 @@ void PmhActionHandler::setCurrentView(PmhContextualWidget *view)
 
     // connect new view
     connect(m_CurrentView, SIGNAL(actionsEnabledStateChanged()), this, SLOT(updateActions()));
-    connect(m_CurrentView, SIGNAL(actionEnabledStateChanged(Form::Internal::FormContextualWidget::WidgetAction)), this, SLOT(onActionEnabledStateUpdated(PMH::Internal::PmhContextualWidget::WidgetAction)));
+    connect(m_CurrentView, SIGNAL(actionEnabledStateChanged(PMH::Internal::PmhContextualWidget::WidgetAction)), this, SLOT(onActionEnabledStateUpdated(PMH::Internal::PmhContextualWidget::WidgetAction)));
 
     // update actions according to the current view
     updateActions();

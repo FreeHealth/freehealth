@@ -28,6 +28,7 @@
 #define PMHMODE_H
 
 #include <coreplugin/modemanager/imode.h>
+#include <coreplugin/icorelistener.h>
 #include <pmhplugin/pmhcontextualwidget.h>
 
 #include <QObject>
@@ -54,19 +55,37 @@ class EpisodeModel;
 }
 namespace PMH {
 namespace Internal {
+class PmhModeWidget;
 namespace Ui {
 class PmhModeWidget;
 }
 
+class PmhModeWidgetCoreListener : public Core::ICoreListener
+{
+    Q_OBJECT
+public:
+    PmhModeWidgetCoreListener(PmhModeWidget *parent);
+    ~PmhModeWidgetCoreListener();
+    bool coreAboutToClose();
+    QString errorMessage() const {return _errorMsg;}
+
+private:
+    PmhModeWidget *_pmhModeWidget;
+    QString _errorMsg;
+};
+
 class PmhModeWidget : public PmhContextualWidget
 {
     Q_OBJECT
+    friend class PMH::Internal::PmhModeWidgetCoreListener;
+
 public:
     PmhModeWidget(QWidget *parent = 0);
     ~PmhModeWidget();
 
     int currentSelectedCategory() const;
     bool enableAction(WidgetAction action) const;
+    QString currentFormLabel() const;
 
 public Q_SLOTS:
     bool clear();
@@ -79,6 +98,9 @@ protected Q_SLOTS:
     bool removeCurrentEpisode();
     bool takeScreenshotOfCurrentEpisode();
     bool printFormOrEpisode();
+
+protected:
+    bool isDirty() const;
 
 private Q_SLOTS:
     void currentChanged(const QModelIndex &current, const QModelIndex &previous);
@@ -93,6 +115,8 @@ private Q_SLOTS:
 private:
     bool saveCurrentEditingEpisode();
     void createEpisodeToolbar();
+    void selectAndActivateFirstEpisode();
+    void showEvent(QShowEvent *event);
     void hideEvent(QHideEvent *event);
     void changeEvent(QEvent *e);
 //    bool eventFilter(QObject *o, QEvent *e);
@@ -102,9 +126,9 @@ private:
     QToolBar *m_ToolBar;
     QPushButton *m_EditButton;
     Form::EpisodeModel *m_currentEpisodeModel;
-    QModelIndex m_currentFormIndex;
     QSortFilterProxyModel *m_proxyModel;
     QToolBar *m_episodeToolBar;
+    QModelIndex m_currentFormIndex;
 };
 
 class PmhMode : public Core::IMode

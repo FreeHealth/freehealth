@@ -149,7 +149,8 @@ PmhModeWidget::PmhModeWidget(QWidget *parent) :
         m_EditButton(0),
         m_currentEpisodeModel(0),
         m_proxyModel(0),
-        m_episodeToolBar(0)
+        m_episodeToolBar(0),
+        m_currentFormIndex(QModelIndex())
 {
     ui->setupUi(this);
     ui->pmhViewer->setEditMode(PmhViewer::ReadOnlyMode);
@@ -242,9 +243,11 @@ int PmhModeWidget::currentSelectedCategory() const
 /** Reacts on the currentChanged signal of the category tree view */
 void PmhModeWidget::currentChanged(const QModelIndex &current, const QModelIndex &previous)
 {
+    qDebug() << Q_FUNC_INFO;
     if (previous.isValid()) {
         if (catModel()->isForm(previous)) {
             if (ui->formDataMapper->isDirty()) {
+                saveCurrentEditingEpisode();
                 ui->formDataMapper->submit();
                 ui->formDataMapper->clear();
                 catModel()->refreshSynthesis();
@@ -275,7 +278,8 @@ void PmhModeWidget::currentChanged(const QModelIndex &current, const QModelIndex
         const QString &formUid = catModel()->index(current.row(), PmhCategoryModel::Id, current.parent()).data().toString();
         ui->stackedWidget->setCurrentWidget(ui->formPage);
         ui->formDataMapper->setCurrentForm(formUid);
-        ui->formDataMapper->setLastEpisodeAsCurrent();
+        selectAndActivateFirstEpisode();
+        //ui->formDataMapper->setLastEpisodeAsCurrent();
         if (m_currentEpisodeModel) {
             QObject::disconnect(m_currentEpisodeModel, SIGNAL(rowsInserted(QModelIndex,int,int)), this, SLOT(updateFormCount()));
             QObject::disconnect(m_currentEpisodeModel, SIGNAL(rowsRemoved(QModelIndex,int,int)), this, SLOT(updateFormCount()));
@@ -432,10 +436,12 @@ void PmhModeWidget::removeItem()
 void PmhModeWidget::onCurrentPatientChanged()
 {
     if (ui->formDataMapper->isDirty()) {
+        saveCurrentEditingEpisode();
         ui->formDataMapper->submit();
         ui->formDataMapper->clear();
         catModel()->refreshSynthesis();
     }
+    m_currentFormIndex = QModelIndex();
     ui->formDataMapper->clear();
     ui->treeView->selectionModel()->select(catModel()->index(0,0), QItemSelectionModel::SelectCurrent);
     ui->treeView->expandAll();
@@ -472,12 +478,21 @@ void PmhModeWidget::pmhModelRowsInserted(const QModelIndex &parent, int start, i
 
 }
 
+void PmhModeWidget::showEvent(QShowEvent *event)
+{
+    LOG(QString("ShowEvent: %1").arg(isVisible() ? "isVisible" : "isHidden"));
+    if (ui->formDataMapper->isDirty()) {
+        LOG_ERROR("**** During ShowEvent FormDataMapper is Dirty: " + catModel()->formForIndex(m_currentFormIndex)->uuid());
+        saveCurrentEditingEpisode();
+    }
+    selectAndActivateFirstEpisode();
+    Q_EMIT actionsEnabledStateChanged();
+    QWidget::showEvent(event);
+}
+
 void PmhModeWidget::hideEvent(QHideEvent *event)
 {
-    if (ui->formDataMapper->isDirty()) {
-        ui->formDataMapper->submit();
-        catModel()->refreshSynthesis();
-    }
+    saveCurrentEditingEpisode();
     QWidget::hideEvent(event);
 }
 
@@ -578,6 +593,11 @@ bool PmhModeWidget::enableAction(WidgetAction action) const
         qDebug() << Q_FUNC_INFO << "return false";
         return false;
     }
+    if(!catModel())
+        return false;
+    if(!m_currentFormIndex.isValid())
+        return false;
+
     switch (action) {
     case Action_Clear:
         // Clear only if a form && an episode are selected
@@ -586,13 +606,16 @@ bool PmhModeWidget::enableAction(WidgetAction action) const
     case Action_CreateEpisode:
     {
         // No form
-                if (catModel()->formForIndex(m_currentFormIndex)->episodePossibilities() == Form::FormMain::NoEpisode) {
-                 return false;
-                }
-
+        qDebug() << catModel();
+        qDebug() << m_currentFormIndex;
+        if (!catModel()->formForIndex(m_currentFormIndex))
+            return false;
+        if (catModel()->formForIndex(m_currentFormIndex)->episodePossibilities() == Form::FormMain::NoEpisode) {
+            return false;
+        }
         // Unique episode, already 1 episode
         if ((catModel()->formForIndex(m_currentFormIndex)->episodePossibilities() == Form::FormMain::UniqueEpisode)
-              && (m_currentEpisodeModel->rowCount() > 0)) {
+                && (m_currentEpisodeModel->rowCount() > 0)) {
             return false;
         }
         return true;
@@ -602,16 +625,15 @@ bool PmhModeWidget::enableAction(WidgetAction action) const
         // Validate episode only if
         // - an episode is selected
         // - && episode not already validated
-        // - && form is not unique episode
-        bool unique = catModel()->formForIndex(m_currentFormIndex)->episodePossibilities() == Form::FormMain::UniqueEpisode;
+        // - && form is not NoEpisode
         return (ui->episodeView->selectionModel()->hasSelection()
                 && !m_currentEpisodeModel->isEpisodeValidated(ui->formDataMapper->currentEditingEpisodeIndex())
-                && !unique);
+                && !(catModel()->formForIndex(m_currentFormIndex)->episodePossibilities() == Form::FormMain::NoEpisode));
     }
     case Action_SaveCurrentEpisode:
         // Save episode only if
         // - an episode is selected
-        //TODO: - episode is not validated
+        // - episode is not validated
         return (ui->episodeView->selectionModel()->hasSelection()
                 && !m_currentEpisodeModel->isEpisodeValidated(ui->formDataMapper->currentEditingEpisodeIndex()));
     case Action_RemoveCurrentEpisode:
@@ -620,9 +642,8 @@ bool PmhModeWidget::enableAction(WidgetAction action) const
         // - not NoEpisode
         // - an episode is selected
         bool modelPopulated = (m_currentEpisodeModel->rowCount() > 0);
-        bool noEpisode = catModel()->formForIndex(m_currentFormIndex)->episodePossibilities() == Form::FormMain::NoEpisode;
         return (modelPopulated
-                && !noEpisode
+                && !(catModel()->formForIndex(m_currentFormIndex)->episodePossibilities() == Form::FormMain::NoEpisode)
                 && ui->episodeView->selectionModel()->hasSelection());
     }
     case Action_RenewCurrentEpisode:
@@ -630,13 +651,12 @@ bool PmhModeWidget::enableAction(WidgetAction action) const
         // Renew an episode only if
         // - form is multi-episode
         // - an episode is selected
-        bool multiEpisode = catModel()->formForIndex(m_currentFormIndex)->episodePossibilities() == Form::FormMain::MultiEpisode;
-        bool hasSelection = ui->episodeView->selectionModel()->hasSelection();
-        return (multiEpisode && hasSelection);
+        return ((catModel()->formForIndex(m_currentFormIndex)->episodePossibilities() == Form::FormMain::MultiEpisode)
+                && ui->episodeView->selectionModel()->hasSelection());
     }
     case Action_TakeScreenShot:
     {
-        // Take screenshot / Renew an episode only if
+        // Take screenshot
         // - an episode is selected
         return (ui->episodeView->selectionModel()->hasSelection());
     }
@@ -909,6 +929,23 @@ bool PmhModeWidget::printFormOrEpisode()
     return true;
 }
 
+void PmhModeWidget::selectAndActivateFirstEpisode()
+{
+    // Assuming the _currentEditingForm is defined and the episodeView model is set
+    if (ui->episodeView->selectionModel()
+            && !ui->episodeView->selectionModel()->hasSelection()) {
+        ui->formDataMapper->setCurrentEpisode(QModelIndex());
+        if (ui->episodeView->model()->rowCount() > 0) {
+            ui->episodeView->selectRow(0);
+            // force episodeChanged
+            episodeChanged(ui->episodeView->currentIndex(), QModelIndex());
+            ui->formDataMapper->setFormWidgetEnabled(true);
+        } else {
+            ui->formDataMapper->setFormWidgetEnabled(false);
+        }
+    }
+}
+
 PmhMode::PmhMode(QObject *parent) :
     Core::IMode(parent),
     m_inPluginManager(false)
@@ -949,6 +986,29 @@ void PmhModeWidget::episodeChanged(const QModelIndex &current, const QModelIndex
     Q_EMIT actionsEnabledStateChanged();
 }
 
+/** Return true is the Form::Internal::FormDataWidgetMapper included in the view is dirty */
+bool PmhModeWidget::isDirty() const
+{
+    //    qWarning() << "FormPlaceHolder::isDirty" << d->_formTreeModel << d->_currentEditingForm.isValid() << d->ui->formDataMapper->currentEditingEpisodeIndex().isValid();
+    if (m_currentFormIndex.isValid())
+            //&& ui->formDataMapper->currentEditingEpisodeIndex().isValid())
+        return ui->formDataMapper->isDirty();
+    return false;
+}
+
+/**
+ * Returns the label of the currently selected form (mainly used for debugging purpose).
+ * \sa Forms::Internal::FormPlaceHolderCoreListener
+ */
+QString PmhModeWidget::currentFormLabel() const
+{
+/*    if (catModel() && m_currentFormIndex.isValid()) {
+        QModelIndex index = catModel()->index(d->_currentEditingForm.row(), FormTreeModel::Label, d->_currentEditingForm.parent());
+        return d->_formTreeModel->data(index).toString();
+    }*/
+    return QString::null;
+}
+
 PmhMode::~PmhMode()
 {
     if (m_inPluginManager) {
@@ -969,3 +1029,27 @@ void PmhMode::onCurrentPatientChanged()
     }
 }
 
+PmhModeWidgetCoreListener::PmhModeWidgetCoreListener(PmhModeWidget *parent) :
+    Core::ICoreListener(parent),
+    _pmhModeWidget(parent)
+{
+    Q_ASSERT(parent);
+    setObjectName("PmhModeWidgetCoreListener");
+}
+
+PmhModeWidgetCoreListener::~PmhModeWidgetCoreListener() {}
+
+bool PmhModeWidgetCoreListener::coreAboutToClose()
+{
+    _errorMsg.clear();
+    if (_pmhModeWidget->isDirty()) {
+        bool ok = _pmhModeWidget->saveCurrentEpisode();
+        if (!ok) {
+            _errorMsg = tr("Unable to save current episode, form: %1")
+                    /*.arg(_pmhModeWidget->currentFormLabel())*/;
+            LOG_ERROR(_errorMsg);
+        }
+        return ok;
+    }
+    return true;
+}
