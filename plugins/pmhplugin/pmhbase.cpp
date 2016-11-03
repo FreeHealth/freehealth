@@ -19,12 +19,10 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *  Main developer: Eric MAEKER, <eric.maeker@gmail.com>                   *
- *  Contributors:                                                          *
- *       Jerome Pinguet <jerome@jerome.cc>                                 *
- *       NAME <MAIL@ADDRESS.COM>                                           *
+ *  Authors:                                                               *
+ *  Eric MAEKER <eric.maeker@gmail.com>                                    *
+ *  Jerome PINGUET <jerome@jerome.cc                                       *
  ***************************************************************************/
-
 /**
   \class PMH::PmhBase
   \brief Provides all read/write access to the PMHx database.
@@ -472,7 +470,6 @@ bool PmhBase::linkPmhWithCategory(const QVector<Category::CategoryItem *> &cats,
 */
 bool PmhBase::savePmhData(PmhData *pmh)
 {
-    qDebug() << Q_FUNC_INFO;
     QSqlDatabase DB = QSqlDatabase::database(Constants::DB_NAME);
     if (!connectDatabase(DB, __LINE__)) {
         return false;
@@ -522,7 +519,6 @@ bool PmhBase::savePmhData(PmhData *pmh)
 */
 bool PmhBase::updatePmhData(PmhData *pmh)
 {
-    qDebug() << Q_FUNC_INFO;
     QSqlDatabase DB = QSqlDatabase::database(Constants::DB_NAME);
     if (!connectDatabase(DB, __LINE__)) {
         return false;
@@ -613,7 +609,6 @@ bool PmhBase::savePmhEpisodeData(PmhEpisodeData *episode)
 */
 bool PmhBase::updatePmhEpsisodeData(PmhEpisodeData *episode)
 {
-    qDebug() << Q_FUNC_INFO;
     // we are inside a transaction
     if (episode->data(PmhEpisodeData::DbOnly_Id).isNull()) {
         return savePmhEpisodeData(episode);

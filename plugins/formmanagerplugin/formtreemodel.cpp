@@ -362,6 +362,20 @@ bool FormTreeModel::isNoEpisode(const QModelIndex &index) const
     return false;
 }
 
+/*!
+  Returns true if the \e index corresponds to an identity form.
+  It is supposed that the \e index points to a form
+  */
+bool FormTreeModel::isIdentity(const QModelIndex &index) const
+{
+    if (!index.isValid())
+        return false;
+    const FormMain *form = d->formForIndex(index);
+    if (form)
+        return (form->spec()->value(FormItemSpec::Spec_IsIdentityForm).toBool());
+    return false;
+}
+
 /** Return the Form::FormMain pointer corresponding to the index. */
 Form::FormMain *FormTreeModel::formForIndex(const QModelIndex &index) const
 {

@@ -19,12 +19,10 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *  Main developer: Eric MAEKER, <eric.maeker@gmail.com>                   *
- *  Contributors:                                                          *
- *       Jerome Pinguet <jerome@jerome.cc>                                 *
- *       NAME <MAIL@ADDRESS.COM>                                           *
+ *  Authors:                                                               *
+ *  Eric MAEKER <eric.maeker@gmail.com>                                    *
+ *  Jerome PINGUET <jerome@jerome.cc                                       *
  ***************************************************************************/
-
 /**
   \class PMH::PmhViewer
   \brief PMHx viewer widget. Allow to show / modify a PMH.
@@ -146,7 +144,6 @@ public:
 
     void populatePmhWithUi()
     {
-        qDebug() << Q_FUNC_INFO;
         m_Pmh->setData(PmhData::Label, ui->personalLabel->text());
         m_Pmh->setData(PmhData::Type, ui->typeCombo->currentIndex());
         m_Pmh->setData(PmhData::State, ui->statusCombo->currentIndex());
@@ -155,10 +152,8 @@ public:
         m_Pmh->setData(PmhData::IsPrivate, ui->makePrivateBox->isChecked());
         // Get category
         QModelIndex cat = pmhCore()->pmhCategoryModel()->categoryOnlyModel()->mapToSource(ui->categoryTreeView->currentIndex());
-        qDebug() << cat;
         cat = pmhCore()->pmhCategoryModel()->index(cat.row(), PmhCategoryModel::Id, cat.parent());
         m_Pmh->setData(PmhData::CategoryId, cat.data().toInt());
-        qDebug() << cat;
         // TODO: improve this : pmhx only manages one episode
         if (m_Pmh->episodeModel()->rowCount() == 0) {
             m_Pmh->episodeModel()->insertRow(0);
@@ -330,7 +325,6 @@ void PmhViewer::revert()
 /** \brief Return the PMH::Internal::PmhData pointer modified or not according to the actual EditMode of the viewer. */
 Internal::PmhData *PmhViewer::modifiedPmhData() const
 {
-    qDebug() << Q_FUNC_INFO;
     // Read only == return the unchanged PmhData
     if (d->m_Mode==ReadOnlyMode) {
         return d->m_Pmh;

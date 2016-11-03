@@ -19,10 +19,9 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *  Main developer: Eric MAEKER, <eric.maeker@gmail.com>                   *
- *  Contributors:                                                          *
- *       Jerome Pinguet <jerome@jerome.cc                                  *
- *       NAME <MAIL@ADDRESS.COM>                                           *
+ *  Authors:                                                               *
+ *  Eric MAEKER <eric.maeker@gmail.com>                                    *
+ *  Jerome PINGUET <jerome@jerome.cc                                       *
  ***************************************************************************/
 #include "pmhcore.h"
 #include "pmhcategorymodel.h"
@@ -135,7 +134,9 @@ PmhCore::~PmhCore()
 
 PmhCategoryModel *PmhCore::pmhCategoryModel() const
 {
-    return d->m_PmhCategoryModel;
+    if (d->m_PmhCategoryModel)
+        return d->m_PmhCategoryModel;
+    return 0;
 }
 
 void PmhCore::onPatientFormsLoaded()

@@ -78,14 +78,14 @@ enum {
     WarnReparentItem = false,
     WarnDatabaseSaving = false,
     WarnLogChronos = false
-   };
+};
 #else
 enum {
     WarnDragAndDrop = false,
     WarnReparentItem = false,
     WarnDatabaseSaving = false,
     WarnLogChronos = false
-   };
+};
 #endif
 
 
@@ -216,9 +216,10 @@ public:
 
     void checkModelContent()
     {
-        // Automatically create the unique episode for UniqueEpisode forms
-        // Check the rowCount of NoEpisode forms
-        if (_formMain->episodePossibilities() == Form::FormMain::UniqueEpisode) {
+        // If (MedForm has Unique option) AND (MedForm has attribute 'IsIdentity = "true"'):
+        // automatically create 1 episode
+        if ( (_formMain->episodePossibilities() == Form::FormMain::UniqueEpisode)
+             && (_formMain->spec()->value(FormItemSpec::Spec_IsIdentityForm).toBool()) ) {
             if (_sqlModel->rowCount() < 1) {
                 q->insertRow(0);
             }
@@ -228,61 +229,61 @@ public:
         }
     }
 
-//    void getLastEpisodes(bool andFeedPatientModel = true)
-//    {
-//        qWarning() << "GetLastEpisode (feedPatientModel=" <<andFeedPatientModel << ")";
-//        if (patient()->uuid().isEmpty())
-//            return;
+    //    void getLastEpisodes(bool andFeedPatientModel = true)
+    //    {
+    //        qWarning() << "GetLastEpisode (feedPatientModel=" <<andFeedPatientModel << ")";
+    //        if (patient()->uuid().isEmpty())
+    //            return;
 
-//        QTime chrono;
-//        if (WarnLogChronos)
-//            chrono.start();
+    //        QTime chrono;
+    //        if (WarnLogChronos)
+    //            chrono.start();
 
-//        foreach(Form::FormMain *form, m_FormItems.keys()) {
-////            if (andFeedPatientModel) {
-////                bool hasPatientData = false;
-////                // test all children FormItem for patientDataRepresentation
-////                foreach(Form::FormItem *item, form->flattenedFormItemChildren()) {
-////                    if (item->itemData()) {
-////                        if (item->patientDataRepresentation()!=-1) {
-////                            hasPatientData = true;
-////                            break;
-////                        }
-////                    }
-////                }
-////                if (!hasPatientData)
-////                    continue;
-////            }
+    //        foreach(Form::FormMain *form, m_FormItems.keys()) {
+    ////            if (andFeedPatientModel) {
+    ////                bool hasPatientData = false;
+    ////                // test all children FormItem for patientDataRepresentation
+    ////                foreach(Form::FormItem *item, form->flattenedFormItemChildren()) {
+    ////                    if (item->itemData()) {
+    ////                        if (item->patientDataRepresentation()!=-1) {
+    ////                            hasPatientData = true;
+    ////                            break;
+    ////                        }
+    ////                    }
+    ////                }
+    ////                if (!hasPatientData)
+    ////                    continue;
+    ////            }
 
-//            // get the form's XML content for the last episode, feed it with the XML code
-//            EpisodeModelTreeItem *formItem = m_FormItems.value(form);
-//            if (!formItem->childCount()) {
-//                continue;  // No episodes
-//            }
+    //            // get the form's XML content for the last episode, feed it with the XML code
+    //            EpisodeModelTreeItem *formItem = m_FormItems.value(form);
+    //            if (!formItem->childCount()) {
+    //                continue;  // No episodes
+    //            }
 
-//            // find last episode of the form
-//            EpisodeData *lastOne = 0;
-//            for(int i=0; i < m_Episodes.count(); ++i) {
-//                EpisodeData *episode = m_Episodes.at(i);
-//                if (episode->data(EpisodeData::FormUuid).toString()==form->uuid()) {
-//                    if (!lastOne) {
-//                        lastOne = episode;
-//                        continue;
-//                    }
-//                    if (lastOne->data(EpisodeData::UserDate).toDateTime() < episode->data(EpisodeData::UserDate).toDateTime()) {
-//                        lastOne = episode;
-//                    }
-//                }
-//            }
+    //            // find last episode of the form
+    //            EpisodeData *lastOne = 0;
+    //            for(int i=0; i < m_Episodes.count(); ++i) {
+    //                EpisodeData *episode = m_Episodes.at(i);
+    //                if (episode->data(EpisodeData::FormUuid).toString()==form->uuid()) {
+    //                    if (!lastOne) {
+    //                        lastOne = episode;
+    //                        continue;
+    //                    }
+    //                    if (lastOne->data(EpisodeData::UserDate).toDateTime() < episode->data(EpisodeData::UserDate).toDateTime()) {
+    //                        lastOne = episode;
+    //                    }
+    //                }
+    //            }
 
-//            // feed episode and activate it
-//            if (lastOne) {
-//                feedFormWithEpisodeContent(form, lastOne, andFeedPatientModel);
-//            }
-//        }
-//        if (WarnLogChronos)
-//            Utils::Log::logTimeElapsed(chrono, q->objectName(), "getLastEpisodes");
-//    }
+    //            // feed episode and activate it
+    //            if (lastOne) {
+    //                feedFormWithEpisodeContent(form, lastOne, andFeedPatientModel);
+    //            }
+    //        }
+    //        if (WarnLogChronos)
+    //            Utils::Log::logTimeElapsed(chrono, q->objectName(), "getLastEpisodes");
+    //    }
 
 public:
     FormMain *_formMain;
@@ -301,8 +302,8 @@ private:
 
 /** Create a specific episode model for the specified Form::FormMain \e rootEmptyForm */
 EpisodeModel::EpisodeModel(FormMain *rootEmptyForm, QObject *parent) :
-        QAbstractListModel(parent),
-        d(new Internal::EpisodeModelPrivate(this))
+    QAbstractListModel(parent),
+    d(new Internal::EpisodeModelPrivate(this))
 {
     Q_ASSERT(rootEmptyForm);
     setObjectName("Form::EpisodeModel");
@@ -331,7 +332,7 @@ bool EpisodeModel::initialize()
 
     connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()), Qt::UniqueConnection);
     connect(user(), SIGNAL(userChanged()), this, SLOT(onUserChanged()), Qt::UniqueConnection);
-//    connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(onCurrentPatientChanged()));
+    //    connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(onCurrentPatientChanged()));
     connect(&formManager(), SIGNAL(patientFormsLoaded()), this, SLOT(onPatientFormLoaded()), Qt::UniqueConnection);
     return true;
 }
@@ -390,7 +391,7 @@ void EpisodeModel::onPatientFormLoaded()
     beginResetModel();
     d->clearCache();
     d->updateFilter(patient()->uuid());
-//    d->_sqlModel->select();
+    //    d->_sqlModel->select();
     d->checkModelContent();
     endResetModel();
 }
@@ -546,23 +547,23 @@ QVariant EpisodeModel::data(const QModelIndex &index, int role) const
         }
         break;
     }
-//    case Qt::BackgroundRole :
-//    {
-//        if (d->_formMain->itemData()) {
-//            QColor red("darkred");
-//            if (d->_formMain->itemData()->isModified()) {
-//                red.setAlpha(120);
-//                return red;
-//            }
-//            foreach(Form::FormItem *item, d->_formMain->flattenedFormItemChildren()) {
-//                if (item->itemData() && item->itemData()->isModified()) {
-//                    red.setAlpha(200);
-//                    return red;
-//                }
-//            }
-//        }
-//        break;
-//    }
+        //    case Qt::BackgroundRole :
+        //    {
+        //        if (d->_formMain->itemData()) {
+        //            QColor red("darkred");
+        //            if (d->_formMain->itemData()->isModified()) {
+        //                red.setAlpha(120);
+        //                return red;
+        //            }
+        //            foreach(Form::FormItem *item, d->_formMain->flattenedFormItemChildren()) {
+        //                if (item->itemData() && item->itemData()->isModified()) {
+        //                    red.setAlpha(200);
+        //                    return red;
+        //                }
+        //            }
+        //        }
+        //        break;
+        //    }
     }  // switch (role)
     return QVariant();
 }
@@ -724,7 +725,7 @@ bool EpisodeModel::removeAllEpisodes()
     bool ok = episodeBase()->removeAllEpisodeForForm(d->_formMain->uuid(), patient()->uuid());
     if (ok)
         d->updateFilter(patient()->uuid());
-//        d->_sqlModel->reset();
+    //        d->_sqlModel->reset();
     return ok;
 }
 
@@ -1004,34 +1005,34 @@ bool EpisodeModel::submit()
 /** Return the HTML formatted synthesis of all the last recorded episodes for each forms in the model. */
 QString EpisodeModel::lastEpisodesSynthesis() const
 {
-//    QTime chrono;
-//    if (WarnLogChronos)
-//        chrono.start();
+    //    QTime chrono;
+    //    if (WarnLogChronos)
+    //        chrono.start();
 
-//    if (d->m_RecomputeLastEpisodeSynthesis) {
-//        // submit actual episode
-//        if (!d->saveEpisode(d->m_ActualEpisode, d->m_ActualEpisode_FormUid)) {
-//            LOG_ERROR("Unable to save actual episode before editing a new one");
-//        }
-//        d->m_ActualEpisode = 0;
-//        d->m_ActualEpisode_FormUid.clear();
+    //    if (d->m_RecomputeLastEpisodeSynthesis) {
+    //        // submit actual episode
+    //        if (!d->saveEpisode(d->m_ActualEpisode, d->m_ActualEpisode_FormUid)) {
+    //            LOG_ERROR("Unable to save actual episode before editing a new one");
+    //        }
+    //        d->m_ActualEpisode = 0;
+    //        d->m_ActualEpisode_FormUid.clear();
 
-//        d->getLastEpisodes(false);
-//    }
-//    if (WarnLogChronos)
-//        Utils::Log::logTimeElapsed(chrono, objectName(), "Compute last episode Part 1");
+    //        d->getLastEpisodes(false);
+    //    }
+    //    if (WarnLogChronos)
+    //        Utils::Log::logTimeElapsed(chrono, objectName(), "Compute last episode Part 1");
 
     QString html;
-//    foreach(FormMain *f, d->_formMain->firstLevelFormMainChildren()) {
-//        if (!f) {
-//            LOG_ERROR("??");
-//            continue;
-//        }
-//        html += f->printableHtml();
-//    }
+    //    foreach(FormMain *f, d->_formMain->firstLevelFormMainChildren()) {
+    //        if (!f) {
+    //            LOG_ERROR("??");
+    //            continue;
+    //        }
+    //        html += f->printableHtml();
+    //    }
 
-//    if (WarnLogChronos)
-//        Utils::Log::logTimeElapsed(chrono, objectName(), "Compute last episode Part 2 (getting html code)");
+    //    if (WarnLogChronos)
+    //        Utils::Log::logTimeElapsed(chrono, objectName(), "Compute last episode Part 2 (getting html code)");
 
     return html;
 }

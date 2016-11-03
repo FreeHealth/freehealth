@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE FreeMedForms>
+
+<FreeMedForms>
+
+  <formdescription>
+    <!-- Non translatable values -->
+    <authors>Jerome Pinguet</authors>
+    <version>test</version>
+    <fmfv>0.9.9</fmfv>
+    <cdate>2016-10-19</cdate>
+    <lmdate>2016-10-19</lmdate>
+    <icon>__theme__/stethoscope.png</icon>
+    <weblink>https://www.medecinelibre.com</weblink>
+    <bibliography/>
+
+    <!-- Translatable values -->
+    <license>GPLv3</license>
+    <description lang="xx">Unique no header test</description>
+    <description lang="fr">Unique no header test</description>
+    <category lang="xx">Test</category>
+    <category lang="fr">Test</category>
+    <specialties lang="xx">FreeHealth</specialties>
+    <specialties lang="fr">Freehealth</specialties>
+
+    <updateinfo>
+      <updateversion from="" to="0.9.9">
+        <text lang="xx">First version</text>
+        <text lang="fr">Première version</text>
+      </updateversion>
+    </updateinfo>
+
+  </formdescription>
+
+  <MedForm name="FreeHealth::Test::Unique::HideHeaderOnUniqueEpisode" uifilename="./ui/xx/unique.ui">
+    <label lang="xx">Unique no header</label>
+    <label lang="fr">Unique no header</label>
+    <options>Unique;HideHeaderOnUniqueEpisode;UseFormNameAsNameSpace</options>
+    <icon>__theme__/stethoscope.png</icon>
+
+    <Item type="group" name="UniqueGroup">
+      <uilink widget="uniqueGroup"/>
+      <label lang="xx">Test</label>
+      <label lang="fr">Test</label>
+      <options>DontPrintEmptyValues</options>
+
+        <Item type="texteditor" name="Test">
+          <uilink label="" widget="" layout="uniqueLayout"/>
+          <tooltip lang="xx">Unique no header</tooltip>
+          <tooltip lang="fr">Unique no header</tooltip>
+          <options>DontPrintEmptyValues</options>
+        </Item>
+
+    </Item>
+
+  </MedForm>
+
+</FreeMedForms>

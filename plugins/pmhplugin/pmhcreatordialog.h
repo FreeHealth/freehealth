@@ -19,13 +19,11 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *  Main developer: Eric MAEKER, <eric.maeker@gmail.com>                   *
- *  Contributors:                                                          *
- *       NAME <MAIL@ADDRESS.COM>                                           *
- *       NAME <MAIL@ADDRESS.COM>                                           *
+ *  Authors:                                                               *
+ *       Eric MAEKER <eric.maeker@gmail.com>                               *
+ *                                                                         *
  ***************************************************************************/
-#ifndef PMHCREATORDIALOG_H
-#define PMHCREATORDIALOG_H
+#pragma once
 
 #include <QDialog>
 class QAbstractButton;
@@ -68,5 +66,3 @@ private:
 };
 
 }
-
-#endif // PMHCREATORDIALOG_H
