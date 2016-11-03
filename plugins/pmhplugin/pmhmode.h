@@ -111,10 +111,12 @@ private Q_SLOTS:
     void createPmh();
     void pmhModelRowsInserted(const QModelIndex &parent, int start, int end);
     void episodeChanged(const QModelIndex &current, const QModelIndex &previous);
+    void refreshPmhSynthesis();
 
 private:
     bool saveCurrentEditingEpisode();
     void createEpisodeToolbar();
+    void checkCurrentEpisodeViewVisibility();
     void selectAndActivateFirstEpisode();
     void showEvent(QShowEvent *event);
     void hideEvent(QHideEvent *event);

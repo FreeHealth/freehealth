@@ -49,6 +49,7 @@
 #include <formmanagerplugin/formcore.h>
 #include <formmanagerplugin/iformitem.h>
 #include <formmanagerplugin/formmanager.h>
+#include <formmanagerplugin/episodebase.h>
 #include <formmanagerplugin/episodemanager.h>
 #include <formmanagerplugin/formtreemodel.h>
 #include <formmanagerplugin/episodemodel.h>
@@ -78,6 +79,7 @@ static inline Core::ISettings *settings() {return Core::ICore::instance()->setti
 static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 static inline Core::Translators *translators() {return Core::ICore::instance()->translators();}
 static inline Form::FormManager &formManager() {return Form::FormCore::instance().formManager();}
+static inline Form::Internal::EpisodeBase *episodeBase() {return Form::Internal::EpisodeBase::instance();}
 static inline Form::EpisodeManager &episodeManager() {return Form::FormCore::instance().episodeManager();}
 
 namespace {
@@ -593,8 +595,12 @@ int PmhCategoryModel::pmhCount(const QModelIndex &parent) const
         for(int i=0; i < item->childCount(); ++i) {
             n += pmhCount(index(i,0,parent));
         }
-    } else if (item->isPmh() || item->isForm()) {
+    } else if (item->isPmh()) {
         ++n;
+    } else if (item->isForm()) {
+
+        n = episodeBase()->getNumberOfEpisodes(item->form()->uuid(),
+                                               item->form()->spec()->equivalentUuid());
     }
     return n;
 }
@@ -1278,6 +1284,12 @@ QString PmhCategoryModel::indexToHtml(const QModelIndex &index, int indent) cons
         html += QString("•&nbsp;%1<br />").arg(index.data(Qt::ToolTipRole).toString().replace("<br />","; "));
     } else if (isForm(index)) {
         // populate form
+        TreeItem *item = d->getItem(index);
+        if (!episodeBase()
+                ->getNumberOfEpisodes(item->form()->uuid(),
+                                               item->form()->spec()->equivalentUuid())) {
+            return QString();
+        }
         activateFormEpisode(index);
         Form::FormMain *form = formForIndex(index);
         // get print mask
@@ -1297,7 +1309,7 @@ void PmhCategoryModel::refreshSynthesis()
     d->_htmlSynthesis.clear();
 }
 
-/** Return the synthesis of the whole model of a specific category \e index */
+/** Return the synthesis of the whole model or of a specific category \e index */
 QString PmhCategoryModel::synthesis(const QModelIndex &parent) const
 {
     if (parent==QModelIndex() || isSynthesis(parent)) {

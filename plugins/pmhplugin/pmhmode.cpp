@@ -278,15 +278,16 @@ void PmhModeWidget::currentChanged(const QModelIndex &current, const QModelIndex
         const QString &formUid = catModel()->index(current.row(), PmhCategoryModel::Id, current.parent()).data().toString();
         ui->stackedWidget->setCurrentWidget(ui->formPage);
         ui->formDataMapper->setCurrentForm(formUid);
-        selectAndActivateFirstEpisode();
         //ui->formDataMapper->setLastEpisodeAsCurrent();
         if (m_currentEpisodeModel) {
-            QObject::disconnect(m_currentEpisodeModel, SIGNAL(rowsInserted(QModelIndex,int,int)), this, SLOT(updateFormCount()));
-            QObject::disconnect(m_currentEpisodeModel, SIGNAL(rowsRemoved(QModelIndex,int,int)), this, SLOT(updateFormCount()));
+            QObject::disconnect(m_currentEpisodeModel, SIGNAL(rowsInserted(QModelIndex,int,int)), this, SLOT(refreshPmhSynthesis()));
+            //QObject::disconnect(m_currentEpisodeModel, SIGNAL(rowsRemoved(QModelIndex,int,int)), this, SLOT(refreshCategoryTreeView()));
         }
         m_currentEpisodeModel = episodeManager().episodeModel(formUid);
-        QObject::connect(m_currentEpisodeModel, SIGNAL(rowsInserted(QModelIndex,int,int)), this, SLOT(updateFormCount()));
-        QObject::connect(m_currentEpisodeModel, SIGNAL(rowsRemoved(QModelIndex,int,int)), this, SLOT(updateFormCount()));
+        QObject::connect(m_currentEpisodeModel, SIGNAL(rowsInserted(QModelIndex,int,int)), this, SLOT(refreshPmhSynthesis()));
+        // as no row is removed from the model (see EpisodeModel::removeEpisode)
+        // the signal rowsRemoved will never be emitted:
+        //QObject::connect(m_currentEpisodeModel, SIGNAL(rowsRemoved(QModelIndex,int,int)), this, SLOT(refreshCategoryTreeView()));
         // create the episodemodel proxymodel
         if (m_proxyModel)
             delete m_proxyModel;
@@ -338,12 +339,13 @@ void PmhModeWidget::currentChanged(const QModelIndex &current, const QModelIndex
                                                                       Qt::DescendingOrder).toInt()));
         ui->episodeView->setSortingEnabled(true);
 
-        //checkCurrentEpisodeViewVisibility();
+        checkCurrentEpisodeViewVisibility();
 
         QObject::connect(ui->episodeView->selectionModel(),
                          SIGNAL(currentChanged(QModelIndex,QModelIndex)),
                          this,
                          SLOT(episodeChanged(QModelIndex, QModelIndex)));
+        selectAndActivateFirstEpisode();
         Q_EMIT actionsEnabledStateChanged();
     } else if (catModel()->isPmhx(current)) {
         ui->stackedWidget->setCurrentWidget(ui->pageEditor);
@@ -466,6 +468,7 @@ void PmhModeWidget::createPmh()
 /** When a PMHx is added to the PmhCategoryModel re-expand all items of the category view */
 void PmhModeWidget::pmhModelRowsInserted(const QModelIndex &parent, int start, int end)
 {
+    qDebug() << Q_FUNC_INFO;
     ui->treeView->expand(parent);
     for(int i=start; i != end+1; ++i) {
         ui->treeView->expand(catModel()->index(i, PmhCategoryModel::Label, parent));
@@ -728,7 +731,6 @@ bool PmhModeWidget::createEpisode()
     ui->episodeView->selectRow(proxy.row());
     ui->formDataMapper->setCurrentEpisode(source);
 
-    //d->_formTreeModel->updateFormCount(d->_currentEditingForm);
     Q_EMIT actionsEnabledStateChanged();
     return true;
 }
@@ -862,12 +864,24 @@ bool PmhModeWidget::removeCurrentEpisode()
     ui->formDataMapper->clear();
     ui->formDataMapper->setEnabled(false);
     Q_EMIT actionsEnabledStateChanged();
+    refreshPmhSynthesis();
     return ok;
 #else
     return false;
 #endif
 }
 
+void PmhModeWidget::checkCurrentEpisodeViewVisibility()
+{
+    if (!catModel())
+        return;
+    // Assuming the _currentEditingForm is defined and the episodeView model is set
+    bool visible = true;
+
+    if (catModel()->formForIndex(m_currentFormIndex)->isNoEpisode())
+        visible = false;
+    ui->episodeView->setVisible(visible);
+}
 
 /*!
   Take a screenshot of the currently selected form and episode.
@@ -944,6 +958,12 @@ void PmhModeWidget::selectAndActivateFirstEpisode()
             ui->formDataMapper->setFormWidgetEnabled(false);
         }
     }
+}
+
+void PmhModeWidget::refreshPmhSynthesis()
+{
+    qDebug() << Q_FUNC_INFO;
+    catModel()->refreshSynthesis();
 }
 
 PmhMode::PmhMode(QObject *parent) :
