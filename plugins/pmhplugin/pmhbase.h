@@ -19,13 +19,11 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *  Main developer: Eric MAEKER, <eric.maeker@gmail.com>                   *
- *  Contributors:                                                          *
- *       NAME <MAIL@ADDRESS.COM>                                           *
- *       NAME <MAIL@ADDRESS.COM>                                           *
+ *  Authors:                                                               *
+ *       Eric MAEKER <eric.maeker@gmail.com>                               *
+ *                                                                         *
  ***************************************************************************/
-#ifndef PMHBASE_H
-#define PMHBASE_H
+#pragma once
 
 #include <utils/database.h>
 
@@ -97,6 +95,3 @@ private:
 
 }  // End namespace Internal
 }  // End namespace PMH
-
-
-#endif // PMHBASE_H

@@ -19,12 +19,10 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *  Main developer: Eric MAEKER, <eric.maeker@gmail.com>                   *
- *  Contributors:                                                          *
- *       Jerome Pinguet <jerome@jerome.cc>                                 *
- *       NAME <MAIL@ADDRESS.COM>                                           *
+ *  Authors:                                                               *
+ *  Eric MAEKER, <eric.maeker@gmail.com>                                   *
+ *  NAME <MAIL@ADDRESS.COM>                                                *
  ***************************************************************************/
-
 /**
   \class PmhEpisodeViewer
   \brief PMHx episode viewer widget. Allow to show, modify, add & remove PMH

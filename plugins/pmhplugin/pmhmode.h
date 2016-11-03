@@ -19,13 +19,11 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *  Main developer: Eric MAEKER, <eric.maeker@gmail.com>                   *
- *  Contributors:                                                          *
- *       NAME <MAIL@ADDRESS.COM>                                           *
- *       NAME <MAIL@ADDRESS.COM>                                           *
+ *  Authors:                                                               *
+ *       Eric MAEKER <eric.maeker@gmail.com>                               *
+ *                                                                         *
  ***************************************************************************/
-#ifndef PMHMODE_H
-#define PMHMODE_H
+#pragma once
 
 #include <coreplugin/modemanager/imode.h>
 #include <coreplugin/icorelistener.h>
@@ -152,6 +150,4 @@ private:
 
 }  // End namespace Internal
 }  // End namespace PMH
-
-#endif // PMHMODE_H
 

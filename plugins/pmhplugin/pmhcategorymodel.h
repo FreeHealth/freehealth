@@ -19,13 +19,11 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *  Main developer: Eric MAEKER, <eric.maeker@gmail.com>                   *
- *  Contributors:                                                          *
- *       NAME <MAIL@ADDRESS.COM>                                           *
- *       NAME <MAIL@ADDRESS.COM>                                           *
+ *  Authors:                                                               *
+ *       Eric MAEKER <eric.maeker@gmail.com>                               *
+ *                                                                         *
  ***************************************************************************/
-#ifndef PMHCATEGORYMODEL_H
-#define PMHCATEGORYMODEL_H
+#pragma once
 
 #include <pmhplugin/pmh_exporter.h>
 
@@ -135,6 +133,3 @@ private:
 
 
 }  // End namespace PMH
-
-
-#endif // PMHCATEGORYMODEL_H

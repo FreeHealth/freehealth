@@ -19,10 +19,11 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *  Main developer: Eric MAEKER, <eric.maeker@gmail.com>                   *
- *  Contributors:                                                          *
- *       NAME <MAIL@ADDRESS.COM>                                           *
- *       NAME <MAIL@ADDRESS.COM>                                           *
+ *  Authors:                                                               *
+ *  Eric MAEKER <eric.maeker@gmail.com>                                    *
+ *  Jerome PINGUET <jerome@jerome.cc                                       *
+ *  NAME <MAIL@ADDRESS.COM>                                                *
+ *  NAME <MAIL@ADDRESS.COM>                                                *
  ***************************************************************************/
 #include "pmhwidgetmanager.h"
 #include "pmhcontextualwidget.h"
@@ -122,9 +123,9 @@ static inline QAction *createAction(QObject *parent, const QString &name, const 
     return a;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////      MANAGER      ///////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+///////////////////////////      MANAGER      //////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 PmhWidgetManager::PmhWidgetManager(QObject *parent) :
     PmhActionHandler(parent),
     _contextObject(0)
@@ -155,14 +156,12 @@ void PmhWidgetManager::updateContext(Core::IContext *object, const Core::Context
             int formContextId = Core::Id(Constants::C_PMH_PLUGINS).uniqueIdentifier();
             if (view) {
                 if (!contextManager()->hasContext(formContextId)) {
-                    //                    qWarning() << "    Adding context";
                     contextManager()->updateAdditionalContexts(Core::Context(), Core::Context(Constants::C_PMH_PLUGINS));
                     break;
                 }
             } else {
                 // !view
                 if (contextManager()->hasContext(formContextId)) {
-                    //                    qWarning() << "    Removing context";
                     contextManager()->updateAdditionalContexts(Core::Context(Constants::C_PMH_PLUGINS), Core::Context());
                     break;
                 }

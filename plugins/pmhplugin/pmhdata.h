@@ -19,13 +19,11 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *  Main developer: Eric MAEKER, <eric.maeker@gmail.com>                   *
- *  Contributors:                                                          *
- *       NAME <MAIL@ADDRESS.COM>                                           *
- *       NAME <MAIL@ADDRESS.COM>                                           *
+ *  Authors:                                                               *
+ *       Eric MAEKER <eric.maeker@gmail.com>                               *
+ *                                                                         *
  ***************************************************************************/
-#ifndef PMHDATA_H
-#define PMHDATA_H
+#pragma once
 
 #include <translationutils/constanttranslations.h>
 
@@ -128,5 +126,3 @@ private:
 
 } // End namespace Internal
 } // End namespace PMH
-
-#endif // PMHDATA_H

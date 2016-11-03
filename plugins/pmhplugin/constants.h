@@ -19,13 +19,11 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *  Main developer: Eric MAEKER, <eric.maeker@gmail.com>                   *
- *  Contributors:                                                          *
- *       NAME <MAIL@ADDRESS.COM>                                           *
- *       NAME <MAIL@ADDRESS.COM>                                           *
+ *  Authors:                                                               *
+ *       Eric MAEKER <eric.maeker@gmail.com>                               *
+ *                                                                         *
  ***************************************************************************/
-#ifndef CONSTANTS_H
-#define CONSTANTS_H
+#pragma once
 
 #include <QtGlobal>
 #include <QString>
@@ -168,6 +166,3 @@ namespace Constants {
 
 }  // End namespace Constants
 }  // End namespace History
-
-
-#endif // CONSTANTS_H
