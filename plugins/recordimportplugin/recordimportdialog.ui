@@ -47,6 +47,13 @@
         </widget>
        </widget>
       </item>
+      <item>
+       <widget class="QCheckBox" name="validateEpisodeCheckBox">
+        <property name="text">
+         <string>validate episode</string>
+        </property>
+       </widget>
+      </item>
      </layout>
     </widget>
    </item>

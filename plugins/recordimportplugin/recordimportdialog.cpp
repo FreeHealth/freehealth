@@ -40,16 +40,20 @@
 #include <formmanagerplugin/formmanager.h>
 #include "formmanagerplugin/formmanager_exporter.h"
 #include "formmanagerplugin/iformio.h"
+#include <formmanagerplugin/episodemanager.h>
+#include <formmanagerplugin/episodemodel.h>
 #include "utils/genericdescription.h"
 #include "utils/widgets/genericdescriptioneditor.h"
 
 #include <QFormLayout>
+#include <QCheckBox>
 
 using namespace RecordImport;
 using namespace Internal;
 
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline Form::FormManager &formManager() {return Form::FormCore::instance().formManager();}
+static inline Form::EpisodeManager &episodeManager() {return Form::FormCore::instance().episodeManager();}
 
 RecordImportDialog::RecordImportDialog(QWidget *parent) :
     QDialog(parent),
@@ -151,14 +155,25 @@ void RecordImportDialog::matchPatientWidget() {
 }
 
 void RecordImportDialog::matchEpisodeWidget() {
-        QFormLayout *matchEpisodeFormLayout = new QFormLayout;
+        QGridLayout *matchEpisodeGridLayout = new QGridLayout;
         QWidget *matchEpisodeWidget = new QWidget;
-
-        for (int j = 0; j < m_data->at(0).size(); ++j) {
+        QStringList episodeItems;
+        episodeItems << "UserDateTime"
+                     << "Label"
+                     << "CreationDateTime"
+                     << "Priority"
+                     << "UserCreatorName";
+        for (int j = 0; j < episodeItems.size(); ++j) {
             QString label = m_data->at(0).at(j);
-            matchEpisodeFormLayout->addRow(QString::number(j), new QLabel(label));
+            matchEpisodeGridLayout->addWidget(new QLabel (episodeItems.at(j)), j, 0);
+            QComboBox *combo = new QComboBox;
+            combo->setObjectName(label);
+            combo->addItems(m_field);
+            combo->setCurrentIndex(-1);
+            matchEpisodeGridLayout->addWidget(combo, j, 1);
         }
-        matchEpisodeWidget->setLayout(matchEpisodeFormLayout);
+        // validate episode widgets
+        matchEpisodeWidget->setLayout(matchEpisodeGridLayout);
         d->ui->matchEpisodeScrollArea->setWidget(matchEpisodeWidget);
         Form::FormMain *form = formManager().form(m_uuid);
         foreach(Form::FormItem *item, form->flattenedFormItemChildren()) {
