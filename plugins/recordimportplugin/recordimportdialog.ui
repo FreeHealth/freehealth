@@ -6,68 +6,25 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>392</width>
-    <height>736</height>
+    <width>302</width>
+    <height>951</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="1">
-    <widget class="QComboBox" name="softwareComboBox"/>
-   </item>
-   <item row="9" column="1">
-    <widget class="QProgressBar" name="importProgressBar">
-     <property name="value">
-      <number>24</number>
-     </property>
-    </widget>
-   </item>
-   <item row="7" column="0" colspan="2">
-    <widget class="QGroupBox" name="episodeGroupBox">
-     <property name="title">
-      <string>episode</string>
-     </property>
-     <layout class="QVBoxLayout" name="verticalLayout">
-      <item>
-       <widget class="QScrollArea" name="matchEpisodeScrollArea">
-        <property name="widgetResizable">
-         <bool>true</bool>
-        </property>
-        <widget class="QWidget" name="scrollAreaWidgetContents">
-         <property name="geometry">
-          <rect>
-           <x>0</x>
-           <y>0</y>
-           <width>348</width>
-           <height>68</height>
-          </rect>
-         </property>
-        </widget>
-       </widget>
-      </item>
-      <item>
-       <widget class="QCheckBox" name="validateEpisodeCheckBox">
-        <property name="text">
-         <string>validate episode</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item row="11" column="0">
-    <widget class="QLabel" name="statusLabel">
+   <item row="0" column="0">
+    <widget class="QLabel" name="softwareLabel">
      <property name="text">
-      <string>status</string>
+      <string>software</string>
      </property>
     </widget>
    </item>
-   <item row="10" column="0" colspan="2">
-    <widget class="QPlainTextEdit" name="logPlainTextEdit">
-     <property name="readOnly">
-      <bool>true</bool>
+   <item row="2" column="1">
+    <widget class="QLineEdit" name="fieldSeparatorLineEdit">
+     <property name="toolTip">
+      <string>Only one unicode character.</string>
      </property>
     </widget>
    </item>
@@ -84,28 +41,102 @@
      </property>
     </widget>
    </item>
-   <item row="5" column="0">
-    <widget class="QPushButton" name="formPushButton">
-     <property name="text">
-      <string>select form</string>
+   <item row="8" column="0" colspan="2">
+    <widget class="QGroupBox" name="patientGroupBox">
+     <property name="title">
+      <string>patient</string>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+     <layout class="QGridLayout" name="patientGridLayout">
+      <item row="0" column="0">
+       <widget class="QLabel" name="usualNameLabel">
+        <property name="text">
+         <string>usual name</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QComboBox" name="usualNameComboBox"/>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="firstNameLabel">
+        <property name="text">
+         <string>first name</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QComboBox" name="firstNameComboBox"/>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="dobLabel">
+        <property name="text">
+         <string>dob</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QComboBox" name="dobComboBox"/>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="12" column="0" colspan="2">
+    <widget class="QPlainTextEdit" name="logPlainTextEdit">
+     <property name="readOnly">
+      <bool>true</bool>
      </property>
     </widget>
    </item>
-   <item row="12" column="1">
-    <widget class="QDialogButtonBox" name="buttonBox">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="standardButtons">
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+   <item row="13" column="0">
+    <widget class="QLabel" name="statusLabel">
+     <property name="text">
+      <string>status</string>
      </property>
     </widget>
    </item>
-   <item row="9" column="0">
-    <widget class="QPushButton" name="startPushButton">
-     <property name="text">
-      <string>start import</string>
+   <item row="1" column="1">
+    <widget class="QLineEdit" name="fileLineEdit"/>
+   </item>
+   <item row="9" column="0" colspan="2">
+    <widget class="QGroupBox" name="episodeGroupBox">
+     <property name="title">
+      <string>episode</string>
      </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <item>
+       <widget class="QScrollArea" name="matchEpisodeScrollArea">
+        <property name="widgetResizable">
+         <bool>true</bool>
+        </property>
+        <widget class="QWidget" name="scrollAreaWidgetContents">
+         <property name="geometry">
+          <rect>
+           <x>0</x>
+           <y>0</y>
+           <width>258</width>
+           <height>68</height>
+          </rect>
+         </property>
+        </widget>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="validateEpisodeCheckBox">
+        <property name="text">
+         <string>validate episode</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </widget>
    </item>
    <item row="3" column="1">
@@ -115,41 +146,13 @@
      </property>
     </widget>
    </item>
-   <item row="2" column="0">
-    <widget class="QLabel" name="fieldSeparatorLabel">
-     <property name="text">
-      <string>field separator</string>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="0" colspan="2">
-    <widget class="QPushButton" name="readPushButton">
-     <property name="text">
-      <string>read file</string>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="1">
-    <widget class="QLineEdit" name="fieldSeparatorLineEdit">
-     <property name="toolTip">
-      <string>Only one unicode character.</string>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="0">
-    <widget class="QLabel" name="softwareLabel">
-     <property name="text">
-      <string>software</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="1">
-    <widget class="QLineEdit" name="fileLineEdit"/>
-   </item>
-   <item row="8" column="0" colspan="2">
+   <item row="10" column="0" colspan="2">
     <widget class="QGroupBox" name="formGroupBox">
      <property name="title">
       <string>form</string>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
@@ -162,7 +165,7 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>348</width>
+           <width>258</width>
            <height>68</height>
           </rect>
          </property>
@@ -179,6 +182,37 @@
      </property>
     </widget>
    </item>
+   <item row="11" column="1">
+    <widget class="QProgressBar" name="importProgressBar">
+     <property name="value">
+      <number>24</number>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QLabel" name="fieldSeparatorLabel">
+     <property name="text">
+      <string>field separator</string>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="0">
+    <widget class="QPushButton" name="formPushButton">
+     <property name="text">
+      <string>select form</string>
+     </property>
+    </widget>
+   </item>
+   <item row="14" column="1">
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
    <item row="1" column="0">
     <widget class="QPushButton" name="filePushButton">
      <property name="text">
@@ -186,10 +220,34 @@
      </property>
     </widget>
    </item>
-   <item row="6" column="0" colspan="2">
-    <widget class="QGroupBox" name="patientGroupBox">
-     <property name="title">
-      <string>patient</string>
+   <item row="0" column="1">
+    <widget class="QComboBox" name="softwareComboBox"/>
+   </item>
+   <item row="11" column="0">
+    <widget class="QPushButton" name="startPushButton">
+     <property name="text">
+      <string>start import</string>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="0">
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>uuid</string>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="0" colspan="2">
+    <widget class="QPushButton" name="readPushButton">
+     <property name="text">
+      <string>read file</string>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="1">
+    <widget class="QLabel" name="uuidLabel">
+     <property name="text">
+      <string/>
      </property>
     </widget>
    </item>

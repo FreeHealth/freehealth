@@ -42,7 +42,12 @@
 #include <QString>
 #include <QVector>
 #include <QStringList>
-#include <QComboBox>
+
+QT_BEGIN_NAMESPACE
+class QLineEdit;
+class QDateTimeEdit;
+class QComboBox;
+QT_END_NAMESPACE
 
 namespace Form {
 class FormIODescription;
@@ -81,7 +86,13 @@ private:
     Internal::RecordImportDialogPrivate *d;
     Form::FormFilesSelectorWidget *m_selector;
     Form::FormIODescription *m_selectedForm;
+    QLineEdit *m_episodeLabelLineEdit;
+    QComboBox *m_episodeLabelComboBox;
+    QDateTimeEdit *m_episodeUserDateTimeDateTimeEdit;
+    QComboBox *m_episodeUserDateTimeComboBox;
+    QComboBox *m_episodeUserCreatorNameComboBox;
     QString m_uuid;
+    QString m_formUuid;
     QVector<QStringList> *m_data;
     QStringList m_field;
     QList<Form::FormItem*> m_formItemList;

@@ -32,6 +32,7 @@
 #include <memory>
 #include "recordimportdialog_p.h"
 
+#include <coreplugin/ipatient.h>
 #include <formmanagerplugin/iformitem.h>
 #include <formmanagerplugin/iformitemspec.h>
 #include <formmanagerplugin/formcore.h>
@@ -42,11 +43,15 @@
 #include "formmanagerplugin/iformio.h"
 #include <formmanagerplugin/episodemanager.h>
 #include <formmanagerplugin/episodemodel.h>
+#include <patientbaseplugin/patientbase.h>
 #include "utils/genericdescription.h"
 #include "utils/widgets/genericdescriptioneditor.h"
 
 #include <QFormLayout>
 #include <QCheckBox>
+#include <QDateTimeEdit>
+#include <QLineEdit>
+#include <QComboBox>
 
 using namespace RecordImport;
 using namespace Internal;
@@ -54,7 +59,16 @@ using namespace Internal;
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline Form::FormManager &formManager() {return Form::FormCore::instance().formManager();}
 static inline Form::EpisodeManager &episodeManager() {return Form::FormCore::instance().episodeManager();}
+static inline Patients::Internal::PatientBase *patientBase() { return Patients::Internal::PatientBase::instance(); }
+static inline Core::IPatient *patient()  { return Core::ICore::instance()->patient(); }
 
+/*!
+ * \brief RecordImportDialog::RecordImportDialog
+ * \param parent
+ * Date of birth format should be ISO 8601 (YYYY-MM-DD). If it is not, or you
+ * need to modify the function RecordImportDialo::import() to convert your date
+ * string to YYYY-MM-DD
+ */
 RecordImportDialog::RecordImportDialog(QWidget *parent) :
     QDialog(parent),
     d(new RecordImportDialogPrivate(this))
@@ -135,51 +149,76 @@ void RecordImportDialog::parse()
 }
 
 void RecordImportDialog::matchPatientWidget() {
-    QGridLayout *matchPatientGridLayout = new QGridLayout;
-    //QWidget *matchPatientWidget = new QWidget;
-    QStringList patientLabels = QStringList();
-    patientLabels << RecordImport::Constants::PATIENT_IDENTITY_USUALNAME
-                  << RecordImport::Constants::PATIENT_IDENTITY_FIRSTNAME
-                  << RecordImport::Constants::PATIENT_IDENTITY_DOB;
-    for (int i = 0; i < patientLabels.size(); ++i) {
-        QString label = patientLabels.at(i);
-        matchPatientGridLayout->addWidget(new QLabel(label), i, 0);
-        QComboBox *combo = new QComboBox;
-        combo->setObjectName(label);
-        combo->addItems(m_field);
-        combo->setCurrentIndex(-1);
-        matchPatientGridLayout->addWidget(combo, i, 1);
-
-    }
-    d->ui->patientGroupBox->setLayout(matchPatientGridLayout);
+    d->ui->usualNameLabel->setText(RecordImport::Constants::PATIENT_IDENTITY_USUALNAME);
+    d->ui->firstNameLabel->setText(RecordImport::Constants::PATIENT_IDENTITY_FIRSTNAME);
+    d->ui->dobLabel->setText(RecordImport::Constants::PATIENT_IDENTITY_DOB);
+    d->ui->usualNameComboBox->addItems(m_field);
+    d->ui->usualNameComboBox->setCurrentIndex(-1);
+    d->ui->firstNameComboBox->addItems(m_field);
+    d->ui->firstNameComboBox->setCurrentIndex(-1);
+    d->ui->dobComboBox->addItems(m_field);
+    d->ui->dobComboBox->setCurrentIndex(-1);
 }
 
 void RecordImportDialog::matchEpisodeWidget() {
-        QGridLayout *matchEpisodeGridLayout = new QGridLayout;
-        QWidget *matchEpisodeWidget = new QWidget;
-        QStringList episodeItems;
-        episodeItems << "UserDateTime"
-                     << "Label"
-                     << "CreationDateTime"
-                     << "Priority"
-                     << "UserCreatorName";
-        for (int j = 0; j < episodeItems.size(); ++j) {
-            QString label = m_data->at(0).at(j);
-            matchEpisodeGridLayout->addWidget(new QLabel (episodeItems.at(j)), j, 0);
-            QComboBox *combo = new QComboBox;
-            combo->setObjectName(label);
-            combo->addItems(m_field);
-            combo->setCurrentIndex(-1);
-            matchEpisodeGridLayout->addWidget(combo, j, 1);
-        }
-        // validate episode widgets
-        matchEpisodeWidget->setLayout(matchEpisodeGridLayout);
-        d->ui->matchEpisodeScrollArea->setWidget(matchEpisodeWidget);
-        Form::FormMain *form = formManager().form(m_uuid);
-        foreach(Form::FormItem *item, form->flattenedFormItemChildren()) {
-            qDebug() << item->spec()->label();
-        }
+    QWidget *matchEpisodeWidget = new QWidget;
+    QGridLayout *matchEpisodeGridLayout = new QGridLayout;
+    QStringList episodeItems;
+    episodeItems << "UserDateTime"
+                 << "Label"
+                 << "Priority"
+                 << "UserCreatorName (uuid)";
+    for (int j = 0; j < episodeItems.size(); ++j) {
+        QString label = m_data->at(0).at(j);
+        matchEpisodeGridLayout->addWidget(new QLabel (episodeItems.at(j)), j, 0);
+    }
+    // UserDateTime
+    m_episodeUserDateTimeComboBox = new QComboBox;
+    m_episodeUserDateTimeComboBox->addItems(m_field);
+    m_episodeUserDateTimeComboBox->setCurrentIndex(-1);
+    matchEpisodeGridLayout->addWidget(m_episodeUserDateTimeComboBox, 0, 1);
+
+    // Label
+    m_episodeLabelComboBox = new QComboBox;
+    m_episodeLabelComboBox->addItems(m_field);
+    m_episodeLabelComboBox->setCurrentIndex(-1);
+    matchEpisodeGridLayout->addWidget(m_episodeLabelComboBox, 1, 1);
+
+    // Priority: let's not implement this right now
+
+    // UserCreatorName (uuid)
+    m_episodeUserCreatorNameComboBox = new QComboBox;
+    m_episodeUserCreatorNameComboBox->addItems(m_field);
+    m_episodeUserCreatorNameComboBox->setCurrentIndex(-1);
+    matchEpisodeGridLayout->addWidget(m_episodeUserCreatorNameComboBox, 3, 1);
+
+    // user chosen values applied to all episodes
+    // UserDateTime
+    m_episodeUserDateTimeDateTimeEdit = new QDateTimeEdit;
+    matchEpisodeGridLayout->addWidget(m_episodeUserDateTimeDateTimeEdit, 0, 2);
+    // Label
+    m_episodeLabelLineEdit = new QLineEdit;
+    matchEpisodeGridLayout->addWidget(m_episodeLabelLineEdit, 1, 2);
+    // Priority
+    QComboBox *priority = new QComboBox;
+    QStringList priorityList = QStringList();
+    priorityList << "High" << "Medium" << "Low";
+    priority->addItems(priorityList);
+    matchEpisodeGridLayout->addWidget(priority, 2, 2);
+    // UserCreatorName (uuid)
+    QLineEdit *userCreatorName = new QLineEdit;
+    matchEpisodeGridLayout->addWidget(userCreatorName, 3, 2);
+
+    // validate episode widgets
+    matchEpisodeWidget->setLayout(matchEpisodeGridLayout);
+    d->ui->matchEpisodeScrollArea->setWidget(matchEpisodeWidget);
+
+    Form::FormMain *form = formManager().form(m_uuid);
+    foreach(Form::FormItem *item, form->flattenedFormItemChildren()) {
+        qDebug() << item->spec()->label();
+    }
 }
+
 
 void RecordImportDialog::matchFormWidget() {
         QGridLayout *matchFormGridLayout = new QGridLayout;
@@ -201,8 +240,75 @@ void RecordImportDialog::matchFormWidget() {
 
 void RecordImportDialog::import()
 {
+    Form::FormMain *form = formManager().form(m_uuid);
+
     d->ui->startPushButton->setEnabled(false);
-    //auto data_uptr = ProcessRecordImport::parse(d->fileName(), d->fieldSeparator(), d->recordSeparator());
+    //QString form_uuid = "Chave::Past::Medical::History";
+    Form::EpisodeModel *model = episodeManager().episodeModel(m_formUuid);
+    QString usualName;
+    QString firstname;
+    QString dateOfBirth;
+    QDate dob;
+    QString othernames;
+    QString gender;
+    for (int i=1; i < m_data->size(); ++i) {
+        usualName = m_data->at(i).at(d->ui->usualNameComboBox->currentIndex());
+        firstname = m_data->at(i).at(d->ui->firstNameComboBox->currentIndex());
+        dateOfBirth = m_data->at(i).at(d->ui->dobComboBox->currentIndex());
+        if (d->ui->softwareComboBox->currentText() == RecordImport::Constants::GESTCAB) {
+            dateOfBirth = dateOfBirth/*.remove(QChar('"'))*/.remove(QChar('/'));
+            dob = QDate::fromString(dateOfBirth, "ddMMyyyy");
+        } else {
+            dob = QDate::fromString(dateOfBirth, "yyyy-MM-dd");
+        }
+        QString patientUuid = patientBase()->patientUuid(usualName, othernames, firstname, gender, dob);
+        qDebug() << usualName << firstname << dateOfBirth << dob << patientUuid;
+        patient()->setCurrentPatientUid(patientUuid);
+
+        //Form::FormMain *form = formManager().form(m_uuid);
+        //qDebug() << form;
+        model->refreshFilter();
+        //model = episodeManager().episodeModel(form);
+        qDebug() << model;
+        //model->setCurrentPatient(uuid);
+        model->setReadOnly(false);
+        qDebug() << "rowCount" << model->rowCount();
+        model->removeAllEpisodes();
+        qDebug() << "rowCount" << model->rowCount();
+        model->submit();
+        qDebug() << "rowCount" << model->rowCount();
+        // insert a row in the model with defautl values
+        model->insertRow(model->rowCount());
+        // set the values related to the episode (if the user set them)
+        QModelIndex idx;
+        // UserDateTime
+        idx = model->index(model->rowCount()-1,
+                                       Form::EpisodeModel::DataRepresentation::UserDateTime);
+        QString isoUtcDateTimeString;
+        if (!(m_episodeUserDateTimeComboBox->currentIndex() == -1)) {
+            qDebug() << "index: " << m_episodeUserDateTimeComboBox->currentIndex() ;
+            QString isoDate = m_data->at(i).at(m_episodeUserDateTimeComboBox->currentIndex());
+            qDebug() << "isoDate: " << isoDate;
+            QDateTime isoDateTime = QDateTime::fromString(isoDate, "yyyy-MM-dd");
+            qDebug() << "isoDateTime: " << isoDateTime;
+            isoUtcDateTimeString = isoDateTime.toUTC().toString(Qt::ISODate);
+        } else if (m_episodeUserDateTimeDateTimeEdit->dateTime().isValid()) {
+            isoUtcDateTimeString = m_episodeUserDateTimeDateTimeEdit->dateTime().toUTC().toString(Qt::ISODate);
+        }
+        qDebug() << "isoUtcDateTimeString: " << isoUtcDateTimeString;
+        model->setData(idx, isoUtcDateTimeString);
+
+        // Label
+        idx = model->index(model->rowCount()-1,
+                                       Form::EpisodeModel::DataRepresentation::Label);
+        QString label = m_episodeLabelLineEdit->text();
+        model->setData(idx, label);
+
+        qDebug() << "rowCount" << model->rowCount();
+        model->submit();
+        qDebug() << "rowCount" << model->rowCount();
+        model->setReadOnly(true);
+    }
 }
 
 int RecordImportDialog::selectForm()
@@ -229,6 +335,16 @@ int RecordImportDialog::selectForm()
             m_selectedForm = selectedForm;
             m_uuid = selectedForm->data(Form::FormIODescription::UuidOrAbsPath).toString();
             d->ui->formLabel->setText(m_uuid);
+            Form::FormMain *form = formManager().form(m_uuid);
+            QList<Form::FormMain*> formList = form->flattenedFormMainChildren();
+            QString uuid;
+            if (!formList.isEmpty()) {
+                uuid = formList.at(0)->uuid();
+                m_formUuid = uuid;
+            } else {
+                uuid = QString("No uuid found. Check your form code.");
+            }
+            d->ui->uuidLabel->setText(uuid);
         }
         return 1;
     }
