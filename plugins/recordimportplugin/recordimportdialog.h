@@ -42,6 +42,7 @@
 #include <QString>
 #include <QVector>
 #include <QStringList>
+#include <QHash>
 
 QT_BEGIN_NAMESPACE
 class QLineEdit;
@@ -50,6 +51,7 @@ class QComboBox;
 QT_END_NAMESPACE
 
 namespace Form {
+class FormMain;
 class FormIODescription;
 }
 
@@ -82,6 +84,7 @@ private:
     void matchPatientWidget();
     void matchEpisodeWidget();
     void matchFormWidget();
+    QString xmlEpisode(int &i);
     void changeEvent(QEvent *e);
     Internal::RecordImportDialogPrivate *d;
     Form::FormFilesSelectorWidget *m_selector;
@@ -97,6 +100,8 @@ private:
     QStringList m_field;
     QList<Form::FormItem*> m_formItemList;
     QList<QComboBox*> m_comboFormList;
+    Form::FormMain *m_formMain;
+    QHash<QString, QString> *m_formItemHash;
 };
 
 } // namespace RecordImport

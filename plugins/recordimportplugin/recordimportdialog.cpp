@@ -33,6 +33,7 @@
 #include "recordimportdialog_p.h"
 
 #include <coreplugin/ipatient.h>
+#include <formmanagerplugin/constants_settings.h>
 #include <formmanagerplugin/iformitem.h>
 #include <formmanagerplugin/iformitemspec.h>
 #include <formmanagerplugin/formcore.h>
@@ -45,6 +46,7 @@
 #include <formmanagerplugin/episodemodel.h>
 #include <patientbaseplugin/patientbase.h>
 #include "utils/genericdescription.h"
+#include <utils/global.h>
 #include "utils/widgets/genericdescriptioneditor.h"
 
 #include <QFormLayout>
@@ -223,9 +225,17 @@ void RecordImportDialog::matchEpisodeWidget() {
 void RecordImportDialog::matchFormWidget() {
         QGridLayout *matchFormGridLayout = new QGridLayout;
         QWidget *matchFormWidget = new QWidget;
+        m_formItemHash = new QHash<QString, QString>;
         for (int j = 0; j < m_formItemList.size(); ++j) {
             QString label = m_formItemList.at(j)->spec()->label();
             QString labelPlugin = m_formItemList.at(j)->spec()->pluginName();
+            if (!m_formItemList.at(j)->uuid().isEmpty()) {
+                m_formItemHash->insert(m_formItemList.at(j)->uuid(), QString());
+                qDebug() << "key: "
+                     << m_formItemList.at(j)->uuid()
+                     << "value: "
+                     << m_formItemHash->value(m_formItemList.at(j)->uuid());
+            }
             matchFormGridLayout->addWidget(new QLabel(label), j, 0);
             matchFormGridLayout->addWidget(new QLabel(labelPlugin), j, 1);
             QComboBox *combo = new QComboBox;
@@ -240,7 +250,7 @@ void RecordImportDialog::matchFormWidget() {
 
 void RecordImportDialog::import()
 {
-    Form::FormMain *form = formManager().form(m_uuid);
+    //Form::FormMain *form = formManager().form(m_uuid);
 
     d->ui->startPushButton->setEnabled(false);
     //QString form_uuid = "Chave::Past::Medical::History";
@@ -304,6 +314,12 @@ void RecordImportDialog::import()
         QString label = m_episodeLabelLineEdit->text();
         model->setData(idx, label);
 
+        // xml
+        QString xml = xmlEpisode(i);
+        qDebug() << "xml: " << xml;
+        idx = model->index(model->rowCount()-1,
+                                       Form::EpisodeModel::DataRepresentation::XmlContent);
+        model->setData(idx, xml);
         qDebug() << "rowCount" << model->rowCount();
         model->submit();
         qDebug() << "rowCount" << model->rowCount();
@@ -335,8 +351,8 @@ int RecordImportDialog::selectForm()
             m_selectedForm = selectedForm;
             m_uuid = selectedForm->data(Form::FormIODescription::UuidOrAbsPath).toString();
             d->ui->formLabel->setText(m_uuid);
-            Form::FormMain *form = formManager().form(m_uuid);
-            QList<Form::FormMain*> formList = form->flattenedFormMainChildren();
+            m_formMain = formManager().form(m_uuid);
+            QList<Form::FormMain*> formList = m_formMain->flattenedFormMainChildren();
             QString uuid;
             if (!formList.isEmpty()) {
                 uuid = formList.at(0)->uuid();
@@ -349,4 +365,26 @@ int RecordImportDialog::selectForm()
         return 1;
     }
     return 0;
+}
+
+QString RecordImportDialog::xmlEpisode(int &i)
+{
+    for (int j = 0; j < m_formItemList.size(); ++j) {
+        qDebug() << m_formItemList.at(j);
+        int idx = m_comboFormList.at(j)->currentIndex();
+        if (!(idx == -1)) {
+            qDebug() << "combo idx = " << idx;
+            qDebug() << "value for combo idx: " << m_data->at(i).at(idx);
+            m_formItemHash->insert(m_formItemList.at(j)->uuid(),
+                               m_data->at(i).at(idx));
+        }
+    }
+    m_formMain = formManager().form(m_uuid);
+    QHash<QString, QString> xmlData;
+    foreach(Form::FormItem *it, m_formMain->flattenedFormItemChildren()) {
+        if (it->itemData()) {
+            xmlData.insert(it->uuid(), m_formItemHash->value(it->uuid()));
+        }
+    }
+    return Utils::createXml(Form::Constants::XML_FORM_GENERAL_TAG, xmlData, 2, false);
 }
