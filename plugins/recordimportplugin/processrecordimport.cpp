@@ -52,7 +52,19 @@ ProcessRecordImport::~ProcessRecordImport()
         delete d_ptr;
     d_ptr = 0;
 }
-
+/*!
+ * \brief ProcessRecordImport::parse
+ * This function expects a single string containing records separated by
+ * recordSeparator (single unicode character). A record contains 1 or more fields
+ * separated by fieldSeparator (single unicode character).
+ * Using a record separator instead of the usual newline was necessary in order
+ * to avoid problems with records containing MS-DOS line endings
+ * TODO: implement true CSV import & SQL import
+ * \param fileName
+ * \param fieldSeparator
+ * \param recordSeparator
+ * \return
+ */
 std::unique_ptr<QVector<QStringList>> ProcessRecordImport::parse(QString fileName,
                                                                  QChar fieldSeparator,
                                                                  QChar recordSeparator)
@@ -84,28 +96,18 @@ std::unique_ptr<QVector<QStringList>> ProcessRecordImport::parse(QString fileNam
     while (!in.atEnd()) {
         qDebug() << "*********** INSIDE main while loop";
         i++;
-        if (i>2000)
-            break;
         in >> character;
-        //string+=character;
         qDebug() << "character " << character;
         qDebug() << "string " << string;
 
         while (!(character==recordSeparator) && !in.atEnd()) {
             qDebug() << "*********** INSIDE recordSeparator while loop";
             j++;
-            if (j>2000)
-                break;
             while (!(character==fieldSeparator)
                    && !(character==recordSeparator)
                    && !in.atEnd()) {
                 qDebug() << "*********** INSIDE fieldSeparator while loop";
-                //k++;
-                //if (k>1000)
-                //        break;
-
                 qDebug() << "before >> " << character;
-                //character = 0;
                 in >> character;
                 qDebug() << "after >> " << character;
                 if (character=='\x0') {

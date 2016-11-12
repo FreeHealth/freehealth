@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>302</width>
+    <width>382</width>
     <height>951</height>
    </rect>
   </property>
@@ -14,30 +14,10 @@
    <string>Dialog</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0">
-    <widget class="QLabel" name="softwareLabel">
+   <item row="11" column="0">
+    <widget class="QCheckBox" name="validateEpisodeCheckBox">
      <property name="text">
-      <string>software</string>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="1">
-    <widget class="QLineEdit" name="fieldSeparatorLineEdit">
-     <property name="toolTip">
-      <string>Only one unicode character.</string>
-     </property>
-    </widget>
-   </item>
-   <item row="5" column="1">
-    <widget class="QLabel" name="formLabel">
-     <property name="frameShape">
-      <enum>QFrame::Box</enum>
-     </property>
-     <property name="frameShadow">
-      <enum>QFrame::Sunken</enum>
-     </property>
-     <property name="text">
-      <string>selected form</string>
+      <string>validate episode</string>
      </property>
     </widget>
    </item>
@@ -86,14 +66,14 @@
      </layout>
     </widget>
    </item>
-   <item row="12" column="0" colspan="2">
+   <item row="14" column="0" colspan="2">
     <widget class="QPlainTextEdit" name="logPlainTextEdit">
      <property name="readOnly">
       <bool>true</bool>
      </property>
     </widget>
    </item>
-   <item row="13" column="0">
+   <item row="15" column="0">
     <widget class="QLabel" name="statusLabel">
      <property name="text">
       <string>status</string>
@@ -122,18 +102,11 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>258</width>
+           <width>338</width>
            <height>68</height>
           </rect>
          </property>
         </widget>
-       </widget>
-      </item>
-      <item>
-       <widget class="QCheckBox" name="validateEpisodeCheckBox">
-        <property name="text">
-         <string>validate episode</string>
-        </property>
        </widget>
       </item>
      </layout>
@@ -146,7 +119,7 @@
      </property>
     </widget>
    </item>
-   <item row="10" column="0" colspan="2">
+   <item row="12" column="0" colspan="2">
     <widget class="QGroupBox" name="formGroupBox">
      <property name="title">
       <string>form</string>
@@ -165,7 +138,7 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>258</width>
+           <width>338</width>
            <height>68</height>
           </rect>
          </property>
@@ -182,7 +155,7 @@
      </property>
     </widget>
    </item>
-   <item row="11" column="1">
+   <item row="13" column="1">
     <widget class="QProgressBar" name="importProgressBar">
      <property name="value">
       <number>24</number>
@@ -203,7 +176,10 @@
      </property>
     </widget>
    </item>
-   <item row="14" column="1">
+   <item row="0" column="1">
+    <widget class="QComboBox" name="softwareComboBox"/>
+   </item>
+   <item row="16" column="1">
     <widget class="QDialogButtonBox" name="buttonBox">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -220,10 +196,7 @@
      </property>
     </widget>
    </item>
-   <item row="0" column="1">
-    <widget class="QComboBox" name="softwareComboBox"/>
-   </item>
-   <item row="11" column="0">
+   <item row="13" column="0">
     <widget class="QPushButton" name="startPushButton">
      <property name="text">
       <string>start import</string>
@@ -248,6 +221,40 @@
     <widget class="QLabel" name="uuidLabel">
      <property name="text">
       <string/>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0">
+    <widget class="QLabel" name="softwareLabel">
+     <property name="text">
+      <string>software</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="1">
+    <widget class="QLineEdit" name="fieldSeparatorLineEdit">
+     <property name="toolTip">
+      <string>Only one unicode character.</string>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="1">
+    <widget class="QLabel" name="formLabel">
+     <property name="frameShape">
+      <enum>QFrame::Box</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Sunken</enum>
+     </property>
+     <property name="text">
+      <string>selected form</string>
+     </property>
+    </widget>
+   </item>
+   <item row="10" column="0" colspan="2">
+    <widget class="QCheckBox" name="deleteUniqueEpisodeCheckBox">
+     <property name="text">
+      <string>Unique episode: delete existing and create new one</string>
      </property>
     </widget>
    </item>
