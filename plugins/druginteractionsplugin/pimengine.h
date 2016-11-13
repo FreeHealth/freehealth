@@ -54,7 +54,7 @@ public:
 //        Precaution       = 0x0010,
 //        APrendreEnCompte = 0x0020,
 //        P450             = 0x0100,
-//        GPG              = 0x0200,
+//        PGP              = 0x0200,
 //        Deconseille      = 0x1000,
 //        ContreIndication = 0x8000
 //    };

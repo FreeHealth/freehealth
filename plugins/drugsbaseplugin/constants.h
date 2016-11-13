@@ -157,7 +157,7 @@ namespace Constants {
     const char * const  INTERACTION_ICONUNKONW =           "help.png";          /*!< \brief Themed icon name for Interactions logo. */
     const char * const  INTERACTION_ICONOK =               "ok.png";            /*!< \brief Themed icon name for Interactions logo. */
     const char * const  INTERACTION_ICONP450 =             "p450iam.png";            /*!< \brief Themed icon name for Interactions logo. */
-    const char * const  INTERACTION_ICONGPG =              "gpgiam.png";            /*!< \brief Themed icon name for Interactions logo. */
+    const char * const  INTERACTION_ICONPGP =              "pgpddi.png";            /*!< \brief Themed icon name for Interactions logo. */
 
     // HELP PAGES
     const char * const  H_INTERACTION_SYNTHETISOR = "interactions.html";

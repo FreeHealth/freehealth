@@ -30,11 +30,11 @@
   \brief This class owns the drugs and dosages database and interactions mechanism.
 
   0. Terminology\n
-  \e Substances are the chimic molecules that compose a drug.\n
+  \e Substances are the chemical molecules that compose a drug.\n
   \e IamCode or \e INN are the INN codes and names.\n
   \e IamClass are the classes that regroups INNs into classes of pharmaceutics family.\n
-  \e CIP : presentation code of a drug. A drug can be presented into different presentation (15 pills, 30 pills a box...).\n
-  \e UID : speciality code of a drug. Everything is base on this code.
+  \e CIP : "presentation" code of a drug. Drugs can be commercialized in different package types (1 blister containing 15 tablets, A unit-dose containing 1 tablet). The combination of a dosage form and a package type is a presentation\n
+  \e UID : speciality code of a drug. Everything is based on this code.
      One UID code can be associated to many CIP, many Substances, many INNs, and many IamClasses.
 
   1. Initialization\n
