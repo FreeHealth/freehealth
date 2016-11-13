@@ -6,7 +6,7 @@
 # - download Health Canada Drug Product Databases (DPD)
 # - inflate and convert CSV to pipe-separated values
 #   more easily parsed by sqlite3
-# - call sqlite to create a db suitable for use with FreeDiams
+# - call sqlite to create a db compatible with FreeRx (or FreeDiams)
 
 #echo "Creating temporary directory ~/tmp/drugsca..."
 rm -R ~/tmp/drugsca
@@ -29,7 +29,7 @@ wget http://www.hc-sc.gc.ca/dhp-mps/prodpharma/databasdon/txt/allfiles.zip
 unzip *.zip
 rm *.zip
 
-# process some (but not all) DPD files, since FreeDiams does not yet use them all
+# process some (but not all) DPD files, since FreeRx does not yet use them all
 
 sed -e 's/.$//' -e 's/","/|/g' -e 's/\(^"\)\(.*\)/\2/' -e 's/"$//' drug.txt >drug.csv
 sed -e 's/.$//' -e 's/","/|/g' -e 's/\(^"\)\(.*\)/\2/' -e 's/"$//' form.txt >form.csv
@@ -114,3 +114,4 @@ echo "Cleaning up..."
 echo "Please look inside user directory ~/tmp for 'drugs-en_CA.db'!"
 echo "Please also bear in mind that more values may be needed for LK_MOL_ATC."
 open ~/tmp
+
