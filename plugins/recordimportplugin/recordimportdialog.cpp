@@ -356,9 +356,12 @@ void RecordImportDialog::import()
         model->setData(idx, label);
 
         // xml
-        QString xml = xmlEpisode(i);
-        qDebug() << "xml: " << xml;
         idx = model->index(row, Form::EpisodeModel::DataRepresentation::XmlContent);
+        QString previousXml = model->data(idx).toString();
+        qDebug() << "previousXml" << previousXml;
+        QString xml = xmlEpisode(i, previousXml);
+        qDebug() << "xml: " << xml;
+
         model->setData(idx, xml);
         qDebug() << "rowCount" << model->rowCount();
         model->submit();
@@ -407,7 +410,7 @@ int RecordImportDialog::selectForm()
     return 0;
 }
 
-QString RecordImportDialog::xmlEpisode(int &i)
+QString RecordImportDialog::xmlEpisode(int &i, const QString previousXml)
 {
     for (int j = 0; j < m_formItemList.size(); ++j) {
         qDebug() << m_formItemList.at(j);
@@ -419,11 +422,32 @@ QString RecordImportDialog::xmlEpisode(int &i)
                                m_data->at(i).at(idx));
         }
     }
+    ;
+    QHash<QString, QString> previousXmlData;
+    if (!previousXml.isEmpty()) {
+        // read the xml'd content
+        if (!Utils::readXml(previousXml,
+                            Form::Constants::XML_FORM_GENERAL_TAG,
+                            previousXmlData,
+                            false)) {
+            //QModelIndex uid = index(episode.row(), EpisodeModel::Uuid);
+            //LOG_ERROR(QString("Error while reading episode content (%1)").arg(data(uid).toString()));
+            return QString();
+        }
+    }
+
     m_formMain = formManager().form(m_uuid);
     QHash<QString, QString> xmlData;
     foreach(Form::FormItem *it, m_formMain->flattenedFormItemChildren()) {
         if (it->itemData()) {
-            xmlData.insert(it->uuid(), m_formItemHash->value(it->uuid()));
+            qDebug() << previousXmlData.value(it->uuid())
+                     << "xml data isEmpty ?"
+                     << previousXmlData.value(it->uuid()).isEmpty();
+            if (previousXmlData.value(it->uuid()).isEmpty()) {
+                xmlData.insert(it->uuid(), m_formItemHash->value(it->uuid()));
+            } else {
+                xmlData.insert(it->uuid(), previousXmlData.value(it->uuid()));
+            }
         }
     }
     return Utils::createXml(Form::Constants::XML_FORM_GENERAL_TAG, xmlData, 2, false);

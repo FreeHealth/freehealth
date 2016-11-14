@@ -84,7 +84,7 @@ private:
     void matchPatientWidget();
     void matchEpisodeWidget();
     void matchFormWidget();
-    QString xmlEpisode(int &i);
+    QString xmlEpisode(int &i, const QString previousXml);
     void changeEvent(QEvent *e);
     Internal::RecordImportDialogPrivate *d;
     Form::FormFilesSelectorWidget *m_selector;
