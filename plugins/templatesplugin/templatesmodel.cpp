@@ -27,7 +27,7 @@
 /**
   \class Templates::TemplatesModel
   Manages the templates database in/out and link to views.
-  Data are statically stored so that you can instanciate how many requiered models
+  Data are statically stored so that you can instanciate how many required models
   as you want without consuming RAM.
 */
 
