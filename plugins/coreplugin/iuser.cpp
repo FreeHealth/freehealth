@@ -249,9 +249,11 @@ void IUser::replaceTokens(QString &stringWillBeModified)
 
 bool IUser::isAdministrator() const
 {
+    WARN_FUNC;
     // get currently connected user's ManagerRights
     QVariant currentUserRights = Core::ICore::instance()->user()->value(Core::IUser::ManagerRights);
-
+    qDebug() << "current user rights" << currentUserRights;
+    qDebug() << "&" << !(Core::IUser::UserRight(currentUserRights.toInt()) ^ Core::IUser::AllRights);
     // If currently connected user has AllRight for ManagerRights, it is an administrative account
-    return(Core::IUser::UserRight(currentUserRights.toInt()) == Core::IUser::AllRights);
+    return(Core::IUser::UserRight(currentUserRights.toInt()) & Core::IUser::AllRights);
 }

@@ -29,7 +29,7 @@
   \brief This widget is specifically develop for UserViewer rights datamapper.
   The UserPlugin::UserRightsWidget is connected to the UserPlugin::UserRightsModel. It receives
   the user rights using setRights(). The widget property \e rights is defined to be used with any
-  QDateWidgetMapper.
+  QDataWidgetMapper.
   \sa UserPlugin::UserViewer
 */
 
@@ -41,7 +41,6 @@
 #include <QHBoxLayout>
 #include <QEvent>
 #include <QDebug>
-
 
 using namespace UserPlugin::Internal;
 
@@ -72,19 +71,24 @@ QVariant UserRightsModel::data(const QModelIndex &index, int role) const
     if (!index.isValid())
         return QVariant();
 
-//    qWarning() << Q_FUNC_INFO;
-
     if (role==Qt::DisplayRole) {
         if (index.row() < m_RightsName.count())
             return m_RightsName.at(index.row());
         return QVariant();
     }
     if (role==Qt::CheckStateRole) {
-        if (index.row()==1) // All Rights
+        if (index.row()==1) {
+            qDebug() << "index" << index;
+            qDebug() << "m_Rights" << m_Rights ;
+            qDebug() << (m_Rights == Core::IUser::AllRights ? Qt::Checked : Qt::Unchecked);
             return m_Rights == Core::IUser::AllRights ? Qt::Checked : Qt::Unchecked;
+        }
         if (index.row()==0) // No Rights
             return m_Rights == 0 ? Qt::Checked : Qt::Unchecked;
         if (m_Rights & m_NameToRole.value(index.row(), 0)) {
+            qDebug() << "index" << index;
+            qDebug() << "m_Rights" << m_Rights ;
+            qDebug() << "m_NameToRole.value(index.row(), 0)" << m_NameToRole.value(index.row(), 0);
             return Qt::Checked;
         }
         return Qt::Unchecked;
@@ -105,17 +109,20 @@ bool UserRightsModel::setData(const QModelIndex &index, const QVariant &value, i
                 {
                     m_Rights = 0;
                     Q_EMIT dataChanged(this->index(0,0), this->index(m_NameToRole.count(), 0));
+                    qDebug() << "row: " << index.row() << "rights: " << m_Rights;
                     break;
                 }
             case 1 :  // All Rights
                 {
                     m_Rights = m_NameToRole.value(index.row(), 0);
+                    qDebug() << "row: " << index.row() << "rights: " << m_Rights;
                     Q_EMIT dataChanged(this->index(0,0), this->index(m_NameToRole.count(), 0));
                     break;
                 }
             default :
             {
                 m_Rights |= m_NameToRole.value(index.row(), 0);
+                qDebug() << "row: " << index.row() << "rights: " << m_Rights;
                 Q_EMIT dataChanged(index, index);
                 Q_EMIT dataChanged(this->index(1,0), this->index(1,0));
             }
@@ -126,12 +133,14 @@ bool UserRightsModel::setData(const QModelIndex &index, const QVariant &value, i
             case 1 :
                 {
                     m_Rights = 0;
+                    qDebug() << "row: " << index.row() << "rights: " << m_Rights;
                     Q_EMIT dataChanged(this->index(0,0), this->index(m_NameToRole.count(), 0));
                     break;
                 }
             default :
             {
                 m_Rights ^= m_NameToRole.value(index.row(), 0);
+                qDebug() << "row: " << index.row() << "rights: " << m_Rights;
                 Q_EMIT dataChanged(index, index);
             }
             return true;

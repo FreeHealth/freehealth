@@ -382,6 +382,7 @@ public:
         foreach(const Internal::UserData *u, m_Uuid_UserList.values()) {
             if (!u || u->uuid().isEmpty()) {
                 LOG_ERROR_FOR("UserModel", "Null user in model");
+                qWarning() << u;
                 qWarning() << m_Uuid_UserList;
                 continue;
             }
@@ -594,7 +595,7 @@ bool UserModel::setCurrentUser(const QString &clearLog, const QString &clearPass
             return false;
     }
 
-    // TODO: this is not the usermanger role if asked uuid == currentuser
+    // TODO: this is not the usermanager role if asked uuid == currentuser
     d->m_CurrentUserRights = Core::IUser::UserRights(user->rightsValue(USER_ROLE_USERMANAGER).toInt());
 
     // If we are running with a server, we need to reconnect all databases
@@ -631,8 +632,8 @@ bool UserModel::setCurrentUser(const QString &clearLog, const QString &clearPass
 }
 
 /**
-  Define the current user as the database server manager. The unique user that can create
-  users at startup time.
+  Define the current user as the database server manager. The unique user that
+  can create users at startup time.
   \sa UserPlugin::UserCreationPage
 */
 bool UserModel::setCurrentUserIsServerManager()
@@ -914,7 +915,7 @@ Qt::ItemFlags UserModel::flags(const QModelIndex &index) const
 /**
  * Define the data of users. \n
  * For index creation, you must use the Core::IUser enumerator for the column.\n
- * Using the Core::IUser::ClearPassword has column, defines the users'
+ * Using the Core::IUser::ClearPassword as column, defines the user's
  * clear password: user's password is changed from the old to the new data
  * (see also: UserPlugin::Internal::UserBase::changeUserPassword()).
 */
@@ -953,7 +954,7 @@ bool UserModel::setData(const QModelIndex &item, const QVariant &value, int role
         // prepare SQL update
         QModelIndex sqlIndex = d->m_Sql->index(item.row(), item.column());
         if (!d->m_Sql->setData(sqlIndex, value, role)) {
-           LOG_ERROR(QString("enable to setData to SqlModel. Row %1, col %2, data %3")
+           LOG_ERROR(QString("Unable to setData to SqlModel. Row %1, col %2, data %3")
                              .arg(sqlIndex.row()).arg(sqlIndex.column()).arg(value.toString()));
             return false;
         }
@@ -962,6 +963,10 @@ bool UserModel::setData(const QModelIndex &item, const QVariant &value, int role
 
     QList<int> colsToEmit;
     colsToEmit << item.column();
+
+    Core::IUser::UserRights rights = Core::IUser::UserRights(userModel()->currentUserData(Core::IUser::ManagerRights).toInt());
+    bool isAdmin = !(rights ^ Core::IUser::AllRights);
+    qDebug() << "rights:" << rights << "isAdmin : " << isAdmin;
 
     switch (item.column())
     {
@@ -975,7 +980,7 @@ bool UserModel::setData(const QModelIndex &item, const QVariant &value, int role
         // When a clear password is defined through the model
         // the model reacts **in real time**. The user password
         // is updated on the database server and inside the
-        // FreeMedForms user database. You do not need to call submit()
+        // users database. You do not need to call submit()
         QString oldPass = user->clearPassword();
         user->setClearPassword(value.toString());
         if (!userBase()->changeUserPassword(user, value.toString()))
@@ -1077,14 +1082,32 @@ bool UserModel::setData(const QModelIndex &item, const QVariant &value, int role
     case Core::IUser::PrescriptionHeaderPresence : user->setExtraDocumentPresence(value.toInt(), Core::IUser::PrescriptionHeader); Q_EMIT(userDocumentsChanged()); break;
     case Core::IUser::PrescriptionFooterPresence : user->setExtraDocumentPresence(value.toInt(), Core::IUser::PrescriptionFooter); Q_EMIT(userDocumentsChanged()); break;
     case Core::IUser::PrescriptionWatermarkPresence : user->setExtraDocumentPresence(value.toInt(), Core::IUser::PrescriptionWatermark); Q_EMIT(userDocumentsChanged()); break;
-
-    case Core::IUser::ManagerRights : user->setRights(USER_ROLE_USERMANAGER, Core::IUser::UserRights(value.toInt())); break;
-    case Core::IUser::MedicalRights : user->setRights(USER_ROLE_MEDICAL, Core::IUser::UserRights(value.toInt())); break;
-    case Core::IUser::DrugsRights : user->setRights(USER_ROLE_DOSAGES, Core::IUser::UserRights(value.toInt())); break;
-    case Core::IUser::ParamedicalRights : user->setRights(USER_ROLE_PARAMEDICAL, Core::IUser::UserRights(value.toInt())); break;
-    case Core::IUser::AdministrativeRights : user->setRights(USER_ROLE_ADMINISTRATIVE, Core::IUser::UserRights(value.toInt())); break;
-    case Core::IUser::AgendaRights : user->setRights(USER_ROLE_AGENDA, Core::IUser::UserRights(value.toInt())); break;
-
+    // set new user rights only if current user is an administrator
+    case Core::IUser::ManagerRights :
+        qDebug() << "inside switch ManagerRights";
+        if (isAdmin)
+            user->setRights(USER_ROLE_USERMANAGER, Core::IUser::UserRights(value.toInt()));
+        break;
+    case Core::IUser::MedicalRights :
+        if (isAdmin)
+            user->setRights(USER_ROLE_MEDICAL, Core::IUser::UserRights(value.toInt()));
+        break;
+    case Core::IUser::DrugsRights :
+        if (isAdmin)
+            user->setRights(USER_ROLE_DOSAGES, Core::IUser::UserRights(value.toInt()));
+        break;
+    case Core::IUser::ParamedicalRights :
+        if (isAdmin)
+            user->setRights(USER_ROLE_PARAMEDICAL, Core::IUser::UserRights(value.toInt()));
+        break;
+    case Core::IUser::AdministrativeRights :
+        if (isAdmin)
+            user->setRights(USER_ROLE_ADMINISTRATIVE, Core::IUser::UserRights(value.toInt()));
+        break;
+    case Core::IUser::AgendaRights :
+        if (isAdmin)
+            user->setRights(USER_ROLE_AGENDA, Core::IUser::UserRights(value.toInt()));
+        break;
     default : return false;
     };
 
@@ -1276,6 +1299,7 @@ bool UserModel::submitAll()
 /** Submit only one user changes of the model into database according to the current user rights. */
 bool UserModel::submitUser(const QString &uuid)
 {
+    WARN_FUNC;
     if (WarnAllProcesses)
         qWarning() << Q_FUNC_INFO << uuid;
     d->checkNullUser();
@@ -1298,7 +1322,7 @@ bool UserModel::submitUser(const QString &uuid)
     // act only on modified users
     if (user->isModified()) {
         if (!d->userCanWriteData(uuid)) {
-            LOG_ERROR("Not enought rights to save data");
+            LOG_ERROR("Not enough rights to save data");
             return false;
         }
         if (!userBase()->saveUser(user))
@@ -1314,6 +1338,7 @@ bool UserModel::submitUser(const QString &uuid)
 
 bool UserModel::submitRow(const int row)
 {
+    WARN_FUNC;
     return submitUser(index(row, Core::IUser::Uuid).data().toString());
 }
 

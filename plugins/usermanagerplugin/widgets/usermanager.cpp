@@ -26,7 +26,7 @@
  ***************************************************************************/
 /**
  * \class UserPlugin::UserManagerMainWindow
- * This is the Users' Manager of FreeMedForms. \n
+ * User manager of EHR. \n
  * You can use it as main app or secondary mainWindow.\n
  * You only need to instanciate the UserModel and define a current user
  * before using this mainwindow.
@@ -201,7 +201,7 @@ void UserManagerMainWindow::extensionsInitialized()
     setFocus();
 }
 
-/** Close the usermanager. Check if modifications have to be saved and ask user. */
+/** Closes the usermanager. Checks if modifications have to be saved and asks user. */
 void UserManagerMainWindow::closeEvent(QCloseEvent *event)
 {
     if (m_Widget->canCloseParent()) {
@@ -443,7 +443,12 @@ public:
 
 public:
     Ui::UserManagerWidget *ui;
-    bool m_CanModify, m_CanCreate, m_CanViewAllUsers, m_CanViewRestrictedData, m_CanDelete, m_CanReadOwn;
+    bool m_CanModify,
+    m_CanCreate,
+    m_CanViewAllUsers,
+    m_CanViewRestrictedData,
+    m_CanDelete,
+    m_CanReadOwn;
     int m_EditingRow;
     int m_SearchBy;
     QToolBar *m_ToolBar;
@@ -623,6 +628,7 @@ void UserManagerWidget::onClearModificationRequested()
  */
 void UserManagerWidget::onSaveRequested()
 {
+    WARN_FUNC;
     if ((!d->m_CanModify) && (!d->m_CanCreate))
         return;
     d->m_ToolBar->setFocus();

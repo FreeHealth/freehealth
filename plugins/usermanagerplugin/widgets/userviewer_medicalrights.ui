@@ -6,17 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>723</height>
+    <width>1040</width>
+    <height>616</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <property name="margin">
-    <number>0</number>
-   </property>
    <item row="0" column="0">
     <widget class="QLabel" name="label_25">
      <property name="font">
@@ -33,8 +30,46 @@
      </property>
     </widget>
    </item>
+   <item row="0" column="1">
+    <widget class="QLabel" name="label_28">
+     <property name="font">
+      <font>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Drugs dosage rights</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="2">
+    <widget class="QLabel" name="label_27">
+     <property name="font">
+      <font>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Agenda rights</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
    <item row="1" column="0">
     <widget class="UserPlugin::Internal::UserRightsWidget" name="userManagerRightsListWidget"/>
+   </item>
+   <item row="1" column="1">
+    <widget class="UserPlugin::Internal::UserRightsWidget" name="drugsRightsListWidget"/>
+   </item>
+   <item row="1" column="2">
+    <widget class="UserPlugin::Internal::UserRightsWidget" name="agendaRightsWidget"/>
    </item>
    <item row="2" column="0">
     <widget class="QLabel" name="label_19">
@@ -52,29 +87,7 @@
      </property>
     </widget>
    </item>
-   <item row="3" column="0">
-    <widget class="UserPlugin::Internal::UserRightsWidget" name="medicalRightsListWidget"/>
-   </item>
-   <item row="4" column="0">
-    <widget class="QLabel" name="label_28">
-     <property name="font">
-      <font>
-       <weight>75</weight>
-       <bold>true</bold>
-      </font>
-     </property>
-     <property name="text">
-      <string>Drugs dosage rights</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
-    </widget>
-   </item>
-   <item row="5" column="0">
-    <widget class="UserPlugin::Internal::UserRightsWidget" name="drugsRightsListWidget"/>
-   </item>
-   <item row="6" column="0">
+   <item row="2" column="1">
     <widget class="QLabel" name="label_26">
      <property name="font">
       <font>
@@ -90,29 +103,7 @@
      </property>
     </widget>
    </item>
-   <item row="7" column="0">
-    <widget class="UserPlugin::Internal::UserRightsWidget" name="paramedicalRightsWidget"/>
-   </item>
-   <item row="8" column="0">
-    <widget class="QLabel" name="label_27">
-     <property name="font">
-      <font>
-       <weight>75</weight>
-       <bold>true</bold>
-      </font>
-     </property>
-     <property name="text">
-      <string>Agenda rights</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
-    </widget>
-   </item>
-   <item row="9" column="0">
-    <widget class="UserPlugin::Internal::UserRightsWidget" name="agendaRightsWidget"/>
-   </item>
-   <item row="10" column="0">
+   <item row="2" column="2" rowspan="2">
     <widget class="QLabel" name="label_29">
      <property name="font">
       <font>
@@ -128,8 +119,14 @@
      </property>
     </widget>
    </item>
-   <item row="11" column="0">
+   <item row="4" column="2">
     <widget class="UserPlugin::Internal::UserRightsWidget" name="administrativeRightsWidget"/>
+   </item>
+   <item row="4" column="1">
+    <widget class="UserPlugin::Internal::UserRightsWidget" name="paramedicalRightsWidget"/>
+   </item>
+   <item row="4" column="0">
+    <widget class="UserPlugin::Internal::UserRightsWidget" name="medicalRightsListWidget"/>
    </item>
   </layout>
  </widget>

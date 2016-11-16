@@ -29,7 +29,7 @@
  * \class UserPlugin::DefaultUserContactWidget
  * Widget containing all editor of the user contact items using the
  * Identity::IdentityEditorWidget. This widget manages password changes
- * using the signl/slot of the Identity::IdentityEditorWidget and
+ * using the signal/slot of the Identity::IdentityEditorWidget and
  * the UserPlugin::Internal::UserModel.
  */
 
@@ -312,6 +312,7 @@ DefaultUserRightsWidget::DefaultUserRightsWidget(QWidget *parent) :
     m_Mapper(0),
     _userModel(0)
 {
+    WARN_FUNC;
     ui->setupUi(this);
 }
 

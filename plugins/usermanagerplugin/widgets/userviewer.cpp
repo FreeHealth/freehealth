@@ -255,6 +255,7 @@ void UserViewer::setCurrentPage(int index)
  */
 void UserViewer::submitChangesToModel()
 {
+    WARN_FUNC;
     for(int i = 0; i < d->m_widgets.count(); ++i) {
         IUserViewerWidget *w = d->m_widgets.at(i);
         if (w && !w->submit())

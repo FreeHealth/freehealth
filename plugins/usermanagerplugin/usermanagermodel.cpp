@@ -93,8 +93,13 @@ public:
     // Get and sort available pages
     void getUserViewerPages()
     {
+        WARN_FUNC;
         _pages << new DefaultUserContactPage(q);
-        _pages << new DefaultUserRightsPage(q);
+        Core::IUser::UserRights rights = Core::IUser::UserRights(userModel()->currentUserData(Core::IUser::ManagerRights).toInt());
+        bool canModifyRights = !(rights ^ Core::IUser::AllRights);
+        qDebug() << rights << Core::IUser::AllRights << canModifyRights;
+        if (canModifyRights)
+            _pages << new DefaultUserRightsPage(q);
         _pages << new DefaultUserProfessionalPage(q);
 
         _pages << new DefaultUserPapersPage(DefaultUserPapersPage::GenericPaper, q);

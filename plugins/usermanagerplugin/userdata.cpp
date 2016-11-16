@@ -19,10 +19,9 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *  Main developer: Eric MAEKER, <eric.maeker@gmail.com>                   *
- *  Contributors:                                                          *
- *       NAME <MAIL@ADDRESS.COM>                                           *
- *       NAME <MAIL@ADDRESS.COM>                                           *
+ *  Authors:                                                               *
+ *  Eric MAEKER, <eric.maeker@gmail.com>                                   *
+ *                                                                         *
  ***************************************************************************/
 /**
   \class UserPlugin::UserDynamicData
@@ -30,7 +29,7 @@
   Dynamic data can be :
   \li strings
   \li datetime value
-  \li files and images (coded into database into base64)
+  \li files and images (bases64 encoded)
   \li integer or double
   \li a Print::TextDocumentExtra pointer or html contents
   Get information of the database structure in UserBase. \n
@@ -38,13 +37,14 @@
   \sa UserPlugin::Internal::UserBase, UserPlugin::Internal::UserManagerPlugin
 */
 
-/**
+/*!
   \class UserPlugin::UserData
   \brief This class owns the user data.
   This class is a link between UserBase and UserModel. You should never use it directly to access user's data.\n
   All the user's data are available via the UserModel.
 
-  Some members are reserved for the use with UserBase and shouldn't be assessed outside of the UserBase class.\n
+  Some members are reserved for the use with UserBase and shouldn't be accessed
+  outside of the UserBase class.\n
   You can set/get values using database tables representations with :
   - setValue() and value() for the USERS table,
   - addDynamicDataFromDatabase() and dynamicDataValue() for the DATA table,
@@ -52,7 +52,8 @@
   - hasModifiedDynamicDataToStore(), hasModifiedRightsToStore inform UserBase of needed changes,
   - modifiedDynamicData(), modifiedRoles() inform UserBase of the dynamic data and rights to save to base.
 
-  Some members are reserved for users interactions. Theses members are mainly assessed by the UserModel.
+  Some members are reserved for users interactions. Theses members are mainly
+  accessed by the UserModel.
   - setDynamicData() can be used for creating a new dynamic data or change the value of the dynamic data,
   - setRights() can be used for creating new rights or change the value of the rights.
   - You can set/get unique value using simplified setters and simplified getters. Ex : setId(), id()...
@@ -60,7 +61,9 @@
   you can not set values. The isNull() value is set in the constructor, and change at the first data modification.
 
   Unit-tests are available.
-  \sa UserPlugin::Internal::UserData, UserPlugin::Internal::UserBase, UserPlugin::Internal::UserManagerPlugin
+  \sa UserPlugin::Internal::UserData
+  \sa UserPlugin::Internal::UserBase
+  \sa UserPlugin::Internal::UserManagerPlugin
 */
 
 #include "userdata.h"
@@ -171,7 +174,7 @@ bool UserDynamicData::isNull() const
     return d->m_IsNull;
 }
 
-/** \brief Returns to if the value has change since last call of feedFromSql(). */
+/** \brief Returns true if the value has changed since last call of feedFromSql(). */
 bool UserDynamicData::isModified() const
 {
     return d->m_IsDirty;
@@ -437,7 +440,9 @@ namespace Internal {
 class UserDataPrivate
 {
 public:
-    static QHash<QString, int> m_Link_PaperName_ModelIndex;  /** \brief For speed improvments, stores the link between name of headers/footers/watermark and there index into UserModel \sa UserConstants. */
+    static QHash<QString, int> m_Link_PaperName_ModelIndex;  /** \brief To
+increase speed, stores the link between name of headers/footers/watermark and
+their index into UserModel \sa UserConstants. */
 
     UserDataPrivate() :
         m_Editable(false),
@@ -522,7 +527,7 @@ public:
     QHash< QString, QHash<int, QVariant >  >  m_Role_Rights;
 //    QHash< QString, QHash< int, QVariant > >  m_DataName_Data;
     bool  m_Editable, m_Modified,  m_IsNull, m_IsCurrent;
-    QSet< QString > m_ModifiedRoles;
+    QSet<QString> m_ModifiedRoles;
     QHash<QString, UserDynamicData*> m_DynamicData;
     bool m_HasModifiedDynamicData;
     QList<int> m_LkIds;
@@ -545,7 +550,7 @@ QHash<QString, int> UserDataPrivate::m_Link_PaperName_ModelIndex;
  * \li no rights for Medical, paramedical, dosage management
  * \li empty password is set encrypted
  * \li user is editable
- * \li user uuid is defined but not control (duplicate in database can exists)
+ * \li user uuid is defined but not control (duplicate in database can exist)
  * \li locker is unset
  */
 UserData::UserData() :
@@ -682,7 +687,7 @@ bool UserData::isEmpty() const
 }
 
 /**
- * Set this user has the current.
+ * Set this user as the current.
  * This state is modified by the UserPlugin::Internal::UserModel
  */
 void UserData::setCurrent(bool state)
@@ -691,7 +696,7 @@ void UserData::setCurrent(bool state)
 }
 
 /**
- * Returns true if this user was defined has the current one.
+ * Returns true if this user was defined as the current one.
  * This state is modified by the UserPlugin::Internal::UserModel
  */
 bool UserData::isCurrent() const
@@ -699,7 +704,10 @@ bool UserData::isCurrent() const
     return d->m_IsCurrent;
 }
 
-/** \brief If user is editable and does not have an uuid then create a new one and return true, otherwise return false. */
+/*!
+  \brief If user is editable and does not have an uuid then create a new one
+  and return true, otherwise return false.
+ */
 bool UserData::createUuid()
 {
     if (!d->m_Editable)
@@ -719,9 +727,9 @@ void UserData::setUuid(const QString & val)
         dyn->setUserUuid(val);
 }
 
-//--------------------------------------------------------------------------------------------------------
-//------------------------------------------------ Setters -----------------------------------------------
-//--------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+//------------------------------- Setters --------------------------------------
+//------------------------------------------------------------------------------
 /**
  * Reserved for database feeding. Only UserBase should use it. \n
  * If user is editable, set the value \e val for the table \e tableref index
@@ -874,20 +882,25 @@ void UserData::setDynamicDataValue(const char *name, const QVariant &val, UserDy
 */
 void UserData::setRights(const char *roleName, const Core::IUser::UserRights rights)
 {
+    WARN_FUNC;
     Core::IUser::UserRights r = rights;
     if (rights & Core::IUser::ReadAll)
         r |= Core::IUser::ReadOwn | Core::IUser::ReadDelegates;
     if (rights & Core::IUser::WriteAll)
         r |= Core::IUser::WriteOwn | Core::IUser::WriteDelegates;
     d->m_Role_Rights[roleName].insert(RIGHTS_RIGHTS, int(r));
+    qDebug() << "modified roles list" << d->m_ModifiedRoles
+             << "role:" << roleName;
     if (!d->m_ModifiedRoles.contains(roleName))
         d->m_ModifiedRoles.insert(roleName);
+    qDebug() << "modified roles list" << d->m_ModifiedRoles
+             << "role:" << roleName;
     d->m_IsNull = false;
     setModified(true);
 }
 
 /**
-  Define the password is a clear way, the crypted password is sync if needed
+  Defines the password, the encrypted password is updated if needed
   \sa setCryptedPassword(),
 */
 void UserData::setClearPassword(const QString &val)
@@ -896,10 +909,8 @@ void UserData::setClearPassword(const QString &val)
         return;
     d->m_ClearPassword = val;
     d->m_PasswordChanged = true;
-    // Sync cryptedPassword
-    if (d->crypter.cryptPassword(val) != cryptedPassword()) {
-        setCryptedPassword(d->crypter.cryptPassword(val));
-    }
+    // Synchronize encrypted password
+    setCryptedPassword(d->crypter.cryptPassword(val));
 }
 
 /** Return the translated human readable title of the user. */
@@ -914,20 +925,20 @@ QString UserData::gender() const
     return Trans::ConstantTranslations::genders().at(genderIndex());
 }
 
-/** Defines the photo of the user */
+/** Defines the picture of the user */
 void UserData::setPhoto(const QPixmap &pix)
 {
     setDynamicDataValue(USER_DATA_PHOTO, Utils::pixmapToBase64(pix));
 }
 
-/** Defines the photo of the user */
+/** Defines user picture */
 QPixmap UserData::photo() const
 {
     return Utils::pixmapFromBase64(dynamicDataValue(USER_DATA_PHOTO).toByteArray());
 }
 
 /**
- * Define the crypted password. You should not use this function,
+ * Define the encrypted password. You should not use this function,
  * but the setClearPassword() instead.
  * \sa setClearPassword(), isPasswordModified(), cryptedPassword(), clearPassword()
 */
@@ -956,9 +967,9 @@ QString UserData::decryptedLogin() const
     return Utils::loginFromSQL(value(Table_USERS, USER_LOGIN));
 }
 
-//--------------------------------------------------------------------------------------------------------
-//------------------------------------------------ Getters -----------------------------------------------
-//--------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+//------------------------------ Getters ---------------------------------------
+//------------------------------------------------------------------------------
 /**
  * Return the value corresponding to the
  * \e tableref and \e fieldref of the database scheme.
@@ -1037,12 +1048,16 @@ QList<UserDynamicData*> UserData::modifiedDynamicData() const
 /** \brief Return true if there are modifications to save in the rights. */
 bool UserData::hasModifiedRightsToStore() const
 {
-    return d->m_ModifiedRoles.count();
+    WARN_FUNC;
+    qDebug() << "m_ModifiedRoled empty?" << d->m_ModifiedRoles.isEmpty();
+    return !(d->m_ModifiedRoles.isEmpty());
 }
 
 /** \brief Return the list of modified rights roles. */
 QStringList UserData::modifiedRoles() const
 {
+    WARN_FUNC;
+    qDebug() << d->m_ModifiedRoles.toList();
     return d->m_ModifiedRoles.toList();
 }
 

@@ -390,10 +390,12 @@ void UserBase::onCoreFirstRunCreationRequested()
     initialize();
 }
 
-//--------------------------------------------------------------------------------------------------------
-//------------------------------------------- Data retrievers --------------------------------------------
-//--------------------------------------------------------------------------------------------------------
-/** Retreive all users data from the users' database. If an error occurs, it returns 0. */
+//------------------------------------------------------------------------------
+//-------------------------- Data retrievers -----------------------------------
+//------------------------------------------------------------------------------
+/*! Retrieve all users data from the users database.
+  If an error occurs, returns 0.
+ */
 UserData *UserBase::getUser(const QHash<int, QString> &conditions) const
 {
     QSqlDatabase DB = QSqlDatabase::database(Constants::USER_DB_CONNECTION);
@@ -493,7 +495,10 @@ UserData *UserBase::getUser(const QHash<int, QString> &conditions) const
     return toReturn;
 }
 
-/** Retreive all users data from the users' database. If an error occurs, it returns 0. \sa getUser() */
+/*! Retrieve all users data from the users database.
+  If an error occurs, returns 0.
+  \sa getUser()
+ */
 UserData *UserBase::getUserById(const QVariant & _id) const
 {
     // retrieve corresponding user
@@ -505,7 +510,11 @@ UserData *UserBase::getUserById(const QVariant & _id) const
     return getUser(where);
 }
 
-/** Retreive all users data from the users' database. If an error occurs, it returns 0. \sa getUser() */
+/*!
+  Retrieve all users data from the users' database. If an error occurs,
+  returns 0.
+  \sa getUser()
+ */
 UserData* UserBase::getUserByUuid(const QString & uuid) const
 {
     // retrieve corresponding user
@@ -518,7 +527,7 @@ UserData* UserBase::getUserByUuid(const QString & uuid) const
 }
 
 /**
- * Retreive all users data from the users' database.
+ * Retrieve all users data from the users' database.
  * If an error occurs, it returns 0. \sa getUser()
  */
 UserData *UserBase::getUserByLoginPassword(const QVariant &login, const QVariant &cryptedPassword) const
@@ -533,16 +542,16 @@ UserData *UserBase::getUserByLoginPassword(const QVariant &login, const QVariant
 }
 
 /**
- * Check the couple login/password passed as params.
- * Returns \e true if a user can connect with these identifiants
- * (to the server + to freemedforms user database).
+ * Checks login/passphrase pair passed as parameters.
+ * Returns \e true if a user can connect with these credentials
+ * (to the RDBMS server & to user database).
  */
 bool UserBase::checkLogin(const QString &clearLogin, const QString &clearPassword)
 {
-    const QString hidenPass = QString().fill('*', clearPassword.length());
+    const QString hiddenPass = QString().fill('*', clearPassword.length());
     LOG(QString("Check user login %1: %2")
         .arg(clearLogin)
-        .arg(hidenPass)
+        .arg(hiddenPass)
         );
     {
         Utils::PasswordCrypter crypter;
@@ -571,7 +580,7 @@ bool UserBase::checkLogin(const QString &clearLogin, const QString &clearPasswor
         }
         LOG(QString("Database server identifiers are correct for login %1: %2")
             .arg(clearLogin)
-            .arg(hidenPass));
+            .arg(hiddenPass));
 
         // If user database is not currently initialized, we need to initialize it
         Utils::DatabaseConnector connector = settings()->databaseConnector();
@@ -617,8 +626,8 @@ bool UserBase::checkLogin(const QString &clearLogin, const QString &clearPasswor
             m_LastLogin = query.value(1).toString();
             m_LastPass = query.value(2).toString();
         } else {
-            // unknown loging
-            LOG_ERROR(tr("Login not found: %1").arg(clearLogin));
+            // unknown user
+            LOG_ERROR(tr("User not found: %1").arg(clearLogin));
             query.finish();
             DB.rollback();
             return false;
@@ -638,7 +647,7 @@ bool UserBase::checkLogin(const QString &clearLogin, const QString &clearPasswor
 
 
     if (!crypter.checkPassword(clearPassword, m_LastPass)) {
-        LOG_ERROR(QString("Unable to connect to FreeMedForms database with user %1").arg(clearLogin));
+        LOG_ERROR(QString("Unable to connect to database with user %1").arg(clearLogin));
         m_LastLogin.clear();
         m_LastPass.clear();
         m_LastUuid.clear();
@@ -649,7 +658,7 @@ bool UserBase::checkLogin(const QString &clearLogin, const QString &clearPasswor
     return (!m_LastUuid.isEmpty());
 }
 
-/** Returns true if the \e login is already used in freemedforms user database. */
+/** Returns true if the \e login is already used in user database. */
 bool UserBase::isLoginAlreadyExists(const QString &clearLogin) const
 {
     QSqlDatabase DB = QSqlDatabase::database(Constants::USER_DB_CONNECTION);
@@ -709,7 +718,8 @@ bool UserBase::userExists(const QString &clearLogin) const
     }
 }
 
-/** Return the Uuid of the user identified with couple login/password. Returns a null QString if an error occurs. */
+/** Returns the Uuid of the user identified with login/password pair.
+ * Returns a null QString if an error occurs. */
 QString UserBase::getUuid(const QString &log64, const QString &cryptpass64)
 {
     if ((log64 == m_LastLogin) && (cryptpass64 == m_LastPass))
@@ -777,7 +787,7 @@ QString UserBase::createNewUuid()
     return tmp;
 }
 
-/** Return the associated encrypted login for the user identified by the specified \e uid. */
+/** Return the base64 encoded login for the user identified by the specified \e uid. */
 QString UserBase::getLogin64(const QString &uuid)
 {
     if (uuid == m_LastUuid)
@@ -812,7 +822,7 @@ QString UserBase::getLogin64(const QString &uuid)
 }
 
 /**
- * Returns the crypted password stored in the FreeMedForms database
+ * Returns the encrypted password stored in the users database
  * for the user identified with the login \e clearLogin
  */
 QString UserBase::getCryptedPassword(const QString &clearLogin)
@@ -882,9 +892,9 @@ QString UserBase::getUserDynamicData(const QString &userUid, const QString &dynD
     DB.commit();
     return QString::null;
 }
-//--------------------------------------------------------------------------------------------------------
-//--------------------------------------------- Data savers ----------------------------------------------
-//--------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+//--------------------------- Data savers --------------------------------------
+//------------------------------------------------------------------------------
 static inline QString defaultPaper(const QString &profession, const QString &paper, const QString &paperType = QString::null)
 {
     QString lang = QLocale().name().left(2).toLower();
@@ -1055,7 +1065,7 @@ bool UserBase::createDatabase(const QString &connectionName , const QString &dbN
     return true;
 }
 
-/** Create a default user when recreating the database. */
+/** Creates a default user when recreating the database. */
 bool UserBase::createDefaultUser()
 {
     // MySQL user is created during the Core::FirstRunWizard -> Core::ServerConfigPage::validatePage() using an external SQL script
@@ -1116,7 +1126,7 @@ bool UserBase::createDefaultUser()
     return true;
 }
 
-/** Create a virtual user. */
+/** Creates a virtual user. */
 bool UserBase::createVirtualUser(const QString &uid, const QString &name, const QString &firstName, int title, int gender,
                                  const QStringList &specialties, const QStringList &qualifications,
                                  int medicalRights, int adminRights, int userRights, int agendaRights, int paramedicRights,
@@ -1212,7 +1222,8 @@ bool UserBase::createVirtualUser(const QString &uid, const QString &name, const 
 }
 
 /**
-  Record the last login date for the user identified by couple login/password. The date is returned.
+  Records the last login date for the user identified by login/password.
+  Date is returned.
   \todo add a locker for users
 */
 QDateTime UserBase::recordLastLoggedIn(const QString &log, const QString &pass)
@@ -1270,7 +1281,9 @@ QDateTime UserBase::recordLastLoggedIn(const QString &log, const QString &pass)
    return QDateTime(); 
 }
 
-/** Creates a new user in the database according to the actual specified driver. */
+/*!
+  Creates a new user in the database
+ */
 bool UserBase::createUser(UserData *user)
 {
     // TODO: check current user freemedforms' rights
@@ -1297,7 +1310,7 @@ bool UserBase::createUser(UserData *user)
     }
     }
 
-    // Create the FreeMedForms user
+    // Create the EHR user inside users table
     return saveUser(user);
 }
 
@@ -1445,7 +1458,10 @@ bool UserBase::saveUser(UserData *user)
         // add Table RIGHTS
         qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
         if (user->hasModifiedRightsToStore()) {
+            WARN_FUNC;
+            qDebug() << "inside userbase.cpp";
             const QStringList &rolesToUpdate = user->modifiedRoles();
+            qDebug() << rolesToUpdate;
             foreach(const QString &s, rolesToUpdate) {
                 QHash<int , QString> w;
                 w.insert(RIGHTS_ROLE, QString("='%1'").arg(s));
@@ -1578,9 +1594,13 @@ bool UserBase::saveUser(UserData *user)
 }
 
 /**
- * Remove all data of user identified by its \e uuid from the database and
+ * Removes all data of user identified by its \e uuid from the database and
  * the server (network configuration).
+ * It is not advised to use this function as all entries made by this user will
+ * not be identified
  * \todo delete the user's LKID
+ * \todo Keep dropMysqlUser but don't deleted user from user table, instead,
+ * make the user "invalid": user will not be able to connect
 */
 bool UserBase::purgeUser(const QString &uuid)
 {
@@ -1775,7 +1795,7 @@ bool UserBase::changeUserPassword(UserData *user, const QString &newClearPasswor
             // If admin user changes its own password, then all passwords for all username/hostname
             // combinations will be changed with changeMySQLOtherUserPassword()
             // It is impossible for a normal user to change the other MySQL username/hostname combinations:
-            // an admin (FMF admin or MySQL admin) will have to take care of it.
+            // an admin (EHR admin or MySQL admin) will have to take care of it.
             if (!changeMySQLOtherUserPassword(user->clearLogin(), newClearPassword)) {
                 LOG_ERROR("Unable to update MySQL server other user password");
                 return false;
@@ -1783,7 +1803,7 @@ bool UserBase::changeUserPassword(UserData *user, const QString &newClearPasswor
         }
     }
 
-    // Update FreeMedForms password in fmf_users database
+    // Update EHR password in fmf_users database
     Utils::PasswordCrypter crypter;
     QHash<int, QString> where;
     where.insert(USER_UUID, QString("='%1'").arg(user->uuid()));
@@ -1797,7 +1817,7 @@ bool UserBase::changeUserPassword(UserData *user, const QString &newClearPasswor
         DB.rollback();
         return false;
     }
-    LOG("User password updated in the FreeMedForms database");
+    LOG("User password updated in the user database");
     query.finish();
     DB.commit();
     LOG("User password succesfully updated");

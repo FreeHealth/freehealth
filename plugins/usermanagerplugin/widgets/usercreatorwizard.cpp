@@ -30,12 +30,12 @@
  * Creating new user:\n
  * You use the UserPlugin::UserCreatorWizard to create a new user.
  * The wizard is directly connected to the UserPlugin::Internal::UserBase and
- * request a reset of the UserPlugin::UserCore::userModel() when the user
+ * requests a reset of the UserPlugin::UserCore::userModel() when the user
  * is saved in the database.\n
  *
  * Checking user rights: \n
  * Before creating this wizard you can use the checkUserRights() to
- * check if the current has the rights to create a new user.
+ * check if the current user has the rights to create a new user.
  *
  * Extending the wizard: \n
  * You can extend the wizard with the UserPlugin::IUserWizardPage interface.
@@ -341,8 +341,8 @@ void UserCreatorWizard::initializePage(int id)
 }
 
 /**
- * Check the current user rights for the creation of new users.
- * Return \e true if user can create a new user, otherwise returns false.
+ * Checks the current user rights for the creation of new users.
+ * Returns \e true if user can create a new user, otherwise returns false.
  * \sa Core::IUser::ManagerRights, Core::IUser::Create
  */
 bool UserCreatorWizard::checkUserRights()
@@ -554,7 +554,7 @@ bool UserProfilePage::validatePage()
     QStringList result = view->getCheckedStringList().toStringList();
 
     if (result.contains(tkTr(Trans::Constants::DOCTOR)) || result.contains(tkTr(Trans::Constants::MEDICAL_STUDENT))) {
-        UserCreatorWizard::setUserRights(Core::IUser::ManagerRights, Core::IUser::ReadOwn | Core::IUser::ReadDelegates | Core::IUser::WriteOwn | Core::IUser::WriteDelegates | Core::IUser::Print);
+        UserCreatorWizard::setUserRights(Core::IUser::ManagerRights, Core::IUser::ReadOwn | Core::IUser::ReadDelegates |  Core::IUser::WriteOwn | Core::IUser::WriteDelegates | Core::IUser::Print);
         UserCreatorWizard::setUserRights(Core::IUser::DrugsRights, Core::IUser::AllRights);
         UserCreatorWizard::setUserRights(Core::IUser::MedicalRights, Core::IUser::AllRights);
         UserCreatorWizard::setUserRights(Core::IUser::AgendaRights, Core::IUser::AllRights);
@@ -575,19 +575,19 @@ bool UserProfilePage::validatePage()
         UserCreatorWizard::setUserPaper(Core::IUser::AdministrativeFooter, defaultPaper("medicals", "footer"));
         UserCreatorWizard::setUserPaper(Core::IUser::AdministrativeWatermark, defaultPaper("medicals", "watermark"));
     } else if (result.contains(tkTr(Trans::Constants::NURSE))) {
-        UserCreatorWizard::setUserRights(Core::IUser::ManagerRights, Core::IUser::ReadOwn | Core::IUser::ReadDelegates | Core::IUser::WriteOwn | Core::IUser::WriteDelegates | Core::IUser::Print);
+        UserCreatorWizard::setUserRights(Core::IUser::ManagerRights, Core::IUser::ReadOwn | Core::IUser::ReadDelegates |  Core::IUser::WriteOwn |Core::IUser::WriteDelegates | Core::IUser::Print);
         UserCreatorWizard::setUserRights(Core::IUser::MedicalRights, Core::IUser::ReadAll | Core::IUser::Print);
         UserCreatorWizard::setUserRights(Core::IUser::DrugsRights, Core::IUser::ReadAll | Core::IUser::Print);
         UserCreatorWizard::setUserRights(Core::IUser::ParamedicalRights, Core::IUser::AllRights);
         UserCreatorWizard::setUserRights(Core::IUser::AdministrativeRights, Core::IUser::AllRights);
 
     } else if (result.contains(tkTr(Trans::Constants::CAREGIVER))) {
-        UserCreatorWizard::setUserRights(Core::IUser::ManagerRights, Core::IUser::ReadOwn | Core::IUser::ReadDelegates | Core::IUser::WriteOwn | Core::IUser::WriteDelegates | Core::IUser::Print);
+        UserCreatorWizard::setUserRights(Core::IUser::ManagerRights, Core::IUser::ReadOwn | Core::IUser::ReadDelegates |  Core::IUser::WriteOwn | Core::IUser::WriteDelegates | Core::IUser::Print);
         UserCreatorWizard::setUserRights(Core::IUser::AgendaRights, Core::IUser::AllRights);
         UserCreatorWizard::setUserRights(Core::IUser::ParamedicalRights, Core::IUser::ReadOwn | Core::IUser::ReadDelegates | Core::IUser::WriteOwn | Core::IUser::WriteDelegates | Core::IUser::Print);
 
     } else if (result.contains(tkTr(Trans::Constants::SECRETARY))) {
-         UserCreatorWizard::setUserRights(Core::IUser::ManagerRights, Core::IUser::ReadOwn | Core::IUser::ReadDelegates | Core::IUser::WriteOwn | Core::IUser::WriteDelegates | Core::IUser::Print);
+         UserCreatorWizard::setUserRights(Core::IUser::ManagerRights, Core::IUser::ReadOwn | Core::IUser::ReadDelegates |  Core::IUser::WriteOwn | Core::IUser::WriteDelegates | Core::IUser::Print);
         UserCreatorWizard::setUserRights(Core::IUser::MedicalRights, Core::IUser::ReadAll);
         UserCreatorWizard::setUserRights(Core::IUser::AgendaRights, Core::IUser::ReadAll | Core::IUser::WriteAll | Core::IUser::Print);
         UserCreatorWizard::setUserRights(Core::IUser::AdministrativeRights, Core::IUser::AllRights);
