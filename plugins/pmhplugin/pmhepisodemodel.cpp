@@ -19,10 +19,9 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *  Main developer: Eric MAEKER, <eric.maeker@gmail.com>                   *
- *  Contributors:                                                          *
- *       Jerome Pinguet <jerome@jerome.cc                                  *
- *       NAME <MAIL@ADDRESS.COM>                                           *
+ *  Authors:                                                               *
+ *  Eric MAEKER <eric.maeker@gmail.com>                                    *
+ *  Jerome PINGUET <jerome@jerome.cc                                       *
  ***************************************************************************/
 #include "pmhepisodemodel.h"
 #include "pmhdata.h"
@@ -98,7 +97,6 @@ int PmhEpisodeModel::columnCount(const QModelIndex &parent) const
 
 QVariant PmhEpisodeModel::data(const QModelIndex &index, int role) const
 {
-    qDebug() << Q_FUNC_INFO;
     if (!index.isValid())
         return QVariant();
 
@@ -176,7 +174,6 @@ QVariant PmhEpisodeModel::data(const QModelIndex &index, int role) const
 
 bool PmhEpisodeModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
-    qDebug() << Q_FUNC_INFO;
     if (!index.isValid())
         return false;
 
@@ -211,7 +208,6 @@ bool PmhEpisodeModel::setData(const QModelIndex &index, const QVariant &value, i
 
 bool PmhEpisodeModel::insertRows(int row, int count, const QModelIndex &parent)
 {
-    qDebug() << Q_FUNC_INFO;
     beginInsertRows(parent, row, row+count-1);
     for(int i = 0; i < count; ++i) {
         d->m_Pmh->insertEpisode(row+i, new Internal::PmhEpisodeData);
@@ -222,7 +218,6 @@ bool PmhEpisodeModel::insertRows(int row, int count, const QModelIndex &parent)
 
 bool PmhEpisodeModel::removeRows(int row, int count, const QModelIndex &parent)
 {
-    qDebug() << Q_FUNC_INFO;
     beginRemoveRows(parent, row, row+count-1);
     // Get episodes to remove
     QVector<Internal::PmhEpisodeData *> toRemove;

@@ -19,26 +19,17 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *  Main Developers:                                                       *
- *       Eric MAEKER <eric.maeker@gmail.com>                             *
- *  Contributors:                                                          *
- *       NAME <MAIL@ADDRESS.COM>                                           *
+ *  Authors:                                                               *
+ *       Eric MAEKER <eric.maeker@gmail.com>                               *
+ *       Jerome PINGUET <jerome@jerome.cc>                                 *
  ***************************************************************************/
-#ifndef FORM_INTERNAL_FORMCONTEXTUALWIDGETMANAGER_H
-#define FORM_INTERNAL_FORMCONTEXTUALWIDGETMANAGER_H
+#pragma once
 
 #include <coreplugin/contextmanager/icontext.h>
 #include <formmanagerplugin/formcontextualwidget.h>
 
 #include <QObject>
 #include <QPointer>
-
-/**
- * \file formcontextualwidget.h
- * \author Eric MAEKER
- * \version 0.8.0
- * \date 16 Sept 2012
-*/
 
 namespace Core {
 class IContext;
@@ -67,10 +58,7 @@ private Q_SLOTS:
     void onAddFormRequested();
     void onRemoveFormRequested();
     void onPrintFormRequested();
-
     void showDatabaseInformation();
-
-private Q_SLOTS:
     void updateActions();
     void onActionEnabledStateUpdated(Form::Internal::FormContextualWidget::WidgetAction action);
 
@@ -103,6 +91,3 @@ private:
 
 } // namespace Internal
 } // namespace Form
-
-#endif // FORM_INTERNAL_FORMCONTEXTUALWIDGETMANAGER_H
-

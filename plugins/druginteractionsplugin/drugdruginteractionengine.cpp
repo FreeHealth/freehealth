@@ -124,7 +124,7 @@ static inline DrugDrugInteractionEngine::TypesOfIAM getLevels(const QString &t)
     if (t.contains("I"))
         r |= DrugDrugInteractionEngine::Information;
     if (t.contains("Y"))
-        r |= DrugDrugInteractionEngine::GPG;
+        r |= DrugDrugInteractionEngine::PGP;
 
     if (r == DrugDrugInteractionEngine::NoIAM)
         qWarning() << "DRUG DRUG INTERACTION LEVEL NOT RECOGNIZED" << t;
@@ -204,8 +204,8 @@ public:
             return th->icon(Constants::INTERACTION_ICONTAKEINTOACCOUNT, size);
         else if ((level & DrugDrugInteractionEngine::P450) && (levelOfWarning <= Constants::ModerateLevelOfWarning))
             return th->icon(Constants::INTERACTION_ICONP450, size);
-        else if ((level & DrugDrugInteractionEngine::GPG) && (levelOfWarning <= Constants::ModerateLevelOfWarning))
-            return th->icon(Constants::INTERACTION_ICONGPG, size);
+        else if ((level & DrugDrugInteractionEngine::PGP) && (levelOfWarning <= Constants::ModerateLevelOfWarning))
+            return th->icon(Constants::INTERACTION_ICONPGP, size);
         else if ((level & DrugDrugInteractionEngine::Precaution) && (levelOfWarning <= Constants::ModerateLevelOfWarning))
             return th->icon(Constants::INTERACTION_ICONPRECAUTION, size);
         // Maximum alerts
@@ -378,8 +378,8 @@ public:
               tmp << tkTr(Trans::Constants::DISCOURAGED);
          if (r & DrugDrugInteractionEngine::P450)
               tmp << tkTr(Trans::Constants::P450_IAM);
-         if (r & DrugDrugInteractionEngine::GPG)
-              tmp << tkTr(Trans::Constants::GPG_IAM);
+         if (r & DrugDrugInteractionEngine::PGP)
+              tmp << tkTr(Trans::Constants::PGP_DDI);
          if (r & DrugDrugInteractionEngine::APrendreEnCompte)
               tmp << tkTr(Trans::Constants::TAKE_INTO_ACCOUNT);
          if (r & DrugDrugInteractionEngine::Precaution)
@@ -467,7 +467,7 @@ public:
             {
                 ret = (r & DrugDrugInteractionEngine::ContreIndication ||
                        r & DrugDrugInteractionEngine::Deconseille ||
-                       r & DrugDrugInteractionEngine::GPG ||
+                       r & DrugDrugInteractionEngine::PGP ||
                        r & DrugDrugInteractionEngine::P450 ||
                        r & DrugDrugInteractionEngine::APrendreEnCompte ||
                        r & DrugDrugInteractionEngine::Precaution);
@@ -504,8 +504,8 @@ public:
             return th->icon(Constants::INTERACTION_ICONTAKEINTOACCOUNT, size);
         else if ((level & DrugDrugInteractionEngine::P450) && (levelOfWarning <= Constants::ModerateLevelOfWarning))
             return th->icon(Constants::INTERACTION_ICONP450, size);
-        else if ((level & DrugDrugInteractionEngine::GPG) && (levelOfWarning <= Constants::ModerateLevelOfWarning))
-            return th->icon(Constants::INTERACTION_ICONGPG, size);
+        else if ((level & DrugDrugInteractionEngine::PGP) && (levelOfWarning <= Constants::ModerateLevelOfWarning))
+            return th->icon(Constants::INTERACTION_ICONPGP, size);
         else if ((level & DrugDrugInteractionEngine::Precaution) && (levelOfWarning <= Constants::ModerateLevelOfWarning))
             return th->icon(Constants::INTERACTION_ICONPRECAUTION, size);
         // Maximum alerts
@@ -556,8 +556,8 @@ public:
             return th->iconFullPath(Constants::INTERACTION_ICONTAKEINTOACCOUNT, size);
         else if ((level & DrugDrugInteractionEngine::P450))
             return th->iconFullPath(Constants::INTERACTION_ICONP450, size);
-        else if ((level & DrugDrugInteractionEngine::GPG))
-            return th->iconFullPath(Constants::INTERACTION_ICONGPG, size);
+        else if ((level & DrugDrugInteractionEngine::PGP))
+            return th->iconFullPath(Constants::INTERACTION_ICONPGP, size);
         else if ((level & DrugDrugInteractionEngine::Precaution))
             return th->iconFullPath(Constants::INTERACTION_ICONPRECAUTION, size);
         // Maximum alerts
@@ -629,8 +629,8 @@ public:
                     typeId = DrugDrugInteractionEngine::APrendreEnCompte;
                 else if ((r & DrugDrugInteractionEngine::P450) && (query.levelOfWarningStaticAlert <= Constants::ModerateLevelOfWarning))
                     typeId = DrugDrugInteractionEngine::P450;
-                else if ((r & DrugDrugInteractionEngine::GPG) && (query.levelOfWarningStaticAlert <= Constants::ModerateLevelOfWarning))
-                    typeId = DrugDrugInteractionEngine::GPG;
+                else if ((r & DrugDrugInteractionEngine::PGP) && (query.levelOfWarningStaticAlert <= Constants::ModerateLevelOfWarning))
+                    typeId = DrugDrugInteractionEngine::PGP;
                 else if ((r & DrugDrugInteractionEngine::Precaution) && (query.levelOfWarningStaticAlert <= Constants::ModerateLevelOfWarning))
                     typeId = DrugDrugInteractionEngine::Precaution;
                 // Maximum alerts
@@ -729,8 +729,8 @@ public:
                         typeId = DrugDrugInteractionEngine::APrendreEnCompte;
                     else if ((level & DrugDrugInteractionEngine::P450) && (query.levelOfWarningStaticAlert <= Constants::ModerateLevelOfWarning))
                         typeId = DrugDrugInteractionEngine::P450;
-                    else if ((level & DrugDrugInteractionEngine::GPG) && (query.levelOfWarningStaticAlert <= Constants::ModerateLevelOfWarning))
-                        typeId = DrugDrugInteractionEngine::GPG;
+                    else if ((level & DrugDrugInteractionEngine::PGP) && (query.levelOfWarningStaticAlert <= Constants::ModerateLevelOfWarning))
+                        typeId = DrugDrugInteractionEngine::PGP;
                     else if ((level & DrugDrugInteractionEngine::Precaution) && (query.levelOfWarningStaticAlert <= Constants::ModerateLevelOfWarning))
                         typeId = DrugDrugInteractionEngine::Precaution;
                     // Maximum alerts
@@ -1299,7 +1299,7 @@ QString DrugDrugInteractionEngine::getDrugDrugInteractionLevelStatistics() const
             << Precaution
             << APrendreEnCompte
             << P450
-            << GPG
+            << PGP
             << Deconseille
             << ContreIndication;
 

@@ -19,31 +19,29 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *  Main developer: Eric MAEKER, <eric.maeker@gmail.com>                   *
- *  Contributors:                                                          *
- *       NAME <MAIL@ADDRESS.COM>                                           *
- *       NAME <MAIL@ADDRESS.COM>                                           *
+ *  Authors:                                                               *
+ *       Eric MAEKER <eric.maeker@gmail.com>                               *
+ *       Jerome PINGUET <jerome@jerome.cc>                                 *
  ***************************************************************************/
-#ifndef PMHWIDGETMANAGER_H
-#define PMHWIDGETMANAGER_H
+
+#pragma once
 
 #include <pmhplugin/pmh_exporter.h>
+#include <pmhplugin/pmhcontextualwidget.h>
 #include <coreplugin/contextmanager/icontext.h>
 
 #include <QObject>
 #include <QPointer>
 
-/**
- * \file pmhwidgetmanager.h
- * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.8.0
- * \date 19 Sept 2012
-*/
+namespace Core {
+class IContext;
+}
 
 namespace PMH {
 class PmhCore;
-class PmhContextualWidget;
+
 namespace Internal {
+class PmhContextualWidget;
 
 class PmhActionHandler : public QObject
 {
@@ -58,16 +56,28 @@ private Q_SLOTS:
     void onCurrentPatientChanged();
     void showPmhDatabaseInformation();
     void categoryManager();
-
-private:
+    void onClearRequested();
+    void onSaveEpisodeRequested();
+    void onCreateEpisodeRequested();
+    void onValidateEpisodeRequested();
+    void onRenewEpisodeRequested();
+    void onRemoveEpisodeRequested();
+    void onTakeScreenshotRequested();
+    void onPrintFormRequested();
     void updateActions();
+    void onActionEnabledStateUpdated(PMH::Internal::PmhContextualWidget::WidgetAction action);
 
 protected:
+    QAction *aClear;
     QAction *aAddPmh;
     QAction *aRemovePmh;
     QAction *aAddCat;
     QAction *aCategoryManager;
     QAction *aPmhDatabaseInformation;
+    QAction *aCreateEpisode, *aValidateEpisode, *aRenewEpisode, *aRemoveEpisode, *aSaveEpisode;
+    QAction *aTakeScreenshot;
+    QAction *aPrintForm;
+
     QPointer<PmhContextualWidget> m_CurrentView;
 };
 
@@ -84,9 +94,10 @@ public:
 
 private Q_SLOTS:
     void updateContext(Core::IContext *object, const Core::Context &additionalContexts);
+
+private:
+    QPointer<Core::IContext> _contextObject;
 };
 
 }  // End namespace Internal
 }  // End namespace PMH
-
-#endif // PMHWIDGETMANAGER_H

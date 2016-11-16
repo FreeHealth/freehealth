@@ -19,10 +19,9 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *  Main developer: Eric MAEKER, <eric.maeker@gmail.com>                   *
- *  Contributors:                                                          *
- *       Jerome Pinguet <jerome@jerome.cc>                                 *
- *       NAME <MAIL@ADDRESS.COM>                                           *
+ *  Authors:                                                               *
+ *  Eric MAEKER <eric.maeker@gmail.com>                                    *
+ *  Jerome PINGUET <jerome@jerome.cc                                       *
  ***************************************************************************/
 #include "pmhdata.h"
 #include "pmhepisodemodel.h"
@@ -166,6 +165,7 @@ PmhData::PmhData() :
     populateWithCurrentData();
     d->m_Data.insert(ConfidenceIndex, 5);
     d->m_Data.insert(IsValid, true);
+    d->m_Data.insert(CreationDateTime, QDateTime::currentDateTimeUtc().toString(Qt::ISODate));
 }
 
 PmhData::~PmhData()

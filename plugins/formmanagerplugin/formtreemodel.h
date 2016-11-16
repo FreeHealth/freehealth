@@ -80,6 +80,7 @@ public:
     bool isUniqueEpisode(const QModelIndex &index) const;
     bool isNoEpisode(const QModelIndex &index) const;
     bool isMultiEpisode(const QModelIndex &index) const {return (!isUniqueEpisode(index) && !isNoEpisode(index));}
+    bool isIdentity(const QModelIndex &index) const;
     Form::FormMain *formForIndex(const QModelIndex &index) const;
 
     // Subform management

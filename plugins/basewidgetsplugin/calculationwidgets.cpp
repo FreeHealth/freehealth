@@ -268,7 +268,7 @@ void SumWidget::retranslate()
 
 void SumWidget::connectFormItems()
 {
-//    qWarning() << "SUM requiered" << formItem()->extraData().value(::SUM_EXTRA_KEY) << formItem()->extraData().value(::SUM_REGEXP_EXTRA_KEY);
+//    qWarning() << "SUM required" << formItem()->extraData().value(::SUM_EXTRA_KEY) << formItem()->extraData().value(::SUM_REGEXP_EXTRA_KEY);
     if (formItem()->extraData().value(::SUM_EXTRA_KEY).isEmpty() && formItem()->extraData().value(::SUM_REGEXP_EXTRA_KEY).isEmpty()) {
         LOG_ERROR("Sum widget: No sumof tag <sumof> or <sumof_regexp>.");
         return;

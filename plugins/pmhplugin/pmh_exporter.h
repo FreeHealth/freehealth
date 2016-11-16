@@ -19,13 +19,11 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *  Main developer: Eric MAEKER, <eric.maeker@gmail.com>                   *
- *  Contributors:                                                          *
- *       NAME <MAIL@ADDRESS.COM>                                           *
- *       NAME <MAIL@ADDRESS.COM>                                           *
+ *  Authors:                                                               *
+ *       Eric MAEKER <eric.maeker@gmail.com>                               *
+ *                                                                         *
  ***************************************************************************/
-#ifndef MEDICALHISTORYEXPORTER_H
-#define MEDICALHISTORYEXPORTER_H
+#pragma once
 
 /**
  * \file pmh_exporter.h
@@ -40,6 +38,4 @@
 #define PMH_EXPORT Q_DECL_EXPORT
 #else
 #define PMH_EXPORT Q_DECL_IMPORT
-#endif
-
 #endif

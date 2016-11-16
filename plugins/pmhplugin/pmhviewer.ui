@@ -72,7 +72,7 @@
        </widget>
       </item>
       <item row="1" column="1">
-       <widget class="Utils::QDateEditEx" name="simple_start_date"/>
+       <widget class="Utils::QDateEditEx" name="simple_start_date" native="true"/>
       </item>
       <item row="1" column="2">
        <widget class="QLabel" name="label_9">
@@ -85,7 +85,7 @@
        </widget>
       </item>
       <item row="1" column="3">
-       <widget class="Utils::QDateEditEx" name="simple_end_date"/>
+       <widget class="Utils::QDateEditEx" name="simple_end_date" native="true"/>
       </item>
       <item row="2" column="0" colspan="4">
        <widget class="Editor::TextEditor" name="comment">
@@ -263,24 +263,62 @@
       <number>0</number>
      </property>
      <layout class="QGridLayout" name="gridLayout_2">
-      <item row="1" column="0" colspan="3">
+      <item row="0" column="0" colspan="2">
+       <layout class="QHBoxLayout" name="horizontalLayout_3">
+        <item>
+         <widget class="QLabel" name="label_8">
+          <property name="text">
+           <string>Created by</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="userNameLabel">
+          <property name="text">
+           <string>userName</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="creationDateTimeOn">
+          <property name="text">
+           <string>on</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="creationDateTimeLabel">
+          <property name="text">
+           <string>dateTime</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="1" column="0" colspan="2">
        <widget class="QCheckBox" name="makePrivateBox">
         <property name="text">
          <string>This PMHx is &amp;private</string>
         </property>
        </widget>
       </item>
-      <item row="3" column="2">
-       <widget class="QComboBox" name="statusCombo">
+      <item row="2" column="0">
+       <widget class="QLabel" name="label_3">
         <property name="sizePolicy">
-         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+         <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="text">
+         <string>&amp;Type:</string>
+        </property>
+        <property name="buddy">
+         <cstring>typeCombo</cstring>
+        </property>
        </widget>
       </item>
-      <item row="2" column="2">
+      <item row="2" column="1">
        <widget class="QComboBox" name="typeCombo">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
@@ -290,7 +328,76 @@
         </property>
        </widget>
       </item>
-      <item row="5" column="2">
+      <item row="3" column="0">
+       <widget class="QLabel" name="label_4">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text">
+         <string>&amp;Status:</string>
+        </property>
+        <property name="buddy">
+         <cstring>statusCombo</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <widget class="QComboBox" name="statusCombo">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="0">
+       <widget class="QLabel" name="label_5">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text">
+         <string>&amp;Confidence</string>
+        </property>
+        <property name="buddy">
+         <cstring>label_5</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="1">
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <item>
+         <widget class="QSpinBox" name="spinBox">
+          <property name="maximum">
+           <number>10</number>
+          </property>
+          <property name="value">
+           <number>5</number>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="horizontalSpacer_2">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </item>
+      <item row="5" column="1">
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
          <widget class="QLabel" name="label">
@@ -357,95 +464,6 @@
         </item>
        </layout>
       </item>
-      <item row="2" column="0">
-       <widget class="QLabel" name="label_3">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="text">
-         <string>&amp;Type:</string>
-        </property>
-        <property name="buddy">
-         <cstring>typeCombo</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="0">
-       <widget class="QLabel" name="label_4">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="text">
-         <string>&amp;Status:</string>
-        </property>
-        <property name="buddy">
-         <cstring>statusCombo</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="0">
-       <widget class="QLabel" name="label_5">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="text">
-         <string>&amp;Confidence</string>
-        </property>
-        <property name="buddy">
-         <cstring>label_5</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="2">
-       <layout class="QHBoxLayout" name="horizontalLayout_2">
-        <item>
-         <widget class="QSpinBox" name="spinBox">
-          <property name="maximum">
-           <number>10</number>
-          </property>
-          <property name="value">
-           <number>5</number>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <spacer name="horizontalSpacer_2">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>40</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-       </layout>
-      </item>
-      <item row="0" column="0">
-       <widget class="QLabel" name="label_8">
-        <property name="text">
-         <string>Created by</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="2">
-       <widget class="QLabel" name="userNameLabel">
-        <property name="text">
-         <string>userName</string>
-        </property>
-       </widget>
-      </item>
      </layout>
     </widget>
    </item>
@@ -464,9 +482,9 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>QDateEditEx</class>
-   <extends>QDateEdit</extends>
-   <header location="global">utils/widgets/qdateeditex/qdateeditex.h</header>
+   <class>Utils::QDateEditEx</class>
+   <extends>QWidget</extends>
+   <header location="gobal">utils/widgets/qdateeditex/qdateeditex.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

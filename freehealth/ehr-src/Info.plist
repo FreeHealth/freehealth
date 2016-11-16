@@ -11,7 +11,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleExecutable</key>
-        <string>freehealth ehr</string>
+        <string>freehealth</string>
 	<key>CFBundleIdentifier</key>
         <string>io.freehealth.ehr</string>
 	<key>NOTE</key>

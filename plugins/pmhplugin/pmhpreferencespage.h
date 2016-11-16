@@ -19,13 +19,11 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *  Main developer: Eric MAEKER, <eric.maeker@gmail.com>                   *
- *  Contributors:                                                          *
- *       NAME <MAIL@ADDRESS.COM>                                           *
- *       NAME <MAIL@ADDRESS.COM>                                           *
+ *  Authors:                                                               *
+ *       Eric MAEKER <eric.maeker@gmail.com>                               *
+ *                                                                         *
  ***************************************************************************/
-#ifndef PMHPREFERENCESPAGE_H
-#define PMHPREFERENCESPAGE_H
+#pragma once
 
 #include <coreplugin/ioptionspage.h>
 
@@ -99,5 +97,3 @@ private:
 
 }
 }
-
-#endif // PMHPREFERENCESPAGE_H

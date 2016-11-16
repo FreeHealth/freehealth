@@ -100,16 +100,10 @@ void FormViewDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
             (option.state & QStyle::State_MouseOver)) {
         QIcon icon;
         if (option.state & QStyle::State_Selected) {
-            // test the form to be unique or multiple episode
-            if (_formTreeModel->isUniqueEpisode(index))
-                return;
             if (_formTreeModel->isNoEpisode(index))
                 return;
             icon = theme()->icon(Core::Constants::ICONADDLIGHT);
         } else {
-            // test the form to be unique or multiple episode
-            if (_formTreeModel->isUniqueEpisode(index))
-                return;
             if (_formTreeModel->isNoEpisode(index))
                 return;
             icon = theme()->icon(Core::Constants::ICONADDDARK);

@@ -19,12 +19,10 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *  Main developer: Eric MAEKER, <eric.maeker@gmail.com>                   *
- *  Contributors:                                                          *
- *       Jerome Pinguet <jerome@jerome.cc>                                 *
- *       NAME <MAIL@ADDRESS.COM>                                           *
+ *  Authors:                                                               *
+ *  Eric MAEKER <eric.maeker@gmail.com>                                    *
+ *  Jerome PINGUET <jerome@jerome.cc                                       *
  ***************************************************************************/
-
 /**
   \class PMH::PmhViewer
   \brief PMHx viewer widget. Allow to show / modify a PMH.
@@ -104,6 +102,15 @@ public:
         m_Pmh = pmh;
         ui->personalLabel->setText(pmh->data(PmhData::Label).toString());
         ui->userNameLabel->setText(user()->fullNameOfUser(pmh->data(PmhData::UserOwner)));
+        QString sCDT = pmh->data(PmhData::CreationDateTime).toString();
+        // If there is no creation date, don't display "on" QLabel
+        ui->creationDateTimeOn->setVisible(!sCDT.isEmpty());
+        QDateTime creationDateTimeUtc = QDateTime::fromString(sCDT, Qt::ISODate);
+        QDateTime CDTL = creationDateTimeUtc.toLocalTime();
+        QDate CDL = CDTL.date();
+        QString sCDL = CDL.toString(Qt::TextDate);
+        ui->creationDateTimeLabel->setText(sCDL);
+        ui->creationDateTimeLabel->setToolTip(CDTL.toString());
         ui->typeCombo->setCurrentIndex(pmh->data(PmhData::Type).toInt());
         ui->statusCombo->setCurrentIndex(pmh->data(PmhData::State).toInt());
         ui->confIndexSlider->setValue(pmh->data(PmhData::ConfidenceIndex).toInt());
@@ -137,7 +144,6 @@ public:
 
     void populatePmhWithUi()
     {
-        qDebug() << Q_FUNC_INFO;
         m_Pmh->setData(PmhData::Label, ui->personalLabel->text());
         m_Pmh->setData(PmhData::Type, ui->typeCombo->currentIndex());
         m_Pmh->setData(PmhData::State, ui->statusCombo->currentIndex());
@@ -146,10 +152,8 @@ public:
         m_Pmh->setData(PmhData::IsPrivate, ui->makePrivateBox->isChecked());
         // Get category
         QModelIndex cat = pmhCore()->pmhCategoryModel()->categoryOnlyModel()->mapToSource(ui->categoryTreeView->currentIndex());
-        qDebug() << cat;
         cat = pmhCore()->pmhCategoryModel()->index(cat.row(), PmhCategoryModel::Id, cat.parent());
         m_Pmh->setData(PmhData::CategoryId, cat.data().toInt());
-        qDebug() << cat;
         // TODO: improve this : pmhx only manages one episode
         if (m_Pmh->episodeModel()->rowCount() == 0) {
             m_Pmh->episodeModel()->insertRow(0);
@@ -258,7 +262,7 @@ void PmhViewer::setPatientInfoVisible(bool visible)
 {
     QString text;
     if (visible) {
-        text = QString("%1, %2").arg(
+        text = QString("%1 %2").arg(
                     patient()->data(Core::IPatient::FullName).toString(),
                     patient()->data(Core::IPatient::DateOfBirth).toString());
     } else {
@@ -321,7 +325,6 @@ void PmhViewer::revert()
 /** \brief Return the PMH::Internal::PmhData pointer modified or not according to the actual EditMode of the viewer. */
 Internal::PmhData *PmhViewer::modifiedPmhData() const
 {
-    qDebug() << Q_FUNC_INFO;
     // Read only == return the unchanged PmhData
     if (d->m_Mode==ReadOnlyMode) {
         return d->m_Pmh;

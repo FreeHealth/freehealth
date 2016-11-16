@@ -322,7 +322,7 @@ bool EpisodeBase::createDatabase(const QString &connectionName , const QString &
     }
 
     // Add version number
-    if (!setVersion(Utils::Field(Constants::Table_VERSION, Constants::VERSION_TEXT), Constants::DB_ACTUALVERSION)) {
+    if (!setVersion(Utils::Field(Constants::Table_VERSION, Constants::VERSION_TEXT), Constants::DB_CURRENTVERSION)) {
         LOG_ERROR_FOR("EpisodeBase", "Unable to set version");
     }
     populateWithDefaultValues();
@@ -345,7 +345,7 @@ bool EpisodeBase::checkDatabaseVersion()
 {
     Utils::Field vField(Constants::Table_VERSION, Constants::VERSION_TEXT);
     QString currentVersion = getVersion(vField);
-    if (currentVersion == Constants::DB_ACTUALVERSION) {
+    if (currentVersion == Constants::DB_CURRENTVERSION) {
         return true;
     }
     // Updates from 0.1 to 0.2
@@ -427,7 +427,7 @@ bool EpisodeBase::checkDatabaseVersion()
         }
     }
     // Update the database version
-    return setVersion(vField, Constants::DB_ACTUALVERSION);
+    return setVersion(vField, Constants::DB_CURRENTVERSION);
 }
 
 void EpisodeBase::onCoreDatabaseServerChanged()
