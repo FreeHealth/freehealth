@@ -69,6 +69,7 @@
 #include <QToolButton>
 #include <QUrl>
 #include <QDesktopServices>
+#include <QStringList>
 
 #include <QDebug>
 
@@ -751,11 +752,34 @@ public:
 
         // address
         // TODO: add a preference -> what to show in summarytext: mobile phone? address? tels? email?
-        const QString &fulladdress = m_PatientModel->index(row, Core::IPatient::FullAddress).data().toString();
-        if (fulladdress.isEmpty())
+        QString space = QString::fromUtf8("\u2003");
+        QString emdash = QString::fromUtf8("\u2014");
+        QString separator = space + emdash + space;
+
+        QString fulladdress = m_PatientModel
+                ->index(row, Core::IPatient::FullAddress).data().toString();
+        QString mobile = _patientModelIdentityWrapper
+                ->data(Core::IPatient::MobilePhone).toString();
+        QString tel = _patientModelIdentityWrapper
+                ->data(Core::IPatient::Tels).toString();
+        QString protel = _patientModelIdentityWrapper
+                          ->data(Core::IPatient::ProfessionalTels).toString();
+        QString email = _patientModelIdentityWrapper
+                ->data(Core::IPatient::Mails).toString();
+        QStringList detailsList;
+        detailsList << fulladdress << mobile << tel << protel << email;
+
+        if (detailsList.length() > 1) {
+            for (int i = 1; i < detailsList.length(); ++i) {
+                if (!detailsList.at(i).isEmpty())
+                    detailsList[i].prepend(separator);
+            }
+        }
+        QString details = detailsList.join("");
+        if (details.isEmpty())
             viewUi->addressDetails->setSummaryText(tkTr(Trans::Constants::NO_ADDRESS_RECORDED));
         else
-            viewUi->addressDetails->setSummaryText(fulladdress);
+            viewUi->addressDetails->setSummaryText(details);
         viewUi->addressDetails->setSummaryFontBold(true);
         m_FullContactWidget->clear();
         m_FullContactWidget->address()->setAddress(_patientModelIdentityWrapper->data(Core::IPatient::Street).toString());
