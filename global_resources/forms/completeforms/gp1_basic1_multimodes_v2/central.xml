@@ -181,6 +181,8 @@
       </Item>
     </MedForm>
 
+    <file>__subForms__/prescriptions/fr/bizone/central.xml</file>
+
     <file>__subForms__/prescriptions/lab_assistant/central.xml</file>
 
     <MedForm name="GP::Basic::Prescr::Drugs">

@@ -7,6 +7,8 @@ namespace.module('com.freemedforms.generic.soapWithBio', function (exports, requ
                    });
 
     // Ui vars (retrieved from the ui)
+    var formUi;
+    var formItem;
     var syst, diast, pulse;
     var weight, weightUnit, weightUnitItem, height, heightUnit, heightUnitItem, bmiValueLabel, bmiValueLineEdit;
 
@@ -15,7 +17,7 @@ namespace.module('com.freemedforms.generic.soapWithBio', function (exports, requ
 
         // Get items to work with
         freemedforms.forms.namespaceInUse = "";
-        var formItem = freemedforms.forms.item("Subs::Tools::SOAP::WithBio");
+        formItem = freemedforms.forms.item("Subs::Tools::SOAP::WithBio");
         print(formItem);
         formUi = formItem.ui();
         syst = formUi.findChild("bpSyst");
@@ -29,12 +31,6 @@ namespace.module('com.freemedforms.generic.soapWithBio', function (exports, requ
         height = formUi.findChild("height");
         heightUnit = formUi.findChild("heightUnit");
         heightUnitItem = freemedforms.forms.item("Subs::Tools::SOAP::WithBio::ObjectiveGroup::Height::Value");
-
-//      populateCombos();
-        
-        // Connect data changed on spins
-        // Spin should use valueChanged(int)
-        // DoubleSpin should use valueChanged(double)
 
         syst['valueChanged(int)'].connect(this, computePulsePressure);          
         diast['valueChanged(int)'].connect(this, computePulsePressure);

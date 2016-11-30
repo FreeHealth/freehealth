@@ -49,13 +49,6 @@ namespace.module('com.freemedforms.generic.soapWithBio', function (exports, requ
         bmiValueLineEdit.visible = false;
     }
 
-//     function populateCombos() {                                                 
-       // TODO: add weight and height units                                    
-//        freemedforms.uiTools.addItems(cholCombo, totalCholRanges);            
-//        freemedforms.uiTools.addItems(hdlCombo, hdlCholRanges);               
-//        freemedforms.uiTools.addItems(systCombo, systolicRanges);             
-//    } 
-
     function retranslateUi() {
         var lang = freemedforms.forms.currentLanguage;
     }
