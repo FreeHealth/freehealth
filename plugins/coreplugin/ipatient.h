@@ -105,14 +105,18 @@ public:
         SocialNumberOwnerFullName,      // If different from the patient
         SocialNumberOwnerFullAddress,   // If different from the patient
 
-        // Women
+        // pediatrics
+        IsPediatricToken, // returns space character if true, returns empty string if false
+        IsPediatric, // returns true if patient age is equal or superior to pediatric
+                     // age limit, false otherwise
+        // female
         IsPregnant,
         LastMenstrualPeriod,
 
         // Biometrics
         SystolicBloodPressure,
         DiastolicBloodPressure,
-        WeightInGrams,                  // 40
+        WeightInGrams,
         HeightInCentimeters,
         BMI,
         Creatinine,

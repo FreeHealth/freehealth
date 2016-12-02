@@ -39,6 +39,7 @@
 #include "identityviewerwidget.h"
 
 #include <patientbaseplugin/patientmodel.h>
+#include <patientbaseplugin/constants_settings.h>
 
 #include <formmanagerplugin/formcore.h>
 #include <formmanagerplugin/formmanager.h>
@@ -46,14 +47,15 @@
 #include <formmanagerplugin/iformitem.h>
 #include <formmanagerplugin/iformitemdata.h>
 
-#include <coreplugin/ipatient.h>
 #include <coreplugin/icore.h>
 #include <coreplugin/iuser.h>
 #include <coreplugin/ipatient.h>
+#include <coreplugin/isettings.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/constants_icons.h>
 
 #include <utils/emailvalidator.h>
+#include <translationutils/constanttranslations.h>
 #include <translationutils/constants.h>
 #include <translationutils/trans_patient.h>
 #include <translationutils/trans_titles.h>
@@ -75,6 +77,7 @@
 
 static inline Core::ITheme *theme() { return Core::ICore::instance()->theme(); }
 static inline Core::IUser *user() { return Core::ICore::instance()->user(); }
+static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 
 using namespace Patients;
 using namespace Internal;
@@ -707,6 +710,10 @@ public:
 
     void populateReadOnlyWidget(const int row)
     {
+        QString space = QString::fromUtf8("\u2003");
+        QString emdash = QString::fromUtf8("\u2014");
+        QString separator = space + emdash + space;
+
         _patientModelIdentityWrapper->setCurrentPatient(row);
         QPixmap photo = m_PatientModel->index(row, Core::IPatient::Photo_64x64).data().value<QPixmap>();
         if (photo.isNull()) {
@@ -728,15 +735,26 @@ public:
         m_IdentityWidget->setTitle(m_PatientModel->index(row, Core::IPatient::Title).data().toString());
 
         // age / dob / dod / prof / nss
-        const QString &age = m_PatientModel->index(row, Core::IPatient::Age).data().toString();
-        QString dob = QLocale().toString(m_PatientModel->index(row, Core::IPatient::DateOfBirth).data().toDate(), QLocale::LongFormat);
-        if (!name.isEmpty())
-            viewUi->identityDetails->setSummaryText(QString("%1 - %2").arg(name).arg(age));
-        else
+        QString age;
+        qDebug() << m_PatientModel->index(row, Core::IPatient::YearsOld).data().toInt();
+        qDebug() << settings()->value(Patients::Constants::S_PEDIATRICSAGELIMIT, 18).toInt();
+        if (m_PatientModel->index(row, Core::IPatient::YearsOld).data().toInt() < settings()->value(Patients::Constants::S_PEDIATRICSAGELIMIT, 18).toInt()) {
+            age = m_PatientModel->index(row, Core::IPatient::Age).data().toString();
+        } else {
+            QString yearsOld = m_PatientModel->index(row, Core::IPatient::YearsOld).data().toString();
+            age = QString("%1 %2").arg(yearsOld).arg(tkTr(  Trans::Constants::YEARS));
+        }
+        QString dobShort = QLocale().toString(m_PatientModel->index(row, Core::IPatient::DateOfBirth).data().toDate(), QLocale::ShortFormat);
+        QString dobLong = QLocale().toString(m_PatientModel->index(row, Core::IPatient::DateOfBirth).data().toDate(), QLocale::LongFormat);
+        if (!name.isEmpty()) {
+            viewUi->identityDetails
+                    ->setSummaryText(QString("%1%2%3%2%4").arg(name).arg(separator).arg(dobShort).arg(age));
+        } else {
             viewUi->identityDetails->setSummaryText("");
+        }
         m_AgeWidget->clearAll();
         m_AgeWidget->setAge(age);
-        m_AgeWidget->setDateOfBirth(dob);
+        m_AgeWidget->setDateOfBirth(dobLong);
         m_AgeWidget->setProfession(_patientModelIdentityWrapper->data(Core::IPatient::Profession).toString());
         QStringList nss;
         nss << _patientModelIdentityWrapper->data(Core::IPatient::SocialNumber).toString()
@@ -752,9 +770,6 @@ public:
 
         // address
         // TODO: add a preference -> what to show in summarytext: mobile phone? address? tels? email?
-        QString space = QString::fromUtf8("\u2003");
-        QString emdash = QString::fromUtf8("\u2014");
-        QString separator = space + emdash + space;
 
         QString fulladdress = m_PatientModel
                 ->index(row, Core::IPatient::FullAddress).data().toString();

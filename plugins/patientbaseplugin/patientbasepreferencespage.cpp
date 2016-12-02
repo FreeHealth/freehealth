@@ -106,6 +106,7 @@ void PatientBasePreferencesPage::checkSettingsValidity()
     defaultvalues.insert(Constants::S_SEARCHWHILETYPING, true);
     defaultvalues.insert(Constants::S_RECENTPATIENT_MAX, 10);
     defaultvalues.insert(Constants::S_RECENTPATIENT_LIST, QString());
+    defaultvalues.insert(Constants::S_PEDIATRICSAGELIMIT, 18);
 
     foreach(const QString &k, defaultvalues.keys()) {
         if (settings()->value(k) == QVariant())
@@ -150,6 +151,8 @@ void PatientBasePreferencesWidget::setDataToUi()
     const int photoSourceIndex = ui->comboDefaultPhotoSource->findData(
                 settings()->value(Constants::S_DEFAULTPHOTOSOURCE).toString());
     ui->comboDefaultPhotoSource->setCurrentIndex(photoSourceIndex);
+    ui->spinBoxPediatricsAgeLimit
+            ->setValue(settings()->value(Constants::S_PEDIATRICSAGELIMIT, 18).toInt());
 }
 
 void PatientBasePreferencesWidget::saveToSettings(Core::ISettings *sets)
@@ -183,6 +186,7 @@ void PatientBasePreferencesWidget::saveToSettings(Core::ISettings *sets)
     //&& update refresh patientselector
     PatientCore::instance()->patientWidgetManager()->refreshSettings();
     PatientCore::instance()->patientWidgetManager()->selector()->setRefreshSearchResultMethod(method);
+    s->setValue(Constants::S_PEDIATRICSAGELIMIT, ui->spinBoxPediatricsAgeLimit->value());
 }
 
 void PatientBasePreferencesWidget::writeDefaultSettings(Core::ISettings *s)
@@ -201,6 +205,7 @@ void PatientBasePreferencesWidget::writeDefaultSettings(Core::ISettings *s)
         s->setValue(Constants::S_DEFAULTPHOTOSOURCE, "");
     else
         s->setValue(Constants::S_DEFAULTPHOTOSOURCE, providerList.first()->id());
+    s->setValue(Constants::S_PEDIATRICSAGELIMIT, 18);
     s->sync();
 }
 

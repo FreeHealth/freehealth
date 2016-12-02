@@ -81,6 +81,7 @@ const char * const  TOKEN_PATIENTAGE                 = "Patient.Age.FullAge";
 const char * const  TOKEN_PATIENTYEARSOLD            = "Patient.Age.YearsOld";
 const char * const  TOKEN_PATIENTDATEOFBIRTH         = "Patient.Age.DateOfBirth";
 const char * const  TOKEN_PATIENTDATEOFDEATH         = "Patient.Age.DateOfDeath";
+const char * const  TOKEN_PATIENTISPEDIATRIC         = "Patient.Age.IsPediatric";
 const char * const  TOKEN_PATIENTFULLNAME            = "Patient.Identity.FullName";
 const char * const  TOKEN_PATIENTUSUALNAME           = "Patient.Identity.UsualName";
 const char * const  TOKEN_PATIENTOTHERNAMES          = "Patient.Identity.OtherNames";
