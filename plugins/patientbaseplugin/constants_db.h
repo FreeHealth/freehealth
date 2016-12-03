@@ -34,7 +34,7 @@ namespace Constants {
 
     const char * const  DB_NAME            = "patients";
     const char * const  DB_FILENAME        = "patients.db";
-    const char * const  DB_ACTUALVERSION   = "0.1";
+    const char * const  DB_CURRENTVERSION   = "0.1";
 
     // Tables
     enum Tables {

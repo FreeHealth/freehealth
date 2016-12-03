@@ -19,13 +19,11 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *  Main developer: Eric MAEKER, <eric.maeker@gmail.com>                   *
- *  Contributors:                                                          *
- *       NAME <MAIL@ADDRESS.COM>                                           *
- *       NAME <MAIL@ADDRESS.COM>                                           *
+ *  Authors:                                                               *
+ *       Eric MAEKER <eric.maeker@gmail.com>                               *
+ *                                                                         *
  ***************************************************************************/
-#ifndef PMHCORE_H
-#define PMHCORE_H
+#pragma once
 
 #include <pmhplugin/pmh_exporter.h>
 
@@ -65,5 +63,3 @@ private:
 };
 
 }  // End PMH
-
-#endif // PMHCORE_H

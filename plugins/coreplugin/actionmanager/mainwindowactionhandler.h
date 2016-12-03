@@ -101,7 +101,7 @@ public Q_SLOTS: // useful slots that interactions with actions and menus
     virtual void updateCheckerEnd(bool error);
 
 
-public Q_SLOTS: // Slots automatically connected to actions is requiered
+public Q_SLOTS: // Slots automatically connected to actions is required
     virtual bool newFile()      {return false;}
     virtual bool openFile()     {return false;}
     virtual bool saveFile()     {return false;}

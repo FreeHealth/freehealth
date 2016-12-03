@@ -38,7 +38,7 @@ namespace Constants {
     // Database
     const char * const  DB_NAME            = "category";
     const char * const  DB_FILENAME        = "category.db";
-    const char * const  DB_ACTUALVERSION   = "0.1";
+    const char * const  DB_CURRENTVERSION   = "0.1";
 
     enum Tables {
       Table_CATEGORIES = 0,

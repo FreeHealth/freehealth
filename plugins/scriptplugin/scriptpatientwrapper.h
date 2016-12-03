@@ -59,6 +59,7 @@ class ScriptPatientWrapper : public QObject  //, public QScriptClass
 
     Q_PROPERTY(QDate    dateOfBirth READ dateOfBirth())
     Q_PROPERTY(int      yearsOld    READ yearsOld())
+    Q_PROPERTY(bool     isPediatric READ isPediatric())
     Q_PROPERTY(bool     isMale      READ isMale())
     Q_PROPERTY(bool     isFemale    READ isFemale())
 
@@ -97,6 +98,7 @@ public Q_SLOTS:
 
     QDate dateOfBirth() const;
     int yearsOld() const;
+    bool isPediatric() const;
     bool isMale() const;
     bool isFemale() const;
 

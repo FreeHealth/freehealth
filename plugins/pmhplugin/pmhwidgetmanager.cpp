@@ -19,10 +19,11 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *  Main developer: Eric MAEKER, <eric.maeker@gmail.com>                   *
- *  Contributors:                                                          *
- *       NAME <MAIL@ADDRESS.COM>                                           *
- *       NAME <MAIL@ADDRESS.COM>                                           *
+ *  Authors:                                                               *
+ *  Eric MAEKER <eric.maeker@gmail.com>                                    *
+ *  Jerome PINGUET <jerome@jerome.cc                                       *
+ *  NAME <MAIL@ADDRESS.COM>                                                *
+ *  NAME <MAIL@ADDRESS.COM>                                                *
  ***************************************************************************/
 #include "pmhwidgetmanager.h"
 #include "pmhcontextualwidget.h"
@@ -52,6 +53,8 @@
 #include <coreplugin/actionmanager/actionmanager.h>
 #include <coreplugin/actionmanager/actioncontainer.h>
 
+#include <formmanagerplugin/constants_db.h>
+
 #include <QGridLayout>
 #include <QTreeWidget>
 #include <QHeaderView>
@@ -66,12 +69,66 @@ static inline Core::IMainWindow *mainWindow() { return Core::ICore::instance()->
 static inline PMH::PmhCore *pmhCore() { return PMH::PmhCore::instance(); }
 static inline PMH::Internal::PmhBase *pmhBase() { return PMH::Internal::PmhBase::instance(); }
 static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
+static inline Core::ITheme *theme() { return Core::ICore::instance()->theme(); }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////      MANAGER      ///////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////////////
+static PmhContextualWidget *parentPmhWidget(QWidget  *widget)
+{
+    QWidget *parent = widget->parentWidget();
+    while (parent) {
+        PmhContextualWidget *w = qobject_cast<PmhContextualWidget *>(parent);
+        if (w)
+            return w;
+        parent = parent->parentWidget();
+    }
+    return 0;
+}
+
+// Register an existing Core action
+static QAction *registerAction(const QString &id, const Core::Context &ctx, QObject *parent)
+{
+    QAction *a = new QAction(parent);
+    Core::Command *cmd = Core::ICore::instance()->actionManager()->registerAction(a, Core::Id(id), ctx);
+    Q_UNUSED(cmd);
+    return a;
+}
+
+// Create an action
+static inline QAction *createAction(QObject *parent, const QString &name, const QString &icon,
+                                    const QString &actionName,
+                                    const Core::Context &context,
+                                    const QString &trans, const QString &transContext,
+                                    Core::Command *cmd,
+                                    Core::ActionContainer *menu,
+                                    const QString &group,
+                                    QKeySequence::StandardKey key = QKeySequence::UnknownKey,
+                                    bool checkable = false)
+{
+    QAction *a = new QAction(parent);
+    a->setObjectName(name);
+    if (!icon.isEmpty())
+        a->setIcon(theme()->icon(icon));
+    if (checkable) {
+        a->setCheckable(true);
+        a->setChecked(false);
+    }
+    cmd = actionManager()->registerAction(a, Core::Id(actionName), context);
+    if (!transContext.isEmpty())
+        cmd->setTranslations(trans, trans, transContext);
+    else
+        cmd->setTranslations(trans, trans); // use the Trans::Constants tr context (automatic)
+    if (key != QKeySequence::UnknownKey)
+        cmd->setDefaultKeySequence(key);
+    if (menu)
+        menu->addAction(cmd, Core::Id(group));
+    return a;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+///////////////////////////      MANAGER      //////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 PmhWidgetManager::PmhWidgetManager(QObject *parent) :
-    PmhActionHandler(parent)
+    PmhActionHandler(parent),
+    _contextObject(0)
 {
     connect(Core::ICore::instance()->contextManager(), SIGNAL(contextChanged(Core::IContext*,Core::Context)),
             this, SLOT(updateContext(Core::IContext*,Core::Context)));
@@ -81,17 +138,34 @@ PmhWidgetManager::PmhWidgetManager(QObject *parent) :
 void PmhWidgetManager::updateContext(Core::IContext *object, const Core::Context &additionalContexts)
 {
     Q_UNUSED(additionalContexts)
+    if (_contextObject==object)
+        return;
+    _contextObject=object;
+
     PmhContextualWidget *view = 0;
     do {
         if (!object) {
             if (!m_CurrentView)
                 return;
-
             //            m_CurrentView = 0;  // keep trace of the last active view (we need it in dialogs)
             break;
         }
         view = qobject_cast<PmhContextualWidget *>(object->widget());
         if (!view) {
+            view = parentPmhWidget(object->widget());
+            int formContextId = Core::Id(Constants::C_PMH_PLUGINS).uniqueIdentifier();
+            if (view) {
+                if (!contextManager()->hasContext(formContextId)) {
+                    contextManager()->updateAdditionalContexts(Core::Context(), Core::Context(Constants::C_PMH_PLUGINS));
+                    break;
+                }
+            } else {
+                // !view
+                if (contextManager()->hasContext(formContextId)) {
+                    contextManager()->updateAdditionalContexts(Core::Context(Constants::C_PMH_PLUGINS), Core::Context());
+                    break;
+                }
+            }
             if (!m_CurrentView)
                 return;
 
@@ -114,15 +188,24 @@ PmhContextualWidget *PmhWidgetManager::currentView() const
     return PmhActionHandler::m_CurrentView;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////  ACTION HANDLER   ///////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////  ACTION HANDLER   ////////////////////
+////////////////////////////////////////////////////////////////////////////////
 PmhActionHandler::PmhActionHandler(QObject *parent) :
         QObject(parent),
-        aAddPmh(0),aRemovePmh(0),
+        aClear(0),
+        aAddPmh(0),
+        aRemovePmh(0),
         aAddCat(0),
         aCategoryManager(0),
         aPmhDatabaseInformation(0),
+        aCreateEpisode(0),
+        aValidateEpisode(0),
+        aRenewEpisode(0),
+        aRemoveEpisode(0),
+        aSaveEpisode(0),
+        aTakeScreenshot(0),
+        aPrintForm(0),
         m_CurrentView(0)
 {
     setObjectName("PmhActionHandler");
@@ -148,6 +231,9 @@ PmhActionHandler::PmhActionHandler(QObject *parent) :
     }
 
     // Create local actions
+    aClear = registerAction(Core::Constants::A_LIST_CLEAR, ctx, this);
+    connect(aClear, SIGNAL(triggered()), this, SLOT(onClearRequested()));
+
     a = aAddPmh = new QAction(this);
     aAddPmh->setEnabled(false);
     a->setObjectName("aAddPmh");
@@ -195,6 +281,65 @@ PmhActionHandler::PmhActionHandler(QObject *parent) :
     }
     connect(aPmhDatabaseInformation, SIGNAL(triggered()), this, SLOT(showPmhDatabaseInformation()));
 
+    // create and connect forms actions
+    // create episode
+    aCreateEpisode = createAction(this, "aCreateEpisode", Core::Constants::ICONADD,
+                                  Form::Constants::A_ADDEPISODE,
+                                  ctx,
+                                  Form::Constants::ADDEPISODE_TEXT, Form::Constants::FORM_TR_CONTEXT,
+                                  cmd,
+                                  0, "",
+                                  QKeySequence::UnknownKey, false);
+    connect(aCreateEpisode, SIGNAL(triggered()), this, SLOT(onCreateEpisodeRequested()));
+
+    // validate episode
+    a = aValidateEpisode = new QAction(this);
+    a->setObjectName("aValidateEpisode");
+    a->setIcon(theme()->icon(Core::Constants::ICONVALIDATEDARK));
+    cmd = actionManager()->registerAction(a, Form::Constants::A_VALIDATEEPISODE, ctx);
+    cmd->setTranslations(Form::Constants::VALIDATEEPISODE_TEXT, Form::Constants::VALIDATEEPISODE_TEXT, Form::Constants::FORM_TR_CONTEXT);
+    connect(aValidateEpisode, SIGNAL(triggered()), this, SLOT(onValidateEpisodeRequested()));
+
+    // renew episode
+    aRenewEpisode = createAction(this, "aRenewEpisode", Core::Constants::ICONRENEW,
+                                  Form::Constants::A_RENEWEPISODE,
+                                  ctx,
+                                  Trans::Constants::RENEW_EPISODE, "",
+                                  cmd,
+                                  0, "",
+                                  QKeySequence::UnknownKey, false);
+    connect(aRenewEpisode, SIGNAL(triggered()), this, SLOT(onRenewEpisodeRequested()));
+
+    //remove episode
+#ifdef WITH_EPISODE_REMOVAL
+    aRemoveEpisode = createAction(this, "aRemoveEpisode", Core::Constants::ICONREMOVE,
+                                  Form::Constants::A_REMOVEEPISODE,
+                                  ctx,
+                                  Trans::Constants::REMOVE_EPISODE, "",
+                                  cmd,
+                                  0, "",
+                                  QKeySequence::UnknownKey, false);
+    connect(aRemoveEpisode, SIGNAL(triggered()), this, SLOT(onRemoveEpisodeRequested()));
+#endif
+
+    // save episode
+    aSaveEpisode = registerAction(Core::Constants::A_FILE_SAVE, ctx, this);
+    connect(aSaveEpisode, SIGNAL(triggered()), this, SLOT(onSaveEpisodeRequested()));
+
+    // take screenshot
+    aTakeScreenshot = createAction(this, "aTakeScreenshot", Core::Constants::ICONTAKESCREENSHOT,
+                                   Form::Constants::A_TAKESCREENSHOT,
+                                   ctx,
+                                   Trans::Constants::TAKE_SCREENSHOT, "",
+                                   cmd,
+                                   0, "",
+                                   QKeySequence::UnknownKey, false);
+    connect(aTakeScreenshot, SIGNAL(triggered()), this, SLOT(onTakeScreenshotRequested()));
+
+    // print form
+    aPrintForm = registerAction(Core::Constants::A_FILE_PRINT, ctx, this);
+    connect(aPrintForm, SIGNAL(triggered()), this, SLOT(onPrintFormRequested()));
+
     contextManager()->updateContext();
     actionManager()->retranslateMenusAndActions();
 
@@ -208,12 +353,51 @@ void PmhActionHandler::setCurrentView(PmhContextualWidget *view)
         LOG_ERROR("setCurrentView: no view");
         return;
     }
+    // disconnect old view
+    if (m_CurrentView) {
+        disconnect(m_CurrentView, SIGNAL(actionsEnabledStateChanged()), this, SLOT(updateActions()));
+        disconnect(m_CurrentView, SIGNAL(actionEnabledStateChanged(PMH::Internal::PmhContextualWidget::WidgetAction)), this, SLOT(onActionEnabledStateUpdated(PMH::Internal::PmhContextualWidget::WidgetAction)));
+    }
     m_CurrentView = view;
+
+    // connect new view
+    connect(m_CurrentView, SIGNAL(actionsEnabledStateChanged()), this, SLOT(updateActions()));
+    connect(m_CurrentView, SIGNAL(actionEnabledStateChanged(PMH::Internal::PmhContextualWidget::WidgetAction)), this, SLOT(onActionEnabledStateUpdated(PMH::Internal::PmhContextualWidget::WidgetAction)));
+
+    // update actions according to the current view
     updateActions();
 }
 
 void PmhActionHandler::updateActions()
 {
+    onActionEnabledStateUpdated(PMH::Internal::PmhContextualWidget::Action_Clear);
+    onActionEnabledStateUpdated(PMH::Internal::PmhContextualWidget::Action_CreateEpisode);
+    onActionEnabledStateUpdated(PMH::Internal::PmhContextualWidget::Action_ValidateCurrentEpisode);
+    onActionEnabledStateUpdated(PMH::Internal::PmhContextualWidget::Action_SaveCurrentEpisode);
+    onActionEnabledStateUpdated(PMH::Internal::PmhContextualWidget::Action_RemoveCurrentEpisode);
+    onActionEnabledStateUpdated(PMH::Internal::PmhContextualWidget::Action_RenewCurrentEpisode);
+    onActionEnabledStateUpdated(PMH::Internal::PmhContextualWidget::Action_TakeScreenShot);
+    onActionEnabledStateUpdated(PMH::Internal::PmhContextualWidget::Action_PrintCurrentFormEpisode);
+}
+
+void PmhActionHandler::onActionEnabledStateUpdated(PMH::Internal::PmhContextualWidget::WidgetAction action)
+{
+    if (m_CurrentView) {
+        QAction *a = 0;
+        switch (action) {
+        case PMH::Internal::PmhContextualWidget::Action_Clear: a = aClear; break;
+        case PMH::Internal::PmhContextualWidget::Action_CreateEpisode: a = aCreateEpisode; break;
+        case PMH::Internal::PmhContextualWidget::Action_ValidateCurrentEpisode: a = aValidateEpisode; break;
+        case PMH::Internal::PmhContextualWidget::Action_SaveCurrentEpisode: a = aSaveEpisode; break;
+        case PMH::Internal::PmhContextualWidget::Action_RenewCurrentEpisode: a = aRenewEpisode; break;
+        case PMH::Internal::PmhContextualWidget::Action_RemoveCurrentEpisode: a = aRemoveEpisode; break;
+        case PMH::Internal::PmhContextualWidget::Action_TakeScreenShot: a = aTakeScreenshot; break;
+        case PMH::Internal::PmhContextualWidget::Action_PrintCurrentFormEpisode: a = aPrintForm; break;
+        }  // end switch
+        if(a)
+            if(m_CurrentView)
+                a->setEnabled(m_CurrentView->enableAction(action));
+    }
 }
 
 void PmhActionHandler::onCurrentPatientChanged()
@@ -239,4 +423,62 @@ void PmhActionHandler::categoryManager()
     Category::CategoryDialog dlg(mainWindow());
     dlg.setCategoryModel(pmhCore()->pmhCategoryModel(), PmhCategoryModel::Label);
     dlg.exec();
+}
+
+void PmhActionHandler::onClearRequested()
+{
+    if (m_CurrentView) {
+        m_CurrentView->clear();
+    }
+}
+
+void PmhActionHandler::onSaveEpisodeRequested()
+{
+    if (m_CurrentView) {
+        m_CurrentView->saveCurrentEpisode();
+    }
+}
+
+void PmhActionHandler::onCreateEpisodeRequested()
+{
+    if (m_CurrentView) {
+        m_CurrentView->createEpisode();
+    }
+}
+
+void PmhActionHandler::onValidateEpisodeRequested()
+{
+    if (m_CurrentView) {
+        m_CurrentView->validateCurrentEpisode();
+    }
+}
+
+void PmhActionHandler::onRenewEpisodeRequested()
+{
+    if (m_CurrentView) {
+        m_CurrentView->renewEpisode();
+    }
+}
+
+void PmhActionHandler::onRemoveEpisodeRequested()
+{
+#ifdef WITH_EPISODE_REMOVAL
+    if (m_CurrentView) {
+        m_CurrentView->removeCurrentEpisode();
+    }
+#endif
+}
+
+void PmhActionHandler::onTakeScreenshotRequested()
+{
+    if (m_CurrentView) {
+        m_CurrentView->takeScreenshotOfCurrentEpisode();
+    }
+}
+
+void PmhActionHandler::onPrintFormRequested()
+{
+    if (m_CurrentView) {
+        m_CurrentView->printFormOrEpisode();
+    }
 }

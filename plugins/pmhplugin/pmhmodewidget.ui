@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>568</width>
-    <height>300</height>
+    <width>800</width>
+    <height>600</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,6 +16,12 @@
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
     <widget class="Utils::MiniSplitter" name="splitter">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
@@ -45,9 +51,15 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>270</width>
-         <height>280</height>
+         <width>387</width>
+         <height>580</height>
         </rect>
+       </property>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
        </property>
        <layout class="QGridLayout" name="gridLayout_2">
         <property name="leftMargin">
@@ -64,6 +76,12 @@
         </property>
         <item row="0" column="0">
          <widget class="QStackedWidget" name="stackedWidget">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
           <property name="currentIndex">
            <number>2</number>
           </property>
@@ -87,33 +105,7 @@
            </layout>
           </widget>
           <widget class="QWidget" name="pageEditor">
-           <layout class="QVBoxLayout" name="verticalLayout">
-            <property name="leftMargin">
-             <number>0</number>
-            </property>
-            <property name="topMargin">
-             <number>0</number>
-            </property>
-            <property name="rightMargin">
-             <number>0</number>
-            </property>
-            <property name="bottomMargin">
-             <number>0</number>
-            </property>
-            <item>
-             <widget class="PMH::PmhViewer" name="pmhViewer" native="true"/>
-            </item>
-            <item>
-             <widget class="QDialogButtonBox" name="buttonBox">
-              <property name="standardButtons">
-               <set>QDialogButtonBox::Cancel|QDialogButtonBox::Save</set>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </widget>
-          <widget class="QWidget" name="formPage">
-           <layout class="QGridLayout" name="gridLayout_5">
+           <layout class="QGridLayout" name="gridLayout_4">
             <property name="leftMargin">
              <number>0</number>
             </property>
@@ -127,7 +119,66 @@
              <number>0</number>
             </property>
             <item row="0" column="0">
-             <widget class="Form::FormDataWidgetMapper" name="formDataMapper" native="true"/>
+             <widget class="PMH::PmhViewer" name="pmhViewer" native="true"/>
+            </item>
+            <item row="1" column="0">
+             <widget class="QDialogButtonBox" name="buttonBox">
+              <property name="standardButtons">
+               <set>QDialogButtonBox::Cancel|QDialogButtonBox::Save</set>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="formPage">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_5">
+            <item row="0" column="0">
+             <layout class="QVBoxLayout" name="Layout" stretch="1,1">
+              <property name="spacing">
+               <number>2</number>
+              </property>
+              <property name="sizeConstraint">
+               <enum>QLayout::SetMaximumSize</enum>
+              </property>
+              <item>
+               <layout class="QVBoxLayout" name="toolbarLayout">
+                <property name="sizeConstraint">
+                 <enum>QLayout::SetNoConstraint</enum>
+                </property>
+               </layout>
+              </item>
+              <item>
+               <widget class="QSplitter" name="episodeFormSplitter">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="orientation">
+                 <enum>Qt::Vertical</enum>
+                </property>
+                <property name="handleWidth">
+                 <number>6</number>
+                </property>
+                <widget class="QTableView" name="episodeView"/>
+                <widget class="Form::FormDataWidgetMapper" name="formDataMapper" native="true">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                </widget>
+               </widget>
+              </item>
+             </layout>
             </item>
            </layout>
           </widget>
@@ -141,6 +192,12 @@
   </layout>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>PMH::PmhViewer</class>
+   <extends>QWidget</extends>
+   <header location="global">pmhplugin/pmhviewer.h</header>
+   <container>1</container>
+  </customwidget>
   <customwidget>
    <class>Views::TreeView</class>
    <extends>QTreeView</extends>
@@ -156,12 +213,6 @@
    <class>Form::FormDataWidgetMapper</class>
    <extends>QWidget</extends>
    <header location="global">formmanagerplugin/formdatawidgetmapper.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>PMH::PmhViewer</class>
-   <extends>QWidget</extends>
-   <header location="global">pmhplugin/pmhviewer.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

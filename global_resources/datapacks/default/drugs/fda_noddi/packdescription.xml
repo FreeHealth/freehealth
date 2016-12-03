@@ -26,8 +26,8 @@
     <license>GPLv3</license>
     <label lang="fr">Base de données thérapeutique américaine (sans les interactions)</label>
     <label lang="xx">USA pharmaceutical drug database (without interactions)</label>
-    <description lang="fr">Données thérapeutiques américaines pour FreeMedForms (sans les interactions)</description>
-    <description lang="xx">USA pharmaceutical data for FreeMedForms (without interactions)</description>
+    <description lang="fr">Données thérapeutiques américaines pour FreeHealth (sans les interactions)</description>
+    <description lang="xx">USA pharmaceutical data for FreeHealth (without interactions)</description>
 
     <htmldescription lang="fr">&lt;p>
       La base de données thérapeutique américaine est construite grâce aux

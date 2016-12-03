@@ -191,6 +191,9 @@ void IPatient::registerPatientTokens()
     t = new PatientToken(Constants::TOKEN_PATIENTDATEOFDEATH, DateOfDeath);
     t->setUntranslatedHumanReadableName(Trans::Constants::DATE_OF_DEATH);
     _tokens << t;
+    t = new PatientToken(Constants::TOKEN_PATIENTISPEDIATRIC, IsPediatricToken);
+    t->setUntranslatedHumanReadableName(Trans::Constants::IS_PEDIATRIC);
+    _tokens << t;
     t = new PatientToken(Constants::TOKEN_PATIENTYEARSOLD, YearsOld);
     t->setUntranslatedHumanReadableName(Trans::Constants::AGE_IN_YEARS);
     _tokens << t;

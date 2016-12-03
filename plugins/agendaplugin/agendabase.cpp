@@ -40,7 +40,7 @@
  *   manage calendars.
  * - EVENTS, CYCLINGEVENTS, COMMON: management of agenda events.
  * - USER_WORKINGTIME: management of users availabilities, vacancies...
- * - VERSION : contains the actual version of the database
+ * - VERSION : contains the current version of the database
 */
 
 #include "agendabase.h"

@@ -115,7 +115,7 @@ public:
 public:
     QSqlQueryModel *m_IcdMaster;
     IcdSearchModel::SearchModes m_SearchMode;
-    QString m_LastFilterRequiered;
+    QString m_LastFilterRequired;
     int m_LangField;
 
 private:
@@ -242,7 +242,7 @@ bool IcdSearchModel::removeRows(int row, int count, const QModelIndex &parent)
 
 void IcdSearchModel::setFilter(const QString &searchLabel)
 {
-    d->m_LastFilterRequiered = searchLabel;
+    d->m_LastFilterRequired = searchLabel;
     QHash<int, QString> where;
     QString req;
     if (d->m_SearchMode==SearchByLabel) {

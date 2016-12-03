@@ -19,13 +19,11 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main developers : Eric Maeker
- *   Contributors :                                                        *
- *       NAME <MAIL@ADDRESS.COM>                                           *
- *       NAME <MAIL@ADDRESS.COM>                                           *
+ *  Authors:                                                               *
+ *       Eric MAEKER <eric.maeker@gmail.com>                               *
+ *                                                                         *
  ***************************************************************************/
-#ifndef PMH_INTERNAL_PMHTOKENS_H
-#define PMH_INTERNAL_PMHTOKENS_H
+#pragma once
 
 #include <coreplugin/ipadtools.h>
 #include <QObject>
@@ -66,6 +64,4 @@ private:
 
 } // namespace Internal
 } // namespace PMH
-
-#endif // PMH_INTERNAL_PMHTOKENS_H
 

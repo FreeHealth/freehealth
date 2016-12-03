@@ -26,10 +26,6 @@
 # *       NAME <MAIL@ADDRESS.COM>                                           *
 # ***************************************************************************/
 
-# define colors for highlighting
-START_COLOR="\033[1;37m"
-END_COLOR="\033[0m"
-
 # Binary to use for the qmake step
 QMAKE_BIN="qmake"
 QMAKE_SPEC=""
@@ -42,9 +38,9 @@ MAC_SCRIPTS_PATH=""
 SOURCES_PATH=""
 PACKAGES_PATH=""
 
-# Qt Prject file to build (contains absolute file path)
+# Qt Project file to build (contains absolute file path)
 PROJECT_FILE=""
-BUNDLE_NAME="FreeMedForms FreeDiams FreeDRC"
+BUNDLE_NAME="freehealth"
 PROJECT="" # lowered case of BundleName
 EXTRA_PLUGINS=""
 
@@ -64,7 +60,7 @@ VERSION=`cat $SOURCES_PATH$PROJECT/buildspecs/projectversion.pri | grep "PACKAGE
 
 showHelp()
 {
-  echo $SCRIPT_NAME" builds FreeMedForms applications into Mac bundle in release mode."
+  echo $SCRIPT_NAME" builds FreeHealth applications into Mac bundle in release mode."
   echo "Usage : $SCRIPT_NAME -b CaseSensitiveBundle <options> -p 'with-pad with-alert with-webcam'"
   echo "Options :"
   echo " -b  Bundle name (optionnal)"
@@ -77,14 +73,14 @@ showHelp()
 
 buildFromSourcePackage()
 {
-  echo $START_COLOR"*** Building from source package"$END_COLOR
-  SOURCE_PACKAGE=$SOURCES_PATH"freemedformsfullsources-"$VERSION".tgz"
+  echo "*** Building from source package"
+  SOURCE_PACKAGE=$SOURCES_PATH"freehealthfullsources-"$VERSION".tgz"
   # test source package
   if [ ! -e $SOURCE_PACKAGE ] ; then
       echo $SOURCE_PACKAGE" not found"
       exit 123;
   fi
-  SOURCES_PATH=$SCRIPT_PATH"freemedforms-"$VERSION"/"
+  SOURCES_PATH=$SCRIPT_PATH"freehealth-"$VERSION"/"
 #  if [ -e $SOURCES_PATH ] ; then
 #    rm -Rf $SOURCES_PATH
 #  fi
@@ -98,7 +94,7 @@ buildFromSourcePackage()
 
 buildTranslations()
 {
-  echo $START_COLOR"*** Building translations"$END_COLOR
+  echo "*** Building translations"
   cd $SOURCES_PATH
   MAKE_STEP=`lrelease ./global_resources/translations/*.ts`
   MAKE_STEP=$?
@@ -115,7 +111,7 @@ buildApp()
   #####################################
   # 1. make clean                     #
   #####################################
-  echo $START_COLOR"*** Cleaning build path..."$END_COLOR
+  echo "*** Cleaning build path..."
   cd $SOURCES_PATH
   rm -R ./bin/$PROJECT/
 
@@ -128,7 +124,7 @@ buildApp()
   # 2. Build process                  #
   #####################################
   # build app
-  echo $START_COLOR"*** Building "$BUNDLE_NAME" "$VERSION$END_COLOR
+  echo "*** Building "$BUNDLE_NAME" "$VERSION
   cd $SOURCES_PATH/$PROJECT
   if [[ "$EXTRA_PLUGINS" != "" ]]; then
       PLUG_CONFIG=""
@@ -151,7 +147,7 @@ buildApp()
      echo "   * QMake done"
    fi
 
-   echo $START_COLOR"   --> make -j $MAKE_JOBS"$END_COLOR
+   echo "   --> make -j $MAKE_JOBS"
    MAKE_STEP=`make -j $MAKE_JOBS`
    MAKE_STEP=$?
    if [ ! $MAKE_STEP = 0 ]; then
@@ -161,7 +157,7 @@ buildApp()
      echo "   * Make done"
    fi
 
-   echo $START_COLOR"   --> make install"$END_COLOR
+   echo "   --> make install"
    MAKE_STEP=`make install`
    MAKE_STEP=$?
    if [ ! $MAKE_STEP = 0 ]; then
@@ -175,7 +171,7 @@ buildApp()
 linkQtLibs()
 {
    # link frameworks
-   echo $START_COLOR"*** Linking Frameworks..."$END_COLOR
+   echo "*** Linking Frameworks..."
    cd $PACKAGES_PATH/mac/$BUNDLE_NAME
    MAKE_STEP=$?
    if [ ! $MAKE_STEP = 0 ]; then
@@ -196,7 +192,7 @@ linkQtLibs()
 linkMySqlLib()
 {
    # Deploy MySql lib
-   echo $START_COLOR"*** Linking MySQL plugin"$END_COLOR
+   echo "*** Linking MySQL plugin"
    ACTUAL_PATH=`pwd`
    cd $PACKAGES_PATH/mac/$BUNDLE_NAME/$BUNDLE_NAME.app
    MYSQL_PLUGIN="./Contents/plugins/qt/sqldrivers/libqsqlmysql.dylib"
@@ -225,7 +221,7 @@ linkMySqlLib()
 linkOpenCVLib()
 {
     # Deploy OpenCV lib
-    echo $START_COLOR"*** Linking WebCam plugin"$END_COLOR
+    echo "*** Linking WebCam plugin"
     ACTUAL_PATH=`pwd`
     cd $PACKAGES_PATH/mac/$BUNDLE_NAME/$BUNDLE_NAME.app
     WEBCAM_PLUGIN="./Contents/plugins/libWebcam.dylib"
@@ -256,7 +252,7 @@ linkOpenCVLib()
 createDmg()
 {
    # clean old dmg and create new one
-   echo $START_COLOR"*** Creating DMG archive..."$END_COLOR
+   echo "*** Creating DMG archive..."
    rm *.dmg
    MAKE_STEP=`$MAC_SCRIPTS_PATH/release_dmg.sh -a $BUNDLE_NAME -p ./ -s 150 -f $SOURCES_PATH -v $VERSION`
    MAKE_STEP=$?
@@ -302,9 +298,9 @@ if [ ! -e $PACKAGES_PATH ] ; then
     mkdir $PACKAGES_PATH
 fi
 
-echo $START_COLOR"*** Creating package for $BUNDLE_NAME $VERSION"
+echo "*** Creating package for $BUNDLE_NAME $VERSION"
 echo "      * from source path $SOURCES_PATH"
-echo $END_COLOR
+echo
 
 buildTranslations
 
@@ -314,7 +310,7 @@ for i in $TMP; do
     BUNDLE_NAME=$i
     PROJECT=`echo $i | tr '[A-Z]' '[a-z]'`;
     PROJECT_FILE=$SOURCES_PATH$PROJECT/$PROJECT.pro;
-    echo $START_COLOR"      * starting project: $PROJECT_FILE"$END_COLOR
+    echo "      * starting project: $PROJECT_FILE"
     buildApp
     linkQtLibs
     linkMySqlLib

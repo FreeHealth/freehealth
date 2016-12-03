@@ -27,7 +27,9 @@
 
 #include <coreplugin/icore.h>
 #include <coreplugin/ipatient.h>
+#include <coreplugin/isettings.h>
 
+#include <patientbaseplugin/constants_settings.h>
 #include <patientbaseplugin/patientmodel.h>
 #include <patientbaseplugin/patientwidgetmanager.h>
 #include <patientbaseplugin/patientselector.h>
@@ -45,6 +47,7 @@ using namespace BaseWidgets;
 using namespace Trans::ConstantTranslations;
 
 static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
+static inline Core::ISettings *settings() { return Core::ICore::instance()->settings(); }
 
 //static inline QStringList getOptions(Form::FormItem *item)
 //{
@@ -204,9 +207,9 @@ QString IdentityFormWidget::printableHtml(bool withValues) const
             QString n = patient()->data(Core::IPatient::FullName).toString();
             n = n.simplified();
             QString age;
-            // For pediatrics show full age
-            // For adults show simplified age
-            if (patient()->data(Core::IPatient::YearsOld).toInt() <= 15) {
+            // Age for pediatric patient: year, month, day
+            // Age for non pediatric patient: years only
+            if (patient()->data(Core::IPatient::YearsOld).toInt() < settings()->value(Patients::Constants::S_PEDIATRICSAGELIMIT, 18).toInt()) {
                 age = patient()->data(Core::IPatient::Age).toString();
             } else {
                 age = patient()->data(Core::IPatient::YearsOld).toString() + " " + tkTr(Trans::Constants::YEARS);

@@ -62,18 +62,18 @@ struct Field {
     Field() : table(-1), field(-1), type(-1), orCondition(false) {}
 
     Field(const Field &f) :
-            table(f.table), field(f.field), type(f.type),
-            tableName(f.tableName), fieldName(f.fieldName), whereCondition(f.whereCondition),
-            orCondition(f.orCondition) {}
+        table(f.table), field(f.field), type(f.type),
+        tableName(f.tableName), fieldName(f.fieldName), whereCondition(f.whereCondition),
+        orCondition(f.orCondition) {}
 
     Field(const int table, const int field, const QString &tableName, const QString &fieldName) :
-            table(table), field(field), type(-1), tableName(tableName), fieldName(fieldName),
-            orCondition(false) {}
+        table(table), field(field), type(-1), tableName(tableName), fieldName(fieldName),
+        orCondition(false) {}
 
     Field(const int table, const int field, const QString &where = QString::null, const bool isOrCondition = false) :
-            table(table), field(field), type(-1), whereCondition(where), orCondition(isOrCondition) {}
+        table(table), field(field), type(-1), whereCondition(where), orCondition(isOrCondition) {}
 
-//    Field &operator=(const Field &f) const {Field ret(f.table, f.field, f.tableName, f.fieldName); ret.type=f.type; ret.whereCondition=f.whereCondition; return ret;}
+    //    Field &operator=(const Field &f) const {Field ret(f.table, f.field, f.tableName, f.fieldName); ret.type=f.type; ret.whereCondition=f.whereCondition; return ret;}
 
     bool operator==(const Field &f) const {return table==f.table && field==f.field && type==f.type;}
 
@@ -91,7 +91,7 @@ struct Join {
     Join() : type(-1) {}
 
     Join(const Field &field1, const Field &field2, const int type = 0) :
-            field1(field1), field2(field2), type(type) {}
+        field1(field1), field2(field2), type(type) {}
 
     Join(const int t1, const int f1, const int t2, const int f2, const int joinType = 0)
     {
@@ -153,7 +153,7 @@ public:
         FieldIsLongInteger,
         FieldIsUnsignedInteger,
         FieldIsUnsignedLongInteger, // unsigned bigint
-                                    // TODO: FieldIsUnsignedLongInteger does not correctly works on SQLite, needs testing with MySQL
+        // TODO: FieldIsUnsignedLongInteger does not correctly works on SQLite, needs testing with MySQL
         FieldIsLongText,            // varchar(2000)
         FieldIsShortText,           // varchar(200)
         FieldIsOneChar,
@@ -165,7 +165,7 @@ public:
         FieldIsTimeStamp,
         FieldIsIsoUtcDateTime,      // varchar(20) "YYYY-MM-DDTHH:mm:ssZ"
         FieldIsBlob,                // SQLite: 1,000,000,000 max size
-                                    // MySQL:  4Go max size
+        // MySQL:  4Go max size
         FieldIsUUID,                // varchar(32) (see Utils::createUid())
         FieldIsBoolean,
         FieldIsUniquePrimaryKey,
@@ -205,12 +205,14 @@ public:
         Grant_Trigger          = 0x040000,
         Grant_ShowDatabases    = 0x080000,
         Grant_Reload           = 0x100000,
-        Grant_All              = Grant_Select|Grant_Update|Grant_Insert|Grant_Delete|Grant_Create|
-                                 Grant_Drop|Grant_Index|Grant_Alter|Grant_CreateTmpTables|
-                                 Grant_LockTables|Grant_Execute|Grant_CreateView|Grant_ShowView|
-                                 Grant_CreateRoutine|Grant_AlterRoutine|Grant_CreateUser|Grant_Options|
-                                 Grant_Process|Grant_Trigger|Grant_ShowDatabases|Grant_Reload
-
+        Grant_All              = Grant_Select|Grant_Update|Grant_Insert
+        |Grant_Delete|Grant_Create|Grant_Drop
+        |Grant_Index|Grant_Alter|Grant_CreateTmpTables
+        |Grant_LockTables|Grant_Execute|Grant_CreateView
+        |Grant_ShowView|Grant_CreateRoutine
+        |Grant_AlterRoutine|Grant_CreateUser
+        |Grant_Options|Grant_Process|Grant_Trigger
+        |Grant_ShowDatabases|Grant_Reload
     };
     /** \brief Enumerate the values of fields got by Sqlite PRAGMA command */
     enum PragmaValues
@@ -222,7 +224,7 @@ public:
         DefaultValue_PragmaValue ,
         Pk_PragmaValue ,
         PragmaValues_MaxParam
-        };
+    };
 
     Q_DECLARE_FLAGS(Grants, Grant)
 
@@ -249,7 +251,7 @@ public:
     virtual bool createDatabase(const QString &connectionName , const QString &prefixedDbName,
                                 const Utils::DatabaseConnector &connector,
                                 CreationOption createOption
-                               );
+                                );
 
     virtual bool createDatabase(const QString &/*connectionName*/ , const QString &/*prefixedDbName*/,
                                 const QString &/*pathOrHostName*/,
@@ -257,7 +259,7 @@ public:
                                 const QString &/*login*/, const QString &/*pass*/,
                                 const int /*port*/,
                                 CreationOption /*createOption*/
-                               ) { return false; }
+                                ) { return false; }
 
     static void setDatabasePrefix(const QString &prefix) {_prefix = prefix;}
     static QString prefixedDatabaseName(AvailableDrivers driver, const QString &dbName);
@@ -295,8 +297,10 @@ public:
 
     virtual bool checkDatabaseScheme();
     virtual bool checkVersion(const Field &field, const QString &expectedVersion);
-    virtual QString getVersion(const Field &field)const ;
+    virtual QString getVersion(const Field &field)const;
+    virtual quint32 getVersionNumber(const Field &field)const;
     virtual bool setVersion(const Field &field, const QString &version);
+    virtual bool setVersion(const Field &field, const int &version);
 
     virtual QString fieldName(const int &tableref, const int &fieldref) const;
     virtual Field field(const int &tableref, const int &fieldref) const;
