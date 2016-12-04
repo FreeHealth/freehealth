@@ -1,4 +1,7 @@
 TEMPLATE        = lib
+
+QT += webenginewidgets
+
 TARGET          = PMH
 
 DEFINES += PMH_LIBRARY
@@ -29,7 +32,8 @@ HEADERS = pmhplugin.h \
     pmhcontextualwidget.h \
     pmhpreferencespage.h \
     pmhcontentexporter.h \
-    pmhtokens.h
+    pmhtokens.h \
+    previewpage.h
 #    pmhmodel.h \
 #    pmhcategorydialog.h \
 #    pmhcategoryonlyproxymodel.h \
@@ -51,7 +55,8 @@ SOURCES = pmhplugin.cpp \
     pmhcontextualwidget.cpp \
     pmhpreferencespage.cpp \
     pmhcontentexporter.cpp \
-    pmhtokens.cpp
+    pmhtokens.cpp \
+    previewpage.cpp
 #    pmhmodel.cpp \
 #    pmhcategorydialog.cpp \
 #    pmhcategoryonlyproxymodel.cpp \

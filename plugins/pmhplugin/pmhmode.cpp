@@ -42,6 +42,7 @@
 #include "pmhcategorymodel.h"
 #include "pmhcreatordialog.h"
 #include "pmhviewer.h"
+#include "previewpage.h"
 #include "constants.h"
 
 #include <coreplugin/icore.h>
@@ -82,8 +83,25 @@
 #include <QScrollBar>
 #include <QSortFilterProxyModel>
 #include <QFileDialog>
+#include <QTextEdit>
 
 #include "ui_pmhmodewidget.h"
+
+template<typename Arg, typename R, typename C>
+struct InvokeWrapper {
+    R *receiver;
+    void (C::*memberFun)(Arg);
+    void operator()(Arg result) {
+        (receiver->*memberFun)(result);
+    }
+};
+
+template<typename Arg, typename R, typename C>
+InvokeWrapper<Arg, R, C> invoke(R *receiver, void (C::*memberFun)(Arg))
+{
+    InvokeWrapper<Arg, R, C> wrapper = {receiver, memberFun};
+    return wrapper;
+}
 
 using namespace PMH;
 using namespace Internal;
@@ -195,6 +213,30 @@ PmhModeWidget::PmhModeWidget(QWidget *parent) :
     ui->treeView->showColumn(PmhCategoryModel::Label);
     ui->treeView->header()->setStretchLastSection(false);
     ui->treeView->header()->setSectionResizeMode(PmhCategoryModel::Label, QHeaderView::Stretch);
+    // preview QWebEnginePage
+    m_preview = new PreviewPage;
+    m_preview->setView(ui->preview);
+
+    // preview toolbar
+    QToolBar *toolBar = new QToolBar(tr("Navigation"));
+    QAction *printAction = new QAction;
+    printAction->setIcon(theme()->icon(Core::Constants::ICONPRINTLIGHT, Core::ITheme::MediumIcon));
+    connect(printAction, SIGNAL(triggered(bool)),
+            this, SLOT(printPreview()));
+    QAction* viewSourceAction = new QAction;
+    viewSourceAction->setIcon(theme()->icon(Core::Constants::ICONSOURCE, Core::ITheme::MediumIcon));
+    connect(viewSourceAction, SIGNAL(triggered()), SLOT(viewSource()));
+
+    toolBar->addAction(m_preview->action(QWebEnginePage::Back));
+    toolBar->addAction(m_preview->action(QWebEnginePage::Forward));
+    toolBar->addAction(m_preview->action(QWebEnginePage::Reload));
+    toolBar->addAction(m_preview->action(QWebEnginePage::Stop));
+    toolBar->addAction(printAction);
+    toolBar->addAction(viewSourceAction);
+
+    ui->previewToolbarLayout->addWidget(toolBar);
+
+
 
     // connect the aAddPmh action
     cmd = actionManager()->command(Constants::A_PMH_NEW);
@@ -263,10 +305,10 @@ void PmhModeWidget::currentChanged(const QModelIndex &current, const QModelIndex
     ui->formDataMapper->setCurrentForm(0);
 
     if (catModel()->isSynthesis(current)) {
-        ui->pmhSynthesisBrowser->setHtml(catModel()->synthesis());
+        m_preview->setHtml(catModel()->synthesis());
         ui->stackedWidget->setCurrentWidget(ui->pageSynthesis);
     } else if (catModel()->isCategory(current)) {
-        ui->pmhSynthesisBrowser->setHtml(catModel()->synthesis(current));
+        m_preview->setHtml(catModel()->synthesis(current));
         ui->stackedWidget->setCurrentWidget(ui->pageSynthesis);
     } else if (catModel()->isForm(current)) {
         m_currentFormIndex = current;
@@ -476,7 +518,7 @@ void PmhModeWidget::pmhModelRowsInserted(const QModelIndex &parent, int start, i
     }
     catModel()->refreshSynthesis();
     if (catModel()->isSynthesis(ui->treeView->currentIndex())) {
-        ui->pmhSynthesisBrowser->setHtml(catModel()->synthesis());
+        m_preview->setHtml(catModel()->synthesis());
         ui->stackedWidget->setCurrentWidget(ui->pageSynthesis);
     }
 
@@ -1012,6 +1054,23 @@ QString PmhModeWidget::currentFormLabel() const
         return d->_formTreeModel->data(index).toString();
     }*/
     return QString::null;
+}
+
+void PmhModeWidget::printPreview()
+{
+    qDebug() << Q_FUNC_INFO;
+    m_preview->printToPdf(QString("/home/elkcloner/test_preview.pdf"));
+}
+
+void PmhModeWidget::viewSource()
+{
+    QTextEdit* textEdit = new QTextEdit(NULL);
+    textEdit->setAttribute(Qt::WA_DeleteOnClose);
+    textEdit->adjustSize();
+    textEdit->move(this->geometry().center() - textEdit->rect().center());
+    textEdit->show();
+
+    m_preview->toHtml(invoke(textEdit, &QTextEdit::setPlainText));
 }
 
 PmhMode::~PmhMode()

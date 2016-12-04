@@ -51,7 +51,7 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>387</width>
+         <width>402</width>
          <height>580</height>
         </rect>
        </property>
@@ -83,24 +83,15 @@
            </sizepolicy>
           </property>
           <property name="currentIndex">
-           <number>2</number>
+           <number>0</number>
           </property>
           <widget class="QWidget" name="pageSynthesis">
            <layout class="QGridLayout" name="gridLayout_3">
-            <property name="leftMargin">
-             <number>0</number>
-            </property>
-            <property name="topMargin">
-             <number>0</number>
-            </property>
-            <property name="rightMargin">
-             <number>0</number>
-            </property>
-            <property name="bottomMargin">
-             <number>0</number>
-            </property>
+            <item row="1" column="0">
+             <widget class="QWebEngineView" name="preview" native="true"/>
+            </item>
             <item row="0" column="0">
-             <widget class="QTextBrowser" name="pmhSynthesisBrowser"/>
+             <layout class="QHBoxLayout" name="previewToolbarLayout"/>
             </item>
            </layout>
           </widget>
@@ -192,6 +183,12 @@
   </layout>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>QWebEngineView</class>
+   <extends>QWidget</extends>
+   <header>qwebengineview.h</header>
+   <container>1</container>
+  </customwidget>
   <customwidget>
    <class>PMH::PmhViewer</class>
    <extends>QWidget</extends>

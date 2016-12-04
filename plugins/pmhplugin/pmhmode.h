@@ -40,6 +40,7 @@ class QAbstractButton;
 class QPushButton;
 class QToolBar;
 class QSortFilterProxyModel;
+class PreviewPage;
 QT_END_NAMESPACE
 
 /**
@@ -96,6 +97,8 @@ protected Q_SLOTS:
     bool removeCurrentEpisode();
     bool takeScreenshotOfCurrentEpisode();
     bool printFormOrEpisode();
+    void printPreview();
+    void viewSource();
 
 protected:
     bool isDirty() const;
@@ -129,6 +132,7 @@ private:
     QSortFilterProxyModel *m_proxyModel;
     QToolBar *m_episodeToolBar;
     QModelIndex m_currentFormIndex;
+    PreviewPage *m_preview;
 };
 
 class PmhMode : public Core::IMode

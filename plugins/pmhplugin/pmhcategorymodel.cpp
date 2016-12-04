@@ -1248,7 +1248,10 @@ QString PmhCategoryModel::indexToHtml(const QModelIndex &index) const
         /*if (index.row() == 0) {
             html += QString("<ol>");
         }*/
-        html += QString("<li>%1</li>").arg(index.data(Qt::ToolTipRole).toString().replace("<br />","; "));
+        html += QString("<button class=\"accordion\">%1</button>")
+                .arg(index.data(Qt::DisplayRole).toString());
+        html += QString("<div class=\"panel\"><p>%1</p></div>")
+                .arg(index.data(Qt::ToolTipRole).toString());
         /*if ((_rowCount-index.row()) == 1) {
             html += QString("</ol>");
         }*/
@@ -1292,17 +1295,126 @@ QString PmhCategoryModel::synthesis(const QModelIndex &parent) const
 
     if (parent==QModelIndex() || isSynthesis(parent)) {
         if (d->_htmlSynthesis.isEmpty()) {
-            d->_htmlSynthesis ="<html><body>";
+            d->_htmlSynthesis ="<!DOCTYPE html>"
+                               "<html>"
+                               "<head>"
+                               "<style>"
+                    "button.accordion {"
+                    "   background-color: #eee;"
+                    "   color: #444;"
+                    "   cursor: pointer;"
+                    "    padding: 18px;"
+                    "    width: 100%;"
+                    "    border: none;"
+                    "    text-align: left;"
+                    "    outline: none;"
+                    "    font-size: 15px;"
+                    "    transition: 0.4s;"
+                    "}"
+                    ""
+                    "button.accordion.active, button.accordion:hover {"
+                    "    background-color: #ddd;"
+                    "}"
+                    ""
+                    "button.accordion:after {"
+                    "    content: \"\u2795\";"
+                    "    font-size: 13px;"
+                    "    color: #777;"
+                    "    float: right;"
+                    "    margin-left: 5px;"
+                    "}"
+                    ""
+                    "button.accordion.active:after {"
+                    "    content: \"\u2796\";"
+                    "}"
+                    ""
+                    "div.panel {"
+                    "    padding: 0 18px;"
+                    "    background-color: white;"
+                    "    max-height: 0;"
+                    "    overflow: hidden;"
+                    "    transition: 0.6s ease-in-out;"
+                    "    opacity: 0;"
+                    "}"
+
+                    "div.panel.show {"
+                    "    opacity: 1;"
+                    "    max-height: 500px;"
+                    "}"
+                    "</style>"
+                    "</head"
+                    "<body>";
             d->_htmlSynthesis += QString("<h1 id=\"pmhtitle\">%1</h1>")
                     .arg(tr("Past Medical History"));
             for(int i=0; i < rowCount(parent); ++i) {
                 d->_htmlSynthesis += indexToHtml(index(i, 0, parent));
             }
-            d->_htmlSynthesis += "</body></html>";
+            d->_htmlSynthesis +=
+                            "<script>"
+                            "var acc = document.getElementsByClassName(\"accordion\");"
+                            "var i;"
+
+                            "for (i = 0; i < acc.length; i++) {"
+                            "    acc[i].onclick = function(){"
+                            "        this.classList.toggle(\"active\");"
+                            "        this.nextElementSibling.classList.toggle(\"show\");"
+                            "  }"
+                            "}"
+                            "</script>"
+                            "</body>"
+                            "</html>";
         }
         return d->_htmlSynthesis;
     } else if (isCategory(parent)) {
-        QString html ="<html><body>";
+        QString html ="<!DOCTYPE html>"
+                      "<html>"
+                      "<head>"
+                      "<style>"
+           "button.accordion {"
+           "   background-color: #eee;"
+           "   color: #444;"
+           "   cursor: pointer;"
+           "    padding: 18px;"
+           "    width: 100%;"
+           "    border: none;"
+           "    text-align: left;"
+           "    outline: none;"
+           "    font-size: 15px;"
+           "    transition: 0.4s;"
+           "}"
+           ""
+           "button.accordion.active, button.accordion:hover {"
+           "    background-color: #ddd;"
+           "}"
+           ""
+           "button.accordion:after {"
+           "    content: \"\u2795\";"
+           "    font-size: 13px;"
+           "    color: #777;"
+           "    float: right;"
+           "    margin-left: 5px;"
+           "}"
+           ""
+           "button.accordion.active:after {"
+           "    content: \"\u2796\";"
+           "}"
+           ""
+           "div.panel {"
+           "    padding: 0 18px;"
+           "    background-color: white;"
+           "    max-height: 0;"
+           "    overflow: hidden;"
+           "    transition: 0.6s ease-in-out;"
+           "    opacity: 0;"
+           "}"
+
+           "div.panel.show {"
+           "    opacity: 1;"
+           "    max-height: 500px;"
+           "}"
+           "</style>"
+           "</head>"
+           "<body>";
         html += QString("<h1 id=\"pmhtitle\">%1</h1><h%2 id=\"pmhcategory%3\">%4</h%2>")
                 .arg(tr("Past Medical History"))
                 .arg(depth)
@@ -1311,7 +1423,19 @@ QString PmhCategoryModel::synthesis(const QModelIndex &parent) const
         for(int i=0; i < rowCount(parent); ++i) {
             html += indexToHtml(index(i, 0, parent));
         }
-        html += "</body></html>";
+        html += "<script>"
+                "var acc = document.getElementsByClassName(\"accordion\");"
+                "var i;"
+
+                "for (i = 0; i < acc.length; i++) {"
+                "    acc[i].onclick = function(){"
+                "        this.classList.toggle(\"active\");"
+                "        this.nextElementSibling.classList.toggle(\"show\");"
+                "  }"
+                "}"
+                "</script>"
+                "</body>"
+                "</html>";
         return html;
     }
     return QString::null;
