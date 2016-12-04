@@ -162,6 +162,9 @@ public:
         m_Pmh->episodeModel()->setData(m_Pmh->episodeModel()->index(0, PmhEpisodeModel::DateStart), ui->simple_start_date->date());
         m_Pmh->episodeModel()->setData(m_Pmh->episodeModel()->index(0, PmhEpisodeModel::DateEnd), ui->simple_end_date->date());
         m_Pmh->episodeModel()->setData(m_Pmh->episodeModel()->index(0, PmhEpisodeModel::IcdLabelStringList), m_IcdLabelModel->stringList());
+        m_Pmh->episodeModel()
+                ->setData(m_Pmh->episodeModel()
+                          ->index(0, PmhEpisodeModel::Comment), ui->comment->textEdit()->toHtml());
     }
 
     void clearUi()

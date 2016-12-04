@@ -220,7 +220,7 @@ PmhModeWidget::PmhModeWidget(QWidget *parent) :
     // preview toolbar
     QToolBar *toolBar = new QToolBar(tr("Navigation"));
     QAction *printAction = new QAction;
-    printAction->setIcon(theme()->icon(Core::Constants::ICONPRINTLIGHT, Core::ITheme::MediumIcon));
+    printAction->setIcon(theme()->icon(Core::Constants::ICONPRINTDARK, Core::ITheme::MediumIcon));
     connect(printAction, SIGNAL(triggered(bool)),
             this, SLOT(printPreview()));
     QAction* viewSourceAction = new QAction;
@@ -491,6 +491,10 @@ void PmhModeWidget::onCurrentPatientChanged()
     ui->formDataMapper->clear();
     ui->treeView->selectionModel()->select(catModel()->index(0,0), QItemSelectionModel::SelectCurrent);
     ui->treeView->expandAll();
+    delete m_preview;
+    m_preview = new PreviewPage;
+    m_preview->setView(ui->preview);
+    m_preview->setHtml(catModel()->synthesis());
     ui->stackedWidget->setCurrentWidget(ui->pageSynthesis);
 }
 

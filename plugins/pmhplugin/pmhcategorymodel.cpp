@@ -63,6 +63,7 @@
 #include <QColor>
 #include <QFont>
 #include <QDomDocument>
+#include <QTextDocument>
 
 #include <QDebug>
 
@@ -82,132 +83,132 @@ static inline Form::EpisodeManager &episodeManager() {return Form::FormCore::ins
 
 namespace {
 
-    // FIXME: use a QStandardItemModel
-    class TreeItem
-    {
-    public:
-        enum DataRepresentation {
-            Label = 0
-        };
-
-        TreeItem(TreeItem *parent = 0) :
-                m_Parent(parent),
-                m_Cat(0),
-                m_Pmh(0),
-                m_Form(0),
-                m_FormEpisodeModel(0)
-        {
-            if (m_Parent)
-                m_Parent->addChildren(this);
-        }
-
-        ~TreeItem()
-        {
-            m_Label.clear();
-            qDeleteAll(m_Children);
-            m_Children.clear();
-            m_Pmh=0;
-            m_Cat=0;
-            m_Parent=0;
-            m_Form=0;
-            m_FormEpisodeModel=0;
-        }
-
-
-        // Genealogy management
-        TreeItem *child(int number) { return m_Children.value(number); }
-        int childCount() const { return m_Children.count(); }
-        int columnCount() const { return 1; }
-        TreeItem *parent() { return m_Parent; }
-        void setParent(TreeItem *parent) { m_Parent = parent; }
-        bool addChildren(TreeItem *child)
-        {
-            if (!m_Children.contains(child))
-                m_Children.append(child);
-            return true;
-        }
-        bool insertChild(const int row, TreeItem *child)
-        {
-            if (row > m_Children.count())
-                return false;
-            m_Children.insert(row, child);
-            return true;
-        }
-        int childNumber() const
-        {
-            if (m_Parent!=nullptr) {
-                return m_Parent->m_Children.indexOf(const_cast<TreeItem*>(this));
-            }
-            return 0;
-        }
-        bool removeChild(TreeItem *child)
-        {
-            if (m_Children.contains(child)) {
-                m_Children.removeAll(child);
-                return true;
-            }
-            return false;
-        }
-
-        // For data management
-        QString label() const {return m_Label;}
-        void setLabel(QString label) {m_Label = label;}
-
-        QIcon icon() const {return m_Icon;}
-        void setIcon(QIcon icon) {m_Icon = icon;}
-
-        // Category / PMH
-        void setPmhCategory(Category::CategoryItem *cat)
-        {
-            m_Cat = cat;
-            setLabel(cat->label());
-            setIcon(theme()->icon(cat->iconName()));
-        }
-        Category::CategoryItem *pmhCategory() const {return m_Cat;}
-
-        void setPmhData(PmhData *pmh)
-        {
-            m_Pmh = pmh;
-        }
-        PmhData *pmhData() const {return m_Pmh;}
-
-        bool isCategory() const {return (m_Cat);}
-        bool isPmh() const {return (m_Pmh);}
-
-        // Forms
-        void setForm(Form::FormMain *form, Form::EpisodeModel *model)
-        {
-            m_Form = form;
-            m_FormEpisodeModel = model;
-            m_FormEpisodeModel->setReadOnly(false); // allow submit (issue fhio-12)
-        }
-        Form::FormMain *form() const {return m_Form;}
-        Form::EpisodeModel *formEpisodeModel() const {return m_FormEpisodeModel;}
-
-        bool isForm() const {return ((m_Form) && (m_FormEpisodeModel));}
-
-        void warn(int indent = 0)
-        {
-            QString sp;
-            if (indent)
-                sp.fill(' ', indent);
-            for(int i = 0; i < m_Children.count(); ++i) {
-                m_Children.at(i)->warn(indent+2);
-            }
-        }
-
-
-    private:
-        TreeItem *m_Parent;
-        QList<TreeItem*> m_Children;
-        QString m_Label;
-        QIcon m_Icon;
-        QVector<int> m_DirtyRows;
-        Category::CategoryItem *m_Cat;
-        PmhData *m_Pmh;
-        Form::FormMain *m_Form;
-        Form::EpisodeModel *m_FormEpisodeModel;
+// FIXME: use a QStandardItemModel
+class TreeItem
+{
+public:
+    enum DataRepresentation {
+        Label = 0
     };
+
+    TreeItem(TreeItem *parent = 0) :
+        m_Parent(parent),
+        m_Cat(0),
+        m_Pmh(0),
+        m_Form(0),
+        m_FormEpisodeModel(0)
+    {
+        if (m_Parent)
+            m_Parent->addChildren(this);
+    }
+
+    ~TreeItem()
+    {
+        m_Label.clear();
+        qDeleteAll(m_Children);
+        m_Children.clear();
+        m_Pmh=0;
+        m_Cat=0;
+        m_Parent=0;
+        m_Form=0;
+        m_FormEpisodeModel=0;
+    }
+
+
+    // Genealogy management
+    TreeItem *child(int number) { return m_Children.value(number); }
+    int childCount() const { return m_Children.count(); }
+    int columnCount() const { return 1; }
+    TreeItem *parent() { return m_Parent; }
+    void setParent(TreeItem *parent) { m_Parent = parent; }
+    bool addChildren(TreeItem *child)
+    {
+        if (!m_Children.contains(child))
+            m_Children.append(child);
+        return true;
+    }
+    bool insertChild(const int row, TreeItem *child)
+    {
+        if (row > m_Children.count())
+            return false;
+        m_Children.insert(row, child);
+        return true;
+    }
+    int childNumber() const
+    {
+        if (m_Parent!=nullptr) {
+            return m_Parent->m_Children.indexOf(const_cast<TreeItem*>(this));
+        }
+        return 0;
+    }
+    bool removeChild(TreeItem *child)
+    {
+        if (m_Children.contains(child)) {
+            m_Children.removeAll(child);
+            return true;
+        }
+        return false;
+    }
+
+    // For data management
+    QString label() const {return m_Label;}
+    void setLabel(QString label) {m_Label = label;}
+
+    QIcon icon() const {return m_Icon;}
+    void setIcon(QIcon icon) {m_Icon = icon;}
+
+    // Category / PMH
+    void setPmhCategory(Category::CategoryItem *cat)
+    {
+        m_Cat = cat;
+        setLabel(cat->label());
+        setIcon(theme()->icon(cat->iconName()));
+    }
+    Category::CategoryItem *pmhCategory() const {return m_Cat;}
+
+    void setPmhData(PmhData *pmh)
+    {
+        m_Pmh = pmh;
+    }
+    PmhData *pmhData() const {return m_Pmh;}
+
+    bool isCategory() const {return (m_Cat);}
+    bool isPmh() const {return (m_Pmh);}
+
+    // Forms
+    void setForm(Form::FormMain *form, Form::EpisodeModel *model)
+    {
+        m_Form = form;
+        m_FormEpisodeModel = model;
+        m_FormEpisodeModel->setReadOnly(false); // allow submit (issue fhio-12)
+    }
+    Form::FormMain *form() const {return m_Form;}
+    Form::EpisodeModel *formEpisodeModel() const {return m_FormEpisodeModel;}
+
+    bool isForm() const {return ((m_Form) && (m_FormEpisodeModel));}
+
+    void warn(int indent = 0)
+    {
+        QString sp;
+        if (indent)
+            sp.fill(' ', indent);
+        for(int i = 0; i < m_Children.count(); ++i) {
+            m_Children.at(i)->warn(indent+2);
+        }
+    }
+
+
+private:
+    TreeItem *m_Parent;
+    QList<TreeItem*> m_Children;
+    QString m_Label;
+    QIcon m_Icon;
+    QVector<int> m_DirtyRows;
+    Category::CategoryItem *m_Cat;
+    PmhData *m_Pmh;
+    Form::FormMain *m_Form;
+    Form::EpisodeModel *m_FormEpisodeModel;
+};
 }
 
 namespace PMH {
@@ -218,7 +219,7 @@ public:
     PmhCategoryModelPrivate(PmhCategoryModel */*parent*/) :
         _rootItem(0),
         _overview(0) // ,q(parent)
-    {     
+    {
         clearTree();
     }
 
@@ -476,7 +477,7 @@ public:
     QString _rootUid;
 
 private:
-//    PmhCategoryModel *q;
+    //    PmhCategoryModel *q;
 };
 
 }  // End namespace Internal
@@ -484,7 +485,7 @@ private:
 
 
 PmhCategoryModel::PmhCategoryModel(QObject *parent) :
-        Category::ICategoryModelHelper(parent), d(new Internal::PmhCategoryModelPrivate(this))
+    Category::ICategoryModelHelper(parent), d(new Internal::PmhCategoryModelPrivate(this))
 {
     connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(onCurrentPatientChanged()));
     connect(translators(), SIGNAL(languageChanged()), this, SLOT(retranslate()));
@@ -532,24 +533,24 @@ void PmhCategoryModel::refreshFromDatabase()
 }
 
 QModelIndex PmhCategoryModel::index(int row, int column, const QModelIndex &parent) const
- {
-     if (parent.isValid() && parent.column() != 0)
-         return QModelIndex();
+{
+    if (parent.isValid() && parent.column() != 0)
+        return QModelIndex();
 
-//     if (!parent.isValid())
-//         return QModelIndex();
+    //     if (!parent.isValid())
+    //         return QModelIndex();
 
-     TreeItem *parentItem = d->getItem(parent);
-     if (!parentItem)
-         return QModelIndex();
+    TreeItem *parentItem = d->getItem(parent);
+    if (!parentItem)
+        return QModelIndex();
 
-     TreeItem *childItem = parentItem->child(row);
+    TreeItem *childItem = parentItem->child(row);
 
-     if (childItem) {
-         return createIndex(row, column, childItem);
-     }
-     return QModelIndex();
- }
+    if (childItem) {
+        return createIndex(row, column, childItem);
+    }
+    return QModelIndex();
+}
 
 QModelIndex PmhCategoryModel::parent(const QModelIndex &index) const
 {
@@ -642,104 +643,123 @@ QVariant PmhCategoryModel::data(const QModelIndex &index, int role) const
     {
     case Qt::EditRole :
     case Qt::DisplayRole :
-        {
-            if (index.column()==Label) {
-                if (it->isCategory()) {
-                    if (it->pmhCategory() == d->_overview)
-                        return tkTr(Trans::Constants::PATIENT_OVERVIEW);
-                    else
-                        return it->label();// + " " + QString::number(it->pmhCategory()->sortId());
-                }
-                return it->label();
-            } else if (index.column()==Id) {
-                if (it->isCategory()) {
-                    return it->pmhCategory()->id();
-                } else if (it->isForm()) {
-                    return it->form()->uuid();
-                } else if (it->isPmh()) {
-                    return it->pmhData()->data(PmhData::Uid);
-                }
+    {
+        if (index.column()==Label) {
+            if (it->isCategory()) {
+                if (it->pmhCategory() == d->_overview)
+                    return tkTr(Trans::Constants::PATIENT_OVERVIEW);
+                else
+                    return it->label();// + " " + QString::number(it->pmhCategory()->sortId());
             }
-            return QVariant();
+            return it->label();
+        } else if (index.column()==Id) {
+            if (it->isCategory()) {
+                return it->pmhCategory()->id();
+            } else if (it->isForm()) {
+                return it->form()->uuid();
+            } else if (it->isPmh()) {
+                return it->pmhData()->data(PmhData::Uid);
+            }
         }
+        return QVariant();
+    }
     case Qt::ToolTipRole :
-        {
-            if (!it->isCategory()) {
-                PmhData *pmh = it->pmhData();
-                if (!pmh)
-                    return QVariant();
-                QString ret = QString("<b>%1</b>")
-                        .arg(pmh->data(PmhData::Label).toString());
-                // display type only if PmhData::Type enum > 0 (not undefined)
-                if (pmh->data(PmhData::Type).toInt()) {
-                        ret.append(QString("<br />%1: %2")
-                                   .arg(tkTr(Trans::Constants::TYPE))
-                                   .arg(Constants::typeToString(pmh->data(PmhData::Type).toInt())));
-                }
-                // display status only if PmhData::State enum > 0 (not undefined)
-                if (pmh->data(PmhData::State).toInt()) {
-                        ret.append(QString("<br />%1: %2")
-                                    .arg(tkTr(Trans::Constants::STATUS))
-                                    .arg(Constants::statusToString(pmh->data(PmhData::State ).toInt())));
-                }
-                return ret;
+    {
+        if (!it->isCategory()) {
+            PmhData *pmh = it->pmhData();
+            if (!pmh)
+                return QVariant();
+            QString ret;
+            // Don't display label it is already visible (TODO: delete this code)
+            //QString ret = QString("<b>%1</b>")
+            //        .arg(pmh->data(PmhData::Label).toString());
+
+            // display type only if PmhData::Type enum > 0 (not undefined)
+            if (pmh->data(PmhData::Type).toInt()) {
+                ret.append(QString("<br />%1: %2")
+                           .arg(tkTr(Trans::Constants::TYPE))
+                           .arg(Constants::typeToString(pmh->data(PmhData::Type).toInt())));
             }
-            return QVariant();
+            // display status only if PmhData::State enum > 0 (not undefined)
+            if (pmh->data(PmhData::State).toInt()) {
+                ret.append(QString("<br />%1: %2")
+                           .arg(tkTr(Trans::Constants::STATUS))
+                           .arg(Constants::statusToString(pmh->data(PmhData::State ).toInt())));
+            }
+            if (!pmh->episodes().at(0)->data(PmhEpisodeData::DateStart).isNull()
+                    || !pmh->episodes().at(0)->data(PmhEpisodeData::DateEnd).isNull()) {
+                ret.append(QString("<br/>%1%2%3")
+                           .arg(pmh->episodes().at(0)->data(PmhEpisodeData::DateStart).toDate().toString(QLocale().dateFormat(QLocale::ShortFormat)))
+                           .arg(((QGuiApplication::isLeftToRight()) ? QString("\u279D") : QString("\u2190")))
+                           .arg(pmh->episodes().at(0)->data(PmhEpisodeData::DateEnd).toDate().toString(QLocale().dateFormat(QLocale::ShortFormat))));
+            }
+            QString comment = pmh->data(PmhData::Comment).toString();
+            if (Qt::mightBeRichText(comment)) {
+                QTextDocument doc;
+                doc.setHtml(comment);
+                comment = doc.toPlainText();
+            }
+            if (!comment.isEmpty()) {
+                ret.append(QString("<br/>%1").arg(comment));
+            }
+            return ret;
         }
+        return QVariant();
+    }
     case Qt::FontRole :
-        {
-            if (index.column()!=Label)
-                return QVariant();
-            QFont font;
-            if (it->isCategory()) {
-                font.fromString(settings()->value(Constants::S_FONT_CATEGORIES).toString());
-            } else {
-                font.fromString(settings()->value(Constants::S_FONT_PMH).toString());
-                font.setBold(true);
-                if (!isCategory(index.parent()))
-                    font.setBold(false);
-                if (!index.parent().isValid())
-                    font.setBold(true);
-            }
-            return font;
-        }
-    case Qt::ForegroundRole :
-        {
-            if (index.column()!=Label)
-                return QVariant();
-            if (it->isCategory()) {
-                return QColor(settings()->value(Constants::S_FOREGROUND_CATEGORIES, "darkblue").toString());
-            } else {
-                return QColor(settings()->value(Constants::S_FOREGROUND_PMH, "#000").toString());
-            }
+    {
+        if (index.column()!=Label)
             return QVariant();
+        QFont font;
+        if (it->isCategory()) {
+            font.fromString(settings()->value(Constants::S_FONT_CATEGORIES).toString());
+        } else {
+            font.fromString(settings()->value(Constants::S_FONT_PMH).toString());
+            font.setBold(true);
+            if (!isCategory(index.parent()))
+                font.setBold(false);
+            if (!index.parent().isValid())
+                font.setBold(true);
         }
+        return font;
+    }
+    case Qt::ForegroundRole :
+    {
+        if (index.column()!=Label)
+            return QVariant();
+        if (it->isCategory()) {
+            return QColor(settings()->value(Constants::S_FOREGROUND_CATEGORIES, "darkblue").toString());
+        } else {
+            return QColor(settings()->value(Constants::S_FOREGROUND_PMH, "#000").toString());
+        }
+        return QVariant();
+    }
     case Qt::BackgroundRole :
-        {
-            if (index.column()!=Label)
-                return QVariant();
-            QColor c;
-            if (it->isCategory()) {
-                c = QColor(settings()->value(Constants::S_BACKGROUND_CATEGORIES, "white").toString());
-                if (it->pmhCategory()->isDirty())
-                    c.setRed(255);
-            } else {
-                c = QColor(settings()->value(Constants::S_BACKGROUND_PMH, "white").toString());
-            }
-            if (c.name()=="#ffffff")
-                return QVariant();
-            c.setAlpha(125);
-            return c;
+    {
+        if (index.column()!=Label)
+            return QVariant();
+        QColor c;
+        if (it->isCategory()) {
+            c = QColor(settings()->value(Constants::S_BACKGROUND_CATEGORIES, "white").toString());
+            if (it->pmhCategory()->isDirty())
+                c.setRed(255);
+        } else {
+            c = QColor(settings()->value(Constants::S_BACKGROUND_PMH, "white").toString());
         }
+        if (c.name()=="#ffffff")
+            return QVariant();
+        c.setAlpha(125);
+        return c;
+    }
     case Qt::DecorationRole :
-        {
-            if (it->isCategory()) {
-                return theme()->icon(it->pmhCategory()->iconName(), Core::ITheme::SmallIcon);
-            }
-            if (!it->icon().isNull())
-                return it->icon();
-            break;
+    {
+        if (it->isCategory()) {
+            return theme()->icon(it->pmhCategory()->iconName(), Core::ITheme::SmallIcon);
         }
+        if (!it->icon().isNull())
+            return it->icon();
+        break;
+    }
     case Qt::SizeHintRole:
     {
         if (it->isCategory()) {
@@ -828,7 +848,7 @@ bool PmhCategoryModel::removeRows(int row, int count, const QModelIndex &parent)
                     base()->updatePmhData(pmh);
                     //base()->updatePmhData(pmh);
                     //if (d->_pmh.contains(pmh))
-                        //d->_pmh.remove(d->_pmh.indexOf(pmh));
+                    //d->_pmh.remove(d->_pmh.indexOf(pmh));
                 }
             }
 
@@ -866,7 +886,7 @@ bool PmhCategoryModel::removeRows(int row, int count, const QModelIndex &parent)
             endRemoveRows();
         }
     }
-//    d->_rootItem->warn();
+    //    d->_rootItem->warn();
     d->_htmlSynthesis.clear();
     return true;
 }
@@ -1181,7 +1201,7 @@ void PmhCategoryModel::addCategory(Category::CategoryItem *cat, int row, const Q
             }
         }
         Q_EMIT layoutChanged();
-//        reset();
+        //        reset();
     }
     d->_htmlSynthesis.clear();
 }
@@ -1228,8 +1248,8 @@ QString PmhCategoryModel::indexToHtml(const QModelIndex &index) const
     int depth = 2;
     while ( idx.parent().isValid() )
     {
-      idx = idx.parent();
-      depth++;
+        idx = idx.parent();
+        depth++;
     }
 
     if (isCategory(index)) {
@@ -1250,8 +1270,9 @@ QString PmhCategoryModel::indexToHtml(const QModelIndex &index) const
         }*/
         html += QString("<button class=\"accordion\">%1</button>")
                 .arg(index.data(Qt::DisplayRole).toString());
-        html += QString("<div class=\"panel\"><p>%1</p></div>")
-                .arg(index.data(Qt::ToolTipRole).toString());
+        if (!index.data(Qt::ToolTipRole).toString().isEmpty())
+            html += QString("<div class=\"panel\"><p>%1</p></div>")
+                    .arg(index.data(Qt::ToolTipRole).toString());
         /*if ((_rowCount-index.row()) == 1) {
             html += QString("</ol>");
         }*/
@@ -1260,7 +1281,7 @@ QString PmhCategoryModel::indexToHtml(const QModelIndex &index) const
         TreeItem *item = d->getItem(index);
         if (!episodeBase()
                 ->getNumberOfEpisodes(item->form()->uuid(),
-                                               item->form()->spec()->equivalentUuid())) {
+                                      item->form()->spec()->equivalentUuid())) {
             return QString();
         }
         activateFormEpisode(index);
@@ -1289,8 +1310,8 @@ QString PmhCategoryModel::synthesis(const QModelIndex &parent) const
     int depth = 2;
     while ( idx.parent().isValid() )
     {
-      idx = idx.parent();
-      depth++;
+        idx = idx.parent();
+        depth++;
     }
 
     if (parent==QModelIndex() || isSynthesis(parent)) {
@@ -1299,70 +1320,70 @@ QString PmhCategoryModel::synthesis(const QModelIndex &parent) const
                                "<html>"
                                "<head>"
                                "<style>"
-                    "button.accordion {"
-                    "   background-color: #eee;"
-                    "   color: #444;"
-                    "   cursor: pointer;"
-                    "    padding: 18px;"
-                    "    width: 100%;"
-                    "    border: none;"
-                    "    text-align: left;"
-                    "    outline: none;"
-                    "    font-size: 15px;"
-                    "    transition: 0.4s;"
-                    "}"
-                    ""
-                    "button.accordion.active, button.accordion:hover {"
-                    "    background-color: #ddd;"
-                    "}"
-                    ""
-                    "button.accordion:after {"
-                    "    content: \"\u2795\";"
-                    "    font-size: 13px;"
-                    "    color: #777;"
-                    "    float: right;"
-                    "    margin-left: 5px;"
-                    "}"
-                    ""
-                    "button.accordion.active:after {"
-                    "    content: \"\u2796\";"
-                    "}"
-                    ""
-                    "div.panel {"
-                    "    padding: 0 18px;"
-                    "    background-color: white;"
-                    "    max-height: 0;"
-                    "    overflow: hidden;"
-                    "    transition: 0.6s ease-in-out;"
-                    "    opacity: 0;"
-                    "}"
+                               "button.accordion {"
+                               "   background-color: #eee;"
+                               "   color: #444;"
+                               "   cursor: pointer;"
+                               "    padding: 18px;"
+                               "    width: 100%;"
+                               "    border: none;"
+                               "    text-align: left;"
+                               "    outline: none;"
+                               "    font-size: 15px;"
+                               "    transition: 0.4s;"
+                               "}"
+                               ""
+                               "button.accordion.active, button.accordion:hover {"
+                               "    background-color: #ddd;"
+                               "}"
+                               ""
+                               "button.accordion:after {"
+                               "    content: \"\u2795\";"
+                               "    font-size: 13px;"
+                               "    color: #777;"
+                               "    float: right;"
+                               "    margin-left: 5px;"
+                               "}"
+                               ""
+                               "button.accordion.active:after {"
+                               "    content: \"\u2796\";"
+                               "}"
+                               ""
+                               "div.panel {"
+                               "    padding: 0 18px;"
+                               "    background-color: white;"
+                               "    max-height: 0;"
+                               "    overflow: hidden;"
+                               "    transition: 0.6s ease-in-out;"
+                               "    opacity: 0;"
+                               "}"
 
-                    "div.panel.show {"
-                    "    opacity: 1;"
-                    "    max-height: 500px;"
-                    "}"
-                    "</style>"
-                    "</head"
-                    "<body>";
+                               "div.panel.show {"
+                               "    opacity: 1;"
+                               "    max-height: 500px;"
+                               "}"
+                               "</style>"
+                               "</head"
+                               "<body>";
             d->_htmlSynthesis += QString("<h1 id=\"pmhtitle\">%1</h1>")
                     .arg(tr("Past Medical History"));
             for(int i=0; i < rowCount(parent); ++i) {
                 d->_htmlSynthesis += indexToHtml(index(i, 0, parent));
             }
             d->_htmlSynthesis +=
-                            "<script>"
-                            "var acc = document.getElementsByClassName(\"accordion\");"
-                            "var i;"
+                    "<script>"
+                    "var acc = document.getElementsByClassName(\"accordion\");"
+                    "var i;"
 
-                            "for (i = 0; i < acc.length; i++) {"
-                            "    acc[i].onclick = function(){"
-                            "        this.classList.toggle(\"active\");"
-                            "        this.nextElementSibling.classList.toggle(\"show\");"
-                            "  }"
-                            "}"
-                            "</script>"
-                            "</body>"
-                            "</html>";
+                    "for (i = 0; i < acc.length; i++) {"
+                    "    acc[i].onclick = function(){"
+                    "        this.classList.toggle(\"active\");"
+                    "        this.nextElementSibling.classList.toggle(\"show\");"
+                    "  }"
+                    "}"
+                    "</script>"
+                    "</body>"
+                    "</html>";
         }
         return d->_htmlSynthesis;
     } else if (isCategory(parent)) {
@@ -1370,51 +1391,51 @@ QString PmhCategoryModel::synthesis(const QModelIndex &parent) const
                       "<html>"
                       "<head>"
                       "<style>"
-           "button.accordion {"
-           "   background-color: #eee;"
-           "   color: #444;"
-           "   cursor: pointer;"
-           "    padding: 18px;"
-           "    width: 100%;"
-           "    border: none;"
-           "    text-align: left;"
-           "    outline: none;"
-           "    font-size: 15px;"
-           "    transition: 0.4s;"
-           "}"
-           ""
-           "button.accordion.active, button.accordion:hover {"
-           "    background-color: #ddd;"
-           "}"
-           ""
-           "button.accordion:after {"
-           "    content: \"\u2795\";"
-           "    font-size: 13px;"
-           "    color: #777;"
-           "    float: right;"
-           "    margin-left: 5px;"
-           "}"
-           ""
-           "button.accordion.active:after {"
-           "    content: \"\u2796\";"
-           "}"
-           ""
-           "div.panel {"
-           "    padding: 0 18px;"
-           "    background-color: white;"
-           "    max-height: 0;"
-           "    overflow: hidden;"
-           "    transition: 0.6s ease-in-out;"
-           "    opacity: 0;"
-           "}"
+                      "button.accordion {"
+                      "   background-color: #eee;"
+                      "   color: #444;"
+                      "   cursor: pointer;"
+                      "    padding: 18px;"
+                      "    width: 100%;"
+                      "    border: none;"
+                      "    text-align: left;"
+                      "    outline: none;"
+                      "    font-size: 15px;"
+                      "    transition: 0.4s;"
+                      "}"
+                      ""
+                      "button.accordion.active, button.accordion:hover {"
+                      "    background-color: #ddd;"
+                      "}"
+                      ""
+                      "button.accordion:after {"
+                      "    content: \"\u2795\";"
+                      "    font-size: 13px;"
+                      "    color: #777;"
+                      "    float: right;"
+                      "    margin-left: 5px;"
+                      "}"
+                      ""
+                      "button.accordion.active:after {"
+                      "    content: \"\u2796\";"
+                      "}"
+                      ""
+                      "div.panel {"
+                      "    padding: 0 18px;"
+                      "    background-color: white;"
+                      "    max-height: 0;"
+                      "    overflow: hidden;"
+                      "    transition: 0.6s ease-in-out;"
+                      "    opacity: 0;"
+                      "}"
 
-           "div.panel.show {"
-           "    opacity: 1;"
-           "    max-height: 500px;"
-           "}"
-           "</style>"
-           "</head>"
-           "<body>";
+                      "div.panel.show {"
+                      "    opacity: 1;"
+                      "    max-height: 500px;"
+                      "}"
+                      "</style>"
+                      "</head>"
+                      "<body>";
         html += QString("<h1 id=\"pmhtitle\">%1</h1><h%2 id=\"pmhcategory%3\">%4</h%2>")
                 .arg(tr("Past Medical History"))
                 .arg(depth)

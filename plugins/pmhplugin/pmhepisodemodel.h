@@ -52,6 +52,7 @@ public:
         IcdLabelStringList,
         IcdXml,
         Contact,
+        Comment,
         EmptyColumn,
         ColumnCount
     };

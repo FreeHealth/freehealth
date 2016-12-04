@@ -120,6 +120,7 @@ QVariant PmhEpisodeModel::data(const QModelIndex &index, int role) const
             case IcdCodeList: return ep->data(PmhEpisodeData::IcdCodeList);
             case IcdLabelStringList : return ep->data(PmhEpisodeData::IcdLabelStringList);
             case IcdXml: return ep->data(PmhEpisodeData::IcdXml);
+            case Comment: return ep->data(PmhEpisodeData::Comment);
             }
             break;
         }
@@ -132,6 +133,7 @@ QVariant PmhEpisodeModel::data(const QModelIndex &index, int role) const
             case Label: return ep->data(PmhEpisodeData::Label);
             case IcdCodeList: return ep->data(PmhEpisodeData::IcdCodeList);
             case IcdLabelStringList : return ep->data(PmhEpisodeData::IcdLabelStringList);
+            case Comment: return ep->data(PmhEpisodeData::Comment);
             default : return QVariant();
             }
             break;
@@ -197,6 +199,7 @@ bool PmhEpisodeModel::setData(const QModelIndex &index, const QVariant &value, i
             case DateEnd: ok = ep->setData(PmhEpisodeData::DateEnd, value); break;
             case Label: ok = ep->setData(PmhEpisodeData::Label, value); break;
             case IcdXml: ok = ep->setData(PmhEpisodeData::IcdXml, value); break;
+            case Comment: ok = ep->setData(PmhEpisodeData::Comment, value); break;
             }
             if (ok)
                 Q_EMIT dataChanged(this->index(index.row(), 0), this->index(index.row(), ColumnCount));
@@ -262,6 +265,7 @@ QVariant PmhEpisodeModel::headerData(int section, Qt::Orientation orientation, i
         case DateEnd: return tr("Ending date");
         case Label: return tr("Label");
         case IcdCodeList: return tr("ICD10 coding");
+        case Comment: return tr("Comment");
         }
     }
     return QVariant();
