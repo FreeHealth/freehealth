@@ -65,7 +65,7 @@ public:
     };
 
     explicit FormContextualWidget(QWidget *parent = 0);
-    ~FormContextualWidget();
+    virtual ~FormContextualWidget();
 
     Core::IContext *context() const;
 
