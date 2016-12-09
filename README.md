@@ -22,7 +22,7 @@ FreeHealth EHR is coded in C++ / Qt5.
 
 Supported OS:
 - GNU/Linux: Debian, Ubuntu
-- Mac OS: 10.9 Mavericks (64 bit), 10.10 Yosemite, 10.11 El Capitan
+- Mac OS: 10.9 Mavericks (64 bit), 10.10 Yosemite, 10.11 El Capitan, 10.12 Sierra
 - Windows: Windows 7 (32 bit & 64 bit), Windows 8, Windows 10
 
 ### Where can I find information about FreeHealth?
