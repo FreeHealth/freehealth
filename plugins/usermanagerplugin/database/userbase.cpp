@@ -125,7 +125,7 @@ UserBase::UserBase(QObject *parent) :
     addField(Table_USERS, USER_ISVIRTUAL,    "ISVIRTUAL",       FieldIsBoolean);
     addField(Table_USERS, USER_LOGIN,        "LOGIN",           FieldIsShortText);
     addField(Table_USERS, USER_PASSWORD,     "PASSWORD",        FieldIsShortText);
-    addField(Table_USERS, USER_LASTLOG,      "LASTLOGIN",       FieldIsTimeStamp,       "0");
+    addField(Table_USERS, USER_LASTLOG,      "LASTLOGIN",       FieldIsTimeStamp,       "NULL");
     addField(Table_USERS, USER_USUALNAME,    "NAME",            FieldIsShortText);
     addField(Table_USERS, USER_OTHERNAMES,   "SECONDNAME",      FieldIsShortText);
     addField(Table_USERS, USER_FIRSTNAME,    "SURNAME",         FieldIsShortText);
@@ -288,7 +288,8 @@ bool UserBase::updateLastloginTypeToTimeStamp()
     switch (settings()->databaseConnector().driver()) {                         
         case Utils::Database::MySQL: {
             if(!Database::modifyMySQLColumnType(Constants::Table_USERS,
-                                                Constants::USER_LASTLOG, "0")) {
+                                                Constants::USER_LASTLOG,
+                                                "NULL")) {
                 return false;
             }
             return true;
@@ -1231,9 +1232,10 @@ QDateTime UserBase::recordLastLoggedIn(const QString &log, const QString &pass)
         where.insert(USER_LOGIN, QString("='%1'").arg(log));                    
         where.insert(USER_PASSWORD, QString("='%1'").arg(pass));                
         QSqlQuery query(DB);                                                    
-        query.prepare(prepareUpdateQuery(Table_USERS, USER_LASTLOG, where));    
-        query.bindValue(0 , "NULL"); // passing NULL will trigger auto-update
-                                   // & set LASTLOGIN field to current UTC time                                              
+        query.prepare(prepareUpdateQuery(Table_USERS, USER_LASTLOG, where));
+        // passing CURRENT_TIMESTAMP will trigger auto-update
+        // & set LASTLOGIN field to current UTC time
+        query.bindValue(0 , "CURRENT_TIMESTAMP");
         if (!query.exec()) {                                                    
             LOG_QUERY_ERROR(query);                                             
             query.finish();                                                     

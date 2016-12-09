@@ -203,7 +203,8 @@ public:
 
     void  setPreferences(const QVariant &val)          { setDynamicDataValue(USER_DATA_PREFERENCES , val); }
 
-    void  addLoginToHistory();
+    // function needs to be rewritten see issue #61
+    //void  addLoginToHistory();
 
     // simplified getters
     int id() const                       { return value(Table_USERS, USER_ID).toInt(); }
