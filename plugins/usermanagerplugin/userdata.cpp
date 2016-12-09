@@ -939,17 +939,23 @@ void UserData::setCryptedPassword(const QVariant &val)
     d->m_PasswordChanged = true;
 }
 
-/** Add the current login to the login history of the user. */
+/**
+ * This function needs to be rewritten, see issue #61
+ * Add the current login to the login history of the user.
+ */
+
+/**
 void UserData::addLoginToHistory()
 {
     setDynamicDataValue(USER_DATA_LOGINHISTORY,
                         QString("%1 %2")
                         .arg(dynamicDataValue(USER_DATA_LOGINHISTORY).toString())
-                        .arg(QCoreApplication::translate("tkUser", "User logged at %1\n")
+                        .arg(QCoreApplication::translate("tkUser", "User logged at %1 \n")
                              .arg(lastLoggedIn().toString(Qt::DefaultLocaleLongDate)))
               );
     setModified(true);
 }
+*/
 
 QString UserData::decryptedLogin() const
 {

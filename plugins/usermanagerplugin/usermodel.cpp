@@ -589,7 +589,10 @@ bool UserModel::setCurrentUser(const QString &clearLog, const QString &clearPass
         // 7. Trace log
         user->setCurrent(true);
         user->setLastLoggedIn(QDateTime::currentDateTime());
-        user->addLoginToHistory();
+        // function addLoginToHistory() is buggy with MySQL 5.7
+        // resulting data is not used by the software
+        // diable this until complete rewrite of login history see issue #61
+        // user->addLoginToHistory();
         if (!userBase()->saveUser(user))
             return false;
     }

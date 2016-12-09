@@ -67,6 +67,7 @@ const char* const MOBILEPHONE       = QT_TRANSLATE_NOOP("tkConstants", "Mobile p
 const char* const DATE_OF_BIRTH               = QT_TRANSLATE_NOOP("tkConstants", "Date of birth");
 const char* const DATE_OF_BIRTH_1             = QT_TRANSLATE_NOOP("tkConstants", "Date of birth: %1");
 const char* const DATE_OF_DEATH               = QT_TRANSLATE_NOOP("tkConstants", "Date of death");
+const char* const IS_PEDIATRIC                = QT_TRANSLATE_NOOP("tkConstants", "Is patient pediatric?");
 const char* const AGE                         = QT_TRANSLATE_NOOP("tkConstants", "Age");
 const char* const AGE_1                       = QT_TRANSLATE_NOOP("tkConstants", "Age: %1");
 const char* const AGE_IN_YEARS                = QT_TRANSLATE_NOOP("tkConstants", "Age in years");

@@ -275,18 +275,6 @@ void PatientSelector::setPatientModel(PatientModel *m)
     setFieldsToShow(d->m_Fields);
 
     d->ui->tableView->horizontalHeader()->setStretchLastSection(false);
-#if QT_VERSION < 0x050000
-    d->ui->tableView->horizontalHeader()->setResizeMode(Core::IPatient::UsualName, QHeaderView::Stretch);
-    d->ui->tableView->horizontalHeader()->setResizeMode(Core::IPatient::OtherNames, QHeaderView::Stretch);
-    d->ui->tableView->horizontalHeader()->setResizeMode(Core::IPatient::Firstname, QHeaderView::Stretch);
-    d->ui->tableView->horizontalHeader()->setResizeMode(Core::IPatient::FullName, QHeaderView::ResizeToContents);
-    d->ui->tableView->horizontalHeader()->setResizeMode(Core::IPatient::IconizedGender, QHeaderView::ResizeToContents);
-    d->ui->tableView->horizontalHeader()->setResizeMode(Core::IPatient::Title, QHeaderView::ResizeToContents);
-    d->ui->tableView->horizontalHeader()->setResizeMode(Core::IPatient::DateOfBirth, QHeaderView::ResizeToContents);
-    d->ui->tableView->horizontalHeader()->setResizeMode(Core::IPatient::FullAddress, QHeaderView::Stretch);
-    d->ui->tableView->horizontalHeader()->setResizeMode(Core::IPatient::PractitionnerLkID, QHeaderView::ResizeToContents);
-#else
-    // Qt5
     d->ui->tableView->horizontalHeader()->setSectionResizeMode(Core::IPatient::UsualName, QHeaderView::Stretch);
     d->ui->tableView->horizontalHeader()->setSectionResizeMode(Core::IPatient::OtherNames, QHeaderView::Stretch);
     d->ui->tableView->horizontalHeader()->setSectionResizeMode(Core::IPatient::Firstname, QHeaderView::Stretch);
@@ -296,7 +284,6 @@ void PatientSelector::setPatientModel(PatientModel *m)
     d->ui->tableView->horizontalHeader()->setSectionResizeMode(Core::IPatient::DateOfBirth, QHeaderView::ResizeToContents);
     d->ui->tableView->horizontalHeader()->setSectionResizeMode(Core::IPatient::FullAddress, QHeaderView::Stretch);
     d->ui->tableView->horizontalHeader()->setSectionResizeMode(Core::IPatient::PractitionnerLkID, QHeaderView::ResizeToContents);
-#endif
 
     d->ui->numberOfPatients->setText(QString::number(m->numberOfFilteredPatients()));
     d->ui->identity->setCurrentPatientModel(m);

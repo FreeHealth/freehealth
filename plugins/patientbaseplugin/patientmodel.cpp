@@ -437,7 +437,7 @@ QVariant PatientModel::data(const QModelIndex &index, int role) const
         case IPatient::Gender:        col = Constants::IDENTITY_GENDER;     break;
         case IPatient::GenderIndex:
             {
-            // TODO: put this in a separate method/class, there is much duplication of gender (de)referencing in FMF
+            // TODO: put this in a separate method/class, there is much duplication of gender (de)referencing
                 const QString &g = d->m_SqlPatient->index(index.row(), Constants::IDENTITY_GENDER).data().toString();
                 if (g=="M")
                     return 0;
@@ -530,8 +530,25 @@ QVariant PatientModel::data(const QModelIndex &index, int role) const
         }
         case IPatient::YearsOld:
         {
+            qDebug() << "case IPatient::YearsOld";
             QModelIndex idx = d->m_SqlPatient->index(index.row(), Constants::IDENTITY_DOB);
             return MedicalUtils::ageYears(d->m_SqlPatient->data(idx).toDate());
+        }
+        case IPatient::IsPediatricToken:
+        {
+            // returns a space character if true, returns an empty string if false
+            QModelIndex idx = d->m_SqlPatient->index(index.row(), Constants::IDENTITY_DOB);
+            bool isPediatric = (MedicalUtils::ageYears(d->m_SqlPatient->data(idx).toDate())
+                    < settings()->value(Patients::Constants::S_PEDIATRICSAGELIMIT, 18).toInt());
+            if (isPediatric)
+                return QString(" ");
+            return QString();
+        }
+        case IPatient::IsPediatric:
+        {
+            QModelIndex idx = d->m_SqlPatient->index(index.row(), Constants::IDENTITY_DOB);
+            return (MedicalUtils::ageYears(d->m_SqlPatient->data(idx).toDate())
+                    < settings()->value(Patients::Constants::S_PEDIATRICSAGELIMIT, 18).toInt());
         }
         case IPatient::IconizedGender: return d->iconizedGender(index);
         case IPatient::GenderPixmap: return d->iconizedGender(index).pixmap(16,16);

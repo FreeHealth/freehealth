@@ -49,6 +49,7 @@ class FormViewDelegate : public QStyledItemDelegate
     Q_OBJECT
 public:
     FormViewDelegate(QObject *parent = 0);
+    virtual ~FormViewDelegate() {};
     void setFormTreeModel(FormTreeModel *model);
 
     void paint(QPainter *painter, const QStyleOptionViewItem &option,

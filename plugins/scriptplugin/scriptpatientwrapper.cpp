@@ -95,6 +95,10 @@ int ScriptPatientWrapper::yearsOld() const
 {
     return patient()->data(Core::IPatient::YearsOld).toInt();
 }
+bool ScriptPatientWrapper::isPediatric() const
+{
+    return patient()->data(Core::IPatient::IsPediatric).toBool();
+}
 bool ScriptPatientWrapper::isMale() const
 {
     return (patient()->data(Core::IPatient::GenderIndex).toInt()==0);
