@@ -55,7 +55,7 @@ protected:
     bool initialize();
     
 public:
-    ~PatientFormItemDataWrapper();
+    virtual ~PatientFormItemDataWrapper();
     bool isInitialized() const;
 
     bool isDataAvailable(int ref) const;
