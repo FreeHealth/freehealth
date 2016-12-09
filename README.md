@@ -49,7 +49,7 @@ Your money will speed up the development process
 
 [1]: copyright © 2016 Jerome Pinguet
 [2]: Copyright (C) 2008-2015 by Eric MAEKER https://freemedforms.com
-[Download FreeHealth EHR]: https://freehealth.io/en/downloads
+[Download FreeHealth EHR]: https://freehealth.io/en/download
 [website]: https://freehealth.io/
 [GitHub]: https://github.com/FreeHealth/freehealth
 [Build instructions]: https://freehealth.io/en/code_doc
