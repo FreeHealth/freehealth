@@ -50,7 +50,7 @@ class FormExporter : public Core::IPatientDataExporter
 
 public:
     explicit FormExporter(bool identityOnly, QObject *parent = 0);
-    ~FormExporter();
+    virtual ~FormExporter();
     bool initialize();
 
     void setIdentityOnly(bool identityOnly);
