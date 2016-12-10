@@ -97,10 +97,10 @@ public:
             delete m_SqlPhoto;
             m_SqlPhoto = 0;
         }
-//        if (m_PatientWrapper) {
-//            delete m_PatientWrapper;
-//            m_PatientWrapper = 0;
-//        }
+        //        if (m_PatientWrapper) {
+        //            delete m_PatientWrapper;
+        //            m_PatientWrapper = 0;
+        //        }
     }
 
     void refreshFilter()
@@ -111,7 +111,7 @@ public:
             where.insert(Constants::IDENTITY_ISVIRTUAL, "=0");
 
         // All users share the same patients
-//        where.insert(Constants::IDENTITY_LK_TOPRACT_LKID, QString("IN (%1)").arg(m_LkIds));
+        //        where.insert(Constants::IDENTITY_LK_TOPRACT_LKID, QString("IN (%1)").arg(m_LkIds));
         where.insert(Constants::IDENTITY_ISACTIVE, "=1");
 
         QString filter = patientBase()->getWhereClause(Constants::Table_IDENT, where);
@@ -237,13 +237,13 @@ private:
 } // end namespace Patients
 
 PatientModel::PatientModel(QObject *parent) :
-        QAbstractTableModel(parent), d(new Internal::PatientModelPrivate(this))
+    QAbstractTableModel(parent), d(new Internal::PatientModelPrivate(this))
 {
     setObjectName("PatientModel");
     onCoreDatabaseServerChanged();
     d->m_RefreshModelOnCoreDatabaseServerChanged = true;
     connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
-//    connect(d->m_SqlPatient, SIGNAL(primeInsert(int,QSqlRecord&)), this, SLOT(onPrimeInsert(int,QSqlRecord&)));
+    //    connect(d->m_SqlPatient, SIGNAL(primeInsert(int,QSqlRecord&)), this, SLOT(onPrimeInsert(int,QSqlRecord&)));
 }
 
 PatientModel::~PatientModel()
@@ -263,7 +263,7 @@ void PatientModel::changeUserUuid()
         d->m_LkIds.append(QString::number(i) + ",");
     d->m_LkIds.chop(1);
 
-//    qWarning() << Q_FUNC_INFO << d->m_LkIds << userModel()->practionnerLkIds(uuid);
+    //    qWarning() << Q_FUNC_INFO << d->m_LkIds << userModel()->practionnerLkIds(uuid);
 
     d->refreshFilter();
 }
@@ -436,17 +436,17 @@ QVariant PatientModel::data(const QModelIndex &index, int role) const
         case IPatient::Firstname:     col = Constants::IDENTITY_FIRSTNAME;  break;
         case IPatient::Gender:        col = Constants::IDENTITY_GENDER;     break;
         case IPatient::GenderIndex:
-            {
+        {
             // TODO: put this in a separate method/class, there is much duplication of gender (de)referencing
-                const QString &g = d->m_SqlPatient->index(index.row(), Constants::IDENTITY_GENDER).data().toString();
-                if (g=="M")
-                    return 0;
-                if (g=="F")
-                    return 1;
-                if (g=="H")
-                    return 2;
-                return -1;
-            }
+            const QString &g = d->m_SqlPatient->index(index.row(), Constants::IDENTITY_GENDER).data().toString();
+            if (g=="M")
+                return 0;
+            if (g=="F")
+                return 1;
+            if (g=="H")
+                return 2;
+            return -1;
+        }
         case IPatient::DateOfBirth:
         {
             QModelIndex idx = d->m_SqlPatient->index(index.row(), Constants::IDENTITY_DOB);
@@ -539,7 +539,7 @@ QVariant PatientModel::data(const QModelIndex &index, int role) const
             // returns a space character if true, returns an empty string if false
             QModelIndex idx = d->m_SqlPatient->index(index.row(), Constants::IDENTITY_DOB);
             bool isPediatric = (MedicalUtils::ageYears(d->m_SqlPatient->data(idx).toDate())
-                    < settings()->value(Patients::Constants::S_PEDIATRICSAGELIMIT, 18).toInt());
+                                < settings()->value(Patients::Constants::S_PEDIATRICSAGELIMIT, 18).toInt());
             if (isPediatric)
                 return QString(" ");
             return QString();
@@ -729,43 +729,43 @@ bool PatientModel::setData(const QModelIndex &index, const QVariant &value, int 
         case IPatient::Faxes:         col = Constants::IDENTITY_FAXES;            break;
         case IPatient::TitleIndex:    col = Constants::IDENTITY_TITLE;            break;
         case IPatient::Title:
-            {
-                QString t = value.toString();
-                int id = -1;
-                col = Constants::IDENTITY_TITLE;
-                if (t == tkTr(Trans::Constants::MISTER)) {
-                    id = Trans::Constants::Mister;
-                } else if (t == tkTr(Trans::Constants::MISS)) {
-                    id = Trans::Constants::Miss;
-                } else if (t == tkTr(Trans::Constants::MADAM)) {
-                    id = Trans::Constants::Madam;
-                } else if (t == tkTr(Trans::Constants::DOCTOR)) {
-                    id = Trans::Constants::Doctor;
-                } else if (t == tkTr(Trans::Constants::PROFESSOR)) {
-                    id = Trans::Constants::Professor;
-                } else if (t == tkTr(Trans::Constants::CAPTAIN)) {
-                    id = Trans::Constants::Captain;
-                }
-                if (id != -1) {
-                    if (d->m_SqlPatient->data(d->m_SqlPatient->index(index.row(), col)).toInt() == id)
-                        return true;
-
-                    d->m_SqlPatient->setData(d->m_SqlPatient->index(index.row(), col), id, role);
-                    colsToEmit << Core::IPatient::TitleIndex << Core::IPatient::FullName;
-                }
-                col = -1;
-                break;
+        {
+            QString t = value.toString();
+            int id = -1;
+            col = Constants::IDENTITY_TITLE;
+            if (t == tkTr(Trans::Constants::MISTER)) {
+                id = Trans::Constants::Mister;
+            } else if (t == tkTr(Trans::Constants::MISS)) {
+                id = Trans::Constants::Miss;
+            } else if (t == tkTr(Trans::Constants::MADAM)) {
+                id = Trans::Constants::Madam;
+            } else if (t == tkTr(Trans::Constants::DOCTOR)) {
+                id = Trans::Constants::Doctor;
+            } else if (t == tkTr(Trans::Constants::PROFESSOR)) {
+                id = Trans::Constants::Professor;
+            } else if (t == tkTr(Trans::Constants::CAPTAIN)) {
+                id = Trans::Constants::Captain;
             }
+            if (id != -1) {
+                if (d->m_SqlPatient->data(d->m_SqlPatient->index(index.row(), col)).toInt() == id)
+                    return true;
+
+                d->m_SqlPatient->setData(d->m_SqlPatient->index(index.row(), col), id, role);
+                colsToEmit << Core::IPatient::TitleIndex << Core::IPatient::FullName;
+            }
+            col = -1;
+            break;
+        }
         case IPatient::Photo_32x32:
         case IPatient::Photo_64x64:
-            {
-                QPixmap pix = value.value<QPixmap>();
-                QString patientUid = d->m_SqlPatient->index(index.row(), Constants::IDENTITY_UID).data().toString();
-                d->savePatientPhoto(pix, patientUid);
-                col = -1;
-                colsToEmit << Core::IPatient::Photo_32x32 << Core::IPatient::Photo_64x64;
-                break;
-            }
+        {
+            QPixmap pix = value.value<QPixmap>();
+            QString patientUid = d->m_SqlPatient->index(index.row(), Constants::IDENTITY_UID).data().toString();
+            d->savePatientPhoto(pix, patientUid);
+            col = -1;
+            colsToEmit << Core::IPatient::Photo_32x32 << Core::IPatient::Photo_64x64;
+            break;
+        }
         }
 
         if (col != -1) {
@@ -797,67 +797,67 @@ void PatientModel::setFilter(const QString &name, const QString &firstname, cons
     // Calculate new filter
     switch (on) {
     case FilterOnFullName :
-        {
-            // WHERE (USUALNAME || OTHERNAMES || SURNAME LIKE '%') OR (USUALNAME LIKE '%')
-            const QString &nameField = patientBase()->fieldName(Constants::Table_IDENT, Constants::IDENTITY_USUALNAME);
-            const QString &secondField = patientBase()->fieldName(Constants::Table_IDENT, Constants::IDENTITY_OTHERNAMES);
-            const QString &surField = patientBase()->fieldName(Constants::Table_IDENT, Constants::IDENTITY_FIRSTNAME);
-            d->m_ExtraFilter.clear();
-//            d->m_ExtraFilter =  name + " || ";
-//            d->m_ExtraFilter += second + " || ";
-//            d->m_ExtraFilter += sur + " ";
-            d->m_ExtraFilter += QString("((%1 LIKE '%2%' ").arg(nameField, name);
-            d->m_ExtraFilter += QString("OR %1 LIKE '%2%') ").arg(secondField, name);
-            if (!firstname.isEmpty())
-                d->m_ExtraFilter += QString("AND %1 LIKE '%2%')").arg(surField, firstname);
-            else
-                d->m_ExtraFilter += ")";
+    {
+        // WHERE (USUALNAME || OTHERNAMES || SURNAME LIKE '%') OR (USUALNAME LIKE '%')
+        const QString &nameField = patientBase()->fieldName(Constants::Table_IDENT, Constants::IDENTITY_USUALNAME);
+        const QString &secondField = patientBase()->fieldName(Constants::Table_IDENT, Constants::IDENTITY_OTHERNAMES);
+        const QString &surField = patientBase()->fieldName(Constants::Table_IDENT, Constants::IDENTITY_FIRSTNAME);
+        d->m_ExtraFilter.clear();
+        //            d->m_ExtraFilter =  name + " || ";
+        //            d->m_ExtraFilter += second + " || ";
+        //            d->m_ExtraFilter += sur + " ";
+        d->m_ExtraFilter += QString("((%1 LIKE '%2%' ").arg(nameField, name);
+        d->m_ExtraFilter += QString("OR %1 LIKE '%2%') ").arg(secondField, name);
+        if (!firstname.isEmpty())
+            d->m_ExtraFilter += QString("AND %1 LIKE '%2%')").arg(surField, firstname);
+        else
+            d->m_ExtraFilter += ")";
 
-            // OR ...
-//            QStringList splitters;
-//            if (filter.contains(" ")) {
-//                splitters << " ";
-//            }
-//            if (filter.contains(";")) {
-//                splitters << ";";
-//            }
-//            if (filter.contains(",")) {
-//                splitters << ",";
-//            }
-//            foreach(const QString &s, splitters) {
-//                foreach(const QString &f, filter.split(s, QString::SkipEmptyParts)) {
-//                    QString like = QString(" LIKE '%1%'").arg(f);
-//                    d->m_ExtraFilter += QString(" OR (%1)").arg(name + like);
-//                    d->m_ExtraFilter += QString(" OR (%1)").arg(second + like);
-//                    d->m_ExtraFilter += QString(" OR (%1)").arg(sur + like);
-//                }
-//            }
-            break;
-        }
+        // OR ...
+        //            QStringList splitters;
+        //            if (filter.contains(" ")) {
+        //                splitters << " ";
+        //            }
+        //            if (filter.contains(";")) {
+        //                splitters << ";";
+        //            }
+        //            if (filter.contains(",")) {
+        //                splitters << ",";
+        //            }
+        //            foreach(const QString &s, splitters) {
+        //                foreach(const QString &f, filter.split(s, QString::SkipEmptyParts)) {
+        //                    QString like = QString(" LIKE '%1%'").arg(f);
+        //                    d->m_ExtraFilter += QString(" OR (%1)").arg(name + like);
+        //                    d->m_ExtraFilter += QString(" OR (%1)").arg(second + like);
+        //                    d->m_ExtraFilter += QString(" OR (%1)").arg(sur + like);
+        //                }
+        //            }
+        break;
+    }
     case FilterOnName :
-        {
-            // WHERE NAME LIKE '%'
-            d->m_ExtraFilter.clear();
-            where.insert(Constants::IDENTITY_USUALNAME, QString("LIKE '%%1%'").arg(name));
-            d->m_ExtraFilter = patientBase()->getWhereClause(Constants::Table_IDENT, where);
-            break;
-        }
+    {
+        // WHERE NAME LIKE '%'
+        d->m_ExtraFilter.clear();
+        where.insert(Constants::IDENTITY_USUALNAME, QString("LIKE '%%1%'").arg(name));
+        d->m_ExtraFilter = patientBase()->getWhereClause(Constants::Table_IDENT, where);
+        break;
+    }
     case FilterOnCity:
-        {
-//            // WHERE CITY LIKE '%'
-//            d->m_ExtraFilter.clear();
-//            d->m_ExtraFilter = patientBase()->fieldName(Constants::Table_IDENT, Constants::IDENTITY_ADDRESS_CITY) + " ";
-//            d->m_ExtraFilter += QString("LIKE '%%1%'").arg(filter);
-            break;
-        }
+    {
+        //            // WHERE CITY LIKE '%'
+        //            d->m_ExtraFilter.clear();
+        //            d->m_ExtraFilter = patientBase()->fieldName(Constants::Table_IDENT, Constants::IDENTITY_ADDRESS_CITY) + " ";
+        //            d->m_ExtraFilter += QString("LIKE '%%1%'").arg(filter);
+        break;
+    }
     case FilterOnUuid:
-        {
-            // WHERE PATIENT_UID='xxxx'
-            d->m_ExtraFilter.clear();
-            where.insert(Constants::IDENTITY_UID, QString("='%1'").arg(uuid));
-            d->m_ExtraFilter = patientBase()->getWhereClause(Constants::Table_IDENT, where);
-            break;
-        }
+    {
+        // WHERE PATIENT_UID='xxxx'
+        d->m_ExtraFilter.clear();
+        where.insert(Constants::IDENTITY_UID, QString("='%1'").arg(uuid));
+        d->m_ExtraFilter = patientBase()->getWhereClause(Constants::Table_IDENT, where);
+        break;
+    }
     }
     if (saveFilter != d->m_ExtraFilter)
         d->refreshFilter();
@@ -889,7 +889,7 @@ void PatientModel::emitPatientCreationOnSubmit(bool state)
  */
 bool PatientModel::insertRows(int row, int count, const QModelIndex &parent)
 {
-//    qWarning() << "PatientModel::insertRows" << row << count << parent;
+    //    qWarning() << "PatientModel::insertRows" << row << count << parent;
     bool ok = true;
     beginInsertRows(parent, row, row+count);
     for(int i=0; i < count; ++i) {
@@ -938,7 +938,7 @@ bool PatientModel::removeRows(int row, int count, const QModelIndex &parent)
     Q_UNUSED(row);
     Q_UNUSED(count);
     Q_UNUSED(parent);
-//    qWarning() << "PatientModel::removeRows" << row << count << parent;
+    //    qWarning() << "PatientModel::removeRows" << row << count << parent;
     return true;
 }
 
@@ -958,23 +958,9 @@ bool PatientModel::canFetchMore(const QModelIndex &parent) const
 bool PatientModel::submit()
 {
     // Nothing to do ?
-//#if QT_VERSION >= 0x05000
-//    if (!d->m_SqlPatient->isDirty())
-//        return true;
-//#else
-//    bool isDirty = false;
-//    for(int i = 0; i < d->m_SqlPatient->rowCount(); ++i) {
-//        for(int j = 0; j < d->m_SqlPatient->columnCount(); ++j) {
-//            QModelIndex index = d->m_SqlPatient->index(i, j);
-//            if (d->m_SqlPatient->isDirty(index)) {
-//                isDirty = true;
-//                break;
-//            }
-//        }
-//    }
-//    if (!isDirty)
-//        return true;
-//#endif
+    //    if (!d->m_SqlPatient->isDirty())
+    //        return true;
+
     // Submit the model to the database
     bool ok = d->m_SqlPatient->submitAll();
     if (!ok && d->m_SqlPatient->lastError().number() != -1) {

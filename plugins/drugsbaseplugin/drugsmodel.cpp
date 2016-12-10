@@ -993,11 +993,7 @@ QString DrugsModel::getFullPrescription(const IDrug *drug, bool toHtml, const QS
 
 Qt::DropActions DrugsModel::supportedDropActions() const
 {
-#if QT_VERSION >= 0x040600
     return Qt::CopyAction;
-#else
-    return Qt::MoveAction | Qt::CopyAction;
-#endif
 }
 
 QStringList DrugsModel::mimeTypes() const

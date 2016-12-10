@@ -58,12 +58,7 @@
 #include <QTimer>
 #include <QStandardItemModel>
 #include <QSqlQueryModel>
-
-#if QT_VERSION < 0x050000
-#include <qtconcurrentrun.h>
-#else
 #include <QtConcurrent/QtConcurrent>
-#endif
 
 #include <QFuture>
 #include <QFutureWatcher>

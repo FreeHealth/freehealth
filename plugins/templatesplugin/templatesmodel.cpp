@@ -796,10 +796,7 @@ TemplatesModel::TemplatesModel(QObject *parent) :
 {
     setObjectName("TemplatesModel");
     d->setupModelData();
-    // FIXME: Qt5 porting: CHECK THIS -> setSupportedDragActions(Qt::CopyAction | Qt::MoveAction);
-#if QT_VERSION < 0x050000
-    setSupportedDragActions(Qt::CopyAction | Qt::MoveAction);
-#endif
+    // TODO FIXME: Qt5 porting: CHECK THIS -> setSupportedDragActions(Qt::CopyAction | Qt::MoveAction);
     connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
 }
 

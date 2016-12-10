@@ -87,16 +87,8 @@ PluginView::PluginView(PluginManager *manager, QWidget *parent)
 {
     m_ui->setupUi(this);
     QHeaderView *header = m_ui->categoryWidget->header();
-
-#if QT_VERSION < 0x050000
-    header->setResizeMode(0, QHeaderView::ResizeToContents);
-    header->setResizeMode(2, QHeaderView::ResizeToContents);
-#else
-    // Qt5
     header->setSectionResizeMode(0, QHeaderView::ResizeToContents);
     header->setSectionResizeMode(2, QHeaderView::ResizeToContents);
-#endif
-
     m_okIcon = QIcon(QLatin1String(":/extensionsystem/images/ok.png"));
     m_errorIcon = QIcon(QLatin1String(":/extensionsystem/images/error.png"));
     m_notLoadedIcon = QIcon(QLatin1String(":/extensionsystem/images/notloaded.png"));

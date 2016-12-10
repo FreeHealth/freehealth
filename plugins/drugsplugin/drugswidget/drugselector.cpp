@@ -302,12 +302,7 @@ void DrugSelector::updateDrugsViewColumns()
     drugsView->setColumnHidden(DrugsDB::GlobalDrugsModel::Forms , !settings()->value(DrugsDB::Constants::S_SELECTOR_SHOWFORM).toBool());
     drugsView->setColumnHidden(DrugsDB::GlobalDrugsModel::Strength , !settings()->value(DrugsDB::Constants::S_SELECTOR_SHOWSTRENGTH).toBool());
     drugsView->horizontalHeader()->setStretchLastSection(false);
-#if QT_VERSION < 0x050000
-    drugsView->horizontalHeader()->setResizeMode(DrugsDB::GlobalDrugsModel::BrandName, QHeaderView::Stretch);
-#else
-    // Qt5
     drugsView->horizontalHeader()->setSectionResizeMode(DrugsDB::GlobalDrugsModel::BrandName, QHeaderView::Stretch);
-#endif
 }
 
 /**
@@ -335,12 +330,7 @@ void DrugSelector::createINNModelView()
 
     //InnView->setModel(m_InnModel);
     InnView->header()->setStretchLastSection(false);
-#if QT_VERSION < 0x050000
-    InnView->header()->setResizeMode(0, QHeaderView::Stretch);
-#else
-    // Qt5
     InnView->header()->setSectionResizeMode(0, QHeaderView::Stretch);
-#endif
     InnView->hide();
 }
 

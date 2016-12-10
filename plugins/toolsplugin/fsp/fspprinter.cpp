@@ -40,17 +40,9 @@
 
 #include <utils/printaxishelper.h>
 #include <translationutils/constants.h>
-
-#if QT_VERSION < 0x050000
-#include <QPrinter>
-#include <QPrinterInfo>
-#include <QPrintDialog>
-#else
 #include <QtPrintSupport/QPrinter>
 #include <QtPrintSupport/QPrinterInfo>                                          
 #include <QtPrintSupport/QPrintDialog>                                          
-#endif 
-
 #include <QPainter>
 #include <QPixmap>
 

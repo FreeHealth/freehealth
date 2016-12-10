@@ -90,7 +90,6 @@ QString PasswordCrypter::cryptPassword(const QString &toCrypt, PasswordCrypter::
     switch (algo) {
     case SHA1:
         break;
-#if (QT_VERSION >= 0x050000)
     case SHA256:
         qch_algo = QCryptographicHash::Sha256;
         prefix = "sha256";
@@ -99,8 +98,6 @@ QString PasswordCrypter::cryptPassword(const QString &toCrypt, PasswordCrypter::
         qch_algo = QCryptographicHash::Sha512;
         prefix = "sha512";
         break;
-#endif
-#if (QT_VERSION >= 0x050100)
     case SHA3_256:
         qch_algo = QCryptographicHash::Sha3_256;
         prefix = "sha3-256";
@@ -109,7 +106,6 @@ QString PasswordCrypter::cryptPassword(const QString &toCrypt, PasswordCrypter::
         qch_algo = QCryptographicHash::Sha3_512;
         prefix = "sha3-512";
         break;
-#endif
     default: return QString::null;
     }
     QByteArray crypt = QCryptographicHash::hash(toCrypt.toUtf8(), qch_algo);
@@ -135,18 +131,15 @@ PasswordCrypter::Algorithm PasswordCrypter::extractHashAlgorithm(const QString &
     QString prefix = cryptedBase64.left(cryptedBase64.indexOf(":"));
     if (prefix == "sha1")
         return SHA1;
-#if (QT_VERSION >= 0x050000)
+
     else if (prefix == "sha256")
         return SHA256;
     else if (prefix == "sha512")
         return SHA512;
-#endif
-#if (QT_VERSION >= 0x050100)
     else if (prefix == "sha3-256")
         return SHA3_256;
     else if (prefix == "sha3-512")
         return SHA3_512;
-#endif
     return ERROR;
 }
 

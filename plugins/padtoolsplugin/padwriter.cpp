@@ -246,12 +246,7 @@ public:
             ui->treeView->setColumnHidden(i, true);
         ui->treeView->setColumnHidden(Constants::TokenModel_HtmlLabelColumn, false);
         ui->treeView->setUniformRowHeights(false);
-    #if QT_VERSION < 0x050000
-        ui->treeView->header()->setResizeMode(Constants::TokenModel_HtmlLabelColumn, QHeaderView::Stretch);
-    #else
-        // Qt5
         ui->treeView->header()->setSectionResizeMode(Constants::TokenModel_HtmlLabelColumn, QHeaderView::Stretch);
-    #endif
         QObject::connect(_filteredTokenModel, SIGNAL(modelReset()), q, SLOT(expandTokenTreeView()));
     }
 

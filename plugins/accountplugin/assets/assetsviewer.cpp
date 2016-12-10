@@ -123,18 +123,9 @@ void AssetsViewer::showAssets()
     ui->tableView->setSelectionMode(QAbstractItemView::SingleSelection);
     ui->tableView->setEditTriggers(QAbstractItemView::SelectedClicked);
     ui->tableView->setSortingEnabled(true);
-
-#if QT_VERSION < 0x050000
-    ui->tableView->horizontalHeader()->setResizeMode(QHeaderView::Interactive);
-    ui->tableView->horizontalHeader()->setResizeMode(QHeaderView::ResizeToContents);
-    ui->tableView->verticalHeader()  ->setResizeMode(QHeaderView::Stretch);
-#else
-    // Qt5
     ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Interactive);
     ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
     ui->tableView->verticalHeader()  ->setSectionResizeMode(QHeaderView::Stretch);
-#endif
-
     ui->tableView->horizontalHeader()->setCascadingSectionResizes (true);
     ui->tableView->horizontalHeader()->setStretchLastSection(true);
     ui->tableView->setColumnHidden(ASSETS_ID,true);
