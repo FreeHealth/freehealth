@@ -245,6 +245,7 @@ BaseEditableStringList::BaseEditableStringList(Form::FormItem *formItem, QWidget
     m_StringListView->setObjectName("StringListView_" + m_FormItem->uuid());
     m_StringListView->setAlternatingRowColors(true);
     m_StringListView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    m_StringListView->setAcceptDrops(true);
 
     Views::StringListModel *model = new Views::StringListModel(this, true, false);
     m_StringListView->setModel(model);

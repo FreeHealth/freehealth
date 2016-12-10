@@ -16,8 +16,8 @@
 
     <!-- Translatable values -->
     <license>GPLv3</license>
-    <description lang="xx">Lab tests prescription</description>
-    <description lang="fr">Prescription d'analyse biologique</description>
+    <description lang="xx">Lab tests prescription v2</description>
+    <description lang="fr">Prescription d'analyse biologique v2</description>
     <description lang="de">Laboranforderungen</description>
     <category lang="xx">Generic tools</category>
     <category lang="fr">Outils généraux</category>
@@ -59,7 +59,7 @@
 
   </formdescription>
 
-  <MedForm name="Subs::Tools::LabTests" uifilename="./ui/xx/main.ui">
+  <MedForm name="Subs::Tools::LabTests::2" uifilename="./ui/xx/main.ui">
     <label lang="xx">Lab tests prescription</label>
     <label lang="fr">Prescription d'analyse biologique</label>
     <label lang="de">Laboranforderungen</label>
@@ -612,6 +612,16 @@
             </Item>
 
         </Item>
+        <Item name="LongText" type="longtext">
+              <uilink widget="plainTextEdit"/>
+              <label lang="xx">This a simple text edit without complex formatting</label>
+              <label lang="fr">Exemple de zone de saisie textuelle brute et multi-ligne</label>
+              <value>
+                <default lang="xx">The default value</default>
+                <default lang="fr">La valeur par défaut</default>
+              </value>
+         </Item>
+
 
   </MedForm>
 
