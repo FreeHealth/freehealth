@@ -896,7 +896,6 @@ QByteArray fileSha1(const QString &fileName)
     return QByteArray();
 }
 
-#if QT_VERSION >= 0x050000
 /** \brief Returns the SHA256 checksum of a file. */
 QByteArray fileSha256(const QString &fileName)
 {
@@ -908,7 +907,6 @@ QByteArray fileSha256(const QString &fileName)
     }
     return QByteArray();
 }
-#endif
 
 QString humanReadableFileSize(qint64 size)
 {

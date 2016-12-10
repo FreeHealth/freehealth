@@ -136,7 +136,7 @@ enum { debugLeaks = 0 };
     invokable methods of the "provider" object in the object pool.
 
     The \c{ExtensionSystem::invoke} function template encapsulates
-    {ExtensionSystem::Invoker} construction for the common case where 
+    {ExtensionSystem::Invoker} construction for the common case where
     the success of the call is not checked.
 
     \code
@@ -574,9 +574,9 @@ void PluginManager::remoteArguments(const QString &serializedArgument)
     Returns if there was an error.
  */
 bool PluginManager::parseOptions(const QStringList &args,
-    const QMap<QString, bool> &appOptions,
-    QMap<QString, QString> *foundAppOptions,
-    QString *errorString)
+                                 const QMap<QString, bool> &appOptions,
+                                 QMap<QString, QString> *foundAppOptions,
+                                 QString *errorString)
 {
     OptionsParser options(args, appOptions, foundAppOptions, errorString, d);
     return options.parse();
@@ -675,21 +675,11 @@ void PluginManager::startTests()
         methods.append("arg0");
         // We only want slots starting with "test"
         for (int i = mo->methodOffset(); i < mo->methodCount(); ++i) {
-#if QT_VERSION < 0x050000
-            // Qt4
-            if (QByteArray(mo->method(i).signature()).startsWith("test") &&
-                !QByteArray(mo->method(i).signature()).endsWith("_data()")) {
-                QString method = QString::fromLatin1(mo->method(i).signature());
-                methods.append(method.left(method.size()-2));
-            }
-#else
-            // Qt5
             if (QByteArray(mo->method(i).methodSignature()).startsWith("test") &&
-                !QByteArray(mo->method(i).methodSignature()).endsWith("_data()")) {
+                    !QByteArray(mo->method(i).methodSignature()).endsWith("_data()")) {
                 QString method = QString::fromLatin1(mo->method(i).methodSignature());
                 methods.append(method.left(method.size()-2));
             }
-#endif
         }
         // Don't run QTest::qExec with only one argument, that'd run
         // *all* slots as tests.
@@ -716,14 +706,14 @@ bool PluginManager::runningTests() const
  */
 QString PluginManager::testDataDirectory() const
 {
-//    QByteArray ba = qgetenv("QTCREATOR_TEST_DIR");
-//    QString s = QString::fromLocal8Bit(ba.constData(), ba.size());
-//    if (s.isEmpty()) {
-//        s = IDE_TEST_DIR;
-//        s.append("/tests");
-//    }
-//    s = QDir::cleanPath(s);
-//    return s;
+    //    QByteArray ba = qgetenv("QTCREATOR_TEST_DIR");
+    //    QString s = QString::fromLocal8Bit(ba.constData(), ba.size());
+    //    if (s.isEmpty()) {
+    //        s = IDE_TEST_DIR;
+    //        s.append("/tests");
+    //    }
+    //    s = QDir::cleanPath(s);
+    //    return s;
     return QString();
 }
 
@@ -951,7 +941,7 @@ void PluginManagerPrivate::removeObject(QObject *obj)
 
     if (!allObjects.contains(obj)) {
         qWarning() << "PluginManagerPrivate::removeObject(): object not in list:"
-            << obj << obj->objectName();
+                   << obj << obj->objectName();
         return;
     }
     if (debugLeaks)
@@ -1042,7 +1032,7 @@ QList<PluginSpec *> PluginManagerPrivate::loadQueue()
     \internal
 */
 bool PluginManagerPrivate::loadQueue(PluginSpec *spec, QList<PluginSpec *> &queue,
-        QList<PluginSpec *> &circularityCheckQueue)
+                                     QList<PluginSpec *> &circularityCheckQueue)
 {
     if (queue.contains(spec))
         return true;
@@ -1053,7 +1043,7 @@ bool PluginManagerPrivate::loadQueue(PluginSpec *spec, QList<PluginSpec *> &queu
         int index = circularityCheckQueue.indexOf(spec);
         for (int i = index; i < circularityCheckQueue.size(); ++i) {
             spec->d->errorString.append(PluginManager::tr("%1(%2) depends on\n")
-                .arg(circularityCheckQueue.at(i)->name()).arg(circularityCheckQueue.at(i)->version()));
+                                        .arg(circularityCheckQueue.at(i)->name()).arg(circularityCheckQueue.at(i)->version()));
         }
         spec->d->errorString.append(PluginManager::tr("%1(%2)").arg(spec->name()).arg(spec->version()));
         return false;
@@ -1070,7 +1060,7 @@ bool PluginManagerPrivate::loadQueue(PluginSpec *spec, QList<PluginSpec *> &queu
         if (!loadQueue(depSpec, queue, circularityCheckQueue)) {
             spec->d->hasError = true;
             spec->d->errorString =
-                PluginManager::tr("Cannot load plugin because dependency failed to load: %1(%2)\nReason: %3")
+                    PluginManager::tr("Cannot load plugin because dependency failed to load: %1(%2)\nReason: %3")
                     .arg(depSpec->name()).arg(depSpec->version()).arg(depSpec->errorString());
             return false;
         }
@@ -1117,7 +1107,7 @@ void PluginManagerPrivate::loadPlugin(PluginSpec *spec, PluginSpec::State destSt
         if (depSpec->state() != destState) {
             spec->d->hasError = true;
             spec->d->errorString =
-                PluginManager::tr("Cannot load plugin because dependency failed to load: %1(%2)\nReason: %3")
+                    PluginManager::tr("Cannot load plugin because dependency failed to load: %1(%2)\nReason: %3")
                     .arg(depSpec->name()).arg(depSpec->version()).arg(depSpec->errorString());
             return;
         }
@@ -1224,7 +1214,7 @@ void PluginManagerPrivate::resolveDependencies()
     }
 }
 
- // Look in argument descriptions of the specs for the option.
+// Look in argument descriptions of the specs for the option.
 PluginSpec *PluginManagerPrivate::pluginForOption(const QString &option, bool *requiresArgument) const
 {
     // Look in the plugins for an option

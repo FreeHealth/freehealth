@@ -208,11 +208,7 @@ void MainWindowActionHandler::createGeneralActions(const int actions)
         a = aGeneralSaveAs = new QAction(this);
         a->setIcon(theme()->icon(Constants::ICONSAVEAS));
         cmd = actionManager()->registerAction(a, Constants::A_FILE_SAVEAS, ctx);
-#if QT_VERSION >= 0x040500
         cmd->setDefaultKeySequence(QKeySequence::SaveAs);
-#else
-        cmd->setDefaultKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_S);
-#endif
         cmd->setTranslations(Trans::Constants::FILESAVEAS_TEXT );
         menu->addAction(cmd, group);
     }
@@ -711,11 +707,7 @@ void MainWindowActionHandler::createFileActions(int actions)
         a = aSaveAs = new QAction(this);
         a->setIcon(theme()->icon(Constants::ICONSAVEAS));
         cmd = actionManager()->registerAction(a, Constants::A_FILE_SAVEAS, ctx);
-#if QT_VERSION >= 0x040500
         cmd->setDefaultKeySequence(QKeySequence::SaveAs);
-#else
-        cmd->setDefaultKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_S);
-#endif
         cmd->setTranslations(Trans::Constants::FILESAVEAS_TEXT );
 //        cmd->setAttribute(Command::CA_UpdateText);
         mfile->addAction(cmd, Id(Constants::G_FILE_SAVE));

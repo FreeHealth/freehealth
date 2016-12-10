@@ -274,14 +274,8 @@ void FancyTreeView::setModel(QAbstractItemModel *model, const int columnForFancy
     d->m_Model = model;
     tree->setModel(model);
     tree->header()->setStretchLastSection(false);
-#if QT_VERSION < 0x050000
-    tree->header()->setResizeMode(0, QHeaderView::Stretch);
-    tree->header()->setResizeMode(columnForFancyButton, QHeaderView::Fixed);
-#else
-    // Qt5
     tree->header()->setSectionResizeMode(0, QHeaderView::Stretch);
     tree->header()->setSectionResizeMode(columnForFancyButton, QHeaderView::Fixed);
-#endif
     tree->setColumnWidth(columnForFancyButton, 16);
 
     d->m_Delegate->setModel(model);

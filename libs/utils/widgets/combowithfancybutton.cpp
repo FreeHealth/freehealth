@@ -251,18 +251,11 @@ ComboWithFancyButton::ComboWithFancyButton(QWidget *parent) :
     setView(view);
 
     view->header()->setStretchLastSection(false);
-#if QT_VERSION < 0x050000
-    view->header()->setResizeMode(0, QHeaderView::Stretch);
-    view->header()->setResizeMode(1, QHeaderView::Fixed);
-    view->header()->setResizeMode(2, QHeaderView::Fixed);
-    view->header()->setResizeMode(3, QHeaderView::Fixed);
-#else
-    // Qt5
+
     view->header()->setSectionResizeMode(0, QHeaderView::Stretch);
     view->header()->setSectionResizeMode(1, QHeaderView::Fixed);
     view->header()->setSectionResizeMode(2, QHeaderView::Fixed);
     view->header()->setSectionResizeMode(3, QHeaderView::Fixed);
-#endif
 
     view->header()->resizeSection(1, 16);
     view->header()->resizeSection(2, 16);

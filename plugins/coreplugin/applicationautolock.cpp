@@ -111,11 +111,7 @@ void ApplicationAutoLock::startListening()
 /** Returns true if the application must be in a lock state */
 bool ApplicationAutoLock::isLocked() const
 {
-#if QT_VERSION >= 0x050000
     return (d->_timer.remainingTime() <= 0);
-#else
-    return d->_timer.isActive();
-#endif
 }
 
 /*! Listen to application events and manage the lock timer. */

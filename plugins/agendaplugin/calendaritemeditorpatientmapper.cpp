@@ -138,16 +138,8 @@ CalendarItemEditorPatientMapperWidget::CalendarItemEditorPatientMapperWidget(QWi
     m_PeopleModel = new Calendar::CalendarPeopleModel(this);
     ui->selectedPatientView->setModel(m_PeopleModel);
     ui->selectedPatientView->header()->setStretchLastSection(false);
-
-#if QT_VERSION < 0x050000
-    ui->selectedPatientView->header()->setResizeMode(Calendar::CalendarPeopleModel::FullName, QHeaderView::Stretch);
-    ui->selectedPatientView->header()->setResizeMode(Calendar::CalendarPeopleModel::EmptyColumn, QHeaderView::Fixed);
-#else
-    // Qt5
     ui->selectedPatientView->header()->setSectionResizeMode(Calendar::CalendarPeopleModel::FullName, QHeaderView::Stretch);
     ui->selectedPatientView->header()->setSectionResizeMode(Calendar::CalendarPeopleModel::EmptyColumn, QHeaderView::Fixed);
-#endif
-
     ui->selectedPatientView->hideColumn(Calendar::CalendarPeopleModel::Uid);
     ui->selectedPatientView->hideColumn(Calendar::CalendarPeopleModel::PeopleTypeName);
     ui->selectedPatientView->setColumnWidth(Calendar::CalendarPeopleModel::EmptyColumn, 16);

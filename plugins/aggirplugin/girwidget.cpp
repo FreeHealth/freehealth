@@ -68,16 +68,9 @@ GirUi::GirUi(QWidget *parent) :
     m_ui->treeView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     m_ui->treeView->setAlternatingRowColors(true);
     m_ui->treeView->header()->setStretchLastSection(false);
-#if QT_VERSION < 0x050000
-    m_ui->treeView->header()->setResizeMode(0, QHeaderView::Stretch);
-    for(int i=1; i < m_ui->treeView->model()->columnCount(); ++i)
-        m_ui->treeView->header()->setResizeMode(i, QHeaderView::ResizeToContents);
-#else
-    // Qt5
     m_ui->treeView->header()->setSectionResizeMode(0, QHeaderView::Stretch);
     for(int i=1; i < m_ui->treeView->model()->columnCount(); ++i)
         m_ui->treeView->header()->setSectionResizeMode(i, QHeaderView::ResizeToContents);
-#endif
     m_ui->treeView->expandAll();
     m_ui->treeView->setMinimumHeight((m_ui->treeView->visualRect(model->index(0,0)).height()) * model->rowCountWithChildren() + 6);
     connect(model, SIGNAL(girCalculated(int)), this, SLOT(girCalculated(int)));
