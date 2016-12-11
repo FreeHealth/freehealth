@@ -1,4 +1,5 @@
 TEMPLATE = lib
+QT += webenginewidgets
 TARGET = Utils
 
 # The version number is defined by the scripts/source.sh script, keep this line unchanged
@@ -82,7 +83,8 @@ HEADERS += global_exporter.h \
     databasecsvimportator.h \
     passwordandlogin.h \
     widgets/qdateeditex/qdateeditex.h \
-    fileutils.h
+    fileutils.h \
+    widgets/webpage.h
 
 SOURCES += global.cpp \
     database.cpp \
@@ -149,7 +151,8 @@ SOURCES += global.cpp \
     databasecsvimportator.cpp \
     passwordandlogin.cpp \
     widgets/qdateeditex/qdateeditex.cpp \
-    fileutils.cpp
+    fileutils.cpp \
+    widgets/webpage.cpp
 
 #macx {
 #    OBJECTIVE_SOURCES += iconbadgealert.mm

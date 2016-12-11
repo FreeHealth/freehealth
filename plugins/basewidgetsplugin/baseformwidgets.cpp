@@ -19,10 +19,10 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *  Main developer: Eric MAEKER, <eric.maeker@gmail.com>                   *
- *  Contributors:                                                          *
- *       Guillaume DENRY <guillaume.denry@gmail.com>                       *
- *       Jerome Pinguet <jerome@jerome.cc>                                 *
+ *  Authors:                                                               *
+ *  Eric MAEKER, <eric.maeker@gmail.com>                                   *
+ *  Guillaume DENRY <guillaume.denry@gmail.com>                            *
+ *  Jerome Pinguet <jerome@jerome.cc>                                      *
  ***************************************************************************/
 #include "baseformwidgets.h"
 #include "baselistwidgets.h"
@@ -179,26 +179,26 @@ Form::IFormWidget *BaseWidgetsFactory::createWidget(const QString &name, Form::F
         return 0;
     switch (id)
     {
-    case ::Type_Form : return new BaseForm(formItem,parent);
-    case ::Type_Group : return new BaseGroup(formItem,parent);
-    case ::Type_Check : return new BaseCheck(formItem,parent);
-    case ::Type_Radio : return new BaseRadio(formItem,parent);
-    case ::Type_ShortText : return new BaseSimpleText(formItem,parent,true);
-    case ::Type_LongText : return new BaseSimpleText(formItem,parent,false);
-    case ::Type_HelpText : return new BaseHelpText(formItem,parent);
-    case ::Type_MultiList : return new BaseList(formItem,parent,false);
-    case ::Type_UniqueList : return new BaseList(formItem,parent,true);
-    case ::Type_EditableList : return new BaseEditableStringList(formItem,parent);
-    case ::Type_Combo : return new BaseCombo(formItem,parent);
-    case ::Type_Date : return new BaseDate(formItem,parent);
-    case ::Type_DateTime : return new BaseDateTime(formItem,parent);
-    case ::Type_ModernDate : return new BaseDateCompleterWidget(formItem,parent);
-    case ::Type_Spin : return new BaseSpin(formItem,parent);
-    case ::Type_DoubleSpin : return new BaseSpin(formItem,parent,true);
-    case ::Type_Button : return new BaseButton(formItem,parent);
+    case ::Type_Form : return new BaseForm(formItem, parent);
+    case ::Type_Group : return new BaseGroup(formItem,  parent);
+    case ::Type_Check : return new BaseCheck(formItem, parent);
+    case ::Type_Radio : return new BaseRadio(formItem, parent);
+    case ::Type_ShortText : return new BaseSimpleText(formItem, parent,true);
+    case ::Type_LongText : return new BaseSimpleText(formItem, parent,false);
+    case ::Type_HelpText : return new BaseHelpText(formItem, parent);
+    case ::Type_MultiList : return new BaseList(formItem, parent,false);
+    case ::Type_UniqueList : return new BaseList(formItem, parent,true);
+    case ::Type_EditableList : return new BaseEditableStringList(formItem, parent);
+    case ::Type_Combo : return new BaseCombo(formItem, parent);
+    case ::Type_Date : return new BaseDate(formItem, parent);
+    case ::Type_DateTime : return new BaseDateTime(formItem, parent);
+    case ::Type_ModernDate : return new BaseDateCompleterWidget(formItem, parent);
+    case ::Type_Spin : return new BaseSpin(formItem, parent);
+    case ::Type_DoubleSpin : return new BaseSpin(formItem, parent,true);
+    case ::Type_Button : return new BaseButton(formItem, parent);
     case ::Type_DetailsWidget: return new BaseDetailsWidget(formItem, parent);
     case ::Type_Measurement: return new MeasurementWidget(formItem, parent);
-    case ::Type_FrenchNSS : return new FrenchSocialNumberFormWidget(formItem,parent);
+    case ::Type_FrenchNSS : return new FrenchSocialNumberFormWidget(formItem, parent);
 //    case ::Type_AustrianSVNR : return new AustrianSocialNumberFormWidget(formItem,parent);
     case ::Type_ButtonMenuPathItemView : return new ButtonMenuPathItemView(formItem,parent);
     default: return 0;
@@ -208,9 +208,9 @@ Form::IFormWidget *BaseWidgetsFactory::createWidget(const QString &name, Form::F
 
 // TODO: Verify usage of clear() in all itemData() --> originalValue ?
 
-//--------------------------------------------------------------------------------------------------------
-//-------------------------------------- BaseForm implementation ---------------------------------------
-//--------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+//-------------------------- BaseForm implementation ---------------------------
+//------------------------------------------------------------------------------
 /**
  * \class BaseForm
  * \brief Creates a form
@@ -278,7 +278,7 @@ BaseForm::BaseForm(Form::FormItem *formItem, QWidget *parent) :
         mainWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         // create container layout
         m_ContainerLayout = new QGridLayout(mainWidget);
-        // Retrieve the number of columns for the gridlayout (lays in extraData() of linked FormItem)
+        // Retrieve the number of columns for the gridlayout (inside extraData() of linked FormItem)
         numberColumns = Constants::getNumberOfColumns(m_FormItem);
         if (Constants::isCompactView(m_FormItem)) {
             mainLayout->setMargin(5);
@@ -480,7 +480,7 @@ void BaseForm::retranslate()
     }
 }
 
-////////////////////////////////////////// ItemData /////////////////////////////////////////////
+////////////////////////////////////////// ItemData ////////////////////////////
 BaseFormData::BaseFormData(Form::FormItem *item) :
     m_FormItem(item),
     m_Form(0),
@@ -928,9 +928,9 @@ void BaseGroupData::onValueChanged()
     Q_EMIT dataChanged(0);
 }
 
-//--------------------------------------------------------------------------------------------------------
-//--------------------------------------------- BaseCheck ----------------------------------------------
-//--------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+//--------------------------- BaseCheck ----------------------------------------
+//------------------------------------------------------------------------------
 BaseCheck::BaseCheck(Form::FormItem *formItem, QWidget *parent) :
     Form::IFormWidget(formItem,parent),
     m_Check(0)
@@ -1009,7 +1009,7 @@ void BaseCheck::retranslate()
     }
 }
 
-////////////////////////////////////////// ItemData /////////////////////////////////////////////
+///////////////////////////// ItemData /////////////////////////////////////////
 BaseCheckData::BaseCheckData(Form::FormItem *item) :
     m_FormItem(item),
     m_Check(0),
@@ -1146,9 +1146,9 @@ void BaseCheckData::onValueChanged()
     Q_EMIT dataChanged(0);
 }
 
-//--------------------------------------------------------------------------------------------------------
-//--------------------------------------------- BaseRadio ----------------------------------------------
-//--------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+//------------------------- BaseRadio ------------------------------------------
+//------------------------------------------------------------------------------
 BaseRadio::BaseRadio(Form::FormItem *formItem, QWidget *parent) :
     Form::IFormWidget(formItem,parent), m_ButGroup(0)
 {
@@ -1323,7 +1323,7 @@ void BaseRadio::buttonClicked(QAbstractButton *radio)
     formItem()->itemData()->setData(0, radio->property("id"), Form::IFormItemData::CalculationsRole);
 }
 
-////////////////////////////////////////// ItemData /////////////////////////////////////////////
+/////////////////////////////// ItemData ///////////////////////////////////////
 BaseRadioData::BaseRadioData(Form::FormItem *item) :
         m_FormItem(item), m_Radio(0)
 {
@@ -1465,9 +1465,9 @@ void BaseRadioData::onValueChanged()
     Constants::executeOnValueChangedScript(m_FormItem);
 }
 
-//--------------------------------------------------------------------------------------------------------
-//------------------------------------------- BaseSimpleText -------------------------------------------
-//--------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+//------------------------- BaseSimpleText -------------------------------------
+//------------------------------------------------------------------------------
 BaseSimpleText::BaseSimpleText(Form::FormItem *formItem, QWidget *parent, bool shortText) :
     Form::IFormWidget(formItem,parent),
     m_Line(0),
@@ -1624,7 +1624,7 @@ void BaseSimpleText::retranslate()
         m_Text->setToolTip(m_FormItem->spec()->tooltip());
 }
 
-////////////////////////////////////////// ItemData /////////////////////////////////////////////
+///////////////////////////////// ItemData /////////////////////////////////////
 BaseSimpleTextData::BaseSimpleTextData(Form::FormItem *item) :
         m_FormItem(item), m_Text(0)
 {
@@ -1743,9 +1743,9 @@ void BaseSimpleTextData::onValueChanged()
     Constants::executeOnValueChangedScript(m_FormItem);
     Q_EMIT dataChanged(0);
 }
-//--------------------------------------------------------------------------------------------------------
-//----------------------------------------- BaseHelpText -----------------------------------------------
-//--------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+//------------------------------- BaseHelpText ---------------------------------
+//------------------------------------------------------------------------------
 BaseHelpText::BaseHelpText(Form::FormItem *formItem, QWidget *parent) :
     Form::IFormWidget(formItem,parent)
 {
@@ -1804,9 +1804,9 @@ void BaseHelpText::retranslate()
     }
 }
 
-//--------------------------------------------------------------------------------------------------------
-//----------------------------------------- BaseDate ---------------------------------------------------
-//--------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+//---------------------------- BaseDate ----------------------------------------
+//------------------------------------------------------------------------------
 //TODO: create a function that returns default time 
 BaseDate::BaseDate(Form::FormItem *formItem, QWidget *parent) :
     Form::IFormWidget(formItem,parent), m_Date(0)
@@ -1932,7 +1932,7 @@ void BaseDate::retranslate()
         m_Date->setToolTip(m_FormItem->spec()->tooltip());
 }
 
-////////////////////////////////////////// ItemData /////////////////////////////////////////////
+///////////////////////// ItemData /////////////////////////////////////////////
 BaseDateData::BaseDateData(Form::FormItem *item) :
         m_FormItem(item), m_Date(0)
 {
@@ -2014,9 +2014,9 @@ void BaseDateData::onValueChanged()
     Q_EMIT dataChanged(0);
 }
 
-//--------------------------------------------------------------------------------------------------------
-//----------------------------------------- BaseDateTime ---------------------------------------------------
-//--------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+//-------------------------- BaseDateTime --------------------------------------
+//------------------------------------------------------------------------------
 //TODO: create a function that returns default time and date
 BaseDateTime::BaseDateTime(Form::FormItem *formItem, QWidget *parent) :
     Form::IFormWidget(formItem,parent), m_DateTime(0)
@@ -2149,7 +2149,7 @@ void BaseDateTime::retranslate()
         m_DateTime->setToolTip(m_FormItem->spec()->tooltip());
 }
 
-////////////////////////////////////////// ItemData /////////////////////////////////////////////
+/////////////////////////// ItemData ///////////////////////////////////////////
 BaseDateTimeData::BaseDateTimeData(Form::FormItem *item) :
         m_FormItem(item), m_DateTime(0)
 {
@@ -2236,9 +2236,9 @@ void BaseDateTimeData::onValueChanged()
     Q_EMIT dataChanged(0);
 }
 
-//--------------------------------------------------------------------------------------------------------
-//------------------------------------------ BaseSpin --------------------------------------------------
-//--------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+//----------------------------- BaseSpin ---------------------------------------
+//------------------------------------------------------------------------------
 BaseSpin::BaseSpin(Form::FormItem *formItem, QWidget *parent, bool doubleSpin) :
     Form::IFormWidget(formItem,parent), m_Spin(0)
 {
@@ -2380,7 +2380,7 @@ void BaseSpin::retranslate()
         m_Label->setText(m_FormItem->spec()->label());
 }
 
-////////////////////////////////////////// ItemData /////////////////////////////////////////////
+////////////////////////////// ItemData ////////////////////////////////////////
 BaseSpinData::BaseSpinData(Form::FormItem *item) :
         m_FormItem(item), m_Spin(0)
 {
@@ -2493,9 +2493,9 @@ void BaseSpinData::onValueChanged()
     Constants::executeOnValueChangedScript(m_FormItem);
     Q_EMIT dataChanged(0);
 }
-//--------------------------------------------------------------------------------------------------------
-//------------------------------------------ BaseButton ------------------------------------------------
-//--------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+//------------------------- BaseButton -----------------------------------------
+//------------------------------------------------------------------------------
 BaseButton::BaseButton(Form::FormItem *formItem, QWidget *parent) :
     Form::IFormWidget(formItem,parent), m_Button(0)
 {

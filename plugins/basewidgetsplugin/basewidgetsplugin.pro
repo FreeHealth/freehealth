@@ -1,4 +1,7 @@
 TEMPLATE = lib
+
+QT += webenginewidgets
+
 TARGET = BaseWidgets
 
 DEFINES += BASEFORMWIDGETS_LIBRARY
@@ -22,7 +25,8 @@ HEADERS += basewidgetsplugin.h \
     frenchsocialnumberwidget.h \
     measurementwidget.h \
     treeviewformitem.h \
-    buttonmenupathitemview.h
+    buttonmenupathitemview.h \
+    webpagefactory.h
 #    basezipcodeswidget.h
 
 SOURCES += basewidgetsplugin.cpp \
@@ -39,7 +43,8 @@ SOURCES += basewidgetsplugin.cpp \
     frenchsocialnumberwidget.cpp \
     measurementwidget.cpp \
     treeviewformitem.cpp \
-    buttonmenupathitemview.cpp
+    buttonmenupathitemview.cpp \
+    webpagefactory.cpp
 #    basezipcodeswidget.cpp
 
 FORMS += baseformwidgetsoptionspage.ui \
