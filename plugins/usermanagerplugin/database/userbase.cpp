@@ -302,7 +302,7 @@ bool UserBase::updateLastloginTypeToTimeStamp()
 }
 
 /**
- * Return \e true if the userbase is the lastest version of the database.
+ * Return \e true if the userbase is the latest version of the database.
  * Checks also if the current running Qt version is compatible
  * with the database version.
  * \warning The database-qt-version can get updated.
