@@ -223,29 +223,29 @@ void RecordImportDialog::matchEpisodeWidget() {
 
 
 void RecordImportDialog::matchFormWidget() {
-        QGridLayout *matchFormGridLayout = new QGridLayout;
-        QWidget *matchFormWidget = new QWidget;
-        m_formItemHash = new QHash<QString, QString>;
-        for (int j = 0; j < m_formItemList.size(); ++j) {
-            QString label = m_formItemList.at(j)->spec()->label();
-            QString labelPlugin = m_formItemList.at(j)->spec()->pluginName();
-            if (!m_formItemList.at(j)->uuid().isEmpty()) {
-                m_formItemHash->insert(m_formItemList.at(j)->uuid(), QString());
-                qDebug() << "key: "
+    QGridLayout *matchFormGridLayout = new QGridLayout;
+    QWidget *matchFormWidget = new QWidget;
+    m_formItemHash = new QHash<QString, QString>;
+    for (int j = 0; j < m_formItemList.size(); ++j) {
+        QString label = m_formItemList.at(j)->spec()->label();
+        QString labelPlugin = m_formItemList.at(j)->spec()->pluginName();
+        if (!m_formItemList.at(j)->uuid().isEmpty()) {
+            m_formItemHash->insert(m_formItemList.at(j)->uuid(), QString());
+            qDebug() << "key: "
                      << m_formItemList.at(j)->uuid()
                      << "value: "
                      << m_formItemHash->value(m_formItemList.at(j)->uuid());
-            }
-            matchFormGridLayout->addWidget(new QLabel(label), j, 0);
-            matchFormGridLayout->addWidget(new QLabel(labelPlugin), j, 1);
-            QComboBox *combo = new QComboBox;
-            combo->addItems(m_field);
-            combo->setCurrentIndex(-1);
-            m_comboFormList.append(combo);
-            matchFormGridLayout->addWidget(m_comboFormList.at(j), j, 2);
         }
-        matchFormWidget->setLayout(matchFormGridLayout);
-        d->ui->matchFormScrollArea->setWidget(matchFormWidget);
+        matchFormGridLayout->addWidget(new QLabel(label), j, 0);
+        matchFormGridLayout->addWidget(new QLabel(labelPlugin), j, 1);
+        QComboBox *combo = new QComboBox;
+        combo->addItems(m_field);
+        combo->setCurrentIndex(-1);
+        m_comboFormList.append(combo);
+        matchFormGridLayout->addWidget(m_comboFormList.at(j), j, 2);
+    }
+    matchFormWidget->setLayout(matchFormGridLayout);
+    d->ui->matchFormScrollArea->setWidget(matchFormWidget);
 }
 
 void RecordImportDialog::import()
@@ -322,8 +322,8 @@ void RecordImportDialog::import()
                 idx = model->index(j, Form::EpisodeModel::DataRepresentation::IsValid);
                 qDebug() << "model->data(idx).toInt()" << model->data(idx).toInt();
                 if (model->data(idx).toInt() == 1) {
-                        row = j;
-                        break;
+                    row = j;
+                    break;
                 }
             }
         }
@@ -333,9 +333,9 @@ void RecordImportDialog::import()
             row = model->rowCount()-1;
         }
         qDebug() << "row = " << row;
-            // set the values related to the episode (if the user set them)
-            // UserDateTime
-            idx = model->index(row, Form::EpisodeModel::DataRepresentation::UserDateTime);
+        // set the values related to the episode (if the user set them)
+        // UserDateTime
+        idx = model->index(row, Form::EpisodeModel::DataRepresentation::UserDateTime);
         QString isoUtcDateTimeString;
         if (!(m_episodeUserDateTimeComboBox->currentIndex() == -1)) {
             qDebug() << "index: " << m_episodeUserDateTimeComboBox->currentIndex() ;
@@ -363,6 +363,11 @@ void RecordImportDialog::import()
         qDebug() << "xml: " << xml;
 
         model->setData(idx, xml);
+
+
+        if (d->ui->validateEpisodeCheckBox->isChecked()) {
+            model->validateEpisode(idx);
+        }
         qDebug() << "rowCount" << model->rowCount();
         model->submit();
         qDebug() << "rowCount" << model->rowCount();
@@ -419,7 +424,7 @@ QString RecordImportDialog::xmlEpisode(int &i, const QString previousXml)
             qDebug() << "combo idx = " << idx;
             qDebug() << "value for combo idx: " << m_data->at(i).at(idx);
             m_formItemHash->insert(m_formItemList.at(j)->uuid(),
-                               m_data->at(i).at(idx));
+                                   m_data->at(i).at(idx));
         }
     }
     ;
