@@ -102,7 +102,7 @@ bool EpisodeManager::isInitialized() const
 
 /**
  * Return the unique Form::EpisodeModel linked to the patient form \e form.
- * Return zero if the form is not null.
+ * Return zero if the form is null.
  */
 EpisodeModel *EpisodeManager::episodeModel(Form::FormMain *form)
 {

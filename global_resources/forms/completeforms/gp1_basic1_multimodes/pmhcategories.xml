@@ -35,5 +35,13 @@
       <label lang="fr">Familiaux</label>
       <label lang="de">Familiär</label>
     </Category>
+    <Category icon="__theme__/package.png" uuid="GP::Basic::MultiModes::Archive" sortId="3">
+      <label lang="xx">Archive</label>
+      <label lang="fr">Archive</label>
+      <label lang="de">Archiv</label>
+      <extra>
+        <file>__subForms__/chave/pmh</file>
+      </extra>
+    </Category>
   </PMHx>
 </FreeMedForms>

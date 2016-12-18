@@ -67,7 +67,7 @@ FormEditorDialog::FormEditorDialog(FormTreeModel *model, EditionModes mode, QWid
     Q_UNUSED(mode);
 
     ui->setupUi(this);
-    // Mange FormSelector options
+    // Manage FormSelector options
     ui->formSelector->setIncludeLocalFiles(true);
     ui->formSelector->setExcludeGenderSpecific(true);
     // Exclude all included forms
@@ -129,7 +129,7 @@ void FormEditorDialog::on_addForm_clicked()
     // Get the selected sub-forms + some checks
     QList<Form::FormIODescription *> selected = ui->formSelector->selectedForms();
     if (selected.isEmpty()) {
-        LOG_ERROR("Trying to insert sub-form but sub-forms was selected");
+        LOG_ERROR("Trying to insert a sub-form but no sub-form was selected");
         return;
     }
 

@@ -227,6 +227,13 @@ with-patientimport {
     patientimport.depends += patientbase
 }
 
+with-recordimport {
+    SUBDIRS += recordimport
+    recordimport.subdir = $${PLUGINS_PATH}/recordimportplugin
+    recordimport.depends += core
+    recordimport.depends += patientbase
+}
+
 tools.subdir   = $${PLUGINS_PATH}/toolsplugin
 tools.depends += core
 tools.depends += formmanager

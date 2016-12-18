@@ -24,75 +24,149 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#include "processpatientimport_p.h"
+#include <memory>
+#include "processrecordimport_p.h"
 
 static inline Core::IPatient *patient() { return Core::ICore::instance()->patient(); }
 static inline Patients::Internal::PatientBase *patientBase() { return Patients::Internal::PatientBase::instance(); }
 
-using namespace PatientImport;
+using namespace RecordImport;
 
-ProcessPatientImport::ProcessPatientImport(QString filename, QString software) : d_ptr(new Internal::ProcessPatientImportPrivate(this))
+ProcessRecordImport::ProcessRecordImport(QString filename,
+                                         QChar fieldSeparator,
+                                         QChar recordSeparator)
+    : d_ptr(new Internal::ProcessRecordImportPrivate(this))
 {
-    d_ptr->m_fileName = filename;
-    d_ptr->m_software = software;
-    qWarning() << "ProcessPatientImport::ProcessPatientImport()";
-    qWarning() << filename << "filename " << software << "software ";
-    QStringList softwareList = PatientImport::Internal::PatientimportPlugin::softwareList();
-    switch (softwareList.indexOf(software)) {
-    case 0:
-        break;
-    case 1:
-        ProcessPatientImport::parseGestcab();
-        ProcessPatientImport::modifyGestcab();
-        ProcessPatientImport::importGestcab();
-        break;
-    default:
-        break;
-    }
+    m_fileName = filename;
+    m_fieldSeparator = fieldSeparator;
+    m_recordSeparator = recordSeparator;
+    qDebug() << Q_FUNC_INFO;
+    qDebug() << filename << "filename ";
+    ProcessRecordImport::modify();
+    ProcessRecordImport::import();
 }
 
-ProcessPatientImport::~ProcessPatientImport()
+ProcessRecordImport::~ProcessRecordImport()
 {
     if (d_ptr)
         delete d_ptr;
     d_ptr = 0;
 }
-
-void ProcessPatientImport::parseGestcab()
+/*!
+ * \brief ProcessRecordImport::parse
+ * This function expects a single string containing records separated by
+ * recordSeparator (single unicode character). A record contains 1 or more fields
+ * separated by fieldSeparator (single unicode character).
+ * Using a record separator instead of the usual newline was necessary in order
+ * to avoid problems with records containing MS-DOS line endings
+ * TODO: implement true CSV import & SQL import
+ * \param fileName
+ * \param fieldSeparator
+ * \param recordSeparator
+ * \return
+ */
+std::unique_ptr<QVector<QStringList>> ProcessRecordImport::parse(QString fileName,
+                                                                 QChar fieldSeparator,
+                                                                 QChar recordSeparator)
 {
-    if(d_ptr->m_fileName == NULL)
-        return;
-    QFile *file = new QFile(d_ptr->m_fileName);
-    qWarning() << "ProcessPatientImport::parseGestcab()";
-    if (!file->open(QIODevice::ReadOnly)) {
+    if(fileName.isEmpty()) {
+        return nullptr;
+    }
+    QFile file(fileName);
+    qDebug() << Q_FUNC_INFO;
+    if (!file.open(QIODevice::ReadOnly)) {
         std::cerr << "Cannot open file for reading: "
-                  << qPrintable(file->errorString()) << std::endl;
-        return;
+                  << qPrintable(file.errorString()) << std::endl;
+        return nullptr;
     }
     qWarning() << "file reading ok";
-    QTextStream in(file);
+    QTextStream in(&file);
     qWarning() << "QTextStream reading ok";
     qWarning() << "set codec ok";
+    qDebug() << "record " << recordSeparator;
+    qDebug() << "field" << fieldSeparator;
     //QVector<QVector<QString>> *import = new QVector<QVector<QString>>;
-    d_ptr->m_import = new QVector<QStringList>;
+    std::unique_ptr<QVector<QStringList>> data(new QVector<QStringList>);
+    QChar character = 0;
+    QStringList r;
+    QString string;
+    int i;
+    int j;
+
     while (!in.atEnd()) {
-        QString line = in.readLine();
-        qWarning() << line;
-        QStringList fields = line.split('@');
-        d_ptr->m_import->append(fields);
+        qDebug() << "*********** INSIDE main while loop";
+        i++;
+        in >> character;
+        qDebug() << "character " << character;
+        qDebug() << "string " << string;
+
+        while (!(character==recordSeparator) && !in.atEnd()) {
+            qDebug() << "*********** INSIDE recordSeparator while loop";
+            j++;
+            while (!(character==fieldSeparator)
+                   && !(character==recordSeparator)
+                   && !in.atEnd()) {
+                qDebug() << "*********** INSIDE fieldSeparator while loop";
+                qDebug() << "before >> " << character;
+                in >> character;
+                qDebug() << "after >> " << character;
+                if (character=='\x0') {
+                    string+="0";
+                } else {
+                    string+=character;
+                }
+                qDebug() << "string" << string;
+            }
+            qDebug() << character;
+            if (!(character==recordSeparator)) {
+                character=0;
+            }
+            if (string == fieldSeparator) {
+                string.clear();
+            }
+            qDebug() << "string" << string;
+            if (string.endsWith(fieldSeparator) || string.endsWith(recordSeparator)) {
+                    string.chop(1);
+            }
+            qDebug() << "string" << string;
+            r.append(string);
+            string.clear();
+        }
+        if (character==recordSeparator)
+        character = 0;
+        qDebug() << r;
+        data->append(r);
+        r.clear();
     }
     qWarning() << "while loop over";
+    // remove last empty QStringList
+    if (!(data.get()->isEmpty())) {
+        data->removeLast();
+    }
+    qWarning() << data->size();
+    qWarning() << data.get()->size();
 
-    for (int i = 0; i < 100; ++i) {
+    QVector<int> error;
+    for (int i = 0; i < data.get()->size(); ++i) {
         qWarning()  << "***** Vector " << i << " *****";
-        for (int j = 0; j < 43; ++j){
-            qWarning() << j << d_ptr->m_import->at(i).at(j);
+        for (int j = 0; j < data->at(i).size(); ++j){
+            if (!(data->at(i).size()==data->at(0).size())) {
+                qWarning() << "Number of QStringList items ("
+                           << data->at(i).size()
+                           << ") is different from number of header items ("
+                           << data->at(0).size();
+                error.append(i);
+            }
+            qWarning() << j << data->at(i).at(j);
         }
     }
-    qWarning() << d_ptr->m_import->size();
+    qWarning() << "Theses lines contained an incorrect number of items: "
+               << error;
+
+    return data;
 }
 
-void ProcessPatientImport::modifyGestcab()
+void ProcessRecordImport::modify()
 {
     // 1. Gender
     // convert "M","F","" to gender index value
@@ -100,7 +174,7 @@ void ProcessPatientImport::modifyGestcab()
     // "F" -> 1
     // ""  -> 3
     int gender3 = 0;
-    qWarning() << "Modify gestcab";
+    qDebug() << Q_FUNC_INFO;
     QVector<QStringList>::iterator i;
     for (i = d_ptr->m_import->begin(); i != d_ptr->m_import->end(); i++) {
         if (i->value(8) == QString("M")) {
@@ -143,15 +217,9 @@ void ProcessPatientImport::modifyGestcab()
     qWarning() << gender3 << "number of patients with unknown gender";
 }
 
-void ProcessPatientImport::importGestcab()
+void ProcessRecordImport::import()
 {
     qWarning() << d_ptr->m_import->size() << "d_ptr->m_import->size()";
-
-    // partial duplicate lists
-    QStringList usualname_firstname;
-    QStringList usualname_dob;
-    QStringList firstname_dob;
-
     for (int j = 0; j < d_ptr->m_import->size(); ++j) {
         QStringList patientdata;
         foreach (QString s, d_ptr->m_import->at(j)) {
@@ -195,82 +263,25 @@ void ProcessPatientImport::importGestcab()
             break;
         }
 
-        // Check for duplicates
-        // exact match (Usual name, First name, DoB):
-        // warn and skip patient creation
+        // Check for duplicate
         if (patientBase()->isPatientExists(UsualName,
                                            QString(),
                                            Firstname,
                                            QString(),
                                            datedob)) {
-
+            qWarning() << UsualName << OtherNames << Firstname << GenderIndex
+                       << DateOfBirth << "Patient" << j << "already exists !!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
             QString duplicate = QString("The patient number %1 %2 %3 %4 %5 %6 already exists: skipping!")
-                                .arg(j)
-                                .arg(UsualName)
-                                .arg(OtherNames)
-                                .arg(Firstname)
-                                .arg(GenderIndex)
-                                .arg(stringdob);
+                    .arg(j)
+                    .arg(UsualName)
+                    .arg(OtherNames)
+                    .arg(Firstname)
+                    .arg(GenderIndex)
+                    .arg(stringdob);
             d_ptr->m_duplicate << duplicate;
-            qWarning() << duplicate;
             continue;
         }
 
-        // warn about partial match
-        // Usual name, First name
-        if (patientBase()->isPatientExists(UsualName,
-                                           QString(),
-                                           Firstname,
-                                           QString(),
-                                           QDate())) {
-            QString duplicate = QString("The patient number %1 %2 %3 %4 %5 %6"
-                                        " has a partial id match: same usual name"
-                                        " and first name")
-                                .arg(j)
-                                .arg(UsualName)
-                                .arg(OtherNames)
-                                .arg(Firstname)
-                                .arg(GenderIndex)
-                                .arg(stringdob);
-            usualname_firstname << duplicate;
-            qWarning() << duplicate;
-        }
-        // Usual name, DoB
-        if (patientBase()->isPatientExists(UsualName,
-                                           QString(),
-                                           QString(),
-                                           QString(),
-                                           datedob)) {
-            QString duplicate = QString("The patient number %1 %2 %3 %4 %5 %6"
-                                        " has a partial id match: same usual name"
-                                        " and DoB.")
-                                .arg(j)
-                                .arg(UsualName)
-                                .arg(OtherNames)
-                                .arg(Firstname)
-                                .arg(GenderIndex)
-                                .arg(stringdob);
-            usualname_dob << duplicate;
-            qWarning() << duplicate;
-        }
-        // Usual first name, DoB
-        if (patientBase()->isPatientExists(QString(),
-                                           QString(),
-                                           Firstname,
-                                           QString(),
-                                           datedob)) {
-            QString duplicate = QString("The patient number %1 %2 %3 %4 %5 %6"
-                                        " has a partial id match: same first name"
-                                        " and DoB.")
-                                .arg(j)
-                                .arg(UsualName)
-                                .arg(OtherNames)
-                                .arg(Firstname)
-                                .arg(GenderIndex)
-                                .arg(stringdob);
-            firstname_dob << duplicate;
-            qWarning() << duplicate;
-        }
 
         qWarning()  << "***** Importing patient " << j << " *****";
         d_ptr->m_patientModel = new Patients::PatientModel(this);
@@ -304,23 +315,10 @@ void ProcessPatientImport::importGestcab()
             delete d_ptr->m_patientModel;
             d_ptr->m_patientModel=NULL;
         }
+        //if (j == 50) break;
     }
-
-    qWarning() << "Exact match duplicates:";
+    qWarning() << "Duplicates";
     foreach (QString s, d_ptr->m_duplicate) {
         qWarning() << s;
     }
-    qWarning() << "Exact match duplicates: usual name, first name";
-    foreach (QString s, usualname_firstname) {
-        qWarning() << s;
-    }
-    qWarning() << "Exact match duplicates: usual name, dob";
-    foreach (QString s, usualname_dob) {
-        qWarning() << s;
-    }
-    qWarning() << "Exact match duplicates: first name, dob";
-    foreach (QString s, firstname_dob) {
-        qWarning() << s;
-    }
 }
-

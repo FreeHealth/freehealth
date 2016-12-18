@@ -155,6 +155,7 @@ const char * const G_PLUGINS_CALENDAR       =   "grPlugins.calendar";
 const char * const G_PLUGINS_PADTOOLS       =   "grPlugins.padTools";
 const char * const G_PLUGINS_OTHERS         =   "grPlugins.others";
 const char * const G_PLUGINS_PATIENTIMPORT  =   "grPlugins.patientimport";
+const char * const G_PLUGINS_RECORDIMPORT   =   "grPlugins.recordimport";
 
 // Interpretor groups
 const char * const G_INTERPRETOR_GENERAL = "grInterpretor.General";  /*!< \brief Default group name  \ingroup constants_actionmanager */
