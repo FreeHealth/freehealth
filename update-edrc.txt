@@ -1,5 +1,0 @@
-version=0.10.0~alpha1
-{
-    * Sept, 2013
-    * First technology preview release
-}

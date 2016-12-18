@@ -1,26 +1,25 @@
 Welcome to FreeHealth
 copyright © 2016 Jerome Pinguet
 
+FreeHealth EHR is a fork of:
+FreeMedForms
 Copyright (C) 2008-2016 by Eric MAEKER
 eric.maeker@gmail.com
-All rights reserved.
 
 I. What is FreeHealth ?
 
-Electronic Health Record.
-FreeHealth is also a lot of derivatives sub-project, which are
-just standalone compilations of FreeHealth plugins, such as FreeRx, the electronic
+An Electronic Health Record including FreeRx, the electronic
 prescribing plugin.
 
-This project is a free and open source project. A community grows up
-around it. FreeMedForms and derivatives are released under the terms
+This project is free and open source: join the community!
+FreeMedForms and derivatives are released under the terms
 of the GPLv3 License. Some parts of the code are LGPL v2.1.
 
 FreeHealth EHR and derived apps are coded in C++/Qt5
 Supported OS:
 
 - GNU/Linux : Ubuntu, Debian
-- Mac Os X
+- macOS
 - Windows
 
 

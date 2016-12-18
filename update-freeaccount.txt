@@ -1,5 +1,0 @@
-version=0.7.6
-{
-    * June 2012
-    * Visit www.freemedforms.com
-}

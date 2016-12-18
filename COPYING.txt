@@ -2,14 +2,13 @@ FreeHealth and all its applications and datas are released
 under the GNU General Public License as published by the Free Software
 Foundation, either version 3 of the License, or (at your option) any later version.
 
-You can find the terms of the license terms here
+You can find the terms of the license here
     http://www.gnu.org/licenses/gpl.html.
 
-Some parts of the code comes from other sources, such as:
+Some parts of the code come from other sources, such as:
 - QtCreator : released under LGPL license: http://qt-project.org/
 
 Icons and Pixmaps:
 - Bc Tango : Creative Common license: http://tango.freedesktop.org/Tango_Icon_Library
 
 Self created icons and pixmaps are released under the public domain license.
-
