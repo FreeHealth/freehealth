@@ -88,3 +88,6 @@ equals(TEST, 1){
 # include translations
 TRANSLATION_NAME = formmanager
 include($${SOURCES_ROOT_PATH}/buildspecs/translations.pri)
+
+RESOURCES += \
+    resources.qrc

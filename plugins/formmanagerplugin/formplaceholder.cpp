@@ -26,17 +26,23 @@
  ***************************************************************************/
 /**
  * \class Form::FormPlaceHolder
- * Widget containing the Episode treeView and the forms in a QStackedLayout
- * When an episode is activated by the user, the formViewer is set to the corresponding form
- * and episode data. Data are automatically saved (without any user intervention).
+ * Widget containing these objects:
+ *   * formView (form tree view, class Views::TreeView)
+ *   * episodeToolBar inside the toolbarLayout
+ *   * episodeView (class QTableView)
+ *   * formDataMapper (class Form::FormDataWidgetMapper)
+ * When an episode is activated by the user, the formDataMapper is set to the
+ * corresponding episode data.
+ * Data are automatically saved (without any user intervention).
  *
  * +--------------+-----------------------------------------+
- * | FormTreeView |  Episode ToolBar                        |
- * |              |             EpisodeListView             |
+ * | formView     |  episodeToolBar                         |
+ * |              +-----------------------------------------|
+ * |              |             episodeView                 |
  * |              |                                         |
  * |              +-----------------------------------------|
  * |              |                                         |
- * |              |           FormDataWidgetMapper          |
+ * |              |           formDataMapper                |
  * |              |                                         |
  * |              |                                         |
  * |              |                                         |
@@ -53,16 +59,13 @@
 #include "formdatawidgetmapper.h"
 #include "formviewdelegate.h"
 #include "subforminsertionpoint.h"
-
+#include "formmanager.h"
+#include "iformitem.h"
+#include "iformitemdata.h"
+#include "iformwidgetfactory.h"
 #include "ui_formplaceholder.h"
-
-#include <formmanagerplugin/formcore.h>
-#include <formmanagerplugin/formmanager.h>
-#include <formmanagerplugin/iformitem.h>
-#include <formmanagerplugin/iformitemdata.h>
-#include <formmanagerplugin/iformwidgetfactory.h>
-#include <formmanagerplugin/episodemanager.h>
-#include <formmanagerplugin/episodemodel.h>
+#include "episodemanager.h"
+#include "episodemodel.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/iuser.h>
@@ -92,7 +95,6 @@
 
 #include <QTreeView>
 #include <QTreeWidgetItem>
-#include <QStackedLayout>
 #include <QScrollArea>
 #include <QTableView>
 #include <QHeaderView>
@@ -262,8 +264,8 @@ public:
             bool save = Utils::yesNoMessageBox(QApplication::translate("Form::FormPlaceHolder",
                                                                        "Save episode?"),
                                                QApplication::translate("Form::FormPlaceHolder",
-                                                                       "The actual episode has been modified. Do you want to save changes in your database?\n"
-                                                                       "Answering 'No' will cause deftialtve data loss."),
+                                                                       "The current episode has been modified. Do you want to save changes?\n"
+                                                                       "Answering 'No' will cause definitive data loss."),
                                                "", QApplication::translate("Form::FormPlaceHolder", "Save episode"));
             if (!save)
                 return false;
@@ -273,10 +275,10 @@ public:
                                              .arg(ui->formDataMapper->currentFormName()));
         bool ok = ui->formDataMapper->submit();
         if (!ok) {
-            patient()->patientBar()->showMessage(QApplication::translate("Form::FormPlaceHolder", "WARNING: Episode (%1) from form (%2) can not be saved")
+            patient()->patientBar()->showMessage(QApplication::translate("Form::FormPlaceHolder", "WARNING: Episode (%1) from form (%2) cannot be saved")
                                                  .arg(ui->formDataMapper->currentEpisodeLabel())
                                                  .arg(ui->formDataMapper->currentFormName()));
-            qDebug() << QString("WARNING: Episode (%1) from form (%2) can not be saved").arg(ui->formDataMapper->currentEpisodeLabel())
+            qDebug() << QString("WARNING: Episode (%1) from form (%2) cannot be saved").arg(ui->formDataMapper->currentEpisodeLabel())
                         .arg(ui->formDataMapper->currentFormName());
         }
         return ok;
@@ -364,25 +366,20 @@ public:
         else
             small.setPointSize(small.pointSize() - 4);
         ui->episodeView->horizontalHeader()->setFont(small);
-        ui->episodeView->horizontalHeader()->setStyleSheet("QHeaderView::section {"
-                                                           //                                                           "background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1,"
-                                                           //                                                           "                                  stop:0 #eeeeee, stop: 0.5 #e0e0e0,"
-                                                           //                                                           "                                  stop: 0.6 #dadada, stop:1 #f2f2f2);"
-                                                           "padding: 2px;"
-                                                           //                                                           "border: 1px solid black;"
-                                                           "}");
-
+        QFile file(":/headerview.qss");
+        file.open(QFile::ReadOnly);
+        QString styleSheet = QLatin1String(file.readAll());
+        ui->episodeView->horizontalHeader()->setStyleSheet(styleSheet);
         ui->episodeView->selectionModel()->clearSelection();
-
         // set the sort order & column to the view/proxymodel
-        ui->episodeView->sortByColumn(settings()->value(Constants::S_EPISODEVIEW_SORTEDCOLUMN,
-                                                        EpisodeModel::UserDateTime).toInt(),
-                                      Qt::SortOrder(settings()->value(Constants::S_EPISODEVIEW_SORTORDER,
-                                                                      Qt::DescendingOrder).toInt()));
+        ui->episodeView->sortByColumn(settings()
+                                      ->value(Constants::S_EPISODEVIEW_SORTEDCOLUMN,
+                                              EpisodeModel::UserDateTime).toInt(),
+                                              Qt::SortOrder(settings()
+                                                            ->value(Constants::S_EPISODEVIEW_SORTORDER,
+                                                            Qt::DescendingOrder).toInt()));
         ui->episodeView->setSortingEnabled(true);
-
         checkCurrentEpisodeViewVisibility();
-
         QObject::connect(ui->episodeView->selectionModel(),
                          SIGNAL(currentChanged(QModelIndex,QModelIndex)),
                          q,
