@@ -384,6 +384,11 @@ public:
                          SIGNAL(currentChanged(QModelIndex,QModelIndex)),
                          q,
                          SLOT(episodeChanged(QModelIndex, QModelIndex)));
+        QObject::connect(ui->episodeView->selectionModel(),
+                SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
+                q,
+                SLOT(emitSelectedEpisodeChanged()));
+
         Q_EMIT q->actionsEnabledStateChanged();
     }
 
@@ -1157,4 +1162,10 @@ void FormPlaceHolder::showEvent(QShowEvent *event)
         }
     }
     QWidget::showEvent(event);
+}
+
+void FormPlaceHolder::emitSelectedEpisodeChanged()
+{
+    qDebug() << Q_FUNC_INFO;
+   Q_EMIT(formManager().selectedEpisodeChanged(d->_formTreeModel->formForIndex(d->_currentEditingForm)->uuid()));
 }

@@ -142,6 +142,7 @@ public Q_SLOTS:
 Q_SIGNALS:
     void episodeAboutToChange(const QModelIndex &index);
     void episodeChanged(const QModelIndex &index);
+    void newEpisodeRow(const QString &uuid);
 
 private Q_SLOTS:
     void onUserChanged();

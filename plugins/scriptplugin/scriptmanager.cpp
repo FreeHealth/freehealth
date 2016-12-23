@@ -37,6 +37,8 @@
 #include <formmanagerplugin/formmanager.h>
 #include <formmanagerplugin/formcollection.h>
 #include <formmanagerplugin/iformitem.h>
+#include <formmanagerplugin/episodemodel.h>
+#include <formmanagerplugin/episodemanager.h>
 
 #include <utils/log.h>
 
@@ -46,6 +48,7 @@ using namespace Script;
 using namespace Internal;
 
 static inline Form::FormManager &formManager() {return Form::FormCore::instance().formManager();}
+static inline Form::EpisodeManager &episodeManager() {return Form::FormCore::instance().episodeManager();}
 
 namespace {
 const char * const SCRIPT_NAMESPACE =
@@ -175,6 +178,7 @@ ScriptManager::ScriptManager(QObject *parent) :
     // Connect to formmanager
     connect(&formManager(), SIGNAL(patientFormsLoaded()), this, SLOT(onAllFormsLoaded()));
     connect(&formManager(), SIGNAL(subFormLoaded(QString)), this, SLOT(onSubFormLoaded(QString)));
+    connect(&formManager(), SIGNAL(selectedEpisodeChanged(QString)), this, SLOT(onSubFormLoaded(QString)));
 }
 
 QScriptValue ScriptManager::evaluate(const QString &script)
@@ -231,6 +235,7 @@ void ScriptManager::onAllFormsLoaded()
 */
 void ScriptManager::onSubFormLoaded(const QString &subFormUuid)
 {
+    qDebug() << Q_FUNC_INFO;
     // Update wrapper items
     forms->updateSubFormItemWrappers(subFormUuid);
 

@@ -105,8 +105,12 @@ public:
     void setFormTreeModel(FormTreeModel *model);
     QString currentFormLabel() const;
 
+signals:
+    void selectedEpisodeChanged(QString uuid);
+
 public Q_SLOTS:
     bool clear();
+    void emitSelectedEpisodeChanged();
 
 protected Q_SLOTS:
     void currentSelectedFormChanged(const QModelIndex &current, const QModelIndex &previous);

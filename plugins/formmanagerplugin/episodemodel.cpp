@@ -26,7 +26,7 @@
  ***************************************************************************/
 /**
  * \class Form::EpisodeModel
- * Create a model to episode database. Episode model are linked to a specific form.
+ * Create a model to episode database. Episode models are linked to a specific form.
  * Form::FormManager centralizes all the Form::EpisodeModel for each
  * forms.
  * \sa Form::FormManager::episodeModel()
@@ -695,6 +695,7 @@ void EpisodeModel::populateNewRowWithDefault(int row, QSqlRecord &record)
                     QDateTime::currentDateTimeUtc().toString(Qt::ISODate));
     record.setValue(Constants::EPISODES_ISVALID, 1);
     record.setValue(Constants::EPISODES_PRIORITY, Medium);
+    Q_EMIT newEpisodeRow(formUid());
 }
 
 /** Invalidate an episode. The episode will stay in database but will not be

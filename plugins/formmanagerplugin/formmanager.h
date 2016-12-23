@@ -138,6 +138,7 @@ public Q_SLOTS:
 Q_SIGNALS:
     void patientFormsLoaded();
     void subFormLoaded(const QString &uuid);
+    void selectedEpisodeChanged(QString uuid);
 
 private Q_SLOTS:
     void packChanged(const DataPack::Pack &pack);
