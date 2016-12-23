@@ -250,10 +250,7 @@ void RecordImportDialog::matchFormWidget() {
 
 void RecordImportDialog::import()
 {
-    //Form::FormMain *form = formManager().form(m_uuid);
-
     d->ui->startPushButton->setEnabled(false);
-    //QString form_uuid = "Chave::Past::Medical::History";
     Form::EpisodeModel *model = episodeManager().episodeModel(m_formUuid);
     QString usualName;
     QString firstname;
@@ -273,31 +270,30 @@ void RecordImportDialog::import()
             dob = QDate::fromString(dateOfBirth, "yyyy-MM-dd");
         }
         QString patientUuid = patientBase()->patientUuid(usualName, othernames, firstname, gender, dob);
-        qDebug() << usualName << firstname << dateOfBirth << dob << patientUuid;
-        //model->refreshFilter();
+        //qDebug() << usualName << firstname << dateOfBirth << dob << patientUuid;
         patient()->setCurrentPatientUid(patientUuid);
 
         //Form::FormMain *form = formManager().form(m_uuid);
         //qDebug() << form;
 
         //model = episodeManager().episodeModel(form);
-        qDebug() << model;
+        //qDebug() << model;
         //model->setCurrentPatient(uuid);
         model->setReadOnly(false);
-        qDebug() << "rowCount" << model->rowCount();
+        //qDebug() << "rowCount" << model->rowCount();
         int row;
         for (int k=0; k < model->rowCount(); ++k) {
             idx = model->index(k, Form::EpisodeModel::DataRepresentation::IsValid);
-            qDebug() << "model->data(idx).toInt()" << model->data(idx).toInt();
+            //qDebug() << "model->data(idx).toInt()" << model->data(idx).toInt();
         }
-        qDebug() << "isUniqueEpisode = " << formManager().form(m_formUuid)->isUniqueEpisode();
-        qDebug() << "del uniq checkbox" << d->ui->deleteUniqueEpisodeCheckBox->isChecked();
-        qDebug() << "m_uuid" << m_uuid;
-        qDebug() << "m_uuid" << m_formUuid;
+        //qDebug() << "isUniqueEpisode = " << formManager().form(m_formUuid)->isUniqueEpisode();
+        //qDebug() << "del uniq checkbox" << d->ui->deleteUniqueEpisodeCheckBox->isChecked();
+        //qDebug() << "m_uuid" << m_uuid;
+        //qDebug() << "m_uuid" << m_formUuid;
 
         if (d->ui->deleteUniqueEpisodeCheckBox->isChecked()
                 && formManager().form(m_formUuid)->isUniqueEpisode()) {
-            qDebug() << "inside delete episodes";
+            //qDebug() << "inside delete episodes";
             //model->removeAllEpisodes();
             for (int k=0; k < model->rowCount(); ++k) {
                 //idx = model->index(k, Form::EpisodeModel::DataRepresentation::IsValid);
@@ -306,21 +302,21 @@ void RecordImportDialog::import()
                 model->removeEpisode(idx);
                 model->submit();
             }
-            qDebug() << "rowCount" << model->rowCount();
+            //qDebug() << "rowCount" << model->rowCount();
             model->submit();
             //model->refreshFilter();
             for (int k=0; k < model->rowCount(); ++k) {
                 idx = model->index(k, Form::EpisodeModel::DataRepresentation::IsValid);
-                qDebug() << k << "model->data(idx).toInt()" << model->data(idx).toInt();
+                //qDebug() << k << "model->data(idx).toInt()" << model->data(idx).toInt();
             }
-            qDebug() << "rowCount" << model->rowCount();
+            //qDebug() << "rowCount" << model->rowCount();
             // insert a row in the model with defautl values
             model->insertRow(model->rowCount());
             row = model->rowCount()-1;
         } else {
             for (int j=0; j < model->rowCount(); ++j) {
                 idx = model->index(j, Form::EpisodeModel::DataRepresentation::IsValid);
-                qDebug() << "model->data(idx).toInt()" << model->data(idx).toInt();
+                //qDebug() << "model->data(idx).toInt()" << model->data(idx).toInt();
                 if (model->data(idx).toInt() == 1) {
                     row = j;
                     break;
@@ -328,26 +324,26 @@ void RecordImportDialog::import()
             }
         }
         if (!formManager().form(m_formUuid)->isUniqueEpisode()) {
-            qDebug() << "inside NOT unique episode";
+            //qDebug() << "inside NOT unique episode";
             model->insertRow(model->rowCount());
             row = model->rowCount()-1;
         }
-        qDebug() << "row = " << row;
+        //qDebug() << "row = " << row;
         // set the values related to the episode (if the user set them)
         // UserDateTime
         idx = model->index(row, Form::EpisodeModel::DataRepresentation::UserDateTime);
         QString isoUtcDateTimeString;
         if (!(m_episodeUserDateTimeComboBox->currentIndex() == -1)) {
-            qDebug() << "index: " << m_episodeUserDateTimeComboBox->currentIndex() ;
+            //qDebug() << "index: " << m_episodeUserDateTimeComboBox->currentIndex() ;
             QString isoDate = m_data->at(i).at(m_episodeUserDateTimeComboBox->currentIndex());
-            qDebug() << "isoDate: " << isoDate;
+            //qDebug() << "isoDate: " << isoDate;
             QDateTime isoDateTime = QDateTime::fromString(isoDate, "yyyy-MM-dd");
-            qDebug() << "isoDateTime: " << isoDateTime;
+            //qDebug() << "isoDateTime: " << isoDateTime;
             isoUtcDateTimeString = isoDateTime.toUTC().toString(Qt::ISODate);
         } else if (m_episodeUserDateTimeDateTimeEdit->dateTime().isValid()) {
             isoUtcDateTimeString = m_episodeUserDateTimeDateTimeEdit->dateTime().toUTC().toString(Qt::ISODate);
         }
-        qDebug() << "isoUtcDateTimeString: " << isoUtcDateTimeString;
+        //qDebug() << "isoUtcDateTimeString: " << isoUtcDateTimeString;
         model->setData(idx, isoUtcDateTimeString);
 
         // Label
@@ -358,19 +354,16 @@ void RecordImportDialog::import()
         // xml
         idx = model->index(row, Form::EpisodeModel::DataRepresentation::XmlContent);
         QString previousXml = model->data(idx).toString();
-        qDebug() << "previousXml" << previousXml;
+        //qDebug() << "previousXml" << previousXml;
         QString xml = xmlEpisode(i, previousXml);
-        qDebug() << "xml: " << xml;
-
+        //qDebug() << "xml: " << xml;
         model->setData(idx, xml);
-
-
         if (d->ui->validateEpisodeCheckBox->isChecked()) {
             model->validateEpisode(idx);
         }
-        qDebug() << "rowCount" << model->rowCount();
+        //qDebug() << "rowCount" << model->rowCount();
         model->submit();
-        qDebug() << "rowCount" << model->rowCount();
+        //qDebug() << "rowCount" << model->rowCount();
         model->setReadOnly(true);
     }
 }
@@ -445,9 +438,9 @@ QString RecordImportDialog::xmlEpisode(int &i, const QString previousXml)
     QHash<QString, QString> xmlData;
     foreach(Form::FormItem *it, m_formMain->flattenedFormItemChildren()) {
         if (it->itemData()) {
-            qDebug() << previousXmlData.value(it->uuid())
-                     << "xml data isEmpty ?"
-                     << previousXmlData.value(it->uuid()).isEmpty();
+            //qDebug() << previousXmlData.value(it->uuid())
+            //         << "xml data isEmpty ?"
+            //         << previousXmlData.value(it->uuid()).isEmpty();
             if (previousXmlData.value(it->uuid()).isEmpty()) {
                 xmlData.insert(it->uuid(), m_formItemHash->value(it->uuid()));
             } else {
