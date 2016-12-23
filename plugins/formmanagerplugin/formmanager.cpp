@@ -2,7 +2,7 @@
  *  The FreeMedForms project is a set of free, open source medical         *
  *  applications.                                                          *
  *  (C) 2008-2016 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
- *  All rights reserved.                                                   *
+ *                                                                         *
  *                                                                         *
  *  This program is free software: you can redistribute it and/or modify   *
  *  it under the terms of the GNU General Public License as published by   *
@@ -62,8 +62,8 @@
 #include "formtreemodel.h"
 #include "formitemtoken.h"
 
-#include <formmanagerplugin/iformwidgetfactory.h>
-#include <formmanagerplugin/iformitemdata.h>
+#include "iformwidgetfactory.h"
+#include "iformitemdata.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/iuser.h>
