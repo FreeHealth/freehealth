@@ -69,3 +69,4 @@ scripts/freemedforms-*
 scripts/Linux/ppa*
 
 .~lock.*#
+libs/aggregation/aggregation.qbs.user
