@@ -7,9 +7,9 @@
     <!-- Non translatable values -->
     <authors>Jérôme Pinguet</authors>
     <version>test</version>
-    <fmfv>0.9.7</fmfv>
+    <fmfv>0.9.9</fmfv>
     <cdate>2016-04-05</cdate>
-    <lmdate>2016-04-05</lmdate>
+    <lmdate>2016-10-04</lmdate>
     <icon>edit.png</icon>
     <weblink>https://www.medecinelibre.com</weblink>
     <!-- Translatable values -->
@@ -28,10 +28,12 @@
   <file type="script" name="onload">./scripts/xx/sportsmedicalcertificate.js</file>
 
   <MedForm type="form" name="Subforms::Certificates::Sports::Medical::Certificate" uifilename="./ui/xx/sportsmedicalcertificate.ui">
-    <label lang="xx">Certificat de non contre-indication à la pratique sportive</label>
-    <label lang="fr">Certificat de non contre-indication à la pratique sportive</label>
-    <icon>__theme__/xray.png</icon>
-    <options>DontPrintEmptyValues;UseFormNameAsNameSpace</options>
+    <label lang="xx">Certificat médical de non contre-indication à la pratique sportive</label>
+    <label lang="fr">Certificat médical de non contre-indication à la pratique sportive</label>
+    <icon>__theme__/typewriter.png</icon>
+    <options>DontPrintEmptyValues;UseFormNameAsNameSpace;noheader</options>
+    <file type="htmlprintmask">./html/xx/sports_medical_certificate_template.html</file>
+    <file type="htmlexportmask">./html/xx/sports_medical_certificate_template.html</file>
 
       <Item type="group" name="Items::Group">
         <uilink label="" widget="itemsGroupBox" layout=""/>

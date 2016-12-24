@@ -1,0 +1,197 @@
+<html>
+<head>
+<style>
+</style>
+</head>
+<body style="font-family:'Liberation Serif'; font-size:12pt; font-weight:400; font-style:normal; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">
+
+{{<!-- start of ~Form.Data.Item.Subs::Tools::LabTests::Exo::Header~ token that
+triggers printing of all exo order -->
+
+<div style="text-align: center; font-size:28pt; font-family: 'Liberation Serif';">Ordonnance bizone</div>
+<div style="text-align: center; font-family: 'Liberation Serif'; font-size: 11pt; ">Articles L. 322-3, 3° et 4°, L. 324-1 et R. 161-45 du Code de la sécurité sociale.</div>
+
+<table style="width:100%; height:350px">
+<tr>
+<td WIDTH="50%">
+<table BORDER="0" width="100%" HEIGHT="100%" style="border-style: none; background-color: black; margin-top: 10px; margin-bottom: 10px; margin-left: 5px; margin-right: 5px;">
+<tr>
+<td>
+<table BORDER="0" width="100%" HEIGHT="100%" style="border-style: none; background-color: white; margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px;">
+<tr>
+<td align="center" style=" font-size: 11pt;">Identification du prescripteur</td>
+<td rowspan="3">
+<div style=" font-family:'Code 128'; font-size:16pt; valign=middle;">
+{{~User.Professional.Identifiants~}}
+</div>
+</td>
+</tr>
+<tr>
+</tr>
+<tr>
+<td align="center">
+<div style="font-size: 11pt;">
+{{~User.Identity.FullName~}}
+</div>
+</td>
+
+</tr>
+</table>
+</td>
+</tr>
+</table>
+</td>
+<td WIDTH="50%">
+<table BORDER="0" HEIGHT="100%" style="border-style: none; background-color: black; margin-top: 10px; margin-bottom: 10px; margin-left: 5px; margin-right: 5px;">
+<tr>
+<td>
+<table BORDER="0" HEIGHT="100%" style="border-style: none; background-color: white; margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px;">
+<tr>
+<td align="center" style=" font-size: 11pt;">Identification de la structure</td>
+</tr>
+<tr>
+<td align="center">
+<div style="font-size: 8pt">(raison sociale du cabinet, de l'établissement et n°AM, FINESSE ou SIRET)</div>
+</td>
+</tr>
+<tr>
+<td align="center">...</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+
+<div align="center">
+<table BORDER="0" WIDTH="60%" style="border-style: none; background-color: black; margin-top: 10px; margin-bottom: 10px; margin-left: 5px; margin-right: 5px;">
+<tr>
+<td>
+<table BORDER="0" WIDTH="60%"
+style="border-style: none; background-color: white; margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px;">
+<tr>
+<td align="center" style=" font-size: 11pt;">Identification du patient</td>
+</tr>
+<tr>
+<td align="center">{{~Patient.Identity.FullName~}}</td>
+</tr>
+<tr>
+<td align="center">{{~Patient.Insurance.SocialNumber~}}</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+</div>
+<div align="right">[[DATE]]</div>
+<div style="margin-top: 5px; margin-bottom: 5px;">
+<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAIAAAAiOjnJAAAABGdBTUEAALGPC/xhBQAAAiJJREFUeF7t0IEAAAAAw6D5Ux/khVBhwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDDwMDDVlwABBWcSrQAAAABJRU5ErkJggg==" width="1000" height="1"/>
+</div>
+
+<div style= "text-align: center; font-size:11pt; font-family: 'Liberation Serif';">
+<b>Prescriptions relatives au traitement de l'affection de longue durée reconnue (liste ou hors liste)</b>
+<br>
+(AFFECTION EXONÉRANTE)
+</div>
+
+<div style="margin-top: 5px; margin-bottom: 5px;">
+<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAIAAAAiOjnJAAAABGdBTUEAALGPC/xhBQAAAiJJREFUeF7t0IEAAAAAw6D5Ux/khVBhwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDDwMDDVlwABBWcSrQAAAABJRU5ErkJggg==" width="1000" height="1"/>
+</div>
+
+<div style="font-family:'Arial'; font-size:14pt; margin-left:20px;">
+{{~Form.Data.Print.Subs::Tools::LabTests::Frequent::Exo~ <br/>}}
+{{~Form.Data.Item.Subs::Tools::LabTests::Affection::Exonerante~ <br/>}}
+{{~Form.Data.Print.Subs::Tools::LabTests::Basics::Hematology::Exo~ <br/>}}
+{{~Form.Data.Print.Subs::Tools::LabTests::Basics::Coagulation::Exo~ <br/>}}
+{{~Form.Data.Print.Subs::Tools::LabTests::Basics::Electrolytes::Exo~ <br/>}}
+{{~Form.Data.Print.Subs::Tools::LabTests::Basics::Kidney::Exo~ <br/>}}
+{{~Form.Data.Print.Subs::Tools::LabTests::Basics::Proteins::Exo~ <br/>}}
+{{~Form.Data.Print.Subs::Tools::LabTests::Basics::Liver::Exo~ <br/>}}
+{{~Form.Data.Print.Subs::Tools::LabTests::Basics::Metabolic::Exo~ <br/>}}
+{{~Form.Data.Print.Subs::Tools::LabTests::Basics::Cancer::Exo~ <br/>}}
+{{~Form.Data.Print.Subs::Tools::LabTests::Basics::Iron::Exo~ <br/>}}
+{{~Form.Data.Print.Subs::Tools::LabTests::Basics::Prostate::Exo~  <br/>}}
+{{~Form.Data.Print.Subs::Tools::LabTests::Basics::Vitamins::Exo~ <br/>}}
+{{~Form.Data.Print.Subs::Tools::LabTests::Basics::Thyroid::Exo~ <br/>}}
+{{~Form.Data.Print.Subs::Tools::LabTests::Basics::Biermer::Exo~ <br/>}}
+{{~Form.Data.Print.Subs::Tools::LabTests::Basics::Serologies::Exo~ <br/>}}
+{{~Form.Data.Print.Subs::Tools::LabTests::Basics::RhumatoidPolyarth::Exo~ <br/>}}
+</div>
+
+<!-- central token that encompass and triggers printing of all exo order: -->
+<div style="color: white;">~Form.Data.Item.Subs::Tools::LabTests::Exo::Header~</div>
+
+<div style="margin-top: 5px; margin-bottom: 5px;">
+<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAIAAAAiOjnJAAAABGdBTUEAALGPC/xhBQAAAiJJREFUeF7t0IEAAAAAw6D5Ux/khVBhwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDDwMDDVlwABBWcSrQAAAABJRU5ErkJggg==" width="1000" height="1"/>
+</div>
+
+<div style="text-align: center;font-size:11pt; font-family: 'Liberation Serif';">
+<b>Prescriptions SANS RAPPORT avec l'affection de longue durée</b>
+<br>
+(MALADIES INTERCURRENTES)
+</div>
+
+<div style="margin-top: 5px; margin-bottom: 5px;">
+<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAIAAAAiOjnJAAAABGdBTUEAALGPC/xhBQAAAiJJREFUeF7t0IEAAAAAw6D5Ux/khVBhwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDDwMDDVlwABBWcSrQAAAABJRU5ErkJggg==" width="1000" height="1"/>
+</div>
+
+}}<!-- end of ~Form.Data.Item.Subs::Tools::LabTests::Exo::Header~ token that
+triggers printing of all exo order -->
+
+{{
+<table border="1" style=" border-style:none; margin-top:6px; margin-bottom:6px; margin-left:6px; margin-right:6px;" width="100%" cellspacing="4" cellpadding="4" bgcolor="#ffffff">
+<tr>
+<td colspan="3">
+<p align="center" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">
+<span style=" font-family:'Sans Serif'; font-size:14pt;">
+{{~User.Contact.Street~}} {{~User.Contact.Zipcode~}} {{~User.Contact.City~}}
+</span>
+<br />
+<span style=" font-family:'Sans Serif'; font-size:12pt;">Tél {{~User.Contact.Tel1~}} </span><span style=" font-family:'Sans Serif'; font-size:12pt;">Fax {{~User.Contact.Fax~}} </span><span style=" font-family:'Sans Serif'; font-size:12pt;">Email {{~User.Contact.Mail~}} </span></p></td>
+<td></td></tr>
+<tr>
+<td width="33%">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'Lucida Grande'; font-size:14pt;">{{~User.Identity.FullName~}}</span> <span style=" font-family:'Lucida Grande'; font-size:13pt;">{{~User.Professional.Specialties~}} </span></p>
+<p style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'Code 128'; font-size:36pt;">{{~User.Professional.Identifiants~}} </span></p>
+<p style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'Sans Serif'; font-size:10pt;">{{~User.Professional.Qualifications~}} </span></p></td>
+<td colspan="2">
+<p align="right" style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'Lucida Grande'; font-size:13pt;">[[DATE]]</span></p>
+<p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;"><br /></p>
+<p align="right" style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'Sans Serif'; font-size:14pt;">{{~Patient.Identity.FullName~}}</span><br/>{{Date de naissance: ~Patient.Age.DateOfBirth~}}</p>{{~Patient.Age.DateFullAge~}}
+<p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Lucida Grande'; font-size:13pt;"><br /></p>
+<p align="right" style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'Sans Serif'; font-size:9pt;">{{~Patient.Age.YearsOld~}}</span></p></td></tr></table>
+
+<div style="color: white;">~Form.Data.Item.Subs::Tools::LabTests::Inter::Header~</div>
+}}
+
+
+
+<div style="font-family:'Arial'; font-size:14pt; margin-left:20px;">
+{{~Form.Data.Print.Subs::Tools::LabTests::Frequent::Inter~ <br/>}}
+{{~Form.Data.Item.Subs::Tools::LabTests::Maladies::Intercurrentes~ <br/>}}
+{{~Form.Data.Print.Subs::Tools::LabTests::Basics::Hematology~ <br/>}}
+{{~Form.Data.Print.Subs::Tools::LabTests::Basics::Coagulation~ <br/>}}
+{{~Form.Data.Print.Subs::Tools::LabTests::Basics::Electrolytes~ <br/>}}
+{{~Form.Data.Print.Subs::Tools::LabTests::Basics::Kidney~ <br/>}}
+{{~Form.Data.Print.Subs::Tools::LabTests::Basics::Proteins~ <br/>}}
+{{~Form.Data.Print.Subs::Tools::LabTests::Basics::Liver~ <br/>}}
+{{~Form.Data.Print.Subs::Tools::LabTests::Basics::Metabolic~ <br/>}}
+{{~Form.Data.Print.Subs::Tools::LabTests::Basics::Cancer~ <br/>}}
+{{~Form.Data.Print.Subs::Tools::LabTests::Basics::Iron~ <br/>}}
+{{~Form.Data.Print.Subs::Tools::LabTests::Basics::Prostate~  <br/>}}
+{{~Form.Data.Print.Subs::Tools::LabTests::Basics::Vitamins~ <br/>}}
+{{~Form.Data.Print.Subs::Tools::LabTests::Basics::Thyroid~ <br/>}}
+{{~Form.Data.Print.Subs::Tools::LabTests::Basics::Biermer~ <br/>}}
+{{~Form.Data.Print.Subs::Tools::LabTests::Basics::Serologies~ <br/>}}
+{{~Form.Data.Print.Subs::Tools::LabTests::Basics::RhumatoidPolyarth~ <br/>}}
+</div>
+<!--
+<div style="text-align: left; font-size:11pt; font-family: 'Liberation Serif';">
+Quiconque se rend coupable de fraude ou de fausse déclaration est passible de pénalités financières, d'amende et/ou d'emprisonnement (articles 313-1,<br>
+441-1 et 441-6 du Code pénal, articles L.114-13 et L. 162-1-14 du Code de la sécurité sociale).
+</div>
+-->
+</body>
+</html>

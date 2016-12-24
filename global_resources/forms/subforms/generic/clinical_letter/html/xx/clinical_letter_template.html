@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+
+p {
+    padding-top: 15px;
+    padding-bottom: 15px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+table, tr, td {
+    margin: 5px;
+    padding: 5px;
+}
+
+li {list-style-type: square;}
+ul {list-style-type: square;}
+
+body {
+    font-family: sans-serif;
+    font-size: 1.5em;
+}
+
+#name {
+    text-transform: uppercase;
+}
+
+</style>
+
+</head>
+
+<body>
+<table width="80%" border="1" cellspacing="0" cellpadding="0" align="right" BORDERCOLOR="lightgrey" RULES="cols" VALIGN="top">
+<tr align="right">
+<th align="right" colspan="2" bgcolor="gainsboro">
+{{<div id="name" align="right">~User.Identity.FullName~</div>}}
+</th>
+</tr>
+<tr align="right">
+<td align="right" valign="top">
+{{~User.Professional.Specialties~<br>}}
+{{~User.Professional.Identifiants~<br>}}
+{{~User.Professional.Qualifications~}}
+</td>
+<td align="right" valign="top">
+{{<nobr>~User.Contact.Street~</nobr><br>}}{{~User.Contact.Zipcode~}}{{ ~User.Contact.City~<br>}}
+{{Tél ~User.Contact.Tel1~ }}{{~User.Contact.Tel2~ }}{{~User.Contact.Tel3~}}<br>
+{{Fax ~User.Contact.Fax~<br>}}
+{{~User.Contact.Mail~}}
+</td>
+</tr>
+</table>
+
+<table border="0" cellspacing="0" cellpadding="0" align="left" VALIGN="top">
+<tr>
+<th align="left" colspan="2">
+<div id="name" align="left">
+{{~Form.Data.Print.Subforms::Generic::Clinical::Letter::Recipient::Title::Print::Combo~}}
+{{~Form.Data.Print.Subforms::Generic::Clinical::Letter::Recipient::Given::Name::Shorttext~}}
+{{~Form.Data.Print.Subforms::Generic::Clinical::Letter::Recipient::Surname::Shorttext~}}
+</div>
+</th>
+</tr>
+<tr>
+<td align="left" valign="top">
+<b>
+{{~Form.Data.Print.Subforms::Generic::Clinical::Letter::Medical::Specialty::Combo~}}
+{{~Form.Data.Print.Subforms::Generic::Clinical::Letter::Surgical::Specialty::Combo~}}
+{{~Form.Data.Print.Subforms::Generic::Clinical::Letter::Allied::Health::Professions::Combo~}}
+{{~Form.Data.Print.Subforms::Generic::Clinical::Letter::Other::Recipient::Shorttext~}}
+</b>
+</td>
+<td align="left" valign="top">
+{{~Form.Data.Print.Subforms::Generic::Clinical::Letter::Health::Facility::Shorttext~<br>}}
+{{~Form.Data.Print.Subforms::Generic::Clinical::Letter::Address1::Shorttext~<br>}}
+{{~Form.Data.Print.Subforms::Generic::Clinical::Letter::Address2::Shorttext~<br>}}
+{{~Form.Data.Print.Subforms::Generic::Clinical::Letter::Zip::Shorttext~}}
+{{~Form.Data.Print.Subforms::Generic::Clinical::Letter::City::Shorttext~}}
+</td>
+</tr>
+</table>
+
+<p align="right" style="text-transform: uppercase;">
+[[DATE]]
+</p>
+
+<p style="text-indent: 40px;">
+{{~Form.Data.Print.Subforms::Generic::Clinical::Letter::Salutation::Combo~}}
+</p>
+
+<p>
+{{<b>~Patient.Identity.FullName~</b>}}
+{{~Patient.Age.DateOfBirth~}}
+{{: ~Patient.Age.FullAge~.}}
+{{<br>~Patient.Address.FullAddress~}}
+</p>
+
+<p><u>Motif:</u> <b>[[EpisodeUserLabel]]</b></p>
+
+{{~Patient.Pmhx.Html~}}
+
+
+{{<h2 align="center">Traitement habituel</h2><hr>~Patient.Drugs.ChronicTherapeutics.Html~<hr>}}
+
+<div style="text-indent: 40px;">
+<p>
+{{~Form.Data.Print.Subforms::Generic::Clinical::Letter::Body::TextEditor~}}
+</p>
+</div>
+
+<p style="text-indent: 40px; padding-top: 10px; padding-bottom: 10px;">
+{{~Form.Data.Print.Subforms::Generic::Clinical::Letter::Sign::Off::Combo~}}
+</p>
+
+<p align="right">
+{{~User.Identity.FullName~}}
+</p>
+
+<p>
+<ul>
+{{{{~Form.Label.Subforms::Generic::Clinical::Letter::Carbon::Copy::Group~}}<li>~Form.Data.Print.Subforms::Generic::Clinical::Letter::CC1::LineEdit~</li>}}
+{{<li>~Form.Data.Print.Subforms::Generic::Clinical::Letter::CC2::LineEdit~</li>}}
+{{<li>~Form.Data.Print.Subforms::Generic::Clinical::Letter::CC3::LineEdit~</li>}}
+</ul>
+</p>
+
+</body>
+</html>

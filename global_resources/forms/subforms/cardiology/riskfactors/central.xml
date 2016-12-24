@@ -36,8 +36,8 @@
     <file type="htmlexportmask">./html/xx/padtools_print_export_mask.html</file>
 
       <Item type="helptext" name="Record::Name" >
-        <label lang="xx">Cardiovascular risk factors</label>
-        <label lang="fr"><b>Facteurs de risque cardio-vasculaires</b></label>
+        <label lang="xx"><![CDATA[<b>Cardiovascular risk factors</b>]]></label>
+        <label lang="fr"><![CDATA[<b>Facteurs de risque cardio-vasculaires</b>]]></label>
         <options>notprintable</options>
       </Item>
 

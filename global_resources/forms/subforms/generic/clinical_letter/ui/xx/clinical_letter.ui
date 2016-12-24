@@ -6,30 +6,39 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>431</width>
-    <height>393</height>
+    <width>437</width>
+    <height>660</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
+  <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
     <widget class="QGroupBox" name="recipientGroupBox">
      <property name="title">
       <string>recipient</string>
      </property>
+     <property name="flat">
+      <bool>false</bool>
+     </property>
+     <property name="checkable">
+      <bool>false</bool>
+     </property>
+     <property name="checked">
+      <bool>false</bool>
+     </property>
      <layout class="QGridLayout" name="gridLayout">
       <item row="0" column="0">
        <widget class="QComboBox" name="titleComboBox"/>
       </item>
-      <item row="0" column="1" colspan="2">
+      <item row="0" column="2" colspan="2">
        <widget class="QLineEdit" name="givenNameLineEdit"/>
       </item>
-      <item row="0" column="3" colspan="2">
+      <item row="0" column="4" colspan="2">
        <widget class="QLineEdit" name="surnameLineEdit"/>
       </item>
-      <item row="1" column="0" colspan="5">
+      <item row="1" column="0" colspan="6">
        <widget class="QLineEdit" name="healthFacilityLineEdit"/>
       </item>
       <item row="2" column="0">
@@ -39,21 +48,21 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="1" colspan="3">
+      <item row="2" column="2" colspan="3">
        <widget class="QComboBox" name="medicalSpecialtyComboBox">
         <property name="editable">
          <bool>true</bool>
         </property>
        </widget>
       </item>
-      <item row="3" column="1" colspan="3">
+      <item row="3" column="2" colspan="3">
        <widget class="QComboBox" name="surgicalSpecialtyComboBox">
         <property name="editable">
          <bool>true</bool>
         </property>
        </widget>
       </item>
-      <item row="2" column="4">
+      <item row="2" column="5">
        <widget class="QPushButton" name="medicalSpecialtyClearPushButton">
         <property name="text">
          <string>clear</string>
@@ -67,14 +76,17 @@
         </property>
        </widget>
       </item>
-      <item row="4" column="1" colspan="3">
+      <item row="4" column="2" colspan="3">
        <widget class="QComboBox" name="alliedHealthProfessionsComboBox">
         <property name="editable">
          <bool>true</bool>
         </property>
        </widget>
       </item>
-      <item row="3" column="4">
+      <item row="6" column="0" colspan="6">
+       <widget class="QLineEdit" name="address1LineEdit"/>
+      </item>
+      <item row="3" column="5">
        <widget class="QPushButton" name="surgicalSpecialtyClearPushButton">
         <property name="text">
          <string>clear</string>
@@ -88,24 +100,24 @@
         </property>
        </widget>
       </item>
-      <item row="6" column="0" colspan="5">
-       <widget class="QLineEdit" name="address1LineEdit"/>
+      <item row="7" column="0" colspan="6">
+       <widget class="QLineEdit" name="address2LineEdit"/>
       </item>
-      <item row="4" column="4">
+      <item row="4" column="5">
        <widget class="QPushButton" name="alliedHealthProfessionsClearPushButton">
         <property name="text">
          <string>clear</string>
         </property>
        </widget>
       </item>
-      <item row="7" column="0" colspan="5">
-       <widget class="QLineEdit" name="address2LineEdit"/>
+      <item row="8" column="0" colspan="3">
+       <widget class="QLineEdit" name="zipLineEdit"/>
       </item>
-      <item row="8" column="2" colspan="3">
+      <item row="8" column="3" colspan="3">
        <widget class="QLineEdit" name="cityLineEdit"/>
       </item>
-      <item row="8" column="0" colspan="2">
-       <widget class="QLineEdit" name="zipLineEdit"/>
+      <item row="5" column="2" colspan="2">
+       <widget class="QLineEdit" name="otherRecipientLineEdit"/>
       </item>
       <item row="5" column="0">
        <widget class="QLabel" name="otherRecipientLabel">
@@ -114,15 +126,82 @@
         </property>
        </widget>
       </item>
-      <item row="5" column="1" colspan="2">
-       <widget class="QLineEdit" name="otherRecipientLineEdit"/>
-      </item>
-      <item row="5" column="4">
+      <item row="5" column="5">
        <widget class="QPushButton" name="otherRecipientClearPushButton">
         <property name="text">
          <string>clear</string>
         </property>
        </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QComboBox" name="titlePrintComboBox">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>0</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="editable">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="carbonCopyGroupBox">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="title">
+      <string>carbon copy</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <item>
+       <widget class="QLineEdit" name="cC1LineEdit"/>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="cC2LineEdit"/>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="cC3LineEdit"/>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="bodyGroupBox">
+     <property name="title">
+      <string/>
+     </property>
+     <property name="flat">
+      <bool>false</bool>
+     </property>
+     <property name="checkable">
+      <bool>false</bool>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_3">
+      <item>
+       <widget class="QComboBox" name="salutationComboBox"/>
+      </item>
+      <item>
+       <layout class="QGridLayout" name="letterGridLayout"/>
+      </item>
+      <item>
+       <widget class="QComboBox" name="signOffComboBox"/>
       </item>
      </layout>
     </widget>
@@ -142,8 +221,8 @@
      <y>115</y>
     </hint>
     <hint type="destinationlabel">
-     <x>213</x>
-     <y>149</y>
+     <x>327</x>
+     <y>178</y>
     </hint>
    </hints>
   </connection>
@@ -158,8 +237,8 @@
      <y>115</y>
     </hint>
     <hint type="destinationlabel">
-     <x>213</x>
-     <y>183</y>
+     <x>327</x>
+     <y>215</y>
     </hint>
    </hints>
   </connection>
@@ -174,8 +253,8 @@
      <y>115</y>
     </hint>
     <hint type="destinationlabel">
-     <x>187</x>
-     <y>217</y>
+     <x>266</x>
+     <y>255</y>
     </hint>
    </hints>
   </connection>
@@ -186,8 +265,8 @@
    <slot>clearEditText()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>213</x>
-     <y>149</y>
+     <x>327</x>
+     <y>178</y>
     </hint>
     <hint type="destinationlabel">
      <x>213</x>
@@ -202,12 +281,12 @@
    <slot>clearEditText()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>213</x>
-     <y>149</y>
+     <x>327</x>
+     <y>178</y>
     </hint>
     <hint type="destinationlabel">
-     <x>213</x>
-     <y>183</y>
+     <x>327</x>
+     <y>215</y>
     </hint>
    </hints>
   </connection>
@@ -218,12 +297,12 @@
    <slot>clear()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>213</x>
-     <y>149</y>
+     <x>327</x>
+     <y>178</y>
     </hint>
     <hint type="destinationlabel">
-     <x>187</x>
-     <y>217</y>
+     <x>266</x>
+     <y>255</y>
     </hint>
    </hints>
   </connection>
@@ -234,12 +313,12 @@
    <slot>clearEditText()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>213</x>
-     <y>183</y>
+     <x>327</x>
+     <y>215</y>
     </hint>
     <hint type="destinationlabel">
-     <x>218</x>
-     <y>149</y>
+     <x>327</x>
+     <y>178</y>
     </hint>
    </hints>
   </connection>
@@ -250,8 +329,8 @@
    <slot>clearEditText()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>213</x>
-     <y>183</y>
+     <x>327</x>
+     <y>215</y>
     </hint>
     <hint type="destinationlabel">
      <x>213</x>
@@ -266,12 +345,12 @@
    <slot>clear()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>213</x>
-     <y>183</y>
+     <x>327</x>
+     <y>215</y>
     </hint>
     <hint type="destinationlabel">
-     <x>187</x>
-     <y>217</y>
+     <x>266</x>
+     <y>255</y>
     </hint>
    </hints>
   </connection>
@@ -282,8 +361,8 @@
    <slot>clearEditText()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>187</x>
-     <y>217</y>
+     <x>266</x>
+     <y>255</y>
     </hint>
     <hint type="destinationlabel">
      <x>213</x>
@@ -298,12 +377,12 @@
    <slot>clearEditText()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>187</x>
-     <y>217</y>
+     <x>266</x>
+     <y>255</y>
     </hint>
     <hint type="destinationlabel">
-     <x>213</x>
-     <y>149</y>
+     <x>327</x>
+     <y>178</y>
     </hint>
    </hints>
   </connection>
@@ -314,12 +393,76 @@
    <slot>clearEditText()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>187</x>
-     <y>217</y>
+     <x>266</x>
+     <y>255</y>
     </hint>
     <hint type="destinationlabel">
-     <x>213</x>
-     <y>183</y>
+     <x>327</x>
+     <y>215</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>titleComboBox</sender>
+   <signal>activated(int)</signal>
+   <receiver>salutationComboBox</receiver>
+   <slot>setCurrentIndex(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>67</x>
+     <y>50</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>219</x>
+     <y>574</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>titleComboBox</sender>
+   <signal>activated(int)</signal>
+   <receiver>signOffComboBox</receiver>
+   <slot>setCurrentIndex(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>67</x>
+     <y>50</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>219</x>
+     <y>617</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>titleComboBox</sender>
+   <signal>activated(int)</signal>
+   <receiver>titlePrintComboBox</receiver>
+   <slot>setCurrentIndex(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>67</x>
+     <y>50</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>114</x>
+     <y>49</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>bodyGroupBox</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>recipientGroupBox</receiver>
+   <slot>setChecked(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>215</x>
+     <y>580</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>215</x>
+     <y>188</y>
     </hint>
    </hints>
   </connection>

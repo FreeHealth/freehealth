@@ -1,0 +1,156 @@
+Hematology Tests
+  Blood Type Test (ABO Grouping and Rho Typing)
+  Complete Blood Count (CBC)
+  Hemoglobin
+  Hematocrit
+  Mean corpuscular volume (MCV)
+  Reticulocyte Count
+  Schizocyte Count
+  Sedimentation Rate (SR)
+
+Coagulation Tests
+  Prothrombin Time
+  Activated partial thromboplastin time
+  One-stage prothrombin time test (temps de Quick)
+
+Kidney / ions
+  Uric acid in blood
+  Blood urea nitrogen (BUN)
+  Creatinine and creatinine clearance
+  Serum Osmolality
+  Sodium (Na) in blood
+  Potassium (K) in blood
+  Chloride(Cl)  Calcium (Ca) in blood
+  Phosphate in blood
+  Lactic acid
+  Carbon dioxide (CO2)
+
+Blood glucose
+
+Proteins
+  Total Serum Protein
+  Albumin
+  Serum Protein Electrophoresis (SPE)
+  C-Reactive Protein (CRP)
+
+Liver Tests
+   Ammonia
+   ALAT (TGP)
+   ASAT (TGO)
+   Gamma Glutamyl Transpeptidase (GGT)
+   Lipase
+   Amylase
+   Total Bilirubin (Bilirubin Conjugated, Bilirubin Unconjugated)
+   Hepatitis A antibody
+   Hepatitis B antibody
+   Hepatitis B antigen
+   Hepatitis C antibody
+   Hepatitis C viral load
+   Hepatitis D antibody
+   Hepatitis E antibody
+
+Cancer
+  CEA (Carcinoembryonic Antigen)
+  AFP (Alpha-Fetoprotein) Tumor Marker
+  Cancer Antigen 125 (CA-125)
+  Cancer Antigen 15-3 (CA 15-3)
+  Cancer Antigen 19-9 (CA 19-9)
+  Cancer Antigen 27.29 (CA 27.29)
+  Beta-HCG Tumor Marker - Human Chorionic Gonadotropin (hCG)
+
+Diabetes
+  Glycohemoglobin (GHB)
+  HgbA1c (Hemoglobin A1c)
+  C-Peptide, Serum
+  Random Microalbumin, Urine
+  Glucose, Serum
+  1 lent
+    Auto-anticorps anti-cellules des îlots
+    Auto-anticorps anti-insuline
+    Auto-anticorps anti-décarboxylase de l'acide glutamique : anti-GAD
+    Auto-anticorps anti-IA2
+
+Iron (Fe)
+  Ferritin
+  Total iron-binding capacity (TIBC) test
+  Serum iron test
+  Transferrin saturation test
+  coefficient de saturation de la sidérophiline ?
+
+Prostate
+  Prostate-Specific Antigen (PSA)
+  Dihydrotestosterone (DHT)
+  Prostatic acid phosphatase (PAP)
+
+Vitamins
+  Vitamin B1
+  Vitamin B12
+  Vitamin D, 1, 25 Hydroxy
+  Vitamin D, 25-Hydroxy
+  Folic Acid In red blood cells / In plasma
+
+Thyroid
+  TSH (Thyroid-Stimulating Hormone)
+  Free T3
+  Free T4
+  Thyroid Peroxidase (TPO) Antibodies
+  Thyroglobulin antibody
+  Thyroid stimulating hormone receptor antibody
+  Thyroid Stimulating Immunoglobulin
+  Parathyroid Hormone (PTH), Intact
+
+Blood Alcohol
+Lead
+
+Cold Agglutinins
+
+Biermer disease
+  Gastrin
+  Intrinsic factor
+  Schilling Test
+
+
+Bilirubin
+Cholesterol and triglyceride tests
+Toxicology Tests (test drugs)
+Vitamin K
+
+
+
+Lyme Disease Antibodies, IgM
+H. pylori Urea Breath Test 
+Lyme Disease, Serum, Western Blot
+HIV
+Antinuclear Antibodies (ANA)
+Rheumatoid Factor (RF)
+Measles, Mumps, Rubella (MMR) Immunity Profile
+Hepatitis B Immunity Status
+Epstein-Barr Virus (EBV), PCR, Qualitative
+Mononucleosis Test, Qualitative
+Cytomegalovirus (CMV) Antibodies, IgG
+Parvovirus B19 (Fifth Disease)
+Rubella Antibodies, IgG
+Rubeola Antibodies, IgG
+Toxoplasma Gondii Antibodies, IgG
+Tetanus Antibodies Profile
+Varicella Zoster Virus (VZV) Antibodies, IgG
+West Nile Virus, PCR
+Syphilis - Rapid Plasma Reagin (RPR)
+
+
+Estradiol, Sensitive
+Estrogen, Total
+Estradiol
+Progesterone
+Follicle Stimulating Hormone (FSH)
+Prolactin
+LH (Luteinizing Hormone)
+Beta HCG Qualitative, Quantitative
+Dehydroepiandrosterone (DHEA) Sulfate
+Testosterone, Total
+Testosterone, Free
+
+Homocysteine
+B-Type Natriuretic Peptide (BNP)
+
+

@@ -129,6 +129,9 @@ ListView::ListView(QWidget *parent, Constants::AvailableActions actions) :
 
     // Create the listview && the widget content
     d->m_ListView = new QListView(this);
+    d->m_ListView->setDragEnabled(true);
+    d->m_ListView->setAcceptDrops(true);
+    d->m_ListView->setDropIndicatorShown(true);
     setItemView(d->m_ListView);
 
     // Create the Manager instance and context

@@ -29,7 +29,7 @@
  * Provides a stringlist view to use with tkUserViewer. For eg with
  * the specialties, qualifications... of users.
  * - Property stringList is used for QDataWidgetMapper.
- * - Holds the mecanism for add, remove, move up and down for all items using a contextmenu.
+ * - Holds the mechanism for add, remove, move up and down for all items using a contextmenu.
  * - Set and get the model stringList using getStringList() and setStringList().
  *
  * - You can use it with the Views::StringListModel and set items to be checkable.

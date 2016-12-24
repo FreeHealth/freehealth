@@ -390,10 +390,20 @@ QString PadCore::tokenValue(Core::ITokenPool *pool, TokenReplacementMethod metho
     case ReplaceWithTokenTestingValue: return pool->token(uid())->testValue().toString();
     case ReplaceWithTokenUuid: return uid();
     default: // ReplaceWithTokenValue
-        if (pool->token(uid()))
-            return pool->token(uid())->value().toString();
-        else
+        if (pool->token(uid())) {
+            if (pool->token(uid())->value().userType() == QMetaType::QStringList) {
+                return pool->token(uid())->value().toStringList().join("<br/>");
+            } else if ((pool->token(uid())->value().userType() == QMetaType::QString)) {
+                return pool->token(uid())->value().toString();
+            } else {
+                qWarning() << Q_FUNC_INFO
+                           << "Token value type: "
+                           << pool->token(uid())->value().userType()
+                           << " is not valid.";
+            }
+        } else {
             qWarning() << "**** Missing token "<<uid();
+        }
     }
     return QString::null;
 }

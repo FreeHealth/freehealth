@@ -48,8 +48,8 @@
   <file type="script" name="onload">./scripts/xx/script.js</file>
 
   <MedForm name="Subs::Tools::SOAP::WithBio" uifilename="./ui/xx/soapbio.ui">
-    <label lang="xx">SOAP with biometrics</label>
-    <label lang="fr">POMR avec biométrie</label>
+    <label lang="xx">SOAP with biometrics v. 2</label>
+    <label lang="fr">POMR avec biométrie v. 2</label>
     <label lang="de">SOAP mit Biometriedaten</label>
     <options>UseFormNameAsNameSpace</options>
     <icon>__theme__/stethoscope.png</icon>
