@@ -284,6 +284,32 @@ public:
         return ok;
     }
 
+    /**
+     * Save currently selected episode even if it's not dirty.
+     * Used as the last step of episode creation so that an associated script
+     * is able to use current (empty) widget data and not dangling widget data
+     * from previous episode.
+     * See Git issue #70
+     * \sa FormPlaceHolder::createEpisode()
+     */
+    bool forceSaveCurrentEditingEpisode()
+    {
+        if (!ui->formDataMapper->currentEditingEpisodeIndex().isValid()) {
+            LOG_FOR(q, "Episode not saved, no current editing episode");
+            qDebug() << "Episode not saved, no current editing episode";
+            return false;
+        }
+        bool ok = ui->formDataMapper->submit();
+        if (!ok) {
+            patient()->patientBar()->showMessage(QApplication::translate("Form::FormPlaceHolder", "WARNING: Episode (%1) from form (%2) cannot be saved")
+                                                 .arg(ui->formDataMapper->currentEpisodeLabel())
+                                                 .arg(ui->formDataMapper->currentFormName()));
+            qDebug() << QString("WARNING: Episode (%1) from form (%2) cannot be saved").arg(ui->formDataMapper->currentEpisodeLabel())
+                        .arg(ui->formDataMapper->currentFormName());
+        }
+        return ok;
+    }
+
     void checkCurrentEpisodeViewVisibility()
     {
         if (!_formTreeModel)
@@ -384,6 +410,7 @@ public:
                          SIGNAL(currentChanged(QModelIndex,QModelIndex)),
                          q,
                          SLOT(episodeChanged(QModelIndex, QModelIndex)));
+
         Q_EMIT q->actionsEnabledStateChanged();
     }
 
@@ -717,7 +744,7 @@ void FormPlaceHolder::setCurrentEditingFormItem(const QModelIndex &index)
 }
 
 /**
- * Creates a new episode for the current selected form.
+ * Create a new episode for the current selected form.
  * Return true in case of success.
  * Connected to Form::Internal::FormActionHandler
  * \sa Form::EpisodeModel::insertRow()
@@ -752,22 +779,23 @@ bool FormPlaceHolder::createEpisode()
         return false;
     }
     setCurrentEditingFormItem(index);
-
-    // create a new episode the selected form and its children
+    // create a new episode with the selected form and its children
     // FIXME: see bool EpisodeModel::validateEpisode(const QModelIndex &index)
     d->_currentEpisodeModel->setReadOnly(false);
     if (!d->_currentEpisodeModel->insertRow(d->_currentEpisodeModel->rowCount())) {
         LOG_ERROR("Unable to create new episode");
         return false;
     }
-
-    // activate the newly created main episode
+    // activate the newly created episode
     QModelIndex source = d->_currentEpisodeModel->index(d->_currentEpisodeModel->rowCount() - 1, EpisodeModel::Label);
     QModelIndex proxy = d->_proxyModel->mapFromSource(source);
-
     d->ui->episodeView->selectRow(proxy.row());
     d->ui->formDataMapper->setCurrentEpisode(source);
-
+    // save newly created episode (see forceSaveCurrentEditingEpisode())
+    if (d->_currentEpisodeModel) {
+        if (!d->forceSaveCurrentEditingEpisode())
+            LOG_ERROR("Unable to save newly created episode");
+    }
     d->_formTreeModel->updateFormCount(d->_currentEditingForm);
     Q_EMIT actionsEnabledStateChanged();
     return true;
