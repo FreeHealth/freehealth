@@ -392,7 +392,7 @@ public:
         else
             small.setPointSize(small.pointSize() - 4);
         ui->episodeView->horizontalHeader()->setFont(small);
-        QFile file(":/headerview.qss");
+        QFile file(":/resources/headerview.qss");
         file.open(QFile::ReadOnly);
         QString styleSheet = QLatin1String(file.readAll());
         ui->episodeView->horizontalHeader()->setStyleSheet(styleSheet);
