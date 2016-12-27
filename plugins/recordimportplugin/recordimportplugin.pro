@@ -20,14 +20,11 @@ HEADERS += \
     recordimport_exporter.h\
     recordimportconstants.h \
     recordimportdialog.h \
-    processrecordimport.h \
-    recordimportdialog_p.h \
-    processrecordimport_p.h
+    recordimportdialog_p.h
         
 SOURCES += \
     recordimportplugin.cpp \
-    recordimportdialog.cpp \
-    processrecordimport.cpp
+    recordimportdialog.cpp
 
 OTHER_FILES = recordimport.pluginspec
 
