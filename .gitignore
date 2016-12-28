@@ -35,8 +35,8 @@ Makefile*
 object_script.*
 *.o
 moc_*
-*plugins/*/*.json
-free*/*plugins/*/*.json
+#*plugins/*/*.json
+#free*/*plugins/*/*.json
 tests/*/plugins/*plugin/*.json
 
 # Non Free content
