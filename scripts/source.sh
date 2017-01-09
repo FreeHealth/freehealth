@@ -206,9 +206,11 @@ plugins/icdplugin \
 plugins/identityplugin \
 plugins/listviewplugin \
 plugins/padtoolsplugin \
-plugins/patientbaseplugin
+plugins/patientbaseplugin \
+plugins/patientimportplugin \
 plugins/pmhplugin \
 plugins/printerplugin \
+plugins/recordimportplugin \
 plugins/saverestoreplugin \
 plugins/scriptplugin \
 plugins/templatesplugin \
