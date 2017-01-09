@@ -104,7 +104,6 @@ global_resources/package_helpers/freeaccount* \
 global_resources/package_helpers/freediams* \
 global_resources/package_helpers/freedrc* \
 global_resources/package_helpers/freeicd* \
-global_resources/package_helpers/freemedforms* \
 global_resources/package_helpers/freehealth* \
 global_resources/package_helpers/freepad* \
 global_resources/package_helpers/freetool* \
@@ -139,7 +138,6 @@ global_resources/textfiles/oldprescriptionsfiles \
 global_resources/textfiles/edrc \
 global_resources/textfiles/prescription \
 global_resources/translations/*.ts \
-global_resources/translations/qt*.qm \
 "
 
 BUILDSPEC_SOURCES="\
@@ -172,7 +170,6 @@ freedrc.pro \
 freedrc \
 freeicd.pro \
 freeicd \
-freehealth.pro \
 freehealth \
 freepad.pro \
 freepad \

@@ -20,12 +20,12 @@
 # * linux-integrated release build on a linux system.                       *
 # ***************************************************************************/
 
-BINARY="freemedforms.bin"
-PLUGINS_PATH="freemedforms"
-APPLICATION_NAME="FreeMedForms"
+BINARY="freehealth.bin"
+PLUGINS_PATH="freehealth"
+APPLICATION_NAME="FreeHealth"
 
-# Check if the freemedforms binary is a linux-integrated & a release build
-checkFreeMedFormsBuild()
+# Check if the freehealth binary is a linux-integrated & a release build
+checkEhrBuild()
 {
     if `/usr/bin/$BINARY -v` | grep -q "Release (Linux Integrated)"; then
         echo "Found $APPLICATION_NAME binary"
@@ -64,11 +64,11 @@ if test -L "$me"; then
     fi
 fi
 
-checkFreeMedFormsBuild
+checkEhrBuild
 
 # Prepare paths
 bindir=`dirname "$me"`
-LIB_DIR="/usr/lib/freemedforms-common"
+LIB_DIR="/usr/lib/freehealth-common"
 PLUG_DIR="/usr/lib/$PLUGINS_PATH"
 
 # Define the LD_LIBRARY_PATH
