@@ -48,45 +48,55 @@ using namespace Trans::ConstantTranslations;
 namespace MedicalUtils {
 
 /** \brief Returns a readable age calculated from the date to now */
-QString readableAge(const QDate &DOB)
+QString readableAge(const QDate &DOB, const int &monthsYearsLimit)
 {
+
     QDate current = QDate::currentDate();
+    int daysTo = DOB.daysTo(current);
+    if (daysTo < 0)
+        return QString(tkTr("Invalid date of birth"));
+    int ageInMonths = (current.year() - DOB.year())*12 + current.month() - DOB.month();
+    // Check newborn
+    if (current == DOB)
+        return QString(tkTr("New born"));
     // Check anniversary
     if (current.month() == DOB.month()
             && current.day() == DOB.day()) {
         int years = current.year() - DOB.year();
-        return QString("%1 %2").arg(years).arg(tkTr(YEAR_S, years));
+        if (ageInMonths <= monthsYearsLimit)
+            return QString(QObject::tr("%n month(s)", "", ageInMonths));
+        return QString(QObject::tr("%n year(s)", "", years));
     }
     // Compute average age
-    int daysTo = DOB.daysTo(current);
     double age = daysTo / 365.242199;
     QStringList readableAge;
     // years
     int years = (int)age;
-    if (years>0) {
-        QString tmp = QString::number(years) + " ";
-        tmp.append(tkTr(YEAR_S, years));
+
+    if (ageInMonths >= monthsYearsLimit) {
+        QString tmp = (QString(QObject::tr("%n year(s)", "", years)));
         readableAge << tmp;
         age -= years;
     }
     // months
-    int months = age * 12;
+    int months;
+    months = age * 12;
     if (months > 0) {
-        QString tmp = QString::number(months) + " ";
         age -= months / 12.0;
-        tmp.append(tkTr(MONTH_S, months));
+        QString tmp = (QString(QObject::tr("%n month(s)", "", months)));
         readableAge << tmp;
     }
-    int days = daysTo - (years*365.25) - (months*12);
+    //int days;
+    //days = daysTo - (years*365.25) - (months*12);
     if (age > 0) {
-        QString tmp = QString::number((int)(age*365.242199)) + " ";
-        tmp.append(tkTr(DAYS, days));
+        int numberOfDays = (int)(age*365.242199);
+        QString tmp = QString(QObject::tr("%n day(s)", "", numberOfDays));
         readableAge << tmp;
     }
     return readableAge.join(" ");
 }
 
-/** \brief Returns a readable age calculated from the date to now */
+/** \brief Returns a readable age in year(s) */
 int ageYears(const QDate &DOB)
 {
     int daysTo = DOB.daysTo(QDate::currentDate());
