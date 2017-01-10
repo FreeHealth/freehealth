@@ -454,7 +454,7 @@ QVariant PatientModel::data(const QModelIndex &index, int role) const
             if (role==Qt::DisplayRole) {
                 return dob;
             } else if (role==Qt::ToolTipRole) {
-                return QString("%1; %2").arg(QLocale().toString(dob, QLocale().dateFormat(QLocale::LongFormat))).arg(MedicalUtils::readableAge(dob));
+                return QString("%1; %2").arg(QLocale().toString(dob, QLocale().dateFormat(QLocale::LongFormat))).arg(MedicalUtils::readableAge(dob, settings()->value(Patients::Constants::S_PEDIATRICSMONTHSYEARSLIMIT, 36).toInt()));
             }
             return dob;
             break;
@@ -526,7 +526,15 @@ QVariant PatientModel::data(const QModelIndex &index, int role) const
         case IPatient::Age:
         {
             QModelIndex idx = d->m_SqlPatient->index(index.row(), Constants::IDENTITY_DOB);
-            return MedicalUtils::readableAge(d->m_SqlPatient->data(idx).toDate());
+            QDate dob = d->m_SqlPatient->data(idx).toDate();
+            int monthsYearsLimit = settings()->value(Patients::Constants::S_PEDIATRICSMONTHSYEARSLIMIT, 36).toInt();
+            int ageInYears = MedicalUtils::ageYears(dob);
+            int pediatricsAgeLimit = settings()->value(Patients::Constants::S_PEDIATRICSAGELIMIT, 18).toInt();
+            if (ageInYears >= pediatricsAgeLimit) {
+                QString ageInYearsString = QString(tr("%n year(s)", "", ageInYears));
+                return ageInYearsString;
+            }
+            return MedicalUtils::readableAge(dob, monthsYearsLimit);
         }
         case IPatient::YearsOld:
         {

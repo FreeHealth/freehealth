@@ -97,13 +97,15 @@ public:
         ui->gender->clear();
         ui->names->clear();
         ui->photo->clear();
+        ui->dob->clear();
     }
 
     void updateUi()
     {
         ui->age->setText(patient()->data(Core::IPatient::Age).toString());
-        QModelIndex dob = patient()->index(patient()->currentPatientIndex().row(), Core::IPatient::DateOfBirth);
-        ui->age->setToolTip(patient()->data(dob, Qt::ToolTipRole).toString());
+        //ui->dob->setText(patient()->data(Core::IPatient::DateOfBirth).toString());
+        QString dobShort = QLocale().toString(patient()->data(Core::IPatient::DateOfBirth).toDate(), QLocale::ShortFormat);
+        ui->dob->setText(dobShort);
         ui->gender->setPixmap(patient()->data(Core::IPatient::GenderPixmap).value<QPixmap>());
         ui->names->setText(patient()->data(Core::IPatient::FullName).toString());
         updatePatientPhoto();

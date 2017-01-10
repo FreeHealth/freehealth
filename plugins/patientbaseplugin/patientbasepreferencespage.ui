@@ -7,13 +7,45 @@
     <x>0</x>
     <y>0</y>
     <width>556</width>
-    <height>585</height>
+    <height>719</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_5">
+   <item row="3" column="0">
+    <widget class="QGroupBox" name="groupBoxPhoto">
+     <property name="title">
+      <string>Patient photo</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_2">
+      <item row="0" column="1">
+       <widget class="QComboBox" name="comboDefaultPhotoSource"/>
+      </item>
+      <item row="0" column="0">
+       <widget class="QLabel" name="labelDefaultPhotoSource">
+        <property name="text">
+         <string>Default photo source:</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="5" column="0">
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
    <item row="1" column="0">
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
@@ -56,73 +88,6 @@
       </item>
      </layout>
     </widget>
-   </item>
-   <item row="2" column="0">
-    <widget class="QGroupBox" name="groupBoxBar">
-     <property name="title">
-      <string>Patient bar</string>
-     </property>
-     <layout class="QGridLayout" name="gridLayout">
-      <item row="0" column="0">
-       <widget class="QLabel" name="labelBackgroundColor">
-        <property name="text">
-         <string>Background color:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="Utils::ColorButtonChooser" name="patientBarColor">
-        <property name="minimumSize">
-         <size>
-          <width>22</width>
-          <height>22</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>22</width>
-          <height>22</height>
-         </size>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item row="3" column="0">
-    <widget class="QGroupBox" name="groupBoxPhoto">
-     <property name="title">
-      <string>Patient photo</string>
-     </property>
-     <layout class="QGridLayout" name="gridLayout_2">
-      <item row="0" column="1">
-       <widget class="QComboBox" name="comboDefaultPhotoSource"/>
-      </item>
-      <item row="0" column="0">
-       <widget class="QLabel" name="labelDefaultPhotoSource">
-        <property name="text">
-         <string>Default photo source:</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item row="5" column="0">
-    <spacer name="verticalSpacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>40</height>
-      </size>
-     </property>
-    </spacer>
    </item>
    <item row="0" column="0">
     <widget class="QGroupBox" name="groupBoxSelector">
@@ -208,23 +173,75 @@ Warning: If you are using FreeMedForms over a network, this can lead to heavy ne
      </layout>
     </widget>
    </item>
+   <item row="2" column="0">
+    <widget class="QGroupBox" name="groupBoxBar">
+     <property name="title">
+      <string>Patient bar</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="0" column="0">
+       <widget class="QLabel" name="labelBackgroundColor">
+        <property name="text">
+         <string>Background color:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="Utils::ColorButtonChooser" name="patientBarColor">
+        <property name="minimumSize">
+         <size>
+          <width>22</width>
+          <height>22</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>22</width>
+          <height>22</height>
+         </size>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
    <item row="4" column="0">
     <widget class="QGroupBox" name="groupBoxPediatrics">
      <property name="title">
       <string>Pediatrics</string>
      </property>
-     <layout class="QHBoxLayout" name="horizontalLayout_2">
-      <item>
+     <layout class="QGridLayout" name="gridLayout_6">
+      <item row="0" column="0">
        <widget class="QLabel" name="labelPediatricsAgeLimit">
         <property name="text">
          <string>Age limit of pediatrics</string>
         </property>
        </widget>
       </item>
-      <item>
+      <item row="0" column="1">
        <widget class="QSpinBox" name="spinBoxPediatricsAgeLimit">
         <property name="value">
          <number>18</number>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0" rowspan="2" colspan="2">
+       <widget class="QLabel" name="labelPediatricsMonthsYearsLimit">
+        <property name="text">
+         <string>Express age in months until</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QSpinBox" name="spinBoxPediatricsMonthsYearsLimit">
+        <property name="suffix">
+         <string>months</string>
+        </property>
+        <property name="maximum">
+         <number>36</number>
         </property>
        </widget>
       </item>

@@ -741,8 +741,8 @@ public:
         if (m_PatientModel->index(row, Core::IPatient::YearsOld).data().toInt() < settings()->value(Patients::Constants::S_PEDIATRICSAGELIMIT, 18).toInt()) {
             age = m_PatientModel->index(row, Core::IPatient::Age).data().toString();
         } else {
-            QString yearsOld = m_PatientModel->index(row, Core::IPatient::YearsOld).data().toString();
-            age = QString("%1 %2").arg(yearsOld).arg(tkTr(  Trans::Constants::YEARS));
+            int yearsOld = m_PatientModel->index(row, Core::IPatient::YearsOld).data().toInt();
+            age = QString(QObject::tr("%n year(s)", "", yearsOld));
         }
         QString dobShort = QLocale().toString(m_PatientModel->index(row, Core::IPatient::DateOfBirth).data().toDate(), QLocale::ShortFormat);
         QString dobLong = QLocale().toString(m_PatientModel->index(row, Core::IPatient::DateOfBirth).data().toDate(), QLocale::LongFormat);

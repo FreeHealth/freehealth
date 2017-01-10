@@ -44,7 +44,8 @@ namespace Constants {
     const char * const  S_RECENTPATIENT_MAX  = "Patients/Recent/Max";
     const char * const  S_RECENTPATIENT_LIST = "Patients/Recent/List";
 
-    const char  * const S_PEDIATRICSAGELIMIT = "Patients/PediatricsAgeLimit";
+    const char * const S_PEDIATRICSAGELIMIT = "Patients/PediatricsAgeLimit";
+    const char * const S_PEDIATRICSMONTHSYEARSLIMIT = "Patients/PediatricsMonthsYearsLimit";
 
 }  // End namespace Patients::Constants
 }  // End namespace Patients
