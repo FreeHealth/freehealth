@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="it_IT">
+<TS version="2.1" language="it_IT">
 <context>
     <name>Agenda</name>
     <message>
@@ -111,10 +111,10 @@
 <context>
     <name>Agenda::Internal::CalendarItemEditorPatientMapperWidget</name>
     <message>
-        <location filename="../../plugins/agendaplugin/calendaritemeditorpatientmapper.cpp" line="163"/>
-        <location filename="../../plugins/agendaplugin/calendaritemeditorpatientmapper.cpp" line="164"/>
-        <location filename="../../plugins/agendaplugin/calendaritemeditorpatientmapper.cpp" line="304"/>
-        <location filename="../../plugins/agendaplugin/calendaritemeditorpatientmapper.cpp" line="305"/>
+        <location filename="../../plugins/agendaplugin/calendaritemeditorpatientmapper.cpp" line="155"/>
+        <location filename="../../plugins/agendaplugin/calendaritemeditorpatientmapper.cpp" line="156"/>
+        <location filename="../../plugins/agendaplugin/calendaritemeditorpatientmapper.cpp" line="296"/>
+        <location filename="../../plugins/agendaplugin/calendaritemeditorpatientmapper.cpp" line="297"/>
         <source>Add current patient</source>
         <translation type="unfinished"></translation>
     </message>

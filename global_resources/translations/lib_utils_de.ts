@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="de_DE">
+<TS version="2.1" language="de_DE">
 <context>
     <name>Database</name>
     <message>
@@ -44,7 +44,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="2386"/>
+        <location filename="../../libs/utils/database.cpp" line="2452"/>
         <source>Can not create table %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -169,23 +169,23 @@
         <translation>Error %1 während des schreibens auf Datei %2</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="1108"/>
+        <location filename="../../libs/utils/global.cpp" line="1100"/>
         <source>Cancel</source>
         <translation>Abbrechen</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="1199"/>
+        <location filename="../../libs/utils/global.cpp" line="1191"/>
         <source>This function is not available in this version.</source>
         <translation>Diese Funktion ist nicht verfügbar in dieser Version.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="1261"/>
+        <location filename="../../libs/utils/global.cpp" line="1253"/>
         <source>Do you agree these terms?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="1241"/>
-        <location filename="../../libs/utils/global.cpp" line="1242"/>
+        <location filename="../../libs/utils/global.cpp" line="1233"/>
+        <location filename="../../libs/utils/global.cpp" line="1234"/>
         <source>License agreement acceptation</source>
         <translation>Nehme die Lizenz an</translation>
     </message>
@@ -196,27 +196,27 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="1200"/>
+        <location filename="../../libs/utils/global.cpp" line="1192"/>
         <source>You can send an email to developers and explain your difficulties: dev@freehealth.io</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="1253"/>
+        <location filename="../../libs/utils/global.cpp" line="1245"/>
         <source>&lt;b&gt;Before you can use this software, you must agree its license terms&lt;/b&gt;</source>
         <translation>&lt;b&gt;Bevor sie diese Software nutzen können, müssen sie die Lizenzbestimmungen annehmen&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="1328"/>
+        <location filename="../../libs/utils/global.cpp" line="1320"/>
         <source>%1 is now in fullScreen Mode.</source>
         <translation>%1 ist nun im Vollbildmodus.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="1333"/>
+        <location filename="../../libs/utils/global.cpp" line="1325"/>
         <source>%1 is now in non fullScreen Mode.</source>
         <translation>%1 ist nun in keinem Vollbildmodus.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="2237"/>
+        <location filename="../../libs/utils/global.cpp" line="2229"/>
         <source>Token replacement error (%1). Wrong number of parentheses.</source>
         <translation>Token ersetzungs Error (%1) Falsche Anzahl an Eltern.</translation>
     </message>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="de_DE">
+<TS version="2.1" language="de_DE">
 <context>
     <name>Form::EpisodeModel</name>
     <message>
@@ -149,10 +149,6 @@ Do you really want to remove the current episode?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>WARNING: Episode (%1) from form (%2) can not be saved</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Episode (%1) from form (%2) signed</source>
         <translation type="unfinished"></translation>
     </message>
@@ -173,8 +169,12 @@ Do you really want to remove the current episode?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>The actual episode has been modified. Do you want to save changes in your database?
-Answering &apos;No&apos; will cause deftialtve data loss.</source>
+        <source>The current episode has been modified. Do you want to save changes?
+Answering &apos;No&apos; will cause definitive data loss.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>WARNING: Episode (%1) from form (%2) cannot be saved</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="fr_FR">
+<TS version="2.1" language="fr_FR">
 <context>
     <name>Tools</name>
     <message>
@@ -247,12 +247,12 @@ Une par ligne</translation>
 </context>
 <context>
     <name>Tools::Internal::FspPrinterPreferencesWidget</name>
-    <message utf8="true">
+    <message>
         <location filename="../../plugins/toolsplugin/fsp/fspprinterpreferences.ui" line="30"/>
         <source>Cerfa par défaut</source>
         <translation></translation>
     </message>
-    <message utf8="true">
+    <message>
         <location filename="../../plugins/toolsplugin/fsp/fspprinterpreferences.ui" line="36"/>
         <source>Utiliser ce CERFA par défaut</source>
         <translation></translation>
@@ -304,7 +304,7 @@ Une par ligne</translation>
 <context>
     <name>Tools::Internal::HprimIntegratorMode</name>
     <message>
-        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="501"/>
+        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="491"/>
         <source>HPRIM</source>
         <translation></translation>
     </message>
@@ -363,60 +363,60 @@ Une par ligne</translation>
         <translation>Intégrer dans</translation>
     </message>
     <message>
-        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="336"/>
-        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="396"/>
+        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="326"/>
+        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="386"/>
         <source>Select a patient</source>
         <translation>Sélectionnez un patient</translation>
     </message>
     <message>
-        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="365"/>
+        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="355"/>
         <source>No patient found with the following names: %1; %2</source>
         <translation>Aucun patient ne correspond aux noms suivants : %1 ; %2</translation>
     </message>
     <message>
-        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="369"/>
+        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="359"/>
         <source>There are multiple patient with the same names: %1 %2. You will have to select the correct one.</source>
         <translation>Il existe plusieurs patients avec le même nom : %1 ; %2. Vous devrez sélectionner le bon patient.</translation>
     </message>
     <message>
-        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="377"/>
+        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="367"/>
         <source>No correct HPRIM header found: %1; %2</source>
         <translation>Pas d&apos;entête HPRIM trouvée %1; %2</translation>
     </message>
     <message>
-        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="397"/>
+        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="387"/>
         <source>No patient selected</source>
         <translation>Aucun patient sélectionné</translation>
     </message>
     <message>
-        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="409"/>
-        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="410"/>
+        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="399"/>
+        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="400"/>
         <source>Unable to find the form item for importation</source>
         <translation>Impossible de trouver l&apos;élément de formulaire pour l&apos;importation</translation>
     </message>
     <message>
+        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="408"/>
         <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="418"/>
-        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="428"/>
         <source>Error during importation</source>
         <translation>Erreur lors l&apos;importation</translation>
     </message>
     <message>
-        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="419"/>
+        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="409"/>
         <source>Error during importation (content is empty)</source>
         <translation>Erreur lors l&apos;importation (le contenu est vide)</translation>
     </message>
     <message>
-        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="429"/>
+        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="419"/>
         <source>Error during importation (wrong checking)</source>
         <translation>Erreur lors de l&apos;importation (mauvais checksum)</translation>
     </message>
     <message>
-        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="477"/>
+        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="467"/>
         <source>Importation was successful</source>
         <translation>L&apos;importation est complète</translation>
     </message>
     <message>
-        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="478"/>
+        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="468"/>
         <source>Importation was successful. 
 %1</source>
         <translation>L&apos;importation est complète.
@@ -533,37 +533,37 @@ Une par ligne</translation>
 <context>
     <name>Tools::Internal::PdfTkWrapper</name>
     <message>
-        <location filename="../../plugins/toolsplugin/pdftkwrapper.cpp" line="340"/>
+        <location filename="../../plugins/toolsplugin/pdftkwrapper.cpp" line="336"/>
         <source>Starting PDF completion. Please wait...</source>
         <translation>Initialise la complétion du formulaire PDF. Veuillez patienter...</translation>
     </message>
     <message>
-        <location filename="../../plugins/toolsplugin/pdftkwrapper.cpp" line="360"/>
-        <location filename="../../plugins/toolsplugin/pdftkwrapper.cpp" line="367"/>
+        <location filename="../../plugins/toolsplugin/pdftkwrapper.cpp" line="356"/>
+        <location filename="../../plugins/toolsplugin/pdftkwrapper.cpp" line="363"/>
         <source>PDF Completion error</source>
         <translation>Erreur lors de la complétion du formulaire PDF</translation>
     </message>
     <message>
-        <location filename="../../plugins/toolsplugin/pdftkwrapper.cpp" line="361"/>
+        <location filename="../../plugins/toolsplugin/pdftkwrapper.cpp" line="357"/>
         <source>The PDF completion process raised the following error:&lt;br /&gt;&lt;b&gt;%1&lt;/b&gt;
 %2</source>
         <translation>La complétion du formulaire PDF a levé l&apos;erreur suivante : &lt;br /&gt;&lt;b&gt;%1&lt;/b&gt;
 %2</translation>
     </message>
     <message>
-        <location filename="../../plugins/toolsplugin/pdftkwrapper.cpp" line="390"/>
+        <location filename="../../plugins/toolsplugin/pdftkwrapper.cpp" line="386"/>
         <source>pdftk error</source>
         <translation>Erreur complétion PDF</translation>
     </message>
     <message>
-        <location filename="../../plugins/toolsplugin/pdftkwrapper.cpp" line="391"/>
+        <location filename="../../plugins/toolsplugin/pdftkwrapper.cpp" line="387"/>
         <source>The pdftk process ends with the exit code: %1
 %2</source>
         <translation>Le processus de complétion des formulaires PDF s&apos;est terminé avec le code d&apos;erreur : %1
 %2</translation>
     </message>
     <message>
-        <location filename="../../plugins/toolsplugin/pdftkwrapper.cpp" line="401"/>
+        <location filename="../../plugins/toolsplugin/pdftkwrapper.cpp" line="397"/>
         <source>Opening completed PDF file</source>
         <translation>Ouverture du formulaire PDF complété</translation>
     </message>

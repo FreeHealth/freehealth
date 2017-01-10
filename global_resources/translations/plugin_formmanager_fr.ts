@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="fr_FR">
+<TS version="2.1" language="fr_FR">
 <context>
     <name>Form::EpisodeModel</name>
     <message>
@@ -152,10 +152,6 @@ Voulez-vous réellement supprimer cet épisode ?</translation>
         <translation>Sauvegarde de l&apos;épisode (%1) du formulaire (%2)</translation>
     </message>
     <message>
-        <source>WARNING: Episode (%1) from form (%2) can not be saved</source>
-        <translation>ATTENTION: l&apos;épisode (%1) du formulaire (%2) ne peut pas être sauvegardé</translation>
-    </message>
-    <message>
         <source>Episode (%1) from form (%2) signed</source>
         <translation>Episode (%1) du formulaire (%2) est signé</translation>
     </message>
@@ -176,10 +172,13 @@ Voulez-vous réellement supprimer cet épisode ?</translation>
         <translation>Épisode (%1) du formulaire (%2) a été supprimé</translation>
     </message>
     <message>
-        <source>The actual episode has been modified. Do you want to save changes in your database?
-Answering &apos;No&apos; will cause deftialtve data loss.</source>
-        <translation>L&apos;épisode courant a été modifié. Voulez-vous sauvegarder les modifications dans votre base de données ?
-Répondre &apos;Non&apos; causera des pertes de données définitive.</translation>
+        <source>The current episode has been modified. Do you want to save changes?
+Answering &apos;No&apos; will cause definitive data loss.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>WARNING: Episode (%1) from form (%2) cannot be saved</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

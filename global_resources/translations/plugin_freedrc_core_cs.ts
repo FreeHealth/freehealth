@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="cs_CZ">
+<TS version="2.1" language="cs_CZ">
 <context>
     <name>CommandLine</name>
     <message>
@@ -26,7 +26,7 @@
 <context>
     <name>Core::HelpDialog</name>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/helpdialog.cpp" line="197"/>
+        <location filename="../../plugins/coreplugin/dialogs/helpdialog.cpp" line="194"/>
         <source>&lt;center&gt;Documentation is available on line only.&lt;/center&gt;</source>
         <translation type="unfinished"></translation>
     </message>

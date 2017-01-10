@@ -1,68 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="fr_FR">
+<TS version="2.1" language="fr_FR">
 <context>
     <name>DataPack::Internal::HttpServerEngine</name>
     <message>
-        <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="242"/>
+        <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="244"/>
         <source>Abort</source>
         <translation>Annuler</translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="324"/>
+        <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="326"/>
         <source>Proxy authentication required</source>
         <translation>Le proxy requière une authentification</translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="353"/>
-        <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="354"/>
+        <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="355"/>
+        <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="356"/>
         <source>Server error: %1</source>
         <translation>Erreur du serveur : %1</translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="457"/>
+        <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="459"/>
         <source>Server description file successfully downloaded.</source>
         <translation>La description du serveur a été correctement téléchargée.</translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="534"/>
+        <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="536"/>
         <source>Pack description successfully downloaded.</source>
         <translation>La description du paquet de données a été correctement téléchargée.</translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="541"/>
+        <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="543"/>
         <source>Pack successfully downloaded.</source>
         <translation>Paquet de données correctement téléchargé.</translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="473"/>
+        <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="475"/>
         <source>Server description file is not readable.</source>
         <translation>Le fichier de description du serveur n&apos;est pas lisible.</translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="294"/>
+        <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="296"/>
         <source>Server %1
 requires an authentication</source>
         <translation>Le serveur %1 requière une authentification</translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="297"/>
+        <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="299"/>
         <source>If you don&apos;t have any login just cancel the dialog</source>
         <translation>Si vous n&apos;avez pas d&apos;identitfiants annuler simplement le dialogue</translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="484"/>
+        <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="486"/>
         <source>Server description file can not be unzipped.</source>
         <translation>Le fichier de description du serveur ne peut pas être décompressé.</translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="514"/>
-        <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="515"/>
+        <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="516"/>
+        <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="517"/>
         <source>Adding pack description file to the download queue.</source>
         <translation>Ajout du fichier descriptif du paquet à la liste des téléchargements.</translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="564"/>
+        <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="566"/>
         <source>Pack file can not be created in the persistent cache.</source>
         <translation>Le paquet ne peut pas être créé dans le répertoire de cache persistant.</translation>
     </message>

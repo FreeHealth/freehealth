@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="sl_SI">
+<TS version="2.1" language="sl_SI">
 <context>
     <name>Gir::GirModel</name>
     <message>
@@ -31,7 +31,7 @@
         <source>Autonome</source>
         <translation type="unfinished"></translation>
     </message>
-    <message utf8="true">
+    <message>
         <location filename="../../plugins/aggirplugin/girwidget.ui" line="90"/>
         <source>Dépendant</source>
         <translation type="unfinished"></translation>

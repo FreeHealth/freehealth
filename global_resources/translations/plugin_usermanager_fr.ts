@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="fr_FR">
+<TS version="2.1" language="fr_FR">
 <context>
     <name>UserBase</name>
     <message>
@@ -771,15 +771,6 @@ Pour effacer l&apos;utilisateur %1 dans la base de données, demandez à l&apos;
     <message>
         <source>Form</source>
         <translation></translation>
-    </message>
-</context>
-<context>
-    <name>tkUser</name>
-    <message>
-        <source>User logged at %1
-</source>
-        <translation>Utilisateur connecté à %1
-</translation>
     </message>
 </context>
 </TS>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="es_ES">
+<TS version="2.1" language="es_ES">
 <context>
     <name>tkConstants</name>
     <message>
@@ -694,7 +694,7 @@
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_current.h" line="168"/>
-        <source>&lt;h2&gt;Welcome to FreeHealth&lt;/h2&gt;&lt;h3&gt;Â© %1 Jerome Pinguet&lt;/h3&gt;&lt;h3&gt;(C) 2008-2015 by Dr Eric Maeker (France)&lt;/h3&gt;&lt;p&gt;This software is released without any warranty, for testing purposes only.&lt;br/&gt;Please refer to our &lt;a href=&quot;%2&quot;&gt;web site&lt;/a&gt; for more information.&lt;br /&gt;FreeHealth is based on FreeMedForms created by Eric Maeker.&lt;/p&gt;</source>
+        <source>&lt;h2&gt;Welcome to FreeHealth&lt;/h2&gt;&lt;h3&gt;© %1 Jerome Pinguet&lt;/h3&gt;&lt;h3&gt;(C) 2008-2015 by Dr Eric Maeker (France)&lt;/h3&gt;&lt;p&gt;This software is released without any warranty, for testing purposes only.&lt;br/&gt;Please refer to our &lt;a href=&quot;%2&quot;&gt;web site&lt;/a&gt; for more information.&lt;br /&gt;FreeHealth is based on FreeMedForms created by Eric Maeker.&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1406,7 +1406,7 @@ Place: %2</source>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_drugs.h" line="62"/>
-        <source>Glycoprotein-P interaction</source>
+        <source>P-glycoprotein interaction</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2692,111 +2692,116 @@ Text Align Justify shortcut key : Mac specific</extracomment>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_patient.h" line="70"/>
-        <source>Age</source>
+        <source>Is patient pediatric?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_patient.h" line="71"/>
-        <source>Age: %1</source>
+        <source>Age</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_patient.h" line="72"/>
-        <source>Age in years</source>
+        <source>Age: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_patient.h" line="73"/>
+        <source>Age in years</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_patient.h" line="74"/>
         <source>Age: %1; DOB: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_patient.h" line="75"/>
+        <location filename="../../libs/translationutils/trans_patient.h" line="76"/>
         <source>Weight</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_patient.h" line="76"/>
+        <location filename="../../libs/translationutils/trans_patient.h" line="77"/>
         <source>Height</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_patient.h" line="77"/>
+        <location filename="../../libs/translationutils/trans_patient.h" line="78"/>
         <source>Creatinin clerance</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_patient.h" line="79"/>
+        <location filename="../../libs/translationutils/trans_patient.h" line="80"/>
         <source>Units</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_patient.h" line="80"/>
+        <location filename="../../libs/translationutils/trans_patient.h" line="81"/>
         <source>Metrics</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_patient.h" line="81"/>
+        <location filename="../../libs/translationutils/trans_patient.h" line="82"/>
         <source>Biology</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_patient.h" line="83"/>
+        <location filename="../../libs/translationutils/trans_patient.h" line="84"/>
         <source>Patient</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_patient.h" line="84"/>
+        <location filename="../../libs/translationutils/trans_patient.h" line="85"/>
         <source>Patients</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_patient.h" line="85"/>
+        <location filename="../../libs/translationutils/trans_patient.h" line="86"/>
         <source>Patient information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_patient.h" line="86"/>
+        <location filename="../../libs/translationutils/trans_patient.h" line="87"/>
         <source>Patient database</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_patient.h" line="87"/>
+        <location filename="../../libs/translationutils/trans_patient.h" line="88"/>
         <source>Clear patient&apos;s information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_patient.h" line="88"/>
+        <location filename="../../libs/translationutils/trans_patient.h" line="89"/>
         <source>Toggle patient&apos;s information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_patient.h" line="90"/>
+        <location filename="../../libs/translationutils/trans_patient.h" line="91"/>
         <source>Social number</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_patient.h" line="91"/>
+        <location filename="../../libs/translationutils/trans_patient.h" line="92"/>
         <source>Social number (all)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_patient.h" line="92"/>
+        <location filename="../../libs/translationutils/trans_patient.h" line="93"/>
         <source>Social number (owner name)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_patient.h" line="93"/>
+        <location filename="../../libs/translationutils/trans_patient.h" line="94"/>
         <source>Social number (owner address)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_patient.h" line="95"/>
+        <location filename="../../libs/translationutils/trans_patient.h" line="96"/>
         <source>Patient overview</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_patient.h" line="97"/>
+        <location filename="../../libs/translationutils/trans_patient.h" line="98"/>
         <source>Long term therapy</source>
         <translation type="unfinished"></translation>
     </message>

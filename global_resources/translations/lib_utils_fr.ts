@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="fr_FR">
+<TS version="2.1" language="fr_FR">
 <context>
     <name>Database</name>
     <message>
@@ -44,7 +44,7 @@
         <translation>Schema de base erroné : champs numéro %1 différe : %2 au lieu de %3 dans la table %4</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="2386"/>
+        <location filename="../../libs/utils/database.cpp" line="2452"/>
         <source>Can not create table %1</source>
         <translation>Impossible de créer la table %1</translation>
     </message>
@@ -170,23 +170,23 @@
         <translation>Erreur %1 en essayant d&apos;ouvrir le fichier %2</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="1108"/>
+        <location filename="../../libs/utils/global.cpp" line="1100"/>
         <source>Cancel</source>
         <translation>Annuler</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="1199"/>
+        <location filename="../../libs/utils/global.cpp" line="1191"/>
         <source>This function is not available in this version.</source>
         <translation>Cette fonction n&apos;est pas disponible dans cette version.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="1261"/>
+        <location filename="../../libs/utils/global.cpp" line="1253"/>
         <source>Do you agree these terms?</source>
         <translation>Acceptez vous ces termes ?</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="1241"/>
-        <location filename="../../libs/utils/global.cpp" line="1242"/>
+        <location filename="../../libs/utils/global.cpp" line="1233"/>
+        <location filename="../../libs/utils/global.cpp" line="1234"/>
         <source>License agreement acceptation</source>
         <translation>Agrément de Licence</translation>
     </message>
@@ -197,27 +197,27 @@
         <translation>%1 correctement sauvegardé (%2)</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="1200"/>
+        <location filename="../../libs/utils/global.cpp" line="1192"/>
         <source>You can send an email to developers and explain your difficulties: dev@freehealth.io</source>
         <translation>Vous pouvez envoyer un email aux développeurs et leur expliquer vos difficultés: dev@freehealth.io</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="1253"/>
+        <location filename="../../libs/utils/global.cpp" line="1245"/>
         <source>&lt;b&gt;Before you can use this software, you must agree its license terms&lt;/b&gt;</source>
         <translation>&lt;b&gt;Avant d&apos;utiliser ce logiciel, vous devez accepter les termes de la licence.&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="1328"/>
+        <location filename="../../libs/utils/global.cpp" line="1320"/>
         <source>%1 is now in fullScreen Mode.</source>
         <translation>%1 est mode plein écran.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="1333"/>
+        <location filename="../../libs/utils/global.cpp" line="1325"/>
         <source>%1 is now in non fullScreen Mode.</source>
         <translation>%1 n&apos;est plus en mode plein écran.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="2237"/>
+        <location filename="../../libs/utils/global.cpp" line="2229"/>
         <source>Token replacement error (%1). Wrong number of parentheses.</source>
         <translation>Erreur lors du remplacement du repère (%1). Nombre incorrect de parenthèses.</translation>
     </message>

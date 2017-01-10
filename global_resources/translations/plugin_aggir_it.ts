@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="it_IT">
+<TS version="2.1" language="it_IT">
 <context>
     <name>Gir::GirModel</name>
     <message>
@@ -26,7 +26,7 @@
         <source>Score Gir</source>
         <translation type="unfinished"></translation>
     </message>
-    <message utf8="true">
+    <message>
         <location filename="../../plugins/aggirplugin/girwidget.ui" line="90"/>
         <source>Dépendant</source>
         <translation type="unfinished"></translation>

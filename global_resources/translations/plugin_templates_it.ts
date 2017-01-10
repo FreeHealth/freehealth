@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="it_IT">
+<TS version="2.1" language="it_IT">
 <context>
     <name>Templates::Internal::TemplatesContentEditor</name>
     <message>
@@ -178,7 +178,7 @@
 <context>
     <name>Templates::TemplatesModel</name>
     <message>
-        <location filename="../../plugins/templatesplugin/templatesmodel.cpp" line="1063"/>
+        <location filename="../../plugins/templatesplugin/templatesmodel.cpp" line="1060"/>
         <source>New</source>
         <translation type="unfinished"></translation>
     </message>
@@ -186,17 +186,17 @@
 <context>
     <name>Templates::TemplatesView</name>
     <message>
-        <location filename="../../plugins/templatesplugin/templatesview.cpp" line="596"/>
+        <location filename="../../plugins/templatesplugin/templatesview.cpp" line="594"/>
         <source>About to delete %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/templatesplugin/templatesview.cpp" line="597"/>
+        <location filename="../../plugins/templatesplugin/templatesview.cpp" line="595"/>
         <source>Do you really want to remove %1 from your templates&apos; list?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/templatesplugin/templatesview.cpp" line="598"/>
+        <location filename="../../plugins/templatesplugin/templatesview.cpp" line="596"/>
         <source>This action is definitive and all information will be lost. Children of this item will be deleted as well.</source>
         <translation type="unfinished"></translation>
     </message>
