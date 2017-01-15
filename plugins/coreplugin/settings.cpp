@@ -51,7 +51,7 @@
        `- .applicationname                   `- .applicationname
         |                                     |
         |- config.ini                         |- config.ini             == user settings for non-networked apps
-        |- config-network.ini                 |- config-network.ini
+        |- config-net.ini                 |- config-net.ini
         |                                     |
         `- databases                          `- databases
          |                                     |
