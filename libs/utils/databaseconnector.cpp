@@ -56,7 +56,7 @@ enum {
 #ifdef RELEASE
     true // In release mode, you must keep encryption enabled
 #else
-    true // for your tests you can change this value only in a debug compilation
+    false // for your tests you can change this value only in a debug compilation
 #endif
 };
 
