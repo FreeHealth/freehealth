@@ -220,7 +220,7 @@ void MainWindow::extensionsInitialized()
     if (!user()->hasCurrentUser()) {
         return;
     }
-    setWindowIcon(theme()->icon(Core::Constants::ICONFREEMEDFORMS));
+    setWindowIcon(theme()->icon(Core::Constants::ICONEHR));
 
     // Connect actions
     connectFileActions();
@@ -321,7 +321,7 @@ void MainWindow::onCurrentUserChanged()
     // Change window title
     setWindowTitle(qApp->applicationName() + " - " + qApp->applicationVersion() + " / " +
                    user()->value(Core::IUser::FullName).toString());
-    setWindowIcon(theme()->icon(Core::Constants::ICONFREEMEDFORMS));
+    setWindowIcon(theme()->icon(Core::Constants::ICONEHR));
     readSettings();
 }
 

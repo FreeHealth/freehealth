@@ -907,7 +907,7 @@ void MainWindowActionHandler::createPatientsActions(int actions)
     }
 }
 
-/** \brief Connect created Patients' menu actions to there standard slots. */
+/** \brief Connect created Patients' menu actions to their standard slots. */
 void MainWindowActionHandler::connectPatientActions()
 {
     if (aPatientNew)
