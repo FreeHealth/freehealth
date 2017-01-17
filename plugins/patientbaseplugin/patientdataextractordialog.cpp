@@ -138,7 +138,7 @@ bool PatientDataExtractorDialog::initialize()
 
     d->ui->setupUi(this);
     setWindowTitle(tr("Patient data extractor"));
-    setWindowIcon(theme()->icon(Core::Constants::ICONFREEMEDFORMS));
+    setWindowIcon(theme()->icon(Core::Constants::ICONEHR));
     d->ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
     d->_exportButton = d->ui->buttonBox->addButton(tr("Export..."), QDialogButtonBox::ActionRole);
     connect(d->_exportButton, SIGNAL(clicked()), this, SLOT(onExportRequested()));

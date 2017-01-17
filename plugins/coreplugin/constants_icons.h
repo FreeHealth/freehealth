@@ -49,7 +49,7 @@ const char * const  FREEDDIMANAGER_SPLASHSCREEN = "freeddimanager.png";
 const char * const  FREEGUARD_SPLASHSCREEN      = "freeguard.png";
 
 // application icons
-const char * const  ICONFREEMEDFORMS   = "ehr.png";
+const char * const  ICONEHR   = "ehr.png";
 const char * const  ICONFREEDIAMS      = "erx.png";
 const char * const  ICONFREEACCOUNT    = "freeaccount.png";
 const char * const  ICONFREEICD        = "freeicd.png";
