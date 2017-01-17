@@ -15,7 +15,7 @@
  *  GNU General Public License for more details.                           *
  *                                                                         *
  *  You should have received a copy of the GNU General Public License      *
- *  along with this program (COPYING.FREEMEDFORMS file).                   *
+ *  along with this program (COPYING file).                   *
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
@@ -141,7 +141,7 @@ QVariant ServerModel::data(const QModelIndex &index, int role) const
         case CreationDate: return s.description().data(ServerDescription::CreationDate).toDate().toString(QLocale().dateFormat());
         case Vendor:
             if (s.description().data(ServerDescription::Vendor).toString().isEmpty())
-                return tkTr(Trans::Constants::THE_FREEMEDFORMS_COMMUNITY);
+                return tkTr(Trans::Constants::EHR_COMMUNITY);
             else
                 return s.description().data(ServerDescription::Vendor);
         case RecommendedUpdateFrequencyIndex: return s.recommendedUpdateFrequency();

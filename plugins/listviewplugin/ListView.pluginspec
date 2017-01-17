@@ -1,5 +1,5 @@
 <plugin name="ListView" version="0.0.1" compatVersion="0.0.1">
-    <vendor>FreeMedForms</vendor>
+    <vendor>FreeHealth</vendor>
     <copyright>(C) 2008-2016 by Eric MAEKER, MD</copyright>
     <category>UI improvements</category>
     <license>GPLv3</license>

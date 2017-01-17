@@ -1,10 +1,10 @@
 <plugin name="PMH" version="0.0.1" compatVersion="0.0.1">
-    <vendor>FreeMedForms</vendor>
+    <vendor>FreeHealth</vendor>
     <copyright>(C) 2008-2016 by Eric MAEKER, MD</copyright>
     <license>GPLv3</license>
     <category>Patient data</category>
     <description>Manages the Past Medical History of patients.</description>
-    <url>http://www.freemedforms.com/</url>
+    <url>https://freehealth.io</url>
     <dependencyList>
         <dependency name="Core" version="0.0.1"/>
         <dependency name="ListView" version="0.0.1"/>

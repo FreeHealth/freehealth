@@ -15,7 +15,7 @@
  *  GNU General Public License for more details.                           *
  *                                                                         *
  *  You should have received a copy of the GNU General Public License      *
- *  along with this program (COPYING.FREEMEDFORMS file).                   *
+ *  along with this program (COPYING file).                   *
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 #include "global.h"
@@ -448,8 +448,8 @@ QStringList applicationPluginsPath(const QString &binaryName, const QString &lib
     // Debug without installation compilation
     // Plugins are stored in the bin path next to the binaries (or binaries.app)
     // bin
-    //  `- freemedforms (dir)
-    //       |- freemedforms (exec)
+    //  `- freemedhealth (dir)
+    //       |- freehealth (exec)
     //       `- plugins (dir - contains all plugins and libs)
     if (isDebugWithoutInstallCompilation()) {
         if (isRunningOnMac()) {
@@ -698,9 +698,9 @@ bool checkDir(const QString &absPath, bool createIfNotExist, const QString &logD
 
 /**
  * Save the string \e toSave to a text file \e toFile.
- * You can choose to warn the user or not is an error
- * is encountered. Return true if all gone good. By default,
- * all files managed by FreeMedForms are saved in UTF8 encoding.
+ * You can choose to warn the user or not if an error
+ * is encountered. Return true if all went well.
+ * By default, all files are saved in UTF8.
  */
 bool saveStringToFile(const QString &toSave, const QString &toFile, IOMode iomode, const Warn warnUser, QWidget *parent)
 {

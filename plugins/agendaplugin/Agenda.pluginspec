@@ -1,5 +1,5 @@
 <plugin name="Agenda" version="0.0.1" compatVersion="0.0.1">
-    <vendor>FreeMedForms</vendor>
+    <vendor>FreeHealth</vendor>
     <copyright>(C) 2008-2012 Eric Maeker, MD</copyright>
     <license>GPLv3</license>
     <category>Agenda</category>

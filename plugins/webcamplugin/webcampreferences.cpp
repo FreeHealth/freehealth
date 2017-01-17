@@ -15,7 +15,7 @@
  *  GNU General Public License for more details.                           *
  *                                                                         *
  *  You should have received a copy of the GNU General Public License      *
- *  along with this program (COPYING.FREEMEDFORMS file).                   *
+ *  along with this program (COPYING file).                   *
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
@@ -133,7 +133,7 @@ void WebcamPreferencesWidget::changeEvent(QEvent *e)
 /* ----------------------  Preferences Page ---------------------- */
 /*!
  * \class Webcam::WebcamPreferencesPage
- * \brief Generic FreeMedForms preferences page for the Webcam plugin.
+ * \brief Generic preferences page for the Webcam plugin.
  *
  * A WebcamPreferencesPage creates a page in the FMF settings dialog, it is listed in
  * the category returned by \sa category().

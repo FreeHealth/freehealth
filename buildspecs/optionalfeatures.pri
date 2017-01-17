@@ -16,7 +16,7 @@ DEFINES += DRUGS_DATABASE_VERSION=0x000804
 # *                                    Auto-locking                                     *
 # ***************************************************************************************
 # * By default this feature is activated. When activated, users can define time         *
-# * to automatically lock FreeMedForms. FreeMedForms will then ask user for his         *
+# * to automatically lock the application. User will then be asked for his              *
 # * identification.                                                                     *
 # * This is a good security feature, but can be redondant with OS configuration.        *
 # ***************************************************************************************
@@ -29,7 +29,7 @@ DEFINES += DRUGS_DATABASE_VERSION=0x000804
 # *                                   User auto login                                   *
 # ***************************************************************************************
 # * By default this feature is not activated. When activated, users can be              *
-# * automatically connected to FreeMedForms according to their last identification      *
+# * automatically connected to the application according to their last identification   *
 # * without any required action.                                                        *
 # * This is a high security failure to activate this feature, as it keeps a weak        *
 # * crypted version of the credentials of the user on the local hard drive.             *
@@ -71,7 +71,7 @@ DEFINES += DRUGS_DATABASE_VERSION=0x000804
 # * By default this feature is activated. When activated, users can print french        *
 # * 'feuilles de soins'.                                                                *
 # ***************************************************************************************
-# * We suggest to activate this feature if you want to use FreeMedForms in France       *
+# * We suggest to activate this feature if you want to use the application in France    *
 # ***************************************************************************************
 # Uncomment the following line to activate the feature
  DEFINES *= WITH_FRENCH_FSP
@@ -83,19 +83,17 @@ DEFINES += DRUGS_DATABASE_VERSION=0x000804
 # * stored in a specific path into any patient file.                                    *
 # * This feature can be used to quickly import decrypted files from apicrypt for eg.    *
 # ***************************************************************************************
-# * We suggest to activate this feature if you want to use FreeMedForms in France       *
-# ***************************************************************************************
 # Uncomment the following line to activate the feature
  DEFINES *= WITH_FRENCH_HPRIM_INTEGRATOR
 
 # ***************************************************************************************
 # *                                       QuaZip                                        *
 # ***************************************************************************************
-# * FreeMedForms uses the external lib QuaZip to manage file/dir (de)compression.       *
+# * The application uses the external lib QuaZip to manage file/dir (de)compression.    *
 # * On some OS we need to build quazip (like Mac OS and Windows) because it is not      *
 # * already available. On Linux, we might have to build QuaZip or not. A package now    *
-# * exists for the main Linux distros. So if you want to link FreeMedForms with the     *
-# * system's QuaZip lib, then uncomment the following line.                             *
+# * exists for the main Linux distros. If you want to link the application with the     *
+# * system's QuaZip lib, leave the config commented.                                    *
 # ***************************************************************************************
 # * If you don't what you are doing here, keep this line commented.                     *
 # ***************************************************************************************

@@ -1,5 +1,5 @@
 <plugin name="PadTools" version="0.0.1" compatVersion="0.0.1">
-    <vendor>FreeMedForms</vendor>
+    <vendor>FreeHealth</vendor>
     <copyright>(C) 2008-2009 Eric Maeker, MD</copyright>
     <license>GPLv3</license>
 

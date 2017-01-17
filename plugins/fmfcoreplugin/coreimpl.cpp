@@ -15,7 +15,7 @@
  *  GNU General Public License for more details.                           *
  *                                                                         *
  *  You should have received a copy of the GNU General Public License      *
- *  along with this program (COPYING.FREEMEDFORMS file).                   *
+ *  along with this program (COPYING file).                   *
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
@@ -126,17 +126,6 @@ CoreImpl::CoreImpl(QObject *parent) :
 
     // initialize the settings
     m_Theme->messageSplashScreen(tkTr(Trans::Constants::LOADING_SETTINGS));
-
-    // WINE compatibility (only for testing under ubuntu when crosscompiling)
-#ifdef Q_OS_WIN
-    // For WINE testings
-    if (m_CommandLine->value(Core::ICommandLine::RunningUnderWine).toBool()) {
-        LOG("Running under Wine environnement." );
-        QFont::insertSubstitution("MS Shell Dlg", "Tahoma" );
-        QFont::insertSubstitution("MS Shell Dlg 2", "Tahoma" );
-    }
-#endif
-
     m_FileManager = new FileManager(this);
     m_UpdateChecker = new Utils::UpdateChecker(this);
     if (logChrono)
