@@ -27,8 +27,6 @@ FORMS += \
     $${PWD}/passwordwidget.ui \
     $${PWD}/passworddialog.ui
 
-PROVIDER = FreeMedForms
-
 # include translations
 TRANSLATION_NAME = identity
 include($${SOURCES_ROOT_PATH}/buildspecs/translations.pri)

@@ -100,8 +100,6 @@ FORMS += \
 
 OTHER_FILES = Tools.pluginspec
 
-PROVIDER = FreeMedForms
-
 # include translations
 TRANSLATION_NAME = tools
 include($${SOURCES_ROOT_PATH}/buildspecs/translations.pri)

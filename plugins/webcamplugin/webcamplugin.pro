@@ -2,7 +2,6 @@ TARGET = Webcam
 TEMPLATE = lib
 
 BUILD_PATH_POSTFIXE = FreeMedForms
-PROVIDER = FreeMedForms
 
 DEFINES += WEBCAM_LIBRARY
 
