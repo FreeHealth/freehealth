@@ -1,0 +1,161 @@
+<html>
+<body>
+<style type="text/css">
+.__soap_bm__formContent {
+  font-size: 12pt;
+  color: black;
+  border: 2px solid gray;
+  margin-top: 1em;
+}
+
+.__soap_bm__formContent .formHeader {
+}
+
+.__soap_bm__formContent .formLabel {
+  font-weight: 600;
+  text-transform: uppercase;
+  background-color: gray;/* #6d8526; #7f9a2c #6d8526 #A7C942*/
+  color: white;
+  padding: 2px;
+  text-align: center;
+}
+
+.__soap_bm__formContent .episodeHeader {
+  margin: 0 2em 0 0;
+  padding: 0px;
+}
+
+.__soap_bm__formContent .episodeContent {
+  margin-left: 3em;
+}
+
+.__soap_bm__formContent .episodeLabel {
+  font-weight: 600;
+  padding: 5px;
+}
+
+.__soap_bm__formContent .episodeUserCreator {
+  color: gray;
+  margin-left: 1em;
+}
+
+.__soap_bm__formContent .episodeUserDate {
+  color: gray;
+  margin-left: 1em;
+}
+
+</style>
+
+<div class="__soap_bm__formContent">
+
+<div class="formHeader">
+  <div class="formLabel">[[EpisodeFullFormLabel]]</div>
+</div> <!-- formHeader -->
+
+<div class="episodeHeader">
+    [<div class="episodeLabel">[EpisodeUserLabel] </div> ]
+    [<span class="episodeUserCreator">[EpisodeUserName.createdBy]</span>]
+    [&nbsp;<span class="episodeUserDate">[EpisodeUserDate]</span>]
+</div> <!-- episodeHeader -->
+
+<style type="text/css">
+.__soap_bm__episodeContent {
+  margin-left: 1em;
+  margin-top: 5px;
+}
+
+.__soap_bm__episodeContent .soap_S {
+  font-size: 12pt;
+  color: black;
+  margin-top: 0.5em;
+}
+
+.__soap_bm__episodeContent .soap_S #label {
+  font-size: 12pt;
+  font-weight: 600;
+}
+
+.__soap_bm__episodeContent .soap_S #content{
+  background-color: #EEE;
+  margin-left: 5px;
+}
+
+.__soap_bm__episodeContent .soap_O {
+  margin-top: 0.5em;
+}
+
+.__soap_bm__episodeContent .soap_O #label {
+  font-size: 12pt;
+  font-weight: 600;
+}
+
+.__soap_bm__episodeContent .soap_O #content{
+  background-color: #FFF;
+  margin-left: 5px;
+}
+
+.__soap_bm__episodeContent .soap_A {
+  margin-top: 0.5em;
+}
+
+.__soap_bm__episodeContent .soap_A #label {
+  font-size: 12pt;
+  font-weight: 600;
+}
+
+.__soap_bm__episodeContent .soap_A #content{
+  background-color: #FFF;
+  margin-left: 5px;
+}
+
+.__soap_bm__episodeContent .soap_P {
+  margin-top: 0.5em;
+}
+
+.__soap_bm__episodeContent .soap_P #label {
+  font-size: 12pt;
+  font-weight: 600;
+}
+
+.__soap_bm__episodeContent .soap_P #content{
+  background-color: #FFF;
+  margin-left: 5px;
+}
+
+</style>
+
+<div class="__soap_bm__episodeContent">
+
+  <div class="soap_S">
+    <span class="soap_S" id="label">[[Subs::Tools::SOAP::WithBio::SubjectiveGroup::Subjective.tooltip]]</span><br/>
+    <span id="content">[[Subs::Tools::SOAP::WithBio::SubjectiveGroup::Subjective]]</span>
+  </div> <!-- soap_S -->
+
+  <div class="soap_O">
+    <span class="soap_O" id="label">[[Subs::Tools::SOAP::WithBio::ObjectiveGroup::Objective.tooltip]]</span><br/>
+    <span class="soap_O" id="content">[[Subs::Tools::SOAP::WithBio::ObjectiveGroup::Objective]]</span><br/>
+
+    <span class="soap_O" id="label">[[Subs::Tools::SOAP::WithBio::ObjectiveGroup::BloodPressure::UiLabel.label]: ]</span>
+    <span class="soap_O" id="content">[[Subs::Tools::SOAP::WithBio::ObjectiveGroup::BloodPressure::Syst]] / [[Subs::Tools::SOAP::WithBio::ObjectiveGroup::BloodPressure::Diast]]</span><br/>
+
+    <span class="soap_O" id="label">[[Subs::Tools::SOAP::WithBio::ObjectiveGroup::Weight::Value.label]: ]</span>
+    <span class="soap_O" id="content">[[Subs::Tools::SOAP::WithBio::ObjectiveGroup::Weight::Value]]</span><br/>
+
+  </div> <!-- soap_O -->
+
+  <div class="soap_A">
+    <span id="label">[[Subs::Tools::SOAP::WithBio::AssessmentPlanGroup::Assessment.tooltip]]</span><br/>
+    <span id="content">[[Subs::Tools::SOAP::WithBio::AssessmentPlanGroup::Assessment]]</span>
+  </div> <!-- soap_A -->
+
+  <div class="soap_P">
+    <span id="label">[[Subs::Tools::SOAP::WithBio::AssessmentPlanGroup::Plan.tooltip]]</span><br/>
+    <span id="content">[[Subs::Tools::SOAP::WithBio::SubjectiveGroup::Subjective]]</span>
+  </div> <!-- soap_P -->
+
+</div> <!-- __soap_bm__episodeContent -->
+
+</div> <!-- __soap_bm__formContent -->
+
+</body>
+</html>

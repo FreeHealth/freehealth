@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>BaseWidgets::Internal::BaseFormWidget</class>
+ <widget class="QWidget" name="BaseWidgets::Internal::BaseFormWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>427</width>
+    <height>242</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string/>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="3" column="0">
+    <widget class="QLabel" name="faxLabel">
+     <property name="text">
+      <string>fax</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <widget class="QLineEdit" name="mobileTelephoneLineEdit"/>
+   </item>
+   <item row="0" column="2">
+    <widget class="QPushButton" name="sendSmsButton">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="text">
+      <string>Send SMS</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QLabel" name="homeTelephoneLabel">
+     <property name="text">
+      <string>home tel</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QLabel" name="emailLabel">
+     <property name="text">
+      <string>email</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="1">
+    <widget class="QLineEdit" name="faxLineEdit"/>
+   </item>
+   <item row="1" column="2">
+    <widget class="QPushButton" name="sendMailButton">
+     <property name="text">
+      <string>Send mail</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1">
+    <widget class="QLineEdit" name="emailLineEdit"/>
+   </item>
+   <item row="5" column="0" colspan="3">
+    <widget class="Line" name="line">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="1">
+    <widget class="QLineEdit" name="homeTelephoneLineEdit"/>
+   </item>
+   <item row="0" column="0">
+    <widget class="QLabel" name="mobileTelephoneLabel">
+     <property name="text">
+      <string>mobile tel</string>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="0">
+    <widget class="QLabel" name="externalRecordPatientIdLabel">
+     <property name="text">
+      <string>external record patient id</string>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="1">
+    <widget class="QLineEdit" name="externalRecordPatientIdLineEdit"/>
+   </item>
+  </layout>
+ </widget>
+ <tabstops>
+  <tabstop>faxLineEdit</tabstop>
+  <tabstop>emailLineEdit</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
+</ui>
