@@ -1,7 +1,7 @@
 TEMPLATE        = lib
 TARGET          = Category
 
-BUILD_PATH_POSTFIXE = FreeMedForms
+BUILD_PATH_POSTFIXE = FreeHealth
 
 include(shared_sources.pri)
 

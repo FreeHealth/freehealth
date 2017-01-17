@@ -4,7 +4,7 @@ TEMPLATE = lib
 QT *= printsupport
 
 DEFINES += TOOLS_LIBRARY
-BUILD_PATH_POSTFIXE = FreeMedForms
+BUILD_PATH_POSTFIXE = FreeHealth
 
 include(../fmf_plugins.pri)
 include(tools_dependencies.pri)
