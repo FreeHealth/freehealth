@@ -194,77 +194,78 @@ void DrugPosologicSentencePreferencesWidget::changeEvent(QEvent *e)
     }
 }
 
-//#ifdef WITH_PAD
+#ifdef WITH_PAD
 // TODO: reintroduce this when the PadWriter will be stable
-//DrugPosologicSentenceWithPadPreferencesWidget::DrugPosologicSentenceWithPadPreferencesWidget(QWidget *parent) :
-//    QWidget(parent)
-//{
-//    setObjectName("DrugPosologicSentenceWithPadPreferencesWidget");
-//    // create the ui by hand
-//    QGridLayout *lay = new QGridLayout(this);
-//    setLayout(lay);
+DrugPosologicSentenceWithPadPreferencesWidget::DrugPosologicSentenceWithPadPreferencesWidget(QWidget *parent) :
+    QWidget(parent)
+{
+    setupUi(this);
+    setObjectName("DrugPosologicSentenceWithPadPreferencesWidget");
+    // create the ui by hand
+    QGridLayout *lay = new QGridLayout(this);
+    setLayout(lay);
 
-//    // Create PadWriter & filtered it
-//    _writer = padTools()->createWriter(this);
-//    _writer->setNamespacesFilter(QStringList() << "Prescription.Drug" << "Prescription.Protocole");
-//    lay->addWidget(_writer);
+    // Create PadWriter & filtered it
+    _writer = padTools()->createWriter(this);
+    _writer->setNamespacesFilter(QStringList() << "Prescription.Drug" << "Prescription.Protocole");
+    lay->addWidget(_writer);
 
-//    // Manage prescription tokens
-//    DrugsDB::DrugsModel *model = new DrugsDB::DrugsModel(this);
-//    model->addDrug(getDrug());
-//    DrugsDB::PrescriptionToken::setPrescriptionModel(model);
-//    DrugsDB::PrescriptionToken::setPrescriptionModelRow(0);
+    // Manage prescription tokens
+    DrugsDB::DrugsModel *model = new DrugsDB::DrugsModel(this);
+    model->addDrug(getDrug());
+    DrugsDB::PrescriptionToken::setPrescriptionModel(model);
+    DrugsDB::PrescriptionToken::setPrescriptionModelRow(0);
 
-// //    connect(defaultFormattingButton, SIGNAL(clicked()), this, SLOT(resetToDefaultFormatting()));
-// //    connect(prescriptionFormatting->textEdit(), SIGNAL(textChanged()), this, SLOT(updateFormatting()));
+    connect(defaultFormattingButton, SIGNAL(clicked()), this, SLOT(resetToDefaultFormatting()));
+    connect(prescriptionFormatting->textEdit(), SIGNAL(textChanged()), this, SLOT(updateFormatting()));
 
-//    setDataToUi();
-//}
+    setDataToUi();
+}
 
-//DrugPosologicSentenceWithPadPreferencesWidget::~DrugPosologicSentenceWithPadPreferencesWidget()
-//{}
+DrugPosologicSentenceWithPadPreferencesWidget::~DrugPosologicSentenceWithPadPreferencesWidget()
+{}
 
-//void DrugPosologicSentenceWithPadPreferencesWidget::setDataToUi()
-//{
-//    _writer->setHtmlSource(settings()->value(DrugsDB::Constants::S_PRESCRIPTIONFORMATTING_HTML).toString());
-// //    updateFormatting();
-//}
+void DrugPosologicSentenceWithPadPreferencesWidget::setDataToUi()
+{
+    _writer->setHtmlSource(settings()->value(DrugsDB::Constants::S_PRESCRIPTIONFORMATTING_HTML).toString());
+    //updateFormatting();
+}
 
-//void DrugPosologicSentenceWithPadPreferencesWidget::resetToDefaultFormatting()
-//{
-//    QString content = getPrescriptionTokenHtmlFileContent();
-//    _writer->setHtmlSource(content);
-//}
+void DrugPosologicSentenceWithPadPreferencesWidget::resetToDefaultFormatting()
+{
+    QString content = getPrescriptionTokenHtmlFileContent();
+    _writer->setHtmlSource(content);
+}
 
-//void DrugPosologicSentenceWithPadPreferencesWidget::saveToSettings(Core::ISettings *sets)
-//{
-//    Core::ISettings *s;
-//    if (!sets)
-//        s = settings();
-//    else
-//        s = sets;
+void DrugPosologicSentenceWithPadPreferencesWidget::saveToSettings(Core::ISettings *sets)
+{
+    Core::ISettings *s;
+    if (!sets)
+        s = settings();
+    else
+        s = sets;
 
-//    QString tmp = _writer->rawSourceToHtml();
-//    QString css = Utils::htmlTakeAllCssContent(tmp);
-//    tmp = Utils::htmlReplaceAccents(tmp);
-//    tmp = Utils::htmlBodyContent(tmp, false);
-//    tmp .prepend(css);
-//    s->setValue(DrugsDB::Constants::S_PRESCRIPTIONFORMATTING_HTML, tmp);
-//    s->setValue(DrugsDB::Constants::S_PRESCRIPTIONFORMATTING_PLAIN, _writer->rawSourceToPlainText());
-//}
+    QString tmp = _writer->rawSourceToHtml();
+    QString css = Utils::htmlTakeAllCssContent(tmp);
+    tmp = Utils::htmlReplaceAccents(tmp);
+    tmp = Utils::htmlBodyContent(tmp, false);
+    tmp .prepend(css);
+    s->setValue(DrugsDB::Constants::S_PRESCRIPTIONFORMATTING_HTML, tmp);
+    s->setValue(DrugsDB::Constants::S_PRESCRIPTIONFORMATTING_PLAIN, _writer->rawSourceToPlainText());
+}
 
-//void DrugPosologicSentenceWithPadPreferencesWidget::changeEvent(QEvent *e)
-//{
-//    QWidget::changeEvent(e);
-//    switch (e->type()) {
-//    case QEvent::LanguageChange:
-// //        retranslateUi(this);
-//        break;
-//    default:
-//        break;
-//    }
-//}
-//#endif
+void DrugPosologicSentenceWithPadPreferencesWidget::changeEvent(QEvent *e)
+{
+    QWidget::changeEvent(e);
+    switch (e->type()) {
+    case QEvent::LanguageChange:
+ //        retranslateUi(this);
+        break;
+    default:
+       break;
+    }
+}
+#endif
 
 DrugPosologicSentencePage::DrugPosologicSentencePage(QObject *parent) :
     IOptionsPage(parent),
@@ -358,11 +359,11 @@ QWidget *DrugPosologicSentencePage::createPage(QWidget *parent)
 {
     if (m_Widget)
         delete m_Widget;
-    m_Widget = new DrugPosologicSentencePreferencesWidget(parent);
-//#ifdef WITH_PAD
-//    m_Widget = new DrugPosologicSentenceWithPadPreferencesWidget(parent);
-//#else
 //    m_Widget = new DrugPosologicSentencePreferencesWidget(parent);
-//#endif
+#ifdef WITH_PAD
+    m_Widget = new DrugPosologicSentenceWithPadPreferencesWidget(parent);
+#else
+    m_Widget = new DrugPosologicSentencePreferencesWidget(parent);
+#endif
     return m_Widget;
 }

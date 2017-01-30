@@ -4,7 +4,7 @@
     <license>GPLv3</license>
     <category>Data packs</category>
     <description>The plugin does nothing. It's only an infra-structure to ease creation of new plugins.</description>
-    <url>http://www.freemedforms.com</url>
+    <url>https://freehealth.io</url>
     <dependencyList>
         <dependency name="Core" version="0.0.1"/>
     </dependencyList>

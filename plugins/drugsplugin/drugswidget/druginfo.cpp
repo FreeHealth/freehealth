@@ -24,8 +24,11 @@
 /**
  * \class DrugInfo
  * \brief Show a dialog with drugs information and interactions found.
- * This dialog allows user to send debugging data. The dialog uses the
+ * The dialog uses the
  * current drugs view drugsmodel as current drugs model.
+ * \remark This dialog was intended to allow user to send debugging data but
+ * it was never used in production.
+ * \sa Utils::MessageSender
 */
 
 #include <coreplugin/isettings.h>

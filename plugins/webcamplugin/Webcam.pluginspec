@@ -4,7 +4,7 @@
     <license>GPLv3</license>
     <category>UI improvements</category>
     <description>Implements a webcam as patient photo source.</description>
-    <url>http://www.freemedforms.com</url>
+    <url>https://freehealth.io</url>
     <dependencyList>
         <dependency name="Core" version="0.0.1"/>
     </dependencyList>

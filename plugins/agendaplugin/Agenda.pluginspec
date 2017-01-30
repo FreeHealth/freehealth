@@ -4,7 +4,7 @@
     <license>GPLv3</license>
     <category>Agenda</category>
     <description>The agenda plugin.</description>
-    <url>http://www.freemedforms.com</url>
+    <url>https://freehealth.io</url>
     <dependencyList>
         <dependency name="Core" version="0.0.1"/>
         <dependency name="UserManager" version="0.0.1"/>

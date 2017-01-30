@@ -4,7 +4,7 @@
     <license>GPLv3</license>
     <category>Category manager</category>
     <description>Category manager for FreeMedForms applications.</description>
-    <url>http://www.freemedforms.com</url>
+    <url>https://freehealth.io</url>
     <dependencyList>
         <dependency name="Core" version="0.0.1"/>
         <dependency name="ListView" version="0.0.1"/>

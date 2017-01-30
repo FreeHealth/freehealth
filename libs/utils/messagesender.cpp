@@ -45,10 +45,10 @@ using namespace Utils::Internal;
 using namespace Trans::ConstantTranslations;
 
 namespace {
-const char * const URL_DOSAGETRANSMISSION     = "http://www.freemedforms.com/appscripts/FMF_DosagesToStore.php";
-const char * const URL_DRUGSARECORRECT        = "http://www.freemedforms.com/appscripts/FMF_Correct.php";
-const char * const URL_DRUGSAREINCORRECT      = "http://www.freemedforms.com/appscripts/FMF_Uncorrect.php";
-const char * const URL_DEVELOPERMAILSENDING  = "http://www.freemedforms.com/appscripts/FMF_Bug.php";
+const char * const URL_DOSAGETRANSMISSION     = "http://www.example.com/appscripts/FMF_DosagesToStore.php";
+const char * const URL_DRUGSARECORRECT        = "http://www.example.com/appscripts/FMF_Correct.php";
+const char * const URL_DRUGSAREINCORRECT      = "http://www.example.com/appscripts/FMF_Uncorrect.php";
+const char * const URL_DEVELOPERMAILSENDING  = "http://www.example.com/appscripts/FMF_Bug.php";
 }  // End Constants
 
 

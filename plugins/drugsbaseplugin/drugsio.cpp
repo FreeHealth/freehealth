@@ -668,6 +668,10 @@ bool DrugsIO::isInitialized() const
 /**
   \brief Start the dosage transmission over the web.
   \todo Manage user's name
+
+  \date 20160130
+  \remark This function is not actually used
+  \sa class DrugInfo
 */
 bool DrugsIO::startsDosageTransmission()
 {

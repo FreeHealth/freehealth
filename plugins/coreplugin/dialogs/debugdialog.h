@@ -29,7 +29,7 @@
 #include <QDialog>
 #include <QHash>
 #include <QMessageBox>
-#include <utils/messagesender.h>
+//#include <utils/messagesender.h>
 
 /**
  * \file debugdialog.h
@@ -70,7 +70,7 @@ private:
     Ui::DebugDialog *m_ui;
     QStackedLayout  *m_slayout;
     QHash<QTreeWidgetItem *, QWidget *> m_Widgets;
-    Utils::MessageSender  m_sender;
+    //Utils::MessageSender  m_sender;
     bool            m_sending;
     QMessageBox *   m_infoMessageBox;
     bool            m_MessageViewExpanded, m_ErrorViewExpanded;

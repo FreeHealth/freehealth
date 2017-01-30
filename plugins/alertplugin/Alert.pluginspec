@@ -4,7 +4,7 @@
     <license>GPLv3</license>
     <category>Alerts</category>
     <description>The alert plugin manages all type of alerts in the project.</description>
-    <url>http://www.freemedforms.com</url>
+    <url>https://freehealth.io</url>
     <dependencyList>
         <dependency name="Core" version="0.0.1"/>
         <dependency name="PatientBase" version="0.0.1"/>
