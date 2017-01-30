@@ -166,6 +166,8 @@ InteractionSynthesisDialog::InteractionSynthesisDialog(DrugsDB::DrugsModel *drug
     d->report->setText(tr("Send a report"));
     d->report->setIcon(theme()->icon(DrugsDB::Constants::I_DRUGREPORT, Core::ITheme::MediumIcon));
     d->report->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
+    // disable until feature is actually coded
+    d->report->setEnabled(false);
     connect(d->report, SIGNAL(clicked()), this, SLOT(drugReportRequested()));
 
     d->help = new QToolButton(this);
