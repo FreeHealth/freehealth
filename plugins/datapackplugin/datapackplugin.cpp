@@ -174,7 +174,7 @@ void DataPackPluginIPlugin::extensionsInitialized()
         if (!core.serverManager()->setGlobalConfiguration(xmlConfig))
             LOG_ERROR("Unable to set the datapack server manager configuration");
         // Always unsure that the freemedforms datapack server is available
-        DataPack::Server http("https://freehealth.io/packs");
+        DataPack::Server http(Constants::SERVER_URL);
         http.setUrlStyle(DataPack::Server::HttpPseudoSecuredAndZipped);
         // FIXME: missing server version to avoid duplicates
         core.serverManager()->addServer(http);

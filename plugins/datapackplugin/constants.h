@@ -34,6 +34,7 @@ const char * const  DATAPACKCONSTANTS_TR_CONTEXT = "DataPackPlug";
 const char * const TOGGLEPACKMANAGER_TEXT = QT_TRANSLATE_NOOP("DataPackPlug", "Data pack manager");
 const char * const I_TOGGLEPACKMANAGER = "package.png";
 const char * const A_TOGGLE_PACKMANAGER = "aTooglePackManager";
+const char * const SERVER_URL = "https://freehealth.io/packs";
 
 }
 }
