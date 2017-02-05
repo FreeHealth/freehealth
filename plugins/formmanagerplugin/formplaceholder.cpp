@@ -377,13 +377,14 @@ public:
         ui->episodeView->showColumn(EpisodeModel::Label);
         ui->episodeView->showColumn(EpisodeModel::UserCreatorName);
 
+        //ui->episodeView->horizontalHeader()->setTextElideMode(Qt::ElideRight);
         ui->episodeView->horizontalHeader()->setSectionResizeMode(EpisodeModel::ValidationStateIcon,
                                                                   QHeaderView::ResizeToContents);
         ui->episodeView->horizontalHeader()->setSectionResizeMode(EpisodeModel::PriorityIcon, QHeaderView::ResizeToContents);
         ui->episodeView->horizontalHeader()->setSectionResizeMode(EpisodeModel::UserDateTime, QHeaderView::ResizeToContents);
         ui->episodeView->horizontalHeader()->setSectionResizeMode(EpisodeModel::CreationDateTime, QHeaderView::ResizeToContents);
-        ui->episodeView->horizontalHeader()->setSectionResizeMode(EpisodeModel::Label, QHeaderView::ResizeToContents);
-        ui->episodeView->horizontalHeader()->setSectionResizeMode(EpisodeModel::UserCreatorName, QHeaderView::Stretch);
+        ui->episodeView->horizontalHeader()->setSectionResizeMode(EpisodeModel::Label, QHeaderView::Stretch);
+        ui->episodeView->horizontalHeader()->setSectionResizeMode(EpisodeModel::UserCreatorName, QHeaderView::ResizeToContents);
         ui->episodeView->horizontalHeader()->setSectionsMovable(true);
 
         QFont small;
@@ -392,10 +393,13 @@ public:
         else
             small.setPointSize(small.pointSize() - 4);
         ui->episodeView->horizontalHeader()->setFont(small);
-        QFile file(":/resources/headerview.qss");
+        // Don't use style sheet to avoid text/sorting arrow overlap in
+        //horizontalheader
+        // TODO: If stylesheet useful fix it
+        /*QFile file(":/resources/headerview.qss");
         file.open(QFile::ReadOnly);
         QString styleSheet = QLatin1String(file.readAll());
-        ui->episodeView->horizontalHeader()->setStyleSheet(styleSheet);
+        ui->episodeView->horizontalHeader()->setStyleSheet(styleSheet)*/
         ui->episodeView->selectionModel()->clearSelection();
         // set the sort order & column to the view/proxymodel
         ui->episodeView->sortByColumn(settings()
