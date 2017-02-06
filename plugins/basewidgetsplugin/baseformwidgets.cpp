@@ -243,6 +243,7 @@ BaseForm::BaseForm(Form::FormItem *formItem, QWidget *parent) :
     m_EpisodeDateTime->setCalendarPopup(true);
 
     m_EpisodeLabel = ui->lineEdit;
+    m_EpisodeLabel->setMaxLength(Constants::EPISODELABELMAXCHAR);
     m_EpisodeLabel->setEnabled(false);
     m_PriorityButton->setToolButtonStyle(Qt::ToolButtonIconOnly);
     m_PriorityButton->setPopupMode(QToolButton::InstantPopup);
@@ -597,12 +598,20 @@ bool BaseFormData::setData(const int ref, const QVariant &data, const int role)
     return true;
 }
 
+/**
+ * @brief BaseFormData::data return data of baseform widget
+ * text() of QLineEdit m_EpisodeLabel being stored as varchar(200)in the database,
+ * we need to make sure that only the first 200 characters of the string are returned.
+ * @param ref
+ * @param role
+ * @return
+ */
 QVariant BaseFormData::data(const int ref, const int role) const
 {
     if (role==Qt::DisplayRole || role==Form::IFormItemData::PatientModelRole) {
         switch (ref) {
         case ID_EpisodeDateTime: return m_Form->m_EpisodeDateTime->dateTime().toUTC().toString(Qt::ISODate);
-        case ID_EpisodeLabel: return m_Form->m_EpisodeLabel->text();
+        case ID_EpisodeLabel: return m_Form->m_EpisodeLabel->text().left(Constants::EPISODELABELMAXCHAR);
         case ID_UserName: return m_Data.value(ID_UserName);
         case ID_Priority: return m_Form->currentPriority();
         }

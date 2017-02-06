@@ -41,8 +41,8 @@ public:
     enum ReferenceRepresentation {
         ID_EpisodeDateTime = 0, // used by BaseFormData to set episode date and time
         ID_EpisodeLabel,    // used by BaseFormData to set episode label
-        ID_UserName,        // used by BaseFormData to set episode label
-        ID_Priority,        // used by BaseFormData to set episode label
+        ID_UserName,        // used by BaseFormData to set episode creator username
+        ID_Priority,        // used by BaseFormData to set episode priority
         ID_CurrentUuid
     };
 

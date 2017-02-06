@@ -86,6 +86,9 @@ const char * const  HIDEHEADERONUNIQUEEPISODE = "HideHeaderOnUniqueEpisode";
 const char * const  NOT_PRINTABLE        = "notprintable";
 const char * const  SUMMARY_FONT_BOLD    = "SummaryFontBold";
 
+// Input validation limit
+const int EPISODELABELMAXCHAR = 200; // maximum length of label string varchar(200)
+
 Form::IFormWidget::LabelOptions labelAlignement(Form::FormItem *item, Form::IFormWidget::LabelOptions defaultValue = Form::IFormWidget::OnLeft);
 
 QStringList getCountries(Form::FormItem *item);
