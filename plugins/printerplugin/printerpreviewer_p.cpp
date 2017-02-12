@@ -75,7 +75,7 @@ QWidget *createEditor(QWidget *parent, Editor::TextEditor *t, const QString &trT
 /**
   \brief For internal use
   \internal
-  \todo Manage printer page magins...
+  \todo Manage printer page margins...
   \todo Manage the page changer for the preview (spinbox)
   \todo pageNumberSpinBox
 */

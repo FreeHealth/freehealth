@@ -56,7 +56,6 @@
 #include <coreplugin/isettings.h>
 #include <coreplugin/constants_tokensandsettings.h>
 #include <printerplugin/textdocumentextra.h>
-#include <coreplugin/iuser.h>
 #include <coreplugin/icommandline.h>
 
 #include <utils/log.h>
@@ -1682,6 +1681,7 @@ bool UserBase::saveUserPreferences(const QString &uid, const QString &content)
 
 bool UserBase::savePapers(UserData *user)
 {
+    WARN_FUNC;
     if (!user->isModified())
         return true;
 

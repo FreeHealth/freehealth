@@ -29,7 +29,7 @@
  * \class UserPlugin::DefaultUserContactWidget
  * Widget containing all editor of the user contact items using the
  * Identity::IdentityEditorWidget. This widget manages password changes
- * using the signl/slot of the Identity::IdentityEditorWidget and
+ * using the signal/slot of the Identity::IdentityEditorWidget and
  * the UserPlugin::Internal::UserModel.
  */
 
@@ -403,9 +403,9 @@ QWidget *DefaultUserRightsPage::createPage(QWidget *parent)
     return w;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////   DefaultUserPapersWidget   //////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+//////////////////////   DefaultUserPapersWidget   /////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 DefaultUserPapersWidget::DefaultUserPapersWidget(const int type, QWidget *parent) :
     UserPlugin::IUserViewerWidget(parent),
     m_Mapper(0),

@@ -26,7 +26,7 @@
  ***************************************************************************/
 /**
  * \class UserPlugin::UserManagerMainWindow
- * This is the Users' Manager of FreeMedForms. \n
+ * User manager. \n
  * You can use it as main app or secondary mainWindow.\n
  * You only need to instanciate the UserModel and define a current user
  * before using this mainwindow.

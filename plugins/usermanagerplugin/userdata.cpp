@@ -171,7 +171,7 @@ bool UserDynamicData::isNull() const
     return d->m_IsNull;
 }
 
-/** \brief Returns to if the value has change since last call of feedFromSql(). */
+/** \brief Returns true if the value has change since last call of feedFromSql(). */
 bool UserDynamicData::isModified() const
 {
     return d->m_IsDirty;
@@ -437,7 +437,7 @@ namespace Internal {
 class UserDataPrivate
 {
 public:
-    static QHash<QString, int> m_Link_PaperName_ModelIndex;  /** \brief For speed improvments, stores the link between name of headers/footers/watermark and there index into UserModel \sa UserConstants. */
+    static QHash<QString, int> m_Link_PaperName_ModelIndex;  /** \brief For speed improvements, stores the link between name of headers/footers/watermark and their index into UserModel \sa UserConstants. */
 
     UserDataPrivate() :
         m_Editable(false),
@@ -545,7 +545,7 @@ QHash<QString, int> UserDataPrivate::m_Link_PaperName_ModelIndex;
  * \li no rights for Medical, paramedical, dosage management
  * \li empty password is set encrypted
  * \li user is editable
- * \li user uuid is defined but not control (duplicate in database can exists)
+ * \li user uuid is defined but no control (duplicate in database can exist)
  * \li locker is unset
  */
 UserData::UserData() :
@@ -580,7 +580,7 @@ UserData::UserData() :
   \li no rights for Medical, paramedical, dosage management
   \li empty password is set encrypted
   \li user is editable
-  \li user uuid is defined but not control (duplicate in database can exists)
+  \li user uuid is defined but no control (duplicate in database can exist)
   \li locker is unset
  */
 UserData::UserData(const QString & uuid)
@@ -682,7 +682,7 @@ bool UserData::isEmpty() const
 }
 
 /**
- * Set this user has the current.
+ * Set this user as the current.
  * This state is modified by the UserPlugin::Internal::UserModel
  */
 void UserData::setCurrent(bool state)
@@ -691,7 +691,7 @@ void UserData::setCurrent(bool state)
 }
 
 /**
- * Returns true if this user was defined has the current one.
+ * Returns true if this user was defined as the current one.
  * This state is modified by the UserPlugin::Internal::UserModel
  */
 bool UserData::isCurrent() const
@@ -699,7 +699,10 @@ bool UserData::isCurrent() const
     return d->m_IsCurrent;
 }
 
-/** \brief If user is editable and does not have an uuid then create a new one and return true, otherwise return false. */
+/**
+ * \brief If user is editable and does not have an uuid then create a new one
+ *  and return true, otherwise return false.
+ */
 bool UserData::createUuid()
 {
     if (!d->m_Editable)
@@ -719,9 +722,9 @@ void UserData::setUuid(const QString & val)
         dyn->setUserUuid(val);
 }
 
-//--------------------------------------------------------------------------------------------------------
-//------------------------------------------------ Setters -----------------------------------------------
-//--------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+//---------------------------------- Setters -----------------------------------
+//------------------------------------------------------------------------------
 /**
  * Reserved for database feeding. Only UserBase should use it. \n
  * If user is editable, set the value \e val for the table \e tableref index
@@ -962,9 +965,9 @@ QString UserData::decryptedLogin() const
     return Utils::loginFromSQL(value(Table_USERS, USER_LOGIN));
 }
 
-//--------------------------------------------------------------------------------------------------------
-//------------------------------------------------ Getters -----------------------------------------------
-//--------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+//---------------------------------- Getters -----------------------------------
+//------------------------------------------------------------------------------
 /**
  * Return the value corresponding to the
  * \e tableref and \e fieldref of the database scheme.

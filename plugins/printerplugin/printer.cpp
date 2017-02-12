@@ -637,9 +637,11 @@ int PrinterPrivate::complexDrawNewPage(QPainter &p, QSizeF & headerSize, QSizeF 
 }
 
 /**
-    \brief This drawing funtion assumes that there is the same number of headers and footers on each pages.
-    Watermark are printed first, text lies over the watermark. Then headers and footers are added, and finally
-    the content of the document to print is added page by page.
+    \brief This drawing funtion assumes that there is the same number of headers
+    and footers on each pages.
+    Watermark are printed first, text lies over the watermark. Then headers and
+    footers are added, and finally the content of the document to print is added
+    page by page.
 */
 bool PrinterPrivate::simpleDraw()
 {
