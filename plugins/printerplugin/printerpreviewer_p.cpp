@@ -35,17 +35,13 @@
 #include <QComboBox>
 #include <QPainter>
 #include <QPixmap>
+#include <QResource>
 
 using namespace Print;
 using namespace Print::Internal;
 using namespace Trans::ConstantTranslations;
 
 namespace {
-
-const char* const EXAMPLE_CONTENT =
-        "<p align=center><b>This is a sample content for the document</b></p><p>&nbsp;</p>"
-        "<p align=justify><span style=\"font-size:10pt\">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse dapibus rhoncus vehicula. Praesent vel eros id dolor malesuada sollicitudin. Nam eros justo, dignissim a adipiscing et, porta vehicula odio. Vivamus et dolor at arcu laoreet pharetra et at nibh. Vestibulum suscipit, eros vitae mollis porttitor, sapien nisl dictum massa, quis volutpat massa nisl ac urna. Proin vulputate sapien at tellus aliquet ultrices. Mauris urna leo, porttitor vitae tincidunt eleifend, congue egestas massa. Aenean vitae metus euismod ipsum ultricies sagittis non laoreet risus. Morbi nec tellus purus, at vestibulum mi. Fusce auctor, sapien eget sodales pulvinar, tellus turpis congue nibh, eu fringilla augue magna nec nisi. Vestibulum rutrum commodo diam nec elementum. Nullam turpis dolor, scelerisque id porttitor a, iaculis porttitor felis. Aliquam et est dui. Fusce lobortis rutrum quam. Cras vitae nisl tellus. Aliquam quis varius turpis. Etiam at lorem turpis. Quisque bibendum malesuada erat id dignissim.</span></p>"
-        "<p align=justify><span style=\"font-size:10pt\">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse dapibus rhoncus vehicula. Praesent vel eros id dolor malesuada sollicitudin. Nam eros justo, dignissim a adipiscing et, porta vehicula odio. Vivamus et dolor at arcu laoreet pharetra et at nibh. Vestibulum suscipit, eros vitae mollis porttitor, sapien nisl dictum massa, quis volutpat massa nisl ac urna. Proin vulputate sapien at tellus aliquet ultrices. Mauris urna leo, porttitor vitae tincidunt eleifend, congue egestas massa. Aenean vitae metus euismod ipsum ultricies sagittis non laoreet risus. Morbi nec tellus purus, at vestibulum mi. Fusce auctor, sapien eget sodales pulvinar, tellus turpis congue nibh, eu fringilla augue magna nec nisi. Vestibulum rutrum commodo diam nec elementum. Nullam turpis dolor, scelerisque id porttitor a, iaculis porttitor felis. Aliquam et est dui. Fusce lobortis rutrum quam. Cras vitae nisl tellus. Aliquam quis varius turpis. Etiam at lorem turpis. Quisque bibendum malesuada erat id dignissim.</span></p>";
 
 QWidget *createEditor(QWidget *parent, Editor::TextEditor *t, const QString &trTitle, const QString &id, const int defaultPresence = Printer::EachPages)
 {
@@ -84,7 +80,19 @@ PrinterPreviewerPrivate::PrinterPreviewerPrivate(QWidget *parent) :
     m_EditorHeader(0), m_EditorFooter(0), m_EditorWatermark(0),
     m_AutoCheck(false)
 {
-    printer.setContent(EXAMPLE_CONTENT);
+    QFile file(":/resources/example_content.txt");
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        qDebug() << "Unable to open file: "
+                 << file.fileName()
+                 << " besause of error "
+                 << file.errorString() << endl;
+        return;
+    }
+    QTextStream in(&file);
+    QString example = in.readAll();
+
+    printer.setContent(example);
     printer.setPrinter(new QPrinter(QPrinter::ScreenResolution));
     printer.printer()->setPaperSize(QPrinter::A4);
 }

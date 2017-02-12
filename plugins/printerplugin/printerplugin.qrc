@@ -1,0 +1,5 @@
+<RCC>
+    <qresource>
+        <file>resources/example_content.txt</file>
+    </qresource>
+</RCC>
