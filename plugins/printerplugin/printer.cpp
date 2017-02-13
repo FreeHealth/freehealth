@@ -1277,8 +1277,10 @@ void Printer::addTextWatermark(const QString & plainText,
 }
 
 /**
-  \brief Returns the Previewer widget
+  \brief Returns the Previewer widget as a pointer
+  This widget is used inside the DefaultUserPapersWidget of the User Manager.
   \sa tkPrinterPreviewer
+  \sa DefaultUserPapersWidget
 */
 PrinterPreviewer *Printer::previewer(QWidget *parent)
 {

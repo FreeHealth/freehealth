@@ -406,6 +406,13 @@ QWidget *DefaultUserRightsPage::createPage(QWidget *parent)
 ////////////////////////////////////////////////////////////////////////////////
 //////////////////////   DefaultUserPapersWidget   /////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
+/**
+ * Edit headers, footers and watemarks of documents.
+ * The widget that actually do the editing is created by PrinterPreviewerPrivate
+ * class.
+ * \sa PrinterPreviewer
+ * \sa Printer::previewer(QWidget *parent)
+ */
 DefaultUserPapersWidget::DefaultUserPapersWidget(const int type, QWidget *parent) :
     UserPlugin::IUserViewerWidget(parent),
     m_Mapper(0),
