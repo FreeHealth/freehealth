@@ -97,6 +97,7 @@ private Q_SLOTS:
     void on_duplicataCheck_stateChanged( int state );
     void on_pageNumberSpinBox_valueChanged( int value );
 //    void on_tooglePreviewButton_clicked();
+    bool setHtmlFromFile();
 
 private:
     void connectPreview(Editor::TextEditor *t);
