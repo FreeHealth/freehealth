@@ -390,10 +390,10 @@ void UserBase::onCoreFirstRunCreationRequested()
     initialize();
 }
 
-//--------------------------------------------------------------------------------------------------------
-//------------------------------------------- Data retrievers --------------------------------------------
-//--------------------------------------------------------------------------------------------------------
-/** Retreive all users data from the users' database. If an error occurs, it returns 0. */
+//------------------------------------------------------------------------------
+//------------------------------ Data retrievers -------------------------------
+//------------------------------------------------------------------------------
+/** Retrieve all users data from the users' database. If an error occurs, it returns 0. */
 UserData *UserBase::getUser(const QHash<int, QString> &conditions) const
 {
     QSqlDatabase DB = QSqlDatabase::database(Constants::USER_DB_CONNECTION);
@@ -493,7 +493,7 @@ UserData *UserBase::getUser(const QHash<int, QString> &conditions) const
     return toReturn;
 }
 
-/** Retreive all users data from the users' database. If an error occurs, it returns 0. \sa getUser() */
+/** Retrieve all users data from the users' database. If an error occurs, it returns 0. \sa getUser() */
 UserData *UserBase::getUserById(const QVariant & _id) const
 {
     // retrieve corresponding user
@@ -505,7 +505,7 @@ UserData *UserBase::getUserById(const QVariant & _id) const
     return getUser(where);
 }
 
-/** Retreive all users data from the users' database. If an error occurs, it returns 0. \sa getUser() */
+/** Retrieve all users data from the users' database. If an error occurs, it returns 0. \sa getUser() */
 UserData* UserBase::getUserByUuid(const QString & uuid) const
 {
     // retrieve corresponding user
@@ -518,7 +518,7 @@ UserData* UserBase::getUserByUuid(const QString & uuid) const
 }
 
 /**
- * Retreive all users data from the users' database.
+ * Retrieve all users data from the users' database.
  * If an error occurs, it returns 0. \sa getUser()
  */
 UserData *UserBase::getUserByLoginPassword(const QVariant &login, const QVariant &cryptedPassword) const
@@ -534,8 +534,8 @@ UserData *UserBase::getUserByLoginPassword(const QVariant &login, const QVariant
 
 /**
  * Check the couple login/password passed as params.
- * Returns \e true if a user can connect with these identifiants
- * (to the server + to freemedforms user database).
+ * Returns \e true if a user can connect with these credentials, that is, if
+ * credentials are correct for both RDBMS (MySQL user accounts) & app (USERS table)
  */
 bool UserBase::checkLogin(const QString &clearLogin, const QString &clearPassword)
 {
@@ -709,7 +709,7 @@ bool UserBase::userExists(const QString &clearLogin) const
     }
 }
 
-/** Return the Uuid of the user identified with couple login/password. Returns a null QString if an error occurs. */
+/** Return the Uuid of the user identified with login/password. Returns a null QString if an error occurs. */
 QString UserBase::getUuid(const QString &log64, const QString &cryptpass64)
 {
     if ((log64 == m_LastLogin) && (cryptpass64 == m_LastPass))
@@ -812,7 +812,7 @@ QString UserBase::getLogin64(const QString &uuid)
 }
 
 /**
- * Returns the crypted password stored in the FreeMedForms database
+ * Returns the encrypted password stored in the app USERS database
  * for the user identified with the login \e clearLogin
  */
 QString UserBase::getCryptedPassword(const QString &clearLogin)
@@ -1274,18 +1274,18 @@ QDateTime UserBase::recordLastLoggedIn(const QString &log, const QString &pass)
 /** Creates a new user in the database according to the actual specified driver. */
 bool UserBase::createUser(UserData *user)
 {
-    // TODO: check current user freemedforms' rights
+    // TODO: check current user rights
     switch (driver()) {
     case Utils::Database::MySQL:
     {
         // create user grants
-        // TODO: security problem, lower grants on DB according to user's FMF rights
+        // TODO: security problem, lower grants on DB according to user rights
         Utils::Database::Grants grants = Grant_Select | Grant_Update | Grant_Insert | Grant_Delete | Grant_Create | Grant_Drop | Grant_Alter | Grant_Index;
         if (user->hasRight(Constants::USER_ROLE_USERMANAGER, Core::IUser::Create)) {
             grants |= Grant_CreateUser;
         }
 
-        // create a MySQL user
+        // create a MySQL account
         Utils::DatabaseConnector c = settings()->databaseConnector();
         if (!createMySQLUser(user->clearLogin(), user->clearPassword(), grants,
                              c.globalDatabasePrefix()))
@@ -1298,7 +1298,7 @@ bool UserBase::createUser(UserData *user)
     }
     }
 
-    // Create the FreeMedForms user
+    // Create an app account
     return saveUser(user);
 }
 
@@ -1785,7 +1785,7 @@ bool UserBase::changeUserPassword(UserData *user, const QString &newClearPasswor
         }
     }
 
-    // Update FreeMedForms password in fmf_users database
+    // Update app password in fmf_users database
     Utils::PasswordCrypter crypter;
     QHash<int, QString> where;
     where.insert(USER_UUID, QString("='%1'").arg(user->uuid()));
@@ -1799,10 +1799,10 @@ bool UserBase::changeUserPassword(UserData *user, const QString &newClearPasswor
         DB.rollback();
         return false;
     }
-    LOG("User password updated in the FreeMedForms database");
+    LOG("User password updated in the application database");
     query.finish();
     DB.commit();
-    LOG("User password succesfully updated");
+    LOG("User password successfully updated");
     return true;
 }
 

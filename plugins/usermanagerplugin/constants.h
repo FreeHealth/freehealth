@@ -121,7 +121,7 @@ namespace Constants {
             "</body></html>";
     const char * const DEFAULT_USER_FOOTER   =
             "<html><body>"  \
-            "Here you can add urgencies phone numbers<br>"  \
+            "Here you can add emergency telephone numbers<br>"  \
             "Or What ever you want."  \
             "</body></html>";
 
