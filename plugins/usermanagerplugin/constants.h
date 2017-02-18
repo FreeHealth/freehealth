@@ -15,7 +15,7 @@
  *  GNU General Public License for more details.                           *
  *                                                                         *
  *  You should have received a copy of the GNU General Public License      *
- *  along with this program (COPYING.FREEMEDFORMS file).                   *
+ *  along with this program (COPYING file).                   *
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
@@ -121,7 +121,7 @@ namespace Constants {
             "</body></html>";
     const char * const DEFAULT_USER_FOOTER   =
             "<html><body>"  \
-            "Here you can add urgencies phone numbers<br>"  \
+            "Here you can add emergency telephone numbers<br>"  \
             "Or What ever you want."  \
             "</body></html>";
 

@@ -15,7 +15,7 @@
  *  GNU General Public License for more details.                           *
  *                                                                         *
  *  You should have received a copy of the GNU General Public License      *
- *  along with this program (COPYING.FREEMEDFORMS file).                   *
+ *  along with this program (COPYING file).                   *
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
@@ -329,16 +329,6 @@ QList<QDateTime> NextAvailabiliyManager::nextAvailableTime(const QDateTime &star
 
         QRect testDate = dateToRect(start, durationInMinutes);
 
-#if QT_VERSION < 0x050000
-        if (WarnDebugs)
-            qWarning() << "TEST" << testDate.intersect(nextAppointment).height();
-
-        // rect does not intersect the next recorded appointment ? -> go next appointment
-        while ((testDate.intersect(nextAppointment).height() < 1) || nextAppointment.isNull()) {
-
-            if (WarnDebugs)
-                qWarning() << "---\ntest" << testDate << "next" << nextAppointment << testDate.intersect(nextAppointment).height() << "topTest" << (nextAppointment.top() <= testDate.top());
-#else
         if (WarnDebugs)
             qWarning() << "TEST" << testDate.intersected(nextAppointment).height();
 
@@ -347,7 +337,6 @@ QList<QDateTime> NextAvailabiliyManager::nextAvailableTime(const QDateTime &star
 
             if (WarnDebugs)
                 qWarning() << "---\ntest" << testDate << "next" << nextAppointment << testDate.intersected(nextAppointment).height() << "topTest" << (nextAppointment.top() <= testDate.top());
-#endif
 
             if (nbFound == numberOfDates) {
                 return toReturn;

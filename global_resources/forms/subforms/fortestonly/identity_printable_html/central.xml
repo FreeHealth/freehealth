@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE FreeMedForms>
+
+<FreeMedForms>
+
+  <formdescription>
+    <!-- Non translatable values -->
+    <authors>Eric Maeker, MD ; Jerome Pinguet</authors>
+    <version>test</version>
+    <fmfv>0.9.9</fmfv>
+    <cdate>2016-12-02</cdate>
+    <lmdate>2016-12-02</lmdate>
+    <icon>__theme__/identity.png</icon>
+    <weblink></weblink>
+    <bibliography/>
+
+    <!-- Translatable values -->
+    <license>GPLv3</license>
+    <description lang="xx">Test identity printable html</description>
+    <category lang="xx">Test</category>
+    <specialties lang="xx">Test</specialties>
+
+    <updateinfo>
+    </updateinfo>
+
+  </formdescription>
+
+  <MedForm name="Subs::Tools::IdentitySynopsis" uifilename="./ui/xx/identity.ui">
+    <label lang="xx">Identity</label>
+    <options>NoEpisode</options>
+    <icon>__theme__/identity.png</icon>
+
+      <MedForm name="Subs::Tools::Identity" uifilename="./ui/xx/identity.ui" isidentity="true">
+        <label lang="xx">Identity</label>
+        <options>unique;UseFormNameAsNameSpace;HideHeaderOnUniqueEpisode</options>
+        <icon>__theme__/identity.png</icon>
+
+        <Item type="detailswidget" name="IdentityDetails" uifilename="./ui/xx/ident.ui">
+            <uilink label="" widget="" layout="identityLayout"/>
+            <label lang="xx">Identity and address</label>
+
+            <options>SummaryFontBold;expanded</options>
+
+            <Item type="identity" name="IdentityWidget">
+                <uilink label="" widget="" layout="identityIncludeLayout"/>
+                <label lang="xx">Full Identity</label>
+                <options>with-address;with-photo</options>
+            </Item>
+        </Item>
+      </MedForm>
+
+  </MedForm>
+</FreeMedForms>

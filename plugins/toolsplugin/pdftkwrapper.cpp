@@ -15,7 +15,7 @@
  *  GNU General Public License for more details.                           *
  *                                                                         *
  *  You should have received a copy of the GNU General Public License      *
- *  along with this program (COPYING.FREEMEDFORMS file).                   *
+ *  along with this program (COPYING file).                   *
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
@@ -134,7 +134,7 @@ public:
     QHash<QProcess *, QProgressDialog *> _progressDialog;
 
 private:
-//    PdfTkWrapper *q;
+    //    PdfTkWrapper *q;
 };
 } // namespace Internal
 } // namespace Tools
@@ -179,9 +179,7 @@ bool PdfTkWrapper::initialize()
     if (Utils::isRunningOnMac()) {
         if (Utils::fileMd5(pdfTk) != ::MAC_MD5
                 || Utils::fileSha1(pdfTk) != ::MAC_SHA1
-        #if QT_VERSION >= 0x050000
                 || Utils::fileSha256(pdfTk) != ::MAC_SHA256
-        #endif
                 ) {
             LOG_ERROR("Wrong pdftk binary");
             return false;
@@ -190,9 +188,7 @@ bool PdfTkWrapper::initialize()
         // FIXME: may be XP / Win7/ Win8 checksum are different?
         if (Utils::fileMd5(pdfTk) != ::XP_MD5
                 || Utils::fileSha1(pdfTk) != ::XP_SHA1
-        #if QT_VERSION >= 0x050000
                 || Utils::fileSha256(pdfTk) != ::XP_SHA256
-        #endif
                 ) {
             LOG_ERROR("Wrong pdftk binary");
             return false;

@@ -36,9 +36,7 @@
 #include "extensionsystem_global.h"
 
 #include <QObject>
-#if QT_VERSION >= 0x050000
-#    include <QtPlugin>
-#endif
+#include <QtPlugin>
 
 namespace ExtensionSystem {
 

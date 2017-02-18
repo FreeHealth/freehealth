@@ -15,7 +15,7 @@
  *  GNU General Public License for more details.                           *
  *                                                                         *
  *  You should have received a copy of the GNU General Public License      *
- *  along with this program (COPYING.FREEMEDFORMS file).                   *
+ *  along with this program (COPYING file).                   *
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
@@ -41,7 +41,6 @@ CommandLine::CommandLine(QObject *parent) :
     ref.insert(Chrono, "--chrono");
     ref.insert(CL_TransmitDosage, "--transmit-dosage");
     ref.insert(ConfigFile, "--config");
-    ref.insert(RunningUnderWine, "--wine");
     ref.insert(ClearUserDatabases, "--clear-user-databases");
     ref.insert(CreateVirtuals, "--create-virtuals");
     ref.insert(ResetUserPreferences, "--reset-users-preferences");
@@ -53,7 +52,6 @@ CommandLine::CommandLine(QObject *parent) :
     // set default values
     params.insert(Chrono, false);
     params.insert(CL_TransmitDosage, false);
-    params.insert(RunningUnderWine, false);
     params.insert(ClearUserDatabases, false);
     params.insert(CreateVirtuals, false);
     params.insert(ResetUserPreferences, false);
@@ -75,7 +73,6 @@ CommandLine::CommandLine(QObject *parent) :
         case Chrono : params.insert(Chrono, true); break;
         case CL_TransmitDosage : params.insert(CL_TransmitDosage, true); break;
         case ConfigFile : params.insert(ConfigFile, a.mid(a.indexOf("=")+1).remove("\"")); break;
-        case RunningUnderWine : params.insert(RunningUnderWine, true); break;
         case ClearUserDatabases : params.insert(ClearUserDatabases, true); break;
         case CreateVirtuals : params.insert(CreateVirtuals, true); break;
         case ResetUserPreferences : params.insert(ResetUserPreferences, true); break;

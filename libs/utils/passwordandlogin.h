@@ -15,7 +15,7 @@
  *  GNU General Public License for more details.                           *
  *                                                                         *
  *  You should have received a copy of the GNU General Public License      *
- *  along with this program (COPYING.FREEMEDFORMS file).                   *
+ *  along with this program (COPYING file).                   *
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
@@ -55,21 +55,11 @@ class UTILS_EXPORT PasswordCrypter {
 public:
     enum Algorithm {
         SHA1 = 0,
-#if (QT_VERSION >= 0x050000)
         SHA256 = 1,
         SHA512 = 2,
-#endif
-#if (QT_VERSION >= 0x050100)
         SHA3_256 = 3,
         SHA3_512 = 4,
-#endif
-#if (QT_VERSION < 0x050000)
-        Default = SHA1,
-#elif (QT_VERSION >= 0x050000 && QT_VERSION < 0x050100)
-        Default = SHA512,
-#else
         Default = SHA3_512,
-#endif
         ERROR = -1
     };
 

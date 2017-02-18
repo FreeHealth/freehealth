@@ -15,7 +15,7 @@
  *  GNU General Public License for more details.                           *
  *                                                                         *
  *  You should have received a copy of the GNU General Public License      *
- *  along with this program (COPYING.FREEMEDFORMS file).                   *
+ *  along with this program (COPYING file).                   *
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
@@ -76,25 +76,25 @@ const char * const TREEVIEW_SHEET =
         "}"
 
         "QTreeView::item {"
-//        "    border: 0px;"
+        //        "    border: 0px;"
         "    background: base;"
-//        "    border-top-color: transparent;"
-//        "    border-bottom-color: transparent;"
+        //        "    border-top-color: transparent;"
+        //        "    border-bottom-color: transparent;"
         "}"
 
         "QTreeView::item:hover {"
         "    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #e7effd, stop: 1 #cbdaf1);"
-//        "    border: 0px solid #bfcde4;"
+        //        "    border: 0px solid #bfcde4;"
         "}"
 
-//        "QTreeView::branch:hover {"
-//        "    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #e7effd, stop: 1 #cbdaf1);"
-//        "    border: 0px solid #bfcde4;"
-//        "}"
+        //        "QTreeView::branch:hover {"
+        //        "    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #e7effd, stop: 1 #cbdaf1);"
+        //        "    border: 0px solid #bfcde4;"
+        //        "}"
 
-//        "QTreeView::item:selected {"
-//        "    border: 0px solid #567dbc;"
-//        "}"
+        //        "QTreeView::item:selected {"
+        //        "    border: 0px solid #567dbc;"
+        //        "}"
 
         "QTreeView::item:selected {"
         "    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #6ea1f1, stop: 1 #567dbc);"
@@ -104,9 +104,9 @@ const char * const TREEVIEW_SHEET =
         "    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #6ea1f1, stop: 1 #567dbc);"
         "}"
 
-//        "QTreeView::item:selected:!active {"
-//        "    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #6b9be8, stop: 1 #577fbf);"
-//        "}"
+        //        "QTreeView::item:selected:!active {"
+        //        "    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #6b9be8, stop: 1 #577fbf);"
+        //        "}"
         ;
 }
 
@@ -236,16 +236,16 @@ CrListViewer::CrListViewer(QWidget *parent) :
     // Manage CrTreeView options & delegate
     QStringList commands;
     commands
-             << Core::Constants::A_LIST_ADD
-             << Core::Constants::A_LIST_REMOVE
-             << "--"
-             << eDRC::Constants::A_LIST_EDIT
-             << eDRC::Constants::A_LIST_RENEW
-             << "--"
-             << Core::Constants::A_LIST_CLEAR
-             << "--"
-             << Core::Constants::A_FILE_PRINT
-                ;
+            << Core::Constants::A_LIST_ADD
+            << Core::Constants::A_LIST_REMOVE
+            << "--"
+            << eDRC::Constants::A_LIST_EDIT
+            << eDRC::Constants::A_LIST_RENEW
+            << "--"
+            << Core::Constants::A_LIST_CLEAR
+            << "--"
+            << Core::Constants::A_FILE_PRINT
+               ;
     d->ui->treeView->setActions(0);
     d->ui->treeView->setCommands(commands);
     d->ui->treeView->addContext(context()->context());
@@ -463,17 +463,12 @@ void CrListViewer::onModelReset()
     // Resize columns
     d->ui->treeView->header()->setStretchLastSection(true);
     d->ui->treeView->header()->setSectionHidden(CrTreeModel::Label, false);
+    // TODO: fix this
     // Due to a assert on windows (Qt4.8.5) I've commented the following
-//    d->ui->treeView->header()->setSectionHidden(CrTreeModel::Empty1, false);
-//    d->ui->treeView->setColumnWidth(CrTreeModel::Empty1, 22);
-//#if QT_VERSION < 0x050000
-//    d->ui->treeView->header()->setResizeMode(CrTreeModel::Label, QHeaderView::Stretch);
-//    d->ui->treeView->header()->setResizeMode(CrTreeModel::Empty1, QHeaderView::Fixed);
-//#else
-//    // Qt5
-//    d->ui->treeView->header()->setSectionResizeMode(CrTreeModel::Label, QHeaderView::Stretch);
-//    d->ui->treeView->header()->setSectionResizeMode(CrTreeModel::Empty1, QHeaderView::Fixed);
-//#endif
+    //    d->ui->treeView->header()->setSectionHidden(CrTreeModel::Empty1, false);
+    //    d->ui->treeView->setColumnWidth(CrTreeModel::Empty1, 22);
+    //    d->ui->treeView->header()->setSectionResizeMode(CrTreeModel::Label, QHeaderView::Stretch);
+    //    d->ui->treeView->header()->setSectionResizeMode(CrTreeModel::Empty1, QHeaderView::Fixed);
     QTimer::singleShot(2, this, SLOT(onModelPostReset()));
 }
 

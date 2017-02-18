@@ -15,7 +15,7 @@
  *  GNU General Public License for more details.                           *
  *                                                                         *
  *  You should have received a copy of the GNU General Public License      *
- *  along with this program (COPYING.FREEMEDFORMS file).                   *
+ *  along with this program (COPYING file).                   *
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
@@ -138,7 +138,7 @@ bool PatientDataExtractorDialog::initialize()
 
     d->ui->setupUi(this);
     setWindowTitle(tr("Patient data extractor"));
-    setWindowIcon(theme()->icon(Core::Constants::ICONFREEMEDFORMS));
+    setWindowIcon(theme()->icon(Core::Constants::ICONEHR));
     d->ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
     d->_exportButton = d->ui->buttonBox->addButton(tr("Export..."), QDialogButtonBox::ActionRole);
     connect(d->_exportButton, SIGNAL(clicked()), this, SLOT(onExportRequested()));

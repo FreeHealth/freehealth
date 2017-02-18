@@ -15,7 +15,7 @@
  *  GNU General Public License for more details.                           *
  *                                                                         *
  *  You should have received a copy of the GNU General Public License      *
- *  along with this program (COPYING.FREEMEDFORMS file).                   *
+ *  along with this program (COPYING file).                   *
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
@@ -167,7 +167,7 @@ bool GenericUpdateInformation::toDomElement(QDomElement *root, QDomDocument *doc
     if (!root || !document)
         return false;
     if (root->tagName().compare(xmlTagName(), Qt::CaseInsensitive)!=0) {
-        LOG_ERROR_FOR("GenericUpdateInformation",QString("Wrong root tag. Got %1, requiered %2").arg(root->tagName()).arg(xmlTagName()));
+        LOG_ERROR_FOR("GenericUpdateInformation",QString("Wrong root tag. Got %1, required %2").arg(root->tagName()).arg(xmlTagName()));
         return false;
     }
     // Create the version branch

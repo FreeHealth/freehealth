@@ -15,7 +15,7 @@
  *  GNU General Public License for more details.                           *
  *                                                                         *
  *  You should have received a copy of the GNU General Public License      *
- *  along with this program (COPYING.FREEMEDFORMS file).                   *
+ *  along with this program (COPYING file).                   *
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
@@ -35,17 +35,16 @@
 #include <QComboBox>
 #include <QPainter>
 #include <QPixmap>
+#include <QResource>
+#include <QFileDialog>
+
+#include <iostream>
 
 using namespace Print;
 using namespace Print::Internal;
 using namespace Trans::ConstantTranslations;
 
 namespace {
-
-const char* const EXAMPLE_CONTENT =
-        "<p align=center><b>This is a sample content for the document</b></p><p>&nbsp;</p>"
-        "<p align=justify><span style=\"font-size:10pt\">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse dapibus rhoncus vehicula. Praesent vel eros id dolor malesuada sollicitudin. Nam eros justo, dignissim a adipiscing et, porta vehicula odio. Vivamus et dolor at arcu laoreet pharetra et at nibh. Vestibulum suscipit, eros vitae mollis porttitor, sapien nisl dictum massa, quis volutpat massa nisl ac urna. Proin vulputate sapien at tellus aliquet ultrices. Mauris urna leo, porttitor vitae tincidunt eleifend, congue egestas massa. Aenean vitae metus euismod ipsum ultricies sagittis non laoreet risus. Morbi nec tellus purus, at vestibulum mi. Fusce auctor, sapien eget sodales pulvinar, tellus turpis congue nibh, eu fringilla augue magna nec nisi. Vestibulum rutrum commodo diam nec elementum. Nullam turpis dolor, scelerisque id porttitor a, iaculis porttitor felis. Aliquam et est dui. Fusce lobortis rutrum quam. Cras vitae nisl tellus. Aliquam quis varius turpis. Etiam at lorem turpis. Quisque bibendum malesuada erat id dignissim.</span></p>"
-        "<p align=justify><span style=\"font-size:10pt\">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse dapibus rhoncus vehicula. Praesent vel eros id dolor malesuada sollicitudin. Nam eros justo, dignissim a adipiscing et, porta vehicula odio. Vivamus et dolor at arcu laoreet pharetra et at nibh. Vestibulum suscipit, eros vitae mollis porttitor, sapien nisl dictum massa, quis volutpat massa nisl ac urna. Proin vulputate sapien at tellus aliquet ultrices. Mauris urna leo, porttitor vitae tincidunt eleifend, congue egestas massa. Aenean vitae metus euismod ipsum ultricies sagittis non laoreet risus. Morbi nec tellus purus, at vestibulum mi. Fusce auctor, sapien eget sodales pulvinar, tellus turpis congue nibh, eu fringilla augue magna nec nisi. Vestibulum rutrum commodo diam nec elementum. Nullam turpis dolor, scelerisque id porttitor a, iaculis porttitor felis. Aliquam et est dui. Fusce lobortis rutrum quam. Cras vitae nisl tellus. Aliquam quis varius turpis. Etiam at lorem turpis. Quisque bibendum malesuada erat id dignissim.</span></p>";
 
 QWidget *createEditor(QWidget *parent, Editor::TextEditor *t, const QString &trTitle, const QString &id, const int defaultPresence = Printer::EachPages)
 {
@@ -62,9 +61,13 @@ QWidget *createEditor(QWidget *parent, Editor::TextEditor *t, const QString &trT
     c->setObjectName(id);
     c->addItems(Printer::presencesAvailable());
     c->setFocusPolicy(Qt::ClickFocus);
+    QPushButton *p = new QPushButton("&Upload", w);
+    p->setObjectName(id);
+    p->setToolTip("Upload html file");
     grid->addWidget(l, 0, 0);
     grid->addWidget(c, 0, 1);
-    grid->addWidget(t, 1, 0, 2, 2);
+    grid->addWidget(p, 0, 2);
+    grid->addWidget(t, 1, 0, 2, 3);
     grid->setMargin(2);
     grid->setSpacing(2);
     return w;
@@ -75,7 +78,7 @@ QWidget *createEditor(QWidget *parent, Editor::TextEditor *t, const QString &trT
 /**
   \brief For internal use
   \internal
-  \todo Manage printer page magins...
+  \todo Manage printer page margins...
   \todo Manage the page changer for the preview (spinbox)
   \todo pageNumberSpinBox
 */
@@ -84,7 +87,19 @@ PrinterPreviewerPrivate::PrinterPreviewerPrivate(QWidget *parent) :
     m_EditorHeader(0), m_EditorFooter(0), m_EditorWatermark(0),
     m_AutoCheck(false)
 {
-    printer.setContent(EXAMPLE_CONTENT);
+    QFile file(":/resources/example_content.txt");
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        qDebug() << "Unable to open file: "
+                 << file.fileName()
+                 << " besause of error "
+                 << file.errorString() << endl;
+        return;
+    }
+    QTextStream in(&file);
+    QString example = in.readAll();
+
+    printer.setContent(example);
     printer.setPrinter(new QPrinter(QPrinter::ScreenResolution));
     printer.printer()->setPaperSize(QPrinter::A4);
 }
@@ -95,14 +110,23 @@ void PrinterPreviewerPrivate::initialize()
     if (!m_EditorHeader) {
         m_EditorHeader = new Editor::TextEditor(this, Editor::TextEditor::Simple | Editor::TextEditor::WithIO | Editor::TextEditor::WithTables);
         editorLayout->insertWidget(0, createEditor(this, m_EditorHeader, tkTr(Trans::Constants::HEADER), Trans::Constants::HEADER));
+        QPushButton *p_header = this->findChild<QPushButton*>(Trans::Constants::HEADER);
+        connect(p_header, &QPushButton::clicked,
+                this, &PrinterPreviewerPrivate::setHtmlFromFile);
     }
     if (!m_EditorFooter) {
         m_EditorFooter = new Editor::TextEditor(this, Editor::TextEditor::Simple | Editor::TextEditor::WithIO | Editor::TextEditor::WithTables);
         editorLayout->insertWidget(1, createEditor(this, m_EditorFooter, tkTr(Trans::Constants::FOOTER), Trans::Constants::FOOTER));
+        QPushButton *p_footer = this->findChild<QPushButton*>(Trans::Constants::FOOTER);
+        connect(p_footer, &QPushButton::clicked,
+                this, &PrinterPreviewerPrivate::setHtmlFromFile);
     }
     if (!m_EditorWatermark) {
         m_EditorWatermark = new Editor::TextEditor(this, Editor::TextEditor::Simple | Editor::TextEditor::WithIO | Editor::TextEditor::WithTables);
         editorLayout->insertWidget(2, createEditor(this, m_EditorWatermark, tkTr(Trans::Constants::WATERMARK), Trans::Constants::WATERMARK));
+        QPushButton *p_watermark = this->findChild<QPushButton*>(Trans::Constants::WATERMARK);
+        connect(p_watermark, &QPushButton::clicked,
+                this, &PrinterPreviewerPrivate::setHtmlFromFile);
     }
 }
 
@@ -140,12 +164,12 @@ void PrinterPreviewerPrivate::setHeaderHtml(const QString &html)
         m_EditorHeader = new Editor::TextEditor(this, Editor::TextEditor::Simple | Editor::TextEditor::WithIO | Editor::TextEditor::WithTables);
         editorLayout->insertWidget(0, createEditor(this, m_EditorHeader, tkTr(Trans::Constants::HEADER), Trans::Constants::HEADER));
     }
-//    qWarning() << html;
-//    printer.setHeader(html,p);
+    //    qWarning() << html;
+    //    printer.setHeader(html,p);
     m_EditorHeader->textEdit()->setHtml(html);
-//    QComboBox *c = this->findChild<QComboBox *>(tkTr(Trans::Constants::HEADER));
-//    if (c)
-//        return c->setCurrentIndex(p);
+    //    QComboBox *c = this->findChild<QComboBox *>(tkTr(Trans::Constants::HEADER));
+    //    if (c)
+    //        return c->setCurrentIndex(p);
     connectPreview(m_EditorHeader);
 }
 
@@ -155,7 +179,7 @@ void PrinterPreviewerPrivate::setFooterHtml(const QString &html)
         m_EditorFooter = new Editor::TextEditor(this, Editor::TextEditor::Simple | Editor::TextEditor::WithIO | Editor::TextEditor::WithTables);
         editorLayout->insertWidget(1, createEditor(this, m_EditorFooter, tkTr(Trans::Constants::FOOTER), Trans::Constants::FOOTER));
     }
-//    printer.setFooter(html,p);
+    //    printer.setFooter(html,p);
     m_EditorFooter->textEdit()->setHtml(html);
     connectPreview(m_EditorFooter);
 }
@@ -166,11 +190,11 @@ void PrinterPreviewerPrivate::setWatermarkHtml(const QString &html)
         m_EditorWatermark = new Editor::TextEditor(this, Editor::TextEditor::Simple | Editor::TextEditor::WithIO | Editor::TextEditor::WithTables);
         editorLayout->insertWidget(2, createEditor(this, m_EditorWatermark, tkTr(Trans::Constants::WATERMARK), Trans::Constants::WATERMARK));
     }
-//    printer.addHtmlWatermark(html,p);
+    //    printer.addHtmlWatermark(html,p);
     m_EditorWatermark->textEdit()->setHtml(html);
-//    QComboBox *c = this->findChild<QComboBox *>(tkTr(Trans::Constants::WATERMARK));
-//    if (c)
-//        return c->setCurrentIndex(p);
+    //    QComboBox *c = this->findChild<QComboBox *>(tkTr(Trans::Constants::WATERMARK));
+    //    if (c)
+    //        return c->setCurrentIndex(p);
     connectPreview(m_EditorWatermark);
 }
 
@@ -225,7 +249,7 @@ void PrinterPreviewerPrivate::headerToPointer(TextDocumentExtra *extra)
     if (m_EditorHeader) {
         extra->setHtml(m_EditorHeader->textEdit()->toHtml());
         extra->setPresence(Printer::Presence(headerPresence()));
-//        extra->setPriority(Printer::Priority(headerPriority()));
+        //        extra->setPriority(Printer::Priority(headerPriority()));
     } else {
         delete extra;
         extra = 0;
@@ -238,7 +262,7 @@ void PrinterPreviewerPrivate::footerToPointer(TextDocumentExtra *extra)
     if (m_EditorFooter) {
         extra->setHtml(m_EditorFooter->textEdit()->toHtml());
         extra->setPresence(Printer::Presence(footerPresence()));
-//        extra->setPriority(Printer::Priority(hfooterPriority()));
+        //        extra->setPriority(Printer::Priority(hfooterPriority()));
     } else {
         delete extra;
         extra = 0;
@@ -251,7 +275,7 @@ void PrinterPreviewerPrivate::watermarkToPointer(TextDocumentExtra *extra)
     if (m_EditorWatermark) {
         extra->setHtml(m_EditorWatermark->textEdit()->toHtml());
         extra->setPresence(Printer::Presence(watermarkPresence()));
-//        extra->setPriority(Printer::Priority(watermarkPriority()));
+        //        extra->setPriority(Printer::Priority(watermarkPriority()));
     } else {
         if (extra) {
             delete extra;
@@ -263,7 +287,7 @@ void PrinterPreviewerPrivate::watermarkToPointer(TextDocumentExtra *extra)
 
 QVariant PrinterPreviewerPrivate::extraDocument() const
 {
-//    qWarning() << "PrinterPreviewerPrivate::extraDocument()";
+    //    qWarning() << "PrinterPreviewerPrivate::extraDocument()";
     QVariantList list;
     QVariant q;
     TextDocumentExtra(headerToHtml(), headerPresence(), Printer::First);
@@ -304,7 +328,7 @@ void PrinterPreviewerPrivate::setFooterPresence(const int presence)
 void PrinterPreviewerPrivate::setWatermarkPresence(const int presence)
 {
     QComboBox *c = this->watermarkPresenceCombo();
-//    qWarning() << "setWatermarkPresence" << presence << c;
+    //    qWarning() << "setWatermarkPresence" << presence << c;
     if (c)
         c->setCurrentIndex(presence);
 }
@@ -329,7 +353,7 @@ int PrinterPreviewerPrivate::footerPresence() const
 
 int PrinterPreviewerPrivate::watermarkPresence() const
 {
-//    qWarning() << "watermarkPresence";
+    //    qWarning() << "watermarkPresence";
     QComboBox *c = this->watermarkPresenceCombo();
     if (c)
         return c->currentIndex();
@@ -441,3 +465,49 @@ void PrinterPreviewerPrivate::on_pageNumberSpinBox_valueChanged(int value)
 //{
 //    previewWidget->setVisible(!previewWidget->isVisible());
 //}
+
+/**
+ * @brief PrinterPreviewerPrivate::setHtmlFromFile set header, footer and
+ * watermark of documents from an html file
+ * This function is called by clicking a QPushButton created in createEditor()
+ * @return
+ * \sa PrinterPreviewerPrivate::initialize()
+ */
+bool PrinterPreviewerPrivate::setHtmlFromFile()
+{
+    // Determine the name (id) of the object (QPushButton) that sent the signal
+    QPushButton *sender = qobject_cast<QPushButton *>(QObject::sender());
+    QString id;
+    if (sender)
+        id = sender->objectName();
+    if (id.isEmpty())
+        return false;
+    QString fileName;
+    fileName = QFileDialog::getOpenFileName(this->findChild<QPushButton*>(id), QObject::tr("Open HTML file"));
+    qDebug() << fileName;
+    QFile file(fileName);
+    if (!file.open(QIODevice::ReadOnly)) {
+        std::cerr << "Cannot open file for reading: "
+                  << qPrintable(file.errorString()) << std::endl;
+        return false;
+    }
+
+    QString html = QString::fromUtf8(file.readAll());
+
+    if (id==Trans::Constants::HEADER) {
+        if(m_EditorHeader) {
+            m_EditorHeader->textEdit()->setHtml(html);
+        }
+    } else if (id==Trans::Constants::FOOTER) {
+        if (m_EditorFooter) {
+            m_EditorFooter->textEdit()->setHtml(html);
+        }
+    } else if (id==Trans::Constants::WATERMARK) {
+        if (m_EditorWatermark) {
+            m_EditorWatermark->textEdit()->setHtml(html);
+        }
+    } else {
+        return false;
+    }
+    return true;
+}

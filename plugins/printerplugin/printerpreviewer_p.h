@@ -15,7 +15,7 @@
  *  GNU General Public License for more details.                           *
  *                                                                         *
  *  You should have received a copy of the GNU General Public License      *
- *  along with this program (COPYING.FREEMEDFORMS file).                   *
+ *  along with this program (COPYING file).                   *
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
@@ -97,6 +97,7 @@ private Q_SLOTS:
     void on_duplicataCheck_stateChanged( int state );
     void on_pageNumberSpinBox_valueChanged( int value );
 //    void on_tooglePreviewButton_clicked();
+    bool setHtmlFromFile();
 
 private:
     void connectPreview(Editor::TextEditor *t);

@@ -15,7 +15,7 @@
  *  GNU General Public License for more details.                           *
  *                                                                         *
  *  You should have received a copy of the GNU General Public License      *
- *  along with this program (COPYING.FREEMEDFORMS file).                   *
+ *  along with this program (COPYING file).                   *
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
@@ -267,6 +267,6 @@ void BugReportDialog::openFmfDocUrl()
 {
     if(!QDesktopServices::openUrl(QUrl(Utils::Constants::URL_ONLINEDOCUMENTATION))) {
         Utils::warningMessageBox(tr("The application has requested the operating system to open the URL in an external browser but something went wrong."),
-                                 tr("Please verify that you have a default browser enabled or go directly to https://freehealth.io and check the documentation."));
+                                 tr("Please verify that you have a default browser enabled or go directly to %1 and check the documentation.").arg(Utils::Constants::URL_ONLINEDOCUMENTATION));
     }
 }

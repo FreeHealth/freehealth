@@ -15,7 +15,7 @@
  *  GNU General Public License for more details.                           *
  *                                                                         *
  *  You should have received a copy of the GNU General Public License      *
- *  along with this program (COPYING.FREEMEDFORMS file).                   *
+ *  along with this program (COPYING file).                   *
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
@@ -84,6 +84,8 @@ private:
     void matchPatientWidget();
     void matchEpisodeWidget();
     void matchFormWidget();
+    void parser();
+    void modify();
     QString xmlEpisode(int &i, const QString previousXml);
     void changeEvent(QEvent *e);
     Internal::RecordImportDialogPrivate *d;
@@ -102,6 +104,9 @@ private:
     QList<QComboBox*> m_comboFormList;
     Form::FormMain *m_formMain;
     QHash<QString, QString> *m_formItemHash;
+    QChar m_record;
+    QChar m_fieldSeparator;
+    QString m_soft;
 };
 
 } // namespace RecordImport

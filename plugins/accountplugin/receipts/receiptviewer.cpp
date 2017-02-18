@@ -20,7 +20,7 @@
  *  GNU General Public License for more details.                           *
  *                                                                         *
  *  You should have received a copy of the GNU General Public License      *
- *  along with this program (COPYING.FREEMEDFORMS file).                   *
+ *  along with this program (COPYING file).                   *
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
@@ -703,18 +703,9 @@ ReceiptViewer::ReceiptViewer(QWidget *parent) :
     ui->amountsView->verticalHeader()->setDefaultSectionSize(10);
     ui->amountsView->verticalHeader()->setDefaultAlignment(Qt::AlignTop);*/
     ui->amountsView->verticalHeader()->setStretchLastSection ( false );
-
-#if QT_VERSION < 0x050000
-    //ui->amountsView->horizontalHeader()->setResizeMode(QHeaderView::ResizeToContents);
-    ui->amountsView->verticalHeader()->setResizeMode(QHeaderView::ResizeToContents);
-    ui->amountsView->horizontalHeader()->setResizeMode(QHeaderView::Interactive);
-#else
-    // Qt5
     //ui->amountsView->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
     ui->amountsView->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
     ui->amountsView->horizontalHeader()->setSectionResizeMode(QHeaderView::Interactive);
-#endif
-
     ui->amountsView->horizontalHeader()->setMinimumSectionSize(100);
     //ui->amountsView->horizontalHeader()->setCascadingSectionResizes (true);
     //ui->amountsView->horizontalHeader()->setStretchLastSection ( true );

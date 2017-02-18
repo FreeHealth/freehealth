@@ -9,5 +9,5 @@ Comment=Free and open source Electronic Health Record
 Comment[fr]=Gestionnaire de dossiers patients libre et open source
 TryExec=freehealth
 Exec=freehealth
-Icon=ehr
+Icon=freehealth
 

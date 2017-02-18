@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="de_DE">
+<TS version="2.1" language="de_DE">
 <context>
     <name>tkConstants</name>
     <message>
@@ -483,10 +483,6 @@
     <message>
         <source>Cytochrome P450 interaction</source>
         <translation>Cytochrom-P450-Interaktion</translation>
-    </message>
-    <message>
-        <source>Glycoprotein-P interaction</source>
-        <translation>Glycoprotein-P-Interaktion</translation>
     </message>
     <message>
         <source>Precaution for use</source>
@@ -2778,15 +2774,23 @@ Text Align Justify shortcut key : Mac specific</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&lt;h2&gt;Welcome to FreeHealth&lt;/h2&gt;&lt;h3&gt;Â© %1 Jerome Pinguet&lt;/h3&gt;&lt;h3&gt;(C) 2008-2015 by Dr Eric Maeker (France)&lt;/h3&gt;&lt;p&gt;This software is released without any warranty, for testing purposes only.&lt;br/&gt;Please refer to our &lt;a href=&quot;%2&quot;&gt;web site&lt;/a&gt; for more information.&lt;br /&gt;FreeHealth is based on FreeMedForms created by Eric Maeker.&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Other</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>FreeHealth community</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;h2&gt;Welcome to FreeHealth&lt;/h2&gt;&lt;h3&gt;© %1 Jerome Pinguet&lt;/h3&gt;&lt;h3&gt;(C) 2008-2015 by Dr Eric Maeker (France)&lt;/h3&gt;&lt;p&gt;This software is released without any warranty, for testing purposes only.&lt;br/&gt;Please refer to our &lt;a href=&quot;%2&quot;&gt;web site&lt;/a&gt; for more information.&lt;br /&gt;FreeHealth is based on FreeMedForms created by Eric Maeker.&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>P-glycoprotein interaction</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Is patient pediatric?</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

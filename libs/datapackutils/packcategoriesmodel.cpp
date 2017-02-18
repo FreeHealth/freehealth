@@ -15,7 +15,7 @@
  *  GNU General Public License for more details.                           *
  *                                                                         *
  *  You should have received a copy of the GNU General Public License      *
- *  along with this program (COPYING.FREEMEDFORMS file).                   *
+ *  along with this program (COPYING file).                   *
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
@@ -102,7 +102,7 @@ public:
         mainFont.setPointSize(mainFont.pointSize() + 2);
         main->setFont(mainFont);
 
-        if (vendor==tkTr(Trans::Constants::THE_FREEMEDFORMS_COMMUNITY))
+        if (vendor==tkTr(Trans::Constants::EHR_COMMUNITY))
             vendor="fmf";
 
         foreach(const QString &s, subCategories) {
@@ -197,7 +197,7 @@ public:
 
     QStandardItem *parentItemForDataType(QString vendor, const int type)
     {
-        if (vendor==tkTr(Trans::Constants::THE_FREEMEDFORMS_COMMUNITY))
+        if (vendor==tkTr(Trans::Constants::EHR_COMMUNITY))
             vendor = "fmf";
         switch (type) {
         case Pack::NoType: vendor.clear(); break;
@@ -318,7 +318,7 @@ PackCategoriesModel::PackCategoriesModel(QObject *parent) :
     d(new Internal::PackCategoriesModelPrivate(this))
 {
     setObjectName("DataPack::PackCategoriesModel");
-    d->createCategories(tkTr(Trans::Constants::THE_FREEMEDFORMS_COMMUNITY));
+    d->createCategories(tkTr(Trans::Constants::EHR_COMMUNITY));
 //    connect(serverManager(), SIGNAL(serverAdded(int)), this, SLOT(onServerAdded(int)));
     connect(serverManager(), SIGNAL(serverAboutToBeRemoved(int)), this, SLOT(onServerRemoved(int)));
     connect(serverManager(), SIGNAL(allServerDescriptionAvailable()), this, SLOT(updateModel()));

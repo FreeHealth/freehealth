@@ -15,7 +15,7 @@
  *  GNU General Public License for more details.                           *
  *                                                                         *
  *  You should have received a copy of the GNU General Public License      *
- *  along with this program (COPYING.FREEMEDFORMS file).                   *
+ *  along with this program (COPYING file).                   *
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
@@ -30,6 +30,7 @@
  */
 
 #include <memory>
+#include <iostream>
 #include "recordimportdialog_p.h"
 
 #include <coreplugin/ipatient.h>
@@ -73,7 +74,8 @@ static inline Core::IPatient *patient()  { return Core::ICore::instance()->patie
  */
 RecordImportDialog::RecordImportDialog(QWidget *parent) :
     QDialog(parent),
-    d(new RecordImportDialogPrivate(this))
+    d(new RecordImportDialogPrivate(this)),
+    m_data(new QVector<QStringList>)
 {
     d->createUi();
     setSoftwareComboBoxItems(RecordImport::Internal::RecordimportPlugin::softwareList());
@@ -118,10 +120,18 @@ void RecordImportDialog::parse()
         d->ui->recordSeparatorLineEdit->setFocus();
         d->ui->recordSeparatorLineEdit->setPlaceholderText(tr("Mandatory field."));
     }
-    QChar field = d->ui->fieldSeparatorLineEdit->text().at(0);
-    QChar record = d->ui->recordSeparatorLineEdit->text().at(0);
-    auto data_uptr = ProcessRecordImport::parse(d->fileName(), field, record);
-    m_data = data_uptr.release();
+    m_fieldSeparator = d->ui->fieldSeparatorLineEdit->text().at(0);
+    m_record = d->ui->recordSeparatorLineEdit->text().at(0);
+    m_soft = d->ui->softwareComboBox->currentText();
+    if(!(d->fileName().isEmpty()
+         || m_fieldSeparator.isNull()
+         || m_record.isNull()
+         || m_soft.isEmpty()
+         || m_formUuid.isEmpty())) {
+        parser();
+    } else {
+        return;
+    }
     for (int i = 0; i < m_data->size(); ++i) {
         qWarning()  << "##### StringList " << i << " #####";
         for (int j = 0; j < m_data->at(i).size(); ++j){
@@ -131,7 +141,7 @@ void RecordImportDialog::parse()
                            << ") is different from number of header items ("
                            << m_data->at(0).size();
             }
-            qWarning() << j << m_data->at(i).at(j);
+            //qDebug() << j << m_data->at(i).at(j);
         }
     }
 
@@ -215,45 +225,42 @@ void RecordImportDialog::matchEpisodeWidget() {
     matchEpisodeWidget->setLayout(matchEpisodeGridLayout);
     d->ui->matchEpisodeScrollArea->setWidget(matchEpisodeWidget);
 
-    Form::FormMain *form = formManager().form(m_uuid);
-    foreach(Form::FormItem *item, form->flattenedFormItemChildren()) {
-        qDebug() << item->spec()->label();
-    }
+    //Form::FormMain *form = formManager().form(m_uuid);
+    //foreach(Form::FormItem *item, form->flattenedFormItemChildren()) {
+        //qDebug() << item->spec()->label();
+    //}
 }
 
 
 void RecordImportDialog::matchFormWidget() {
-        QGridLayout *matchFormGridLayout = new QGridLayout;
-        QWidget *matchFormWidget = new QWidget;
-        m_formItemHash = new QHash<QString, QString>;
-        for (int j = 0; j < m_formItemList.size(); ++j) {
-            QString label = m_formItemList.at(j)->spec()->label();
-            QString labelPlugin = m_formItemList.at(j)->spec()->pluginName();
-            if (!m_formItemList.at(j)->uuid().isEmpty()) {
-                m_formItemHash->insert(m_formItemList.at(j)->uuid(), QString());
-                qDebug() << "key: "
+    QGridLayout *matchFormGridLayout = new QGridLayout;
+    QWidget *matchFormWidget = new QWidget;
+    m_formItemHash = new QHash<QString, QString>;
+    for (int j = 0; j < m_formItemList.size(); ++j) {
+        QString label = m_formItemList.at(j)->spec()->label();
+        QString labelPlugin = m_formItemList.at(j)->spec()->pluginName();
+        if (!m_formItemList.at(j)->uuid().isEmpty()) {
+            m_formItemHash->insert(m_formItemList.at(j)->uuid(), QString());
+            /*qDebug() << "key: "
                      << m_formItemList.at(j)->uuid()
                      << "value: "
-                     << m_formItemHash->value(m_formItemList.at(j)->uuid());
-            }
-            matchFormGridLayout->addWidget(new QLabel(label), j, 0);
-            matchFormGridLayout->addWidget(new QLabel(labelPlugin), j, 1);
-            QComboBox *combo = new QComboBox;
-            combo->addItems(m_field);
-            combo->setCurrentIndex(-1);
-            m_comboFormList.append(combo);
-            matchFormGridLayout->addWidget(m_comboFormList.at(j), j, 2);
+                     << m_formItemHash->value(m_formItemList.at(j)->uuid());*/
         }
-        matchFormWidget->setLayout(matchFormGridLayout);
-        d->ui->matchFormScrollArea->setWidget(matchFormWidget);
+        matchFormGridLayout->addWidget(new QLabel(label), j, 0);
+        matchFormGridLayout->addWidget(new QLabel(labelPlugin), j, 1);
+        QComboBox *combo = new QComboBox;
+        combo->addItems(m_field);
+        combo->setCurrentIndex(-1);
+        m_comboFormList.append(combo);
+        matchFormGridLayout->addWidget(m_comboFormList.at(j), j, 2);
+    }
+    matchFormWidget->setLayout(matchFormGridLayout);
+    d->ui->matchFormScrollArea->setWidget(matchFormWidget);
 }
 
 void RecordImportDialog::import()
 {
-    //Form::FormMain *form = formManager().form(m_uuid);
-
     d->ui->startPushButton->setEnabled(false);
-    //QString form_uuid = "Chave::Past::Medical::History";
     Form::EpisodeModel *model = episodeManager().episodeModel(m_formUuid);
     QString usualName;
     QString firstname;
@@ -273,31 +280,30 @@ void RecordImportDialog::import()
             dob = QDate::fromString(dateOfBirth, "yyyy-MM-dd");
         }
         QString patientUuid = patientBase()->patientUuid(usualName, othernames, firstname, gender, dob);
-        qDebug() << usualName << firstname << dateOfBirth << dob << patientUuid;
-        //model->refreshFilter();
+        //qDebug() << usualName << firstname << dateOfBirth << dob << patientUuid;
         patient()->setCurrentPatientUid(patientUuid);
 
         //Form::FormMain *form = formManager().form(m_uuid);
         //qDebug() << form;
 
         //model = episodeManager().episodeModel(form);
-        qDebug() << model;
+        //qDebug() << model;
         //model->setCurrentPatient(uuid);
         model->setReadOnly(false);
-        qDebug() << "rowCount" << model->rowCount();
+        //qDebug() << "rowCount" << model->rowCount();
         int row;
         for (int k=0; k < model->rowCount(); ++k) {
             idx = model->index(k, Form::EpisodeModel::DataRepresentation::IsValid);
-            qDebug() << "model->data(idx).toInt()" << model->data(idx).toInt();
+            //qDebug() << "model->data(idx).toInt()" << model->data(idx).toInt();
         }
-        qDebug() << "isUniqueEpisode = " << formManager().form(m_formUuid)->isUniqueEpisode();
-        qDebug() << "del uniq checkbox" << d->ui->deleteUniqueEpisodeCheckBox->isChecked();
-        qDebug() << "m_uuid" << m_uuid;
-        qDebug() << "m_uuid" << m_formUuid;
+        //qDebug() << "isUniqueEpisode = " << formManager().form(m_formUuid)->isUniqueEpisode();
+        //qDebug() << "del uniq checkbox" << d->ui->deleteUniqueEpisodeCheckBox->isChecked();
+        //qDebug() << "m_uuid" << m_uuid;
+        qDebug() << "m_formUuid" << m_formUuid;
 
         if (d->ui->deleteUniqueEpisodeCheckBox->isChecked()
                 && formManager().form(m_formUuid)->isUniqueEpisode()) {
-            qDebug() << "inside delete episodes";
+            //qDebug() << "inside delete episodes";
             //model->removeAllEpisodes();
             for (int k=0; k < model->rowCount(); ++k) {
                 //idx = model->index(k, Form::EpisodeModel::DataRepresentation::IsValid);
@@ -306,48 +312,48 @@ void RecordImportDialog::import()
                 model->removeEpisode(idx);
                 model->submit();
             }
-            qDebug() << "rowCount" << model->rowCount();
+            //qDebug() << "rowCount" << model->rowCount();
             model->submit();
             //model->refreshFilter();
             for (int k=0; k < model->rowCount(); ++k) {
                 idx = model->index(k, Form::EpisodeModel::DataRepresentation::IsValid);
-                qDebug() << k << "model->data(idx).toInt()" << model->data(idx).toInt();
+                //qDebug() << k << "model->data(idx).toInt()" << model->data(idx).toInt();
             }
-            qDebug() << "rowCount" << model->rowCount();
+            //qDebug() << "rowCount" << model->rowCount();
             // insert a row in the model with defautl values
             model->insertRow(model->rowCount());
             row = model->rowCount()-1;
         } else {
             for (int j=0; j < model->rowCount(); ++j) {
                 idx = model->index(j, Form::EpisodeModel::DataRepresentation::IsValid);
-                qDebug() << "model->data(idx).toInt()" << model->data(idx).toInt();
+                //qDebug() << "model->data(idx).toInt()" << model->data(idx).toInt();
                 if (model->data(idx).toInt() == 1) {
-                        row = j;
-                        break;
+                    row = j;
+                    break;
                 }
             }
         }
         if (!formManager().form(m_formUuid)->isUniqueEpisode()) {
-            qDebug() << "inside NOT unique episode";
+            //qDebug() << "inside NOT unique episode";
             model->insertRow(model->rowCount());
             row = model->rowCount()-1;
         }
-        qDebug() << "row = " << row;
-            // set the values related to the episode (if the user set them)
-            // UserDateTime
-            idx = model->index(row, Form::EpisodeModel::DataRepresentation::UserDateTime);
+        //qDebug() << "row = " << row;
+        // set the values related to the episode (if the user set them)
+        // UserDateTime
+        idx = model->index(row, Form::EpisodeModel::DataRepresentation::UserDateTime);
         QString isoUtcDateTimeString;
         if (!(m_episodeUserDateTimeComboBox->currentIndex() == -1)) {
-            qDebug() << "index: " << m_episodeUserDateTimeComboBox->currentIndex() ;
+            //qDebug() << "index: " << m_episodeUserDateTimeComboBox->currentIndex() ;
             QString isoDate = m_data->at(i).at(m_episodeUserDateTimeComboBox->currentIndex());
-            qDebug() << "isoDate: " << isoDate;
+            //qDebug() << "isoDate: " << isoDate;
             QDateTime isoDateTime = QDateTime::fromString(isoDate, "yyyy-MM-dd");
-            qDebug() << "isoDateTime: " << isoDateTime;
+            //qDebug() << "isoDateTime: " << isoDateTime;
             isoUtcDateTimeString = isoDateTime.toUTC().toString(Qt::ISODate);
         } else if (m_episodeUserDateTimeDateTimeEdit->dateTime().isValid()) {
             isoUtcDateTimeString = m_episodeUserDateTimeDateTimeEdit->dateTime().toUTC().toString(Qt::ISODate);
         }
-        qDebug() << "isoUtcDateTimeString: " << isoUtcDateTimeString;
+        //qDebug() << "isoUtcDateTimeString: " << isoUtcDateTimeString;
         model->setData(idx, isoUtcDateTimeString);
 
         // Label
@@ -358,21 +364,23 @@ void RecordImportDialog::import()
         // xml
         idx = model->index(row, Form::EpisodeModel::DataRepresentation::XmlContent);
         QString previousXml = model->data(idx).toString();
-        qDebug() << "previousXml" << previousXml;
+        //qDebug() << "previousXml" << previousXml;
         QString xml = xmlEpisode(i, previousXml);
-        qDebug() << "xml: " << xml;
-
+        //qDebug() << "xml: " << xml;
         model->setData(idx, xml);
-        qDebug() << "rowCount" << model->rowCount();
+        if (d->ui->validateEpisodeCheckBox->isChecked()) {
+            model->validateEpisode(idx);
+        }
+        //qDebug() << "rowCount" << model->rowCount();
         model->submit();
-        qDebug() << "rowCount" << model->rowCount();
+        //qDebug() << "rowCount" << model->rowCount();
         model->setReadOnly(true);
     }
 }
 
 int RecordImportDialog::selectForm()
 {
-    qDebug() << Q_FUNC_INFO;
+    //qDebug() << Q_FUNC_INFO;
     QDialog *dialog = new QDialog(this);
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok
                                                        | QDialogButtonBox::Cancel);
@@ -413,13 +421,13 @@ int RecordImportDialog::selectForm()
 QString RecordImportDialog::xmlEpisode(int &i, const QString previousXml)
 {
     for (int j = 0; j < m_formItemList.size(); ++j) {
-        qDebug() << m_formItemList.at(j);
+        //qDebug() << m_formItemList.at(j);
         int idx = m_comboFormList.at(j)->currentIndex();
         if (!(idx == -1)) {
-            qDebug() << "combo idx = " << idx;
-            qDebug() << "value for combo idx: " << m_data->at(i).at(idx);
+            //qDebug() << "combo idx = " << idx;
+            //qDebug() << "value for combo idx: " << m_data->at(i).at(idx);
             m_formItemHash->insert(m_formItemList.at(j)->uuid(),
-                               m_data->at(i).at(idx));
+                                   m_data->at(i).at(idx));
         }
     }
     ;
@@ -440,9 +448,9 @@ QString RecordImportDialog::xmlEpisode(int &i, const QString previousXml)
     QHash<QString, QString> xmlData;
     foreach(Form::FormItem *it, m_formMain->flattenedFormItemChildren()) {
         if (it->itemData()) {
-            qDebug() << previousXmlData.value(it->uuid())
-                     << "xml data isEmpty ?"
-                     << previousXmlData.value(it->uuid()).isEmpty();
+            //qDebug() << previousXmlData.value(it->uuid())
+            //         << "xml data isEmpty ?"
+            //         << previousXmlData.value(it->uuid()).isEmpty();
             if (previousXmlData.value(it->uuid()).isEmpty()) {
                 xmlData.insert(it->uuid(), m_formItemHash->value(it->uuid()));
             } else {
@@ -451,4 +459,139 @@ QString RecordImportDialog::xmlEpisode(int &i, const QString previousXml)
         }
     }
     return Utils::createXml(Form::Constants::XML_FORM_GENERAL_TAG, xmlData, 2, false);
+}
+
+/*!
+ * \brief ProcessRecordImport::parser
+ * This function expects a single string containing records separated by
+ * recordSeparator (single unicode character). A record contains 1 or more fields
+ * separated by fieldSeparator (single unicode character).
+ * Using a record separator instead of the usual newline was necessary in order
+ * to avoid problems with records containing MS-DOS line endings
+ * TODO: implement true CSV import & SQL import
+ * \param fileName
+ * \param fieldSeparator
+ * \param recordSeparator
+ * \return
+ */
+void RecordImportDialog::parser()
+{
+    if(d->fileName().isEmpty()) {
+        return;
+    }
+    QFile file(d->fileName());
+    //qDebug() << Q_FUNC_INFO;
+    if (!file.open(QIODevice::ReadOnly)) {
+        std::cerr << "Cannot open file for reading: "
+                  << qPrintable(file.errorString()) << std::endl;
+        return;
+    }
+    //qDebug() << "file reading ok";
+    QTextStream in(&file);
+    //qDebug() << "QTextStream reading ok";
+    //qDebug() << "set codec ok";
+    //qDebug() << "record " << m_record;
+    //qDebug() << "field" << m_fieldSeparator;
+    //QVector<QVector<QString>> *import = new QVector<QVector<QString>>;
+    QChar character = 0;
+    QStringList r;
+    QString string;
+    int i;
+    int j;
+
+    while (!in.atEnd()) {
+        //qDebug() << "*********** INSIDE main while loop";
+        i++;
+        in >> character;
+        //qDebug() << "character " << character;
+        //qDebug() << "string " << string;
+
+        while (!(character==m_record) && !in.atEnd()) {
+            //qDebug() << "*********** INSIDE recordSeparator while loop";
+            j++;
+            while (!(character==m_fieldSeparator)
+                   && !(character==m_record)
+                   && !in.atEnd()) {
+                //qDebug() << "*********** INSIDE fieldSeparator while loop";
+                //qDebug() << "before >> " << character;
+                in >> character;
+                //qDebug() << "after >> " << character;
+                if (character=='\x0') {
+                    string+="0";
+                } else {
+                    string+=character;
+                }
+                //qDebug() << "string" << string;
+            }
+            //qDebug() << character;
+            if (!(character==m_record)) {
+                character=0;
+            }
+            if (string == m_fieldSeparator) {
+                string.clear();
+            }
+            //qDebug() << "string" << string;
+            if (string.endsWith(m_fieldSeparator) || string.endsWith(m_record)) {
+                string.chop(1);
+            }
+            //qDebug() << "string" << string;
+            r.append(string);
+            string.clear();
+        }
+        if (character==m_record)
+            character = 0;
+        //qDebug() << r;
+        m_data->append(r);
+        r.clear();
+    }
+    //qDebug() << "while loop over";
+    // remove last empty QStringList
+    if (!(m_data->isEmpty())) {
+        m_data->removeLast();
+    }
+    //qDebug() << m_data->size();
+
+    QVector<int> error;
+    for (int i = 0; i < m_data->size(); ++i) {
+        //qDebug()  << "***** Vector " << i << " *****";
+        for (int j = 0; j < m_data->at(i).size(); ++j){
+            if (!(m_data->at(i).size()== m_data->at(0).size())) {
+                /*qDebug() << "Number of QStringList items ("
+                           << m_data->at(i).size()
+                           << ") is different from number of header items ("
+                           << m_data->at(0).size();*/
+                error.append(i);
+            }
+            //qDebug() << j << m_data->at(i).at(j);
+        }
+    }
+    qDebug() << "Theses lines contained an incorrect number of items: "
+               << error;
+    modify();
+}
+
+void RecordImportDialog::modify()
+{
+    qDebug() << m_soft;
+    qDebug() << m_uuid;
+    if(m_soft == "Gestcab")
+        if (m_uuid == "__subForms__/prescriptions/fr/prescription") {
+            for (int i=1; i < m_data->size(); ++i) {
+                    qDebug() << m_data->at(i);
+                    // both empty: erase
+                    if (m_data->at(i).at(4).isEmpty() && m_data->at(i).at(5).isEmpty())
+                        m_data->remove(i);
+                    // if ALD not empty then check = 2, group = true
+                    QStringList sl = m_data->at(i);
+                    if (!m_data->at(i).at(4).isEmpty()) {
+                        sl.append(QString("2"));
+                        sl.append(QString("true"));
+                    } else { // if not ALD then check = 0, group = false
+                        sl.append(QString("0"));
+                        sl.append(QString("false"));
+                    }
+                    m_data->replace(i, sl);
+                    qDebug() << m_data->at(i);
+            }
+        }
 }

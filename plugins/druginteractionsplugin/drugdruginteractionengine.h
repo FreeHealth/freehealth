@@ -15,7 +15,7 @@
  *  GNU General Public License for more details.                           *
  *                                                                         *
  *  You should have received a copy of the GNU General Public License      *
- *  along with this program (COPYING.FREEMEDFORMS file).                   *
+ *  along with this program (COPYING file).                   *
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
@@ -55,7 +55,7 @@ public:
         Precaution       = 0x0020,
         APrendreEnCompte = 0x0040,
         P450             = 0x0080,
-        GPG              = 0x0100,
+        PGP              = 0x0100,
         Deconseille      = 0x1000,
         ContreIndication = 0x8000
     };

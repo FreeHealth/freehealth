@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="pl_PL">
+<TS version="2.1" language="pl_PL">
 <context>
     <name>BaseFormData</name>
     <message>
-        <location filename="../../plugins/basewidgetsplugin/baseformwidgets.cpp" line="559"/>
+        <location filename="../../plugins/basewidgetsplugin/baseformwidgets.cpp" line="551"/>
         <source>This episode is validated.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/basewidgetsplugin/baseformwidgets.cpp" line="560"/>
+        <location filename="../../plugins/basewidgetsplugin/baseformwidgets.cpp" line="552"/>
         <source>You cannot edit its content, you cannot remove it.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -106,12 +106,12 @@ Number of items of the translation (%3) are wrong.</source>
 <context>
     <name>BaseWidgets::Internal::BaseRadio</name>
     <message>
-        <location filename="../../plugins/basewidgetsplugin/baseformwidgets.cpp" line="1321"/>
+        <location filename="../../plugins/basewidgetsplugin/baseformwidgets.cpp" line="1305"/>
         <source>Wrong form&apos;s translations</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/basewidgetsplugin/baseformwidgets.cpp" line="1322"/>
+        <location filename="../../plugins/basewidgetsplugin/baseformwidgets.cpp" line="1306"/>
         <source>You asked to change the language of the form to %1.
 But this an error while reading translation of %2.
 Number of items of the translation (%3) are wrong.</source>

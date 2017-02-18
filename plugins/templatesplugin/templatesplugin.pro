@@ -1,7 +1,7 @@
 TEMPLATE = lib
 TARGET = Templates
 
-BUILD_PATH_POSTFIXE = FreeMedForms
+BUILD_PATH_POSTFIXE = FreeHealth
 
 include($${PWD}/shared_sources.pri)
 

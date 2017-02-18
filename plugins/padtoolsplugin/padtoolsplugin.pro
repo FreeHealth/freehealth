@@ -1,7 +1,7 @@
 TEMPLATE = lib
 TARGET = PadTools
 
-BUILD_PATH_POSTFIXE = FreeMedForms
+BUILD_PATH_POSTFIXE = FreeHealth
 
 include(padtools_sources.pri)
 

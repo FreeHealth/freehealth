@@ -15,7 +15,7 @@
  *  GNU General Public License for more details.                           *
  *                                                                         *
  *  You should have received a copy of the GNU General Public License      *
- *  along with this program (COPYING.FREEMEDFORMS file).                   *
+ *  along with this program (COPYING file).                   *
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
@@ -101,7 +101,7 @@ public Q_SLOTS: // useful slots that interactions with actions and menus
     virtual void updateCheckerEnd(bool error);
 
 
-public Q_SLOTS: // Slots automatically connected to actions is requiered
+public Q_SLOTS: // Slots automatically connected to actions is required
     virtual bool newFile()      {return false;}
     virtual bool openFile()     {return false;}
     virtual bool saveFile()     {return false;}

@@ -15,7 +15,7 @@
  *  GNU General Public License for more details.                           *
  *                                                                         *
  *  You should have received a copy of the GNU General Public License      *
- *  along with this program (COPYING.FREEMEDFORMS file).                   *
+ *  along with this program (COPYING file).                   *
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
@@ -49,7 +49,7 @@ const char * const  FREEDDIMANAGER_SPLASHSCREEN = "freeddimanager.png";
 const char * const  FREEGUARD_SPLASHSCREEN      = "freeguard.png";
 
 // application icons
-const char * const  ICONFREEMEDFORMS   = "ehr.png";
+const char * const  ICONEHR   = "ehr.png";
 const char * const  ICONFREEDIAMS      = "erx.png";
 const char * const  ICONFREEACCOUNT    = "freeaccount.png";
 const char * const  ICONFREEICD        = "freeicd.png";

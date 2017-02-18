@@ -15,7 +15,7 @@
  *  GNU General Public License for more details.                           *
  *                                                                         *
  *  You should have received a copy of the GNU General Public License      *
- *  along with this program (COPYING.FREEMEDFORMS file).                   *
+ *  along with this program (COPYING file).                   *
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
@@ -32,7 +32,7 @@ namespace Trans {
 namespace Constants {
 
 // Widely used words
-const char* const THE_FREEMEDFORMS_COMMUNITY         = QT_TRANSLATE_NOOP("tkConstants", "FreeHealth community");
+const char* const EHR_COMMUNITY         = QT_TRANSLATE_NOOP("tkConstants", "FreeHealth community");
 const char* const CONTACT_DEV_TEAM                   = QT_TRANSLATE_NOOP("tkConstants", "Please contact the development team.");
 const char* const TYPE                               = QT_TRANSLATE_NOOP("tkConstants", "Type");
 const char* const STATUS                             = QT_TRANSLATE_NOOP("tkConstants", "Status");

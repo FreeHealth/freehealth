@@ -15,7 +15,7 @@
  *  GNU General Public License for more details.                           *
  *                                                                         *
  *  You should have received a copy of the GNU General Public License      *
- *  along with this program (COPYING.FREEMEDFORMS file).                   *
+ *  along with this program (COPYING file).                   *
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
@@ -274,14 +274,8 @@ void FancyTreeView::setModel(QAbstractItemModel *model, const int columnForFancy
     d->m_Model = model;
     tree->setModel(model);
     tree->header()->setStretchLastSection(false);
-#if QT_VERSION < 0x050000
-    tree->header()->setResizeMode(0, QHeaderView::Stretch);
-    tree->header()->setResizeMode(columnForFancyButton, QHeaderView::Fixed);
-#else
-    // Qt5
     tree->header()->setSectionResizeMode(0, QHeaderView::Stretch);
     tree->header()->setSectionResizeMode(columnForFancyButton, QHeaderView::Fixed);
-#endif
     tree->setColumnWidth(columnForFancyButton, 16);
 
     d->m_Delegate->setModel(model);

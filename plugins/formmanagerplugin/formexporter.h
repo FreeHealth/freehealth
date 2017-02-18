@@ -15,7 +15,7 @@
  *  GNU General Public License for more details.                           *
  *                                                                         *
  *  You should have received a copy of the GNU General Public License      *
- *  along with this program (COPYING.FREEMEDFORMS file).                   *
+ *  along with this program (COPYING file).                   *
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
@@ -50,7 +50,7 @@ class FormExporter : public Core::IPatientDataExporter
 
 public:
     explicit FormExporter(bool identityOnly, QObject *parent = 0);
-    ~FormExporter();
+    virtual ~FormExporter();
     bool initialize();
 
     void setIdentityOnly(bool identityOnly);

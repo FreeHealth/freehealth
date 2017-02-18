@@ -15,7 +15,7 @@
  *  GNU General Public License for more details.                           *
  *                                                                         *
  *  You should have received a copy of the GNU General Public License      *
- *  along with this program (COPYING.FREEMEDFORMS file).                   *
+ *  along with this program (COPYING file).                   *
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /**
@@ -51,7 +51,7 @@
        `- .applicationname                   `- .applicationname
         |                                     |
         |- config.ini                         |- config.ini             == user settings for non-networked apps
-        |- config-network.ini                 |- config-network.ini
+        |- config-net.ini                 |- config-net.ini
         |                                     |
         `- databases                          `- databases
          |                                     |

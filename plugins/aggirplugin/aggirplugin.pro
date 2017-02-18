@@ -3,7 +3,7 @@ TARGET = Gir
 
 DEFINES += AGGIR_LIBRARY
 
-BUILD_PATH_POSTFIXE = FreeMedForms
+BUILD_PATH_POSTFIXE = FreeHealth
 
 include(../fmf_plugins.pri)
 include( aggirplugin_dependencies.pri )

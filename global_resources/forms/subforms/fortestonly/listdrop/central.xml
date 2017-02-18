@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE FreeMedForms>
+
+<FreeMedForms>
+
+  <formdescription>
+    <!-- Non translatable values -->
+    <authors></authors>
+    <version>test</version>
+    <fmfv>0.9.9</fmfv>
+    <cdate>20161210</cdate>
+    <lmdate>20161210</lmdate>
+    <icon>__theme__/stethoscope.png</icon>
+    <weblink></weblink>
+    <bibliography/>
+
+    <!-- Translatable values -->
+    <license>GPLv3</license>
+    <description lang="xx">droplist</description>
+    <description lang="fr">droplist</description>
+    <category lang="xx">test</category>
+    <category lang="fr">test</category>
+    <specialties lang="xx">test</specialties>
+    <specialties lang="fr">test</specialties>
+
+    <updateinfo>
+      <updateversion from="1" to="2">
+      <text lang="xx">
+      </text>
+        <text lang="fr">
+        </text>
+      </updateversion>
+    </updateinfo>
+
+  </formdescription>
+
+<!--file type="script" name="onload">./scripts/xx/.js</file-->
+
+<MedForm name="Test::DropList" uifilename="./ui/xx/listdrop.ui">
+  <label lang="xx">DropList</label>
+  <label lang="fr">DropList</label>
+  <options>UseFormNameAsNameSpace</options>
+  <icon>__theme__/stethoscope.png</icon>
+  <!--file type="htmlprintmask">./html/xx/.html</file-->
+  <!--file type="htmlexportmask">./html/xx/.html</file-->
+
+<Item name="editableListSample" type="editableList">
+  <uilink layout="editableList"/>
+  <label lang="xx">This a simple of editable list limited to 10 lines</label>
+  <label lang="fr">This a simple of editable list limited to 10 lines</label>
+  <maxrow>10</maxrow>
+</Item>
+
+<Item name="sampleList1" type="uniquelist">
+  <label>This a simple uniquelist selector from the BaseWidgetsForm plugins</label>
+  <uilink widget="listView1"/>
+  <value>
+    <uuid id="0">firstitem</uuid>
+    <uuid id="1">seconditem</uuid>
+    <uuid id="2">thirditem</uuid>
+    <possible id="0">First Element</possible>
+    <possible id="1">Second Element</possible>
+    <possible id="2">Third Element</possible>
+  </value>
+</Item>
+
+<Item name="plainTextEditor" type="longtext">
+    <uilink widget="textEdit"/>
+</Item>
+
+<Item name="textEditor" type="texteditor">
+    <uilink layout="formLayout"/>
+    <label lang="xx">Subjective</label>
+    <label lang="fr">Subjectif</label>
+    <options>FullEditor</options>
+</Item>
+
+<Item name="creatinineLabel" type="helptext">
+    <uilink widget="creatinineLabel"/>
+      <label lang="xx">Creatinine</label>
+      <label lang="fr">Creatinine</label>
+      <options>notprintable</options>
+</Item>
+
+<Item name="web" type="webpage">
+    <uilink layout="webpage"/>
+</Item>
+
+
+
+</MedForm>
+
+</FreeMedForms>

@@ -2,7 +2,7 @@ TARGET = Feedback
 TEMPLATE = lib
 
 DEFINES += FEEDBACK_LIBRARY
-BUILD_PATH_POSTFIXE = FreeMedForms
+BUILD_PATH_POSTFIXE = FreeHealth
 
 INCLUDEPATH += ../
 
@@ -29,8 +29,6 @@ OTHER_FILES = Feedback.pluginspec
 
 #FREEMEDFORMS_SOURCES=%FreeMedFormsSources%
 #IDE_BUILD_TREE=%FreeMedFormsBuild%
-
-PROVIDER = FreeMedForms
 
 #include translations
 TRANSLATION_NAME = feedback

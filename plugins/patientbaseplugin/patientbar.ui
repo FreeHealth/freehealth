@@ -96,13 +96,22 @@
    <string>Form</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
    <property name="horizontalSpacing">
     <number>5</number>
    </property>
    <property name="verticalSpacing">
-    <number>0</number>
-   </property>
-   <property name="margin">
     <number>0</number>
    </property>
    <item row="0" column="0" rowspan="3">
@@ -136,7 +145,7 @@
       <number>0</number>
      </property>
      <item row="1" column="2">
-      <widget class="QLabel" name="weight">
+      <widget class="QLabel" name="dob">
        <property name="minimumSize">
         <size>
          <width>0</width>

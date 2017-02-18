@@ -15,7 +15,7 @@
  *  GNU General Public License for more details.                           *
  *                                                                         *
  *  You should have received a copy of the GNU General Public License      *
- *  along with this program (COPYING.FREEMEDFORMS file).                   *
+ *  along with this program (COPYING file).                   *
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
@@ -43,6 +43,9 @@ namespace Constants {
 
     const char * const  S_RECENTPATIENT_MAX  = "Patients/Recent/Max";
     const char * const  S_RECENTPATIENT_LIST = "Patients/Recent/List";
+
+    const char * const S_PEDIATRICSAGELIMIT = "Patients/PediatricsAgeLimit";
+    const char * const S_PEDIATRICSMONTHSYEARSLIMIT = "Patients/PediatricsMonthsYearsLimit";
 
 }  // End namespace Patients::Constants
 }  // End namespace Patients

@@ -15,7 +15,7 @@
  *  GNU General Public License for more details.                           *
  *                                                                         *
  *  You should have received a copy of the GNU General Public License      *
- *  along with this program (COPYING.FREEMEDFORMS file).                   *
+ *  along with this program (COPYING file).                   *
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
@@ -43,7 +43,7 @@ QT_END_NAMESPACE
 
 namespace MedicalUtils {
 
-MEDICALUTILS_EXPORT QString readableAge(const QDate &DOB);
+MEDICALUTILS_EXPORT QString readableAge(const QDate &DOB, const int &monthsYearsLimit);
 MEDICALUTILS_EXPORT int ageYears(const QDate &DOB);
 
 MEDICALUTILS_EXPORT double clearanceCreatinin(const int ageYears, const int weightKg, const double creatMlMin, const bool isMale);

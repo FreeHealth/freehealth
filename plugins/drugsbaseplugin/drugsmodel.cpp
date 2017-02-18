@@ -15,7 +15,7 @@
  *  GNU General Public License for more details.                           *
  *                                                                         *
  *  You should have received a copy of the GNU General Public License      *
- *  along with this program (COPYING.FREEMEDFORMS file).                   *
+ *  along with this program (COPYING file).                   *
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
@@ -104,7 +104,7 @@ class DrugsModelPrivate
 {
 public:
     DrugsModelPrivate(DrugsModel *parent) :
-        m_LastDrugRequiered(0), m_ShowTestingDrugs(true),
+        m_LastDrugRequired(0), m_ShowTestingDrugs(true),
         m_SelectionOnlyMode(false), m_IsDirty(false),
         m_InteractionResult(0), m_AllergyEngine(0), m_ComputeInteraction(true),
         q(parent)
@@ -127,17 +127,17 @@ public:
     /** Return the pointer to the drug if it is already in the drugs list, otherwise return 0 */
     IDrug *getDrug(const QVariant &drugId)
     {
-        if (m_LastDrugRequiered) {
-            if (m_LastDrugRequiered->drugId() == drugId) {
-                return m_LastDrugRequiered;
+        if (m_LastDrugRequired) {
+            if (m_LastDrugRequired->drugId() == drugId) {
+                return m_LastDrugRequired;
             }
         }
-        m_LastDrugRequiered = 0;
+        m_LastDrugRequired = 0;
         foreach(IDrug *drug, m_DrugsList) {
             if (drug->drugId()==drugId)
-                m_LastDrugRequiered = drug;
+                m_LastDrugRequired = drug;
         }
-        return m_LastDrugRequiered;
+        return m_LastDrugRequired;
     }
 
     /**
@@ -383,7 +383,7 @@ public:
     QList<IDrug *> m_TestingDrugsList;
     int m_levelOfWarning;
     mutable QHash<int, QPointer<DosageModel> > m_DosageModelList;
-    IDrug *m_LastDrugRequiered;
+    IDrug *m_LastDrugRequired;
     bool m_ShowTestingDrugs, m_SelectionOnlyMode, m_IsDirty;
     DrugInteractionResult *m_InteractionResult;
     DrugInteractionQuery *m_InteractionQuery;
@@ -624,7 +624,7 @@ Qt::ItemFlags DrugsModel::flags(const QModelIndex &index) const
 /** Removes \e count drugs from the \e row. */
 bool DrugsModel::removeRows(int row, int count, const QModelIndex &parent)
 {
-    d->m_LastDrugRequiered = 0;
+    d->m_LastDrugRequired = 0;
     beginRemoveRows(parent, row, row+count);
     if (row >= d->m_DrugsList.count())
         return false;
@@ -709,7 +709,7 @@ int DrugsModel::addDrugs(const QVector<IDrug *> &drugs, bool automaticInteractio
 void DrugsModel::clearDrugsList()
 {
     beginResetModel();
-    d->m_LastDrugRequiered = 0;
+    d->m_LastDrugRequired = 0;
     qDeleteAll(d->m_DrugsList);
     d->m_DrugsList.clear();
     qDeleteAll(d->m_TestingDrugsList);
@@ -906,7 +906,7 @@ Internal::DosageModel *DrugsModel::dosageModel(const QModelIndex &drugIndex)
 int DrugsModel::removeDrug(const QVariant &drugId)
 {
     // Take care that this function removes all occurence of the referenced drug
-    d->m_LastDrugRequiered = 0;
+    d->m_LastDrugRequired = 0;
     d->m_InteractionQuery->clearDrugsList();
     int i = 0;
     foreach(IDrug * drug, d->m_DrugsList) {
@@ -931,7 +931,7 @@ int DrugsModel::removeDrug(const QVariant &drugId)
 int DrugsModel::removeLastInsertedDrug()
 {
     // TODO Take care if user inserted x times the same drug
-    d->m_LastDrugRequiered = 0;
+    d->m_LastDrugRequired = 0;
     if (d->m_DrugsList.count() == 0)
         return 0;
     if (WarnDrugPosologicSentencePlainTextCache)
@@ -993,11 +993,7 @@ QString DrugsModel::getFullPrescription(const IDrug *drug, bool toHtml, const QS
 
 Qt::DropActions DrugsModel::supportedDropActions() const
 {
-#if QT_VERSION >= 0x040600
     return Qt::CopyAction;
-#else
-    return Qt::MoveAction | Qt::CopyAction;
-#endif
 }
 
 QStringList DrugsModel::mimeTypes() const

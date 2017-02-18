@@ -3,7 +3,7 @@ TARGET = PatientBase
 
 DEFINES += PATIENTBASE_LIBRARY
 
-BUILD_PATH_POSTFIXE = FreeMedForms
+BUILD_PATH_POSTFIXE = FreeHealth
 
 include(../fmf_plugins.pri)
 include(patientbaseplugin_dependencies.pri)

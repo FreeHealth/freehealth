@@ -15,7 +15,7 @@
  *  GNU General Public License for more details.                           *
  *                                                                         *
  *  You should have received a copy of the GNU General Public License      *
- *  along with this program (COPYING.FREEMEDFORMS file).                   *
+ *  along with this program (COPYING file).                   *
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
@@ -25,7 +25,6 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #include "prescriptionviewer.h"
-
 #include <drugsplugin/constants.h>
 #include <drugsplugin/drugswidget/druginfo.h>
 #include <drugsplugin/dosagedialog/dosagecreatordialog.h>
@@ -33,11 +32,9 @@
 #include <drugsplugin/drugswidgetmanager.h>
 #include <drugsplugin/drugswidget/textualprescriptiondialog.h>
 #include <drugsplugin/drugswidget/interactionsynthesisdialog.h>
-
 #include <drugsbaseplugin/drugbasecore.h>
 #include <drugsbaseplugin/drugsmodel.h>
 #include <drugsbaseplugin/drugsio.h>
-
 #include <coreplugin/constants_menus.h>
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
@@ -46,25 +43,16 @@
 #include <coreplugin/actionmanager/actionmanager.h>
 #include <coreplugin/dialogs/settingsdialog.h>
 #include <coreplugin/dialogs/simpletextdialog.h>
-
 #include <utils/global.h>
 #include <translationutils/constanttranslations.h>
 
 #include <QFileDialog>
-
-#if QT_VERSION < 0x050000                                                       
-#include <QPrinter>                                                             
-#include <QPrintDialog>                                                         
-#else                                                                           
 #include <QtPrintSupport/QPrinter>                                              
 #include <QtPrintSupport/QPrintDialog>                                          
-#endif 
-
 #include <QTextDocument>
 #include <QTreeWidget>
 #include <QClipboard>
 #include <QMimeData>
-
 #include <QDebug>
 
 using namespace DrugsWidget;

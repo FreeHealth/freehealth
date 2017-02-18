@@ -108,7 +108,12 @@
     <span id="identDob">Date of birth: {{~Patient.Age.DateOfBirth~}}</span><br />
     {{<span id="identAge">Date of death: ~Patient.Age.DateOfDeath~</span><br />}}
     <span id="identAddress">{{~Patient.Address.FullAddress~}}</span><br />
-    {{<span id="identSocialNumber">Social number: ~Patient.Insurance.SocialNumber~{{, ~Patient.Insurance.SocialNumber2~}}{{, ~Patient.Insurance.SocialNumber3~}}{{, ~Patient.Insurance.SocialNumber4~}}{{Owned by: ~Patient.Insurance.SocialNumberOwnerName~{{, ~Patient.Insurance.SocialNumberOwnerAddress~}}}}</span>}}
+    {{<span id="identSocialNumber">Social number: ~Patient.Insurance.SocialNumber~{{, ~Patient.Insurance.SocialNumber2~}}{{, ~Patient.Insurance.SocialNumber3~}}{{, ~Patient.Insurance.SocialNumber4~}}{{Owned by: ~Patient.Insurance.SocialNumberOwnerName~{{, ~Patient.Insurance.SocialNumberOwnerAddress~}}}}</span><br/>}}
+    {{
+    {{~Form.Label.Subs::Tools::Identity::Marital::Status::Combo~}}
+    ~Form.Data.Item.Subs::Tools::Identity::Marital::Status::Combo~
+    {{: ~Form.Data.Item.Subs::Tools::Identity::Marital::Status::Other::ShortText~}}
+    }}
 </div> <!-- identityContainer -->
 
 <div class="contactContainer">

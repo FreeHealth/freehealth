@@ -15,7 +15,7 @@
  *  GNU General Public License for more details.                           *
  *                                                                         *
  *  You should have received a copy of the GNU General Public License      *
- *  along with this program (COPYING.FREEMEDFORMS file).                   *
+ *  along with this program (COPYING file).                   *
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
@@ -130,14 +130,8 @@ UserCalendarDelegatesMapperWidget::UserCalendarDelegatesMapperWidget(QWidget *pa
     m_PeopleModel = new Calendar::CalendarPeopleModel(this);
     ui->delegateUserView->setModel(m_PeopleModel);
     ui->delegateUserView->header()->setStretchLastSection(false);
-#if QT_VERSION < 0x050000
-    ui->delegateUserView->header()->setResizeMode(Calendar::CalendarPeopleModel::FullName, QHeaderView::Stretch);
-    ui->delegateUserView->header()->setResizeMode(Calendar::CalendarPeopleModel::EmptyColumn, QHeaderView::Fixed);
-#else
-    // Qt5
     ui->delegateUserView->header()->setSectionResizeMode(Calendar::CalendarPeopleModel::FullName, QHeaderView::Stretch);
     ui->delegateUserView->header()->setSectionResizeMode(Calendar::CalendarPeopleModel::EmptyColumn, QHeaderView::Fixed);
-#endif
     ui->delegateUserView->hideColumn(Calendar::CalendarPeopleModel::Uid);
     ui->delegateUserView->hideColumn(Calendar::CalendarPeopleModel::PeopleTypeName);
     ui->delegateUserView->setColumnWidth(Calendar::CalendarPeopleModel::EmptyColumn, 16);

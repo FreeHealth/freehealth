@@ -15,7 +15,7 @@
  *  GNU General Public License for more details.                           *
  *                                                                         *
  *  You should have received a copy of the GNU General Public License      *
- *  along with this program (COPYING.FREEMEDFORMS file).                   *
+ *  along with this program (COPYING file).                   *
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
@@ -174,7 +174,7 @@ void DataPackPluginIPlugin::extensionsInitialized()
         if (!core.serverManager()->setGlobalConfiguration(xmlConfig))
             LOG_ERROR("Unable to set the datapack server manager configuration");
         // Always unsure that the freemedforms datapack server is available
-        DataPack::Server http("https://freehealth.io/packs");
+        DataPack::Server http(Constants::SERVER_URL);
         http.setUrlStyle(DataPack::Server::HttpPseudoSecuredAndZipped);
         // FIXME: missing server version to avoid duplicates
         core.serverManager()->addServer(http);

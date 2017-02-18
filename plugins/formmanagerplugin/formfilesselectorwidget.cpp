@@ -15,7 +15,7 @@
  *  GNU General Public License for more details.                           *
  *                                                                         *
  *  You should have received a copy of the GNU General Public License      *
- *  along with this program (COPYING.FREEMEDFORMS file).                   *
+ *  along with this program (COPYING file).                   *
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
@@ -106,13 +106,13 @@ public:
         ui->toolButton->addAction(a);
 
         a = aBySpecialties = new QAction(ui->toolButton);
-        a->setIcon(theme()->icon(Core::Constants::ICONFREEMEDFORMS));
+        a->setIcon(theme()->icon(Core::Constants::ICONEHR));
         a->setText(QCoreApplication::translate("FormFilesSelectorWidget", "by specialty"));
         a->setToolTip(QCoreApplication::translate("FormFilesSelectorWidget", "by specialty"));
         ui->toolButton->addAction(a);
 
         a = aByType = new QAction(ui->toolButton);
-        a->setIcon(theme()->icon(Core::Constants::ICONFREEMEDFORMS));
+        a->setIcon(theme()->icon(Core::Constants::ICONEHR));
         a->setText(QCoreApplication::translate("FormFilesSelectorWidget", "by type"));
         a->setToolTip(QCoreApplication::translate("FormFilesSelectorWidget", "by type"));
         ui->toolButton->addAction(a);

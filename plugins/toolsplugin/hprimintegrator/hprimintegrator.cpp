@@ -15,7 +15,7 @@
  *  GNU General Public License for more details.                           *
  *                                                                         *
  *  You should have received a copy of the GNU General Public License      *
- *  along with this program (COPYING.FREEMEDFORMS file).                   *
+ *  along with this program (COPYING file).                   *
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
@@ -277,20 +277,10 @@ HprimIntegratorWidget::HprimIntegratorWidget(QWidget *parent) :
     d->ui->dirContentTableView->setSelectionBehavior(QAbstractItemView::SelectRows);
     d->ui->dirContentTableView->setModel(d->_fileModel);
     d->ui->dirContentTableView->setRootIndex(d->_fileModel->fileRootPath());
-
-#if QT_VERSION < 0x050000
-    d->ui->dirContentTableView->horizontalHeader()->setResizeMode(HprimFileModel::PatientName, QHeaderView::Stretch);
-    d->ui->dirContentTableView->horizontalHeader()->setResizeMode(HprimFileModel::PatientDateOfBirth, QHeaderView::ResizeToContents);
-    d->ui->dirContentTableView->horizontalHeader()->setResizeMode(HprimFileModel::FileName, QHeaderView::ResizeToContents);
-    d->ui->dirContentTableView->horizontalHeader()->setResizeMode(HprimFileModel::FileDate, QHeaderView::ResizeToContents);
-#else
-    // Qt5
     d->ui->dirContentTableView->horizontalHeader()->setSectionResizeMode(HprimFileModel::PatientName, QHeaderView::Stretch);
     d->ui->dirContentTableView->horizontalHeader()->setSectionResizeMode(HprimFileModel::PatientDateOfBirth, QHeaderView::ResizeToContents);
     d->ui->dirContentTableView->horizontalHeader()->setSectionResizeMode(HprimFileModel::FileName, QHeaderView::ResizeToContents);
     d->ui->dirContentTableView->horizontalHeader()->setSectionResizeMode(HprimFileModel::FileDate, QHeaderView::ResizeToContents);
-#endif
-
     // Populate the form item selector combo
     d->findFormItem();
     d->ui->formItemSelector->setModel(d->_formItemsUidModel);

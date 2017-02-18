@@ -15,7 +15,7 @@
  *  GNU General Public License for more details.                           *
  *                                                                         *
  *  You should have received a copy of the GNU General Public License      *
- *  along with this program (COPYING.FREEMEDFORMS file).                   *
+ *  along with this program (COPYING file).                   *
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
@@ -174,7 +174,9 @@ bool UserDynamicData::isNull() const
     return d->m_IsNull;
 }
 
-/** \brief Returns true if the value has changed since last call of feedFromSql(). */
+/**
+ * \brief Returns true if the value has changed since last call of feedFromSql().
+ */
 bool UserDynamicData::isModified() const
 {
     return d->m_IsDirty;
@@ -440,10 +442,10 @@ namespace Internal {
 class UserDataPrivate
 {
 public:
+
     static QHash<QString, int> m_Link_PaperName_ModelIndex;  /** \brief To
 increase speed, stores the link between name of headers/footers/watermark and
 their index into UserModel \sa UserConstants. */
-
     UserDataPrivate() :
         m_Editable(false),
         m_Modified(false),
@@ -550,7 +552,7 @@ QHash<QString, int> UserDataPrivate::m_Link_PaperName_ModelIndex;
  * \li no rights for Medical, paramedical, dosage management
  * \li empty password is set encrypted
  * \li user is editable
- * \li user uuid is defined but not control (duplicate in database can exist)
+ * \li user uuid is defined but no control (duplicate in database can exist)
  * \li locker is unset
  */
 UserData::UserData() :
@@ -585,7 +587,7 @@ UserData::UserData() :
   \li no rights for Medical, paramedical, dosage management
   \li empty password is set encrypted
   \li user is editable
-  \li user uuid is defined but not control (duplicate in database can exists)
+  \li user uuid is defined but no control (duplicate in database can exist)
   \li locker is unset
  */
 UserData::UserData(const QString & uuid)
@@ -704,9 +706,9 @@ bool UserData::isCurrent() const
     return d->m_IsCurrent;
 }
 
-/*!
-  \brief If user is editable and does not have an uuid then create a new one
-  and return true, otherwise return false.
+/**
+ * \brief If user is editable and does not have an uuid then create a new one
+ * and return true, otherwise return false.
  */
 bool UserData::createUuid()
 {
@@ -728,7 +730,7 @@ void UserData::setUuid(const QString & val)
 }
 
 //------------------------------------------------------------------------------
-//------------------------------- Setters --------------------------------------
+//---------------------------------- Setters -----------------------------------
 //------------------------------------------------------------------------------
 /**
  * Reserved for database feeding. Only UserBase should use it. \n
@@ -950,17 +952,23 @@ void UserData::setCryptedPassword(const QVariant &val)
     d->m_PasswordChanged = true;
 }
 
-/** Add the current login to the login history of the user. */
+/**
+ * This function needs to be rewritten, see issue #61
+ * Add the current login to the login history of the user.
+ */
+
+/**
 void UserData::addLoginToHistory()
 {
     setDynamicDataValue(USER_DATA_LOGINHISTORY,
                         QString("%1 %2")
                         .arg(dynamicDataValue(USER_DATA_LOGINHISTORY).toString())
-                        .arg(QCoreApplication::translate("tkUser", "User logged at %1\n")
+                        .arg(QCoreApplication::translate("tkUser", "User logged at %1 \n")
                              .arg(lastLoggedIn().toString(Qt::DefaultLocaleLongDate)))
               );
     setModified(true);
 }
+*/
 
 QString UserData::decryptedLogin() const
 {
@@ -968,7 +976,7 @@ QString UserData::decryptedLogin() const
 }
 
 //------------------------------------------------------------------------------
-//------------------------------ Getters ---------------------------------------
+//---------------------------------- Getters -----------------------------------
 //------------------------------------------------------------------------------
 /**
  * Return the value corresponding to the
@@ -1179,9 +1187,9 @@ QString UserData::fullName() const
     return r;
 }
 
-//---------------------------------------------------------------------------------------
-//----------------------------------- Debug ---------------------------------------------
-//---------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+//-------------------------- Debug ---------------------------------------------
+//------------------------------------------------------------------------------
 QString UserData::debugText() const
 {
     QStringList s;

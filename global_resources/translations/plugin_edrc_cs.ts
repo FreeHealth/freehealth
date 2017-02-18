@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="cs_CZ">
+<TS version="2.1" language="cs_CZ">
 <context>
     <name>ConsultResultError</name>
     <message>
@@ -172,13 +172,13 @@
 </context>
 <context>
     <name>eDRC::Internal::CrEditorWidget</name>
-    <message utf8="true">
+    <message>
         <location filename="../../plugins/edrcplugin/widgets/creditorwidget.ui" line="81"/>
         <source>Utilsez cette ligne pour effectuer votre recherche parmis les résultats de consultation disponibles.
 Les résultats de la recherche s&apos;affichent dans la liste juste en dessous.</source>
         <translation type="unfinished"></translation>
     </message>
-    <message utf8="true">
+    <message>
         <location filename="../../plugins/edrcplugin/widgets/creditorwidget.ui" line="85"/>
         <source>&lt;p&gt;Utilsez cette ligne pour effectuer votre recherche parmis les résultats de consultation disponibles&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
@@ -188,7 +188,7 @@ Les résultats de la recherche s&apos;affichent dans la liste juste en dessous.<
         <source>Preventable critical risks</source>
         <translation type="unfinished"></translation>
     </message>
-    <message utf8="true">
+    <message>
         <location filename="../../plugins/edrcplugin/widgets/creditorwidget.ui" line="161"/>
         <source>Les risques critiques évitables sont détaillés dans cette liste.</source>
         <translation type="unfinished"></translation>

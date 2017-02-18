@@ -7,3 +7,4 @@ FORMS += \
     $${PWD}/drugsviewoptionspage.ui \
     $${PWD}/drugsuseroptionspage.ui \
     $${PWD}/drugsprintoptionspage.ui \
+    $${PWD}/drugposologicsentencepreferences.ui \

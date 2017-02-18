@@ -15,7 +15,7 @@
  *  GNU General Public License for more details.                           *
  *                                                                         *
  *  You should have received a copy of the GNU General Public License      *
- *  along with this program (COPYING.FREEMEDFORMS file).                   *
+ *  along with this program (COPYING file).                   *
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
@@ -40,17 +40,9 @@
 
 #include <utils/printaxishelper.h>
 #include <translationutils/constants.h>
-
-#if QT_VERSION < 0x050000
-#include <QPrinter>
-#include <QPrinterInfo>
-#include <QPrintDialog>
-#else
 #include <QtPrintSupport/QPrinter>
 #include <QtPrintSupport/QPrinterInfo>                                          
 #include <QtPrintSupport/QPrintDialog>                                          
-#endif 
-
 #include <QPainter>
 #include <QPixmap>
 

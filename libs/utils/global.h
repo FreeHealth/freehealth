@@ -15,7 +15,7 @@
  *  GNU General Public License for more details.                           *
  *                                                                         *
  *  You should have received a copy of the GNU General Public License      *
- *  along with this program (COPYING.FREEMEDFORMS file).                   *
+ *  along with this program (COPYING file).                   *
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
@@ -144,9 +144,7 @@ UTILS_EXPORT QString isDirExists(const QString &absPath);
 UTILS_EXPORT QString isFileExists(const QString &absPath);
 UTILS_EXPORT QByteArray fileMd5(const QString &fileName);
 UTILS_EXPORT QByteArray fileSha1(const QString &fileName);
-#if QT_VERSION >= 0x050000
 UTILS_EXPORT QByteArray fileSha256(const QString &fileName);
-#endif
 UTILS_EXPORT QString humanReadableFileSize(qint64 size);
 
 // Some useful widgets specific functions

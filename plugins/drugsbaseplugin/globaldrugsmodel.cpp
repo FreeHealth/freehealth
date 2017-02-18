@@ -15,7 +15,7 @@
  *  GNU General Public License for more details.                           *
  *                                                                         *
  *  You should have received a copy of the GNU General Public License      *
- *  along with this program (COPYING.FREEMEDFORMS file).                   *
+ *  along with this program (COPYING file).                   *
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
@@ -58,12 +58,7 @@
 #include <QTimer>
 #include <QStandardItemModel>
 #include <QSqlQueryModel>
-
-#if QT_VERSION < 0x050000
-#include <qtconcurrentrun.h>
-#else
 #include <QtConcurrent/QtConcurrent>
-#endif
 
 #include <QFuture>
 #include <QFutureWatcher>

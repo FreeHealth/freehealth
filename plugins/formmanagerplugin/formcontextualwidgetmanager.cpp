@@ -15,7 +15,7 @@
  *  GNU General Public License for more details.                           *
  *                                                                         *
  *  You should have received a copy of the GNU General Public License      *
- *  along with this program (COPYING.FREEMEDFORMS file).                   *
+ *  along with this program (COPYING file).                   *
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
@@ -123,9 +123,9 @@ static FormContextualWidget *parentFormWidget(QWidget  *widget)
     return 0;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////      MANAGER      ///////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////      MANAGER      /////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 FormContextualWidgetManager::FormContextualWidgetManager(QObject *parent) :
     FormActionHandler(parent),
     _contextObject(0)

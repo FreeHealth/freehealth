@@ -15,7 +15,7 @@
  *  GNU General Public License for more details.                           *
  *                                                                         *
  *  You should have received a copy of the GNU General Public License      *
- *  along with this program (COPYING.FREEMEDFORMS file).                   *
+ *  along with this program (COPYING file).                   *
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
@@ -55,7 +55,7 @@ protected:
     bool initialize();
     
 public:
-    ~PatientFormItemDataWrapper();
+    virtual ~PatientFormItemDataWrapper();
     bool isInitialized() const;
 
     bool isDataAvailable(int ref) const;

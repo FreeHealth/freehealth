@@ -15,7 +15,7 @@
  *  GNU General Public License for more details.                           *
  *                                                                         *
  *  You should have received a copy of the GNU General Public License      *
- *  along with this program (COPYING.FREEMEDFORMS file).                   *
+ *  along with this program (COPYING file).                   *
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
@@ -27,7 +27,7 @@
 /**
   \class Templates::TemplatesModel
   Manages the templates database in/out and link to views.
-  Data are statically stored so that you can instanciate how many requiered models
+  Data are statically stored so that you can instanciate how many required models
   as you want without consuming RAM.
 */
 
@@ -796,10 +796,7 @@ TemplatesModel::TemplatesModel(QObject *parent) :
 {
     setObjectName("TemplatesModel");
     d->setupModelData();
-    // FIXME: Qt5 porting: CHECK THIS -> setSupportedDragActions(Qt::CopyAction | Qt::MoveAction);
-#if QT_VERSION < 0x050000
-    setSupportedDragActions(Qt::CopyAction | Qt::MoveAction);
-#endif
+    // TODO FIXME: Qt5 porting: CHECK THIS -> setSupportedDragActions(Qt::CopyAction | Qt::MoveAction);
     connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
 }
 

@@ -15,7 +15,7 @@
  *  GNU General Public License for more details.                           *
  *                                                                         *
  *  You should have received a copy of the GNU General Public License      *
- *  along with this program (COPYING.FREEMEDFORMS file).                   *
+ *  along with this program (COPYING file).                   *
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
@@ -194,9 +194,7 @@ public:
     void createToolBar()
     {
         m_ToolBar = new QToolBar(m_Parent);
-#if QT_VERSION > 0x040600
         m_ToolBar->setIconSize(QSize(16,16));
-#endif
         m_ToolBar->setFocusPolicy(Qt::ClickFocus);
 //        populateToolbar();
     }
@@ -678,11 +676,7 @@ void TextEditor::fontFormat()
     QFont font = textEdit()->textCursor().charFormat().font();
     // 2. show font dialog
     bool ok;
-#if QT_VERSION >= 0x040500
     QFont selectedfont = QFontDialog::getFont(&ok, font, this, tr("Font format"), QFontDialog::DontUseNativeDialog);
-#else
-    QFont selectedfont = QFontDialog::getFont(&ok, font, this, tr("Font format"));
-#endif
     // 3. apply, if accepted, font style
     if (ok) {
         QTextCharFormat fmt;

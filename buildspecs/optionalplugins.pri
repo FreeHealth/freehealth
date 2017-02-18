@@ -88,14 +88,14 @@ contains(FREEHEALTH,1){
     # *                                  Patientimport Plugin                                      *
     # ***************************************************************************************
     # Uncomment the following line to build the plugin
-      CONFIG *= with-patientimport
+    # CONFIG *= with-patientimport
     # ***************************************************************************************
 
     # ***************************************************************************************
     # *                                  Record import plugin                               *
     # ***************************************************************************************
     # Uncomment the following line to build the plugin
-      CONFIG *= with-recordimport
+    # CONFIG *= with-recordimport
     # ***************************************************************************************
 
     # The following lines must not be modified

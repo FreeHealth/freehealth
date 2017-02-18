@@ -20,7 +20,7 @@
  *  GNU General Public License for more details.                           *
  *                                                                         *
  *  You should have received a copy of the GNU General Public License      *
- *  along with this program (COPYING.FREEMEDFORMS file).                   *
+ *  along with this program (COPYING file).                   *
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
@@ -152,14 +152,8 @@ void AccountView::setHeadersOfTable(){
           m_Model->fetchMore();
         }
     m_ui->tableView->setModel(m_Model);
-#if QT_VERSION < 0x050000
-    m_ui->tableView->horizontalHeader()->setResizeMode(QHeaderView::Interactive);
-    m_ui->tableView->horizontalHeader()->setResizeMode(QHeaderView::ResizeToContents);
-#else
-    // Qt5
     m_ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Interactive);
     m_ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
-#endif
     m_ui->tableView->show();
 }
 

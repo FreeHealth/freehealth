@@ -15,7 +15,7 @@
  *  GNU General Public License for more details.                           *
  *                                                                         *
  *  You should have received a copy of the GNU General Public License      *
- *  along with this program (COPYING.FREEMEDFORMS file).                   *
+ *  along with this program (COPYING file).                   *
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
@@ -59,7 +59,7 @@ const char* const TAKE_INTO_ACCOUNT             = QT_TRANSLATE_NOOP("tkConstants
 const char* const DISCOURAGED                   = QT_TRANSLATE_NOOP("tkConstants", "Discouraged");
 const char* const CONTRAINDICATION              = QT_TRANSLATE_NOOP("tkConstants", "Contraindication");
 const char* const P450_IAM                      = QT_TRANSLATE_NOOP("tkConstants", "Cytochrome P450 interaction");
-const char* const GPG_IAM                       = QT_TRANSLATE_NOOP("tkConstants", "Glycoprotein-P interaction");
+const char* const PGP_DDI                       = QT_TRANSLATE_NOOP("tkConstants", "P-glycoprotein interaction");
 const char* const PRECAUTION_FOR_USE            = QT_TRANSLATE_NOOP("tkConstants", "Precaution for use");
 const char* const DRUG_DUPLICATION              = QT_TRANSLATE_NOOP("tkConstants", "Drug duplication");
 const char* const INN_DUPLICATION               = QT_TRANSLATE_NOOP("tkConstants", "Molecule duplication");

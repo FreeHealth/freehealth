@@ -15,7 +15,7 @@
  *  GNU General Public License for more details.                           *
  *                                                                         *
  *  You should have received a copy of the GNU General Public License      *
- *  along with this program (COPYING.FREEMEDFORMS file).                   *
+ *  along with this program (COPYING file).                   *
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
@@ -668,6 +668,10 @@ bool DrugsIO::isInitialized() const
 /**
   \brief Start the dosage transmission over the web.
   \todo Manage user's name
+
+  \date 20160130
+  \remark This function is not actually used
+  \sa class DrugInfo
 */
 bool DrugsIO::startsDosageTransmission()
 {

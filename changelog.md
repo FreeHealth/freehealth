@@ -3,6 +3,13 @@ Changelog
 
 See https://github.com/FreeHealth/freehealth/issues for more details
 
+
+0.9.10
+------
+
+### Database
+  * Database fmf_pmh: CREATIONDATETIME field added to table PMH_MASTER
+
 0.9.9
 -----
 

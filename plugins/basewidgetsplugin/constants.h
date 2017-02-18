@@ -15,7 +15,7 @@
  *  GNU General Public License for more details.                           *
  *                                                                         *
  *  You should have received a copy of the GNU General Public License      *
- *  along with this program (COPYING.FREEMEDFORMS file).                   *
+ *  along with this program (COPYING file).                   *
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
@@ -85,6 +85,9 @@ const char * const  DONTPRINTLABEL       = "DontPrintLabel";
 const char * const  HIDEHEADERONUNIQUEEPISODE = "HideHeaderOnUniqueEpisode";
 const char * const  NOT_PRINTABLE        = "notprintable";
 const char * const  SUMMARY_FONT_BOLD    = "SummaryFontBold";
+
+// Input validation limit
+const int EPISODELABELMAXCHAR = 200; // maximum length of label string varchar(200)
 
 Form::IFormWidget::LabelOptions labelAlignement(Form::FormItem *item, Form::IFormWidget::LabelOptions defaultValue = Form::IFormWidget::OnLeft);
 

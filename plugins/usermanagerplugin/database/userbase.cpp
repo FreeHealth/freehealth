@@ -15,7 +15,7 @@
  *  GNU General Public License for more details.                           *
  *                                                                         *
  *  You should have received a copy of the GNU General Public License      *
- *  along with this program (COPYING.FREEMEDFORMS file).                   *
+ *  along with this program (COPYING file).                   *
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
@@ -56,7 +56,6 @@
 #include <coreplugin/isettings.h>
 #include <coreplugin/constants_tokensandsettings.h>
 #include <printerplugin/textdocumentextra.h>
-#include <coreplugin/iuser.h>
 #include <coreplugin/icommandline.h>
 
 #include <utils/log.h>
@@ -125,7 +124,7 @@ UserBase::UserBase(QObject *parent) :
     addField(Table_USERS, USER_ISVIRTUAL,    "ISVIRTUAL",       FieldIsBoolean);
     addField(Table_USERS, USER_LOGIN,        "LOGIN",           FieldIsShortText);
     addField(Table_USERS, USER_PASSWORD,     "PASSWORD",        FieldIsShortText);
-    addField(Table_USERS, USER_LASTLOG,      "LASTLOGIN",       FieldIsTimeStamp,       "0");
+    addField(Table_USERS, USER_LASTLOG,      "LASTLOGIN",       FieldIsTimeStamp,       "NULL");
     addField(Table_USERS, USER_USUALNAME,    "NAME",            FieldIsShortText);
     addField(Table_USERS, USER_OTHERNAMES,   "SECONDNAME",      FieldIsShortText);
     addField(Table_USERS, USER_FIRSTNAME,    "SURNAME",         FieldIsShortText);
@@ -288,7 +287,8 @@ bool UserBase::updateLastloginTypeToTimeStamp()
     switch (settings()->databaseConnector().driver()) {                         
         case Utils::Database::MySQL: {
             if(!Database::modifyMySQLColumnType(Constants::Table_USERS,
-                                                Constants::USER_LASTLOG, "0")) {
+                                                Constants::USER_LASTLOG,
+                                                "NULL")) {
                 return false;
             }
             return true;
@@ -393,8 +393,9 @@ void UserBase::onCoreFirstRunCreationRequested()
 //------------------------------------------------------------------------------
 //-------------------------- Data retrievers -----------------------------------
 //------------------------------------------------------------------------------
-/*! Retrieve all users data from the users database.
-  If an error occurs, returns 0.
+/**
+ * Retrieve all users data from the users database.
+ *  If an error occurs, returns 0.
  */
 UserData *UserBase::getUser(const QHash<int, QString> &conditions) const
 {
@@ -495,7 +496,7 @@ UserData *UserBase::getUser(const QHash<int, QString> &conditions) const
     return toReturn;
 }
 
-/*! Retrieve all users data from the users database.
+/** Retrieve all users data from the users database.
   If an error occurs, returns 0.
   \sa getUser()
  */
@@ -542,9 +543,9 @@ UserData *UserBase::getUserByLoginPassword(const QVariant &login, const QVariant
 }
 
 /**
- * Checks login/passphrase pair passed as parameters.
- * Returns \e true if a user can connect with these credentials
- * (to the RDBMS server & to user database).
+ * Check login/passphrase pair passed as parameters.
+ * Return \e true if a user can connect with these credentials, that is, if
+ * credentials are correct for both RDBMS (MySQL user accounts) & app (USERS table)
  */
 bool UserBase::checkLogin(const QString &clearLogin, const QString &clearPassword)
 {
@@ -718,8 +719,10 @@ bool UserBase::userExists(const QString &clearLogin) const
     }
 }
 
-/** Returns the Uuid of the user identified with login/password pair.
- * Returns a null QString if an error occurs. */
+/**
+ * Return the Uuid of the user identified with login/password pair.
+ * Return a null QString if an error occurs.
+ */
 QString UserBase::getUuid(const QString &log64, const QString &cryptpass64)
 {
     if ((log64 == m_LastLogin) && (cryptpass64 == m_LastPass))
@@ -787,7 +790,9 @@ QString UserBase::createNewUuid()
     return tmp;
 }
 
-/** Return the base64 encoded login for the user identified by the specified \e uid. */
+/**
+ * Return the base64 encoded login for the user identified by the specified \e uid.
+ */
 QString UserBase::getLogin64(const QString &uuid)
 {
     if (uuid == m_LastUuid)
@@ -822,7 +827,7 @@ QString UserBase::getLogin64(const QString &uuid)
 }
 
 /**
- * Returns the encrypted password stored in the users database
+ * Returns the encrypted password stored in the app USERS database
  * for the user identified with the login \e clearLogin
  */
 QString UserBase::getCryptedPassword(const QString &clearLogin)
@@ -861,7 +866,9 @@ QString UserBase::getCryptedPassword(const QString &clearLogin)
     return QString();
 }
 
-/** Returns a specific dynamic data of a user. */
+/**
+ * Returns a specific dynamic data of a user.
+ */
 QString UserBase::getUserDynamicData(const QString &userUid, const QString &dynDataUuid)
 {
     QSqlDatabase DB = QSqlDatabase::database(Constants::USER_DB_CONNECTION);
@@ -1065,7 +1072,9 @@ bool UserBase::createDatabase(const QString &connectionName , const QString &dbN
     return true;
 }
 
-/** Creates a default user when recreating the database. */
+/**
+ * Create a default user when recreating the database.
+ */
 bool UserBase::createDefaultUser()
 {
     // MySQL user is created during the Core::FirstRunWizard -> Core::ServerConfigPage::validatePage() using an external SQL script
@@ -1126,7 +1135,9 @@ bool UserBase::createDefaultUser()
     return true;
 }
 
-/** Creates a virtual user. */
+/**
+ * Create a virtual user.
+ */
 bool UserBase::createVirtualUser(const QString &uid, const QString &name, const QString &firstName, int title, int gender,
                                  const QStringList &specialties, const QStringList &qualifications,
                                  int medicalRights, int adminRights, int userRights, int agendaRights, int paramedicRights,
@@ -1242,9 +1253,10 @@ QDateTime UserBase::recordLastLoggedIn(const QString &log, const QString &pass)
         where.insert(USER_LOGIN, QString("='%1'").arg(log));                    
         where.insert(USER_PASSWORD, QString("='%1'").arg(pass));                
         QSqlQuery query(DB);                                                    
-        query.prepare(prepareUpdateQuery(Table_USERS, USER_LASTLOG, where));    
-        query.bindValue(0 , "NULL"); // passing NULL will trigger auto-update
-                                   // & set LASTLOGIN field to current UTC time                                              
+        query.prepare(prepareUpdateQuery(Table_USERS, USER_LASTLOG, where));
+        // passing CURRENT_TIMESTAMP will trigger auto-update
+        // & set LASTLOGIN field to current UTC time
+        query.bindValue(0 , "CURRENT_TIMESTAMP");
         if (!query.exec()) {                                                    
             LOG_QUERY_ERROR(query);                                             
             query.finish();                                                     
@@ -1281,23 +1293,23 @@ QDateTime UserBase::recordLastLoggedIn(const QString &log, const QString &pass)
    return QDateTime(); 
 }
 
-/*!
-  Creates a new user in the database
+/**
+ * Creates a new user in the database
  */
 bool UserBase::createUser(UserData *user)
 {
-    // TODO: check current user freemedforms' rights
+    // TODO: check current user rights
     switch (driver()) {
     case Utils::Database::MySQL:
     {
         // create user grants
-        // TODO: security problem, lower grants on DB according to user's FMF rights
+        // TODO: security problem, lower grants on DB according to user rights
         Utils::Database::Grants grants = Grant_Select | Grant_Update | Grant_Insert | Grant_Delete | Grant_Create | Grant_Drop | Grant_Alter | Grant_Index;
         if (user->hasRight(Constants::USER_ROLE_USERMANAGER, Core::IUser::Create)) {
             grants |= Grant_CreateUser;
         }
 
-        // create a MySQL user
+        // create a MySQL account
         Utils::DatabaseConnector c = settings()->databaseConnector();
         if (!createMySQLUser(user->clearLogin(), user->clearPassword(), grants,
                              c.globalDatabasePrefix()))
@@ -1309,8 +1321,7 @@ bool UserBase::createUser(UserData *user)
         break;
     }
     }
-
-    // Create the EHR user inside users table
+    // Create an app account
     return saveUser(user);
 }
 
@@ -1700,6 +1711,7 @@ bool UserBase::saveUserPreferences(const QString &uid, const QString &content)
 
 bool UserBase::savePapers(UserData *user)
 {
+    WARN_FUNC;
     if (!user->isModified())
         return true;
 
@@ -1762,7 +1774,9 @@ bool UserBase::savePapers(UserData *user)
     return true;
 }
 
-/** Update the user's password (taking care of the current server settings). */
+/**
+ * Update the user's password (taking care of the current server settings).
+ */
 bool UserBase::changeUserPassword(UserData *user, const QString &newClearPassword)
 {
     if (!user)
@@ -1802,8 +1816,7 @@ bool UserBase::changeUserPassword(UserData *user, const QString &newClearPasswor
             }
         }
     }
-
-    // Update EHR password in fmf_users database
+    // Update app password in fmf_users database
     Utils::PasswordCrypter crypter;
     QHash<int, QString> where;
     where.insert(USER_UUID, QString("='%1'").arg(user->uuid()));
@@ -1817,14 +1830,17 @@ bool UserBase::changeUserPassword(UserData *user, const QString &newClearPasswor
         DB.rollback();
         return false;
     }
-    LOG("User password updated in the user database");
+    LOG("User password updated in the application USERS database");
     query.finish();
     DB.commit();
-    LOG("User password succesfully updated");
+    LOG("User password successfully updated");
     return true;
 }
 
-/** Save a dynamic data for \e user using \e value. The data will be saved as a file field. */
+/**
+ * Save a dynamic data for \e user using \e value.
+ * The data will be saved as a file field.
+ */
 bool UserBase::saveUserDynamicData(const QString &userUid, const QString &dynDataUuid, const QVariant &value)
 {
     QSqlDatabase DB = QSqlDatabase::database(Constants::USER_DB_CONNECTION);
@@ -1957,4 +1973,3 @@ void UserBase::onCoreDatabaseServerChanged()
     }
     initialize();
 }
-

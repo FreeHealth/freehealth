@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="sl_SI">
+<TS version="2.1" language="sl_SI">
 <context>
     <name>Calendar::CalendarNavbar</name>
     <message>
@@ -57,12 +57,12 @@
 <context>
     <name>Calendar::Internal::DayRangeHeader</name>
     <message>
-        <location filename="../../libs/calendar/dayview/dayrangeheader.cpp" line="392"/>
+        <location filename="../../libs/calendar/dayview/dayrangeheader.cpp" line="384"/>
         <source>modify</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/calendar/dayview/dayrangeheader.cpp" line="394"/>
+        <location filename="../../libs/calendar/dayview/dayrangeheader.cpp" line="386"/>
         <source>remove</source>
         <translation type="unfinished"></translation>
     </message>

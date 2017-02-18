@@ -15,7 +15,7 @@
  *  GNU General Public License for more details.                           *
  *                                                                         *
  *  You should have received a copy of the GNU General Public License      *
- *  along with this program (COPYING.FREEMEDFORMS file).                   *
+ *  along with this program (COPYING file).                   *
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
@@ -371,9 +371,7 @@ public:
 
         // manage contexts and drag/drop
         manageContexts(editModes);
-#if QT_VERSION >= 0x040600
         m_ui->categoryTreeView->setDefaultDropAction(Qt::CopyAction);
-#endif
         connect(m_ui->categoryTreeView, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(contextMenu(QPoint)));
 //        connect(m_Model,SIGNAL(modelAboutToBeReset()), this, SLOT(on_ModelAboutToReset()));
         connect(m_Model, SIGNAL(rowsInserted(const QModelIndex &, int, int)), this, SLOT(model_rowInserted(const QModelIndex &, int, int)));

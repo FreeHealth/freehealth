@@ -15,7 +15,7 @@
  *  GNU General Public License for more details.                           *
  *                                                                         *
  *  You should have received a copy of the GNU General Public License      *
- *  along with this program (COPYING.FREEMEDFORMS file).                   *
+ *  along with this program (COPYING file).                   *
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
@@ -107,7 +107,7 @@ QString Pack::vendor() const
 {
     const QString &v = m_descr.data(PackDescription::Vendor).toString();
     if (v.isEmpty())
-        return tkTr(Trans::Constants::THE_FREEMEDFORMS_COMMUNITY);
+        return tkTr(Trans::Constants::EHR_COMMUNITY);
     return v;
 }
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="pl_PL">
+<TS version="2.1" language="pl_PL">
 <context>
     <name>Editor::Internal::TableDialog</name>
     <message>
@@ -217,18 +217,17 @@
 <context>
     <name>Editor::TextEditor</name>
     <message>
-        <location filename="../../plugins/texteditorplugin/texteditor.cpp" line="649"/>
+        <location filename="../../plugins/texteditorplugin/texteditor.cpp" line="647"/>
         <source>Save in pure textual format?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/texteditorplugin/texteditor.cpp" line="650"/>
+        <location filename="../../plugins/texteditorplugin/texteditor.cpp" line="648"/>
         <source>The conversion of the document to a pure textual format will cause the lost of the paragraph and characters format. Do you really want to save in pure textual format?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/texteditorplugin/texteditor.cpp" line="682"/>
-        <location filename="../../plugins/texteditorplugin/texteditor.cpp" line="684"/>
+        <location filename="../../plugins/texteditorplugin/texteditor.cpp" line="679"/>
         <source>Font format</source>
         <translation type="unfinished"></translation>
     </message>

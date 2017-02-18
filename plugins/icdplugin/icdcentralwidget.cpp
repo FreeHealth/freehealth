@@ -15,7 +15,7 @@
  *  GNU General Public License for more details.                           *
  *                                                                         *
  *  You should have received a copy of the GNU General Public License      *
- *  along with this program (COPYING.FREEMEDFORMS file).                   *
+ *  along with this program (COPYING file).                   *
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
@@ -77,9 +77,6 @@ public:
         Core::Command *cmd = 0;
         // populate toolbar
         m_ToolBar = new QToolBar(q);
-    #if QT_VERSION < 0x040600
-        m_ToolBar->setIconSize(QSize(16,16));
-    #endif
         QStringList actionsToAdd;
         actionsToAdd
                 << Constants::A_TOGGLE_ICDSELECTOR

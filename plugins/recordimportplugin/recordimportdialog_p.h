@@ -6,7 +6,6 @@
 #include "recordimportdialog.h"
 #include "recordimportplugin.h"
 #include "ui_recordimportdialog.h"
-#include "processrecordimport.h"
 #include "recordimportdialog_p.h"
 
 #include <formmanagerplugin/formmanager_exporter.h>

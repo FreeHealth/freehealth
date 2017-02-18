@@ -15,7 +15,7 @@
  *  GNU General Public License for more details.                           *
  *                                                                         *
  *  You should have received a copy of the GNU General Public License      *
- *  along with this program (COPYING.FREEMEDFORMS file).                   *
+ *  along with this program (COPYING file).                   *
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
@@ -1107,7 +1107,7 @@ int Database::addTable(const int & ref, const QString & name)
  */
 int Database::addField(const int & tableref, const int & fieldref, const QString & name, TypeOfField type, const QString & defaultValue)
 {
-    Q_ASSERT_X(name.length() < 64, "Database", "Name of field can not exceed 50 chars");
+    Q_ASSERT_X(name.length() < 64, "Database", "Name of field can not exceed 63 chars");
     int ref = d_database->index(tableref, fieldref);
     d_database->m_Tables_Fields.insertMulti(tableref, ref);
     d_database->m_Fields.insert(ref , name);
@@ -2885,11 +2885,13 @@ QStringList DatabasePrivate::getSQLCreateTable(const int &tableref)
             case Database::FieldIsUnsignedLongInteger:
             case Database::FieldIsReal :
             case Database::FieldIsTimeStamp :
-                fieldLine.append(QString("%1 %2 DEFAULT %3")
+            {
+                fieldLine.append(QString("%1 %2 NULL DEFAULT %3")
                                 .arg(fieldName)
-                                .arg(getTypeOfField(i))// .leftJustified(20, ' '))
+                                .arg(getTypeOfField(i)).toUpper()// .leftJustified(20, ' '))
                                 .arg(m_DefaultFieldValue.value(i)));
                 break;
+            }
             case Database::FieldIsIsoUtcDateTime :
                 fieldLine.append(QString("%1 %2")
                                  .arg(fieldName)
@@ -2970,7 +2972,7 @@ QString DatabasePrivate::getTypeOfField(const int &fieldref) const
             toReturn = "datetime";
             break;
         case Database::FieldIsTimeStamp:
-            toReturn = "timestamp";
+            toReturn = "TIMESTAMP NULL";
             break;
         case Database::FieldIsIsoUtcDateTime:
             toReturn = "varchar(20)";

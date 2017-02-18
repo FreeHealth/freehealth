@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="sl_SI">
+<TS version="2.1" language="sl_SI">
 <context>
     <name>Print</name>
     <message>
-        <location filename="../../plugins/printerplugin/documentprinter.cpp" line="175"/>
+        <location filename="../../plugins/printerplugin/documentprinter.cpp" line="176"/>
         <source>Made with %1.</source>
         <translation type="unfinished"></translation>
     </message>

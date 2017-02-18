@@ -15,7 +15,7 @@
  *  GNU General Public License for more details.                           *
  *                                                                         *
  *  You should have received a copy of the GNU General Public License      *
- *  along with this program (COPYING.FREEMEDFORMS file).                   *
+ *  along with this program (COPYING file).                   *
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
@@ -268,7 +268,7 @@ void SumWidget::retranslate()
 
 void SumWidget::connectFormItems()
 {
-//    qWarning() << "SUM requiered" << formItem()->extraData().value(::SUM_EXTRA_KEY) << formItem()->extraData().value(::SUM_REGEXP_EXTRA_KEY);
+//    qWarning() << "SUM required" << formItem()->extraData().value(::SUM_EXTRA_KEY) << formItem()->extraData().value(::SUM_REGEXP_EXTRA_KEY);
     if (formItem()->extraData().value(::SUM_EXTRA_KEY).isEmpty() && formItem()->extraData().value(::SUM_REGEXP_EXTRA_KEY).isEmpty()) {
         LOG_ERROR("Sum widget: No sumof tag <sumof> or <sumof_regexp>.");
         return;

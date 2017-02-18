@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="pt_PT">
+<TS version="2.1" language="pt_PT">
 <context>
     <name>PatientBar</name>
     <message>
@@ -197,48 +197,68 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientbasepreferencespage.ui" line="147"/>
+        <location filename="../../plugins/patientbaseplugin/patientbasepreferencespage.ui" line="179"/>
         <source>Patient bar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientbasepreferencespage.ui" line="153"/>
+        <location filename="../../plugins/patientbaseplugin/patientbasepreferencespage.ui" line="185"/>
         <source>Background color:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientbasepreferencespage.ui" line="20"/>
+        <location filename="../../plugins/patientbaseplugin/patientbasepreferencespage.ui" line="214"/>
+        <source>Pediatrics</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/patientbaseplugin/patientbasepreferencespage.ui" line="220"/>
+        <source>Age limit of pediatrics</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/patientbaseplugin/patientbasepreferencespage.ui" line="234"/>
+        <source>Express age in months until</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/patientbaseplugin/patientbasepreferencespage.ui" line="241"/>
+        <source>months</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/patientbaseplugin/patientbasepreferencespage.ui" line="95"/>
         <source>Patient selector</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientbasepreferencespage.ui" line="26"/>
+        <location filename="../../plugins/patientbaseplugin/patientbasepreferencespage.ui" line="101"/>
         <source>Use color to differentiate genders</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientbasepreferencespage.ui" line="123"/>
+        <location filename="../../plugins/patientbaseplugin/patientbasepreferencespage.ui" line="71"/>
         <source>Select newly created patients</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientbasepreferencespage.ui" line="57"/>
+        <location filename="../../plugins/patientbaseplugin/patientbasepreferencespage.ui" line="132"/>
         <source>When this option is checked, the patient selector updates the search result while you are typing. If you are using FreeMedForms over a network, this can lead to heavy network usage.
 This option is not recommended with big patient database (&gt; 10.000 patients).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientbasepreferencespage.ui" line="33"/>
+        <location filename="../../plugins/patientbaseplugin/patientbasepreferencespage.ui" line="108"/>
         <source>Maximum patient in the recent list (default 10)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientbasepreferencespage.ui" line="61"/>
+        <location filename="../../plugins/patientbaseplugin/patientbasepreferencespage.ui" line="136"/>
         <source>Search patients while typing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientbasepreferencespage.ui" line="86"/>
+        <location filename="../../plugins/patientbaseplugin/patientbasepreferencespage.ui" line="161"/>
         <source>When this option is checked, the patient selector updates the search result while you are typing.When this option is unckecked you need to hit enter to refresh the search results.
 
 Warning: If you are using FreeMedForms over a network, this can lead to heavy network usage. This option is not recommended with big patient database (&gt; 10.000 patients).
@@ -246,27 +266,27 @@ Warning: If you are using FreeMedForms over a network, this can lead to heavy ne
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientbasepreferencespage.ui" line="104"/>
+        <location filename="../../plugins/patientbaseplugin/patientbasepreferencespage.ui" line="52"/>
         <source>New patient</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientbasepreferencespage.ui" line="113"/>
+        <location filename="../../plugins/patientbaseplugin/patientbasepreferencespage.ui" line="61"/>
         <source>Default zipcode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientbasepreferencespage.ui" line="130"/>
+        <location filename="../../plugins/patientbaseplugin/patientbasepreferencespage.ui" line="78"/>
         <source>Default city</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientbasepreferencespage.ui" line="182"/>
+        <location filename="../../plugins/patientbaseplugin/patientbasepreferencespage.ui" line="20"/>
         <source>Patient photo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientbasepreferencespage.ui" line="191"/>
+        <location filename="../../plugins/patientbaseplugin/patientbasepreferencespage.ui" line="29"/>
         <source>Default photo source:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -449,6 +469,28 @@ Warning: If you are using FreeMedForms over a network, this can lead to heavy ne
         <location filename="../../plugins/patientbaseplugin/patientcreatorwizard.cpp" line="98"/>
         <source>Patient not saved</source>
         <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Patients::PatientModel</name>
+    <message numerus="yes">
+        <location filename="../../plugins/patientbaseplugin/patientmodel.cpp" line="534"/>
+        <source>%n year(s)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
+</context>
+<context>
+    <name>QObject</name>
+    <message numerus="yes">
+        <location filename="../../plugins/patientbaseplugin/identityviewerwidget.cpp" line="745"/>
+        <source>%n year(s)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
 </context>
 </TS>

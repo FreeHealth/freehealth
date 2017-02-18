@@ -2,7 +2,7 @@ isudo: required
 dist: trusty
 
 before_install:
-  - sudo add-apt-repository --yes ppa:beineri/opt-qt561-trusty
+  - sudo add-apt-repository --yes ppa:beineri/opt-qt562-trusty
   - sudo apt-get update -qq
 
 install:
@@ -10,5 +10,5 @@ install:
 
 script:
   - source /opt/qt56/bin/qt56-env.sh
-  - /opt/qt56/bin/qmake freehealth/freehealth.pro
+  - /opt/qt56/bin/qmake freehealth/freehealth.pro -r "CONFIG+=debug debug_without_install"
   - make

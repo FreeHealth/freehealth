@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE FreeMedForms>
+<FreeMedForms>
+
+  <formdescription>
+    <!-- Non translatable values -->
+    <authors>Jerome Pinguet</authors>
+    <version>2.0.0</version>
+    <fmfv>0.9.7</fmfv>
+    <cdate>2016-11-17</cdate>
+    <lmdate>2016-11-28</lmdate>
+    <icon>generalpractitioner.png</icon>
+    <weblink>https://medecinelibre.com</weblink>
+    <bibliography/>
+
+    <!-- Translatable values -->
+    <license>GPLv3</license>
+    <description lang="fr">Ordonnance bizone</description>
+    <description lang="xx">Ordonnance bizone</description>
+    <category lang="xx">Prescription</category>
+    <category lang="fr">Order</category>
+    <specialties lang="fr">Médecine générale</specialties>
+    <specialties lang="xx">General practice</specialties>
+    <updateinfo/>
+
+  </formdescription>
+
+    <fieldequivalence>
+      <equivalent old="GP::Basic::Prescr::Text::Content" new="GP::Basic::Prescr::Text::Maladies::Intercurrentes" setInVersion=""/>
+    </fieldequivalence>
+
+  <file type="script" name="onload">./scripts/xx/bizone.js</file>
+
+<MedForm name="GP::Basic::Prescr::Text" uifilename="./ui/xx/bizone.ui">
+  <label lang="xx">Textual orders</label>
+  <label lang="fr">Prescriptions textuelles</label>
+  <icon>__theme__/edit.png</icon>
+  <options>DontPrintEmptyValues;UseFormNameAsNameSpace;NoHeader</options>
+  <file type="htmlprintmask">./html/xx/bizone.html</file>
+  <file type="htmlexportmask">./html/xx/bizone.html</file>
+
+<Item name="Bizone::Check" type="check">
+  <uilink widget="bizoneCheckBox"/>
+  <options></options>
+  <value>
+    <uuid id="0"></uuid>
+    <uuid id="1">1</uuid>
+  </value>
+<script>
+  <onValueChanged>namespace.com.freemedforms.prescriptions.fr.bizone.bz_onCheckChanged();</onValueChanged>
+</script>
+</Item>
+
+<Item name="Bizone::Group" type="group">
+  <uilink widget="bizoneGroupBox"/>
+  <options>collapsible</options>
+  <label lang = "xx">Bizone</label>
+  <label lang = "fr">Bizone</label>
+  <value>
+    <uuid id="0">0</uuid>
+    <uuid id="1">1</uuid>
+  </value>
+<script>
+  <onValueChanged>namespace.com.freemedforms.prescriptions.fr.bizone.bz_onCheckChanged();</onValueChanged>
+</script>
+</Item>
+
+<!--Item name="Radio" type="radio">
+<uilink layout="bizoneRadioLayout"/>
+<value>
+  <uuid id="0"></uuid>
+  <uuid id="1">oui</uuid>
+
+  <possible id="0" lang="xx">No</possible>
+  <possible id="1" lang="xx"></possible>
+
+  <possible id="0" lang="fr">Non</possible>
+  <possible id="1" lang="fr"></possible>
+
+
+  <numerical id="0">0</numerical>
+  <numerical id="1">1</numerical>
+</value>
+<options>compact</options>
+<script>
+  <onValueChanged>namespace.com.freemedforms.prescriptions.fr.bizone.bz_onRadioChanged();</onValueChanged>
+</script>
+</Item-->
+
+
+  <!--Item name="FileNavigationButton" type="buttonmenupath">
+    <uilink widget="affectionExonerantePushButton"/>
+    <label lang="xx">Select a file (replacement with confirmation)</label>
+    <label lang="fr">Sélectionnez un fichier (replacement avec confirmation)</label>
+    <tooltip lang="xx">Select a file and the its content will be included in the text editor</tooltip>
+    <tooltip lang="fr">Sélectionnez un fichier et son contenu sera insérer dans l'éditeur de texte</tooltip>
+    <icon>__theme__/fileopen.png</icon>
+    <path>__userDocuments__</path>
+    <filter>*.htm;*.html;*.txt;*.rtf</filter>
+    <populate>GP::Basic::Prescr::Text::Content</populate>
+  </Item-->
+
+  <Item name="Affection::Exonerante" type="texteditor" >
+    <uilink layout="affectionExoneranteGridLayout"/>
+    <label lang="xx"></label>
+    <label lang="fr"></label>
+    <options>DontPrintEmptyValues;FullEditor</options>
+    <papers>Prescription</papers>
+  </Item>
+
+    <!--Item name="maladiesIntercurrentesFileNavigationButton" type="buttonmenupath">
+      <uilink widget="maladiesIntercurrentesPushButton"/>
+      <label lang="xx">Select a file (replacement with confirmation)</label>
+      <label lang="fr">Sélectionnez un fichier (replacement avec confirmation)</label>
+      <tooltip lang="xx">Select a file and the its content will be included in the text editor</tooltip>
+      <tooltip lang="fr">Sélectionnez un fichier et son contenu sera insérer dans l'éditeur de texte</tooltip>
+      <icon>__theme__/fileopen.png</icon>
+      <path>__userDocuments__</path>
+      <filter>*.htm;*.html;*.txt;*.rtf</filter>
+      <populate>GP::Basic::Prescr::Text::Content</populate>
+    </Item-->
+
+    <Item name="Maladies::Intercurrentes" type="texteditor">
+      <uilink layout="maladiesIntercurrentesGridLayout"/>
+      <label lang="xx"></label>
+      <label lang="fr"></label>
+      <options>DontPrintEmptyValues;FullEditor</options>
+      <papers>Prescription</papers>
+    </Item>
+
+    <Item name="Warning" type="shorttext">
+    <uilink widget="warningLineEdit"/>
+    </Item>
+
+    <Item name="Header" type="shorttext">
+    <uilink widget="headerLineEdit"/>
+    </Item>
+
+</MedForm>
+
+</FreeMedForms>

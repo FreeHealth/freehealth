@@ -15,7 +15,7 @@
  *  GNU General Public License for more details.                           *
  *                                                                         *
  *  You should have received a copy of the GNU General Public License      *
- *  along with this program (COPYING.FREEMEDFORMS file).                   *
+ *  along with this program (COPYING file).                   *
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
@@ -29,7 +29,7 @@
 #include <QDialog>
 #include <QHash>
 #include <QMessageBox>
-#include <utils/messagesender.h>
+//#include <utils/messagesender.h>
 
 /**
  * \file debugdialog.h
@@ -70,7 +70,7 @@ private:
     Ui::DebugDialog *m_ui;
     QStackedLayout  *m_slayout;
     QHash<QTreeWidgetItem *, QWidget *> m_Widgets;
-    Utils::MessageSender  m_sender;
+    //Utils::MessageSender  m_sender;
     bool            m_sending;
     QMessageBox *   m_infoMessageBox;
     bool            m_MessageViewExpanded, m_ErrorViewExpanded;

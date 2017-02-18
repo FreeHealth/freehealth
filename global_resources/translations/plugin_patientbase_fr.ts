@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="fr_FR">
+<TS version="2.1" language="fr_FR">
 <context>
     <name>PatientBar</name>
     <message>
@@ -225,6 +225,22 @@ Attention : Si vous utilisez FreeMedForms en réseau, cela peut causer une surch
         <source>Default city</source>
         <translation>Ville par défaut</translation>
     </message>
+    <message>
+        <source>Pediatrics</source>
+        <translation>Pédiatrie</translation>
+    </message>
+    <message>
+        <source>Age limit of pediatrics</source>
+        <translation>Âge limite des patients pédiatriques</translation>
+    </message>
+    <message>
+        <source>Express age in months until</source>
+        <translation>Exprimer l&apos;âge en mois jusqu&apos;à</translation>
+    </message>
+    <message>
+        <source>months</source>
+        <translation>mois</translation>
+    </message>
 </context>
 <context>
     <name>Patients::Internal::PatientDataExtractorDialog</name>
@@ -369,6 +385,26 @@ Attention : Si vous utilisez FreeMedForms en réseau, cela peut causer une surch
     <message>
         <source>Patient not saved</source>
         <translation>Patient non sauvegardé</translation>
+    </message>
+</context>
+<context>
+    <name>Patients::PatientModel</name>
+    <message numerus="yes">
+        <source>%n year(s)</source>
+        <translation>
+            <numerusform>%n an</numerusform>
+            <numerusform>%n ans</numerusform>
+        </translation>
+    </message>
+</context>
+<context>
+    <name>QObject</name>
+    <message numerus="yes">
+        <source>%n year(s)</source>
+        <translation>
+            <numerusform>%n an</numerusform>
+            <numerusform>%n ans</numerusform>
+        </translation>
     </message>
 </context>
 </TS>

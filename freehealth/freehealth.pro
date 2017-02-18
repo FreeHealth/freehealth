@@ -10,4 +10,4 @@ SUBDIRS += \
     appnamedefine \
     libs \
     plugins \
-    ehr-src
+    freehealth-src

@@ -15,13 +15,20 @@
  *  GNU General Public License for more details.                           *
  *                                                                         *
  *  You should have received a copy of the GNU General Public License      *
- *  along with this program (COPYING.FREEMEDFORMS file).                   *
+ *  along with this program (COPYING file).                   *
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /**
   \class Core::DebugDialog
   \brief This class is a QDialog that shows the content of the tkLog class of this library.
-  It can send message over the web with the tkSendMessage class (part of freemedforms).
+
+  \remark Previously planned feature "send messages to a web server
+          with the tkSendMessage class" was never implemented in production.
+          In order to reflect this in the header file, we commented out the inclusion
+               // #include <utils/messagesender.h>
+          and the private member
+               // Utils::MessageSender  m_sender;
+          Commented out code will probably be removed in a future refactoring.
 */
 #include "debugdialog.h"
 

@@ -15,7 +15,7 @@
  *  GNU General Public License for more details.                           *
  *                                                                         *
  *  You should have received a copy of the GNU General Public License      *
- *  along with this program (COPYING.FREEMEDFORMS file).                   *
+ *  along with this program (COPYING file).                   *
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
@@ -39,6 +39,7 @@
 #include "identityviewerwidget.h"
 
 #include <patientbaseplugin/patientmodel.h>
+#include <patientbaseplugin/constants_settings.h>
 
 #include <formmanagerplugin/formcore.h>
 #include <formmanagerplugin/formmanager.h>
@@ -46,14 +47,15 @@
 #include <formmanagerplugin/iformitem.h>
 #include <formmanagerplugin/iformitemdata.h>
 
-#include <coreplugin/ipatient.h>
 #include <coreplugin/icore.h>
 #include <coreplugin/iuser.h>
 #include <coreplugin/ipatient.h>
+#include <coreplugin/isettings.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/constants_icons.h>
 
 #include <utils/emailvalidator.h>
+#include <translationutils/constanttranslations.h>
 #include <translationutils/constants.h>
 #include <translationutils/trans_patient.h>
 #include <translationutils/trans_titles.h>
@@ -69,11 +71,13 @@
 #include <QToolButton>
 #include <QUrl>
 #include <QDesktopServices>
+#include <QStringList>
 
 #include <QDebug>
 
 static inline Core::ITheme *theme() { return Core::ICore::instance()->theme(); }
 static inline Core::IUser *user() { return Core::ICore::instance()->user(); }
+static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 
 using namespace Patients;
 using namespace Internal;
@@ -706,6 +710,10 @@ public:
 
     void populateReadOnlyWidget(const int row)
     {
+        QString space = QString::fromUtf8("\u2003");
+        QString emdash = QString::fromUtf8("\u2014");
+        QString separator = space + emdash + space;
+
         _patientModelIdentityWrapper->setCurrentPatient(row);
         QPixmap photo = m_PatientModel->index(row, Core::IPatient::Photo_64x64).data().value<QPixmap>();
         if (photo.isNull()) {
@@ -727,15 +735,26 @@ public:
         m_IdentityWidget->setTitle(m_PatientModel->index(row, Core::IPatient::Title).data().toString());
 
         // age / dob / dod / prof / nss
-        const QString &age = m_PatientModel->index(row, Core::IPatient::Age).data().toString();
-        QString dob = QLocale().toString(m_PatientModel->index(row, Core::IPatient::DateOfBirth).data().toDate(), QLocale::LongFormat);
-        if (!name.isEmpty())
-            viewUi->identityDetails->setSummaryText(QString("%1 - %2").arg(name).arg(age));
-        else
+        QString age;
+        qDebug() << m_PatientModel->index(row, Core::IPatient::YearsOld).data().toInt();
+        qDebug() << settings()->value(Patients::Constants::S_PEDIATRICSAGELIMIT, 18).toInt();
+        if (m_PatientModel->index(row, Core::IPatient::YearsOld).data().toInt() < settings()->value(Patients::Constants::S_PEDIATRICSAGELIMIT, 18).toInt()) {
+            age = m_PatientModel->index(row, Core::IPatient::Age).data().toString();
+        } else {
+            int yearsOld = m_PatientModel->index(row, Core::IPatient::YearsOld).data().toInt();
+            age = QString(QObject::tr("%n year(s)", "", yearsOld));
+        }
+        QString dobShort = QLocale().toString(m_PatientModel->index(row, Core::IPatient::DateOfBirth).data().toDate(), QLocale::ShortFormat);
+        QString dobLong = QLocale().toString(m_PatientModel->index(row, Core::IPatient::DateOfBirth).data().toDate(), QLocale::LongFormat);
+        if (!name.isEmpty()) {
+            viewUi->identityDetails
+                    ->setSummaryText(QString("%1%2%3%2%4").arg(name).arg(separator).arg(dobShort).arg(age));
+        } else {
             viewUi->identityDetails->setSummaryText("");
+        }
         m_AgeWidget->clearAll();
         m_AgeWidget->setAge(age);
-        m_AgeWidget->setDateOfBirth(dob);
+        m_AgeWidget->setDateOfBirth(dobLong);
         m_AgeWidget->setProfession(_patientModelIdentityWrapper->data(Core::IPatient::Profession).toString());
         QStringList nss;
         nss << _patientModelIdentityWrapper->data(Core::IPatient::SocialNumber).toString()
@@ -751,11 +770,31 @@ public:
 
         // address
         // TODO: add a preference -> what to show in summarytext: mobile phone? address? tels? email?
-        const QString &fulladdress = m_PatientModel->index(row, Core::IPatient::FullAddress).data().toString();
-        if (fulladdress.isEmpty())
+
+        QString fulladdress = m_PatientModel
+                ->index(row, Core::IPatient::FullAddress).data().toString();
+        QString mobile = _patientModelIdentityWrapper
+                ->data(Core::IPatient::MobilePhone).toString();
+        QString tel = _patientModelIdentityWrapper
+                ->data(Core::IPatient::Tels).toString();
+        QString protel = _patientModelIdentityWrapper
+                          ->data(Core::IPatient::ProfessionalTels).toString();
+        QString email = _patientModelIdentityWrapper
+                ->data(Core::IPatient::Mails).toString();
+        QStringList detailsList;
+        detailsList << fulladdress << mobile << tel << protel << email;
+
+        if (detailsList.length() > 1) {
+            for (int i = 1; i < detailsList.length(); ++i) {
+                if (!detailsList.at(i).isEmpty())
+                    detailsList[i].prepend(separator);
+            }
+        }
+        QString details = detailsList.join("");
+        if (details.isEmpty())
             viewUi->addressDetails->setSummaryText(tkTr(Trans::Constants::NO_ADDRESS_RECORDED));
         else
-            viewUi->addressDetails->setSummaryText(fulladdress);
+            viewUi->addressDetails->setSummaryText(details);
         viewUi->addressDetails->setSummaryFontBold(true);
         m_FullContactWidget->clear();
         m_FullContactWidget->address()->setAddress(_patientModelIdentityWrapper->data(Core::IPatient::Street).toString());

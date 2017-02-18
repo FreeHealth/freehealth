@@ -15,7 +15,7 @@
  *  GNU General Public License for more details.                           *
  *                                                                         *
  *  You should have received a copy of the GNU General Public License      *
- *  along with this program (COPYING.FREEMEDFORMS file).                   *
+ *  along with this program (COPYING file).                   *
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
@@ -51,7 +51,7 @@
 #include "htmldelegate.h"
 
 #include <QPainter>
-#include <QStyleOptionViewItemV4>
+#include <QStyleOptionViewItem>
 #include <QVariant>
 #include <QModelIndex>
 #include <QString>
@@ -88,7 +88,7 @@ public:
     {
     }
 
-    QString changeColors(const QStyleOptionViewItemV4 &optionV4, QString text)
+    QString changeColors(const QStyleOptionViewItem &optionV4, QString text)
     {
         if (optionV4.state & QStyle::State_Selected) {
             text.replace(QRegExp("color\\s*:\\s*gray", Qt::CaseInsensitive), "color:lightgray");
@@ -100,7 +100,7 @@ public:
         return text;
     }
 
-    void setHtml(const QModelIndex &index, const QStyleOptionViewItemV4 &optionV4)
+    void setHtml(const QModelIndex &index, const QStyleOptionViewItem &optionV4)
     {
         QTextDocument *doc;
         if (_documents.contains(index)) {
@@ -112,7 +112,7 @@ public:
         doc->setHtml(changeColors(optionV4, optionV4.text));
     }
 
-    void setDocumentWidth(const QModelIndex &index, const QStyleOptionViewItemV4 &optionV4)
+    void setDocumentWidth(const QModelIndex &index, const QStyleOptionViewItem &optionV4)
     {
         QTextDocument *doc = _documents.value(index);
         if (!doc) {
@@ -142,7 +142,7 @@ public:
         doc->drawContents(painter, rect);
     }
 
-    int getMaxWidth(const QStyleOptionViewItemV4 &optionV4)
+    int getMaxWidth(const QStyleOptionViewItem &optionV4)
     {
         int max = optionV4.rect.width();
 
@@ -202,7 +202,7 @@ HtmlDelegate::~HtmlDelegate()
 
 void HtmlDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-    QStyleOptionViewItemV4 optionV4 = option;
+    QStyleOptionViewItem optionV4 = option;
     initStyleOption(&optionV4, index);
     QStyle *style = optionV4.widget? optionV4.widget->style() : QApplication::style();
 
@@ -298,7 +298,7 @@ void HtmlDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
 
 QSize HtmlDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-    QStyleOptionViewItemV4 optionV4 = option;
+    QStyleOptionViewItem optionV4 = option;
     initStyleOption(&optionV4, index);
 
     d_html->setHtml(index, optionV4);

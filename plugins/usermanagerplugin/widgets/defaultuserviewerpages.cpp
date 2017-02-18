@@ -15,7 +15,7 @@
  *  GNU General Public License for more details.                           *
  *                                                                         *
  *  You should have received a copy of the GNU General Public License      *
- *  along with this program (COPYING.FREEMEDFORMS file).                   *
+ *  along with this program (COPYING file).                   *
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
@@ -404,9 +404,16 @@ QWidget *DefaultUserRightsPage::createPage(QWidget *parent)
     return w;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////   DefaultUserPapersWidget   //////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+//////////////////////   DefaultUserPapersWidget   /////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+/**
+ * Edit headers, footers and watemarks of documents.
+ * The widget that actually do the editing is created by PrinterPreviewerPrivate
+ * class.
+ * \sa PrinterPreviewer
+ * \sa Printer::previewer(QWidget *parent)
+ */
 DefaultUserPapersWidget::DefaultUserPapersWidget(const int type, QWidget *parent) :
     UserPlugin::IUserViewerWidget(parent),
     m_Mapper(0),

@@ -15,7 +15,7 @@
  *  GNU General Public License for more details.                           *
  *                                                                         *
  *  You should have received a copy of the GNU General Public License      *
- *  along with this program (COPYING.FREEMEDFORMS file).                   *
+ *  along with this program (COPYING file).                   *
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
@@ -637,9 +637,11 @@ int PrinterPrivate::complexDrawNewPage(QPainter &p, QSizeF & headerSize, QSizeF 
 }
 
 /**
-    \brief This drawing funtion assumes that there is the same number of headers and footers on each pages.
-    Watermark are printed first, text lies over the watermark. Then headers and footers are added, and finally
-    the content of the document to print is added page by page.
+    \brief This drawing funtion assumes that there is the same number of headers
+    and footers on each pages.
+    Watermark are printed first, text lies over the watermark. Then headers and
+    footers are added, and finally the content of the document to print is added
+    page by page.
 */
 bool PrinterPrivate::simpleDraw()
 {
@@ -1275,8 +1277,10 @@ void Printer::addTextWatermark(const QString & plainText,
 }
 
 /**
-  \brief Returns the Previewer widget
+  \brief Returns the Previewer widget as a pointer
+  This widget is used inside the DefaultUserPapersWidget of the User Manager.
   \sa tkPrinterPreviewer
+  \sa DefaultUserPapersWidget
 */
 PrinterPreviewer *Printer::previewer(QWidget *parent)
 {

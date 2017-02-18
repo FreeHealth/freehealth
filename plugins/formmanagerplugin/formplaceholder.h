@@ -15,14 +15,14 @@
  *  GNU General Public License for more details.                           *
  *                                                                         *
  *  You should have received a copy of the GNU General Public License      *
- *  along with this program (COPYING.FREEMEDFORMS file).                   *
+ *  along with this program (COPYING file).                   *
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *  Main developer: Eric MAEKER, <eric.maeker@gmail.com>                   *
- *  Contributors:                                                          *
- *       NAME <MAIL@ADDRESS.COM>                                           *
- *       NAME <MAIL@ADDRESS.COM>                                           *
+ *  Authors:                                                               *
+ *  Eric MAEKER, <eric.maeker@gmail.com>                                   *
+ *  NAME <MAIL@ADDRESS.COM>                                                *
+ *  NAME <MAIL@ADDRESS.COM>                                                *
  ***************************************************************************/
 #ifndef FORMPLACEHOLDER_H
 #define FORMPLACEHOLDER_H
@@ -37,7 +37,6 @@
 
 QT_BEGIN_NAMESPACE
 class  QTreeWidgetItem;
-class QStackedLayout;
 class QModelIndex;
 QT_END_NAMESPACE
 

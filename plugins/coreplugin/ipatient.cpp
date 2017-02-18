@@ -15,7 +15,7 @@
  *  GNU General Public License for more details.                           *
  *                                                                         *
  *  You should have received a copy of the GNU General Public License      *
- *  along with this program (COPYING.FREEMEDFORMS file).                   *
+ *  along with this program (COPYING file).                   *
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
@@ -190,6 +190,9 @@ void IPatient::registerPatientTokens()
     _tokens << t;
     t = new PatientToken(Constants::TOKEN_PATIENTDATEOFDEATH, DateOfDeath);
     t->setUntranslatedHumanReadableName(Trans::Constants::DATE_OF_DEATH);
+    _tokens << t;
+    t = new PatientToken(Constants::TOKEN_PATIENTISPEDIATRIC, IsPediatricToken);
+    t->setUntranslatedHumanReadableName(Trans::Constants::IS_PEDIATRIC);
     _tokens << t;
     t = new PatientToken(Constants::TOKEN_PATIENTYEARSOLD, YearsOld);
     t->setUntranslatedHumanReadableName(Trans::Constants::AGE_IN_YEARS);

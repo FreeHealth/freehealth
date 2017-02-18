@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="ru_RU">
+<TS version="2.1" language="ru_RU">
 <context>
     <name>DatabaseUpdater</name>
     <message>
@@ -208,27 +208,27 @@ Do you want to add them to the file?</source>
 <context>
     <name>DrugsDB::GlobalDrugsModel</name>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/globaldrugsmodel.cpp" line="399"/>
+        <location filename="../../plugins/drugsbaseplugin/globaldrugsmodel.cpp" line="394"/>
         <source>KNOWN ALLERGY</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/globaldrugsmodel.cpp" line="403"/>
+        <location filename="../../plugins/drugsbaseplugin/globaldrugsmodel.cpp" line="398"/>
         <source>KNOWN INTOLERANCE</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/globaldrugsmodel.cpp" line="442"/>
+        <location filename="../../plugins/drugsbaseplugin/globaldrugsmodel.cpp" line="437"/>
         <source>Form(s): </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/globaldrugsmodel.cpp" line="443"/>
+        <location filename="../../plugins/drugsbaseplugin/globaldrugsmodel.cpp" line="438"/>
         <source>Route(s): </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/globaldrugsmodel.cpp" line="444"/>
+        <location filename="../../plugins/drugsbaseplugin/globaldrugsmodel.cpp" line="439"/>
         <source>Identifier(s): </source>
         <translation type="unfinished"></translation>
     </message>
