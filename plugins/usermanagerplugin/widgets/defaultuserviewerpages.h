@@ -172,10 +172,15 @@ public:
     void setUserIndex(const int index);
 
     void clear();
-    bool submit();
 
 private:
     void changeEvent(QEvent *e);
+    /**
+     * UserRightsWidget DataMapper has the default AutoSubmit policy,
+     * no submit() function is required.
+     * TODO: redesign this class without inheritance from IUserViewerWidget
+     */
+    bool submit() {return false;}
 
 private:
     Ui::UserViewer_RightsUI *ui;

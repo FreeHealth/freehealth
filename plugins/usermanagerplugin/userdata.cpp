@@ -886,10 +886,12 @@ void UserData::setRights(const char *roleName, const Core::IUser::UserRights rig
 {
     WARN_FUNC;
     Core::IUser::UserRights r = rights;
+    qDebug() << r;
     if (rights & Core::IUser::ReadAll)
         r |= Core::IUser::ReadOwn | Core::IUser::ReadDelegates;
     if (rights & Core::IUser::WriteAll)
         r |= Core::IUser::WriteOwn | Core::IUser::WriteDelegates;
+    qDebug() << r;
     d->m_Role_Rights[roleName].insert(RIGHTS_RIGHTS, int(r));
     qDebug() << "modified roles list" << d->m_ModifiedRoles
              << "role:" << roleName;
@@ -1057,7 +1059,7 @@ QList<UserDynamicData*> UserData::modifiedDynamicData() const
 bool UserData::hasModifiedRightsToStore() const
 {
     WARN_FUNC;
-    qDebug() << "m_ModifiedRoled empty?" << d->m_ModifiedRoles.isEmpty();
+    qDebug() << "m_ModifiedRoles empty?" << d->m_ModifiedRoles.isEmpty();
     return !(d->m_ModifiedRoles.isEmpty());
 }
 

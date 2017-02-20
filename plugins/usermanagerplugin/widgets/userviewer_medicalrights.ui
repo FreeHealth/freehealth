@@ -31,6 +31,16 @@
     </widget>
    </item>
    <item row="0" column="1">
+    <widget class="QPushButton" name="managerPushButton">
+     <property name="text">
+      <string>PushButton</string>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="2">
     <widget class="QLabel" name="label_28">
      <property name="font">
       <font>
@@ -46,7 +56,17 @@
      </property>
     </widget>
    </item>
-   <item row="0" column="2">
+   <item row="0" column="3">
+    <widget class="QPushButton" name="drugsPushButton">
+     <property name="text">
+      <string>PushButton</string>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="4">
     <widget class="QLabel" name="label_27">
      <property name="font">
       <font>
@@ -62,14 +82,24 @@
      </property>
     </widget>
    </item>
-   <item row="1" column="0">
-    <widget class="UserPlugin::Internal::UserRightsWidget" name="userManagerRightsListWidget"/>
+   <item row="0" column="5">
+    <widget class="QPushButton" name="agendaPushButton">
+     <property name="text">
+      <string>PushButton</string>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+    </widget>
    </item>
-   <item row="1" column="1">
+   <item row="1" column="0" colspan="2">
+    <widget class="UserPlugin::Internal::UserRightsWidget" name="managerRightsListWidget"/>
+   </item>
+   <item row="1" column="2" colspan="2">
     <widget class="UserPlugin::Internal::UserRightsWidget" name="drugsRightsListWidget"/>
    </item>
-   <item row="1" column="2">
-    <widget class="UserPlugin::Internal::UserRightsWidget" name="agendaRightsWidget"/>
+   <item row="1" column="4" colspan="2">
+    <widget class="UserPlugin::Internal::UserRightsWidget" name="agendaRightsListWidget"/>
    </item>
    <item row="2" column="0">
     <widget class="QLabel" name="label_19">
@@ -88,6 +118,16 @@
     </widget>
    </item>
    <item row="2" column="1">
+    <widget class="QPushButton" name="medicalPushButton">
+     <property name="text">
+      <string>PushButton</string>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="2">
     <widget class="QLabel" name="label_26">
      <property name="font">
       <font>
@@ -103,7 +143,17 @@
      </property>
     </widget>
    </item>
-   <item row="2" column="2" rowspan="2">
+   <item row="2" column="3">
+    <widget class="QPushButton" name="paramedicalPushButton">
+     <property name="text">
+      <string>PushButton</string>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="4">
     <widget class="QLabel" name="label_29">
      <property name="font">
       <font>
@@ -119,14 +169,24 @@
      </property>
     </widget>
    </item>
-   <item row="4" column="2">
-    <widget class="UserPlugin::Internal::UserRightsWidget" name="administrativeRightsWidget"/>
+   <item row="2" column="5">
+    <widget class="QPushButton" name="administrativePushButton">
+     <property name="text">
+      <string>PushButton</string>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+    </widget>
    </item>
-   <item row="4" column="1">
-    <widget class="UserPlugin::Internal::UserRightsWidget" name="paramedicalRightsWidget"/>
-   </item>
-   <item row="4" column="0">
+   <item row="3" column="0" colspan="2">
     <widget class="UserPlugin::Internal::UserRightsWidget" name="medicalRightsListWidget"/>
+   </item>
+   <item row="3" column="2" colspan="2">
+    <widget class="UserPlugin::Internal::UserRightsWidget" name="paramedicalRightsListWidget"/>
+   </item>
+   <item row="3" column="4" colspan="2">
+    <widget class="UserPlugin::Internal::UserRightsWidget" name="administrativeRightsListWidget"/>
    </item>
   </layout>
  </widget>

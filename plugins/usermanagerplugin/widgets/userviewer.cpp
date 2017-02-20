@@ -29,7 +29,7 @@
  * \brief This class is a data widget wrapper for users.
  * This mapper has its own UserPlugin::UserModel independent from the
  * Core::IUser and filter it on the user uuid. Data are sent to this
- * model and all usermodel must be updated after a submition of data.
+ * model and all usermodel must be updated after a submission of data.
  */
 
 #include "userviewer.h"

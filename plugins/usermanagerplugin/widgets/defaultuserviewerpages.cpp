@@ -303,9 +303,9 @@ QWidget *DefaultUserProfessionalPage::createPage(QWidget *parent)
     return w;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////   DefaultUserRightsWidget   //////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+//////////////////////////   DefaultUserRightsWidget   /////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 DefaultUserRightsWidget::DefaultUserRightsWidget(QWidget *parent) :
     UserPlugin::IUserViewerWidget(parent),
     ui(new Ui::UserViewer_RightsUI),
@@ -314,6 +314,24 @@ DefaultUserRightsWidget::DefaultUserRightsWidget(QWidget *parent) :
 {
     WARN_FUNC;
     ui->setupUi(this);
+    ui->managerRightsListWidget->setEnabled(false);
+    ui->drugsRightsListWidget->setEnabled(false);
+    ui->agendaRightsListWidget->setEnabled(false);
+    ui->medicalRightsListWidget->setEnabled(false);
+    ui->paramedicalRightsListWidget->setEnabled(false);
+    ui->administrativeRightsListWidget->setEnabled(false);
+    connect(ui->managerPushButton, SIGNAL(toggled(bool)),
+            ui->managerRightsListWidget, SLOT(setEnabled(bool)));
+    connect(ui->drugsPushButton, SIGNAL(toggled(bool)),
+            ui->drugsRightsListWidget, SLOT(setEnabled(bool)));
+    connect(ui->agendaPushButton, SIGNAL(toggled(bool)),
+            ui->agendaRightsListWidget, SLOT(setEnabled(bool)));
+    connect(ui->medicalPushButton, SIGNAL(toggled(bool)),
+            ui->medicalRightsListWidget, SLOT(setEnabled(bool)));
+    connect(ui->paramedicalPushButton, SIGNAL(toggled(bool)),
+            ui->paramedicalRightsListWidget, SLOT(setEnabled(bool)));
+    connect(ui->administrativePushButton, SIGNAL(toggled(bool)),
+            ui->administrativeRightsListWidget, SLOT(setEnabled(bool)));
 }
 
 DefaultUserRightsWidget::~DefaultUserRightsWidget()
@@ -328,13 +346,12 @@ void DefaultUserRightsWidget::setUserModel(UserModel *model)
         m_Mapper = new QDataWidgetMapper(this);
     }
     m_Mapper->setModel(model);
-    m_Mapper->setSubmitPolicy(QDataWidgetMapper::AutoSubmit);
-    m_Mapper->addMapping(ui->userManagerRightsListWidget, Core::IUser::ManagerRights, "rights");
+    m_Mapper->addMapping(ui->managerRightsListWidget, Core::IUser::ManagerRights, "rights");
     m_Mapper->addMapping(ui->drugsRightsListWidget, Core::IUser::DrugsRights, "rights");
     m_Mapper->addMapping(ui->medicalRightsListWidget, Core::IUser::MedicalRights, "rights");
-    m_Mapper->addMapping(ui->paramedicalRightsWidget, Core::IUser::ParamedicalRights, "rights");
-    m_Mapper->addMapping(ui->agendaRightsWidget, Core::IUser::AgendaRights, "rights");
-    m_Mapper->addMapping(ui->administrativeRightsWidget, Core::IUser::AdministrativeRights, "rights");
+    m_Mapper->addMapping(ui->paramedicalRightsListWidget, Core::IUser::ParamedicalRights, "rights");
+    m_Mapper->addMapping(ui->agendaRightsListWidget, Core::IUser::AgendaRights, "rights");
+    m_Mapper->addMapping(ui->administrativeRightsListWidget, Core::IUser::AdministrativeRights, "rights");
 }
 
 void DefaultUserRightsWidget::setUserIndex(const int index)
@@ -346,13 +363,6 @@ void DefaultUserRightsWidget::setUserIndex(const int index)
 void DefaultUserRightsWidget::clear()
 {
 //    m_Mapper->model()->revert();
-}
-
-bool DefaultUserRightsWidget::submit()
-{
-    if (m_Mapper)
-        return m_Mapper->submit();
-    return false;
 }
 
 void DefaultUserRightsWidget::changeEvent(QEvent *e)

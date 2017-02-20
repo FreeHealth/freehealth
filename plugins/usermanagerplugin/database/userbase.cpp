@@ -162,7 +162,7 @@ UserBase::UserBase(QObject *parent) :
     addField(Table_GROUPS, GROUPS_UID,              "GROUP_UID",  FieldIsUUID);
     addField(Table_GROUPS, GROUPS_USER_UID,         "USER_UID",   FieldIsUUID);
     addField(Table_GROUPS, GROUPS_PARENT_GROUP_UID, "PARENT_GROUP_UID", FieldIsUUID);
-//    addIndex(Table_RIGHTS, RIGHTS_USER_UUID);
+    //    addIndex(Table_RIGHTS, RIGHTS_USER_UUID);
 
     // links
     addTable(Table_USER_LK_ID, "LK_USER");
@@ -192,13 +192,13 @@ bool UserBase::initialize()
     // connect
     if (commandLine()->value(Core::ICommandLine::ClearUserDatabases).toBool()) {
         if (!createConnection(USER_DB_CONNECTION, USER_DB_CONNECTION,
-                         settings()->databaseConnector(),
-                         Utils::Database::DeleteAndRecreateDatabase))
+                              settings()->databaseConnector(),
+                              Utils::Database::DeleteAndRecreateDatabase))
             return false;
     } else {
         if (!createConnection(USER_DB_CONNECTION, USER_DB_CONNECTION,
-                         settings()->databaseConnector(),
-                         Utils::Database::CreateDatabase))
+                              settings()->databaseConnector(),
+                              Utils::Database::CreateDatabase))
             return false;
     }
 
@@ -220,7 +220,7 @@ bool UserBase::initialize()
     if (!checkDatabaseVersion())
         return false;
 
-//    connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
+    //    connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
     m_initialized = true;
     return true;
 }
@@ -254,29 +254,29 @@ QString UserBase::databaseAndQtVersion() const
  */
 QString UserBase::getDatabaseQtVersion() const
 {
-    Utils::Field vField(Constants::Table_INFORMATION, Constants::INFO_VERSION); 
-    QString fullVersion = getVersion(vField);                                       
-    if (fullVersion.contains("/")) {                                                
+    Utils::Field vField(Constants::Table_INFORMATION, Constants::INFO_VERSION);
+    QString fullVersion = getVersion(vField);
+    if (fullVersion.contains("/")) {
         QString qtVersion = fullVersion.mid(fullVersion.indexOf("/")+1);
         return qtVersion;
     } else {
         return QString();
-    }   
+    }
 }
 
 /**                                                                             
- * Returns Users database FMF version                                            
+ * Returns Users database FMF version
  */
 QString UserBase::getDatabaseFmfVersion() const                                  
 {                                                                               
-    Utils::Field vField(Constants::Table_INFORMATION, Constants::INFO_VERSION); 
-    QString fullVersion = getVersion(vField);                                   
-    if (fullVersion.contains("/")) {                                                
+    Utils::Field vField(Constants::Table_INFORMATION, Constants::INFO_VERSION);
+    QString fullVersion = getVersion(vField);
+    if (fullVersion.contains("/")) {
         QString userDbVersion = fullVersion.left(fullVersion.indexOf("/"));
-        return userDbVersion;                                                       
-    } else {                                                                    
-        return fullVersion;                                                       
-    }                                                                           
+        return userDbVersion;
+    } else {
+        return fullVersion;
+    }
 }
 
 /**
@@ -284,19 +284,19 @@ QString UserBase::getDatabaseFmfVersion() const
  */
 bool UserBase::updateLastloginTypeToTimeStamp()
 {
-    switch (settings()->databaseConnector().driver()) {                         
-        case Utils::Database::MySQL: {
-            if(!Database::modifyMySQLColumnType(Constants::Table_USERS,
-                                                Constants::USER_LASTLOG,
-                                                "NULL")) {
-                return false;
-            }
-            return true;
+    switch (settings()->databaseConnector().driver()) {
+    case Utils::Database::MySQL: {
+        if(!Database::modifyMySQLColumnType(Constants::Table_USERS,
+                                            Constants::USER_LASTLOG,
+                                            "NULL")) {
+            return false;
         }
-        case Utils::Database::SQLite: {
-            return true; // No change required for SQLite
-        }
-        default: return false;
+        return true;
+    }
+    case Utils::Database::SQLite: {
+        return true; // No change required for SQLite
+    }
+    default: return false;
     }
 }
 
@@ -330,7 +330,7 @@ bool UserBase::checkDatabaseVersion()
     Utils::VersionNumber vnUserCodeVersion(Constants::USER_DB_VERSION);
     QString version = getVersion(vField);
     if (version.contains("/")) {
-    
+
         // Qt version matches?
         Utils::VersionNumber vnUserDbQt(qsQtVersion);
         Utils::VersionNumber vnCurrentQt(QT_VERSION_STR);
@@ -354,34 +354,34 @@ bool UserBase::checkDatabaseVersion()
             if(UserBase::updateLastloginTypeToTimeStamp()) {
                 Utils::Field vField(Constants::Table_INFORMATION, Constants::INFO_VERSION);
                 QString newVersion = QString("%1/%2").arg(Constants::USER_DB_VERSION).arg(UserBase::getDatabaseQtVersion());
-                if (!setVersion(vField, newVersion)) {                              
-                    LOG_ERROR_FOR("UserBase", "Unable to set version");             
+                if (!setVersion(vField, newVersion)) {
+                    LOG_ERROR_FOR("UserBase", "Unable to set version");
                 }
             }
-        }                                                        
+        }
     } else if (vnUserDbVersion < vnUserCodeVersion) {
         
         // Update database qt version number
         Utils::Field vField(Constants::Table_INFORMATION, Constants::INFO_VERSION);
         QString newVersion = QString("%1/%2").arg(qsUserDbVersion).arg(QT_VERSION_STR);
-            if (!setVersion(vField, newVersion)) {                              
-                LOG_ERROR_FOR("UserBase", "Unable to set version");             
-            }
+        if (!setVersion(vField, newVersion)) {
+            LOG_ERROR_FOR("UserBase", "Unable to set version");
+        }
         LOG_FOR("UserBase", QString("Tag database version with Qt Version: %1")
-                      .arg(version));
+                .arg(version));
         // Update database then tag it to current version
-        if(UserBase::updateLastloginTypeToTimeStamp()) {                              
-                Utils::Field vField(Constants::Table_INFORMATION, Constants::INFO_VERSION);
-                QString newVersion = QString("%1/%2").arg(Constants::USER_DB_VERSION).arg(UserBase::getDatabaseQtVersion());
-                if (!setVersion(vField, newVersion)) {                          
-                    LOG_ERROR_FOR("UserBase", "Unable to set version");         
-                }
+        if(UserBase::updateLastloginTypeToTimeStamp()) {
+            Utils::Field vField(Constants::Table_INFORMATION, Constants::INFO_VERSION);
+            QString newVersion = QString("%1/%2").arg(Constants::USER_DB_VERSION).arg(UserBase::getDatabaseQtVersion());
+            if (!setVersion(vField, newVersion)) {
+                LOG_ERROR_FOR("UserBase", "Unable to set version");
+            }
         } else {
             return false;
         }
     }
     return ((UserBase::getDatabaseFmfVersion() == Constants::USER_DB_VERSION)
-             && (UserBase::getDatabaseQtVersion() == QT_VERSION_STR));
+            && (UserBase::getDatabaseQtVersion() == QT_VERSION_STR));
 }
 
 void UserBase::onCoreFirstRunCreationRequested()
@@ -484,8 +484,8 @@ UserData *UserBase::getUser(const QHash<int, QString> &conditions) const
 
     if (lkid == -1) {
         LOG_ERROR(QString("No linker for user %1").arg(uuid));
-//        DB.rollback();
-//        return 0;
+        //        DB.rollback();
+        //        return 0;
     }
 
     toReturn->setPersonalLkId(lkid);
@@ -676,46 +676,46 @@ bool UserBase::isLoginAlreadyExists(const QString &clearLogin) const
 /** Returns true if a user with username "clearlogin" exists in MySQL database */
 bool UserBase::userExists(const QString &clearLogin) const
 {
-    switch (driver()) {                                                         
+    switch (driver()) {
     case Utils::Database::MySQL:
     {
-        QSqlDatabase DB = QSqlDatabase::database(Constants::USER_DB_CONNECTION);    
+        QSqlDatabase DB = QSqlDatabase::database(Constants::USER_DB_CONNECTION);
         if (!connectDatabase(DB, __LINE__)) {
-        LOG_FOR("In userbase.cpp", "userExists() can't connect to database, return false");                                       
-        return false;                                                           
-        }                                                                           
-        DB.transaction();                                                           
+            LOG_FOR("In userbase.cpp", "userExists() can't connect to database, return false");
+            return false;
+        }
+        DB.transaction();
         QString check = QString("SELECT EXISTS(SELECT * FROM mysql.user WHERE User='%1')").arg(clearLogin);
-        LOG_FOR("In userbase.cpp", "userExists() user: " + clearLogin);                  
-        QSqlQuery exist(DB);                                                        
-            if(!exist.exec(check)) {                                                
-                LOG_QUERY_ERROR(exist);                                             
-                exist.finish();
-                return false;                                                     
-            } else {
-                QVariant result;
-                bool userExist;
-                while (exist.next()) {
+        LOG_FOR("In userbase.cpp", "userExists() user: " + clearLogin);
+        QSqlQuery exist(DB);
+        if(!exist.exec(check)) {
+            LOG_QUERY_ERROR(exist);
+            exist.finish();
+            return false;
+        } else {
+            QVariant result;
+            bool userExist;
+            while (exist.next()) {
                 QVariant result = exist.value(0);
                 userExist = result.toBool();
                 qDebug() << userExist;
-                }
-                if (userExist) {                                            
-                    LOG("User already exists: " + clearLogin);                                         
-                    exist.finish();                                                     
-                    return true;
-                } else {
-                    LOG("User doesn't exist: " + clearLogin);
-                    exist.finish();
-                    return false;
-                }
+            }
+            if (userExist) {
+                LOG("User already exists: " + clearLogin);
+                exist.finish();
+                return true;
+            } else {
+                LOG("User doesn't exist: " + clearLogin);
+                exist.finish();
+                return false;
             }
         }
-        case Utils::Database::SQLite:                                               
-        {                                                                           
-            return false;                                                                  
-        }
-        default: return false;
+    }
+    case Utils::Database::SQLite:
+    {
+        return false;
+    }
+    default: return false;
     }
 }
 
@@ -982,12 +982,12 @@ static inline QString defaultWatermark(const QString &profession, const QString 
 
 /** Create the default users database if it does not exist. */
 bool UserBase::createDatabase(const QString &connectionName , const QString &dbName,
-                    const QString &pathOrHostName,
-                    TypeOfAccess access, AvailableDrivers driver,
-                    const QString &login, const QString &pass,
-                    const int port,
-                    CreationOption createOption
-                   )
+                              const QString &pathOrHostName,
+                              TypeOfAccess access, AvailableDrivers driver,
+                              const QString &login, const QString &pass,
+                              const int port,
+                              CreationOption createOption
+                              )
 {
     Q_UNUSED(access);
     Q_UNUSED(createOption);
@@ -1185,7 +1185,7 @@ bool UserBase::createVirtualUser(const QString &uid, const QString &name, const 
     user->setRights(Constants::USER_ROLE_ADMINISTRATIVE, Core::IUser::UserRights(adminRights));
     user->setRights(Constants::USER_ROLE_PARAMEDICAL, Core::IUser::UserRights(paramedicRights));
     user->setRights(Constants::USER_ROLE_AGENDA, Core::IUser::UserRights(agendaRights));
-//    user->setPersonalLkId(1);
+    //    user->setPersonalLkId(1);
 
     qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     user->setExtraDocument(Print::TextDocumentExtra::fromXml(defaultHeader("medicals")), Core::IUser::GenericHeader);
@@ -1246,28 +1246,28 @@ QDateTime UserBase::recordLastLoggedIn(const QString &log, const QString &pass)
     }
     DB.transaction();
 
-    switch (driver()) {                                                         
-    case Utils::Database::MySQL: {                                                
+    switch (driver()) {
+    case Utils::Database::MySQL: {
         QDateTime now = QDateTime::currentDateTime(); // temporary, for testing
-        QHash< int, QString >  where;                                           
-        where.insert(USER_LOGIN, QString("='%1'").arg(log));                    
-        where.insert(USER_PASSWORD, QString("='%1'").arg(pass));                
-        QSqlQuery query(DB);                                                    
+        QHash< int, QString >  where;
+        where.insert(USER_LOGIN, QString("='%1'").arg(log));
+        where.insert(USER_PASSWORD, QString("='%1'").arg(pass));
+        QSqlQuery query(DB);
         query.prepare(prepareUpdateQuery(Table_USERS, USER_LASTLOG, where));
         // passing CURRENT_TIMESTAMP will trigger auto-update
         // & set LASTLOGIN field to current UTC time
         query.bindValue(0 , "CURRENT_TIMESTAMP");
-        if (!query.exec()) {                                                    
-            LOG_QUERY_ERROR(query);                                             
-            query.finish();                                                     
-            DB.rollback();                                                      
-            return QDateTime();                                                 
-        }                                                                       
-        query.finish();                                                         
-        DB.commit();                                                            
-        // TODO add locker                                                      
+        if (!query.exec()) {
+            LOG_QUERY_ERROR(query);
+            query.finish();
+            DB.rollback();
+            return QDateTime();
+        }
+        query.finish();
+        DB.commit();
+        // TODO add locker
         LOG(tr("Last recorded user login: %1 ").arg(now.toString()));
-        return now; //temporary return value           
+        return now; //temporary return value
     }
     case Utils::Database::SQLite: {
         QDateTime now = QDateTime::currentDateTime();
@@ -1290,7 +1290,7 @@ QDateTime UserBase::recordLastLoggedIn(const QString &log, const QString &pass)
         return now;
     }
     }
-   return QDateTime(); 
+    return QDateTime();
 }
 
 /**
@@ -1491,8 +1491,8 @@ bool UserBase::saveUser(UserData *user)
                     query.finish();
                 } else {
                     query.prepare(prepareUpdateQuery(Table_RIGHTS,
-                                                 QList<int>()
-                                                 << RIGHTS_RIGHTS, where));
+                                                     QList<int>()
+                                                     << RIGHTS_RIGHTS, where));
                     query.bindValue(0,  user->rightsValue(s, RIGHTS_RIGHTS));
                     if (!query.exec()) {
                         LOG_QUERY_ERROR(query);
@@ -1621,17 +1621,17 @@ bool UserBase::purgeUser(const QString &uuid)
     }
     switch (driver()) {
     case Utils::Database::MySQL:
-        {
-            // drop a MySQL user
-            QString clearLog = QString(QByteArray::fromBase64(getLogin64(uuid).toUtf8()));
-            if (!dropMySQLUser(clearLog))
-                return false;
-            break;
-        }
+    {
+        // drop a MySQL user
+        QString clearLog = QString(QByteArray::fromBase64(getLogin64(uuid).toUtf8()));
+        if (!dropMySQLUser(clearLog))
+            return false;
+        break;
+    }
     case Utils::Database::SQLite:
-        {
-            break;
-        }
+    {
+        break;
+    }
     }
 
     // delete user row from table USERS

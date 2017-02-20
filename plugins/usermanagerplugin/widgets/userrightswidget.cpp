@@ -26,10 +26,10 @@
  ***************************************************************************/
 /**
   \class UserPlugin::UserRightsWidget
-  \brief This widget is specifically develop for UserViewer rights datamapper.
-  The UserPlugin::UserRightsWidget is connected to the UserPlugin::UserRightsModel. It receives
-  the user rights using setRights(). The widget property \e rights is defined to be used with any
-  QDataWidgetMapper.
+  \brief This widget is specifically developed for UserViewer rights datamapper.
+  The UserPlugin::UserRightsWidget is connected to the UserPlugin::UserRightsModel.
+  It receives the user rights using setRights(). The widget property \e rights
+  is defined to be used with any QDataWidgetMapper.
   \sa UserPlugin::UserViewer
 */
 
