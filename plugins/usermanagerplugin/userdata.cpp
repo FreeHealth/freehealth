@@ -559,7 +559,7 @@ UserData::UserData() :
     setRights(USER_ROLE_MEDICAL, Core::IUser::NoRights);
     setRights(USER_ROLE_DOSAGES, Core::IUser::NoRights);
     setRights(USER_ROLE_PARAMEDICAL, Core::IUser::NoRights);
-    setRights(USER_ROLE_ADMINISTRATIVE, Core::IUser::NoRights);
+    setRights(USER_ROLE_SECRETARY, Core::IUser::NoRights);
     setRights(USER_ROLE_AGENDA, Core::IUser::NoRights);
     setCryptedPassword(d->crypter.cryptPassword(""));
     setLocker(false);
@@ -595,7 +595,7 @@ UserData::UserData(const QString & uuid)
     setRights(USER_ROLE_MEDICAL, Core::IUser::NoRights);
     setRights(USER_ROLE_DOSAGES, Core::IUser::NoRights);
     setRights(USER_ROLE_PARAMEDICAL, Core::IUser::NoRights);
-    setRights(USER_ROLE_ADMINISTRATIVE, Core::IUser::NoRights);
+    setRights(USER_ROLE_SECRETARY, Core::IUser::NoRights);
     setCryptedPassword(d->crypter.cryptPassword(""));
     setLocker(false);
     d->m_IsNull = true;
@@ -868,7 +868,7 @@ void UserData::setDynamicDataValue(const char *name, const QVariant &val, UserDy
 
 /**
   Define the rights of the user according to the role name of the rights.
-  \sa UserPlugin::Constants::USER_ROLE_ADMINISTRATIVE,
+  \sa UserPlugin::Constants::USER_ROLE_SECRETARY,
   UserPlugin::Constants::USER_ROLE_MEDICAL,
   UserPlugin::Constants::USER_ROLE_PARAMEDICAL,
   UserPlugin::Constants::USER_ROLE_USERMANAGER,

@@ -14,7 +14,16 @@
    <string>Form</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <property name="margin">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
     <number>0</number>
    </property>
    <item row="0" column="0">
@@ -121,7 +130,7 @@
       </font>
      </property>
      <property name="text">
-      <string>Administrative rights</string>
+      <string>Secretary rights</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
@@ -129,7 +138,7 @@
     </widget>
    </item>
    <item row="11" column="0">
-    <widget class="UserPlugin::Internal::UserRightsWidget" name="administrativeRightsWidget"/>
+    <widget class="UserPlugin::Internal::UserRightsWidget" name="secretaryRightsWidget"/>
    </item>
   </layout>
  </widget>

@@ -333,7 +333,7 @@ void DefaultUserRightsWidget::setUserModel(UserModel *model)
     m_Mapper->addMapping(ui->medicalRightsListWidget, Core::IUser::MedicalRights, "rights");
     m_Mapper->addMapping(ui->paramedicalRightsWidget, Core::IUser::ParamedicalRights, "rights");
     m_Mapper->addMapping(ui->agendaRightsWidget, Core::IUser::AgendaRights, "rights");
-    m_Mapper->addMapping(ui->administrativeRightsWidget, Core::IUser::AdministrativeRights, "rights");
+    m_Mapper->addMapping(ui->secretaryRightsWidget, Core::IUser::SecretaryRights, "rights");
 }
 
 void DefaultUserRightsWidget::setUserIndex(const int index)

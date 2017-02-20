@@ -110,7 +110,7 @@ public:
         DrugsRights,
         MedicalRights,
         ParamedicalRights,
-        AdministrativeRights,
+        SecretaryRights,
         AgendaRights,
 
         DecryptedLogin,           /*!< \brief Clear human readable login. */

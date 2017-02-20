@@ -375,7 +375,7 @@ public:
         case Core::IUser::MedicalRights : toReturn = user->rightsValue(USER_ROLE_MEDICAL); break;
         case Core::IUser::DrugsRights : toReturn = user->rightsValue(USER_ROLE_DOSAGES); break;
         case Core::IUser::ParamedicalRights : toReturn = user->rightsValue(USER_ROLE_PARAMEDICAL); break;
-        case Core::IUser::AdministrativeRights : toReturn = user->rightsValue(USER_ROLE_ADMINISTRATIVE); break;
+        case Core::IUser::SecretaryRights : toReturn = user->rightsValue(USER_ROLE_SECRETARY); break;
         case Core::IUser::AgendaRights : toReturn = user->rightsValue(USER_ROLE_AGENDA); break;
         case Core::IUser::LoginHistory : toReturn = user->loginHistory(); break;
         case Core::IUser::DebugText : toReturn = user->debugText(); break;
@@ -1098,7 +1098,7 @@ bool UserModel::setData(const QModelIndex &item, const QVariant &value, int role
     case Core::IUser::MedicalRights : user->setRights(USER_ROLE_MEDICAL, Core::IUser::UserRights(value.toInt())); break;
     case Core::IUser::DrugsRights : user->setRights(USER_ROLE_DOSAGES, Core::IUser::UserRights(value.toInt())); break;
     case Core::IUser::ParamedicalRights : user->setRights(USER_ROLE_PARAMEDICAL, Core::IUser::UserRights(value.toInt())); break;
-    case Core::IUser::AdministrativeRights : user->setRights(USER_ROLE_ADMINISTRATIVE, Core::IUser::UserRights(value.toInt())); break;
+    case Core::IUser::SecretaryRights : user->setRights(USER_ROLE_SECRETARY, Core::IUser::UserRights(value.toInt())); break;
     case Core::IUser::AgendaRights : user->setRights(USER_ROLE_AGENDA, Core::IUser::UserRights(value.toInt())); break;
 
     default : return false;

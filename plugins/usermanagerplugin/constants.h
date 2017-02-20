@@ -78,7 +78,7 @@ namespace Constants {
     const char * const USER_ROLE_MEDICAL         = "role.medical";
     const char * const USER_ROLE_DOSAGES         = "role.dosage";
     const char * const USER_ROLE_PARAMEDICAL     = "role.paramedical";
-    const char * const USER_ROLE_ADMINISTRATIVE  = "role.administrative";
+    const char * const USER_ROLE_SECRETARY       = "role.secretary";
     const char * const USER_ROLE_AGENDA          = "role.agenda";
 
     const char * const DEFAULT_USER_UUID      = "{bff46aaa-5fed-481a-8af3-d5985c549e9c}";
