@@ -415,7 +415,7 @@ void UserManagerPlugin::test_userbase_test_with_virtualuser()
                                                        data.specialties(),
                                                        data.qualifications(),
                                                        data.rightsValue(Constants::USER_ROLE_MEDICAL).toInt(),
-                                                       data.rightsValue(Constants::USER_ROLE_ADMINISTRATIVE).toInt(),
+                                                       data.rightsValue(Constants::USER_ROLE_SECRETARY).toInt(),
                                                        data.rightsValue(Constants::USER_ROLE_USERMANAGER).toInt(),
                                                        data.rightsValue(Constants::USER_ROLE_AGENDA).toInt(),
                                                        data.rightsValue(Constants::USER_ROLE_PARAMEDICAL).toInt(),
@@ -864,7 +864,7 @@ void UserManagerPlugin::test_usermodel_basics()
     QCOMPARE(userModel()->currentUserData(Core::IUser::DrugsRights), QVariant(fromDb->rightsValue(Constants::USER_ROLE_DOSAGES)));
     QCOMPARE(userModel()->currentUserData(Core::IUser::MedicalRights), QVariant(fromDb->rightsValue(Constants::USER_ROLE_MEDICAL)));
     QCOMPARE(userModel()->currentUserData(Core::IUser::ParamedicalRights), QVariant(fromDb->rightsValue(Constants::USER_ROLE_PARAMEDICAL)));
-    QCOMPARE(userModel()->currentUserData(Core::IUser::AdministrativeRights), QVariant(fromDb->rightsValue(Constants::USER_ROLE_ADMINISTRATIVE)));
+    QCOMPARE(userModel()->currentUserData(Core::IUser::SecretaryRights), QVariant(fromDb->rightsValue(Constants::USER_ROLE_SECRETARY)));
     QCOMPARE(userModel()->currentUserData(Core::IUser::AgendaRights), QVariant(fromDb->rightsValue(Constants::USER_ROLE_AGENDA)));
     QCOMPARE(userModel()->currentUserData(Core::IUser::DecryptedLogin), QVariant(fromDb->decryptedLogin()));
     // QCOMPARE(userModel()->currentUserData(Core::IUser::LoginHistory), QVariant(fromDb->loginHistory()));

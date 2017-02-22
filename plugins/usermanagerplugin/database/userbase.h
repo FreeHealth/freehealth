@@ -75,7 +75,7 @@ public:
     bool createDefaultUser();
     bool createVirtualUser(const QString &uid, const QString &name, const QString &firstName, int title, int gender,
                            const QStringList &specialties, const QStringList &qualifications,
-                           int medicalRights = 0, int adminRights = 0, int userRights = 0, int agendaRights = 0, int paramedicRights = 0,
+                           int medicalRights = 0, int secretaryRights = 0, int userRights = 0, int agendaRights = 0, int paramedicRights = 0,
                            QLocale::Language lang = QLocale().language());
 
     // retrievers

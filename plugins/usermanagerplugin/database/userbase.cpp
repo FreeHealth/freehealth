@@ -1090,7 +1090,7 @@ bool UserBase::createDefaultUser()
     user->setStreet(DEFAULT_USER_ADDRESS);
     user->setRights(Constants::USER_ROLE_USERMANAGER, Core::IUser::AllRights);
     user->setRights(Constants::USER_ROLE_MEDICAL, Core::IUser::AllRights);
-    user->setRights(Constants::USER_ROLE_ADMINISTRATIVE, Core::IUser::AllRights);
+    user->setRights(Constants::USER_ROLE_SECRETARY, Core::IUser::AllRights);
     user->setRights(Constants::USER_ROLE_PARAMEDICAL, Core::IUser::AllRights);
     user->setPersonalLkId(1);
 
@@ -1140,7 +1140,7 @@ bool UserBase::createDefaultUser()
  */
 bool UserBase::createVirtualUser(const QString &uid, const QString &name, const QString &firstName, int title, int gender,
                                  const QStringList &specialties, const QStringList &qualifications,
-                                 int medicalRights, int adminRights, int userRights, int agendaRights, int paramedicRights,
+                                 int medicalRights, int secretaryRights, int userRights, int agendaRights, int paramedicRights,
                                  QLocale::Language lang)  // static
 {
     qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
@@ -1182,7 +1182,7 @@ bool UserBase::createVirtualUser(const QString &uid, const QString &name, const 
     user->setQualification(qualifications);
     user->setRights(Constants::USER_ROLE_USERMANAGER, Core::IUser::UserRights(userRights));
     user->setRights(Constants::USER_ROLE_MEDICAL, Core::IUser::UserRights(medicalRights));
-    user->setRights(Constants::USER_ROLE_ADMINISTRATIVE, Core::IUser::UserRights(adminRights));
+    user->setRights(Constants::USER_ROLE_SECRETARY, Core::IUser::UserRights(secretaryRights));
     user->setRights(Constants::USER_ROLE_PARAMEDICAL, Core::IUser::UserRights(paramedicRights));
     user->setRights(Constants::USER_ROLE_AGENDA, Core::IUser::UserRights(agendaRights));
     //    user->setPersonalLkId(1);

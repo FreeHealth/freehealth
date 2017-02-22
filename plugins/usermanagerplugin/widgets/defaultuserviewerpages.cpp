@@ -38,6 +38,8 @@
 
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
+#include <coreplugin/constants_icons.h>
+#include <coreplugin/itheme.h>
 
 #include <printerplugin/printer.h>
 #include <printerplugin/textdocumentextra.h>
@@ -63,6 +65,7 @@ using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
+static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 
 /////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////   DefaultUserContactWidget   ////////////////////////////////
@@ -319,7 +322,12 @@ DefaultUserRightsWidget::DefaultUserRightsWidget(QWidget *parent) :
     ui->agendaRightsListWidget->setEnabled(false);
     ui->medicalRightsListWidget->setEnabled(false);
     ui->paramedicalRightsListWidget->setEnabled(false);
-    ui->administrativeRightsListWidget->setEnabled(false);
+    ui->secretaryRightsListWidget->setEnabled(false);
+
+    //QIcon unlock(Core::Constants::ICONUNLOCK);
+    ui->managerPushButton->setIcon(theme()->icon(Core::Constants::ICONLOCK));
+    //ui->managerPushButton->setIconSize(lockPix.rect().size());
+
     connect(ui->managerPushButton, SIGNAL(toggled(bool)),
             ui->managerRightsListWidget, SLOT(setEnabled(bool)));
     connect(ui->drugsPushButton, SIGNAL(toggled(bool)),
@@ -330,8 +338,8 @@ DefaultUserRightsWidget::DefaultUserRightsWidget(QWidget *parent) :
             ui->medicalRightsListWidget, SLOT(setEnabled(bool)));
     connect(ui->paramedicalPushButton, SIGNAL(toggled(bool)),
             ui->paramedicalRightsListWidget, SLOT(setEnabled(bool)));
-    connect(ui->administrativePushButton, SIGNAL(toggled(bool)),
-            ui->administrativeRightsListWidget, SLOT(setEnabled(bool)));
+    connect(ui->secretaryPushButton, SIGNAL(toggled(bool)),
+            ui->secretaryRightsListWidget, SLOT(setEnabled(bool)));
 }
 
 DefaultUserRightsWidget::~DefaultUserRightsWidget()
@@ -351,7 +359,7 @@ void DefaultUserRightsWidget::setUserModel(UserModel *model)
     m_Mapper->addMapping(ui->medicalRightsListWidget, Core::IUser::MedicalRights, "rights");
     m_Mapper->addMapping(ui->paramedicalRightsListWidget, Core::IUser::ParamedicalRights, "rights");
     m_Mapper->addMapping(ui->agendaRightsListWidget, Core::IUser::AgendaRights, "rights");
-    m_Mapper->addMapping(ui->administrativeRightsListWidget, Core::IUser::AdministrativeRights, "rights");
+    m_Mapper->addMapping(ui->secretaryRightsListWidget, Core::IUser::SecretaryRights, "rights");
 }
 
 void DefaultUserRightsWidget::setUserIndex(const int index)

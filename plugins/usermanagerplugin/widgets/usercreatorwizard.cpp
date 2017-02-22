@@ -151,7 +151,7 @@ public:
     bool validatePage();
 
 private:
-    Internal::UserRightsWidget *um, *drugs, *med, *paramed, *administ;
+    Internal::UserRightsWidget *um, *drugs, *med, *paramed, *secretary;
 };
 
 class UserLastPage: public QWizardPage
@@ -403,7 +403,7 @@ void UserCreatorWizard::done(int r)
     d->m_User->setRights(Constants::USER_ROLE_MEDICAL, Core::IUser::UserRights(d->m_Rights.value(Core::IUser::MedicalRights)));
     d->m_User->setRights(Constants::USER_ROLE_DOSAGES, Core::IUser::UserRights(d->m_Rights.value(Core::IUser::DrugsRights)));
     d->m_User->setRights(Constants::USER_ROLE_PARAMEDICAL, Core::IUser::UserRights(d->m_Rights.value(Core::IUser::ParamedicalRights)));
-    d->m_User->setRights(Constants::USER_ROLE_ADMINISTRATIVE, Core::IUser::UserRights(d->m_Rights.value(Core::IUser::AdministrativeRights)));
+    d->m_User->setRights(Constants::USER_ROLE_SECRETARY, Core::IUser::UserRights(d->m_Rights.value(Core::IUser::SecretaryRights)));
 
     d->m_User->setExtraDocument(Print::TextDocumentExtra::fromXml(d->m_Papers.value(Core::IUser::GenericHeader)), Core::IUser::GenericHeader);
     d->m_User->setExtraDocument(Print::TextDocumentExtra::fromXml(d->m_Papers.value(Core::IUser::GenericFooter)), Core::IUser::GenericFooter);
@@ -549,7 +549,7 @@ bool UserProfilePage::validatePage()
     UserCreatorWizard::setUserRights(Core::IUser::MedicalRights, Core::IUser::NoRights);
     UserCreatorWizard::setUserRights(Core::IUser::AgendaRights, Core::IUser::NoRights);
     UserCreatorWizard::setUserRights(Core::IUser::ParamedicalRights, Core::IUser::NoRights);
-    UserCreatorWizard::setUserRights(Core::IUser::AdministrativeRights, Core::IUser::NoRights);
+    UserCreatorWizard::setUserRights(Core::IUser::SecretaryRights, Core::IUser::NoRights);
     next = UserCreatorWizard::SpecialiesQualificationsPage;
     QStringList result = view->getCheckedStringList().toStringList();
 
@@ -559,7 +559,7 @@ bool UserProfilePage::validatePage()
         UserCreatorWizard::setUserRights(Core::IUser::MedicalRights, Core::IUser::AllRights);
         UserCreatorWizard::setUserRights(Core::IUser::AgendaRights, Core::IUser::AllRights);
         UserCreatorWizard::setUserRights(Core::IUser::ParamedicalRights, Core::IUser::ReadAll | Core::IUser::Print);
-        UserCreatorWizard::setUserRights(Core::IUser::AdministrativeRights, Core::IUser::NoRights);
+        UserCreatorWizard::setUserRights(Core::IUser::SecretaryRights, Core::IUser::NoRights);
         next = UserCreatorWizard::SpecialiesQualificationsPage;
 
         // create default papers
@@ -579,7 +579,7 @@ bool UserProfilePage::validatePage()
         UserCreatorWizard::setUserRights(Core::IUser::MedicalRights, Core::IUser::ReadAll | Core::IUser::Print);
         UserCreatorWizard::setUserRights(Core::IUser::DrugsRights, Core::IUser::ReadAll | Core::IUser::Print);
         UserCreatorWizard::setUserRights(Core::IUser::ParamedicalRights, Core::IUser::AllRights);
-        UserCreatorWizard::setUserRights(Core::IUser::AdministrativeRights, Core::IUser::AllRights);
+        UserCreatorWizard::setUserRights(Core::IUser::SecretaryRights, Core::IUser::AllRights);
 
     } else if (result.contains(tkTr(Trans::Constants::CAREGIVER))) {
         UserCreatorWizard::setUserRights(Core::IUser::ManagerRights, Core::IUser::ReadOwn | Core::IUser::ReadDelegates |  Core::IUser::WriteOwn | Core::IUser::WriteDelegates | Core::IUser::Print);
@@ -590,7 +590,7 @@ bool UserProfilePage::validatePage()
          UserCreatorWizard::setUserRights(Core::IUser::ManagerRights, Core::IUser::ReadOwn | Core::IUser::ReadDelegates |  Core::IUser::WriteOwn | Core::IUser::WriteDelegates | Core::IUser::Print);
         UserCreatorWizard::setUserRights(Core::IUser::MedicalRights, Core::IUser::ReadAll);
         UserCreatorWizard::setUserRights(Core::IUser::AgendaRights, Core::IUser::ReadAll | Core::IUser::WriteAll | Core::IUser::Print);
-        UserCreatorWizard::setUserRights(Core::IUser::AdministrativeRights, Core::IUser::AllRights);
+        UserCreatorWizard::setUserRights(Core::IUser::SecretaryRights, Core::IUser::AllRights);
     }
     if (result.contains(tkTr(Trans::Constants::SOFT_ADMIN))) {
         UserCreatorWizard::setUserRights(Core::IUser::ManagerRights, Core::IUser::AllRights);
@@ -598,7 +598,7 @@ bool UserProfilePage::validatePage()
         UserCreatorWizard::setUserRights(Core::IUser::DrugsRights, Core::IUser::AllRights);
         UserCreatorWizard::setUserRights(Core::IUser::ParamedicalRights, Core::IUser::AllRights);
         UserCreatorWizard::setUserRights(Core::IUser::AgendaRights, Core::IUser::AllRights);
-        UserCreatorWizard::setUserRights(Core::IUser::AdministrativeRights, Core::IUser::AllRights);
+        UserCreatorWizard::setUserRights(Core::IUser::SecretaryRights, Core::IUser::AllRights);
     }
 
     if (box->isChecked()) {
@@ -656,13 +656,13 @@ UserRightsPage::UserRightsPage(QWidget *parent)
     drugs = new Internal::UserRightsWidget(this);
     med = new Internal::UserRightsWidget(this);
     paramed = new Internal::UserRightsWidget(this);
-    administ = new Internal::UserRightsWidget(this);
+    secretary = new Internal::UserRightsWidget(this);
 
     tab->addTab(um, tr("Users"));
     tab->addTab(drugs, tr("Drugs"));
     tab->addTab(med, tr("Medicals"));
     tab->addTab(paramed, tr("Paramedicals"));
-    tab->addTab(administ, tr("Administrative"));
+    tab->addTab(secretary, tr("Secretary"));
 
     QGridLayout *layout = new QGridLayout;
     layout->addWidget(tab, 0, 0);
@@ -675,7 +675,7 @@ void UserRightsPage::initializePage()
     drugs->setRights(UserCreatorWizard::userRights(Core::IUser::DrugsRights));
     med->setRights(UserCreatorWizard::userRights(Core::IUser::MedicalRights));
     paramed->setRights(UserCreatorWizard::userRights(Core::IUser::ParamedicalRights));
-    administ->setRights(UserCreatorWizard::userRights(Core::IUser::AdministrativeRights));
+    secretary->setRights(UserCreatorWizard::userRights(Core::IUser::SecretaryRights));
 
 }
 
@@ -685,7 +685,7 @@ bool UserRightsPage::validatePage()
     UserCreatorWizard::setUserRights(Core::IUser::DrugsRights, drugs->getRights());
     UserCreatorWizard::setUserRights(Core::IUser::MedicalRights, med->getRights());
     UserCreatorWizard::setUserRights(Core::IUser::ParamedicalRights, paramed->getRights());
-    UserCreatorWizard::setUserRights(Core::IUser::AdministrativeRights, administ->getRights());
+    UserCreatorWizard::setUserRights(Core::IUser::SecretaryRights, secretary->getRights());
     return true;
 }
 

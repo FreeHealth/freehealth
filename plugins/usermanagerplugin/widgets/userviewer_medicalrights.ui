@@ -33,7 +33,7 @@
    <item row="0" column="1">
     <widget class="QPushButton" name="managerPushButton">
      <property name="text">
-      <string>PushButton</string>
+      <string>Unlock</string>
      </property>
      <property name="checkable">
       <bool>true</bool>
@@ -59,7 +59,7 @@
    <item row="0" column="3">
     <widget class="QPushButton" name="drugsPushButton">
      <property name="text">
-      <string>PushButton</string>
+      <string>Unlock</string>
      </property>
      <property name="checkable">
       <bool>true</bool>
@@ -85,7 +85,7 @@
    <item row="0" column="5">
     <widget class="QPushButton" name="agendaPushButton">
      <property name="text">
-      <string>PushButton</string>
+      <string>Unlock</string>
      </property>
      <property name="checkable">
       <bool>true</bool>
@@ -120,7 +120,7 @@
    <item row="2" column="1">
     <widget class="QPushButton" name="medicalPushButton">
      <property name="text">
-      <string>PushButton</string>
+      <string>Unlock</string>
      </property>
      <property name="checkable">
       <bool>true</bool>
@@ -146,7 +146,7 @@
    <item row="2" column="3">
     <widget class="QPushButton" name="paramedicalPushButton">
      <property name="text">
-      <string>PushButton</string>
+      <string>Unlock</string>
      </property>
      <property name="checkable">
       <bool>true</bool>
@@ -162,7 +162,7 @@
       </font>
      </property>
      <property name="text">
-      <string>Administrative rights</string>
+      <string>Secretary rights</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
@@ -170,9 +170,9 @@
     </widget>
    </item>
    <item row="2" column="5">
-    <widget class="QPushButton" name="administrativePushButton">
+    <widget class="QPushButton" name="secretaryPushButton">
      <property name="text">
-      <string>PushButton</string>
+      <string>Unlock</string>
      </property>
      <property name="checkable">
       <bool>true</bool>
@@ -186,7 +186,7 @@
     <widget class="UserPlugin::Internal::UserRightsWidget" name="paramedicalRightsListWidget"/>
    </item>
    <item row="3" column="4" colspan="2">
-    <widget class="UserPlugin::Internal::UserRightsWidget" name="administrativeRightsListWidget"/>
+    <widget class="UserPlugin::Internal::UserRightsWidget" name="secretaryRightsListWidget"/>
    </item>
   </layout>
  </widget>

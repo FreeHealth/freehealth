@@ -78,17 +78,22 @@ QVariant UserRightsModel::data(const QModelIndex &index, int role) const
     }
     if (role==Qt::CheckStateRole) {
         if (index.row()==1) {
-            qDebug() << "index" << index;
-            qDebug() << "m_Rights" << m_Rights ;
-            qDebug() << (m_Rights == Core::IUser::AllRights ? Qt::Checked : Qt::Unchecked);
+            qDebug() << "index" << index
+                     << "m_Rights" << m_Rights
+                     << (m_Rights == Core::IUser::AllRights ? Qt::Checked : Qt::Unchecked);
             return m_Rights == Core::IUser::AllRights ? Qt::Checked : Qt::Unchecked;
         }
-        if (index.row()==0) // No Rights
+        if (index.row()==0) { // No Rights
+            qDebug() << "index" << index
+                     << "m_Rights" << m_Rights
+                     << (m_Rights == Core::IUser::NoRights ? Qt::Checked : Qt::Unchecked);
             return m_Rights == 0 ? Qt::Checked : Qt::Unchecked;
+        }
         if (m_Rights & m_NameToRole.value(index.row(), 0)) {
-            qDebug() << "index" << index;
-            qDebug() << "m_Rights" << m_Rights ;
-            qDebug() << "m_NameToRole.value(index.row(), 0)" << m_NameToRole.value(index.row(), 0);
+            qDebug() << "index" << index
+                     << "m_Rights" << m_Rights
+                     << "m_NameToRole.value(index.row(), 0)"
+                     << m_NameToRole.value(index.row(), 0);
             return Qt::Checked;
         }
         return Qt::Unchecked;
@@ -103,48 +108,51 @@ bool UserRightsModel::setData(const QModelIndex &index, const QVariant &value, i
         return false;
 
     if (role==Qt::CheckStateRole) {
+        QVector<int> roleChanged;
+        roleChanged.push_back(Qt::CheckStateRole);
+
         if (value.toInt() == Qt::Checked) {
             switch (index.row()) {
             case 0 :  // No Rights
-                {
-                    m_Rights = 0;
-                    Q_EMIT dataChanged(this->index(0,0), this->index(m_NameToRole.count(), 0));
-                    qDebug() << "row: " << index.row() << "rights: " << m_Rights;
-                    break;
-                }
+            {
+                m_Rights = 0;
+                Q_EMIT dataChanged(this->index(0,0), this->index(m_NameToRole.count(), 0), roleChanged);
+                qDebug() << "row: " << index.row() << "rights: " << m_Rights;
+                break;
+            }
             case 1 :  // All Rights
-                {
-                    m_Rights = m_NameToRole.value(index.row(), 0);
-                    qDebug() << "row: " << index.row() << "rights: " << m_Rights;
-                    Q_EMIT dataChanged(this->index(0,0), this->index(m_NameToRole.count(), 0));
-                    break;
-                }
+            {
+                m_Rights = m_NameToRole.value(index.row(), 0);
+                qDebug() << "row: " << index.row() << "rights: " << m_Rights;
+                Q_EMIT dataChanged(this->index(0,0), this->index(m_NameToRole.count(), 0), roleChanged);
+                break;
+            }
             default :
             {
                 m_Rights |= m_NameToRole.value(index.row(), 0);
                 qDebug() << "row: " << index.row() << "rights: " << m_Rights;
-                Q_EMIT dataChanged(index, index);
-                Q_EMIT dataChanged(this->index(1,0), this->index(1,0));
+                Q_EMIT dataChanged(index, index, roleChanged);
+                Q_EMIT dataChanged(this->index(1,0), this->index(1,0), roleChanged);
             }
-        }  // End switch
+            }  // End switch
             return true;
         } else {
             switch (index.row()) {
             case 1 :
-                {
-                    m_Rights = 0;
-                    qDebug() << "row: " << index.row() << "rights: " << m_Rights;
-                    Q_EMIT dataChanged(this->index(0,0), this->index(m_NameToRole.count(), 0));
-                    break;
-                }
+            {
+                m_Rights = 0;
+                qDebug() << "row: " << index.row() << "rights: " << m_Rights;
+                Q_EMIT dataChanged(this->index(0,0), this->index(m_NameToRole.count(), 0));
+                break;
+            }
             default :
             {
                 m_Rights ^= m_NameToRole.value(index.row(), 0);
                 qDebug() << "row: " << index.row() << "rights: " << m_Rights;
                 Q_EMIT dataChanged(index, index);
             }
-            return true;
-        }  // End switch
+                return true;
+            }  // End switch
         }
         return false;
     }
@@ -180,7 +188,7 @@ void UserRightsModel::retranslate()
 
 
 UserRightsWidget::UserRightsWidget(QWidget * parent) :
-        QListView(parent), m_Model(0)
+    QListView(parent), m_Model(0)
 {
     static int handle = 0;
     ++handle;
