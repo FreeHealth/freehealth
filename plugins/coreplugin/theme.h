@@ -59,6 +59,9 @@ public:
     void setCacheMaxCost( const int max );
 
     QIcon icon( const QString & fileName, IconSize size = SmallIcon );
+    QIcon iconOnOff(const QString &fileNameOn,
+                    const QString &fileNameOff = QString(),
+                    IconSize size = SmallIcon);
     QString iconFullPath( const QString &fileName, IconSize size = SmallIcon );
     QPixmap splashScreenPixmap( const QString &fileName, const IconSize size = MediumIcon );
     QPixmap defaultGenderPixmap(int gender, const IconSize size = BigIcon);

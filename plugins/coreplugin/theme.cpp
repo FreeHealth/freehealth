@@ -27,8 +27,10 @@
 /**
   \class Core::ITheme
   \brief this is the theme manager. Actually manages only the icons of the app.
-  You first need to instanciate it, inform it of path to use. Then ask the needed QIcon.\n
-  There is a cache of asked icons. Limit of the cache can be dynamycally set using setCacheMaxCost().
+  You first need to instanciate it, inform it of path to use.
+  Then ask the needed QIcon.\n
+  There is a cache of asked icons. Limit of the cache can be dynamycally set
+  using setCacheMaxCost().
 
   \sa constants_theme
   \todo write full documentation
@@ -114,7 +116,7 @@ void ThemePrivate::refreshCache()
     // TODO: code here
 }
 
-/** \brief Defines the max number of icons in the cache */
+/** \brief Define the maximum number of icons in the cache */
 void ThemePrivate::setCacheMaxCost(const int max)
 {
     m_IconCache.setMaxCost(max);
@@ -147,14 +149,28 @@ void ThemePrivate::setBigIconPath(const QString &absPath)
         LOG_ERROR(Trans::ConstantTranslations::tkTr(Trans::Constants::PATH_1_DOESNOT_EXISTS).arg("BigIcon: "+absPath));
 }
 
-/** \brief Returns the icon corresponding to the themed file name \e fileName and the size \e size */
+/**
+ * \brief Returns the icon corresponding to the theme file name \e fileName
+ * and the size \e size.
+ */
 QIcon ThemePrivate::icon(const QString &fileName, IconSize size)
+{
+    return iconOnOff(fileName, QString(), size);
+}
+
+/**
+ * \brief Returns the icon corresponding to the theme file name \e fileName (for
+ * "On" state), the theme file name \fileNameOff (for "Off" state) and the size
+ * \e size. Mode defaults to "Normal".
+ * \sa ThemePrivate::icon
+ */
+QIcon ThemePrivate::iconOnOff(const QString &fileNameOn, const QString &fileNameOff, IconSize size)
 {
     // TODO: size is now obsolete
     Q_UNUSED(size);
     Q_ASSERT_X(!m_AbsolutePath.isEmpty(), "ThemePrivate::icon", "No path set");
     // Get icon uid
-    QString uid = QString("%1/%2").arg(m_AbsolutePath).arg(fileName);
+    QString uid = QString("%1/%2").arg(m_AbsolutePath).arg(fileNameOn);
 
     // Check cache
     if (m_IconCache.contains(uid))
@@ -162,19 +178,38 @@ QIcon ThemePrivate::icon(const QString &fileName, IconSize size)
 
     QIcon *i = new QIcon;
     QString fullName;
+    QString fullNameOff;
 
     // Read all sizes
-    fullName = iconFullPath(fileName, SmallIcon);
+    // Small
+    // On
+    fullName = iconFullPath(fileNameOn, SmallIcon);
     if (QFile(fullName).exists())
-        i->addFile(fullName, QSize(16,16));
+        i->addFile(fullName, QSize(16,16), QIcon::Normal, QIcon::On);
+    // Off
+    fullNameOff = iconFullPath(fileNameOff, SmallIcon);
+    if (QFile(fullNameOff).exists())
+        i->addFile(fullNameOff, QSize(16,16), QIcon::Normal, QIcon::Off);
 
-    fullName = iconFullPath(fileName, MediumIcon);
+    // Medium
+    // On
+    fullName = iconFullPath(fileNameOn, MediumIcon);
     if (QFile(fullName).exists())
-        i->addFile(fullName, QSize(32,32));
+        i->addFile(fullName, QSize(32,32), QIcon::Normal, QIcon::On);
+    // Off
+    fullNameOff = iconFullPath(fileNameOff, MediumIcon);
+    if (QFile(fullNameOff).exists())
+        i->addFile(fullNameOff, QSize(32,32), QIcon::Normal, QIcon::Off);
 
-    fullName = iconFullPath(fileName, BigIcon);
+    // Big
+    // On
+    fullName = iconFullPath(fileNameOn, BigIcon);
     if (QFile(fullName).exists())
-        i->addFile(fullName, QSize(64,64));
+        i->addFile(fullName, QSize(64,64), QIcon::Normal, QIcon::On);
+    // Off
+    fullNameOff = iconFullPath(fileNameOff, BigIcon);
+    if (QFile(fullNameOff).exists())
+        i->addFile(fullNameOff, QSize(64,64), QIcon::Normal, QIcon::Off);
 
     // Cache icon
     m_IconCache.insert(uid, i);
