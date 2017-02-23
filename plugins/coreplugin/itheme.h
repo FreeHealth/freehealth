@@ -55,6 +55,7 @@ public:
     virtual ~ITheme() {}
 
     virtual QIcon icon( const QString & fileName, IconSize size = SmallIcon ) = 0;
+    virtual QIcon iconOnOff( const QString & fileName, const QString & fileNameOff = QString(), IconSize size = SmallIcon ) = 0;
     virtual QString iconFullPath( const QString &fileName, IconSize size = SmallIcon ) = 0;
     virtual QPixmap splashScreenPixmap( const QString &fileName, const IconSize size = MediumIcon ) = 0;
     virtual QPixmap defaultGenderPixmap(int gender, const IconSize size = BigIcon) = 0;
