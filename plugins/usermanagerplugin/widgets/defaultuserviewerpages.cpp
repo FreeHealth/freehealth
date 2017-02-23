@@ -81,7 +81,7 @@ DefaultUserContactWidget::DefaultUserContactWidget(QWidget *parent) :
     lay->setMargin(0);
     lay->setSpacing(0);
     _identity = new Identity::IdentityEditorWidget(this);
-//    _identity->setAvailableWidgets(Identity::IdentityEditorWidget::FullIdentity | Identity::IdentityEditorWidget::FullAddress | Identity::IdentityEditorWidget::Photo | Identity::IdentityEditorWidget::FullLogin);
+    //    _identity->setAvailableWidgets(Identity::IdentityEditorWidget::FullIdentity | Identity::IdentityEditorWidget::FullAddress | Identity::IdentityEditorWidget::Photo | Identity::IdentityEditorWidget::FullLogin);
     lay->addWidget(_identity);
     connect(_identity, SIGNAL(clearPasswordChanged(QString)), this, SLOT(passwordChanged(QString)));
 }
@@ -247,7 +247,7 @@ void DefaultUserProfessionalWidget::setUserIndex(const int index)
 
 void DefaultUserProfessionalWidget::clear()
 {
-//    m_Mapper->model()->revert();
+    //    m_Mapper->model()->revert();
 }
 
 bool DefaultUserProfessionalWidget::submit()
@@ -325,7 +325,18 @@ DefaultUserRightsWidget::DefaultUserRightsWidget(QWidget *parent) :
     ui->secretaryRightsListWidget->setEnabled(false);
 
     //QIcon unlock(Core::Constants::ICONUNLOCK);
-    ui->managerPushButton->setIcon(theme()->icon(Core::Constants::ICONLOCK));
+    ui->managerPushButton->setIcon(theme()->iconOffOn(Core::Constants::ICONLOCK,
+                                                      Core::Constants::ICONUNLOCK));
+    ui->drugsPushButton->setIcon(theme()->iconOffOn(Core::Constants::ICONLOCK,
+                                                    Core::Constants::ICONUNLOCK));
+    ui->agendaPushButton->setIcon(theme()->iconOffOn(Core::Constants::ICONLOCK,
+                                                     Core::Constants::ICONUNLOCK));
+    ui->medicalPushButton->setIcon(theme()->iconOffOn(Core::Constants::ICONLOCK,
+                                                      Core::Constants::ICONUNLOCK));
+    ui->paramedicalPushButton->setIcon(theme()->iconOffOn(Core::Constants::ICONLOCK,
+                                                          Core::Constants::ICONUNLOCK));
+    ui->secretaryPushButton->setIcon(theme()->iconOffOn(Core::Constants::ICONLOCK,
+                                                        Core::Constants::ICONUNLOCK));
     //ui->managerPushButton->setIconSize(lockPix.rect().size());
 
     connect(ui->managerPushButton, SIGNAL(toggled(bool)),
@@ -340,6 +351,19 @@ DefaultUserRightsWidget::DefaultUserRightsWidget(QWidget *parent) :
             ui->paramedicalRightsListWidget, SLOT(setEnabled(bool)));
     connect(ui->secretaryPushButton, SIGNAL(toggled(bool)),
             ui->secretaryRightsListWidget, SLOT(setEnabled(bool)));
+
+    connect(ui->managerPushButton, SIGNAL(toggled(bool)),
+            this, SLOT(setButtonText()));
+    connect(ui->drugsPushButton, SIGNAL(toggled(bool)),
+            this, SLOT(setButtonText()));
+    connect(ui->agendaPushButton, SIGNAL(toggled(bool)),
+            this, SLOT(setButtonText()));
+    connect(ui->medicalPushButton, SIGNAL(toggled(bool)),
+            this, SLOT(setButtonText()));
+    connect(ui->paramedicalPushButton, SIGNAL(toggled(bool)),
+            this, SLOT(setButtonText()));
+    connect(ui->secretaryPushButton, SIGNAL(toggled(bool)),
+            this, SLOT(setButtonText()));
 }
 
 DefaultUserRightsWidget::~DefaultUserRightsWidget()
@@ -370,7 +394,7 @@ void DefaultUserRightsWidget::setUserIndex(const int index)
 
 void DefaultUserRightsWidget::clear()
 {
-//    m_Mapper->model()->revert();
+    //    m_Mapper->model()->revert();
 }
 
 void DefaultUserRightsWidget::changeEvent(QEvent *e)
@@ -380,6 +404,17 @@ void DefaultUserRightsWidget::changeEvent(QEvent *e)
     }
 }
 
+void DefaultUserRightsWidget::setButtonText()
+{
+    bool checked;
+    qDebug() << QObject::sender()->property("checked");
+    checked = QObject::sender()->property("checked").toBool();
+    if (checked) {
+        QObject::sender()->setProperty("text", tr("Lock"));
+    } else {
+        QObject::sender()->setProperty("text", tr("Unlock"));
+    }
+}
 
 DefaultUserRightsPage::DefaultUserRightsPage(QObject *parent) :
     IUserViewerPage(parent)
@@ -482,7 +517,7 @@ void DefaultUserPapersWidget::setUserIndex(const int index)
 
 void DefaultUserPapersWidget::clear()
 {
-//    m_Mapper->model()->revert();
+    //    m_Mapper->model()->revert();
 }
 
 bool DefaultUserPapersWidget::submit()

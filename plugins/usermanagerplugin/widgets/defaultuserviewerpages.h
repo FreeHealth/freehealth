@@ -181,6 +181,8 @@ private:
      * TODO: redesign this class without inheritance from IUserViewerWidget
      */
     bool submit() {return false;}
+private slots:
+    void setButtonText();
 
 private:
     Ui::UserViewer_RightsUI *ui;
