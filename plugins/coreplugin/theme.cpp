@@ -155,7 +155,7 @@ void ThemePrivate::setBigIconPath(const QString &absPath)
  */
 QIcon ThemePrivate::icon(const QString &fileName, IconSize size)
 {
-    return iconOnOff(fileName, QString(), size);
+    return iconOffOn(fileName, QString(), size);
 }
 
 /**
@@ -164,52 +164,53 @@ QIcon ThemePrivate::icon(const QString &fileName, IconSize size)
  * \e size. Mode defaults to "Normal".
  * \sa ThemePrivate::icon
  */
-QIcon ThemePrivate::iconOnOff(const QString &fileNameOn, const QString &fileNameOff, IconSize size)
+QIcon ThemePrivate::iconOffOn(const QString &fileNameOff, const QString &fileNameOn, IconSize size)
 {
     // TODO: size is now obsolete
     Q_UNUSED(size);
     Q_ASSERT_X(!m_AbsolutePath.isEmpty(), "ThemePrivate::icon", "No path set");
     // Get icon uid
-    QString uid = QString("%1/%2").arg(m_AbsolutePath).arg(fileNameOn);
+    QString uid = QString("%1/%2").arg(m_AbsolutePath).arg(fileNameOff);
 
     // Check cache
     if (m_IconCache.contains(uid))
         return QIcon(*m_IconCache[uid]);
 
     QIcon *i = new QIcon;
-    QString fullName;
     QString fullNameOff;
+    QString fullNameOn;
+
 
     // Read all sizes
     // Small
-    // On
-    fullName = iconFullPath(fileNameOn, SmallIcon);
-    if (QFile(fullName).exists())
-        i->addFile(fullName, QSize(16,16), QIcon::Normal, QIcon::On);
     // Off
     fullNameOff = iconFullPath(fileNameOff, SmallIcon);
     if (QFile(fullNameOff).exists())
         i->addFile(fullNameOff, QSize(16,16), QIcon::Normal, QIcon::Off);
+    // On
+    fullNameOn = iconFullPath(fileNameOn, SmallIcon);
+    if (QFile(fullNameOn).exists())
+        i->addFile(fullNameOn, QSize(16,16), QIcon::Normal, QIcon::On);
 
     // Medium
-    // On
-    fullName = iconFullPath(fileNameOn, MediumIcon);
-    if (QFile(fullName).exists())
-        i->addFile(fullName, QSize(32,32), QIcon::Normal, QIcon::On);
     // Off
     fullNameOff = iconFullPath(fileNameOff, MediumIcon);
     if (QFile(fullNameOff).exists())
         i->addFile(fullNameOff, QSize(32,32), QIcon::Normal, QIcon::Off);
+    // On
+    fullNameOn = iconFullPath(fileNameOn, MediumIcon);
+    if (QFile(fullNameOn).exists())
+        i->addFile(fullNameOn, QSize(32,32), QIcon::Normal, QIcon::On);
 
     // Big
-    // On
-    fullName = iconFullPath(fileNameOn, BigIcon);
-    if (QFile(fullName).exists())
-        i->addFile(fullName, QSize(64,64), QIcon::Normal, QIcon::On);
     // Off
     fullNameOff = iconFullPath(fileNameOff, BigIcon);
     if (QFile(fullNameOff).exists())
         i->addFile(fullNameOff, QSize(64,64), QIcon::Normal, QIcon::Off);
+    // On
+    fullNameOn = iconFullPath(fileNameOn, BigIcon);
+    if (QFile(fullNameOn).exists())
+        i->addFile(fullNameOn, QSize(64,64), QIcon::Normal, QIcon::On);
 
     // Cache icon
     m_IconCache.insert(uid, i);
