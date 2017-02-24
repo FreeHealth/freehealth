@@ -324,7 +324,6 @@ DefaultUserRightsWidget::DefaultUserRightsWidget(QWidget *parent) :
     ui->paramedicalRightsListWidget->setEnabled(false);
     ui->secretaryRightsListWidget->setEnabled(false);
 
-    //QIcon unlock(Core::Constants::ICONUNLOCK);
     ui->managerPushButton->setIcon(theme()->iconOffOn(Core::Constants::ICONLOCK,
                                                       Core::Constants::ICONUNLOCK));
     ui->drugsPushButton->setIcon(theme()->iconOffOn(Core::Constants::ICONLOCK,
@@ -337,7 +336,6 @@ DefaultUserRightsWidget::DefaultUserRightsWidget(QWidget *parent) :
                                                           Core::Constants::ICONUNLOCK));
     ui->secretaryPushButton->setIcon(theme()->iconOffOn(Core::Constants::ICONLOCK,
                                                         Core::Constants::ICONUNLOCK));
-    //ui->managerPushButton->setIconSize(lockPix.rect().size());
 
     connect(ui->managerPushButton, SIGNAL(toggled(bool)),
             ui->managerRightsListWidget, SLOT(setEnabled(bool)));
