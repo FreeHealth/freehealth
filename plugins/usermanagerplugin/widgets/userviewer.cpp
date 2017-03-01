@@ -229,7 +229,7 @@ bool UserViewer::initialize(Internal::UserManagerModel *model)
 /** \brief Change current viewing user to \e modelRow from UserModel */
 void UserViewer::setCurrentUser(const QString &userUid)
 {
-//    qWarning() << "UserViewer::setCurrentUser" << userUid;
+    qDebug() << "UserViewer::setCurrentUser" << userUid;
     if (d->m_currentUserUuid == userUid)
         return;
     d->m_currentUserUuid = userUid;

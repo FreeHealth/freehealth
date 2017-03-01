@@ -218,7 +218,7 @@ UserManagerDialog::UserManagerDialog(QWidget *parent) :
     QDialog(parent)
 {
     Q_ASSERT_X(userModel()->hasCurrentUser(), "UserManagerDialog", "NO CURRENT USER");
-    setWindowFlags(windowFlags() | Qt::CustomizeWindowHint | Qt::WindowCloseButtonHint | Qt::WindowMaximizeButtonHint);
+    setWindowFlags(windowFlags() | Qt::CustomizeWindowHint | Qt::WindowCloseButtonHint | Qt::WindowMaximizeButtonHint | Qt::WindowSystemMenuHint);
 
     if (!userModel()->hasCurrentUser())
         return;
@@ -684,8 +684,8 @@ void UserManagerWidget::toggleSearchView(bool checked)
 void UserManagerWidget::onCurrentSelectedIndexChanged(const QModelIndex &current, const QModelIndex &previous)
 {
     Q_UNUSED(previous);
-    d->ui->userViewer->setCurrentUser(d->m_model->userUuid(current));
     d->ui->userViewer->setCurrentPage(d->m_model->pageIndexFromIndex(current));
+    d->ui->userViewer->setCurrentUser(d->m_model->userUuid(current));
     d->ui->userViewer->setEnabled(true);
     d->updateButtons();
 }

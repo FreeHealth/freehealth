@@ -440,9 +440,10 @@ void UserManagerPlugin::updateActions()
 void UserManagerPlugin::showUserManager()
 {
     UserManagerDialog dlg(Core::ICore::instance()->mainWindow());
-//    dlg.setModal(true);
+    dlg.setModal(true);
     dlg.initialize();
     Utils::resizeAndCenter(&dlg, Core::ICore::instance()->mainWindow());
+    dlg.setWindowFlags(Qt::Window | Qt::CustomizeWindowHint | Qt::WindowCloseButtonHint | Qt::WindowMaximizeButtonHint | Qt::WindowSystemMenuHint);
     dlg.show();
     dlg.initializeAfterShowing();
     dlg.exec();

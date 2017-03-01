@@ -26,7 +26,8 @@
 
 /**
   \namespace Trans
-  \brief Contains all translated strings, and members to ease the access to some translations.
+  \brief Contains all translated strings, and members to ease the access to some
+  translations. tk
 */
 
 #include "constanttranslations.h"
@@ -42,14 +43,14 @@ namespace ConstantTranslations {
 
 /**
   \brief Only work with the declared constants in tkConstants.
-  Plural are not implemented
+  Plurals are not implemented
 */
-QString tkTr(const char* toTr, const int plurials)
+QString tkTr(const char* toTr, const int plurals)
 {
-    Q_UNUSED(plurials);
-//    QString tmp = QCoreApplication::translate(CONSTANTS_TR_CONTEXT, toTr, "", QCoreApplication::UnicodeUTF8, plurials);
+    Q_UNUSED(plurals);
+//    QString tmp = QCoreApplication::translate(CONSTANTS_TR_CONTEXT, toTr, "", QCoreApplication::UnicodeUTF8, plurals);
 //    if (tmp.contains("(s)")) {
-//        switch (plurials)
+//        switch (plurals)
 //        {
 //            case 0 :
 //            {
@@ -309,7 +310,7 @@ QString mealTime(const int index)
     return QString();
 }
 
-/** Return the list of available translated gender (male, female, hermaphrodism) */
+/** Return the list of available translated gender (male, female, other, unknown) */
 QStringList genders()
 {
     return QStringList()

@@ -90,7 +90,7 @@ namespace Constants {
 
     static const QColor femaleColor(255, 207, 255, 90);  //ffcfff
     static const QColor maleColor(225, 225, 255, 90);    //e0e0ff
-    static const QColor hermaColor(255, 214, 255, 90);   //ffd6ff
+    static const QColor genderOtherColor(255, 214, 255, 90);   //ffd6ff
 
 }  // End namespace Patients::Constants
 }  // End namespace Patients

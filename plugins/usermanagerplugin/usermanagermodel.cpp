@@ -101,13 +101,10 @@ public:
         if (canModifyRights)
             _pages << new DefaultUserRightsPage(q);
         _pages << new DefaultUserProfessionalPage(q);
-
         _pages << new DefaultUserPapersPage(DefaultUserPapersPage::GenericPaper, q);
         _pages << new DefaultUserPapersPage(DefaultUserPapersPage::AdministrativePaper, q);
         _pages << new DefaultUserPapersPage(DefaultUserPapersPage::PrescriptionPaper, q);
-
         _pages << pluginManager()->getObjects<IUserViewerPage>();
-
         qSort(_pages.begin(), _pages.end(), Core::IGenericPage::sortIndexLessThan);
     }
 

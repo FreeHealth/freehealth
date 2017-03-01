@@ -295,7 +295,7 @@ QPixmap ThemePrivate::defaultGenderPixmap(int gender, const ITheme::IconSize siz
     switch (gender) {
     case 0:  return QPixmap(iconFullPath(Core::Constants::ICONMALE, size));
     case 1:  return QPixmap(iconFullPath(Core::Constants::ICONFEMALE, size));
-    case 2:  return QPixmap(iconFullPath(Core::Constants::ICONHERMAPHRODISM , size));
+    case 2:  return QPixmap(iconFullPath(Core::Constants::ICONGENDEROTHER , size));
     default: return QPixmap();
     }
 }

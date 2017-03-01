@@ -61,7 +61,7 @@ const char* const TIMEFORMAT_FOR_EDITOR = QT_TRANSLATE_NOOP("tkConstants", "hh:m
 
 namespace ConstantTranslations {
 
-TRUTILS_EXPORT QString tkTr(const char* toTr, const int plurials=1);
+TRUTILS_EXPORT QString tkTr(const char* toTr, const int plurals=1);
 
 TRUTILS_EXPORT QString checkUpdateLabel(const int index);
 TRUTILS_EXPORT QStringList checkUpdateLabels();

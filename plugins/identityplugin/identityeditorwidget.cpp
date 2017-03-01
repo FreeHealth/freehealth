@@ -481,7 +481,7 @@ public:
         case 1: //Female
             tags.insert(::XML_GENDER, "F");
             break;
-        case 2: //Herma
+        case 2: //Other
             tags.insert(::XML_GENDER, "H");
             break;
         }

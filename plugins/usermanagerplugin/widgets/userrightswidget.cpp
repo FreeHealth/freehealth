@@ -78,22 +78,22 @@ QVariant UserRightsModel::data(const QModelIndex &index, int role) const
     }
     if (role==Qt::CheckStateRole) {
         if (index.row()==1) {
-            qDebug() << "index" << index
+            /*qDebug() << "index" << index
                      << "m_Rights" << m_Rights
-                     << (m_Rights == Core::IUser::AllRights ? Qt::Checked : Qt::Unchecked);
+                     << (m_Rights == Core::IUser::AllRights ? Qt::Checked : Qt::Unchecked);*/
             return m_Rights == Core::IUser::AllRights ? Qt::Checked : Qt::Unchecked;
         }
         if (index.row()==0) { // No Rights
-            qDebug() << "index" << index
+            /*qDebug() << "index" << index
                      << "m_Rights" << m_Rights
-                     << (m_Rights == Core::IUser::NoRights ? Qt::Checked : Qt::Unchecked);
+                     << (m_Rights == Core::IUser::NoRights ? Qt::Checked : Qt::Unchecked);*/
             return m_Rights == 0 ? Qt::Checked : Qt::Unchecked;
         }
         if (m_Rights & m_NameToRole.value(index.row(), 0)) {
-            qDebug() << "index" << index
+            /*qDebug() << "index" << index
                      << "m_Rights" << m_Rights
                      << "m_NameToRole.value(index.row(), 0)"
-                     << m_NameToRole.value(index.row(), 0);
+                     << m_NameToRole.value(index.row(), 0);*/
             return Qt::Checked;
         }
         return Qt::Unchecked;
@@ -193,7 +193,8 @@ UserRightsWidget::UserRightsWidget(QWidget * parent) :
     static int handle = 0;
     ++handle;
     setObjectName("UserRightsWidget_"+QString::number(handle));
-    setModel(m_Model = new UserRightsModel(this));
+    m_Model = new UserRightsModel(this);
+    setModel(m_Model);
 }
 
 void UserRightsWidget::changeEvent(QEvent *e)
