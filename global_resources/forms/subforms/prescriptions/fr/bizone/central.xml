@@ -5,10 +5,10 @@
   <formdescription>
     <!-- Non translatable values -->
     <authors>Jerome Pinguet</authors>
-    <version>2.0.0</version>
+    <version>4.0.0</version>
     <fmfv>0.9.7</fmfv>
     <cdate>2016-11-17</cdate>
-    <lmdate>2016-11-28</lmdate>
+    <lmdate>2017-03-04</lmdate>
     <icon>generalpractitioner.png</icon>
     <weblink>https://medecinelibre.com</weblink>
     <bibliography/>
@@ -25,13 +25,9 @@
 
   </formdescription>
 
-    <fieldequivalence>
-      <equivalent old="GP::Basic::Prescr::Text::Content" new="GP::Basic::Prescr::Text::Maladies::Intercurrentes" setInVersion=""/>
-    </fieldequivalence>
-
   <file type="script" name="onload">./scripts/xx/bizone.js</file>
 
-<MedForm name="GP::Basic::Prescr::Text" uifilename="./ui/xx/bizone.ui">
+<MedForm name="Prescription::Fr::Bizone" uifilename="./ui/xx/bizone.ui">
   <label lang="xx">Textual orders</label>
   <label lang="fr">Prescriptions textuelles</label>
   <icon>__theme__/edit.png</icon>

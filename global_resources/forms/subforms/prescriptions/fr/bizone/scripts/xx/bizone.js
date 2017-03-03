@@ -43,8 +43,8 @@ namespace.module('com.freemedforms.prescriptions.fr.bizone', function (exports, 
 
 function bz_getUiElements() {
         freemedforms.forms.namespaceInUse = "";
-        var formUi = freemedforms.forms.item("GP::Basic::Prescr::Text");
-        freemedforms.forms.namespaceInUse = "GP::Basic::Prescr::Text";
+        var formUi = freemedforms.forms.item("Prescription::Fr::Bizone");
+        freemedforms.forms.namespaceInUse = "Prescription::Fr::Bizone";
         var ui = formUi.ui();
         bz_bizoneCheckUi = ui.findChild("bizoneCheckBox");
         bz_bizoneCheckItem = freemedforms.forms.item("Bizone::Check");
