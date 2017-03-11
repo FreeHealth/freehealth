@@ -43,10 +43,16 @@ namespace Constants {
     const char * const DB_DEFAULT_IDENTIFIANT  = "FR_AFSSAPS";
     const char * const DB_FDA_IDENTIFIANT  = "FDA_US";
 
-    //--------------------------------------------------------------------------------------------------------
-    //------------------------------------ Enums for Database Management -------------------------------------
-    //--------------------------------------------------------------------------------------------------------
-    /** \brief Represents the tables index of drugs database */
+    //--------------------------------------------------------------------------
+    //----------------- Enums for Database Management --------------------------
+    //--------------------------------------------------------------------------
+    /**
+     * \brief Represents the tables index of drugs database
+     * Drugs databases are SQLite databases that can be found either in the
+     * source files or on datapacks servers.
+     * Exhaustive documentation of database schema on the wiki:
+     * https://freehealth.io/en/manuals/drugswidget/drugsdatabaseschema
+     */
     enum Tables  // ORDER OF THIS ENUM MUST NEVER CHANGE
     {
         Table_MASTER = 0,                   // 0
@@ -80,200 +86,309 @@ namespace Constants {
         Table_IA_IAK,                       // 25
         Table_PIM_SOURCES,                  // 26
 
-        Table_PIM_TYPES, Table_PIMS, Table_PIMS_RELATED_ATC,
-        Table_PIMS_RELATED_ICD, Table_VERSION, Table_CURRENTVERSION,
+        Table_PIM_TYPES,                    // 27
+        Table_PIMS,                         // 28
+        Table_PIMS_RELATED_ATC,             // 29
+        Table_PIMS_RELATED_ICD,             // 30
+        Table_VERSION,                      // 31
+        Table_CURRENTVERSION,               // 32
 
         Table_MaxParam
     };
 
     enum ProtocolTables
     {
-        Table_PROTOMASTER = 100, Table_PROTORELAT, Table_PROTODISTRIB, Table_PROTOTRANSMIT,
-        Table_PROTODRUG, Table_PROTOATC, Table_PROTOPREC,
+        Table_PROTOMASTER = 100,
+        Table_PROTORELAT,
+        Table_PROTODISTRIB,
+        Table_PROTOTRANSMIT,
+        Table_PROTODRUG,
+        Table_PROTOATC,
+        Table_PROTOPREC,
         Table_PROTO_MaxParam
     };
 
     enum MASTERFields {
-        MASTER_DID = 0, MASTER_UID1, MASTER_UID2, MASTER_UID3, MASTER_OLDUID,  MASTER_SID,
+        MASTER_DID = 0,
+        MASTER_UID1,
+        MASTER_UID2,
+        MASTER_UID3,
+        MASTER_OLDUID,
+        MASTER_SID,
         MASTER_MaxParam
     };
 
     enum SOURCESFields {
-        SOURCES_SID = 0, SOURCES_DBUID, SOURCES_MASTERLID, SOURCES_LANG,
-        SOURCES_WEB, SOURCES_COPYRIGHT, SOURCES_LICENSE, SOURCES_DATE,
-        SOURCES_DRUGS_VERSION, SOURCES_AUTHORS,  // 10
-        SOURCES_VERSION, SOURCES_PROVIDER,
-        SOURCES_WEBLINK, SOURCES_DRUGUID_NAME, SOURCES_ATC, SOURCES_INTERACTIONS,
-        SOURCES_COMPL_WEBSITE, SOURCES_PACKUID_NAME, SOURCES_COMPLETION,
-        SOURCES_AUTHOR_COMMENTS, //10
-        SOURCES_DRUGNAMECONSTRUCTOR,  SOURCES_FMFCOMPAT,
-        SOURCES_OPENREACT_COMPAT,
-        SOURCES_MaxParam
+        SOURCES_SID = 0,
+        SOURCES_DBUID,                  //1
+        SOURCES_MASTERLID,              //2
+        SOURCES_LANG,                   //3
+        SOURCES_WEB,                    //4
+        SOURCES_COPYRIGHT,              //5
+        SOURCES_LICENSE,                //6
+        SOURCES_DATE,                   //7
+        SOURCES_DRUGS_VERSION,          //8
+        SOURCES_AUTHORS,                //9
+        SOURCES_VERSION,                //10
+        SOURCES_PROVIDER,               //11
+        SOURCES_WEBLINK,                //12
+        SOURCES_DRUGUID_NAME,           //13
+        SOURCES_ATC,                    //14
+        SOURCES_INTERACTIONS,           //15
+        SOURCES_COMPL_WEBSITE,          //16
+        SOURCES_PACKUID_NAME,           //17
+        SOURCES_COMPLETION,             //18
+        SOURCES_AUTHOR_COMMENTS,        //19
+        SOURCES_DRUGNAMECONSTRUCTOR,    //20
+        SOURCES_FMFCOMPAT,              //21
+        SOURCES_OPENREACT_COMPAT,       //22
+        SOURCES_MaxParam                //23
     };
 
     enum LABELSFields {
-        LABELS_LID = 0, LABELS_LANG, LABELS_LABEL,
+        LABELS_LID = 0,
+        LABELS_LANG,
+        LABELS_LABEL,
         LABELS_MaxParam
     };
 
     enum LABELSLINKFields {
-        LABELSLINK_MASTERLID = 0, LABELSLINK_LID,
+        LABELSLINK_MASTERLID = 0,
+        LABELSLINK_LID,
         LABELSLINK_MaxParam
     };
 
     enum BIBFields {
-        BIB_BIBID = 0, BIB_TYPE, BIB_LINK, BIB_TEXTREF, BIB_ABSTRACT, BIB_EXPLAIN, BIB_XML,
+        BIB_BIBID = 0,
+        BIB_TYPE,
+        BIB_LINK,
+        BIB_TEXTREF,
+        BIB_ABSTRACT,
+        BIB_EXPLAIN,
+        BIB_XML,
         BIB_MaxParam
     };
 
     enum BIB_LINKFields {
-        BIB_LINK_MASTERID = 0, BIB_LINK_BIBID,
+        BIB_LINK_MASTERID = 0,
+        BIB_LINK_BIBID,
         BIB_LINK_MaxParam
     };
 
     enum DRUGSFields {
-        DRUGS_ID = 0, DRUGS_DID, DRUGS_SID, DRUGS_NAME,
-        DRUGS_ATC_ID, DRUGS_STRENGTH, DRUGS_VALID,
-        DRUGS_MARKET, DRUGS_AID_MASTER_LID, DRUGS_LINK_SPC, DRUGS_EXTRA_XML,
+        DRUGS_ID = 0,
+        DRUGS_DID,
+        DRUGS_SID,
+        DRUGS_NAME,
+        DRUGS_ATC_ID,
+        DRUGS_STRENGTH,
+        DRUGS_VALID,
+        DRUGS_MARKET,
+        DRUGS_AID_MASTER_LID,
+        DRUGS_LINK_SPC,
+        DRUGS_EXTRA_XML,
         DRUGS_MaxParam
     };
 
     enum MOLSFields {
-        MOLS_MID = 0, MOLS_SID, MOLS_NAME, MOLS_WWW,
+        MOLS_MID = 0,
+        MOLS_SID,
+        MOLS_NAME,
+        MOLS_WWW,
         MOLS_MaxParam
     };
 
     enum COMPOFields {
-        COMPO_ID = 0, COMPO_DID, COMPO_MID, COMPO_STRENGTH, COMPO_STRENGTH_NID,
-        COMPO_DOSE_REF, COMPO_REF_NID, COMPO_NATURE, COMPO_LK_NATURE,
+        COMPO_ID = 0,
+        COMPO_DID,
+        COMPO_MID,
+        COMPO_STRENGTH,
+        COMPO_STRENGTH_NID,
+        COMPO_DOSE_REF,
+        COMPO_REF_NID,
+        COMPO_NATURE,
+        COMPO_LK_NATURE,
         COMPO_MaxParam
     };
 
     enum UNITSFields {
-        UNITS_NID = 0, UNITS_VALUE,
+        UNITS_NID = 0,
+        UNITS_VALUE,
         UNITS_MaxParam
     };
 
     enum LK_MOL_ATCFields {
-        LK_MID = 0, LK_ATC_ID, LK_ATC_SID,
+        LK_MID = 0,
+        LK_ATC_ID,
+        LK_ATC_SID,
         LK_MaxParam
     };
 
     enum PACKAGINGfields {
-        PACK_DID = 0, PACK_SID, PACK_PACK_UID, PACK_LABEL, PACK_STATUS, PACK_MARKET,
-        PACK_DATE, PACK_OPTION_CODE,
+        PACK_DID = 0,
+        PACK_SID,
+        PACK_PACK_UID,
+        PACK_LABEL,
+        PACK_STATUS,
+        PACK_MARKET,
+        PACK_DATE,
+        PACK_OPTION_CODE,
         PACK_MaxParam
     };
 
     enum DRUG_ROUTESFields {
-        DRUG_ROUTES_DID = 0, DRUG_ROUTES_RID,
+        DRUG_ROUTES_DID = 0,
+        DRUG_ROUTES_RID,
         DRUG_ROUTES_MaxParam
     };
 
     enum DRUG_FORMSFields {
-        DRUG_FORMS_DID = 0, DRUG_FORMS_MASTERLID,
+        DRUG_FORMS_DID = 0,
+        DRUG_FORMS_MASTERLID,
         DRUG_FORMS_MaxParam
     };
 
     enum ROUTESFields {
-        ROUTES_RID = 0, ROUTES_MASTERLID, ROUTES_SYSTEMIC,
+        ROUTES_RID = 0,
+        ROUTES_MASTERLID,
+        ROUTES_SYSTEMIC,
         ROUTES_MaxParam
     };
 
     enum SEARCHENGINESFields {
-        SEARCHENGINE_ID = 0, SEARCHENGINE_LABEL, SEARCHENGINE_URL,
+        SEARCHENGINE_ID = 0,
+        SEARCHENGINE_LABEL,
+        SEARCHENGINE_URL,
         SEARCHENGINES_MaxParam
     };
 
     enum DRUG_SPCFields {
-        DRUG_SPC_DID = 0, DRUG_SPC_SPCCONTENT_ID,
+        DRUG_SPC_DID = 0,
+        DRUG_SPC_SPCCONTENT_ID,
         DRUG_SPS_MaxParam
     };
 
     enum SPCCONTENTFields {
-        SPCCONTENT_ID = 0, SPCCONTENT_LABEL,
-        SPCCONTENT_URL_SOURCE, SPCCONTENT_DATEOFDOWNLOAD,
-        SPCCONTENT_HTMLCONTENT, SPCCONTENT_SPCCONTENT_RESOURCES_LINK_ID,
+        SPCCONTENT_ID = 0,
+        SPCCONTENT_LABEL,
+        SPCCONTENT_URL_SOURCE,
+        SPCCONTENT_DATEOFDOWNLOAD,
+        SPCCONTENT_HTMLCONTENT,
+        SPCCONTENT_SPCCONTENT_RESOURCES_LINK_ID,
         SPCCONTENT_MaxParam
     };
 
     enum SPCCONTENT_RESOURCES_LINKFields {
-        SPCCONTENT_RESOURCES_LINK_ID = 0, SPCCONTENT_SPCCONTENTRESOURCES_ID,
+        SPCCONTENT_RESOURCES_LINK_ID = 0,
+        SPCCONTENT_SPCCONTENTRESOURCES_ID,
         SPCCONTENT_RESOURCES_LINK_MaxParam
     };
 
     enum SPCCONTENT_RESOURCESFields {
         SPCCONTENTRESOURCES_ID = 0,
-        SPCCONTENTRESOURCES_TYPE, SPCCONTENTRESOURCES_NAME,
+        SPCCONTENTRESOURCES_TYPE,
+        SPCCONTENTRESOURCES_NAME,
         SPCCONTENTRESOURCES_CONTENT,
         SPCCONTENTRESOURCES_MaxParam
     };
 
     enum VERSIONFields {
-        VERSION_ID = 0, VERSION_VERSION, VERSION_DATE, VERSION_COMMENT,
+        VERSION_ID = 0,
+        VERSION_VERSION,
+        VERSION_DATE,
+        VERSION_COMMENT,
         VERSION_MaxParam
     };
 
     enum ATCFields {
-        ATC_ID = 0, ATC_CODE, ATC_WARNDUPLICATES,
+        ATC_ID = 0,
+        ATC_CODE,
+        ATC_WARNDUPLICATES,
         ATC_MaxParam
     };
 
     enum INTERACTIONSFields {
-        INTERACTIONS_IAID = 0, INTERACTIONS_ATC_ID1, INTERACTIONS_ATC_ID2,
+        INTERACTIONS_IAID = 0,
+        INTERACTIONS_ATC_ID1,
+        INTERACTIONS_ATC_ID2,
         INTERACTIONS_MaxParam
     };
 
     enum IAKNOWLEDGEFields {
-        IAKNOWLEDGE_IAKID = 0, IAKNOWLEDGE_TYPE, IAKNOWLEDGE_RISK_MASTERLID,
-        IAKNOWLEDGE_MANAGEMENT_MASTERLID, IAKNOWLEDGE_BIB_MASTERID, IAKNOWLEDGE_WWW,
+        IAKNOWLEDGE_IAKID = 0,
+        IAKNOWLEDGE_TYPE,
+        IAKNOWLEDGE_RISK_MASTERLID,
+        IAKNOWLEDGE_MANAGEMENT_MASTERLID,
+        IAKNOWLEDGE_BIB_MASTERID,
+        IAKNOWLEDGE_WWW,
         IAKNOWLEDGE_MaxParam
     };
 
     enum IA_IAKFields {
-        IA_IAK_IAID = 0, IA_IAK_IAKID,
+        IA_IAK_IAID = 0,
+        IA_IAK_IAKID,
         IA_IAK_MaxParam
     };
 
     enum ATC_LABELSFields {
-        ATC_LABELS_ATCID = 0, ATC_LABELS_MASTERLID,
+        ATC_LABELS_ATCID = 0,
+        ATC_LABELS_MASTERLID,
         ATC_LABELS_MaxParam
     };
 
     enum ATC_CLASS_TREEFields {
-        ATC_CLASS_TREE_ID = 0, ATC_CLASS_TREE_ID_CLASS, ATC_CLASS_TREE_ID_ATC, ATC_CLASS_TREE_BIBMASTERID,
+        ATC_CLASS_TREE_ID = 0,
+        ATC_CLASS_TREE_ID_CLASS,
+        ATC_CLASS_TREE_ID_ATC,
+        ATC_CLASS_TREE_BIBMASTERID,
         ATC_CLASS_TREE_MaxParam
     };
 
     enum PIM_SOURCESFields {
-        PIM_SOURCES_SID = 0, PIM_SOURCES_UID, PIM_SOURCES_NAME, PIM_SOURCES_PMID,
-        PIM_SOURCES_COUNTRY, PIM_SOURCES_WWW,
+        PIM_SOURCES_SID = 0,
+        PIM_SOURCES_UID,
+        PIM_SOURCES_NAME,
+        PIM_SOURCES_PMID,
+        PIM_SOURCES_COUNTRY,
+        PIM_SOURCES_WWW,
         PIM_SOURCES_MaxParam
     };
 
     enum PIM_TYPESFields {
-        PIM_TYPES_TID = 0, PIM_TYPES_UID, PIM_TYPES_MASTER_LID,
+        PIM_TYPES_TID = 0,
+        PIM_TYPES_UID,
+        PIM_TYPES_MASTER_LID,
         PIM_TYPES_MaxParam
     };
 
     enum PIMSFields {
-        PIMS_ID = 0, PIMS_SID, PIMS_TID, PIMS_LEVEL, PIMS_RISK_MASTER_LID,
+        PIMS_ID = 0,
+        PIMS_SID,
+        PIMS_TID,
+        PIMS_LEVEL,
+        PIMS_RISK_MASTER_LID,
         PIMS_MaxParam
     };
 
     enum PIMS_RELATED_ATCFields {
-        PIMS_RELATC_RMID = 0, PIMS_RELATC_PIM_ID, PIMS_RELATC_ATC_ID,
-        PIMS_RELATC_MAXDAYDOSE, PIMS_RELATC_MAXDAYDOSEUNIT,
+        PIMS_RELATC_RMID = 0,
+        PIMS_RELATC_PIM_ID,
+        PIMS_RELATC_ATC_ID,
+        PIMS_RELATC_MAXDAYDOSE,
+        PIMS_RELATC_MAXDAYDOSEUNIT,
         PIMS_RELATC_MaxParam
     };
 
     enum PIMS_RELATED_ICDFields {
-        PIMS_RELICD_RMID = 0, PIMS_RELICD_PIM_ID, PIMS_RELICD_ICD_SID,
+        PIMS_RELICD_RMID = 0,
+        PIMS_RELICD_PIM_ID,
+        PIMS_RELICD_ICD_SID,
         PIMS_RELICD_MaxParam
     };
 
     enum CURRENTVERSIONFields {
-        CURRENTVERSION_ID = 0, CURRENTVERSION_NUMBER,
+        CURRENTVERSION_ID = 0,
+        CURRENTVERSION_NUMBER,
         CURRENTVERSION_MaxParam
     };
 
