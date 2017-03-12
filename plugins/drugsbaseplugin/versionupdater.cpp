@@ -640,7 +640,7 @@ private:
 class IO_Update_From_0008_To_020 : public DrugsDB::DrugsIOUpdateStep
 {
 public:
-    // Adding root FreeDiams tag
+    // Adding root FreeRx tag
     // Unfortunatly DailyScheme was not saved before 0.2.0 --> so no update is available
     // MealTime scheme must be update since an empty choice has been added at index (0)
     IO_Update_From_0008_To_020() : DrugsDB::DrugsIOUpdateStep() {}

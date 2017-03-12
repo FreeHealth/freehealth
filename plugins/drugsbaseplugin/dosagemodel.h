@@ -50,6 +50,8 @@ class DRUGSBASE_EXPORT DosageModel : public QSqlTableModel
 {
     Q_OBJECT
 
+    // A scored (or pre-scored) tablet is a tablet that has one or grooves on it
+    // that make it easier to be split.
     enum ScoredTablet
     {
         CompletTablet = 0,
