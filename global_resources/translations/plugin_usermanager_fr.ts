@@ -559,12 +559,12 @@ p, li { white-space: pre-wrap; }
         <translation>Droits sur l&apos;agenda</translation>
     </message>
     <message>
-        <source>Administrative rights</source>
-        <translation>Droits administratifs</translation>
-    </message>
-    <message>
         <source>Form</source>
         <translation></translation>
+    </message>
+    <message>
+        <source>Secretary rights</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -739,8 +739,8 @@ Pour effacer l&apos;utilisateur %1 dans la base de données, demandez à l&apos;
         <translation>Para-médicaux</translation>
     </message>
     <message>
-        <source>Administrative</source>
-        <translation>Administratifs</translation>
+        <source>Secretary</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

@@ -998,10 +998,6 @@ Ort: %2</translation>
         <translation>Medizinische Rechte</translation>
     </message>
     <message>
-        <source>Administrative rights</source>
-        <translation>Administrative Rechte</translation>
-    </message>
-    <message>
         <source>User manager rights</source>
         <translation>Benutzerverwaltungs-Rechte</translation>
     </message>
@@ -2791,6 +2787,10 @@ Text Align Justify shortcut key : Mac specific</extracomment>
     </message>
     <message>
         <source>Is patient pediatric?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Secretary rights</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

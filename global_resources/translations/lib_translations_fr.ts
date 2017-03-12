@@ -1102,10 +1102,6 @@ Emplacement : %2</translation>
         <translation>Droits médicaux</translation>
     </message>
     <message>
-        <source>Administrative rights</source>
-        <translation>Droits administratifs</translation>
-    </message>
-    <message>
         <source>User manager rights</source>
         <translation>Droits du gestionnaire des utilisateurs</translation>
     </message>
@@ -2786,6 +2782,10 @@ Text Align Justify shortcut key : Mac specific</extracomment>
     </message>
     <message>
         <source>Is patient pediatric?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Secretary rights</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

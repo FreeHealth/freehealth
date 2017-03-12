@@ -390,6 +390,13 @@ Dies kann eine starke CPU Belastung sein.</translation>
     </message>
 </context>
 <context>
+    <name>QObject</name>
+    <message>
+        <source>Open HTML file</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>tkPrinter</name>
     <message>
         <source>No content to preview (simpleDraw).</source>

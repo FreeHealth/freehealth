@@ -555,7 +555,7 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Administrative rights</source>
+        <source>Secretary rights</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -730,7 +730,7 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Administrative</source>
+        <source>Secretary</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

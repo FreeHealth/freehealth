@@ -3188,7 +3188,7 @@ Text Align Justify shortcut key : Mac specific</extracomment>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_user.h" line="45"/>
-        <source>Administrative rights</source>
+        <source>Secretary rights</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

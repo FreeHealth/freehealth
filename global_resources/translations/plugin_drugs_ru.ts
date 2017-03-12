@@ -175,12 +175,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/interactionsynthesisdialog.cpp" line="289"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/interactionsynthesisdialog.cpp" line="291"/>
         <source>Tested drugs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/interactionsynthesisdialog.cpp" line="293"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/interactionsynthesisdialog.cpp" line="295"/>
         <source>Related to drugs</source>
         <translation type="unfinished"></translation>
     </message>
@@ -990,77 +990,77 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>DrugsWidget::Internal::DrugInfoPrivate</name>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="112"/>
-        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="113"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="115"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="116"/>
         <source>INN Information will be lost.
 Do you want to send them?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="178"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="181"/>
         <source>Testing: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="184"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="187"/>
         <source>All interactions found.
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="186"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="189"/>
         <source>*** Missing interactions.
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="190"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="193"/>
         <source>All interactions are OK.
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="192"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="195"/>
         <source>*** Wrong interactions.
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="196"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="199"/>
         <source>IAM Text is correct.
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="198"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="201"/>
         <source>*** IAM Text is incorrect.
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="202"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="205"/>
         <source>CAT Text is correct.
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="204"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="207"/>
         <source>*** CAT Text is incorrect.
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="207"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="210"/>
         <source>Message: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="213"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="216"/>
         <source>Checked interactions: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="239"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="242"/>
         <source>ERROR: %1
 </source>
         <translation type="unfinished"></translation>
@@ -1069,13 +1069,13 @@ Do you want to send them?</source>
 <context>
     <name>DrugsWidget::Internal::DrugPosologicSentencePage</name>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/drugposologicsentencepreferences.cpp" line="284"/>
-        <location filename="../../plugins/drugsplugin/drugspreferences/drugposologicsentencepreferences.cpp" line="286"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/drugposologicsentencepreferences.cpp" line="285"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/drugposologicsentencepreferences.cpp" line="287"/>
         <source>Posologic sentence</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/drugposologicsentencepreferences.cpp" line="321"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/drugposologicsentencepreferences.cpp" line="322"/>
         <source>Updating posologic sentence.</source>
         <translation type="unfinished"></translation>
     </message>

@@ -294,8 +294,8 @@ Click Ok to test FreeHealth, or click Cancel to install FreeHealth with MySQL.</
 <context>
     <name>Core::Internal::CoreImpl</name>
     <message>
-        <location filename="../../plugins/fmfcoreplugin/coreimpl.cpp" line="149"/>
-        <location filename="../../plugins/fmfcoreplugin/coreimpl.cpp" line="151"/>
+        <location filename="../../plugins/fmfcoreplugin/coreimpl.cpp" line="138"/>
+        <location filename="../../plugins/fmfcoreplugin/coreimpl.cpp" line="140"/>
         <source>Core intialization finished...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -332,22 +332,22 @@ Click Ok to test FreeHealth, or click Cancel to install FreeHealth with MySQL.</
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/debugdialog.cpp" line="87"/>
+        <location filename="../../plugins/coreplugin/dialogs/debugdialog.cpp" line="94"/>
         <source>Save log to...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/debugdialog.cpp" line="96"/>
+        <location filename="../../plugins/coreplugin/dialogs/debugdialog.cpp" line="103"/>
         <source>Log correctly saved</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/debugdialog.cpp" line="97"/>
+        <location filename="../../plugins/coreplugin/dialogs/debugdialog.cpp" line="104"/>
         <source>The log was correctly saved into&lt;br /&gt;%1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/debugdialog.cpp" line="100"/>
+        <location filename="../../plugins/coreplugin/dialogs/debugdialog.cpp" line="107"/>
         <source>Saving log</source>
         <translation type="unfinished"></translation>
     </message>
@@ -953,7 +953,7 @@ Click Ok to test FreeHealth, or click Cancel to install FreeHealth with MySQL.</
 <context>
     <name>Core::Internal::ThemePrivate</name>
     <message>
-        <location filename="../../plugins/coreplugin/theme.cpp" line="249"/>
+        <location filename="../../plugins/coreplugin/theme.cpp" line="285"/>
         <source>Using splash: %1</source>
         <translation type="unfinished"></translation>
     </message>

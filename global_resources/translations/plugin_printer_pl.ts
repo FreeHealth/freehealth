@@ -436,7 +436,7 @@ Refer to your operating system documentation.</source>
 <context>
     <name>Print::Printer</name>
     <message>
-        <location filename="../../plugins/printerplugin/printer.cpp" line="819"/>
+        <location filename="../../plugins/printerplugin/printer.cpp" line="821"/>
         <source>Print document</source>
         <translation type="unfinished"></translation>
     </message>
@@ -482,9 +482,17 @@ Refer to your operating system documentation.</source>
     </message>
 </context>
 <context>
+    <name>QObject</name>
+    <message>
+        <location filename="../../plugins/printerplugin/printerpreviewer_p.cpp" line="486"/>
+        <source>Open HTML file</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>tkPrinter</name>
     <message>
-        <location filename="../../plugins/printerplugin/printer.cpp" line="647"/>
+        <location filename="../../plugins/printerplugin/printer.cpp" line="649"/>
         <source>No content to preview (simpleDraw).</source>
         <translation type="unfinished"></translation>
     </message>

@@ -398,6 +398,13 @@ Référez-vous à la documentation de votre système d&apos;exploitation.</trans
     </message>
 </context>
 <context>
+    <name>QObject</name>
+    <message>
+        <source>Open HTML file</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>tkPrinter</name>
     <message>
         <source>No content to preview (simpleDraw).</source>
