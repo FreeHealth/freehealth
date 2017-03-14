@@ -50,13 +50,15 @@ class DRUGSBASE_EXPORT DosageModel : public QSqlTableModel
 {
     Q_OBJECT
 
-    // A scored (or pre-scored) tablet is a tablet that has one or grooves on it
-    // that make it easier to be split.
+    // A scored (or pre-scored) tablet is a tablet that has one or more grooves
+    // on it that make it easier to be split.
     enum ScoredTablet
     {
-        CompletTablet = 0,
-        HalfTablet,
-        QuarterTablet
+        FullTablet = 0, // Tablet cannot be split
+        HalfTablet,     // Tablet can be split in two
+        ThirdTablet,    // Tablet can be split in three parts
+        QuarterTablet,  // Tablet can be split in four parts
+        ScoredTablet    // Tablet can be split in an unknown number of parts
     };
 
     enum PreDeterminedForms
@@ -109,9 +111,9 @@ public Q_SLOTS:
     bool submitAll();
 
 public:
-    //--------------------------------------------------------------------------------------------------------
-    //---------------------------------------- STATIC MEMBERS ------------------------------------------------
-    //--------------------------------------------------------------------------------------------------------
+    //--------------------------------------------------------------------------
+    //---------- STATIC MEMBERS ------------------------------------------------
+    //--------------------------------------------------------------------------
     // static viewers to use for ui generation
     static void         initStaticData()      { retranslate() ; }
     static int          periodDefault()        { return 4; }
@@ -128,9 +130,9 @@ private Q_SLOTS:
     void changeEvent(QEvent * event);
     static void retranslate();
 
-    //--------------------------------------------------------------------------------------------------------
-    //----------------------------------------- PRIVATE DATA -------------------------------------------------
-    //--------------------------------------------------------------------------------------------------------
+    //--------------------------------------------------------------------------
+    //--------------------- PRIVATE DATA ---------------------------------------
+    //--------------------------------------------------------------------------
 private:
     DrugsDB::DrugsModel *m_DrugsModel;
     static QStringList   m_ScoredTabletScheme;
