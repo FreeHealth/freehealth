@@ -80,7 +80,7 @@ public:
         return toReturn;
     }
 
-    QHash<int, double> m_DailySchemes;
+    QMap<int, double> m_DailySchemes;
     bool m_IsScored;
     double m_Min, m_Max;
     bool m_HasError;

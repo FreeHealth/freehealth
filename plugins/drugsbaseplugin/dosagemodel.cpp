@@ -28,19 +28,24 @@
 /**
   \class DosageModel
   \brief Manages predetermined dosage.
-  A \b "dosage" is a set of values that defines what, when and how to prescribe a drug. A dosage can apply:
-  \li on a specific drug based on its CIS,
+  A \b "dosage" is a set of values that defines what, when and how to prescribe
+  a drug. A dosage can apply:
+  \li on a specific drug based on its UID (NDC,CIS)
   \li on the INN molecule of the drug which are presented in the same "dosage" (100mg, 1g...).
   For example :
-  \li CLAMOXYL 1g can have prescription based on its CIS or on the \e amoxicilline molecule.
-  \li CIS based could be : one intake morning and evening during seven days.
-  \li INN based could be the same and can be applied to AMOXICILLINE PHARMACEUTICAL_LABO 1g.
+  \li AMOXIL 1g (USA) or CLAMOXYL 1g (France) can have prescription based on its
+  UID or on the \e amoxicillin molecule.
+  \li UID based could be : one intake morning and evening during seven days.
+  \li INN based could be the same and can be applied to
+  AMOXICILLIN PHARMACEUTICAL_Manufacturer 1g.
 
   A \b "prescription" is the when and how you prescribe a selected drug.\n
   database(DB_DOSAGES_NAME) should be defined BEFORE instance()
 */
-//TODO: Create a specific user's right for dosage creation/edition/modification/deletion +++. (Get user's right throught Core::IUser)
-
+/*
+ * TODO: Create a specific user's right for dosage creation, edition,
+ * modification, deletion. Get user's right through Core::IUser
+*/
 
 #include "dosagemodel.h"
 
@@ -96,7 +101,7 @@ static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 // intialize static private members
 QStringList DosageModel::m_ScoredTabletScheme = QStringList();
 QStringList DosageModel::m_PreDeterminedForms = QStringList();
-QString     DosageModel::m_ActualLangage = "";
+QString     DosageModel::m_CurrentLangage = "";
 
 //------------------------------------------------------------------------------
 //--------------------- Managing Translations ----------------------------------
@@ -114,19 +119,21 @@ void DosageModel::changeEvent(QEvent * event)
 void DosageModel::retranslate()
 {
     // proceed only if needed
-    if (m_ActualLangage == QLocale().name().left(2))
+    if (m_CurrentLangage == QLocale().name().left(2))
         return;
 
     // store the langage and retranslate
-    m_ActualLangage = QLocale().name().left(2);
+    m_CurrentLangage = QLocale().name().left(2);
     m_ScoredTabletScheme.clear();
     m_PreDeterminedForms.clear();
 
     m_ScoredTabletScheme =
             QStringList()
-            << tr("full tab.")
-            << tr("half tab.")
-            << tr("quarter tab.");
+            << tr("full tablet")
+            << tr("quarter tablet")
+            << tr("third tablet")
+            << tr("half tablet")
+            << tr("scored tablet");
 
     m_PreDeterminedForms =
             QStringList()
@@ -166,9 +173,9 @@ QStringList DosageModel::predeterminedForms()
     return m_PreDeterminedForms;
 }
 
-//--------------------------------------------------------------------------------------------------------
-//------------------------------------------ Dosage Model ------------------------------------------------
-//--------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+//---------------- Dosage Model ------------------------------------------------
+//------------------------------------------------------------------------------
 /** \brief Constructor */
 DosageModel::DosageModel(DrugsDB::DrugsModel *parent)
     : QSqlTableModel(parent, QSqlDatabase::database(Dosages::Constants::DB_DOSAGES_NAME)),
@@ -324,7 +331,7 @@ bool DosageModel::setData(const QModelIndex &index, const QVariant &value, int r
     return false;
 }
 
-/** \brief Retreive dosage's data. */
+/** \brief Retrieve dosage's data. */
 QVariant DosageModel::data(const QModelIndex & item, int role) const
 {
     Q_ASSERT_X(!m_UID.isNull(), "DosageModel::data", "before using the dosagemodel, you must specify the UID of the related drug");
@@ -444,7 +451,7 @@ bool DosageModel::insertRows(int row, int count, const QModelIndex & parent)
 }
 
 /**
-  \brief Removes somes rows.
+  \brief Removes some rows.
   \todo  when QSqlTableModel removes rows it may call select() and reset(),  this causes non submitted modifications deletion on the model THIS MUST BE IMPROVED
 */
 bool DosageModel::removeRows(int row, int count, const QModelIndex & parent)
@@ -535,7 +542,7 @@ bool DosageModel::setDrugId(const QVariant &drugId)
     return true;
 }
 
-/** \brief Return the actual drug's DID */
+/** \brief Return the current drug DID */
 QVariant DosageModel::drugId()
 {
     return m_UID;
@@ -576,7 +583,7 @@ QStringList DosageModel::isDosageValid(const int row)
 }
 
 /**
-  \brief Transforms a dosage to a drug's prescription.
+  \brief Transforms a dosage to a drug prescription.
   \sa DrugsModel
 */
 void DosageModel::toPrescription(const int row)

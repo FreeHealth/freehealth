@@ -137,7 +137,7 @@ private:
     DrugsDB::DrugsModel *m_DrugsModel;
     static QStringList   m_ScoredTabletScheme;
     static QStringList   m_PreDeterminedForms;
-    static QString       m_ActualLangage;
+    static QString       m_CurrentLangage;
     QVariant m_UID;
     QSet<int> m_DirtyRows;
     QSet<int> m_DirtyInnLkRows;

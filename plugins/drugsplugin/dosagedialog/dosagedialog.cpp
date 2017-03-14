@@ -97,7 +97,9 @@ DosageDialog::DosageDialog(QWidget *parent)
 /** \brief Destructor, frees mapper */
 DosageDialog::~DosageDialog()
 {
-    if (d) delete d; d=0;
+    if (d)
+        delete d;
+    d=0;
 }
 
 /**
