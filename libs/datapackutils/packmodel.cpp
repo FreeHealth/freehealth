@@ -221,8 +221,6 @@ public:
         int appId = PackDescription::FreeMedFormsCompatVersion;
         if (qApp->applicationName().contains("freediams", Qt::CaseInsensitive)) {
             appId = PackDescription::FreeDiamsCompatVersion;
-        } else if (qApp->applicationName().contains("freeaccount", Qt::CaseInsensitive)) {
-            appId = PackDescription::FreeAccountCompatVersion;
         }
         Utils::VersionNumber appVersion(qApp->applicationVersion());
         for(int i = m_AvailPacks.count()-1; i >= 0; --i) {

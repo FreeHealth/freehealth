@@ -28,7 +28,6 @@
 
 #include <translationutils/constants.h>
 #include <translationutils/trans_numbers.h>
-#include <translationutils/trans_account.h>
 #include <translationutils/trans_current.h>
 
 #include <QStringList>

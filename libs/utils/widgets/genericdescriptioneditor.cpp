@@ -76,7 +76,6 @@ void GenericDescriptionEditor::setDescription(const Utils::GenericDescription &d
     ui->absFileName->setText(descr.data(Utils::GenericDescription::AbsFileName).toString());
     ui->fmfCompat->setText(descr.data(Utils::GenericDescription::FreeMedFormsCompatVersion).toString());
     ui->fdCompat->setText(descr.data(Utils::GenericDescription::FreeDiamsCompatVersion).toString());
-    ui->faCompat->setText(descr.data(Utils::GenericDescription::FreeAccountCompatVersion).toString());
     m_PreviousLang.clear();
     on_langSelector_activated(ui->langSelector->currentText());
 
@@ -184,8 +183,6 @@ Utils::GenericDescription GenericDescriptionEditor::submit()
     m_desc.setData(Utils::GenericDescription::AbsFileName, ui->absFileName->text());
     m_desc.setData(Utils::GenericDescription::FreeMedFormsCompatVersion, ui->fmfCompat->text());
     m_desc.setData(Utils::GenericDescription::FreeDiamsCompatVersion, ui->fdCompat->text());
-    m_desc.setData(Utils::GenericDescription::FreeAccountCompatVersion, ui->faCompat->text());
-
     m_desc.setData(Utils::GenericDescription::Category, ui->category->text(), ui->langSelector->currentText());
     m_desc.setData(Utils::GenericDescription::HtmlDescription, ui->htmlDescr->toHtml(), ui->langSelector->currentText());
     m_desc.setData(Utils::GenericDescription::LicenseName, ui->license->toPlainText(), ui->langSelector->currentText());

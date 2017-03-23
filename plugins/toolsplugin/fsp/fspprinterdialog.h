@@ -62,7 +62,6 @@ private Q_SLOTS:
     void useTemplate(const QModelIndex &index);
     void printFsp();
     void previewFsp();
-    void printCheque();
     void updatePreview();
 
 private:

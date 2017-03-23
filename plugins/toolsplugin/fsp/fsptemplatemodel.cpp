@@ -273,7 +273,7 @@ private:
     FspTemplateModel *q;
 };
 } // namespace Internal
-} // end namespace Account
+} // end namespace Tools
 
 
 /*! Constructor of the Tools::Internal::FspTemplateModel class */

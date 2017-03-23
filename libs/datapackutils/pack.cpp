@@ -260,10 +260,6 @@ Pack::DataType Pack::dataType() const
         m_type = Pack::ZipCodes;
     else if (type.compare("UserDocuments", Qt::CaseInsensitive)==0)
         m_type = Pack::UserDocuments;
-    else if (type.compare("Accountancy", Qt::CaseInsensitive)==0)
-        m_type = Pack::Accountancy;
-    else if (type.compare("Account", Qt::CaseInsensitive)==0)
-        m_type = Pack::Accountancy;
     else if (type.compare("AlertPack", Qt::CaseInsensitive)==0
              || type.compare("AlertPacks", Qt::CaseInsensitive)==0)
         m_type = Pack::AlertPacks;

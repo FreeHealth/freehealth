@@ -68,6 +68,9 @@ const char* const MILLION     = QT_TRANSLATE_NOOP("tkConstants", "million");
 const char* const BILLION     = QT_TRANSLATE_NOOP("tkConstants", "billion");
 const char* const TRILLION    = QT_TRANSLATE_NOOP("tkConstants", "trillion");
 
+// Money (use QLocale::currency...) but we need to add 'cents'
+const char* const CENT = QT_TRANSLATE_NOOP("tkConstants", "cent");
+
 }
 }
 

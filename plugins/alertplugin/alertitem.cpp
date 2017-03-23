@@ -1333,7 +1333,6 @@ QString AlertItem::toXml() const
     d->descr.setData(Internal::AlertXmlDescription::Validity, d->_valid);
 //    d->descr.setData(Internal::AlertXmlDescription::FreeMedFormsCompatVersion, );
 //    d->descr.setData(Internal::AlertXmlDescription::FreeDiamsCompatVersion, );
-//    d->descr.setData(Internal::AlertXmlDescription::FreeAccountCompatVersion, );
     d->descr.setData(Internal::AlertXmlDescription::CreationDate, d->_creationDate);
     d->descr.setData(Internal::AlertXmlDescription::LastModificationDate, d->_update);
     d->descr.setData(Internal::AlertXmlDescription::CryptedPass, d->_pass);

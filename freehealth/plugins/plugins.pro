@@ -138,31 +138,6 @@ script.depends += formmanager
 # optional plugins
 include(../../buildspecs/optionalplugins.pri)
 
-with-old-account {
-    SUBDIRS += accountbase account
-    accountbase.subdir = $${PLUGINS_PATH}/accountbaseplugin
-    accountbase.depends += core
-    accountbase.depends += datapack
-
-    account.subdir   = $${PLUGINS_PATH}/accountplugin
-    account.depends += core
-    account.depends += texteditor
-    account.depends += printer
-    account.depends += accountbase
-    account.depends += zipcodes
-    account.depends += listview
-}
-
-with-account {
-    SUBDIRS += account2
-    account2.subdir   = $${PLUGINS_PATH}/account2plugin
-    account2.depends += core
-    account2.depends += datapack
-    account2.depends += formmanager
-    #account2.depends += texteditor
-    #account2.depends += listview
-}
-
 with-agenda {
     SUBDIRS += agenda
     agenda.subdir = $${PLUGINS_PATH}/agendaplugin

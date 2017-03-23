@@ -29,7 +29,7 @@ LOG_FILE=""               # Log filename
 GIT_PULL=""               # y / n (if "y" a git pull command will be executed)
 SLEEP_TIME=0              # Sleep time for zenity progress bar
 REQUESTED_PLUGINS=""      # This var will store the optional plugins requested by the user
-AVAILABLE_OPTIONAL_PLUGINS="account agenda alerts feedback pad pmh webcam edrc"
+AVAILABLE_OPTIONAL_PLUGINS="agenda alerts feedback pad pmh webcam edrc"
 AVAILABLE_CAMELCASE_APPS="FreeMedForms FreeDiams FreePad FreePort FreeDRC FreeDDIManager FreeICD FreeToolBox"
 RUNNING_ZENITY=0          # 0 / 1 (when zenity is used => set to 1)
 
@@ -590,7 +590,6 @@ firstPage()
             `[ $(expr "$CONFIG" : ".*FreeMedForms.*") -ne 0 ] && echo 'True' ||  echo 'False'` "FreeMedForms"  \
             `[ $(expr "$CONFIG" : ".*FreeDiams.*") -ne 0 ] && echo 'True' ||  echo 'False'` "FreeDiams"  \
             `[ $(expr "$CONFIG" : ".*FreeDDIManager.*") -ne 0 ] && echo 'True' ||  echo 'False'` "FreeDDIManager"  \
-            `[ $(expr "$CONFIG" : ".*FreeAccount.*") -ne 0 ] && echo 'True' ||  echo 'False'` "FreeAccount"  \
             `[ $(expr "$CONFIG" : ".*FreePad.*") -ne 0 ] && echo 'True' ||  echo 'False'` "FreePad"  \
             `[ $(expr "$CONFIG" : ".*FreePort.*") -ne 0 ] && echo 'True' ||  echo 'False'` "FreePort"  \
             `[ $(expr "$CONFIG" : ".*FreeDRC.*") -ne 0 ] && echo 'True' ||  echo 'False'` "FreeDRC"  \
@@ -621,7 +620,6 @@ thirdPage()
 fourthPage()
 {
     RET=$($ZENITY_SIZED --title "$ZENITY_TITLE" --list --text "Select optional plugins" --checklist --column "Select" --column "Plugs"  \
-           `[ $(expr "$CONFIG" : ".*Account_plugin.*") -ne 0 ] && echo 'True' ||  echo 'False'` "Account plugin"  \
            `[ $(expr "$CONFIG" : ".*Agenda_plugin.*") -ne 0 ] && echo 'True' ||  echo 'False'` "Agenda plugin"  \
            `[ $(expr "$CONFIG" : ".*Alerts_plugin.*") -ne 0 ] && echo 'True' ||  echo 'False'` "Alerts plugin"  \
            `[ $(expr "$CONFIG" : ".*Feedback_plugin.*") -ne 0 ] && echo 'True' ||  echo 'False'` "Feedback plugin"  \
@@ -666,7 +664,6 @@ zenityConfigToBuildSystem()
     TRANS="`[ $(expr "$CONFIG" : ".*Create_translations.*") -ne 0 ] && echo 'y' || echo 'n'`"
     MAKE_OPTS="`[ $(expr "$CONFIG" : ".*Parallel_build.*") -ne 0 ] && echo '-j4' || echo '-j1'`"
     NOTIFY="`[ $(expr "$CONFIG" : ".*Notify_when_done.*") -ne 0 ] && echo 'y' || echo 'n'`"
-    REQUESTED_PLUGINS=$REQUESTED_PLUGINS"`[ $(expr "$CONFIG" : ".*Account_plugin.*") -ne 0 ] && echo 'account '`"
     REQUESTED_PLUGINS=$REQUESTED_PLUGINS"`[ $(expr "$CONFIG" : ".*Agenda_plugin.*") -ne 0 ] && echo 'agenda '`"
     REQUESTED_PLUGINS=$REQUESTED_PLUGINS"`[ $(expr "$CONFIG" : ".*Alerts_plugin.*") -ne 0 ] && echo 'alerts '`"
     REQUESTED_PLUGINS=$REQUESTED_PLUGINS"`[ $(expr "$CONFIG" : ".*Feedback_plugin.*") -ne 0 ] && echo 'feedback '`"

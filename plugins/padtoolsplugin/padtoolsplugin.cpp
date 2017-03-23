@@ -88,7 +88,7 @@ void PadToolsPlugin::extensionsInitialized()
     if (Utils::Log::debugPluginsCreation())
         qWarning() << "PadToolsPlugin::extensionsInitialized";
 
-#if defined(FREEMEDFORMS) || defined(FREEACCOUNT)
+#if defined(FREEMEDFORMS)
     if (!user())
         return;
 #endif

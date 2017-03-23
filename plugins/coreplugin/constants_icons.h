@@ -39,7 +39,6 @@ namespace Constants {
 
 const char * const  EHR_SPLASHSCREEN = "freehealth.png";
 const char * const  ERX_SPLASHSCREEN    = "erx.png";
-const char * const  FREEACCOUNT_SPLASHSCREEN  = "freeaccount.png";
 const char * const  FREEICD_SPLASHSCREEN      = "freeicd.png";
 const char * const  FREEGIR_SPLASHSCREEN      = "freegir.png";
 const char * const  FREETOOLBOX_SPLASHSCREEN  = "freetoolbox.png";
@@ -51,7 +50,6 @@ const char * const  FREEGUARD_SPLASHSCREEN      = "freeguard.png";
 // application icons
 const char * const  ICONEHR   = "ehr.png";
 const char * const  ICONFREEDIAMS      = "erx.png";
-const char * const  ICONFREEACCOUNT    = "freeaccount.png";
 const char * const  ICONFREEICD        = "freeicd.png";
 const char * const  ICONFREEGIR        = "freegir.png";
 const char * const  ICONFREETOOLBOX    = "freetoolbox.png";
@@ -179,8 +177,6 @@ const char * const  ICONDEBUGHELPER =  "";
 const char * const  ICONABOUT =        "freemedforms.png";
 #elif defined(FREEDIAMS)
 const char * const  ICONABOUT =        "erx.png";
-#elif defined(FREEACCOUNT)
-const char * const  ICONABOUT =        "freemedforms.png";
 #elif defined(FREEPAD)
 const char * const  ICONABOUT =        "freepad.png";
 #elif defined(FREEICD)
@@ -250,7 +246,6 @@ const char * const  ICONPATIENTFILES  = "patientfiles.png";
 const char * const  ICONPATIENTHISTORY= "patienthistory.png";
 const char * const  ICONCHROMOSOME    = "chromosome.png";
 const char * const  ICONDRUGMODE      = "drugmode.png";
-const char * const  ICONACCOUNTMODE   = "accountancymode.png";
 const char * const  ICONLABTEST       = "labtest.png";
 
 // media

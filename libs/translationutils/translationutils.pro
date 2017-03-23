@@ -18,7 +18,6 @@ HEADERS += \
     constants.h \
     multilingualclasstemplate.h \
     googletranslator.h \
-    trans_account.h \
     trans_agenda.h \
     trans_countries.h \
     trans_current.h \

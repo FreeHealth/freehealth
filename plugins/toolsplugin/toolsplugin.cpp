@@ -27,11 +27,6 @@
 #include "toolsconstants.h"
 #include "pdftkwrapper.h"
 
-#ifdef WITH_CHEQUE_PRINTING
-#include "cheque/chequeprinterdialog.h"
-#include "cheque/chequeprinter_preferences.h"
-#endif
-
 #ifdef WITH_FRENCH_FSP
 #include "fsp/fspprinterpreferences.h"
 #include "fsp/fspprinterdialog.h"
@@ -86,7 +81,6 @@ ToolsPlugin::ToolsPlugin() :
     m_prefPage(0),
     pdf(0),
     m_FspPage(0),
-    m_ChequePage(0),
     m_HprimPage(0)
 {
     setObjectName("ToolsPlugin");
@@ -100,9 +94,6 @@ ToolsPlugin::ToolsPlugin() :
 
     // All preferences pages must be created in this part (before user connection)
     // And included in the QObject pool
-#ifdef WITH_CHEQUE_PRINTING
-    addAutoReleasedObject(m_ChequePage = new ChequePrinterPreferencesPage(this));
-#endif
 
 #ifdef WITH_FRENCH_FSP
     addAutoReleasedObject(m_FspPage = new FspPrinterPreferencesPage(this));
@@ -177,21 +168,6 @@ void ToolsPlugin::extensionsInitialized()
     Core::Command *cmd = 0;
 #endif
 
-#ifdef WITH_CHEQUE_PRINTING
-    action = new QAction(this);
-    action->setEnabled(ChequePrinterDialog::isAvailable());
-    action->setIcon(theme()->icon(Core::Constants::ICONCHEQUE));
-    cmd = actionManager()->registerAction(action, "aTools.PrintCheque", Core::Context(Core::Constants::C_GLOBAL));
-    cmd->setTranslations(::PRINT_CHEQUE, ::PRINT_CHEQUE, "Tools");
-    //: Translation for the 'Print Cheque' action
-    cmd->setDefaultKeySequence(QKeySequence(tr("Ctrl+Shift+C")));
-    connect(action, SIGNAL(triggered()), this, SLOT(printCheque()));
-    menu->addAction(cmd, Core::Id(Core::Constants::G_GENERAL_PRINT));
-
-    if (m_ChequePage)
-        m_ChequePage->checkSettingsValidity();
-#endif
-
 #ifdef WITH_FRENCH_FSP
     action = new QAction(this);
     action->setEnabled(FspPrinterDialog::isAvailable());
@@ -254,15 +230,6 @@ ExtensionSystem::IPlugin::ShutdownFlag ToolsPlugin::aboutToShutdown()
 #endif
 
     return SynchronousShutdown;
-}
-
-void ToolsPlugin::printCheque()
-{
-#ifdef WITH_CHEQUE_PRINTING
-    ChequePrinterDialog printDialog;
-    printDialog.initializeWithSettings();
-    printDialog.exec();
-#endif
 }
 
 void ToolsPlugin::printFsp()

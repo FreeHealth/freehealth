@@ -382,7 +382,7 @@ QVariant Fsp::amountLineData(int line, int index) const
 /**
  * Compute the total amount of the FSP by adding each fees amount and
  * set the Fsp::TotalAmount value. \n
- * This does not the IK/ID into account.
+ * This does not take the IK/ID into account.
  */
 void Fsp::computeTotalAmountFromFees()
 {

@@ -51,7 +51,6 @@
 #include <translationutils/trans_user.h>
 #include <translationutils/trans_current.h>
 #include <translationutils/trans_menu.h>
-#include <translationutils/trans_account.h>
 #include <translationutils/trans_drugs.h>
 
 #include <QMetaEnum>

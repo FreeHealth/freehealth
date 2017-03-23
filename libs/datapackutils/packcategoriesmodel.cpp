@@ -38,7 +38,6 @@
 #include <translationutils/trans_menu.h>
 #include <translationutils/trans_spashandupdate.h>
 #include <translationutils/trans_drugs.h>
-#include <translationutils/trans_account.h>
 
 #include <QApplication>
 #include <QFont>
@@ -86,8 +85,7 @@ public:
             rootItem = q->invisibleRootItem();
 
         QStringList subCategories;
-        subCategories << "account"
-                      << "drugs/withddi" << "drugs/withoutddi"
+        subCategories << "drugs/withddi" << "drugs/withoutddi"
                       << "diseases/icd10"
                       << "forms/fullsets" << "forms/subforms"
                       << "documents"
@@ -133,7 +131,6 @@ public:
         _categories.insert(vendor, main);
         rootItem->appendRow(main);
 
-        _categories.value(vendor+"/account")->setData(Trans::Constants::ACCOUNTANCY, ::UnTranslatedNameRole);
         _categories.value(vendor+"/drugs")->setData(Trans::Constants::DRUGS, ::UnTranslatedNameRole);
         _categories.value(vendor+"/drugs/withddi")->setData(Trans::Constants::DRUGS_WITH_INTERACTIONS, ::UnTranslatedNameRole);
         _categories.value(vendor+"/drugs/withoutddi")->setData(Trans::Constants::DRUGS_WITHOUT_INTERACTIONS, ::UnTranslatedNameRole);
@@ -148,7 +145,6 @@ public:
         _categories.value(vendor+"/binaries")->setData(Trans::Constants::BINARY_PACKS, ::UnTranslatedNameRole);
         _categories.value(vendor+"/various")->setData(Trans::Constants::VARIOUS, ::UnTranslatedNameRole);
 
-        _categories.value(vendor+"/account")->setIcon(icon("freeaccount.png", DataPackCore::SmallPixmaps));
         _categories.value(vendor+"/drugs")->setIcon(icon("drugs.png", DataPackCore::SmallPixmaps));
         _categories.value(vendor+"/diseases")->setIcon(icon("chromosome.png", DataPackCore::SmallPixmaps));
         _categories.value(vendor+"/forms")->setIcon(icon("forms.png", DataPackCore::SmallPixmaps));
@@ -158,7 +154,6 @@ public:
         _categories.value(vendor+"/binaries")->setIcon(icon("package.png", DataPackCore::SmallPixmaps));
         _categories.value(vendor+"/various")->setIcon(icon("package.png", DataPackCore::SmallPixmaps));
 
-        _categories.value(vendor+"/account")->setData(Pack::Accountancy, ::PackDataTypeRole);
         _categories.value(vendor+"/drugs/withddi")->setData(Pack::DrugsWithInteractions, ::PackDataTypeRole);
         _categories.value(vendor+"/drugs/withoutddi")->setData(Pack::DrugsWithoutInteractions, ::PackDataTypeRole);
         _categories.value(vendor+"/diseases/icd10")->setData(Pack::ICD, ::PackDataTypeRole);
@@ -172,7 +167,6 @@ public:
 
         QFont bold;
         bold.setBold(true);
-        _categories.value(vendor+"/account")->setFont(bold);
         _categories.value(vendor+"/drugs")->setFont(bold);
         _categories.value(vendor+"/diseases")->setFont(bold);
         _categories.value(vendor+"/forms")->setFont(bold);
@@ -247,8 +241,6 @@ public:
         int appId = PackDescription::FreeMedFormsCompatVersion;
         if (qApp->applicationName().contains("freediams", Qt::CaseInsensitive)) {
             appId = PackDescription::FreeDiamsCompatVersion;
-        } else if (qApp->applicationName().contains("freeaccount", Qt::CaseInsensitive)) {
-            appId = PackDescription::FreeAccountCompatVersion;
         }
         Utils::VersionNumber appVersion(qApp->applicationVersion());
         for(int i = m_AvailPacks.count()-1; i >= 0; --i) {

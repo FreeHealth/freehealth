@@ -68,7 +68,6 @@ public:
         Validity,                       //!< Validity
         FreeMedFormsCompatVersion,      //!< With which version of FreeMedForms is this data compatible
         FreeDiamsCompatVersion,         //!< With which version of FreeDiams is this data compatible
-        FreeAccountCompatVersion,       //!< With which version of FreeAccount is this data compatible
         CreationDate,                   //!< Creation date
         LastModificationDate,           //!< Last modification date
         GeneralIcon,                    //!< Representative Icon of this data

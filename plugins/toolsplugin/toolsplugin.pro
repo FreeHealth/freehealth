@@ -35,28 +35,6 @@ contains(DEFINES, WITH_FRENCH_FSP){
         fsp/fspprinterpreferences.ui
 }
 
-# Cheque printing Feature
-contains(DEFINES, WITH_CHEQUE_PRINTING){
-    HEADERS += \
-        cheque/chequeconstants.h \
-        cheque/chequeprinter.h \
-        cheque/chequeprinter_preferences.h \
-        cheque/chequeprinterdialog.h \
-        cheque/chequeprintformat.h \
-        cheque/chequeprintformatmodel.h
-
-    SOURCES += \
-        cheque/chequeprinter.cpp \
-        cheque/chequeprinter_preferences.cpp \
-        cheque/chequeprinterdialog.cpp \
-        cheque/chequeprintformat.cpp \
-        cheque/chequeprintformatmodel.cpp
-
-    FORMS += \
-        cheque/chequeprinter_preferences.ui \
-        cheque/chequeprinterdialog.ui
-}
-
 # HPRIM integrator
 contains(DEFINES, WITH_FRENCH_HPRIM_INTEGRATOR){
     QT *= xml

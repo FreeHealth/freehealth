@@ -137,11 +137,6 @@ void DataPackPluginIPlugin::extensionsInitialized()
         xmlConfig = user()->value(Core::IUser::DataPackConfig).toString();
 #endif
 
-#ifdef FREEACCOUNT
-    if (user())
-        xmlConfig = user()->value(Core::IUser::DataPackConfig).toString();
-#endif
-
 #ifdef FREEDIAMS
     xmlConfig = QString(QByteArray::fromBase64(settings()->value("datapack/server/config").toByteArray()));
 #endif
@@ -224,11 +219,6 @@ void DataPackPluginIPlugin::coreAboutToClose()
         user()->setValue(Core::IUser::DataPackConfig, core.serverManager()->xmlConfiguration());
 #endif
 
-#ifdef FREEACCOUNT
-    if (user())
-        user()->setValue(Core::IUser::DataPackConfig, core.serverManager()->xmlConfiguration());
-#endif
-
 #ifdef FREEDIAMS
     QByteArray s = QByteArray(core.serverManager()->xmlConfiguration().toUtf8()).toBase64();
     settings()->setValue("datapack/server/config", s);
@@ -270,13 +260,6 @@ ExtensionSystem::IPlugin::ShutdownFlag DataPackPluginIPlugin::aboutToShutdown()
     // Core::user() is still available
     DataPack::DataPackCore &core = DataPack::DataPackCore::instance(this);
 #ifdef FREEHEALTH
-    if (user()) {
-        user()->setValue(Core::IUser::DataPackConfig, core.serverManager()->xmlConfiguration());
-        user()->saveChanges();
-    }
-#endif
-
-#ifdef FREEACCOUNT
     if (user()) {
         user()->setValue(Core::IUser::DataPackConfig, core.serverManager()->xmlConfiguration());
         user()->saveChanges();

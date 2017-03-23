@@ -150,7 +150,6 @@ const char * const G_PLUGINS                =   "grPlugins";
 const char * const G_PLUGINS_USERMANAGER    =   "grPlugins.usermanager";
 const char * const G_PLUGINS_FORM           =   "grPlugins.forms";
 const char * const G_PLUGINS_DRUGS          =   "grPlugins.drugs";
-const char * const G_PLUGINS_ACCOUNT        =   "grPlugins.account";
 const char * const G_PLUGINS_CALENDAR       =   "grPlugins.calendar";
 const char * const G_PLUGINS_PADTOOLS       =   "grPlugins.padTools";
 const char * const G_PLUGINS_OTHERS         =   "grPlugins.others";
@@ -311,7 +310,6 @@ const char * const MODE_PATIENT_SEARCH    = "PatientSearch";
 const char * const MODE_PATIENT_FILE      = "central";
 const char * const MODE_PATIENT_HISTORY   = "PatientHistory";
 const char * const MODE_PATIENT_DRUGS     = "drugs";
-const char * const MODE_ACCOUNT           = "account";
 const char * const MODE_AGENDA            = "agenda";
 const char * const MODE_USERMANAGER       = "usermanager";
 
@@ -342,7 +340,6 @@ const int P_MODE_PATIENT_DRUGS   = ThirdModeGroup + SecondModeSubGroup;
 const int P_MODE_PATIENT_FILE    = ThirdModeGroup + ThirdModeSubGroup;
 const int P_MODE_USERMANAGER     = FourthModeGroup + FirstModeSubGroup;
 const int P_MODE_TOOLS           = FourthModeGroup + SecondModeSubGroup;
-const int P_MODE_ACCOUNT         = FourthModeGroup + ThirdModeSubGroup;
 
 // Options page sortIndex (per categories)
 const int          OPTIONINDEX_MAIN         = 0;
@@ -355,7 +352,6 @@ const int          OPTIONINDEX_FORMS        = 6000;
 const int          OPTIONINDEX_DRUGS        = 7000;
 const int          OPTIONINDEX_TEMPLATES    = 8000;
 const int          OPTIONINDEX_WEBCAM       = 9000;
-const int          OPTIONINDEX_ACCOUNT      = 10000;
 const int          OPTIONINDEX_TOOLS        = 11000;
 
 // Contexts

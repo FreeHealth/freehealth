@@ -586,7 +586,6 @@ QMap<int, QString> GenericDescription::nonTranslatableTagsDataReference() const
     elements.insert(GenericDescription::Validity, TAG_VALIDITY);
     elements.insert(GenericDescription::FreeMedFormsCompatVersion, TAG_FMF_COMPAT_VERSION);
     elements.insert(GenericDescription::FreeDiamsCompatVersion, TAG_FD_COMPAT_VERSION);
-    elements.insert(GenericDescription::FreeAccountCompatVersion, TAG_FA_COMPAT_VERSION);
     elements.insert(GenericDescription::CreationDate, TAG_CREATIONDATE);
     elements.insert(GenericDescription::LastModificationDate, TAG_LASTMODIFDATE);
     elements.insert(GenericDescription::GeneralIcon, TAG_ICON);

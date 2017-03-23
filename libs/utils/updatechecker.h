@@ -41,7 +41,6 @@ namespace Utils {
 namespace Constants {
     const char* const  EHR_UPDATE_URL  = "https://freehealth.io/update/update-ehr.txt";
     const char* const  FREEDIAMS_UPDATE_URL     = "https://freehealth.io/update/update-di.txt";
-    const char* const  FREEACCOUNT_UPDATE_URL   = "https://freehealth.io/update/update-freeaccount.txt";
     const char* const  FREEICD_UPDATE_URL       = "https://freehealth.io/update/update-freeicd.txt";
     const char* const  FREEGIR_UPDATE_URL       = "https://freehealth.io/update/update-freegir.txt";
     const char* const  FREETOOLBOX_UPDATE_URL   = "https://freehealth.io/update/update-freetoolbox.txt";

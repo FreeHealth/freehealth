@@ -7,7 +7,6 @@ CONFIG(debug_without_install) {
 # - INSTALL_PROFILES_FILES : install user profile files (used by the user manager plugin)
 # - INSTALL_DRUGS : install "appinstalled" free drugs datapack
 # - INSTALL_ICD_DATABASE : install "appinstalled" free icd10 datapack
-# - INSTALL_ACCOUNT_FILES install freeaccount/accountancy plugin required files
 # - INSTALL_ZIPCODES : install "appinstalled" free zipcodes datapack
 # - INSTALL_EDRC_FILES : install "appinstalled" edrc datapack
 
@@ -132,7 +131,6 @@ message(    * Extension: $${LIB_EXTENSION})
     contains(INSTALL_DRUGS,1):message( Installing drugs database )
     contains(INSTALL_PROFILES_FILES,1):message( Installing user default Profiles files)
     contains(INSTALL_ICD_DATABASE,1):message( Installing ICD10 database )
-    contains(INSTALL_ACCOUNT_FILES,1):message( Installing Account files )
     contains(INSTALL_ZIPCODES,1):message( Installing ZipCodes database )
     contains(INSTALL_EDRC_FILES,1):message( Installing eDRC database )
 }
@@ -272,18 +270,6 @@ macx {
     INSTALLS+=freeicd_sqlfile
   }
 
-  # Install FreeAccount SQL files
-  contains(INSTALL_ACCOUNT_FILES,1){
-    account_sqlfile.path=$${INSTALL_RESOURCES_PATH}/sql/account
-    account_sqlfile.files=$${SOURCES_GLOBAL_RESOURCES}/sql/account/*
-    INSTALLS+=account_sqlfile
-  }
-  # Install accountancy databases
-  contains(INSTALL_ACCOUNT_FILES,1):!isEmpty(INSTALL_FREEDATAPACK_PATH):!isEmpty(SOURCES_FREEDATAPACK_PATH){
-    accountdb.path = $${INSTALL_FREEDATAPACK_PATH}/account
-    accountdb.files = $${SOURCES_FREEDATAPACK_PATH}/account/*
-    INSTALLS += accountdb
-  }
   # Install FreeDRC datapack files
   contains(INSTALL_EDRC_FILES,1):!isEmpty(INSTALL_FREEDATAPACK_PATH):!isEmpty(SOURCES_FREEDATAPACK_PATH){
     edrcdb.path = $${INSTALL_FREEDATAPACK_PATH}/edrc_ro

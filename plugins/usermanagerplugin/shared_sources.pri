@@ -1,5 +1,5 @@
 # Shared sources of UserManager plugin
-# Sources are shared between multiple applications (FreeAccount, FreeMedForms)
+# Sources are shared between multiple applications
 
 include( $${PWD}/../fmf_plugins.pri)
 include( $${PWD}/usermanagerplugin_dependencies.pri )

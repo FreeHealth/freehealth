@@ -34,7 +34,6 @@
 #include "fspprinter.h"
 #include "fspconstants.h"
 #include "fsptemplatemodel.h"
-#include "../cheque/chequeprinterdialog.h"
 
 #include "ui_fspprinterdialog.h"
 #include "ui_fspprinterdialog_patient.h"
@@ -585,14 +584,6 @@ void FspPrinterDialog::previewFsp()
     Utils::ImageViewer viewer(this);
     viewer.setPixmap(QPixmap(*d->_preview->pixmap()));
     viewer.exec();
-}
-
-void FspPrinterDialog::printCheque()
-{
-    ChequePrinterDialog dlg(this);
-    dlg.initializeWithSettings();
-    dlg.setAmount(d->_fsp.data(Fsp::TotalAmount).toDouble());
-    dlg.exec();
 }
 
 void FspPrinterDialog::updatePreview()

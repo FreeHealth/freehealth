@@ -122,8 +122,8 @@ public:
     };
 
     /**
-       \brief Simpified Enum for database driver selection.
-       Actually, only SQLite is take into account.
+       \brief Simplified Enum for database driver selection.
+       Currently, only SQLite is take into account.
     */
     enum AvailableDrivers
     {

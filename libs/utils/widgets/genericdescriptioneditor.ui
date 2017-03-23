@@ -17,7 +17,7 @@
    <item row="0" column="0">
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="tab">
       <attribute name="title">
@@ -166,7 +166,7 @@
           <item row="0" column="0">
            <widget class="QLabel" name="label_9">
             <property name="text">
-             <string>FreeMedForms:</string>
+             <string>FreeHealth</string>
             </property>
            </widget>
           </item>
@@ -176,22 +176,12 @@
           <item row="1" column="0">
            <widget class="QLabel" name="label_10">
             <property name="text">
-             <string>FreeDiams:</string>
+             <string>FreeRx</string>
             </property>
            </widget>
           </item>
           <item row="1" column="1">
            <widget class="QLineEdit" name="fdCompat"/>
-          </item>
-          <item row="2" column="0">
-           <widget class="QLabel" name="label_11">
-            <property name="text">
-             <string>FreeAccount:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="1">
-           <widget class="QLineEdit" name="faCompat"/>
           </item>
          </layout>
         </widget>

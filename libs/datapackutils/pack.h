@@ -53,7 +53,6 @@ public:
         ICD,
         ZipCodes,
         UserDocuments,
-        Accountancy,
         AlertPacks,
         Binaries,
         UnknownType

@@ -43,7 +43,9 @@
   These two members returns true if all is ok.
 
   2. Drugs retriever\n
-  You can retrieve drugs using UID ou CIP code via getDrugByUID() and getDrufByCIP().
+  You can retrieve drugs from their
+    * UID (Unique ID: eg NDA or CIS) code via getDrugByUID()
+    * DID (Drug ID) via getDrugByDrugId()
 
   3. Dosages retriever / saver
 
