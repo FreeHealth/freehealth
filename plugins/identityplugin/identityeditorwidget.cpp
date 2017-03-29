@@ -50,6 +50,7 @@
  * - firstnames
  * - date of birth
  * - photo
+ * - landline phone number
  * - full address with
  *    - street
  *    - city
@@ -121,6 +122,7 @@ const char * const XML_GENDER   = "gdr";
 const char * const XML_LANG     = "i18";
 const char * const XML_DOB      = "dob";
 //const char * const XML_DOD      = "dod";
+const char * const XML_LANDLINEPHONE = "landline";
 const char * const XML_PHOTO    = "pix";
 const char * const XML_STREET   = "str";
 const char * const XML_CITY     = "city";
@@ -293,6 +295,8 @@ public:
         QObject::connect(ui->usualName, SIGNAL(textChanged(QString)), q, SIGNAL(usualNameChanged(QString)));
         QObject::connect(ui->otherNames, SIGNAL(textChanged(QString)), q, SIGNAL(otherNamesChanged(QString)));
         QObject::connect(ui->firstname, SIGNAL(textChanged(QString)), q, SIGNAL(firstNameChanged(QString)));
+        QObject::connect(ui->landlinePhoneLineEdit, SIGNAL(textChanged(QString)),
+                         q, SIGNAL(landlinePhoneChanged(QString)));
         QObject::connect(ui->dob, SIGNAL(dateChanged(QDate)), q, SIGNAL(dateOfBirthChanged(QDate)));
         QObject::connect(ui->genderCombo, SIGNAL(currentIndexChanged(int)), q, SIGNAL(genderIndexChanged(int)));
         QObject::connect(ui->genderCombo, SIGNAL(currentIndexChanged(QString)), q, SIGNAL(genderChanged(QString)));
@@ -352,6 +356,7 @@ public:
         m_Mapper->addMapping(ui->usualName, Core::IPatient::UsualName, "text");
         m_Mapper->addMapping(ui->otherNames, Core::IPatient::OtherNames, "text");
         m_Mapper->addMapping(ui->firstname, Core::IPatient::Firstname, "text");
+        m_Mapper->addMapping(ui->landlinePhoneLineEdit, Core::IPatient::Tels, "text");
         m_Mapper->addMapping(ui->genderCombo, Core::IPatient::GenderIndex, "currentIndex");
         m_Mapper->addMapping(ui->titleCombo, Core::IPatient::TitleIndex, "currentIndex");
         m_Mapper->addMapping(ui->dob, Core::IPatient::DateOfBirth, "date");
@@ -382,6 +387,7 @@ public:
         case IdentityEditorWidget::Photo: return ui->photoButton;
         case IdentityEditorWidget::Extra_Login: return ui->passwordWidget->loginEditor();
         case IdentityEditorWidget::Extra_Password: return ui->passwordWidget;
+        case IdentityEditorWidget::LandlinePhone: return ui->landlinePhoneLineEdit;
         default: break;
         }
         return 0;
@@ -399,6 +405,7 @@ public:
         case IdentityEditorWidget::OtherNames:
         case IdentityEditorWidget::FirstName:
         case IdentityEditorWidget::Extra_Login:
+        case IdentityEditorWidget::LandlinePhone:
             return "text";
         case IdentityEditorWidget::Extra_Password:
             return "cryptedPassword";
@@ -453,6 +460,7 @@ public:
             id = 2;
         ui->genderCombo->setCurrentIndex(id);
         ui->language->setCurrentIsoLanguage(tags.value(::XML_LANG));
+        ui->landlinePhoneLineEdit->setText(tags.value(::XML_LANDLINEPHONE));
         ui->dob->setDate(QDate::fromString(tags.value(::XML_DOB), Qt::ISODate));
         //ui->dod->setText(tags.value(::XML_DOD));
         ui->photoButton->setPixmap(Utils::pixmapFromBase64(tags.value(::XML_PHOTO).toUtf8()));
@@ -486,6 +494,7 @@ public:
             break;
         }
         tags.insert(::XML_LANG, ui->language->currentLanguageIsoName());
+        tags.insert(::XML_LANDLINEPHONE, ui->landlinePhoneLineEdit->text());
         tags.insert(::XML_DOB, ui->dob->date().toString(Qt::ISODate));
         //tags.insert(::XML_DOD, ui->dod->date().toString(Qt::ISODate));
         tags.insert(::XML_PHOTO, Utils::pixmapToBase64(ui->photoButton->pixmap()));
@@ -583,6 +592,7 @@ void IdentityEditorWidget::setAvailableWidgets(AvailableWidgets widgets)
     d->ui->otherNames->setEnabled(widgets.testFlag(OtherNames));
     d->ui->firstname->setEnabled(widgets.testFlag(FirstName));
     d->ui->language->setEnabled(widgets.testFlag(Language_QLocale) || widgets.testFlag(LanguageIso));
+    d->ui->landlinePhoneLineEdit->setEnabled(widgets.testFlag(LandlinePhone));
     d->ui->dob->setEnabled(widgets.testFlag(DateOfBirth));
     //d->ui->dod->setEnabled(widgets.testFlag(DateOfDeath));
     d->ui->photoButton->setEnabled(widgets.testFlag(Photo));
@@ -599,6 +609,8 @@ void IdentityEditorWidget::setAvailableWidgets(AvailableWidgets widgets)
     d->ui->genderLabel->setVisible(d->ui->genderCombo->isEnabled());
     d->ui->language->setVisible(d->ui->language->isEnabled());
     d->ui->languageLabel->setVisible(d->ui->language->isEnabled());
+    d->ui->landlinePhoneLabel->setVisible(d->ui->landlinePhoneLineEdit->isEnabled());
+    d->ui->landlinePhoneLineEdit->setVisible(d->ui->landlinePhoneLineEdit->isEnabled());
     d->ui->dob->setVisible(d->ui->dob->isEnabled());
     d->ui->dobLabel->setVisible(d->ui->dob->isEnabled());
     //d->ui->dod->setVisible(d->ui->dod->isEnabled());
@@ -610,6 +622,7 @@ void IdentityEditorWidget::setAvailableWidgets(AvailableWidgets widgets)
     QWidget::setTabOrder(d->ui->firstname, d->ui->otherNames);
     QWidget::setTabOrder(d->ui->otherNames, d->ui->dob);
     QWidget::setTabOrder(d->ui->dob, d->ui->genderCombo);
+    QWidget::setTabOrder(d->ui->genderCombo, d->ui->landlinePhoneLineEdit);
 
     QWidget *lastTab = d->ui->genderCombo;
 
@@ -651,6 +664,7 @@ void IdentityEditorWidget::setReadOnly(bool readOnly)
     d->ui->titleCombo->setEnabled(!readOnly);
     d->ui->language->setEnabled(!readOnly);
     d->ui->photoButton->setEnabled(!readOnly);
+    d->ui->landlinePhoneLineEdit->setReadOnly(readOnly);
 }
 
 bool IdentityEditorWidget::isReadOnly() const
@@ -900,6 +914,12 @@ QDate IdentityEditorWidget::currentDateOfBirth() const
 QString IdentityEditorWidget::currentLanguage() const
 {
     return d->ui->language->currentLanguageName();
+}
+
+/** Return the current editing value */
+QString IdentityEditorWidget::currentLandlinePhone() const
+{
+    return d->ui->landlinePhoneLineEdit->text();
 }
 
 /** Return the current editing value */

@@ -26,7 +26,8 @@
  ***************************************************************************/
 /**
  * \class IdentityPage
- * Wizard page that asks for basic identity data like name, title, date of birth, gender, etc.
+ * Wizard page that asks for basic identity data like name, title,
+ * date of birth, gender, phone number, etc.
  */
 
 #include "patientcreatorwizard.h"
@@ -89,7 +90,7 @@ void PatientCreatorWizard::done(int r)
 {
     if (r == QDialog::Rejected) {
         m_Saved = false;
-        // has been anything entered already into the fields (data model is "dirty")?
+        // has anything been already entered into the fields (data model is "dirty")?
         // -->then ask for confirmation
         bool reallyClose = !m_Page->isModified() ? true :
                                       Utils::yesNoMessageBox(tr("WARNING! You did not save this patient. "
@@ -130,7 +131,8 @@ IdentityPage::IdentityPage(QWidget *parent) :
     m_Identity = new Identity::IdentityEditorWidget(this);
     m_Identity->setAvailableWidgets(Identity::IdentityEditorWidget::FullIdentity |
                                     Identity::IdentityEditorWidget::Photo |
-                                    Identity::IdentityEditorWidget::FullAddress);
+                                    Identity::IdentityEditorWidget::FullAddress |
+                                    Identity::IdentityEditorWidget::FullContact);
     m_Model = new PatientModel(this);
     m_Model->setObjectName("PatientModelForWizardCreator");
     // Ensure the model is empty using a fake uuid
@@ -159,6 +161,7 @@ IdentityPage::IdentityPage(QWidget *parent) :
     m_Identity->addMapping(Identity::IdentityEditorWidget::Zipcode, Core::IPatient::ZipCode);
     m_Identity->addMapping(Identity::IdentityEditorWidget::Province, Core::IPatient::StateProvince);
     m_Identity->addMapping(Identity::IdentityEditorWidget::Country_TwoCharIso, Core::IPatient::Country);
+    m_Identity->addMapping(Identity::IdentityEditorWidget::LandlinePhone, Core::IPatient::Tels);
     m_Identity->setCurrentIndex(m_Model->index(0,0));
 
     QGridLayout *layout = new QGridLayout(this);

@@ -78,6 +78,7 @@ class IDENTITYSHARED_EXPORT IdentityEditorWidget : public QWidget
     Q_PROPERTY(QString gender READ currentGender NOTIFY genderChanged)
     Q_PROPERTY(int genderIndex READ currentGenderIndex NOTIFY genderIndexChanged)
     Q_PROPERTY(QString language READ currentLanguage NOTIFY languageChanged)
+    Q_PROPERTY(QString landlinePhone READ currentLandlinePhone NOTIFY landlinePhoneChanged)
 //    QPixmap currentPhoto() const;
 
     Q_PROPERTY(QString clearLogin READ currentClearLogin NOTIFY clearLoginChanged)
@@ -105,7 +106,7 @@ public:
         Country_QLocale         = 0x00020000,
         Tel1Work                = 0x00040000,
         Tel2Cell                = 0x00080000,
-        Tel3Home                = 0x00100000,
+        LandlinePhone           = 0x00100000,
         Fax                     = 0x00200000,
         Email                   = 0x00400000,
         // TODO: implement the following
@@ -115,7 +116,7 @@ public:
         FullIdentity = TitleIndex | UsualName | OtherNames | FirstName | Gender | DateOfBirth,
         FullAddress =  Street | City | Zipcode | Province | Country_TwoCharIso |Country_QLocale,
         FullLogin = Extra_Login | Extra_Password | Extra_ConfirmPassword,
-        FullContact = Tel1Work | Tel2Cell | Tel3Home | Fax | Email
+        FullContact = Tel1Work | Tel2Cell | LandlinePhone | Fax | Email
     };
     Q_DECLARE_FLAGS(AvailableWidgets, AvailableWidget)
 
@@ -166,7 +167,7 @@ public:
     QString currentZipCode() const;
     QString currentTel1Work() const;
     QString currentTel2Cell() const;
-    QString currentTel3Home() const;
+    QString currentLandlinePhone() const;
     QString currentFax() const;
     QString currentEmail() const;
 
@@ -189,6 +190,7 @@ Q_SIGNALS:
     void genderIndexChanged(int genderIndex);
     void genderChanged(const QString &gender);
     void languageChanged(const QString &languageName);
+    void landlinePhoneChanged(const QString &landlinePhone);
     void clearLoginChanged(const QString &login);
     void clearPasswordChanged(const QString &clearPassword);
 
