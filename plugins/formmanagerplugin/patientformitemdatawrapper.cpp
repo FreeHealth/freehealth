@@ -94,6 +94,14 @@ public:
                         _availablePatientData << item->patientDataRepresentation();
                         _availablePatientData << Core::IPatient::DrugsChronicTherapeuticsHtml;
                          break;
+                    case Core::IPatient::Tels:
+                        qDebug() << item->patientDataRepresentation()
+                                 << item->itemData()->isModified()
+                                 << item->itemData()->storableData();
+                    case Core::IPatient::MobilePhone:
+                        qDebug() << item->patientDataRepresentation()
+                                 << item->itemData()->isModified()
+                                 << item->itemData()->storableData();
                     default:
                         _availablePatientData << item->patientDataRepresentation();
                     } // switch
