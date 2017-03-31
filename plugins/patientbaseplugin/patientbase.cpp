@@ -151,8 +151,16 @@ PatientBase::PatientBase(QObject *parent) :
     addIndex(Table_PATIENT_PHOTO, PHOTO_PATIENT_UID);
 
     // Version
-    addTable(Table_VERSION, "VERSION");
-    addField(Table_VERSION, VERSION_TEXT, "VERSION", FieldIsShortText);
+    //addTable(Table_VERSION, "VERSION");
+    //addField(Table_VERSION, VERSION_TEXT, "VERSION", FieldIsShortText);
+
+    // SchemaChanges
+    addTable(Table_SCHEMA, "SCHEMA_CHANGES");
+    addField(Table_SCHEMA, SCHEMA_ID, "ID", FieldIsUniquePrimaryKey);
+    addField(Table_SCHEMA, SCHEMA_VERSION, "VERSION_NUMBER", FieldIsInteger);
+    addField(Table_SCHEMA, SCHEMA_SCRIPT, "SCRIPT_NAME", FieldIsShortText);
+    addField(Table_SCHEMA, SCHEMA_TIMESTAMP, "TIMESTAMP_UTC_APPLIED", FieldIsShortText);
+    addIndex(Table_SCHEMA, SCHEMA_ID);
 
     // Connect first run database creation requested
     connect(Core::ICore::instance(), SIGNAL(firstRunDatabaseCreation()), this, SLOT(onCoreFirstRunCreationRequested()));
@@ -190,7 +198,7 @@ bool PatientBase::initialize()
         LOG(tkTr(Trans::Constants::CONNECTED_TO_DATABASE_1_DRIVER_2).arg(database().databaseName()).arg(database().driverName()));
     }
 
-    //    d->checkDatabaseVersion();
+    updateDatabase();
 
     if (!checkDatabaseScheme()) {
         LOG_ERROR(tkTr(Trans::Constants::DATABASE_1_SCHEMA_ERROR).arg(Constants::DB_NAME));
@@ -455,11 +463,6 @@ bool PatientBase::createDatabase(const QString &connectionName , const QString &
         return false;
     }
 
-    // Add version number
-    if (!setVersion(Utils::Field(Constants::Table_VERSION, Constants::VERSION_TEXT), Constants::DB_CURRENTVERSION)) {
-        LOG_ERROR_FOR("EpisodeBase", "Unable to set version");
-    }
-
     return true;
 }
 
@@ -502,4 +505,40 @@ void PatientBase::toTreeWidget(QTreeWidget *tree) const
     new QTreeWidgetItem(db, QStringList() << "Total patients" << QString::number(count(Constants::Table_IDENT, Constants::IDENTITY_ID)));
 //    new QTreeWidgetItem(db, QStringList() << "User's patients" << QString::number(count(Constants::Table_IDENT, Constants::IDENTITY_ID, req)));
     tree->expandAll();
+}
+
+bool PatientBase::updateDatabase() const
+{
+    if (getSchemaVersionNumber() == Constants::DB_CURRENTVERSION)
+        return true;
+    return true;
+}
+
+
+/**
+ * Returns the current schema version number of the database
+ * The version number is a integer.
+ * The field VERSION_NUMBER of the last row of the table SCHEMA_CHANGES.
+ * By definition, this number must be a positive, non null integer.
+ */
+quint32 PatientBase::getSchemaVersionNumber() const
+{
+    return 1;
+    /*QSqlDatabase DB = QSqlDatabase::database(Constants::DB_NAME);
+    if (!connectDatabase(DB, __LINE__)) {
+        return false;
+    }
+    using namespace Patients::Constants;
+    DB.transaction();
+    quint32 value;
+    QSqlQuery query(DB);
+    if (query.exec(selectLast(field, table))) {
+        if (query.next()){
+            value = query.value(0).toUInt();
+        }
+    }
+    query.finish();
+    DB.commit();
+    return value;
+    */
 }

@@ -84,6 +84,9 @@ public:
 
     void toTreeWidget(QTreeWidget *tree) const;
 
+    bool updateDatabase() const;
+    quint32 getSchemaVersionNumber() const;
+
 private:
     bool createDatabase(const QString &connectionName, const QString &dbName,
                           const QString &pathOrHostName,

@@ -297,8 +297,8 @@ public:
 
     virtual bool checkDatabaseScheme();
     virtual bool checkVersion(const Field &field, const QString &expectedVersion);
-    virtual QString getVersion(const Field &field)const;
-    virtual quint32 getVersionNumber(const Field &field)const;
+    virtual QString getVersion(const Field &field) const;
+    virtual quint32 getVersionNumber(const Field &field) const;
     virtual bool setVersion(const Field &field, const QString &version);
     virtual bool setVersion(const Field &field, const int &version);
 
@@ -340,6 +340,7 @@ public:
     virtual QString select(const Field &select, const Join &join, const FieldList &conditions) const;
     virtual QString select(const Field &select, const JoinList &joins, const FieldList &conditions) const;
     virtual QString select(const Field &select, const Join &join, const Field &conditions) const;
+    virtual QString selectLast(const int &fieldref, const int &tableref);
 
     virtual QString fieldEquality(const int tableRef1, const int fieldRef1, const int tableRef2, const int fieldRef2) const;
 

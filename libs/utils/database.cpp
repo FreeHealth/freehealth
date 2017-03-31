@@ -1916,6 +1916,14 @@ QString Database::select(const Field &select, const Join &join, const Field &con
     return this->select(get, joins, conds);
 }
 
+
+QString Database::selectLast(const int &fieldref, const int &tableref)
+{
+    return QString("SELECT `%1` FROM `%2` ORDER BY `%1` DESC LIMIT 1")
+                .arg(fieldref)
+                .arg(tableref);
+}
+
 /**
    Return a SELECT SQL structured field equality.
   \code
