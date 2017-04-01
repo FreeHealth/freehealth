@@ -32,10 +32,12 @@
 namespace Patients {
 namespace Constants {
 
-    const char * const  DB_NAME            = "patients";
-    const char * const  DB_FILENAME        = "patients.db";
-    //const char * const  DB_CURRENTVERSION   = "0.1";
-    const int DB_CURRENTVERSION = 1;
+    const char * const DB_NAME            = "patients";
+    const char * const DB_FILENAME        = "patients.db";
+    const char * const DB_INITIAL_VERSION = "0.1";
+    const char * const OLD_VERSION_TABLE  = "VERSION";
+    const char * const OLD_VERSION_FIELD  = "VERSION";
+    const int          DB_CURRENTVERSION  = 1;
 
     // Tables
     enum Tables {
@@ -72,8 +74,8 @@ namespace Constants {
         IDENTITY_MAILS,
         IDENTITY_TELS,
         IDENTITY_FAXES,
-        IDENT_MOBILE_PHONE,
-        IDENT_WORK_PHONE
+        IDENTITY_MOBILE_PHONE,
+        IDENTITY_WORK_PHONE
     };
     enum LkFields {
         LK_TOPRACT_ID = 0,

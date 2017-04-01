@@ -52,7 +52,9 @@
 #include <coreplugin/icommandline.h>
 
 #include <QCoreApplication>
+#include <QFile>
 #include <QSqlDatabase>
+#include <QSqlDriver>
 #include <QSqlError>
 #include <QSqlQuery>
 #include <QSqlRecord>
@@ -75,8 +77,9 @@ static inline bool connectDatabase(QSqlDatabase &DB, const int line)
 {
     if (!DB.isOpen()) {
         if (!DB.open()) {
-            Utils::Log::addError("EpisodeBase", tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
-                                 .arg(DB.connectionName()).arg(DB.lastError().text()),
+            Utils::Log::addError(Patients::Constants::DB_NAME, tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
+                                 .arg(DB.connectionName())
+                                 .arg(DB.lastError().text()),
                                  __FILE__, line);
             return false;
         }
@@ -140,7 +143,8 @@ PatientBase::PatientBase(QObject *parent) :
     addField(Table_IDENT, IDENTITY_MAILS, "MAILS", FieldIsLongText);  // Context:Value;Context;Value... Work:eric@work.fr...
     addField(Table_IDENT, IDENTITY_TELS, "TELS", FieldIsLongText);  // Context:Value;Context;Value...
     addField(Table_IDENT, IDENTITY_FAXES, "FAXES", FieldIsLongText);  // Context:Value;Context;Value...
-
+    addField(Table_IDENT, IDENTITY_MOBILE_PHONE, "MOBILE_PHONE", FieldIs32Chars);
+    addField(Table_IDENT, IDENTITY_WORK_PHONE, "WORK_PHONE", FieldIs32Chars);
     // Photo
     addTable(Table_PATIENT_PHOTO, "PATIENT_PHOTO");
     addField(Table_PATIENT_PHOTO, PHOTO_ID, "PHOTO_ID", FieldIsUniquePrimaryKey);
@@ -212,11 +216,11 @@ bool PatientBase::initialize()
 
 /** Creates a virtual patient with the specified data. Virtual patient can be hidden from the ui using a preference setting. */
 bool PatientBase::createVirtualPatient(const QString &usualName, const QString &otherNames, const QString &firstname,
-                          const QString &gender, const int title, const QDate &dob,
-                          const QString &country, const QString &note,
-                          const QString &street, const QString &zip, const QString &city,
-                          QString uuid, const int lkid,
-                          const QString &photoFile, const QDate &death)
+                                       const QString &gender, const int title, const QDate &dob,
+                                       const QString &country, const QString &note,
+                                       const QString &street, const QString &zip, const QString &city,
+                                       QString uuid, const int lkid,
+                                       const QString &photoFile, const QDate &death)
 {
     qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     QSqlDatabase DB = QSqlDatabase::database(Constants::DB_NAME);
@@ -385,12 +389,12 @@ bool PatientBase::setPatientActiveProperty(const QString &uuid, bool active)
 
 /** Private part of the Patients::PatientBase that creates the database. \sa Utils::Database. */
 bool PatientBase::createDatabase(const QString &connectionName , const QString &dbName,
-                    const QString &pathOrHostName,
-                    TypeOfAccess access, AvailableDrivers driver,
-                    const QString & login, const QString & pass,
-                    const int port,
-                    CreationOption /*createOption*/
-                   )
+                                 const QString &pathOrHostName,
+                                 TypeOfAccess access, AvailableDrivers driver,
+                                 const QString & login, const QString & pass,
+                                 const int port,
+                                 CreationOption /*createOption*/
+                                 )
 {
     Q_UNUSED(access);
     if (connectionName != Constants::DB_NAME)
@@ -492,25 +496,39 @@ void PatientBase::toTreeWidget(QTreeWidget *tree) const
     QString uuid = user()->uuid();
     QHash<int, QString> where;
     // TODO: here
-//    where.clear();
-//    where.insert(Constants::LK_TOPRACT_PRACT_UUID, QString("='%1'").arg(uuid));
-//    QString req = select(Constants::Table_LK_TOPRACT, Constants::LK_TOPRACT_LKID, where);
-//    where.clear();
-//    where.insert(Constants::IDENTITY_LK_TOPRACT_LKID, QString("IN (%1)").arg(req));
-//    req = getWhereClause(Constants::Table_IDENT, where);
+    //    where.clear();
+    //    where.insert(Constants::LK_TOPRACT_PRACT_UUID, QString("='%1'").arg(uuid));
+    //    QString req = select(Constants::Table_LK_TOPRACT, Constants::LK_TOPRACT_LKID, where);
+    //    where.clear();
+    //    where.insert(Constants::IDENTITY_LK_TOPRACT_LKID, QString("IN (%1)").arg(req));
+    //    req = getWhereClause(Constants::Table_IDENT, where);
     QFont bold;
     bold.setBold(true);
     QTreeWidgetItem *db = new QTreeWidgetItem(tree, QStringList() << "Patients count");
     db->setFont(0, bold);
     new QTreeWidgetItem(db, QStringList() << "Total patients" << QString::number(count(Constants::Table_IDENT, Constants::IDENTITY_ID)));
-//    new QTreeWidgetItem(db, QStringList() << "User's patients" << QString::number(count(Constants::Table_IDENT, Constants::IDENTITY_ID, req)));
+    //    new QTreeWidgetItem(db, QStringList() << "User's patients" << QString::number(count(Constants::Table_IDENT, Constants::IDENTITY_ID, req)));
     tree->expandAll();
 }
 
 bool PatientBase::updateDatabase() const
 {
-    if (getSchemaVersionNumber() == Constants::DB_CURRENTVERSION)
+    QSqlDatabase DB = QSqlDatabase::database(Constants::DB_NAME);
+    if (getSchemaVersionNumber() == Constants::DB_CURRENTVERSION) {
         return true;
+    } else if (getSchemaVersionNumber() == 0) {
+        if(getOldVersionField() == Constants::DB_INITIAL_VERSION) {
+            for (int i = 1; i <= Constants::DB_CURRENTVERSION; i++) {
+                QString updateScriptFileName= QString(":/sql/update/update%1%2.sql")
+                        .arg(Constants::DB_NAME)
+                        .arg(QString::number(i));
+                QFile updateScriptFile(updateScriptFileName);
+                executeQueryFile(updateScriptFile, DB);
+            }
+        } else {
+            LOG_ERROR("You database structure is note recognized");
+        }
+    }
     return true;
 }
 
@@ -523,22 +541,116 @@ bool PatientBase::updateDatabase() const
  */
 quint32 PatientBase::getSchemaVersionNumber() const
 {
-    return 1;
-    /*QSqlDatabase DB = QSqlDatabase::database(Constants::DB_NAME);
+    bool SchemaTableExists = false;
+    QSqlDatabase DB = QSqlDatabase::database(Constants::DB_NAME);
     if (!connectDatabase(DB, __LINE__)) {
         return false;
     }
     using namespace Patients::Constants;
+    QSqlQuery query(DB);
+    QString queryText = QString("SELECT * FROM information_schema.tables "
+                                "WHERE table_schema = '%1' "
+                                "AND table_name = '%2' "
+                                "LIMIT 1;").arg(DB_NAME).arg(Table_SCHEMA);
+
+    if (query.exec(queryText)) {
+        if (query.next()){
+            SchemaTableExists = !query.value(0).isNull();
+        }
+    } else {
+        LOG_QUERY_ERROR_FOR(Patients::Constants::DB_NAME, query);
+    }
+    if (!SchemaTableExists)
+        return 0;
     DB.transaction();
     quint32 value;
-    QSqlQuery query(DB);
-    if (query.exec(selectLast(field, table))) {
+    query.clear();
+    if (query.exec(selectLast(Constants::SCHEMA_VERSION, Constants::Table_SCHEMA))) {
         if (query.next()){
             value = query.value(0).toUInt();
         }
+    } else {
+        LOG_QUERY_ERROR_FOR(Patients::Constants::DB_NAME, query);
     }
     query.finish();
     DB.commit();
+    qDebug() << value;
     return value;
-    */
+}
+
+bool PatientBase::executeQueryFile(QFile &file, QSqlDatabase &db) const
+{
+    QSqlQuery query(db);
+    //Read query file content
+    file.open(QIODevice::ReadOnly);
+    QString queryStr(file.readAll());
+    file.close();
+
+    //Check if SQL Driver supports Transactions
+    if(db.driver()->hasFeature(QSqlDriver::Transactions)) {
+        //Replace comments and tabs and new lines with space
+        queryStr = queryStr.replace(QRegularExpression("(\\/\\*(.|\\n)*?\\*\\/|^--.*\\n|\\t|\\n)", QRegularExpression::CaseInsensitiveOption|QRegularExpression::MultilineOption), " ");
+        //Remove waste spaces
+        queryStr = queryStr.trimmed();
+
+        //Extracting queries
+        QStringList qList = queryStr.split(';', QString::SkipEmptyParts);
+
+        //Initialize regular expression for detecting special queries (`begin transaction` and `commit`).
+        //NOTE: I used new regular expression for Qt5 as recommended by Qt documentation.
+        QRegularExpression re_transaction("\\bbegin.transaction.*", QRegularExpression::CaseInsensitiveOption);
+        QRegularExpression re_commit("\\bcommit.*", QRegularExpression::CaseInsensitiveOption);
+
+        //Check if query file is already wrapped with a transaction
+        bool isStartedWithTransaction = re_transaction.match(qList.at(0)).hasMatch();
+        if(!isStartedWithTransaction)
+            db.transaction();     //<=== not wrapped with a transaction, so we wrap it with a transaction.
+
+        //Execute each individual queries
+        foreach(const QString &s, qList) {
+            if(re_transaction.match(s).hasMatch())    //<== detecting special query
+                db.transaction();
+            else if(re_commit.match(s).hasMatch())    //<== detecting special query
+                db.commit();
+            else {
+                query.exec(s);                        //<== execute normal query
+                if(query.lastError().type() != QSqlError::NoError) {
+                    qDebug() << query.lastError().text();
+                    db.rollback();                    //<== rollback the transaction if there is any problem
+                }
+            }
+        }
+        if(!isStartedWithTransaction)
+            db.commit();          //<== ... completing of wrapping with transaction
+
+        //Sql Driver doesn't supports transaction
+    } else {
+
+        //...so we need to remove special queries (`begin transaction` and `commit`)
+        queryStr = queryStr.replace(QRegularExpression("(\\bbegin.transaction.*;|\\bcommit.*;|\\/\\*(.|\\n)*?\\*\\/|^--.*\\n|\\t|\\n)", QRegularExpression::CaseInsensitiveOption|QRegularExpression::MultilineOption), " ");
+        queryStr = queryStr.trimmed();
+
+        //Execute each individual queries
+        QStringList qList = queryStr.split(';', QString::SkipEmptyParts);
+        foreach(const QString &s, qList) {
+            query.exec(s);
+            if(query.lastError().type() != QSqlError::NoError) qDebug() << query.lastError().text();
+        }
+    }
+}
+
+QString PatientBase::getOldVersionField() const
+{
+    QString oldVersionValue;
+        QSqlDatabase DB = QSqlDatabase::database(Constants::DB_NAME);
+        QSqlQuery query(DB);
+        QString queryText = QString("SELECT `VERSION` FROM `VERSION`");
+        if (query.exec(queryText)) {
+            if (query.next()){
+                oldVersionValue == query.value(0).toString();
+            }
+        } else {
+            LOG_QUERY_ERROR_FOR(Patients::Constants::DB_NAME, query);
+        }
+        return oldVersionValue;
 }

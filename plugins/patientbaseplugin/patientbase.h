@@ -86,6 +86,8 @@ public:
 
     bool updateDatabase() const;
     quint32 getSchemaVersionNumber() const;
+    bool executeQueryFile(QFile &file, QSqlDatabase &db) const;
+    QString getOldVersionField() const;
 
 private:
     bool createDatabase(const QString &connectionName, const QString &dbName,

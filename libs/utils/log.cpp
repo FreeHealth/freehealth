@@ -205,10 +205,8 @@ void Log::addQueryError(const QObject *o, const QSqlQuery &q, const QString &fil
 
 void Log::addQueryError(const QString &o, const QSqlQuery &q, const QString &file, const int line, bool forceWarning)
 {
-    addError(o, QCoreApplication::translate("Log", "SQL Error: \n"
-                                            "     * %1\n"
-                                            "     * %2\n"
-                                            "     * %3")
+    addError(o, QCoreApplication::translate("Log", "SQL Error: %1 %2 %3 %4")
+             .arg(q.lastError().nativeErrorCode())
              .arg(q.lastError().driverText())
              .arg(q.lastError().databaseText())
              .arg(q.lastQuery()), file, line, forceWarning);

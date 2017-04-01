@@ -190,11 +190,11 @@ public:
         ref.insert("SHOW VIEW", Database::Grant_ShowView);
         ref.insert("TRIGGER", Database::Grant_Trigger);
         ref.insert("UPDATE", Database::Grant_Update);
-//        ref.insert("EVENT", Database::Grant_Event);
-//        ref.insert("FILE", Database::Grant_File);
-//        ref.insert("REFERENCES", Database::Grant_References);
+        //        ref.insert("EVENT", Database::Grant_Event);
+        //        ref.insert("FILE", Database::Grant_File);
+        //        ref.insert("REFERENCES", Database::Grant_References);
         ref.insert("RELOAD", Database::Grant_Reload);
-//        ref.insert("USAGE", Database::Grant_Usage);
+        //        ref.insert("USAGE", Database::Grant_Usage);
 
         // check grants from stringlist
         Database::Grants g = 0;
@@ -415,32 +415,32 @@ bool Database::createMySQLUser(const QString &log,
 
     // Creating grants string
     QString g;
-//    if (grants & Grant_All) {
-//        g = "ALL PRIVILEGES";
-//    } else {
+    //    if (grants & Grant_All) {
+    //        g = "ALL PRIVILEGES";
+    //    } else {
     // Database privileges
-        if (grants & Grant_Select) {
-            g += "SELECT, ";
-        }
-        if (grants & Grant_Update) {
-            g += "UPDATE, ";
-        }
-        if (grants & Grant_Insert) {
-            g += "INSERT, ";
-        }
-        if (grants & Grant_Delete) {
-            g += "DELETE, ";
-        }
-        if (grants & Grant_Create) {
-            g += "CREATE, ";
-        }
-        if (grants & Grant_Drop) {
-            g += "DROP, ";
-        }
-        if (grants & Grant_Alter) {
-            g += "ALTER, ";
-        }
-        g.chop(2);
+    if (grants & Grant_Select) {
+        g += "SELECT, ";
+    }
+    if (grants & Grant_Update) {
+        g += "UPDATE, ";
+    }
+    if (grants & Grant_Insert) {
+        g += "INSERT, ";
+    }
+    if (grants & Grant_Delete) {
+        g += "DELETE, ";
+    }
+    if (grants & Grant_Create) {
+        g += "CREATE, ";
+    }
+    if (grants & Grant_Drop) {
+        g += "DROP, ";
+    }
+    if (grants & Grant_Alter) {
+        g += "ALTER, ";
+    }
+    g.chop(2);
     
     if (g.isEmpty()) {
         LOG_ERROR_FOR("Database","No grants when creating user");
@@ -578,7 +578,7 @@ bool Database::changeMySQLUserOwnPassword(const QString &login, const QString &n
     QSqlQuery query(DB);
     QString req;
     req = QString("SET PASSWORD = PASSWORD('%1');")
-                 .arg(newPassword);
+            .arg(newPassword);
     
     if (!query.exec(req)) {
         LOG_QUERY_ERROR_FOR("Database", query);
@@ -776,10 +776,10 @@ bool Database::createConnection(const QString &connectionName, const QString &no
             DB.setUserName(connector.clearLog());
             DB.setPassword(connector.clearPass());
             DB.setPort(connector.port());
-//            DB.setDatabaseName("mysql");
+            //            DB.setDatabaseName("mysql");
             if (!DB.open()) {
                 LOG_ERROR_FOR("Database", QString("Unable to connect to the server %1 - %2")
-                                     .arg(connector.host()).arg(DB.lastError().text()));
+                              .arg(connector.host()).arg(DB.lastError().text()));
                 return false;
             }
             QSqlQuery query(DB);
@@ -983,9 +983,9 @@ bool Database::createConnection(const QString &connectionName, const QString &no
  * Creates the database
  */
 bool Database::createDatabase(const QString &connectionName , const QString &prefixedDbName,
-                            const Utils::DatabaseConnector &connector,
-                            CreationOption createOption
-                           )
+                              const Utils::DatabaseConnector &connector,
+                              CreationOption createOption
+                              )
 {
     if (connector.driver()==SQLite) {
         return createDatabase(connectionName, prefixedDbName,
@@ -1185,7 +1185,7 @@ bool Database::checkDatabaseScheme()
         int current = rec.count();
         if (current != expected) {
             LOG_ERROR_FOR("Database", QCoreApplication::translate("Database", "Database Scheme Error: wrong number of fields for table %1 (expected: %2; current: %3)")
-                                   .arg(d_database->m_Tables.value(i))
+                          .arg(d_database->m_Tables.value(i))
                           .arg(expected)
                           .arg(current)
                           );
@@ -1197,7 +1197,7 @@ bool Database::checkDatabaseScheme()
         foreach(int f, fields) {
             if (d_database->m_Fields.value(f)!= rec.field(id).name()) {
                 LOG_ERROR_FOR("Database", QCoreApplication::translate("Database", "Database Scheme Error: field number %1 differs: %2 instead of %3 in table %4")
-                                   .arg(id).arg(d_database->m_Fields.value(f), rec.field(id).name(), d_database->m_Tables.value(i)));
+                              .arg(id).arg(d_database->m_Fields.value(f), rec.field(id).name(), d_database->m_Tables.value(i)));
                 return false;
             }
             id++;
@@ -1411,7 +1411,7 @@ QStringList Database::fieldNames(const int &tableref) const
     qSort(list);
     QStringList toReturn;
     foreach(int i, list)
-       toReturn << d_database->m_Fields.value(i);
+        toReturn << d_database->m_Fields.value(i);
     return toReturn;
 }
 
@@ -1443,7 +1443,7 @@ QStringList Database::fieldNamesSql(const int &tableref) const
     }
     if (database().driverName().contains("SQLITE")) {
         req = QString("PRAGMA table_info('%1');")
-             .arg(tableString);
+                .arg(tableString);
     }
     if (query.exec(req)) {
         while (query.next()) {
@@ -1602,8 +1602,8 @@ QString Database::joinToSql(const Join &join) const
         return s;
     s += "`" + join.field1.tableName + "` ON " ;
     s += QString("`%1`.`%2`=`%3`.`%4` ")
-         .arg(join.field1.tableName, join.field1.fieldName)
-         .arg(join.field2.tableName, join.field2.fieldName);
+            .arg(join.field1.tableName, join.field1.fieldName)
+            .arg(join.field2.tableName, join.field2.fieldName);
     return s;
 }
 
@@ -1708,7 +1708,7 @@ QString Database::select(const int &tableref, const QHash<int, QString> &conditi
     qSort(list);
     foreach(const int &i, list)
         tmp += "`" + table(tableref) + "`.`" + d_database->m_Fields.value(i) + "`, ";
-//        tmp += "`" + d_database->m_Fields.value(i)+ "`, ";
+    //        tmp += "`" + d_database->m_Fields.value(i)+ "`, ";
     if (tmp.isEmpty())
         return QString::null;
     tmp.chop(2);
@@ -1754,9 +1754,9 @@ QString Database::selectDistinct(const int &tableref, const QList<int> &fields, 
     QString toReturn = select(tableref, fields, conditions);
     // SELECT ... FROM ... -> SELECT DISTINCT (...) FROM ...
     toReturn = toReturn.replace("SELECT", "SELECT DISTINCT").replace("SELECT DISTINCT DISTINCT", "SELECT DISTINCT");
-//    toReturn = toReturn.replace("SELECT ", "SELECT DISTINCT (");
-//    toReturn = toReturn.replace("SELECT DISTINCT (DISTINCT", "SELECT DISTINCT");
-//    toReturn = toReturn.replace(" FROM", ") FROM");
+    //    toReturn = toReturn.replace("SELECT ", "SELECT DISTINCT (");
+    //    toReturn = toReturn.replace("SELECT DISTINCT (DISTINCT", "SELECT DISTINCT");
+    //    toReturn = toReturn.replace(" FROM", ") FROM");
     return toReturn;
 }
 
@@ -1917,11 +1917,11 @@ QString Database::select(const Field &select, const Join &join, const Field &con
 }
 
 
-QString Database::selectLast(const int &fieldref, const int &tableref)
+QString Database::selectLast(const int &fieldref, const int &tableref) const
 {
     return QString("SELECT `%1` FROM `%2` ORDER BY `%1` DESC LIMIT 1")
-                .arg(fieldref)
-                .arg(tableref);
+            .arg(fieldref)
+            .arg(tableref);
 }
 
 /**
@@ -2051,8 +2051,8 @@ QVariant Database::max(const int &tableref, const int &fieldref, const QString &
     DB.transaction();
 
     QString req = QString("SELECT max(%1) FROM %2")
-                  .arg(d_database->m_Fields.value(d_database->index(tableref, fieldref)))
-                  .arg(d_database->m_Tables[tableref]);
+            .arg(d_database->m_Fields.value(d_database->index(tableref, fieldref)))
+            .arg(d_database->m_Tables[tableref]);
     if (!filter.isEmpty())
         req += " WHERE " + filter;
     if (WarnSqlCommands)
@@ -2090,9 +2090,9 @@ QVariant Database::max(const int &tableref, const int &fieldref, const int &grou
         return toReturn;
     DB.transaction();
     QString req = QString("SELECT max(%1) FROM %2 GROUP BY %3")
-                  .arg(d_database->m_Fields.value(d_database->index(tableref, fieldref)))
-                  .arg(d_database->m_Tables[tableref])
-                  .arg(d_database->m_Fields.value(d_database->index(tableref, groupBy)));
+            .arg(d_database->m_Fields.value(d_database->index(tableref, fieldref)))
+            .arg(d_database->m_Tables[tableref])
+            .arg(d_database->m_Fields.value(d_database->index(tableref, groupBy)));
     if (!filter.isEmpty())
         req += " WHERE " + filter;
     if (WarnSqlCommands)
@@ -2128,8 +2128,8 @@ QVariant Database::min(const int &tableref, const int &fieldref, const QString &
     DB.transaction();
 
     QString req = QString("SELECT MIN(%1) FROM %2")
-                  .arg(d_database->m_Fields.value(d_database->index(tableref, fieldref)))
-                  .arg(d_database->m_Tables[tableref]);
+            .arg(d_database->m_Fields.value(d_database->index(tableref, fieldref)))
+            .arg(d_database->m_Tables[tableref]);
     if (!filter.isEmpty())
         req += " WHERE " + filter;
     if (WarnSqlCommands)
@@ -2157,8 +2157,8 @@ QVariant Database::min(const int &tableref, const int &fieldref, const QString &
 QString Database::maxSqlCommand(const int &tableref, const int &fieldref, const QString &filter) const
 {
     QString req = QString("SELECT max(%1) FROM %2")
-                  .arg(d_database->m_Fields.value(d_database->index(tableref, fieldref)))
-                  .arg(d_database->m_Tables[tableref]);
+            .arg(d_database->m_Fields.value(d_database->index(tableref, fieldref)))
+            .arg(d_database->m_Tables[tableref]);
     if (!filter.isEmpty())
         req += " WHERE " + filter;
     if (WarnSqlCommands)
@@ -2175,13 +2175,13 @@ QString Database::totalSqlCommand(const int tableRef, const int fieldRef, const 
     QString toReturn;
     if (where.count()) {
         toReturn = QString("SELECT SUM(`%1`) FROM `%2` WHERE %3")
-                   .arg(d_database->m_Fields.value(d_database->index(tableRef, fieldRef)))
-                   .arg(d_database->m_Tables.value(tableRef))
-                   .arg(getWhereClause(tableRef, where));
+                .arg(d_database->m_Fields.value(d_database->index(tableRef, fieldRef)))
+                .arg(d_database->m_Tables.value(tableRef))
+                .arg(getWhereClause(tableRef, where));
     } else  {
         toReturn = QString("SELECT SUM(`%1`) FROM `%2`")
-                   .arg(d_database->m_Fields.value(d_database->index(tableRef, fieldRef)))
-                   .arg(d_database->m_Tables.value(tableRef));
+                .arg(d_database->m_Fields.value(d_database->index(tableRef, fieldRef)))
+                .arg(d_database->m_Tables.value(tableRef));
     }
     return toReturn;
 }
@@ -2191,8 +2191,8 @@ QString Database::totalSqlCommand(const int tableref, const int fieldref) const
 {
     QString toReturn;
     toReturn = QString("SELECT SUM(`%1`) FROM `%2`")
-               .arg(d_database->m_Fields.value(d_database->index(tableref, fieldref)))
-               .arg(d_database->m_Tables.value(tableref));
+            .arg(d_database->m_Fields.value(d_database->index(tableref, fieldref)))
+            .arg(d_database->m_Tables.value(tableref));
     return toReturn;
 }
 
@@ -2267,14 +2267,14 @@ QString Database::prepareInsertQuery(const int tableref) const
 
 QString Database::getLastExecutedQuery(const QSqlQuery& query)
 {
- QString str = query.lastQuery();
- QMapIterator<QString, QVariant> it(query.boundValues());
- while (it.hasNext())
- {
-  it.next();
-  str.replace(it.key(),it.value().toString());
- }
- return str;
+    QString str = query.lastQuery();
+    QMapIterator<QString, QVariant> it(query.boundValues());
+    while (it.hasNext())
+    {
+        it.next();
+        str.replace(it.key(),it.value().toString());
+    }
+    return str;
 }
 
 /** Return a SQL command usable for QSqlQuery::prepareUpdateQuery(). Fields are ordered. */
@@ -2282,9 +2282,9 @@ QString Database::prepareUpdateQuery(const int tableref, const int fieldref, con
 {
     QString toReturn;
     toReturn = QString("UPDATE `%1` SET `%2` = ? WHERE %4")
-               .arg(table(tableref))
-               .arg(fieldName(tableref, fieldref))
-               .arg(getWhereClause(tableref, conditions));
+            .arg(table(tableref))
+            .arg(fieldName(tableref, fieldref))
+            .arg(getWhereClause(tableref, conditions));
     // UPDATE tbl_name [, tbl_name ...]
     // SET col_name1=expr1 [, col_name2=expr2 ...]
     // WHERE where_definition
@@ -2303,9 +2303,9 @@ QString Database::prepareUpdateQuery(const int tableref, const QList<int> &field
     }
     tmp.chop(2);
     toReturn = QString("UPDATE `%1` SET %2 WHERE %4")
-               .arg(table(tableref))
-               .arg(tmp)
-               .arg(getWhereClause(tableref, conditions));
+            .arg(table(tableref))
+            .arg(tmp)
+            .arg(getWhereClause(tableref, conditions));
     // UPDATE tbl_name [, tbl_name ...]
     // SET col_name1=expr1 [, col_name2=expr2 ...]
     // WHERE where_definition
@@ -2319,8 +2319,8 @@ QString Database::prepareUpdateQuery(const int tableref, const int fieldref)
 {
     QString toReturn;
     toReturn = QString("UPDATE `%1` SET `%2` =?")
-               .arg(table(tableref))
-               .arg(fieldName(tableref, fieldref));
+            .arg(table(tableref))
+            .arg(fieldName(tableref, fieldref));
     // UPDATE tbl_name [, tbl_name ...]
     // SET col_name1=expr1 [, col_name2=expr2 ...]
     // WHERE where_definition
@@ -2338,9 +2338,9 @@ QString Database::prepareUpdateQuery(const int tableref, const QHash<int, QStrin
         tmp += QString ("`%1`=? , ").arg(f);
     tmp.chop(2);
     toReturn = QString("UPDATE `%1` SET \n%2 \nWHERE %3")
-               .arg(table(tableref))
-               .arg(tmp)
-               .arg(getWhereClause(tableref, conditions));
+            .arg(table(tableref))
+            .arg(tmp)
+            .arg(getWhereClause(tableref, conditions));
     // UPDATE tbl_name [, tbl_name ...]
     // SET col_name1=expr1 [, col_name2=expr2 ...]
     // WHERE where_definition
@@ -2358,8 +2358,8 @@ QString Database::prepareUpdateQuery(const int tableref)
         tmp += QString ("`%1`=? , ").arg(f);
     tmp.chop(2);
     toReturn = QString("UPDATE `%1` SET \n%2 ")
-               .arg(table(tableref))
-               .arg(tmp);
+            .arg(table(tableref))
+            .arg(tmp);
     // UPDATE tbl_name [, tbl_name ...]
     // SET col_name1=expr1 [, col_name2=expr2 ...]
     // WHERE where_definition
@@ -2519,11 +2519,11 @@ bool Database::alterTableForNewField(const int tableRef, const int newFieldRef, 
     DB.transaction();
     QSqlQuery query(DB);
     if (!query.exec(req)) {
-          LOG_QUERY_ERROR_FOR("Database", query);
-          LOG_FOR("Database",QString("Unable to add the fields %1").arg(fieldName(tableRef, newFieldRef)));
-          query.finish();
-          DB.rollback();
-          return false;
+        LOG_QUERY_ERROR_FOR("Database", query);
+        LOG_FOR("Database",QString("Unable to add the fields %1").arg(fieldName(tableRef, newFieldRef)));
+        query.finish();
+        DB.rollback();
+        return false;
     }
     query.finish();
     DB.commit();
@@ -2537,7 +2537,7 @@ bool Database::alterTableForNewField(const int tableRef, const int newFieldRef, 
 bool Database::modifyMySQLColumnType(const int & tableref, const int & fieldref)
 {
     QSqlDatabase DB = database();
-    if (!connectedDatabase(DB, __LINE__))                                       
+    if (!connectedDatabase(DB, __LINE__))
         return false;
     QString req;
     QString newType = d_database->getTypeOfField(d_database->index(tableref, fieldref));
@@ -2545,45 +2545,45 @@ bool Database::modifyMySQLColumnType(const int & tableref, const int & fieldref)
             .arg(table(tableref), fieldName(tableref, fieldref), newType);
     DB.transaction();
     QSqlQuery query(DB);
-    if (!query.exec(req)) {                                                     
-          LOG_QUERY_ERROR_FOR("Database", query);                               
-          //LOG_FOR("Database", QString("Unable to modify column %1 type to %2").arg(fieldName(tableref, fieldref), type));
-          query.finish();                                                       
-          DB.rollback();                                                        
-          return false;                                                         
+    if (!query.exec(req)) {
+        LOG_QUERY_ERROR_FOR("Database", query);
+        //LOG_FOR("Database", QString("Unable to modify column %1 type to %2").arg(fieldName(tableref, fieldref), type));
+        query.finish();
+        DB.rollback();
+        return false;
     }
     query.finish();
-    DB.commit();      
+    DB.commit();
     return true;
 }
 
 /**                                                                             
  * Modify the type of an existing column of a table in a MySQL database
- * Default value is set by QString & defaultValue                             
+ * Default value is set by QString & defaultValue
  */
 bool Database::modifyMySQLColumnType(const int & tableref, const int & fieldref,
                                      const QString & defaultValue)
 {                                                                               
-    QSqlDatabase DB = database();                                               
-    if (!connectedDatabase(DB, __LINE__))                                       
+    QSqlDatabase DB = database();
+    if (!connectedDatabase(DB, __LINE__))
         return false;
-    QString newType = d_database->getTypeOfField(d_database->index(tableref, fieldref));     
+    QString newType = d_database->getTypeOfField(d_database->index(tableref, fieldref));
     QString req;
     // Handle default value
-    req = QString("ALTER TABLE `%1` MODIFY COLUMN `%2` %3 DEFAULT %4;")                  
-            .arg(table(tableref)).arg(fieldName(tableref, fieldref)).arg(newType).arg(defaultValue);         
-    DB.transaction();                                                           
-    QSqlQuery query(DB);                                                        
-    if (!query.exec(req)) {                                                     
-          LOG_QUERY_ERROR_FOR("Database", query);                               
-          //LOG_FOR("Database", QString("Unable to modify column %1 type to %2").arg(fieldName(tableref, fieldref), type));
-          query.finish();                                                       
-          DB.rollback();                                                        
-          return false;                                                         
-    }                                                                           
-    query.finish();                                                             
-    DB.commit();                                                                
-    return true;                                                                
+    req = QString("ALTER TABLE `%1` MODIFY COLUMN `%2` %3 DEFAULT %4;")
+            .arg(table(tableref)).arg(fieldName(tableref, fieldref)).arg(newType).arg(defaultValue);
+    DB.transaction();
+    QSqlQuery query(DB);
+    if (!query.exec(req)) {
+        LOG_QUERY_ERROR_FOR("Database", query);
+        //LOG_FOR("Database", QString("Unable to modify column %1 type to %2").arg(fieldName(tableref, fieldref), type));
+        query.finish();
+        DB.rollback();
+        return false;
+    }
+    query.finish();
+    DB.commit();
+    return true;
 }
 
 /**
@@ -2631,8 +2631,8 @@ bool Database::vacuum(const QString &connectionName)
         return false;
     QSqlQuery query(DB);
     if (!query.exec("VACUUM")) {
-          LOG_QUERY_ERROR_FOR("Database", query);
-          return false;
+        LOG_QUERY_ERROR_FOR("Database", query);
+        return false;
     }
     return true;
 }
@@ -2780,7 +2780,7 @@ bool Database::importCsvToDatabase(const QString &connectionName, const QString 
     QSqlQuery query(DB);
     for(int i = start; i < lines.count(); ++i) {
         QStringList values = lines.at(i).split(separator, QString::KeepEmptyParts);
-//        qWarning() << lines.at(i) << separator << values;
+        //        qWarning() << lines.at(i) << separator << values;
         QString reqValues;
         int counter = 0;
         foreach(const QString &val, values) {
@@ -2819,7 +2819,7 @@ bool Database::importCsvToDatabase(const QString &connectionName, const QString 
 QStringList DatabasePrivate::getSQLCreateTable(const int &tableref)
 {
     QString toReturn;
-    toReturn = QString("CREATE TABLE IF NOT EXISTS `%1` (\n  ").arg(m_Tables.value(tableref));
+    toReturn = QString("CREATE TABLE IF NOT EXISTS `%1` (").arg(m_Tables.value(tableref));
     QList<int> list = m_Tables_Fields.values(tableref);
     qSort(list);
     QStringList fieldLine;
@@ -2838,13 +2838,13 @@ QStringList DatabasePrivate::getSQLCreateTable(const int &tableref)
         // Manage NULL value
         if (m_DefaultFieldValue.value(i) == "NULL") {
             if (Database::TypeOfField(m_TypeOfField.value(i)) != Database::FieldIsUniquePrimaryKey) {
-                fieldLine.append(QString("%1 %2 DEFAULT NULL")
-                                .arg(fieldName)
-                                .arg(getTypeOfField(i)));// .leftJustified(20, ' '))
+                fieldLine.append(QString("%1 %2")
+                                 .arg(fieldName)
+                                 .arg(getTypeOfField(i)));// .leftJustified(20, ' '))
             } else {
                 fieldLine.append(QString("%1 %2")
-                                .arg(fieldName)
-                                .arg(getTypeOfField(i)));// .leftJustified(20, ' '))
+                                 .arg(fieldName)
+                                 .arg(getTypeOfField(i)));// .leftJustified(20, ' '))
             }
         } else {
             // Manage DEFAULT value by type of field
@@ -2854,38 +2854,39 @@ QStringList DatabasePrivate::getSQLCreateTable(const int &tableref)
             case Database::FieldIsLongText :
             case Database::FieldIsShortText :
             case Database::FieldIsTwoChars :
+            case Database::FieldIsLanguageText :
             case Database::FieldIsBlob :
                 fieldLine.append(QString("%1 %2 DEFAULT '%3'")
-                                .arg(fieldName)
-                                .arg(getTypeOfField(i))// .leftJustified(20, ' '))
-                                .arg(m_DefaultFieldValue.value(i)));
+                                 .arg(fieldName)
+                                 .arg(getTypeOfField(i))// .leftJustified(20, ' '))
+                                 .arg(m_DefaultFieldValue.value(i)));
                 break;
             case Database::FieldIsDate :
-                {
-                    QString defVal = m_DefaultFieldValue.value(i).simplified();
-                    if (defVal.startsWith("CUR")) {
-                        if (m_Driver==Database::MySQL) {
-                            // CURRENT_DATE as default value is not supported by MySQL
-                            // When we switch to >=5.6.5 we will be able to use DATETIME:
-                            // "The exception is that you can specify CURRENT_TIMESTAMP
-                            // as the default for a TIMESTAMP
-                            // or (as of MySQL 5.6.5) DATETIME column."
-                            defVal = "NULL";
-                        } else if (defVal.endsWith("()")) {
-                            defVal = defVal.remove("()");
-                        }
-                        fieldLine.append(QString("%1 %2 DEFAULT %3")
-                                         .arg(fieldName)
-                                         .arg(getTypeOfField(i))// .leftJustified(20, ' '))
-                                         .arg(defVal));
+            {
+                QString defVal = m_DefaultFieldValue.value(i).simplified();
+                if (defVal.startsWith("CUR")) {
+                    if (m_Driver==Database::MySQL) {
+                        // CURRENT_DATE as default value is not supported by MySQL
+                        // When we switch to >=5.6.5 we will be able to use DATETIME:
+                        // "The exception is that you can specify CURRENT_TIMESTAMP
+                        // as the default for a TIMESTAMP
+                        // or (as of MySQL 5.6.5) DATETIME column."
+                        defVal = "NULL";
+                    } else if (defVal.endsWith("()")) {
+                        defVal = defVal.remove("()");
                     }
-                    else
-                        fieldLine.append(QString("%1 %2 DEFAULT '%3'")
-                                        .arg(fieldName)
-                                        .arg(getTypeOfField(i))// .leftJustified(20, ' '))
-                                        .arg(m_DefaultFieldValue.value(i)));
-                    break;
+                    fieldLine.append(QString("%1 %2 DEFAULT %3")
+                                     .arg(fieldName)
+                                     .arg(getTypeOfField(i))// .leftJustified(20, ' '))
+                                     .arg(defVal));
                 }
+                else
+                    fieldLine.append(QString("%1 %2 DEFAULT '%3'")
+                                     .arg(fieldName)
+                                     .arg(getTypeOfField(i))// .leftJustified(20, ' '))
+                                     .arg(m_DefaultFieldValue.value(i)));
+                break;
+            }
             case Database::FieldIsBoolean :
             case Database::FieldIsInteger :
             case Database::FieldIsLongInteger :
@@ -2895,9 +2896,9 @@ QStringList DatabasePrivate::getSQLCreateTable(const int &tableref)
             case Database::FieldIsTimeStamp :
             {
                 fieldLine.append(QString("%1 %2 NULL DEFAULT %3")
-                                .arg(fieldName)
-                                .arg(getTypeOfField(i)).toUpper()// .leftJustified(20, ' '))
-                                .arg(m_DefaultFieldValue.value(i)));
+                                 .arg(fieldName)
+                                 .arg(getTypeOfField(i)).toUpper()// .leftJustified(20, ' '))
+                                 .arg(m_DefaultFieldValue.value(i)));
                 break;
             }
             case Database::FieldIsIsoUtcDateTime :
@@ -2907,37 +2908,37 @@ QStringList DatabasePrivate::getSQLCreateTable(const int &tableref)
                 break;
             default :
                 fieldLine.append(QString("%1 %2 DEFAULT '%3'")
-                                .arg(fieldName)
-                                .arg(getTypeOfField(i))// .leftJustified(20, ' '))
-                                .arg(m_DefaultFieldValue.value(i)));
+                                 .arg(fieldName)
+                                 .arg(getTypeOfField(i))// .leftJustified(20, ' '))
+                                 .arg(m_DefaultFieldValue.value(i)));
                 break;
 
-        }
+            }
         }
     }
-    toReturn.append(fieldLine.join(",\n  "));
+    toReturn.append(fieldLine.join(", "));
 
     foreach(int field, m_PrimKeys.values(tableref)) {
         int ref = index(tableref, field);
         if (m_TypeOfField.value(ref) != Database::FieldIsUniquePrimaryKey) {
-            toReturn.append(QString(",\nPRIMARY KEY(%1)").arg(m_Fields.value(ref)));
+            toReturn.append(QString(", PRIMARY KEY(%1)").arg(m_Fields.value(ref)));
         }
     }
-    toReturn.append("\n);\n");
+    toReturn.append(");");
 
     QStringList indexes;
     for(int i = 0; i < m_DbIndexes.count(); ++i) {
         const DbIndex &idx = m_DbIndexes.at(i);
         if (idx.field.table==tableref) {
-            indexes << QString("CREATE INDEX %1 ON %2 (%3);\n")
-                    .arg(idx.name)
-                    .arg(idx.field.tableName)
-                    .arg(idx.field.fieldName);
+            indexes << QString("CREATE INDEX %1 ON %2 (%3);")
+                       .arg(idx.name)
+                       .arg(idx.field.tableName)
+                       .arg(idx.field.fieldName);
         }
     }
 
     if (WarnCreateTableSqlCommand)
-        qWarning() << toReturn << "\nIndexes: \n" << indexes;
+        qWarning() << toReturn << "Indexes: " << indexes;
 
     return QStringList() << toReturn << indexes;
 }
@@ -2948,73 +2949,85 @@ QString DatabasePrivate::getTypeOfField(const int &fieldref) const
     QString toReturn;
     switch (Database::TypeOfField(m_TypeOfField.value(fieldref)))
     {
-        case Database::FieldIsUUID :
-            toReturn = "varchar(32)";
-            break;
-        case Database::FieldIsBoolean :
-            toReturn = "int(1)";
-            break;
-        case Database::FieldIsLongText :
-            toReturn = "varchar(2000)";
-            break;
-        case Database::FieldIsShortText :
-            toReturn = "varchar(200)";
-            break;
-        case Database::FieldIsTwoChars :
-            toReturn = "varchar(2)";
-            break;
-        case Database::FieldIsBlob :
+    case Database::FieldIsUUID :
+        toReturn = "VARCHAR(32)";
+        break;
+    case Database::FieldIsBoolean :
+        toReturn = "INT(1)";
+        break;
+    case Database::FieldIsLongText :
+        toReturn = "VARCHAR(2000)";
+        break;
+    case Database::FieldIsShortText :
+        toReturn = "VARCHAR(200)";
+        break;
+    case Database::FieldIsTwoChars :
+        toReturn = "VARCHAR(2)";
+        break;
+    case Database::FieldIsLanguageText :
+        toReturn = "VARCHAR(2)";
+        break;
+    case Database::FieldIs19Chars :
+        toReturn = "VARCHAR(19)";
+        break;
+    case Database::FieldIs32Chars :
+        toReturn = "VARCHAR(32)";
+        break;
+    case Database::FieldIs255Chars :
+        toReturn = "VARCHAR(255)";
+        break;
+    case Database::FieldIsBlob :
         if (m_Driver==Database::SQLite) {
-            toReturn = "blob"; // 1,000,000,000 max size
+            toReturn = "BLOB"; // 1,000,000,000 max size
         } else if (m_Driver==Database::MySQL) {
-            toReturn = "longblob"; // 4Go max size
+            toReturn = "LONGBLOB"; // 4Go max size
         }
-            break;
-        case Database::FieldIsDate :
-            toReturn = "date";
-            break;
-        case Database::FieldIsTime:
-            toReturn = "time";
-            break;
-        case Database::FieldIsDateTime:
-            toReturn = "datetime";
-            break;
-        case Database::FieldIsTimeStamp:
-            toReturn = "TIMESTAMP NULL";
-            break;
-        case Database::FieldIsIsoUtcDateTime:
-            toReturn = "varchar(20)";
-            break;
-        case Database::FieldIsOneChar :
-            toReturn = "varchar(1)";
-            break;
-        case Database::FieldIsInteger :
-            toReturn = "integer";
-            break;
-        case Database::FieldIsUniquePrimaryKey :
-            if (m_Driver==Database::SQLite) {
-                toReturn = "integer not null primary key";
-            } else if (m_Driver==Database::MySQL) {
-                toReturn = "integer unsigned not null primary key auto_increment";
-            }
-            break;
-        case Database::FieldIsLongInteger :
-            toReturn = "int(11)";
-            break;
-        case Database::FieldIsUnsignedInteger:
-            toReturn = "integer unsigned";
-            break;
-        case Database::FieldIsUnsignedLongInteger:
+        break;
+    case Database::FieldIsDate :
+        toReturn = "DATE";
+        break;
+    case Database::FieldIsTime:
+        toReturn = "TIME";
+        break;
+    case Database::FieldIsDateTime:
+        toReturn = "DATETIME";
+        break;
+    case Database::FieldIsTimeStamp:
+        toReturn = "TIMESTAMP NULL";
+        break;
+    case Database::FieldIsIsoUtcDateTime:
+        toReturn = "VARCHAR(20)";
+        break;
+    case Database::FieldIsOneChar :
+        toReturn = "VARCHAR(1)";
+        break;
+    case Database::FieldIsInteger :
+        toReturn = "INTEGER";
+        break;
+    case Database::FieldIsUniquePrimaryKey :
         if (m_Driver==Database::SQLite) {
-            toReturn = "unsigned bigint";
+            toReturn = "INTEGER NOT NULL PRIMARY KEY";
         } else if (m_Driver==Database::MySQL) {
-            toReturn = "bigint unsigned";
+            toReturn = "INTEGER UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT";
         }
-            break;
-        case Database::FieldIsReal :
-            toReturn = "double";
-            break;
-        default : toReturn = QString::null; break;
+        break;
+    case Database::FieldIsLongInteger :
+        toReturn = "INT(11)";
+        break;
+    case Database::FieldIsUnsignedInteger:
+        toReturn = "INTEGER UNSIGNED";
+        break;
+    case Database::FieldIsUnsignedLongInteger:
+        if (m_Driver==Database::SQLite) {
+            toReturn = "UNSIGNED BIGINT";
+        } else if (m_Driver==Database::MySQL) {
+            toReturn = "BIGINT UNSIGNED";
+        }
+        break;
+    case Database::FieldIsReal :
+        toReturn = "DOUBLE";
+        break;
+    default : toReturn = QString::null; break;
     }
     return toReturn;
 }
