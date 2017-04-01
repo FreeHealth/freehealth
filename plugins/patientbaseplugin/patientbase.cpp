@@ -201,9 +201,12 @@ bool PatientBase::initialize()
     } else {
         LOG(tkTr(Trans::Constants::CONNECTED_TO_DATABASE_1_DRIVER_2).arg(database().databaseName()).arg(database().driverName()));
     }
-
-    updateDatabase();
-
+    int currentDatabaseVersion = getSchemaVersionNumber();
+    qDebug() << currentDatabaseVersion;
+    if (currentDatabaseVersion != Constants::DB_CURRENT_CODE_VERSION) {
+        if(!updateDatabase())
+            LOG_ERROR(QString("Couldn't upgrade database %1").arg(Constants::DB_NAME));
+    }
     if (!checkDatabaseScheme()) {
         LOG_ERROR(tkTr(Trans::Constants::DATABASE_1_SCHEMA_ERROR).arg(Constants::DB_NAME));
         return false;
@@ -513,20 +516,36 @@ void PatientBase::toTreeWidget(QTreeWidget *tree) const
 
 bool PatientBase::updateDatabase() const
 {
+    int currentDatabaseVersion = getSchemaVersionNumber();
+    qDebug() << "currentDatabaseVersion: " << currentDatabaseVersion;
     QSqlDatabase DB = QSqlDatabase::database(Constants::DB_NAME);
-    if (getSchemaVersionNumber() == Constants::DB_CURRENTVERSION) {
-        return true;
-    } else if (getSchemaVersionNumber() == 0) {
+    qDebug() << "getOldVersionField()" << getOldVersionField();
+    qDebug() << "Constants::DB_INITIAL_VERSION" << Constants::DB_INITIAL_VERSION;
+    if (currentDatabaseVersion == 0) {
         if(getOldVersionField() == Constants::DB_INITIAL_VERSION) {
-            for (int i = 1; i <= Constants::DB_CURRENTVERSION; i++) {
+            for (int i = 1; i <= Constants::DB_CURRENT_CODE_VERSION; i++) {
                 QString updateScriptFileName= QString(":/sql/update/update%1%2.sql")
                         .arg(Constants::DB_NAME)
                         .arg(QString::number(i));
+                qDebug() << updateScriptFileName;
                 QFile updateScriptFile(updateScriptFileName);
                 executeQueryFile(updateScriptFile, DB);
             }
+            return true;
         } else {
-            LOG_ERROR("You database structure is note recognized");
+            LOG_ERROR("You database structure is not recognized");
+            return false;
+        }
+    } else if (currentDatabaseVersion > 0) {
+        for (int i = currentDatabaseVersion++; i <= Constants::DB_CURRENT_CODE_VERSION; i++) {
+            QString updateScriptFileName= QString(":/sql/update/update%1%2.sql")
+                    .arg(Constants::DB_NAME)
+                    .arg(QString::number(i));
+            QFile updateScriptFile(updateScriptFileName);
+            if(!executeQueryFile(updateScriptFile, DB)){
+                LOG_ERROR(QString("Error during update with updatescript%1").arg(i));
+                return false;
+            }
         }
     }
     return true;
@@ -544,7 +563,7 @@ quint32 PatientBase::getSchemaVersionNumber() const
     bool SchemaTableExists = false;
     QSqlDatabase DB = QSqlDatabase::database(Constants::DB_NAME);
     if (!connectDatabase(DB, __LINE__)) {
-        return false;
+        return 0;
     }
     using namespace Patients::Constants;
     QSqlQuery query(DB);
@@ -580,6 +599,7 @@ quint32 PatientBase::getSchemaVersionNumber() const
 
 bool PatientBase::executeQueryFile(QFile &file, QSqlDatabase &db) const
 {
+    WARN_FUNC;
     QSqlQuery query(db);
     //Read query file content
     file.open(QIODevice::ReadOnly);
@@ -634,23 +654,27 @@ bool PatientBase::executeQueryFile(QFile &file, QSqlDatabase &db) const
         QStringList qList = queryStr.split(';', QString::SkipEmptyParts);
         foreach(const QString &s, qList) {
             query.exec(s);
-            if(query.lastError().type() != QSqlError::NoError) qDebug() << query.lastError().text();
+            if(query.lastError().type() != QSqlError::NoError)
+                qDebug() << query.lastError().text();
         }
     }
+    return true;
 }
 
 QString PatientBase::getOldVersionField() const
 {
     QString oldVersionValue;
-        QSqlDatabase DB = QSqlDatabase::database(Constants::DB_NAME);
-        QSqlQuery query(DB);
-        QString queryText = QString("SELECT `VERSION` FROM `VERSION`");
-        if (query.exec(queryText)) {
-            if (query.next()){
-                oldVersionValue == query.value(0).toString();
-            }
-        } else {
-            LOG_QUERY_ERROR_FOR(Patients::Constants::DB_NAME, query);
-        }
-        return oldVersionValue;
+    QSqlDatabase DB = QSqlDatabase::database(Constants::DB_NAME);
+    if (!connectDatabase(DB, __LINE__)) {
+        LOG_ERROR("Can't connect to DB");
+        return QString();
+    }
+    QSqlQuery query("SELECT `VERSION` FROM `VERSION` ORDER BY `VERSION` ASC LIMIT 1", DB);
+    int fieldNo = query.record().indexOf("VERSION");
+    while (query.next()) {
+        oldVersionValue = query.value(fieldNo).toString();
+    }
+    qDebug() << query.lastError().text();
+    qDebug() << oldVersionValue;
+    return oldVersionValue;
 }
