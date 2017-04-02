@@ -40,7 +40,7 @@
        <item row="0" column="0">
         <widget class="QLabel" name="lblPhone">
          <property name="text">
-          <string>Telephone numbers</string>
+          <string>Work phone</string>
          </property>
          <property name="buddy">
           <cstring>tel1</cstring>
@@ -59,7 +59,7 @@
        <item row="3" column="0">
         <widget class="QLabel" name="lblFax">
          <property name="text">
-          <string>Fax number</string>
+          <string>Fax</string>
          </property>
          <property name="buddy">
           <cstring>fax</cstring>
@@ -83,6 +83,20 @@
         <widget class="QLineEdit" name="mail">
          <property name="placeholderText">
           <string>user@example.com</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>Home phone</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string>Mobile phone</string>
          </property>
         </widget>
        </item>

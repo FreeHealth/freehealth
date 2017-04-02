@@ -610,7 +610,9 @@ UserData::UserData(const QString & uuid)
 /** \brief Destructor */
 UserData::~UserData()
 {
-    if (d) delete d; d=0;
+    if (d)
+        delete d;
+    d=0;
 }
 
 /**

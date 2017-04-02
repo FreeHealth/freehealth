@@ -73,11 +73,22 @@ public:
         PersonalLinkId,
         FullName,
         Gender, Title,
-        Street, Zipcode, City, StateProvince, Country, IsoCountry,
-        FullHtmlAddress, FullAddress,
-        Tel1, Tel2, Tel3, Fax,
+        Street,
+        Zipcode,
+        City,
+        StateProvince,
+        Country,
+        IsoCountry,
+        FullHtmlAddress,
+        FullAddress,
+        Tel1, // WorkPhone
+        Tel2, // LandlinePhone / Home phone
+        Tel3, // MobilePhone
+        Fax,
         FullHtmlContact,
-        Specialities, Qualifications, ProfessionalIdentifiants,
+        Specialities,
+        Qualifications,
+        ProfessionalIdentifiants,
         Preferences,  // 33
 
         GenericHeader,
