@@ -90,11 +90,11 @@ public:
         StateProvince,       // 30
         AddressNote,
         FullAddress,
-        Mails,
+        Email,
         Tels,
         MobilePhone,
         Faxes,
-        ProfessionalTels,
+        WorkPhone,
         ProfessionalSite,
 
         // Social numbers

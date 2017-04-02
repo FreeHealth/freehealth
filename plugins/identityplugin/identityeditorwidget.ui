@@ -28,8 +28,21 @@
      <property name="sizeConstraint">
       <enum>QLayout::SetDefaultConstraint</enum>
      </property>
-     <item row="3" column="1">
-      <widget class="QLabel" name="otherNamesLabel">
+     <item row="8" column="2">
+      <widget class="QLineEdit" name="landlinePhoneLineEdit"/>
+     </item>
+     <item row="8" column="1">
+      <widget class="QLabel" name="landlinePhoneLabel">
+       <property name="text">
+        <string>Landline phone</string>
+       </property>
+       <property name="buddy">
+        <cstring>landlinePhoneLineEdit</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="1">
+      <widget class="QLabel" name="languageLabel">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -43,10 +56,64 @@
         </size>
        </property>
        <property name="text">
-        <string>Other names</string>
+        <string>Language</string>
        </property>
        <property name="buddy">
-        <cstring>otherNames</cstring>
+        <cstring>language</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="1">
+      <widget class="QLabel" name="dobLabel">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>20</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>Date of birth</string>
+       </property>
+       <property name="buddy">
+        <cstring>dob</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QLabel" name="firstnameLabel">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>20</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>First name</string>
+       </property>
+       <property name="buddy">
+        <cstring>firstname</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="1">
+      <widget class="QLabel" name="mobilePhoneLabel">
+       <property name="text">
+        <string>Mobile phone</string>
+       </property>
+       <property name="buddy">
+        <cstring>mobilePhoneLineEdit</cstring>
        </property>
       </widget>
      </item>
@@ -101,30 +168,23 @@
        <property name="text">
         <string>Gender</string>
        </property>
-      </widget>
-     </item>
-     <item row="6" column="2" colspan="2">
-      <widget class="Utils::LanguageComboBox" name="language">
-       <property name="minimumSize">
-        <size>
-         <width>0</width>
-         <height>20</height>
-        </size>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="2" colspan="2">
-      <widget class="QLineEdit" name="otherNames">
-       <property name="minimumSize">
-        <size>
-         <width>0</width>
-         <height>20</height>
-        </size>
+       <property name="buddy">
+        <cstring>genderCombo</cstring>
        </property>
       </widget>
      </item>
      <item row="4" column="2" colspan="2">
       <widget class="Utils::ModernDateEditor" name="dob">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>20</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1" colspan="3">
+      <widget class="QLineEdit" name="usualName">
        <property name="minimumSize">
         <size>
          <width>0</width>
@@ -149,8 +209,38 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="1">
-      <widget class="QLabel" name="firstnameLabel">
+     <item row="2" column="2" colspan="2">
+      <widget class="QLineEdit" name="firstname">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>20</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="2" colspan="2">
+      <widget class="Utils::LanguageComboBox" name="language">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>20</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="2" colspan="2">
+      <widget class="QLineEdit" name="otherNames">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>20</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <widget class="QLabel" name="otherNamesLabel">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -164,10 +254,10 @@
         </size>
        </property>
        <property name="text">
-        <string>First name</string>
+        <string>Other names</string>
        </property>
        <property name="buddy">
-        <cstring>firstname</cstring>
+        <cstring>otherNames</cstring>
        </property>
       </widget>
      </item>
@@ -187,79 +277,34 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="1" colspan="3">
-      <widget class="QLineEdit" name="usualName">
-       <property name="minimumSize">
-        <size>
-         <width>0</width>
-         <height>20</height>
-        </size>
-       </property>
-      </widget>
-     </item>
-     <item row="6" column="1">
-      <widget class="QLabel" name="languageLabel">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="minimumSize">
-        <size>
-         <width>0</width>
-         <height>20</height>
-        </size>
-       </property>
-       <property name="text">
-        <string>Language</string>
-       </property>
-      </widget>
-     </item>
-     <item row="4" column="1">
-      <widget class="QLabel" name="dobLabel">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="minimumSize">
-        <size>
-         <width>0</width>
-         <height>20</height>
-        </size>
-       </property>
-       <property name="text">
-        <string>Date of birth</string>
-       </property>
-       <property name="buddy">
-        <cstring>dob</cstring>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="2" colspan="2">
-      <widget class="QLineEdit" name="firstname">
-       <property name="minimumSize">
-        <size>
-         <width>0</width>
-         <height>20</height>
-        </size>
-       </property>
-      </widget>
-     </item>
-     <item row="7" column="1">
-      <widget class="QLabel" name="landlinePhoneLabel">
-       <property name="text">
-        <string>Landline phone</string>
-       </property>
-       <property name="buddy">
-        <cstring>landlinePhoneLineEdit</cstring>
-       </property>
-      </widget>
-     </item>
      <item row="7" column="2">
-      <widget class="QLineEdit" name="landlinePhoneLineEdit"/>
+      <widget class="QLineEdit" name="mobilePhoneLineEdit"/>
+     </item>
+     <item row="9" column="2">
+      <widget class="QLineEdit" name="workPhoneLineEdit"/>
+     </item>
+     <item row="9" column="1">
+      <widget class="QLabel" name="workPhoneLabel">
+       <property name="text">
+        <string>Work phone</string>
+       </property>
+       <property name="buddy">
+        <cstring>workPhoneLineEdit</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="10" column="1">
+      <widget class="QLabel" name="emailLabel">
+       <property name="text">
+        <string>Email</string>
+       </property>
+       <property name="buddy">
+        <cstring>emailLineEdit</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="10" column="2">
+      <widget class="QLineEdit" name="emailLineEdit"/>
      </item>
     </layout>
    </item>

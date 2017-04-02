@@ -78,7 +78,6 @@ DefaultUserContactWidget::DefaultUserContactWidget(QWidget *parent) :
     lay->setMargin(0);
     lay->setSpacing(0);
     _identity = new Identity::IdentityEditorWidget(this);
-//    _identity->setAvailableWidgets(Identity::IdentityEditorWidget::FullIdentity | Identity::IdentityEditorWidget::FullAddress | Identity::IdentityEditorWidget::Photo | Identity::IdentityEditorWidget::FullLogin);
     lay->addWidget(_identity);
     connect(_identity, SIGNAL(clearPasswordChanged(QString)), this, SLOT(passwordChanged(QString)));
 }

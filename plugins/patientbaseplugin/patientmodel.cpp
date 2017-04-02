@@ -468,8 +468,10 @@ QVariant PatientModel::data(const QModelIndex &index, int role) const
         case IPatient::Country:       col = Constants::IDENTITY_ADDRESS_COUNTRY;   break;
         case IPatient::StateProvince: col = Constants::IDENTITY_ADDRESS_PROVINCE;  break;
         case IPatient::AddressNote:   col = Constants::IDENTITY_ADDRESS_NOTE;      break;
-        case IPatient::Mails:         col = Constants::IDENTITY_MAILS;             break;
+        case IPatient::Email:         col = Constants::IDENTITY_MAILS;             break;
         case IPatient::Tels:          col = Constants::IDENTITY_TELS;              break;
+        case IPatient::MobilePhone:   col = Constants::IDENTITY_MOBILE_PHONE;      break;
+        case IPatient::WorkPhone:     col = Constants::IDENTITY_WORK_PHONE;        break;
         case IPatient::Faxes:         col = Constants::IDENTITY_FAXES;             break;
         case IPatient::TitleIndex:    col = Constants::IDENTITY_TITLE;             break;
         case IPatient::Title:
@@ -732,8 +734,10 @@ bool PatientModel::setData(const QModelIndex &index, const QVariant &value, int 
             colsToEmit << Core::IPatient::FullAddress;
             break;
         }
-        case IPatient::Mails:         col = Constants::IDENTITY_MAILS;            break;
+        case IPatient::Email:         col = Constants::IDENTITY_MAILS;            break;
         case IPatient::Tels:          col = Constants::IDENTITY_TELS;             break;
+        case IPatient::MobilePhone:   col = Constants::IDENTITY_MOBILE_PHONE;     break;
+        case IPatient::WorkPhone:     col = Constants::IDENTITY_WORK_PHONE;       break;
         case IPatient::Faxes:         col = Constants::IDENTITY_FAXES;            break;
         case IPatient::TitleIndex:    col = Constants::IDENTITY_TITLE;            break;
         case IPatient::Title:

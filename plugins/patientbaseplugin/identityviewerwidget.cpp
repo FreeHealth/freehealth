@@ -778,9 +778,9 @@ public:
         QString tel = _patientModelIdentityWrapper
                 ->data(Core::IPatient::Tels).toString();
         QString protel = _patientModelIdentityWrapper
-                          ->data(Core::IPatient::ProfessionalTels).toString();
+                          ->data(Core::IPatient::WorkPhone).toString();
         QString email = _patientModelIdentityWrapper
-                ->data(Core::IPatient::Mails).toString();
+                ->data(Core::IPatient::Email).toString();
         QStringList detailsList;
         detailsList << fulladdress << mobile << tel << protel << email;
 
@@ -803,7 +803,7 @@ public:
         m_FullContactWidget->address()->setCountry(_patientModelIdentityWrapper->data(Core::IPatient::Country).toString());
         m_FullContactWidget->contact()->setTels(_patientModelIdentityWrapper->data(Core::IPatient::Tels).toString());
         m_FullContactWidget->contact()->setFax(_patientModelIdentityWrapper->data(Core::IPatient::Faxes).toString());
-        m_FullContactWidget->contact()->setMail(_patientModelIdentityWrapper->data(Core::IPatient::Mails).toString());
+        m_FullContactWidget->contact()->setMail(_patientModelIdentityWrapper->data(Core::IPatient::Email).toString());
         m_FullContactWidget->contact()->setMobile(_patientModelIdentityWrapper->data(Core::IPatient::MobilePhone).toString());
     }
 

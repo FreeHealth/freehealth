@@ -162,6 +162,9 @@ IdentityPage::IdentityPage(QWidget *parent) :
     m_Identity->addMapping(Identity::IdentityEditorWidget::Province, Core::IPatient::StateProvince);
     m_Identity->addMapping(Identity::IdentityEditorWidget::Country_TwoCharIso, Core::IPatient::Country);
     m_Identity->addMapping(Identity::IdentityEditorWidget::LandlinePhone, Core::IPatient::Tels);
+    m_Identity->addMapping(Identity::IdentityEditorWidget::MobilePhone, Core::IPatient::MobilePhone);
+    m_Identity->addMapping(Identity::IdentityEditorWidget::WorkPhone, Core::IPatient::WorkPhone);
+    m_Identity->addMapping(Identity::IdentityEditorWidget::Email, Core::IPatient::Email);
     m_Identity->setCurrentIndex(m_Model->index(0,0));
 
     QGridLayout *layout = new QGridLayout(this);

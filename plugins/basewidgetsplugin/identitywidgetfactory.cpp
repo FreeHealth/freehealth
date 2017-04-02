@@ -114,7 +114,9 @@ IdentityFormWidget::IdentityFormWidget(Form::FormItem *formItem, QWidget *parent
     m_Identity = new Identity::IdentityEditorWidget(this);
     m_Identity->initialize();
 
-    Identity::IdentityEditorWidget::AvailableWidgets widgets = Identity::IdentityEditorWidget::FullIdentity;
+    Identity::IdentityEditorWidget::AvailableWidgets widgets =
+            Identity::IdentityEditorWidget::FullIdentity;
+    widgets |= Identity::IdentityEditorWidget::FullContact;
     if (options.contains("with-photo", Qt::CaseInsensitive))
         widgets |= Identity::IdentityEditorWidget::Photo;
     if (options.contains("with-address", Qt::CaseInsensitive))
