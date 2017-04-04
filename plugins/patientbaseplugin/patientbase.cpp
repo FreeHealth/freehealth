@@ -39,6 +39,7 @@
 
 #include <utils/global.h>
 #include <utils/log.h>
+#include <utils/database.h>
 #include <utils/databaseconnector.h>
 #include <translationutils/constants.h>
 #include <translationutils/trans_current.h>
@@ -51,6 +52,8 @@
 #include <coreplugin/iuser.h>
 #include <coreplugin/icommandline.h>
 
+#include <formmanagerplugin/constants_db.h>
+
 #include <QCoreApplication>
 #include <QFile>
 #include <QSqlDatabase>
@@ -58,7 +61,7 @@
 #include <QSqlError>
 #include <QSqlQuery>
 #include <QSqlRecord>
-#include <QSqlField>
+#include <QSql>
 #include <QDir>
 #include <QProgressDialog>
 #include <QTreeWidgetItem>
@@ -214,6 +217,10 @@ bool PatientBase::initialize()
 
     connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
     m_initialized = true;
+
+    // Test transferPhone() TODO remove this after testing
+    transferPhone();
+
     return true;
 }
 
@@ -531,6 +538,9 @@ bool PatientBase::updateDatabase() const
                 QFile updateScriptFile(updateScriptFileName);
                 executeQueryFile(updateScriptFile, DB);
             }
+
+            // launch transfer of phone numbers from xml to patients db here:
+            //transferPhone();
             return true;
         } else {
             LOG_ERROR("You database structure is not recognized");
@@ -560,31 +570,36 @@ bool PatientBase::updateDatabase() const
  */
 quint32 PatientBase::getSchemaVersionNumber() const
 {
-    bool SchemaTableExists = false;
+    //bool SchemaTableExists = false;
     QSqlDatabase DB = QSqlDatabase::database(Constants::DB_NAME);
     if (!connectDatabase(DB, __LINE__)) {
         return 0;
     }
     using namespace Patients::Constants;
     QSqlQuery query(DB);
-    QString queryText = QString("SELECT * FROM information_schema.tables "
+    /*QString queryText = QString("SELECT * FROM information_schema.tables "
                                 "WHERE table_schema = '%1' "
                                 "AND table_name = '%2' "
                                 "LIMIT 1;").arg(DB_NAME).arg(Table_SCHEMA);
 
     if (query.exec(queryText)) {
         if (query.next()){
-            SchemaTableExists = !query.value(0).isNull();
+            QVariant result = query.value(0);
+            qDebug() << result;
+            SchemaTableExists = !result.isNull();
+            qDebug() << "SchemaTableExists" << SchemaTableExists;
         }
     } else {
         LOG_QUERY_ERROR_FOR(Patients::Constants::DB_NAME, query);
     }
     if (!SchemaTableExists)
         return 0;
+    */
     DB.transaction();
-    quint32 value;
+    quint32 value = 0;
     query.clear();
-    if (query.exec(selectLast(Constants::SCHEMA_VERSION, Constants::Table_SCHEMA))) {
+    Utils::Field field(Table_SCHEMA, SCHEMA_VERSION);
+    if (query.exec(selectLast(field))) {
         if (query.next()){
             value = query.value(0).toUInt();
         }
@@ -677,4 +692,47 @@ QString PatientBase::getOldVersionField() const
     qDebug() << query.lastError().text();
     qDebug() << oldVersionValue;
     return oldVersionValue;
+}
+
+/**
+ * Transfer phone numbers from xml content of episode database
+ * to identity table of patients database
+ * //FormXmlContent/Subs::Tools::Identity::ProfGroup::ProfessionTels
+ * //FormXmlContent/Subs::Tools::Identity::ContactGroup::MobileTel
+ *
+ * Select EPISODES.EPISODE_ID, EPISODES.PATIENT_UID FROM EPISODES WHERE (PATIENT_UID != NULL AND
+ * ISVALID = 1 AND FORM_PAGE_UID = "Subs::Tools::Identity")
+ * IN JOIN  EPISODES_CONTENT ON EPISODES.EPISODE_ID = EPISODES_CONTENT.CONTENT_ID
+ *
+ * Select EPISODES.EPISODE_ID, EPISODES.PATIENT_UID, EPISODES_CONTENT.XML_CONTENT
+FROM EPISODES
+INNER JOIN  EPISODES_CONTENT
+ON EPISODES.EPISODE_ID = EPISODES_CONTENT.CONTENT_ID
+WHERE (PATIENT_UID IS NOT NULL AND ISVALID = 1 AND FORM_PAGE_UID = "Subs::Tools::Identity");
+ */
+bool PatientBase::transferPhone() const
+{
+    QHash<QVariant, QString> mobilePhone;
+    QHash<QVariant, QString> workPhone;
+    QString xml;
+    QSqlDatabase DB = QSqlDatabase::database(Form::Constants::DB_NAME);
+    if (!connectDatabase(DB, __LINE__)) {
+        LOG_ERROR("Can't connect to DB");
+        return false;
+    }
+    QString queryString("SELECT EPISODES.EPISODE_ID, EPISODES.PATIENT_UID, EPISODES_CONTENT.XML_CONTENT "
+                        "FROM EPISODES"
+                        "INNER JOIN EPISODES_CONTENT"
+                        "ON EPISODES.EPISODE_ID = EPISODES_CONTENT.CONTENT_ID "
+                        "WHERE (PATIENT_UID IS NOT NULL AND ISVALID = 1 AND FORM_PAGE_UID = 'Subs::Tools::Identity')");
+    QSqlQuery query(queryString, DB);
+    int fieldUid = query.record().indexOf("EPISODES.PATIENT_UID");
+    int fieldXml = query.record().indexOf("EPISODES_CONTENT.XML_CONTENT");
+    while (query.next()) {
+        QVariant fieldUidValue = query.value(fieldUid);
+        QVariant fieldXmlValue = query.value(fieldXml);
+        qDebug() << fieldUidValue << fieldXmlValue;
+    }
+    qDebug() << query.lastError().text();
+    return true;
 }

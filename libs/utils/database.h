@@ -343,7 +343,7 @@ public:
     virtual QString select(const Field &select, const Join &join, const FieldList &conditions) const;
     virtual QString select(const Field &select, const JoinList &joins, const FieldList &conditions) const;
     virtual QString select(const Field &select, const Join &join, const Field &conditions) const;
-    virtual QString selectLast(const int &fieldref, const int &tableref) const;
+    virtual QString selectLast(const Field &fieldref) const;
 
     virtual QString fieldEquality(const int tableRef1, const int fieldRef1, const int tableRef2, const int fieldRef2) const;
 

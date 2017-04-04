@@ -1917,11 +1917,11 @@ QString Database::select(const Field &select, const Join &join, const Field &con
 }
 
 
-QString Database::selectLast(const int &fieldref, const int &tableref) const
+QString Database::selectLast(const Field &fieldref) const
 {
     return QString("SELECT `%1` FROM `%2` ORDER BY `%1` DESC LIMIT 1")
-            .arg(fieldref)
-            .arg(tableref);
+            .arg(field(fieldref.table, fieldref.field).fieldName)
+            .arg(table(fieldref.table));
 }
 
 /**
