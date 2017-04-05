@@ -46,6 +46,8 @@
 #include <translationutils/trans_database.h>
 #include <translationutils/trans_msgerror.h>
 
+#include <formmanagerplugin/episodebase.h>
+
 #include <coreplugin/isettings.h>
 #include <coreplugin/icore.h>
 #include <coreplugin/constants_tokensandsettings.h>
@@ -68,6 +70,7 @@
 #include <QFont>
 #include <QByteArray>
 #include <QBuffer>
+#include <QDomDocument>
 
 using namespace Patients::Internal;
 using namespace Trans::ConstantTranslations;
@@ -180,6 +183,9 @@ PatientBase::~PatientBase()
 /** Initialize and connect to the database */
 bool PatientBase::initialize()
 {
+    // Test transferPhone() TODO remove this after testing
+    transferPhone();
+
     // only one base can be initialized
     if (m_initialized)
         return true;
@@ -217,9 +223,6 @@ bool PatientBase::initialize()
 
     connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
     m_initialized = true;
-
-    // Test transferPhone() TODO remove this after testing
-    transferPhone();
 
     return true;
 }
@@ -712,27 +715,63 @@ WHERE (PATIENT_UID IS NOT NULL AND ISVALID = 1 AND FORM_PAGE_UID = "Subs::Tools:
  */
 bool PatientBase::transferPhone() const
 {
-    QHash<QVariant, QString> mobilePhone;
-    QHash<QVariant, QString> workPhone;
+    QString workPhoneTag("Subs::Tools::Identity::ProfGroup::ProfessionTels");
+    QString mobilePhoneTag("Subs::Tools::Identity::ContactGroup::MobileTel");
+    QHash<QVariant, QVariant> mobilePhone;
+    QHash<QVariant, QVariant> workPhone;
     QString xml;
-    QSqlDatabase DB = QSqlDatabase::database(Form::Constants::DB_NAME);
-    if (!connectDatabase(DB, __LINE__)) {
-        LOG_ERROR("Can't connect to DB");
+
+    createConnection("transfer",
+                     Form::Constants::DB_NAME,
+                     settings()->databaseConnector(),
+                     Utils::Database::CreateDatabase);
+
+    if (!database().isOpen()) {
+        if (!database().open()) {
+            LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Constants::DB_NAME).arg(database().lastError().text()));
+        } else {
+            LOG(tkTr(Trans::Constants::CONNECTED_TO_DATABASE_1_DRIVER_2).arg(database().databaseName()).arg(database().driverName()));
+        }
+    } else {
+        LOG(tkTr(Trans::Constants::CONNECTED_TO_DATABASE_1_DRIVER_2).arg(database().databaseName()).arg(database().driverName()));
+    }
+
+    QSqlDatabase db = QSqlDatabase::database("transfer");
+    bool ok = db.open();
+    if (!ok) {
+        LOG_ERROR("Can't connect to database 'transfer' (episodes)");
         return false;
     }
     QString queryString("SELECT EPISODES.EPISODE_ID, EPISODES.PATIENT_UID, EPISODES_CONTENT.XML_CONTENT "
-                        "FROM EPISODES"
-                        "INNER JOIN EPISODES_CONTENT"
-                        "ON EPISODES.EPISODE_ID = EPISODES_CONTENT.CONTENT_ID "
-                        "WHERE (PATIENT_UID IS NOT NULL AND ISVALID = 1 AND FORM_PAGE_UID = 'Subs::Tools::Identity')");
-    QSqlQuery query(queryString, DB);
-    int fieldUid = query.record().indexOf("EPISODES.PATIENT_UID");
-    int fieldXml = query.record().indexOf("EPISODES_CONTENT.XML_CONTENT");
+                        "FROM EPISODES "
+                        "INNER JOIN EPISODES_CONTENT "
+                        "ON EPISODES.EPISODE_ID = EPISODES_CONTENT.EPISODE_ID "
+                        "WHERE (PATIENT_UID IS NOT NULL AND ISVALID = 1 AND "
+                        "FORM_PAGE_UID = 'Subs::Tools::Identity')");
+    QSqlQuery query(queryString, db);
+    int fieldUid = query.record().indexOf("PATIENT_UID");
+    int fieldXml = query.record().indexOf("XML_CONTENT");
     while (query.next()) {
         QVariant fieldUidValue = query.value(fieldUid);
         QVariant fieldXmlValue = query.value(fieldXml);
         qDebug() << fieldUidValue << fieldXmlValue;
+        QByteArray xmlBA;
+        if (fieldXmlValue.canConvert<QByteArray>())
+            xmlBA = fieldXmlValue.toByteArray();
+        QBuffer device(&xmlBA);
+        QDomDocument doc;
+        device.open(QIODevice::ReadOnly);
+        if (!device.open(QIODevice::ReadOnly) || !doc.setContent(&device))
+              return false;
+        QDomNodeList mobileNodes = doc.elementsByTagName(mobilePhoneTag);
+        QDomNode mobileNode;
+        if(!mobileNodes.isEmpty())
+            mobileNode = mobileNodes.at(0);
+        QDomElement mobileElement = mobileNode.toElement();
+        QString mobile = mobileElement.text();
+        qDebug() << "Mobile phone: " << mobile;
     }
     qDebug() << query.lastError().text();
+    db.close();
     return true;
 }

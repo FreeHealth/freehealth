@@ -244,7 +244,7 @@ public:
     // connection
     virtual bool createConnection(const QString &connectionName, const QString &nonPrefixedDbName,
                                   const Utils::DatabaseConnector &connector,
-                                  CreationOption createOption = WarnOnly);
+                                  CreationOption createOption = WarnOnly) const;
 
 
     /**
@@ -253,16 +253,16 @@ public:
     */
     virtual bool createDatabase(const QString &connectionName , const QString &prefixedDbName,
                                 const Utils::DatabaseConnector &connector,
-                                CreationOption createOption
-                                );
+                                const CreationOption createOption
+                                ) const;
 
     virtual bool createDatabase(const QString &/*connectionName*/ , const QString &/*prefixedDbName*/,
                                 const QString &/*pathOrHostName*/,
                                 TypeOfAccess /*access*/, AvailableDrivers /*driver*/,
                                 const QString &/*login*/, const QString &/*pass*/,
                                 const int /*port*/,
-                                CreationOption /*createOption*/
-                                ) { return false; }
+                                const CreationOption /*createOption*/
+                                ) const { return false; }
 
     static void setDatabasePrefix(const QString &prefix) {_prefix = prefix;}
     static QString prefixedDatabaseName(AvailableDrivers driver, const QString &dbName);

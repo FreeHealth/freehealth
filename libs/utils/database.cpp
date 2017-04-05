@@ -704,7 +704,7 @@ QString Database::sqliteFileName(const QString &connectionName,
  * An error is returned if :
  * - Driver is not available
  * - Can not connect to server (wrong host/log/pass)
- * - Can not create database is it doesn't exists and user asked to create it
+ * - Can not create database if it doesn't exists and user asked to create it
  * - Can not read database if asked to be readable
  * - Can not write in database if asked to be writable
  *
@@ -715,7 +715,7 @@ QString Database::sqliteFileName(const QString &connectionName,
 bool Database::createConnection(const QString &connectionName, const QString &nonPrefixedDbName,
                                 const Utils::DatabaseConnector &connector,
                                 CreationOption createOption
-                                )
+                                ) const
 {
     qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     bool toReturn = true;
@@ -727,13 +727,13 @@ bool Database::createConnection(const QString &connectionName, const QString &no
         qWarning() << connector;
     }
 
-    // does driver is available
+    // Is the driver available?
     if (!connector.isDriverValid()) {
         LOG_ERROR_FOR("Database", "Driver is not valid");
         return false;
     }
 
-    // does connection already exists ?
+    // Does the connection already exists ?
     if (QSqlDatabase::contains(connectionName)) {
         if (WarnLogMessages)
             LOG_FOR("Database", QCoreApplication::translate("Database",
@@ -819,7 +819,7 @@ bool Database::createConnection(const QString &connectionName, const QString &no
     }
     } // switch
 
-    // create database is not exists and user ask for database creation
+    // create database if it doesn't exist and user ask for database creation
     qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     switch (connector.driver()) {
     case SQLite:
@@ -984,8 +984,8 @@ bool Database::createConnection(const QString &connectionName, const QString &no
  */
 bool Database::createDatabase(const QString &connectionName , const QString &prefixedDbName,
                               const Utils::DatabaseConnector &connector,
-                              CreationOption createOption
-                              )
+                              const CreationOption createOption
+                              ) const
 {
     if (connector.driver()==SQLite) {
         return createDatabase(connectionName, prefixedDbName,
