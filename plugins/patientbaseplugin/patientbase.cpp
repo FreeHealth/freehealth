@@ -146,7 +146,13 @@ PatientBase::PatientBase(QObject *parent) :
     addField(Table_IDENT, IDENTITY_ADDRESS_PROVINCE, "PROV", FieldIsShortText);
     addField(Table_IDENT, IDENTITY_ADDRESS_COUNTRY, "COUNTRY", FieldIsLanguageText);  // two chars field
     addField(Table_IDENT, IDENTITY_ADDRESS_NOTE, "NOTE", FieldIsLongText);
-    addField(Table_IDENT, IDENTITY_MAILS, "MAILS", FieldIsLongText);  // Context:Value;Context;Value... Work:eric@work.fr...
+
+    // MAILS field Used to be: Context:Value;Context;Value... Work:eric@work.fr...
+    // For now let's just put 1 unique email, then in a future release a JSON format
+    // allowing multiple emails to trace patient's emails change and keep the link
+    // between earlier messages and patient ID?
+    // Same for TELS and FAXES
+    addField(Table_IDENT, IDENTITY_MAILS, "MAILS", FieldIsLongText);
     addField(Table_IDENT, IDENTITY_TELS, "TELS", FieldIsLongText);  // Context:Value;Context;Value...
     addField(Table_IDENT, IDENTITY_FAXES, "FAXES", FieldIsLongText);  // Context:Value;Context;Value...
     addField(Table_IDENT, IDENTITY_MOBILE_PHONE, "MOBILE_PHONE", FieldIs32Chars);
@@ -168,8 +174,8 @@ PatientBase::PatientBase(QObject *parent) :
     addTable(Table_SCHEMA, "SCHEMA_CHANGES");
     addField(Table_SCHEMA, SCHEMA_ID, "ID", FieldIsUniquePrimaryKey);
     addField(Table_SCHEMA, SCHEMA_VERSION, "VERSION_NUMBER", FieldIsInteger);
-    addField(Table_SCHEMA, SCHEMA_SCRIPT, "SCRIPT_NAME", FieldIsShortText);
-    addField(Table_SCHEMA, SCHEMA_TIMESTAMP, "TIMESTAMP_UTC_APPLIED", FieldIsShortText);
+    addField(Table_SCHEMA, SCHEMA_SCRIPT, "SCRIPT_NAME", FieldIs255Chars);
+    addField(Table_SCHEMA, SCHEMA_TIMESTAMP, "TIMESTAMP_UTC_APPLIED", FieldIs19Chars);
     addIndex(Table_SCHEMA, SCHEMA_ID);
 
     // Connect first run database creation requested
@@ -183,9 +189,6 @@ PatientBase::~PatientBase()
 /** Initialize and connect to the database */
 bool PatientBase::initialize()
 {
-    // Test transferPhone() TODO remove this after testing
-    transferPhone();
-
     // only one base can be initialized
     if (m_initialized)
         return true;
@@ -223,7 +226,8 @@ bool PatientBase::initialize()
 
     connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
     m_initialized = true;
-
+    // Test transferPhone() TODO remove this after testing
+    transferPhone();
     return true;
 }
 
@@ -713,15 +717,15 @@ INNER JOIN  EPISODES_CONTENT
 ON EPISODES.EPISODE_ID = EPISODES_CONTENT.CONTENT_ID
 WHERE (PATIENT_UID IS NOT NULL AND ISVALID = 1 AND FORM_PAGE_UID = "Subs::Tools::Identity");
  */
-bool PatientBase::transferPhone() const
+bool PatientBase::transferPhone()
 {
     QString workPhoneTag("Subs::Tools::Identity::ProfGroup::ProfessionTels");
     QString mobilePhoneTag("Subs::Tools::Identity::ContactGroup::MobileTel");
-    QHash<QVariant, QVariant> mobilePhone;
-    QHash<QVariant, QVariant> workPhone;
+    QHash<QString, QString> mobilePhone;
+    QHash<QString, QString> workPhone;
     QString xml;
 
-    createConnection("transfer",
+    createConnection("transferEpisodes",
                      Form::Constants::DB_NAME,
                      settings()->databaseConnector(),
                      Utils::Database::CreateDatabase);
@@ -736,7 +740,7 @@ bool PatientBase::transferPhone() const
         LOG(tkTr(Trans::Constants::CONNECTED_TO_DATABASE_1_DRIVER_2).arg(database().databaseName()).arg(database().driverName()));
     }
 
-    QSqlDatabase db = QSqlDatabase::database("transfer");
+    QSqlDatabase db = QSqlDatabase::database("transferEpisodes");
     bool ok = db.open();
     if (!ok) {
         LOG_ERROR("Can't connect to database 'transfer' (episodes)");
@@ -753,6 +757,7 @@ bool PatientBase::transferPhone() const
     int fieldXml = query.record().indexOf("XML_CONTENT");
     while (query.next()) {
         QVariant fieldUidValue = query.value(fieldUid);
+        const QString fieldUidString = fieldUidValue.toString();
         QVariant fieldXmlValue = query.value(fieldXml);
         qDebug() << fieldUidValue << fieldXmlValue;
         QByteArray xmlBA;
@@ -762,16 +767,78 @@ bool PatientBase::transferPhone() const
         QDomDocument doc;
         device.open(QIODevice::ReadOnly);
         if (!device.open(QIODevice::ReadOnly) || !doc.setContent(&device))
-              return false;
+            return false;
+
+        // MobilePhone
         QDomNodeList mobileNodes = doc.elementsByTagName(mobilePhoneTag);
         QDomNode mobileNode;
         if(!mobileNodes.isEmpty())
             mobileNode = mobileNodes.at(0);
         QDomElement mobileElement = mobileNode.toElement();
-        QString mobile = mobileElement.text();
+        const QString mobile = mobileElement.text();
         qDebug() << "Mobile phone: " << mobile;
+        mobilePhone.insert(fieldUidValue.toString(), mobile);
+
+        // WorkPhone
+        QDomNodeList workNodes = doc.elementsByTagName(workPhoneTag);
+        QDomNode workNode;
+        if(!workNodes.isEmpty())
+            workNode = workNodes.at(0);
+        QDomElement workElement = workNode.toElement();
+        QString work = workElement.text();
+        qDebug() << "Work phone: " << work;
     }
     qDebug() << query.lastError().text();
     db.close();
+    insertPhone(mobilePhone);
+    return true;
+}
+
+
+bool PatientBase::insertPhone(QHash<QString, QString> mP)
+{
+    createConnection("transferPatients",
+                     Constants::DB_NAME,
+                     settings()->databaseConnector(),
+                     Utils::Database::WarnOnly);
+
+    if (!database().isOpen()) {
+        if (!database().open()) {
+            LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Constants::DB_NAME).arg(database().lastError().text()));
+        } else {
+            LOG(tkTr(Trans::Constants::CONNECTED_TO_DATABASE_1_DRIVER_2).arg(database().databaseName()).arg(database().driverName()));
+        }
+    } else {
+        LOG(tkTr(Trans::Constants::CONNECTED_TO_DATABASE_1_DRIVER_2).arg(database().databaseName()).arg(database().driverName()));
+    }
+
+    QSqlDatabase dbPatients = QSqlDatabase::database("transferPatients");
+    bool ok = dbPatients.open();
+    if (!ok) {
+        LOG_ERROR("Can't connect to database 'transferPatients' (patients)");
+        return false;
+    }
+    using namespace Patients::Constants;
+    QSqlDatabase DB = QSqlDatabase::database(Constants::DB_NAME);
+    QHashIterator<QString, QString> i(mP);
+    while (i.hasNext()) {
+        i.next();
+        qDebug() << i.key() << ": " << i.value();
+        DB.transaction();
+        QSqlQuery query(DB);
+        QHash<int, QString> where;
+        where.insert(IDENTITY_UID, QString("='%1'").arg(i.key()));
+        query.prepare(prepareUpdateQuery(Table_IDENT, IDENTITY_MOBILE_PHONE, where));
+        query.bindValue(0, QVariant(i.value()));
+        if (!query.exec()) {
+            LOG_QUERY_ERROR_FOR("PatientBase", query);
+            query.finish();
+            DB.rollback();
+            return false;
+        }
+        query.finish();
+        DB.commit();
+    }
+    database().close();
     return true;
 }

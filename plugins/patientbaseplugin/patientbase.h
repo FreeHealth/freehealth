@@ -88,7 +88,8 @@ public:
     quint32 getSchemaVersionNumber() const;
     bool executeQueryFile(QFile &file, QSqlDatabase &db) const;
     QString getOldVersionField() const;
-    bool transferPhone() const;
+    bool transferPhone();
+    bool insertPhone(QHash<QString, QString> mP);
 private:
     bool createDatabase(const QString &connectionName, const QString &dbName,
                           const QString &pathOrHostName,
