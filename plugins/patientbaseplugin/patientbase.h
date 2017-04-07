@@ -84,12 +84,13 @@ public:
 
     void toTreeWidget(QTreeWidget *tree) const;
 
-    bool updateDatabase() const;
+    bool updateDatabase();
     quint32 getSchemaVersionNumber() const;
     bool executeQueryFile(QFile &file, QSqlDatabase &db) const;
     QString getOldVersionField() const;
     bool transferPhone();
-    bool insertPhone(QHash<QString, QString> mP);
+    bool insertMobilePhone(QHash<QString, QString> mP);
+    bool insertWorkPhone(QHash<QString, QString> wP);
 private:
     bool createDatabase(const QString &connectionName, const QString &dbName,
                           const QString &pathOrHostName,

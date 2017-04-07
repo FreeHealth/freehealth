@@ -95,7 +95,7 @@
 #include <QDateEdit>
 #include <QMenu>
 #include <QRegExpValidator>
-
+#include <QDesktopServices>
 #include <QDebug>
 
 using namespace Identity;
@@ -260,6 +260,8 @@ public:
         Utils::CapitalizationValidator *capVal = new Utils::CapitalizationValidator(q);
         ui->firstname->setValidator(capVal);
 
+        ui->emailPushButton->setEnabled(false);
+
         QObject::connect(ui->photoButton, SIGNAL(clicked()), q, SLOT(photoButton_clicked()));
         q->updateGenderImage();
         //            QObject::connect(ui->genderCombo, SIGNAL(currentIndexChanged(int)), q, SLOT(updateGenderImage()));
@@ -291,6 +293,8 @@ public:
         QObject::connect(ui->photoButton->deletePhotoAction(), SIGNAL(triggered()), q, SLOT(updateGenderImage()));
         QObject::connect(ui->passwordWidget, SIGNAL(uncryptedPasswordChanged(QString)), q, SIGNAL(clearPasswordChanged(QString)));
         QObject::connect(ui->passwordWidget, SIGNAL(uncryptedPasswordChanged(QString)), q, SIGNAL(passwordConfirmed()));
+        QObject::connect(ui->emailLineEdit, SIGNAL(textChanged(QString)),
+                         q, SLOT(updateEmailButtonState()));
     }
 
     void connectPropertiesNotifier()
@@ -701,6 +705,9 @@ void IdentityEditorWidget::setReadOnly(bool readOnly)
     d->ui->language->setEnabled(!readOnly);
     d->ui->photoButton->setEnabled(!readOnly);
     d->ui->landlinePhoneLineEdit->setReadOnly(readOnly);
+    d->ui->mobilePhoneLineEdit->setReadOnly(readOnly);
+    d->ui->workPhoneLineEdit->setReadOnly(readOnly);
+    d->ui->emailLineEdit->setReadOnly(readOnly);
 }
 
 bool IdentityEditorWidget::isReadOnly() const
@@ -836,8 +843,8 @@ void IdentityEditorWidget::setCurrentIndex(const QModelIndex &modelIndex)
 }
 
 /**
- * Test the validity of the "actually shown" identity. The default implementation
- * test the content of the firstname, usualName, gender & DOB.
+ * Test the validity of the currently shown identity. The default implementation
+ * tests the content of the firstname, usualName, gender & DOB.
  * When subclassing, if you return false, the object can not submit to the model.
  */
 bool IdentityEditorWidget::isIdentityValid(bool warnUser) const
@@ -1107,6 +1114,15 @@ void IdentityEditorWidget::updateGenderImage(int genderIndex)
 }
 
 /**
+ * \internal
+ * Connected to the email QLineEdit, update the QPushButton state
+ */
+void IdentityEditorWidget::updateEmailButtonState()
+{
+    d->ui->emailPushButton->setEnabled(!d->ui->emailLineEdit->text().isEmpty());
+}
+
+/**
  * Set the current data from an XML content.
  * \sa toXml(), setXmlInOut()
  */
@@ -1183,4 +1199,18 @@ void IdentityEditorWidget::onPhotoProviderPhotoReady(const QPixmap &pixmap)
         return;
     d->ui->photoButton->setPixmap(pixmap);
     d->m_requestedProvider = 0;
+}
+
+/**
+ * \internal
+ * Send an email to the address inside emailLineEdit if emailPushButton is clicked
+ */
+void IdentityEditorWidget::on_emailPushButton_clicked()
+{
+    if (d->ui->emailLineEdit->text().isEmpty()) {
+        return;
+    }
+    QString email = d->ui->emailLineEdit->text();
+    QDesktopServices::openUrl(QString("mailto:%1")
+            .arg(email));
 }

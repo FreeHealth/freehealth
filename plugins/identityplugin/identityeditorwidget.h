@@ -212,6 +212,8 @@ private Q_SLOTS:
     void onCurrentPatientChanged();
     void onPhotoProviderRequested();
     void onPhotoProviderPhotoReady(const QPixmap &pixmap);
+    void on_emailPushButton_clicked();
+    void updateEmailButtonState();
 
 private:
     Internal::IdentityEditorWidgetPrivate *d;

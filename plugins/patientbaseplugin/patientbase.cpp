@@ -190,8 +190,9 @@ PatientBase::~PatientBase()
 bool PatientBase::initialize()
 {
     // only one base can be initialized
-    if (m_initialized)
+    if (m_initialized) {
         return true;
+    }
 
     // connect
     if (commandLine()->value(Core::ICommandLine::ClearUserDatabases).toBool()) {
@@ -216,8 +217,9 @@ bool PatientBase::initialize()
     int currentDatabaseVersion = getSchemaVersionNumber();
     qDebug() << currentDatabaseVersion;
     if (currentDatabaseVersion != Constants::DB_CURRENT_CODE_VERSION) {
-        if(!updateDatabase())
+        if(!updateDatabase()) {
             LOG_ERROR(QString("Couldn't upgrade database %1").arg(Constants::DB_NAME));
+        }
     }
     if (!checkDatabaseScheme()) {
         LOG_ERROR(tkTr(Trans::Constants::DATABASE_1_SCHEMA_ERROR).arg(Constants::DB_NAME));
@@ -226,8 +228,6 @@ bool PatientBase::initialize()
 
     connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
     m_initialized = true;
-    // Test transferPhone() TODO remove this after testing
-    transferPhone();
     return true;
 }
 
@@ -266,8 +266,9 @@ bool PatientBase::createVirtualPatient(const QString &usualName, const QString &
     query.bindValue(IDENTITY_ISVIRTUAL, 1);
     query.bindValue(IDENTITY_USUALNAME, usualName);
     query.bindValue(IDENTITY_FIRSTNAME, firstname);
-    if (otherNames.isEmpty())
+    if (otherNames.isEmpty()) {
         query.bindValue(IDENTITY_OTHERNAMES, QVariant());
+    }
     else
         query.bindValue(IDENTITY_OTHERNAMES, otherNames);
     query.bindValue(IDENTITY_GENDER, gender);
@@ -304,8 +305,9 @@ bool PatientBase::createVirtualPatient(const QString &usualName, const QString &
 
     if (!photoFile.isEmpty()) {
         QPixmap pix(photoFile);
-        if (pix.isNull())
+        if (pix.isNull()) {
             return false;
+        }
         QByteArray ba;
         QBuffer buffer(&ba);
         buffer.open(QIODevice::WriteOnly);
@@ -341,11 +343,22 @@ QString PatientBase::patientUuid(const QString &usualname,
     }
     using namespace Patients::Constants;
     QHash<int, QString> where;
-    if (usualname != QString()) where.insert(IDENTITY_USUALNAME, QString("=\"%1\"").arg(usualname));
-    if (othernames != QString()) where.insert(IDENTITY_OTHERNAMES, QString("=\"%1\"").arg(othernames));
-    if (firstname != QString()) where.insert(IDENTITY_FIRSTNAME, QString("=\"%1\"").arg(firstname));
-    if (gender != QString()) where.insert(IDENTITY_GENDER, QString("=\"%1\"").arg(gender));
-    if (dob != QDate()) where.insert(IDENTITY_DOB, QString("= STR_TO_DATE('%1̀', '%Y-%m-%d')").arg(dob.toString(Qt::ISODate)));
+    if (usualname != QString()) {
+        where.insert(IDENTITY_USUALNAME, QString("=\"%1\"").arg(usualname));
+    }
+    if (othernames != QString()) {
+        where.insert(IDENTITY_OTHERNAMES, QString("=\"%1\"").arg(othernames));
+    }
+    if (firstname != QString()) {
+        where.insert(IDENTITY_FIRSTNAME, QString("=\"%1\"").arg(firstname));
+    }
+    if (gender != QString()) {
+        where.insert(IDENTITY_GENDER, QString("=\"%1\"").arg(gender));
+    }
+    if (dob != QDate()) {
+        where.insert(IDENTITY_DOB, QString("= STR_TO_DATE('%1̀', '%Y-%m-%d')")
+                     .arg(dob.toString(Qt::ISODate)));
+    }
     QString req = select(Table_IDENT, IDENTITY_UID, where);
     DB.transaction();
     QSqlQuery query(DB);
@@ -414,8 +427,9 @@ bool PatientBase::createDatabase(const QString &connectionName , const QString &
                                  )
 {
     Q_UNUSED(access);
-    if (connectionName != Constants::DB_NAME)
+    if (connectionName != Constants::DB_NAME) {
         return false;
+    }
 
     LOG(tkTr(Trans::Constants::TRYING_TO_CREATE_1_PLACE_2).arg(dbName).arg(pathOrHostName));
 
@@ -423,12 +437,15 @@ bool PatientBase::createDatabase(const QString &connectionName , const QString &
     QSqlDatabase DB;
     if (driver == SQLite) {
         DB = QSqlDatabase::addDatabase("QSQLITE", connectionName);
-        if (!QDir(pathOrHostName).exists())
-            if (!QDir().mkpath(pathOrHostName))
+        if (!QDir(pathOrHostName).exists()) {
+            if (!QDir().mkpath(pathOrHostName)) {
                 LOG(tkTr(Trans::Constants::_1_ISNOT_AVAILABLE_CANNOTBE_CREATED).arg(pathOrHostName));
-        DB.setDatabaseName(QDir::cleanPath(pathOrHostName + QDir::separator() + dbName));
-        if (!DB.open())
+            }
+            DB.setDatabaseName(QDir::cleanPath(pathOrHostName + QDir::separator() + dbName));
+        }
+        if (!DB.open()) {
             LOG(tkTr(Trans::Constants::DATABASE_1_CANNOT_BE_CREATED_ERROR_2).arg(dbName).arg(DB.lastError().text()));
+        }
         setDriver(Utils::Database::SQLite);
     }
     else if (driver == MySQL) {
@@ -461,8 +478,10 @@ bool PatientBase::createDatabase(const QString &connectionName , const QString &
             }
             DB.setDatabaseName(dbName);
         }
-        if (QSqlDatabase::connectionNames().contains("__PATIENTS_CREATOR"))
+        if (QSqlDatabase::connectionNames().contains("__PATIENTS_CREATOR")) {
             QSqlDatabase::removeDatabase("__PATIENTS_CREATOR");
+        }
+
         if (!DB.open()) {
             Utils::warningMessageBox(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
                                      .arg(DB.connectionName()).arg(DB.lastError().text()),
@@ -528,7 +547,7 @@ void PatientBase::toTreeWidget(QTreeWidget *tree) const
     tree->expandAll();
 }
 
-bool PatientBase::updateDatabase() const
+bool PatientBase::updateDatabase()
 {
     int currentDatabaseVersion = getSchemaVersionNumber();
     qDebug() << "currentDatabaseVersion: " << currentDatabaseVersion;
@@ -545,9 +564,8 @@ bool PatientBase::updateDatabase() const
                 QFile updateScriptFile(updateScriptFileName);
                 executeQueryFile(updateScriptFile, DB);
             }
-
             // launch transfer of phone numbers from xml to patients db here:
-            //transferPhone();
+            transferPhone();
             return true;
         } else {
             LOG_ERROR("You database structure is not recognized");
@@ -559,7 +577,7 @@ bool PatientBase::updateDatabase() const
                     .arg(Constants::DB_NAME)
                     .arg(QString::number(i));
             QFile updateScriptFile(updateScriptFileName);
-            if(!executeQueryFile(updateScriptFile, DB)){
+            if(!executeQueryFile(updateScriptFile, DB)) {
                 LOG_ERROR(QString("Error during update with updatescript%1").arg(i));
                 return false;
             }
@@ -607,7 +625,7 @@ quint32 PatientBase::getSchemaVersionNumber() const
     query.clear();
     Utils::Field field(Table_SCHEMA, SCHEMA_VERSION);
     if (query.exec(selectLast(field))) {
-        if (query.next()){
+        if (query.next()) {
             value = query.value(0).toUInt();
         }
     } else {
@@ -645,16 +663,17 @@ bool PatientBase::executeQueryFile(QFile &file, QSqlDatabase &db) const
 
         //Check if query file is already wrapped with a transaction
         bool isStartedWithTransaction = re_transaction.match(qList.at(0)).hasMatch();
-        if(!isStartedWithTransaction)
+        if(!isStartedWithTransaction) {
             db.transaction();     //<=== not wrapped with a transaction, so we wrap it with a transaction.
-
+        }
         //Execute each individual queries
         foreach(const QString &s, qList) {
-            if(re_transaction.match(s).hasMatch())    //<== detecting special query
+            if (re_transaction.match(s).hasMatch()) {    //<== detecting special query
                 db.transaction();
-            else if(re_commit.match(s).hasMatch())    //<== detecting special query
+            }
+            else if(re_commit.match(s).hasMatch()) {    //<== detecting special query
                 db.commit();
-            else {
+            } else {
                 query.exec(s);                        //<== execute normal query
                 if(query.lastError().type() != QSqlError::NoError) {
                     qDebug() << query.lastError().text();
@@ -662,8 +681,9 @@ bool PatientBase::executeQueryFile(QFile &file, QSqlDatabase &db) const
                 }
             }
         }
-        if(!isStartedWithTransaction)
+        if (!isStartedWithTransaction) {
             db.commit();          //<== ... completing of wrapping with transaction
+        }
 
         //Sql Driver doesn't supports transaction
     } else {
@@ -676,8 +696,9 @@ bool PatientBase::executeQueryFile(QFile &file, QSqlDatabase &db) const
         QStringList qList = queryStr.split(';', QString::SkipEmptyParts);
         foreach(const QString &s, qList) {
             query.exec(s);
-            if(query.lastError().type() != QSqlError::NoError)
+            if(query.lastError().type() != QSqlError::NoError) {
                 qDebug() << query.lastError().text();
+            }
         }
     }
     return true;
@@ -757,45 +778,53 @@ bool PatientBase::transferPhone()
     int fieldXml = query.record().indexOf("XML_CONTENT");
     while (query.next()) {
         QVariant fieldUidValue = query.value(fieldUid);
-        const QString fieldUidString = fieldUidValue.toString();
         QVariant fieldXmlValue = query.value(fieldXml);
         qDebug() << fieldUidValue << fieldXmlValue;
         QByteArray xmlBA;
-        if (fieldXmlValue.canConvert<QByteArray>())
+        if (fieldXmlValue.canConvert<QByteArray>()) {
             xmlBA = fieldXmlValue.toByteArray();
+        }
         QBuffer device(&xmlBA);
         QDomDocument doc;
         device.open(QIODevice::ReadOnly);
-        if (!device.open(QIODevice::ReadOnly) || !doc.setContent(&device))
+        if (!device.open(QIODevice::ReadOnly) || !doc.setContent(&device)) {
             return false;
+        }
 
         // MobilePhone
         QDomNodeList mobileNodes = doc.elementsByTagName(mobilePhoneTag);
         QDomNode mobileNode;
-        if(!mobileNodes.isEmpty())
+        if(!mobileNodes.isEmpty()) {
             mobileNode = mobileNodes.at(0);
+        }
         QDomElement mobileElement = mobileNode.toElement();
         const QString mobile = mobileElement.text();
         qDebug() << "Mobile phone: " << mobile;
-        mobilePhone.insert(fieldUidValue.toString(), mobile);
-
+        if (!mobile.isEmpty()) {
+            mobilePhone.insert(fieldUidValue.toString(), mobile);
+        }
         // WorkPhone
         QDomNodeList workNodes = doc.elementsByTagName(workPhoneTag);
         QDomNode workNode;
-        if(!workNodes.isEmpty())
+        if(!workNodes.isEmpty()) {
             workNode = workNodes.at(0);
+        }
         QDomElement workElement = workNode.toElement();
         QString work = workElement.text();
         qDebug() << "Work phone: " << work;
+        if (!work.isEmpty()) {
+            workPhone.insert(fieldUidValue.toString(), work);
+        }
     }
     qDebug() << query.lastError().text();
     db.close();
-    insertPhone(mobilePhone);
+    insertMobilePhone(mobilePhone);
+    insertWorkPhone(workPhone);
     return true;
 }
 
 
-bool PatientBase::insertPhone(QHash<QString, QString> mP)
+bool PatientBase::insertMobilePhone(QHash<QString, QString> mP)
 {
     createConnection("transferPatients",
                      Constants::DB_NAME,
@@ -805,6 +834,7 @@ bool PatientBase::insertPhone(QHash<QString, QString> mP)
     if (!database().isOpen()) {
         if (!database().open()) {
             LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Constants::DB_NAME).arg(database().lastError().text()));
+            return false;
         } else {
             LOG(tkTr(Trans::Constants::CONNECTED_TO_DATABASE_1_DRIVER_2).arg(database().databaseName()).arg(database().driverName()));
         }
@@ -842,3 +872,52 @@ bool PatientBase::insertPhone(QHash<QString, QString> mP)
     database().close();
     return true;
 }
+
+bool PatientBase::insertWorkPhone(QHash<QString, QString> wP)
+{
+    createConnection("transferPatients",
+                     Constants::DB_NAME,
+                     settings()->databaseConnector(),
+                     Utils::Database::WarnOnly);
+
+    if (!database().isOpen()) {
+        if (!database().open()) {
+            LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Constants::DB_NAME).arg(database().lastError().text()));
+        } else {
+            LOG(tkTr(Trans::Constants::CONNECTED_TO_DATABASE_1_DRIVER_2).arg(database().databaseName()).arg(database().driverName()));
+        }
+    } else {
+        LOG(tkTr(Trans::Constants::CONNECTED_TO_DATABASE_1_DRIVER_2).arg(database().databaseName()).arg(database().driverName()));
+    }
+
+    QSqlDatabase dbPatients = QSqlDatabase::database("transferPatients");
+    bool ok = dbPatients.open();
+    if (!ok) {
+        LOG_ERROR("Can't connect to database 'transferPatients' (patients)");
+        return false;
+    }
+    using namespace Patients::Constants;
+    QSqlDatabase DB = QSqlDatabase::database(Constants::DB_NAME);
+    QHashIterator<QString, QString> i(wP);
+    while (i.hasNext()) {
+        i.next();
+        qDebug() << i.key() << ": " << i.value();
+        DB.transaction();
+        QSqlQuery query(DB);
+        QHash<int, QString> where;
+        where.insert(IDENTITY_UID, QString("='%1'").arg(i.key()));
+        query.prepare(prepareUpdateQuery(Table_IDENT, IDENTITY_WORK_PHONE, where));
+        query.bindValue(0, QVariant(i.value()));
+        if (!query.exec()) {
+            LOG_QUERY_ERROR_FOR("PatientBase", query);
+            query.finish();
+            DB.rollback();
+            return false;
+        }
+        query.finish();
+        DB.commit();
+    }
+    database().close();
+    return true;
+}
+
