@@ -250,7 +250,6 @@ void FormDataWidgetMapper::clear()
 bool FormDataWidgetMapper::isDirty() const
 {
     if (!d->_formMain) {
-        qDebug() << Q_FUNC_INFO << "d->_formMain == false";
         return false;
     }
 
@@ -281,14 +280,12 @@ bool FormDataWidgetMapper::isDirty() const
         if (it->itemData() && it->itemData()->isModified()) {
             if (WarnDirty) {
                 LOG(QString("isDirty (item) %1 %2").arg(it->uuid()).arg(+it->itemData()->isModified()));
-                qDebug() << QString("isDirty (item) %1 %2").arg(it->uuid()).arg(+it->itemData()->isModified());
             }
             return true;
         }
     }
     if (WarnDirty) {
         LOG(QString("isDirty = FALSE, Form: %1").arg(d->_formMain->uuid()));
-        qDebug() << QString("isDirty = FALSE, Form: %1").arg(d->_formMain->uuid());
     }
     return false;
 }

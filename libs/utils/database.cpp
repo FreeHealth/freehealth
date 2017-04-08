@@ -56,7 +56,7 @@
     // In constructor call createConnection()
     createConnection( "users", "users.db", databasePath(), ReadWrite, SQLite);
     // That's done, now you can work with enums instead of magic strings...
-    // If you want to create database if it doesn't exist define the member createDatabase() in your superclass.
+    // If you want to create database if it doesn't exist define the member () in your superclass.
     \endcode
 */
 
@@ -712,10 +712,11 @@ QString Database::sqliteFileName(const QString &connectionName,
  * \param connector = Utils::DatabaseConnector = connection params
  * \param createOption = what to do if the database does not exist.
  */
-bool Database::createConnection(const QString &connectionName, const QString &nonPrefixedDbName,
+bool Database::createConnection(const QString &connectionName,
+                                const QString &nonPrefixedDbName,
                                 const Utils::DatabaseConnector &connector,
                                 CreationOption createOption
-                                ) const
+                                )
 {
     qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     bool toReturn = true;
@@ -982,25 +983,30 @@ bool Database::createConnection(const QString &connectionName, const QString &no
 /**
  * Creates the database
  */
-bool Database::createDatabase(const QString &connectionName , const QString &prefixedDbName,
+bool Database::createDatabase(const QString &connectionName,
+                              const QString &prefixedDbName,
                               const Utils::DatabaseConnector &connector,
-                              const CreationOption createOption
-                              ) const
+                              CreationOption createOption
+                              )
 {
     if (connector.driver()==SQLite) {
-        return createDatabase(connectionName, prefixedDbName,
+        return createDatabase(connectionName,
+                              prefixedDbName,
                               connector.absPathToSqliteReadWriteDatabase() + QDir::separator() + connectionName + QDir::separator(),
                               Database::TypeOfAccess(connector.accessMode()),
                               connector.driver(),
-                              connector.clearLog(), connector.clearPass(),
+                              connector.clearLog(),
+                              connector.clearPass(),
                               connector.port(),
                               createOption);
     } else {
-        return createDatabase(connectionName, prefixedDbName,
+        return createDatabase(connectionName,
+                              prefixedDbName,
                               connector.host(),
                               Database::TypeOfAccess(connector.accessMode()),
                               connector.driver(),
-                              connector.clearLog(), connector.clearPass(),
+                              connector.clearLog(),
+                              connector.clearPass(),
                               connector.port(),
                               createOption);
     }
@@ -1340,6 +1346,40 @@ bool Database::setVersion(const Field &field, const int &version)
     query.bindValue(field.field, version);
     if (!query.exec()) {
         LOG_QUERY_ERROR_FOR("Database", query);
+        query.finish();
+        DB.rollback();
+        return false;
+    }
+    query.finish();
+    DB.commit();
+    return true;
+}
+
+/**
+ * Set the database version to \e version text (QString) using the field
+ * \e field.
+ * \warning The table containing this field will be totally
+ * deleted and a new row will be inserted with the new version value.
+ * \sa getVersion(), setVersion()
+ */
+bool Database::setSchemaVersion(const int &version)
+{
+    QSqlDatabase DB = database();
+    if (!connectedDatabase(DB, __LINE__)) {
+        return false;
+    }
+    DB.transaction();
+    QSqlQuery query(DB);
+    // Insert a new row with the version
+    query.prepare("INSERT INTO `SCHEMA_CHANGES` (`VERSION_NUMBER`, `SCRIPT_NAME`, `TIMESTAMP_UTC_APPLIED`) "
+                      "VALUES (:version, :script, UTC_TIMESTAMP())");
+        query.bindValue(":version", version);
+        query.bindValue(":script", "initialpatients");
+        //query.bindValue(":timestamp", "UTC_TIMESTAMP()");
+
+    if (!query.exec()) {
+        QString dbName = database().databaseName();
+        LOG_QUERY_ERROR_FOR(dbName, query);
         query.finish();
         DB.rollback();
         return false;
@@ -2684,7 +2724,7 @@ bool Database::executeSQL(const QStringList &list, QSqlDatabase &DB)
  * Execute SQL commands on the QSqlDatabase \e DB. \n
  * \warning All SQL commands must be separated by a \e ; followed by a linefeed. \n
  * Creates a transaction on the database \e DB. \n
- * \warning The string is splitted with the ; and line feed. All lines starting with
+ * \warning The string is split with the ; and line feed. All lines starting with
  * \e -- are ignored. Remember to add a ; at the end of your comment lines.
 */
 bool Database::executeSQL(const QString &req, QSqlDatabase &DB)
@@ -2879,12 +2919,12 @@ QStringList DatabasePrivate::getSQLCreateTable(const int &tableref)
                                      .arg(fieldName)
                                      .arg(getTypeOfField(i))// .leftJustified(20, ' '))
                                      .arg(defVal));
-                }
-                else
+                } else {
                     fieldLine.append(QString("%1 %2 DEFAULT '%3'")
                                      .arg(fieldName)
                                      .arg(getTypeOfField(i))// .leftJustified(20, ' '))
                                      .arg(m_DefaultFieldValue.value(i)));
+                }
                 break;
             }
             case Database::FieldIsBoolean :

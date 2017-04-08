@@ -464,7 +464,7 @@ bool DrugsBase::datapackChanged()
 {
     forceFullDatabaseRefreshing();
     d->m_initialized = false;
-    // Remove actual QSqlDatabase
+    // Remove current QSqlDatabase
     QSqlDatabase::removeDatabase(Constants::DB_DRUGS_NAME);
     // Re-init database
     initialize();

@@ -736,8 +736,6 @@ public:
 
         // age / dob / dod / prof / nss
         QString age;
-        qDebug() << m_PatientModel->index(row, Core::IPatient::YearsOld).data().toInt();
-        qDebug() << settings()->value(Patients::Constants::S_PEDIATRICSAGELIMIT, 18).toInt();
         if (m_PatientModel->index(row, Core::IPatient::YearsOld).data().toInt() < settings()->value(Patients::Constants::S_PEDIATRICSAGELIMIT, 18).toInt()) {
             age = m_PatientModel->index(row, Core::IPatient::Age).data().toString();
         } else {

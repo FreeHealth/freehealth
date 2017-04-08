@@ -141,7 +141,6 @@ void RecordImportDialog::parse()
                            << ") is different from number of header items ("
                            << m_data->at(0).size();
             }
-            //qDebug() << j << m_data->at(i).at(j);
         }
     }
 

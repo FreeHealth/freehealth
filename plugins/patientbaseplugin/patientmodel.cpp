@@ -540,7 +540,6 @@ QVariant PatientModel::data(const QModelIndex &index, int role) const
         }
         case IPatient::YearsOld:
         {
-            qDebug() << "case IPatient::YearsOld";
             QModelIndex idx = d->m_SqlPatient->index(index.row(), Constants::IDENTITY_DOB);
             return MedicalUtils::ageYears(d->m_SqlPatient->data(idx).toDate());
         }

@@ -341,7 +341,10 @@ bool UserBase::checkDatabaseVersion()
         } else if (vnCurrentQt < vnUserDbQt) {
             LOG_ERROR(QString("In User base. Qt Version mismatch. Linux users: install Qt%1 or higher. Windows and Mac users: use FreeMedForms 0.9.8 or higher. FMF/system Qt version: %2 inferior to User Database Qt version: %3").arg(QT_VERSION_STR).arg(qsQtVersion).arg(qsQtVersion));
             // TODO: raise a UI error
-            return true; // Don't block the app: in most cases, no serious problem will arise.
+            // We return true as in practcice FHIO runs perfecly on
+            // Qt 5.6,  5.7 or 5.8 it will avoid problems if clients built
+            // with different versions try to access the same database
+            return true;
         } else if (vnCurrentQt > vnUserDbQt) {
             // Update the database qt version number
             Utils::Field vField(Constants::Table_INFORMATION, Constants::INFO_VERSION);

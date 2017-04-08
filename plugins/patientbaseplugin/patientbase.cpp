@@ -215,29 +215,38 @@ bool PatientBase::initialize()
         LOG(tkTr(Trans::Constants::CONNECTED_TO_DATABASE_1_DRIVER_2).arg(database().databaseName()).arg(database().driverName()));
     }
     int currentDatabaseVersion = getSchemaVersionNumber();
-    qDebug() << currentDatabaseVersion;
     if (currentDatabaseVersion != Constants::DB_CURRENT_CODE_VERSION) {
         if(!updateDatabase()) {
             LOG_ERROR(QString("Couldn't upgrade database %1").arg(Constants::DB_NAME));
+            return false;
         }
+        initialize();
     }
     if (!checkDatabaseScheme()) {
         LOG_ERROR(tkTr(Trans::Constants::DATABASE_1_SCHEMA_ERROR).arg(Constants::DB_NAME));
         return false;
     }
-
     connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
     m_initialized = true;
     return true;
 }
 
-/** Creates a virtual patient with the specified data. Virtual patient can be hidden from the ui using a preference setting. */
-bool PatientBase::createVirtualPatient(const QString &usualName, const QString &otherNames, const QString &firstname,
-                                       const QString &gender, const int title, const QDate &dob,
-                                       const QString &country, const QString &note,
-                                       const QString &street, const QString &zip, const QString &city,
-                                       QString uuid, const int lkid,
-                                       const QString &photoFile, const QDate &death)
+/** Create a virtual patient with the specified data. Virtual patient can be hidden from the ui using a preference setting. */
+bool PatientBase::createVirtualPatient(const QString &usualName,
+                                       const QString &otherNames,
+                                       const QString &firstname,
+                                       const QString &gender,
+                                       const int title,
+                                       const QDate &dob,
+                                       const QString &country,
+                                       const QString &note,
+                                       const QString &street,
+                                       const QString &zip,
+                                       const QString &city,
+                                       QString uuid,
+                                       const int lkid,
+                                       const QString &photoFile,
+                                       const QDate &death)
 {
     qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     QSqlDatabase DB = QSqlDatabase::database(Constants::DB_NAME);
@@ -293,6 +302,8 @@ bool PatientBase::createVirtualPatient(const QString &usualName, const QString &
     query.bindValue(IDENTITY_MAILS, QVariant());
     query.bindValue(IDENTITY_TELS, QVariant());
     query.bindValue(IDENTITY_FAXES, QVariant());
+    query.bindValue(IDENTITY_MOBILE_PHONE, QVariant());
+    query.bindValue(IDENTITY_WORK_PHONE, QVariant());
 
     qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     if (!query.exec()) {
@@ -386,7 +397,7 @@ bool PatientBase::isPatientExists(const QString &usualname,
 }
 
 /**
- * Activate or desactivate a patient (eq to remove patient).
+ * Activate or deactivate a patient (eq to remove patient).
  * Manage its own transaction.
  */
 bool PatientBase::setPatientActiveProperty(const QString &uuid, bool active)
@@ -502,7 +513,10 @@ bool PatientBase::createDatabase(const QString &connectionName , const QString &
                   .arg(dbName, DB.lastError().text()));
         return false;
     }
-
+    if (!setSchemaVersion(Constants::DB_CURRENT_CODE_VERSION)) {
+        LOG_ERROR(QString("Couldn't set schema version for database %1").arg(Constants::DB_NAME));
+        return false;
+    }
     return true;
 }
 
@@ -547,6 +561,16 @@ void PatientBase::toTreeWidget(QTreeWidget *tree) const
     tree->expandAll();
 }
 
+/**
+ * Update patients database
+ * Old versioning (fhio version <= 0.9.9): version string = "0.1"
+ * New versioning (fhio version >= 0.9.10): The version number is a integer,
+ * starting from 1 for fhio version 0.9.10
+ * The field VERSION_NUMBER of the last row of the table SCHEMA_CHANGES.
+ * By definition, this number must be a positive, non null integer.
+ * This function will run all sql update scripts to update the database to
+ * the current code version
+ */
 bool PatientBase::updateDatabase()
 {
     int currentDatabaseVersion = getSchemaVersionNumber();
@@ -588,10 +612,13 @@ bool PatientBase::updateDatabase()
 
 
 /**
- * Returns the current schema version number of the database
- * The version number is a integer.
- * The field VERSION_NUMBER of the last row of the table SCHEMA_CHANGES.
+ * Returns the current schema version number of the database or 0
+ * The version number is a positive integer.
+ * Version number is the value of the field VERSION_NUMBER of the last row of
+ * the table SCHEMA_CHANGES.
  * By definition, this number must be a positive, non null integer.
+ * If the table SCHEMA_CHANGES doesn't exist (in fhio version <= 0.9.9) this
+ * function returns 0
  */
 quint32 PatientBase::getSchemaVersionNumber() const
 {
@@ -602,24 +629,6 @@ quint32 PatientBase::getSchemaVersionNumber() const
     }
     using namespace Patients::Constants;
     QSqlQuery query(DB);
-    /*QString queryText = QString("SELECT * FROM information_schema.tables "
-                                "WHERE table_schema = '%1' "
-                                "AND table_name = '%2' "
-                                "LIMIT 1;").arg(DB_NAME).arg(Table_SCHEMA);
-
-    if (query.exec(queryText)) {
-        if (query.next()){
-            QVariant result = query.value(0);
-            qDebug() << result;
-            SchemaTableExists = !result.isNull();
-            qDebug() << "SchemaTableExists" << SchemaTableExists;
-        }
-    } else {
-        LOG_QUERY_ERROR_FOR(Patients::Constants::DB_NAME, query);
-    }
-    if (!SchemaTableExists)
-        return 0;
-    */
     DB.transaction();
     quint32 value = 0;
     query.clear();
@@ -723,20 +732,10 @@ QString PatientBase::getOldVersionField() const
 }
 
 /**
- * Transfer phone numbers from xml content of episode database
+ * Transfer phone numbers from xml content of episodes database
  * to identity table of patients database
  * //FormXmlContent/Subs::Tools::Identity::ProfGroup::ProfessionTels
  * //FormXmlContent/Subs::Tools::Identity::ContactGroup::MobileTel
- *
- * Select EPISODES.EPISODE_ID, EPISODES.PATIENT_UID FROM EPISODES WHERE (PATIENT_UID != NULL AND
- * ISVALID = 1 AND FORM_PAGE_UID = "Subs::Tools::Identity")
- * IN JOIN  EPISODES_CONTENT ON EPISODES.EPISODE_ID = EPISODES_CONTENT.CONTENT_ID
- *
- * Select EPISODES.EPISODE_ID, EPISODES.PATIENT_UID, EPISODES_CONTENT.XML_CONTENT
-FROM EPISODES
-INNER JOIN  EPISODES_CONTENT
-ON EPISODES.EPISODE_ID = EPISODES_CONTENT.CONTENT_ID
-WHERE (PATIENT_UID IS NOT NULL AND ISVALID = 1 AND FORM_PAGE_UID = "Subs::Tools::Identity");
  */
 bool PatientBase::transferPhone()
 {
@@ -826,11 +825,10 @@ bool PatientBase::transferPhone()
 
 bool PatientBase::insertMobilePhone(QHash<QString, QString> mP)
 {
-    createConnection("transferPatients",
+    createConnection("transferMobilePatients",
                      Constants::DB_NAME,
                      settings()->databaseConnector(),
                      Utils::Database::WarnOnly);
-
     if (!database().isOpen()) {
         if (!database().open()) {
             LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Constants::DB_NAME).arg(database().lastError().text()));
@@ -842,10 +840,10 @@ bool PatientBase::insertMobilePhone(QHash<QString, QString> mP)
         LOG(tkTr(Trans::Constants::CONNECTED_TO_DATABASE_1_DRIVER_2).arg(database().databaseName()).arg(database().driverName()));
     }
 
-    QSqlDatabase dbPatients = QSqlDatabase::database("transferPatients");
+    QSqlDatabase dbPatients = QSqlDatabase::database("transferMobilePatients");
     bool ok = dbPatients.open();
     if (!ok) {
-        LOG_ERROR("Can't connect to database 'transferPatients' (patients)");
+        LOG_ERROR("Can't connect to database 'transferMobilePatients' (patients)");
         return false;
     }
     using namespace Patients::Constants;
@@ -875,7 +873,7 @@ bool PatientBase::insertMobilePhone(QHash<QString, QString> mP)
 
 bool PatientBase::insertWorkPhone(QHash<QString, QString> wP)
 {
-    createConnection("transferPatients",
+    createConnection("transferWorkPatients",
                      Constants::DB_NAME,
                      settings()->databaseConnector(),
                      Utils::Database::WarnOnly);
@@ -890,10 +888,10 @@ bool PatientBase::insertWorkPhone(QHash<QString, QString> wP)
         LOG(tkTr(Trans::Constants::CONNECTED_TO_DATABASE_1_DRIVER_2).arg(database().databaseName()).arg(database().driverName()));
     }
 
-    QSqlDatabase dbPatients = QSqlDatabase::database("transferPatients");
+    QSqlDatabase dbPatients = QSqlDatabase::database("transferWorkPatients");
     bool ok = dbPatients.open();
     if (!ok) {
-        LOG_ERROR("Can't connect to database 'transferPatients' (patients)");
+        LOG_ERROR("Can't connect to database 'transferWorkPatients' (patients)");
         return false;
     }
     using namespace Patients::Constants;
@@ -917,7 +915,7 @@ bool PatientBase::insertWorkPhone(QHash<QString, QString> wP)
         query.finish();
         DB.commit();
     }
-    database().close();
+    //database().close();
     return true;
 }
 

@@ -372,7 +372,6 @@ void HttpDownloaderPrivate::httpFinished()
     }
 
     if (!_useBuffer) {
-        qDebug() << "Not using buffer";
         file->flush();
         file->close();
     }
