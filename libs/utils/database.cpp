@@ -1371,12 +1371,23 @@ bool Database::setSchemaVersion(const int &version)
     DB.transaction();
     QSqlQuery query(DB);
     // Insert a new row with the version
+    if (driver()==MySQL) {
     query.prepare("INSERT INTO `SCHEMA_CHANGES` (`VERSION_NUMBER`, `SCRIPT_NAME`, `TIMESTAMP_UTC_APPLIED`) "
                       "VALUES (:version, :script, UTC_TIMESTAMP())");
         query.bindValue(":version", version);
         query.bindValue(":script", "initialpatients");
-        //query.bindValue(":timestamp", "UTC_TIMESTAMP()");
-
+    } else if (driver()==SQLite) {
+        QString v = QString::number(version);
+        QString timestamp =  QDateTime::currentDateTimeUtc().toString("YYYY-MM-DD HH:MM:SS");
+        query.prepare("INSERT INTO SCHEMA_CHANGES(VERSION_NUMBER, SCRIPT_NAME, TIMESTAMP_UTC_APPLIED) "
+                          "VALUES(?, ?, ?)");
+            query.bindValue(0, v);
+            query.bindValue(1, "initialpatients");
+            query.bindValue(2, timestamp);
+    } else {
+        LOG_ERROR_FOR("Database", "Driver not recognized");
+        return false;
+    }
     if (!query.exec()) {
         QString dbName = database().databaseName();
         LOG_QUERY_ERROR_FOR(dbName, query);
@@ -1959,7 +1970,7 @@ QString Database::select(const Field &select, const Join &join, const Field &con
 
 QString Database::selectLast(const Field &fieldref) const
 {
-    return QString("SELECT `%1` FROM `%2` ORDER BY `%1` DESC LIMIT 1")
+    return QString("SELECT %1 FROM %2 ORDER BY %1 DESC LIMIT 1")
             .arg(field(fieldref.table, fieldref.field).fieldName)
             .arg(table(fieldref.table));
 }
@@ -3046,7 +3057,7 @@ QString DatabasePrivate::getTypeOfField(const int &fieldref) const
         break;
     case Database::FieldIsUniquePrimaryKey :
         if (m_Driver==Database::SQLite) {
-            toReturn = "INTEGER NOT NULL PRIMARY KEY";
+            toReturn = "INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT";
         } else if (m_Driver==Database::MySQL) {
             toReturn = "INTEGER UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT";
         }

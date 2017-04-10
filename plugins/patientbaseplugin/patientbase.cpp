@@ -245,6 +245,8 @@ bool PatientBase::createVirtualPatient(const QString &usualName,
                                        const QString &city,
                                        QString uuid,
                                        const int lkid,
+                                       const QString &mobilePhone,
+                                       const QString &workPhone,
                                        const QString &photoFile,
                                        const QDate &death)
 {
@@ -302,8 +304,8 @@ bool PatientBase::createVirtualPatient(const QString &usualName,
     query.bindValue(IDENTITY_MAILS, QVariant());
     query.bindValue(IDENTITY_TELS, QVariant());
     query.bindValue(IDENTITY_FAXES, QVariant());
-    query.bindValue(IDENTITY_MOBILE_PHONE, QVariant());
-    query.bindValue(IDENTITY_WORK_PHONE, QVariant());
+    query.bindValue(IDENTITY_MOBILE_PHONE, mobilePhone);
+    query.bindValue(IDENTITY_WORK_PHONE, workPhone);
 
     qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     if (!query.exec()) {
@@ -573,20 +575,27 @@ void PatientBase::toTreeWidget(QTreeWidget *tree) const
  */
 bool PatientBase::updateDatabase()
 {
+    WARN_FUNC;
     int currentDatabaseVersion = getSchemaVersionNumber();
-    qDebug() << "currentDatabaseVersion: " << currentDatabaseVersion;
     QSqlDatabase DB = QSqlDatabase::database(Constants::DB_NAME);
-    qDebug() << "getOldVersionField()" << getOldVersionField();
-    qDebug() << "Constants::DB_INITIAL_VERSION" << Constants::DB_INITIAL_VERSION;
     if (currentDatabaseVersion == 0) {
         if(getOldVersionField() == Constants::DB_INITIAL_VERSION) {
+            QString updateScriptFileName;
             for (int i = 1; i <= Constants::DB_CURRENT_CODE_VERSION; i++) {
-                QString updateScriptFileName= QString(":/sql/update/update%1%2.sql")
-                        .arg(Constants::DB_NAME)
-                        .arg(QString::number(i));
-                qDebug() << updateScriptFileName;
+                if (driver()==MySQL) {
+                    updateScriptFileName= QString(":/sql/update/update%1%2.sql")
+                            .arg(Constants::DB_NAME)
+                            .arg(QString::number(i));
+                } else if (driver()==SQLite) {
+                    updateScriptFileName= QString(":/sql/update/updatesqlite%1%2.sql")
+                            .arg(Constants::DB_NAME)
+                            .arg(QString::number(i));
+                }
                 QFile updateScriptFile(updateScriptFileName);
-                executeQueryFile(updateScriptFile, DB);
+                if(!executeQueryFile(updateScriptFile, DB)) {
+                    LOG_ERROR(QString("Error during update with updatescript%1").arg(i));
+                    return false;
+                }
             }
             // launch transfer of phone numbers from xml to patients db here:
             transferPhone();
@@ -596,10 +605,17 @@ bool PatientBase::updateDatabase()
             return false;
         }
     } else if (currentDatabaseVersion > 0) {
+        QString updateScriptFileName;
         for (int i = currentDatabaseVersion++; i <= Constants::DB_CURRENT_CODE_VERSION; i++) {
-            QString updateScriptFileName= QString(":/sql/update/update%1%2.sql")
-                    .arg(Constants::DB_NAME)
-                    .arg(QString::number(i));
+            if (driver()==MySQL) {
+                updateScriptFileName= QString(":/sql/update/update%1%2.sql")
+                        .arg(Constants::DB_NAME)
+                        .arg(QString::number(i));
+            } else if (driver()==SQLite) {
+                updateScriptFileName= QString(":/sql/update/updatesqlite%1%2.sql")
+                        .arg(Constants::DB_NAME)
+                        .arg(QString::number(i));
+            }
             QFile updateScriptFile(updateScriptFileName);
             if(!executeQueryFile(updateScriptFile, DB)) {
                 LOG_ERROR(QString("Error during update with updatescript%1").arg(i));
@@ -642,10 +658,16 @@ quint32 PatientBase::getSchemaVersionNumber() const
     }
     query.finish();
     DB.commit();
-    qDebug() << value;
     return value;
 }
 
+/**
+ * @brief PatientBase::executeQueryFile
+ * @param file
+ * @param db
+ * TODO: test & use Utils::Database::executeSqlFile()
+ * @return
+ */
 bool PatientBase::executeQueryFile(QFile &file, QSqlDatabase &db) const
 {
     WARN_FUNC;
@@ -685,7 +707,7 @@ bool PatientBase::executeQueryFile(QFile &file, QSqlDatabase &db) const
             } else {
                 query.exec(s);                        //<== execute normal query
                 if(query.lastError().type() != QSqlError::NoError) {
-                    qDebug() << query.lastError().text();
+                    LOG_QUERY_ERROR_FOR(file.fileName(), query);
                     db.rollback();                    //<== rollback the transaction if there is any problem
                 }
             }
@@ -706,7 +728,7 @@ bool PatientBase::executeQueryFile(QFile &file, QSqlDatabase &db) const
         foreach(const QString &s, qList) {
             query.exec(s);
             if(query.lastError().type() != QSqlError::NoError) {
-                qDebug() << query.lastError().text();
+                LOG_QUERY_ERROR_FOR(file.fileName(), query);
             }
         }
     }
@@ -721,13 +743,11 @@ QString PatientBase::getOldVersionField() const
         LOG_ERROR("Can't connect to DB");
         return QString();
     }
-    QSqlQuery query("SELECT `VERSION` FROM `VERSION` ORDER BY `VERSION` ASC LIMIT 1", DB);
+    QSqlQuery query("SELECT VERSION FROM VERSION ORDER BY VERSION ASC LIMIT 1", DB);
     int fieldNo = query.record().indexOf("VERSION");
     while (query.next()) {
         oldVersionValue = query.value(fieldNo).toString();
     }
-    qDebug() << query.lastError().text();
-    qDebug() << oldVersionValue;
     return oldVersionValue;
 }
 
@@ -743,26 +763,18 @@ bool PatientBase::transferPhone()
     QString mobilePhoneTag("Subs::Tools::Identity::ContactGroup::MobileTel");
     QHash<QString, QString> mobilePhone;
     QHash<QString, QString> workPhone;
-    QString xml;
-
-    createConnection("transferEpisodes",
+    QSqlDatabase db;
+    createConnection(Form::Constants::DB_NAME,
                      Form::Constants::DB_NAME,
                      settings()->databaseConnector(),
                      Utils::Database::CreateDatabase);
+    db = QSqlDatabase::database(Form::Constants::DB_NAME);
 
-    if (!database().isOpen()) {
-        if (!database().open()) {
-            LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Constants::DB_NAME).arg(database().lastError().text()));
-        } else {
-            LOG(tkTr(Trans::Constants::CONNECTED_TO_DATABASE_1_DRIVER_2).arg(database().databaseName()).arg(database().driverName()));
-        }
-    } else {
-        LOG(tkTr(Trans::Constants::CONNECTED_TO_DATABASE_1_DRIVER_2).arg(database().databaseName()).arg(database().driverName()));
+    if(!db.open()) {
+        LOG_ERROR("Can't open database 'transfer' (episodes)");
+        return false;
     }
-
-    QSqlDatabase db = QSqlDatabase::database("transferEpisodes");
-    bool ok = db.open();
-    if (!ok) {
+    if(!db.isOpen()) {
         LOG_ERROR("Can't connect to database 'transfer' (episodes)");
         return false;
     }
@@ -778,7 +790,6 @@ bool PatientBase::transferPhone()
     while (query.next()) {
         QVariant fieldUidValue = query.value(fieldUid);
         QVariant fieldXmlValue = query.value(fieldXml);
-        qDebug() << fieldUidValue << fieldXmlValue;
         QByteArray xmlBA;
         if (fieldXmlValue.canConvert<QByteArray>()) {
             xmlBA = fieldXmlValue.toByteArray();
@@ -798,7 +809,6 @@ bool PatientBase::transferPhone()
         }
         QDomElement mobileElement = mobileNode.toElement();
         const QString mobile = mobileElement.text();
-        qDebug() << "Mobile phone: " << mobile;
         if (!mobile.isEmpty()) {
             mobilePhone.insert(fieldUidValue.toString(), mobile);
         }
@@ -810,12 +820,10 @@ bool PatientBase::transferPhone()
         }
         QDomElement workElement = workNode.toElement();
         QString work = workElement.text();
-        qDebug() << "Work phone: " << work;
         if (!work.isEmpty()) {
             workPhone.insert(fieldUidValue.toString(), work);
         }
     }
-    qDebug() << query.lastError().text();
     db.close();
     insertMobilePhone(mobilePhone);
     insertWorkPhone(workPhone);
@@ -825,10 +833,18 @@ bool PatientBase::transferPhone()
 
 bool PatientBase::insertMobilePhone(QHash<QString, QString> mP)
 {
-    createConnection("transferMobilePatients",
-                     Constants::DB_NAME,
-                     settings()->databaseConnector(),
-                     Utils::Database::WarnOnly);
+    QSqlDatabase dbPatients;
+    if (driver()==MySQL) {
+        createConnection("transferMobilePatients",
+                         Constants::DB_NAME,
+                         settings()->databaseConnector(),
+                         Utils::Database::WarnOnly);
+    } else if (driver()==SQLite) {
+        createConnection(Constants::DB_NAME,
+                         Constants::DB_NAME,
+                         settings()->databaseConnector(),
+                         Utils::Database::WarnOnly);
+    }
     if (!database().isOpen()) {
         if (!database().open()) {
             LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Constants::DB_NAME).arg(database().lastError().text()));
@@ -839,8 +855,11 @@ bool PatientBase::insertMobilePhone(QHash<QString, QString> mP)
     } else {
         LOG(tkTr(Trans::Constants::CONNECTED_TO_DATABASE_1_DRIVER_2).arg(database().databaseName()).arg(database().driverName()));
     }
-
-    QSqlDatabase dbPatients = QSqlDatabase::database("transferMobilePatients");
+    if (driver()==MySQL) {
+        dbPatients = QSqlDatabase::database("transferMobilePatients");
+    } else if (driver()==SQLite) {
+        dbPatients = QSqlDatabase::database(Constants::DB_NAME);
+    }
     bool ok = dbPatients.open();
     if (!ok) {
         LOG_ERROR("Can't connect to database 'transferMobilePatients' (patients)");
@@ -851,7 +870,6 @@ bool PatientBase::insertMobilePhone(QHash<QString, QString> mP)
     QHashIterator<QString, QString> i(mP);
     while (i.hasNext()) {
         i.next();
-        qDebug() << i.key() << ": " << i.value();
         DB.transaction();
         QSqlQuery query(DB);
         QHash<int, QString> where;
@@ -873,10 +891,18 @@ bool PatientBase::insertMobilePhone(QHash<QString, QString> mP)
 
 bool PatientBase::insertWorkPhone(QHash<QString, QString> wP)
 {
-    createConnection("transferWorkPatients",
-                     Constants::DB_NAME,
-                     settings()->databaseConnector(),
-                     Utils::Database::WarnOnly);
+    QSqlDatabase dbPatients;
+    if (driver()==MySQL) {
+        createConnection("transferMobilePatients",
+                         Constants::DB_NAME,
+                         settings()->databaseConnector(),
+                         Utils::Database::WarnOnly);
+    } else if (driver()==SQLite) {
+        createConnection(Constants::DB_NAME,
+                         Constants::DB_NAME,
+                         settings()->databaseConnector(),
+                         Utils::Database::WarnOnly);
+    }
 
     if (!database().isOpen()) {
         if (!database().open()) {
@@ -888,7 +914,11 @@ bool PatientBase::insertWorkPhone(QHash<QString, QString> wP)
         LOG(tkTr(Trans::Constants::CONNECTED_TO_DATABASE_1_DRIVER_2).arg(database().databaseName()).arg(database().driverName()));
     }
 
-    QSqlDatabase dbPatients = QSqlDatabase::database("transferWorkPatients");
+    if (driver()==MySQL) {
+        dbPatients = QSqlDatabase::database("transferMobilePatients");
+    } else if (driver()==SQLite) {
+        dbPatients = QSqlDatabase::database(Constants::DB_NAME);
+    }
     bool ok = dbPatients.open();
     if (!ok) {
         LOG_ERROR("Can't connect to database 'transferWorkPatients' (patients)");
@@ -899,7 +929,6 @@ bool PatientBase::insertWorkPhone(QHash<QString, QString> wP)
     QHashIterator<QString, QString> i(wP);
     while (i.hasNext()) {
         i.next();
-        qDebug() << i.key() << ": " << i.value();
         DB.transaction();
         QSqlQuery query(DB);
         QHash<int, QString> where;

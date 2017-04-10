@@ -81,6 +81,8 @@ public:
                               const QString &city,
                               QString uuid,
                               const int lkid,
+                              const QString &mobilePhone = QString(),
+                              const QString &workPhone = QString(),
                               const QString &photoFile = QString(),
                               const QDate &death = QDate());
 
