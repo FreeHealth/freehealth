@@ -35,31 +35,31 @@
     </message>
     <message>
         <source>Token</source>
-        <translation type="unfinished">Étiquette</translation>
+        <translation>Étiquette</translation>
     </message>
     <message>
         <source>Current value</source>
-        <translation type="unfinished">Valeur courante</translation>
+        <translation>Valeur actuelle</translation>
     </message>
     <message>
         <source>Text value</source>
-        <translation type="unfinished">Valeur du texte</translation>
+        <translation>Valeur du texte</translation>
     </message>
     <message>
         <source>Block formatting of the token value</source>
-        <translation type="unfinished"></translation>
+        <translation>Format du bloc de la valeur de l&apos;étiquette</translation>
     </message>
     <message>
         <source>Conditional texts</source>
-        <translation type="unfinished">Textes conditionnels</translation>
+        <translation>Textes conditionnels</translation>
     </message>
     <message>
         <source>Before</source>
-        <translation type="unfinished">Avant</translation>
+        <translation>Avant</translation>
     </message>
     <message>
         <source>After</source>
-        <translation type="unfinished">Après</translation>
+        <translation>Après</translation>
     </message>
 </context>
 <context>

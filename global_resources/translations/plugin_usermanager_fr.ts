@@ -564,7 +564,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Secretary rights</source>
-        <translation type="unfinished"></translation>
+        <translation>Droits du secrétariat</translation>
     </message>
 </context>
 <context>
@@ -578,14 +578,6 @@ p, li { white-space: pre-wrap; }
         <translation>Téléphone et courriel</translation>
     </message>
     <message>
-        <source>Telephone numbers</source>
-        <translation>Numéros de téléphone</translation>
-    </message>
-    <message>
-        <source>Fax number</source>
-        <translation>Numéro de fax</translation>
-    </message>
-    <message>
         <source>Email</source>
         <translation>Courriel</translation>
     </message>
@@ -596,6 +588,22 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>user@example.com</source>
         <translation></translation>
+    </message>
+    <message>
+        <source>Work phone</source>
+        <translation>Téléphone professionnel</translation>
+    </message>
+    <message>
+        <source>Fax</source>
+        <translation>Fax</translation>
+    </message>
+    <message>
+        <source>Home phone</source>
+        <translation>Téléphone fixe du domicile</translation>
+    </message>
+    <message>
+        <source>Mobile phone</source>
+        <translation>Téléphone mobile</translation>
     </message>
 </context>
 <context>
@@ -740,7 +748,7 @@ Pour effacer l&apos;utilisateur %1 dans la base de données, demandez à l&apos;
     </message>
     <message>
         <source>Secretary</source>
-        <translation type="unfinished"></translation>
+        <translation>Secrétariat</translation>
     </message>
 </context>
 <context>

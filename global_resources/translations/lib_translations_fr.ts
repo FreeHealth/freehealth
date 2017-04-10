@@ -508,32 +508,8 @@
         <translation>Base de données thérapeutique sans gestion des interactions</translation>
     </message>
     <message>
-        <source>Bank details</source>
-        <translation>Détails banquaires</translation>
-    </message>
-    <message>
-        <source>Available movements</source>
-        <translation>Mouvements disponibles</translation>
-    </message>
-    <message>
-        <source>Medical procedures</source>
-        <translation>Actes médicaux</translation>
-    </message>
-    <message>
-        <source>Sites</source>
-        <translation>Sites</translation>
-    </message>
-    <message>
         <source>Insurance</source>
         <translation>Assurance</translation>
-    </message>
-    <message>
-        <source>Percentages</source>
-        <translation>Pourcentages</translation>
-    </message>
-    <message>
-        <source>Distance rules</source>
-        <translation>Règles de distance</translation>
     </message>
     <message>
         <source>The %1 driver is not available.</source>
@@ -1095,7 +1071,7 @@ Emplacement : %2</translation>
     </message>
     <message>
         <source>User rights</source>
-        <translation>Droits de l&apos;utilisateurs</translation>
+        <translation>Droits de l&apos;utilisateur</translation>
     </message>
     <message>
         <source>Medical rights</source>
@@ -1498,10 +1474,6 @@ Emplacement : %2</translation>
         <translation>Protocoles</translation>
     </message>
     <message>
-        <source>Accountancy</source>
-        <translation>Comptabilité</translation>
-    </message>
-    <message>
         <source>year(s)</source>
         <translation>année(s)</translation>
     </message>
@@ -1889,10 +1861,6 @@ Emplacement : %2</translation>
         <source>hh:mm</source>
         <extracomment>This time format will be used in every QTimeEdit only</extracomment>
         <translation></translation>
-    </message>
-    <message>
-        <source>Assets rates</source>
-        <translation>Taux d&apos;actifs</translation>
     </message>
     <message>
         <source>Agenda</source>
@@ -2569,22 +2537,6 @@ Text Align Justify shortcut key : Mac specific</extracomment>
         <translation></translation>
     </message>
     <message>
-        <source>Payment</source>
-        <translation>Paiement</translation>
-    </message>
-    <message>
-        <source>Payments</source>
-        <translation>Paiements</translation>
-    </message>
-    <message>
-        <source>Fee</source>
-        <translation>Honoraire</translation>
-    </message>
-    <message>
-        <source>Fees</source>
-        <translation>Honoraires</translation>
-    </message>
-    <message>
         <source>Fixed width</source>
         <translation>Taille fixe</translation>
     </message>
@@ -2770,23 +2722,23 @@ Text Align Justify shortcut key : Mac specific</extracomment>
     </message>
     <message>
         <source>FreeHealth community</source>
-        <translation type="unfinished"></translation>
+        <translation>Communauté FreeHealth</translation>
     </message>
     <message>
         <source>&lt;h2&gt;Welcome to FreeHealth&lt;/h2&gt;&lt;h3&gt;© %1 Jerome Pinguet&lt;/h3&gt;&lt;h3&gt;(C) 2008-2015 by Dr Eric Maeker (France)&lt;/h3&gt;&lt;p&gt;This software is released without any warranty, for testing purposes only.&lt;br/&gt;Please refer to our &lt;a href=&quot;%2&quot;&gt;web site&lt;/a&gt; for more information.&lt;br /&gt;FreeHealth is based on FreeMedForms created by Eric Maeker.&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;h2&gt;Bienvenue sur FreeHealth&lt;/h2&gt;&lt;h3&gt;© %1 Jerome Pinguet&lt;/h3&gt;&lt;h3&gt;(C) 2008-2015 by Dr Eric Maeker (France)&lt;/h3&gt;&lt;p&gt;Ce logiciel est distribué tel quel, sans aucune garantie, à visée de test uniquement.&lt;br/&gt;Merci de vous référer à notre &lt;a href=&quot;%2&quot;&gt;site web&lt;/a&gt; pour plus d&apos;information.&lt;br /&gt;FreeHealth est dérivé de FreeMedForms créé par Eric Maeker.&lt;/p&gt;</translation>
     </message>
     <message>
         <source>P-glycoprotein interaction</source>
-        <translation type="unfinished"></translation>
+        <translation>Interaction avec la glycoprotéine P</translation>
     </message>
     <message>
         <source>Is patient pediatric?</source>
-        <translation type="unfinished"></translation>
+        <translation>Est-ce un patient pédiatrique?</translation>
     </message>
     <message>
         <source>Secretary rights</source>
-        <translation type="unfinished"></translation>
+        <translation>Droits du secrétariat</translation>
     </message>
 </context>
 </TS>

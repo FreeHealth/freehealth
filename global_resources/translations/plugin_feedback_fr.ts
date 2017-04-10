@@ -17,7 +17,7 @@
     <message>
         <location filename="../../plugins/feedbackplugin/bugreportdialog.cpp" line="189"/>
         <source>Please enter your email address.</source>
-        <translation>Merci d&apos;indiquer votre adresse mail</translation>
+        <translation>Merci d&apos;indiquer votre adresse mail.</translation>
     </message>
     <message>
         <location filename="../../plugins/feedbackplugin/bugreportdialog.cpp" line="196"/>
@@ -52,12 +52,12 @@
     <message>
         <location filename="../../plugins/feedbackplugin/bugreportdialog.cpp" line="269"/>
         <source>The application has requested the operating system to open the URL in an external browser but something went wrong.</source>
-        <translation>L&apos;application a demandé au système d&apos;exploitation d&apos;ouvrir l&apos;URL dans un navigateur externe mais une erreur est survenue</translation>
+        <translation>L&apos;application a demandé au système d&apos;exploitation d&apos;ouvrir l&apos;URL dans un navigateur externe mais une erreur est survenue.</translation>
     </message>
     <message>
         <location filename="../../plugins/feedbackplugin/bugreportdialog.cpp" line="270"/>
         <source>Please verify that you have a default browser enabled or go directly to %1 and check the documentation.</source>
-        <translation type="unfinished"></translation>
+        <translation>Merci de vérifier qu&apos;un navigateur par défaut est paramétré, ou allez directement vers %1 et consultez la documentation.</translation>
     </message>
 </context>
 <context>

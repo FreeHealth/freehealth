@@ -4,23 +4,23 @@
 <context>
     <name>UserBase</name>
     <message>
-        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="740"/>
-        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="769"/>
+        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="743"/>
+        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="772"/>
         <source>Can not create a new user&apos;s UUID, database access error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="806"/>
+        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="809"/>
         <source>Can not retrieve login from the uuid</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="845"/>
+        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="848"/>
         <source>Can not retrieve crypted password from the login %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="981"/>
+        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="984"/>
         <source>Trying to create empty user database.
        Location: %1
        FileName: %2
@@ -28,7 +28,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="1483"/>
+        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="1486"/>
         <source>User %1 successfully updated.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -161,8 +161,8 @@
 <context>
     <name>UserPlugin::Internal::DefaultUserContactPage</name>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/defaultuserviewerpages.cpp" line="178"/>
-        <location filename="../../plugins/usermanagerplugin/widgets/defaultuserviewerpages.cpp" line="188"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/defaultuserviewerpages.cpp" line="181"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/defaultuserviewerpages.cpp" line="191"/>
         <source>Contact</source>
         <translation type="unfinished"></translation>
     </message>
@@ -170,13 +170,13 @@
 <context>
     <name>UserPlugin::Internal::DefaultUserContactWidget</name>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/defaultuserviewerpages.cpp" line="155"/>
         <location filename="../../plugins/usermanagerplugin/widgets/defaultuserviewerpages.cpp" line="158"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/defaultuserviewerpages.cpp" line="161"/>
         <source>Password correctly changed.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/defaultuserviewerpages.cpp" line="156"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/defaultuserviewerpages.cpp" line="159"/>
         <source>Your password was correctly modified in the server and the database.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -184,22 +184,22 @@
 <context>
     <name>UserPlugin::Internal::DefaultUserPapersPage</name>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/defaultuserviewerpages.cpp" line="536"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/defaultuserviewerpages.cpp" line="539"/>
         <source>Generic papers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/defaultuserviewerpages.cpp" line="537"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/defaultuserviewerpages.cpp" line="540"/>
         <source>Administrative papers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/defaultuserviewerpages.cpp" line="538"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/defaultuserviewerpages.cpp" line="541"/>
         <source>Prescription papers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/defaultuserviewerpages.cpp" line="545"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/defaultuserviewerpages.cpp" line="548"/>
         <source>Documents</source>
         <translation type="unfinished"></translation>
     </message>
@@ -207,8 +207,8 @@
 <context>
     <name>UserPlugin::Internal::DefaultUserProfessionalPage</name>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/defaultuserviewerpages.cpp" line="281"/>
-        <location filename="../../plugins/usermanagerplugin/widgets/defaultuserviewerpages.cpp" line="291"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/defaultuserviewerpages.cpp" line="284"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/defaultuserviewerpages.cpp" line="294"/>
         <source>Professional identifiers</source>
         <translation type="unfinished"></translation>
     </message>
@@ -216,19 +216,19 @@
 <context>
     <name>UserPlugin::Internal::UserBase</name>
     <message>
-        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="582"/>
-        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="590"/>
+        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="585"/>
+        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="593"/>
         <source>Unable to initialize the database with the login: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="621"/>
+        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="624"/>
         <source>Login not found: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="1247"/>
-        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="1267"/>
+        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="1250"/>
+        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="1270"/>
         <source>Last recorded user login: %1 </source>
         <translation type="unfinished"></translation>
     </message>
@@ -708,12 +708,22 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="../../plugins/usermanagerplugin/widgets/userwizardcontactwidget.ui" line="43"/>
-        <source>Telephone numbers</source>
+        <source>Work phone</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/usermanagerplugin/widgets/userwizardcontactwidget.ui" line="62"/>
-        <source>Fax number</source>
+        <source>Fax</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizardcontactwidget.ui" line="92"/>
+        <source>Home phone</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizardcontactwidget.ui" line="99"/>
+        <source>Mobile phone</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -730,7 +740,7 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>UserPlugin::UserCreationPage</name>
     <message>
-        <location filename="../../plugins/usermanagerplugin/userfirstrunpage.cpp" line="174"/>
+        <location filename="../../plugins/usermanagerplugin/userfirstrunpage.cpp" line="176"/>
         <source>You can use the full user manager dialog to create user or create simple users using the user wizard.</source>
         <translation type="unfinished"></translation>
     </message>

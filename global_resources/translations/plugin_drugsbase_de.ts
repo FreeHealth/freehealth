@@ -193,10 +193,6 @@ Do you want to add them to the file?</source>
 <context>
     <name>DrugsDB::Internal::DosageModel</name>
     <message>
-        <source>half tab.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>2.5 ml spoon</source>
         <translation type="unfinished"></translation>
     </message>
@@ -249,14 +245,6 @@ Do you want to add them to the file?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>full tab.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>quarter tab.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>dose per kilogram</source>
         <translation type="unfinished"></translation>
     </message>
@@ -274,6 +262,26 @@ Do you want to add them to the file?</source>
     </message>
     <message>
         <source>shampoo</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>full tablet</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>quarter tablet</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>third tablet</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>half tablet</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>scored tablet</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

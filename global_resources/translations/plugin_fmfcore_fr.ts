@@ -838,10 +838,6 @@ Veuillez vérifier les fichiers journaux et contacter votre administrateur.</tra
         <translation>Serveur déjà configuré</translation>
     </message>
     <message>
-        <source>The server is already configured for FreeMedForms.</source>
-        <translation>Ce serveur est déjà configuré pour FreeMedForms.</translation>
-    </message>
-    <message>
         <source>Server configured</source>
         <translation>Serveur configuré</translation>
     </message>
@@ -866,6 +862,10 @@ Veuillez vérifier les fichiers journaux et contacter votre administrateur.</tra
 Please contact your server administrator.</source>
         <translation>Vous devez vous connecter avec un autre utilisateur qui a les privilèges globaux suivants: select, update, delete, insert, create, drop, alter and create user.
 Merci de contacter l&apos;administrateur de votre serveur de bases de données.</translation>
+    </message>
+    <message>
+        <source>The server is already configured for FreeHealth.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

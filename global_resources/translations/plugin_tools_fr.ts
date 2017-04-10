@@ -4,62 +4,14 @@
 <context>
     <name>Tools</name>
     <message>
-        <location filename="../../plugins/toolsplugin/toolsplugin.cpp" line="80"/>
+        <location filename="../../plugins/toolsplugin/toolsplugin.cpp" line="75"/>
         <source>Print a cheque</source>
         <translation>Imprimer un chèque</translation>
     </message>
     <message>
-        <location filename="../../plugins/toolsplugin/toolsplugin.cpp" line="81"/>
+        <location filename="../../plugins/toolsplugin/toolsplugin.cpp" line="76"/>
         <source>Print a french &apos;FSP&apos;</source>
         <translation>Imprimer une FSP</translation>
-    </message>
-</context>
-<context>
-    <name>Tools::ChequePrinterDialog</name>
-    <message>
-        <location filename="../../plugins/toolsplugin/cheque/chequeprinterdialog.ui" line="14"/>
-        <source>Dialog</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/toolsplugin/cheque/chequeprinterdialog.ui" line="108"/>
-        <source>Cheque printer</source>
-        <translation>Imprimer un chèque</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/toolsplugin/cheque/chequeprinterdialog.ui" line="27"/>
-        <source>Order</source>
-        <translation>Ordre</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/toolsplugin/cheque/chequeprinterdialog.ui" line="57"/>
-        <source>Value</source>
-        <translation>Montant</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/toolsplugin/cheque/chequeprinterdialog.ui" line="37"/>
-        <source>Place</source>
-        <translation>Lieu</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/toolsplugin/cheque/chequeprinterdialog.ui" line="47"/>
-        <source>Date</source>
-        <translation>Date</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/toolsplugin/cheque/chequeprinterdialog.cpp" line="65"/>
-        <source>Cheque printing assistant</source>
-        <translation>Assistant d&apos;impression de chèque</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/toolsplugin/cheque/chequeprinterdialog.cpp" line="138"/>
-        <source>No amount</source>
-        <translation>Pas de montant</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/toolsplugin/cheque/chequeprinterdialog.cpp" line="138"/>
-        <source>Please specify an amount for the cheque.</source>
-        <translation>Veuillez spécifier un montant pour le chèque.</translation>
     </message>
 </context>
 <context>
@@ -133,106 +85,9 @@
     </message>
 </context>
 <context>
-    <name>Tools::Internal::ChequePrinterPreferencesPage</name>
-    <message>
-        <location filename="../../plugins/toolsplugin/cheque/chequeprinter_preferences.cpp" line="230"/>
-        <source>Tools</source>
-        <translation>Outils</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/toolsplugin/cheque/chequeprinter_preferences.cpp" line="224"/>
-        <location filename="../../plugins/toolsplugin/cheque/chequeprinter_preferences.cpp" line="236"/>
-        <source>Cheque printer</source>
-        <translation>Imprimer un chèque</translation>
-    </message>
-</context>
-<context>
-    <name>Tools::Internal::ChequePrinterPreferencesWidget</name>
-    <message>
-        <location filename="../../plugins/toolsplugin/cheque/chequeprinter_preferences.ui" line="14"/>
-        <source>Account Preferences</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/toolsplugin/cheque/chequeprinter_preferences.ui" line="20"/>
-        <source>Available formats</source>
-        <translation>Formats disponibles</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/toolsplugin/cheque/chequeprinter_preferences.ui" line="29"/>
-        <source>Pay to</source>
-        <translation>Ordre</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/toolsplugin/cheque/chequeprinter_preferences.ui" line="104"/>
-        <location filename="../../plugins/toolsplugin/cheque/chequeprinter_preferences.ui" line="211"/>
-        <location filename="../../plugins/toolsplugin/cheque/chequeprinter_preferences.ui" line="318"/>
-        <location filename="../../plugins/toolsplugin/cheque/chequeprinter_preferences.ui" line="425"/>
-        <location filename="../../plugins/toolsplugin/cheque/chequeprinter_preferences.ui" line="532"/>
-        <source>width</source>
-        <translation>largeur</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/toolsplugin/cheque/chequeprinter_preferences.ui" line="129"/>
-        <location filename="../../plugins/toolsplugin/cheque/chequeprinter_preferences.ui" line="236"/>
-        <location filename="../../plugins/toolsplugin/cheque/chequeprinter_preferences.ui" line="343"/>
-        <location filename="../../plugins/toolsplugin/cheque/chequeprinter_preferences.ui" line="450"/>
-        <location filename="../../plugins/toolsplugin/cheque/chequeprinter_preferences.ui" line="557"/>
-        <source>height</source>
-        <translation>hauteur</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/toolsplugin/cheque/chequeprinter_preferences.ui" line="136"/>
-        <source>Amount (numbers)</source>
-        <translation>Montant (nombres)</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/toolsplugin/cheque/chequeprinter_preferences.ui" line="243"/>
-        <source>Amount (letters)</source>
-        <translation>Montant (lettres)</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/toolsplugin/cheque/chequeprinter_preferences.ui" line="350"/>
-        <source>Date</source>
-        <translation>Date</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/toolsplugin/cheque/chequeprinter_preferences.ui" line="457"/>
-        <source>Place</source>
-        <translation>Lieu</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/toolsplugin/cheque/chequeprinter_preferences.ui" line="564"/>
-        <source>Print a test</source>
-        <translation>Imprimer un test</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/toolsplugin/cheque/chequeprinter_preferences.ui" line="574"/>
-        <source>Cheque printing</source>
-        <translation>Impression de chèques</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/toolsplugin/cheque/chequeprinter_preferences.ui" line="596"/>
-        <source>Default place</source>
-        <translation>Lieu par défault</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/toolsplugin/cheque/chequeprinter_preferences.ui" line="586"/>
-        <source>Cheque order</source>
-        <translation>Ordre du chèque</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/toolsplugin/cheque/chequeprinter_preferences.ui" line="606"/>
-        <source>Default values
-One per line</source>
-        <translation>Valeurs par défaut
-Une par ligne</translation>
-    </message>
-</context>
-<context>
     <name>Tools::Internal::FspPrinterDialog</name>
     <message>
-        <location filename="../../plugins/toolsplugin/fsp/fspprinterdialog.cpp" line="391"/>
+        <location filename="../../plugins/toolsplugin/fsp/fspprinterdialog.cpp" line="390"/>
         <source>French &apos;FSP&apos; printing assistant</source>
         <translation>Assistant d&apos;impression des FSP</translation>
     </message>
@@ -571,18 +426,12 @@ Une par ligne</translation>
 <context>
     <name>Tools::Internal::ToolsPlugin</name>
     <message>
-        <location filename="../../plugins/toolsplugin/toolsplugin.cpp" line="169"/>
+        <location filename="../../plugins/toolsplugin/toolsplugin.cpp" line="160"/>
         <source>Initializing Tools...</source>
         <translation>Initialisation des outils...</translation>
     </message>
     <message>
-        <location filename="../../plugins/toolsplugin/toolsplugin.cpp" line="187"/>
-        <source>Ctrl+Shift+C</source>
-        <extracomment>Translation for the &apos;Print Cheque&apos; action</extracomment>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/toolsplugin/toolsplugin.cpp" line="202"/>
+        <location filename="../../plugins/toolsplugin/toolsplugin.cpp" line="178"/>
         <source>Ctrl+Shift+F</source>
         <extracomment>Translation for the &apos;Print FSP&apos; action</extracomment>
         <translation></translation>

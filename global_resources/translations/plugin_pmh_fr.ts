@@ -5,24 +5,25 @@
     <name>Form::FormPlaceHolder</name>
     <message>
         <source>Save episode?</source>
-        <translation type="unfinished"></translation>
+        <translation>Sauvegarder l&apos;épisode?</translation>
     </message>
     <message>
         <source>The actual episode has been modified. Do you want to save changes in your database?
 Answering &apos;No&apos; will cause deftialtve data loss.</source>
-        <translation type="unfinished"></translation>
+        <translation>L&apos;épisode actuel a été modifié. Souhaitez-vous sauvegarder les changements?
+Répondre &apos;Non&apos; entraînera une perte définitive des données.</translation>
     </message>
     <message>
         <source>Save episode</source>
-        <translation type="unfinished"></translation>
+        <translation>Sauvegarder l&apos;épisode</translation>
     </message>
     <message>
         <source>Saving episode (%1) from form (%2)</source>
-        <translation type="unfinished"></translation>
+        <translation>Enregistrer l&apos;épisode (%1) du formulaire (%2)</translation>
     </message>
     <message>
         <source>WARNING: Episode (%1) from form (%2) can not be saved</source>
-        <translation type="unfinished"></translation>
+        <translation>AVERTISSEMENT: l&apos;épisode %1 du formulaire %2 ne peut être sauvegardé</translation>
     </message>
 </context>
 <context>
@@ -111,53 +112,56 @@ Answering &apos;No&apos; will cause deftialtve data loss.</source>
     </message>
     <message>
         <source>Validate the current episode</source>
-        <translation type="unfinished"></translation>
+        <translation>Valider l&apos;épisode sélectionné</translation>
     </message>
     <message>
         <source>When you validate an episode, you freeze it permanently. The episode will still be visible but no modification will be possible.
 Do you really want to validate the current episode?</source>
-        <translation type="unfinished"></translation>
+        <translation>Quand vous validez un épisode, vous empêchez définitivement toute modification. L&apos;épisode sera toujours visible mais aucune édition ne sera possible.
+Voulez-vous vraiment valider l&apos;épisode sélectionné?</translation>
     </message>
     <message>
         <source>Episode (%1) from form (%2) signed</source>
-        <translation type="unfinished"></translation>
+        <translation>Episode %1 du formulaire %2 signé</translation>
     </message>
     <message>
         <source>Renew the current episode</source>
-        <translation type="unfinished"></translation>
+        <translation>Renouveler l&apos;épisode sélectionné</translation>
     </message>
     <message>
         <source>Create a new episode with today&apos;s date and the same content as the selected episode.&lt;br /&gt;Do you want to renew the selected episode?</source>
-        <translation type="unfinished"></translation>
+        <translation>Créer un nouvel épisode à la date du jour et avec le même contenu que l&apos;épisode sélectionné.&lt;br/&gt;Voulez-vous renouveler l&apos;épisode sélectionné?</translation>
     </message>
     <message>
         <source>Episode (%1) from form (%2) renewed</source>
-        <translation type="unfinished"></translation>
+        <translation>Episode %1 du formulaire %2 renouvelé</translation>
     </message>
     <message>
         <source>Remove the current episode</source>
-        <translation type="unfinished"></translation>
+        <translation>Supprimer l&apos;épisode sélectionné</translation>
     </message>
     <message>
         <source>You cannot completely destroy an episode, but you can remove it from the views.
 The episode will not be shown anymore, but will still be recorded in the database.
 Do you really want to remove the current episode?</source>
-        <translation type="unfinished"></translation>
+        <translation>Vous ne pouvez pas effacer définitivement un épisode, mais vous pouvez le rendre invisible.
+L&apos;épisode ne sera plus visible mais il sera toujours enregistré dans la base de données.
+Voulez-vous vraiment supprimer l&apos;épisode sélectionné?</translation>
     </message>
     <message>
         <source>Episode (%1) from form (%2) removed</source>
-        <translation type="unfinished"></translation>
+        <translation>Episode %1 du formulaire %2 supprimé</translation>
     </message>
     <message>
         <source>Images (*.png)</source>
-        <translation type="unfinished"></translation>
+        <translation>Images (*.png)</translation>
     </message>
 </context>
 <context>
     <name>PMH::Internal::PmhModeWidgetCoreListener</name>
     <message>
         <source>Unable to save current episode, form: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossible d&apos;enregistrer l&apos;épisode sélectionné du formulaire %1</translation>
     </message>
 </context>
 <context>
@@ -294,11 +298,11 @@ Do you really want to remove the current episode?</source>
     </message>
     <message>
         <source>on</source>
-        <translation type="unfinished"></translation>
+        <translation>le</translation>
     </message>
     <message>
         <source>dateTime</source>
-        <translation type="unfinished"></translation>
+        <translation>date et heure</translation>
     </message>
 </context>
 <context>

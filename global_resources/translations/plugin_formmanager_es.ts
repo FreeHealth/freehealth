@@ -154,65 +154,65 @@ Answering &apos;No&apos; will cause definitive data loss.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formplaceholder.cpp" line="820"/>
+        <location filename="../../plugins/formmanagerplugin/formplaceholder.cpp" line="819"/>
         <source>Validate the current episode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formplaceholder.cpp" line="821"/>
+        <location filename="../../plugins/formmanagerplugin/formplaceholder.cpp" line="820"/>
         <source>When you validate an episode, you prevent all subsequent amendments. The episode will be shown but will be kept unchanged.
 Do you really want to validate the current episode?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formplaceholder.cpp" line="840"/>
+        <location filename="../../plugins/formmanagerplugin/formplaceholder.cpp" line="838"/>
         <source>Episode (%1) from form (%2) signed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formplaceholder.cpp" line="860"/>
+        <location filename="../../plugins/formmanagerplugin/formplaceholder.cpp" line="858"/>
         <source>Renew the current episode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formplaceholder.cpp" line="861"/>
+        <location filename="../../plugins/formmanagerplugin/formplaceholder.cpp" line="859"/>
         <source>A new episode will created with the exact same content as the currently selected but at the current date, using your user.&lt;br /&gt;Do you want to renew the current episode?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formplaceholder.cpp" line="881"/>
+        <location filename="../../plugins/formmanagerplugin/formplaceholder.cpp" line="879"/>
         <source>Episode (%1) from form (%2) renewed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formplaceholder.cpp" line="922"/>
+        <location filename="../../plugins/formmanagerplugin/formplaceholder.cpp" line="920"/>
         <source>Remove the current episode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formplaceholder.cpp" line="923"/>
+        <location filename="../../plugins/formmanagerplugin/formplaceholder.cpp" line="921"/>
         <source>You can not completely destroy an episode, but you can remove it from the views.
 The episode will not be shown anymore, but will still be included in the database.
 Do you really want to remove the current episode?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formplaceholder.cpp" line="932"/>
+        <location filename="../../plugins/formmanagerplugin/formplaceholder.cpp" line="930"/>
         <source>Episode (%1) from form (%2) removed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formplaceholder.cpp" line="955"/>
+        <location filename="../../plugins/formmanagerplugin/formplaceholder.cpp" line="953"/>
         <source>Images (*.png)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formplaceholder.cpp" line="1004"/>
+        <location filename="../../plugins/formmanagerplugin/formplaceholder.cpp" line="1002"/>
         <source>Remove the current form</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formplaceholder.cpp" line="1005"/>
+        <location filename="../../plugins/formmanagerplugin/formplaceholder.cpp" line="1003"/>
         <source>Trying to remove the sub-form:&lt;br /&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;b&gt;%1&lt;/b&gt;.&lt;br /&gt;&lt;br /&gt;%2This modification will only affect the current patient:&lt;br /&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;b&gt;%3&lt;/b&gt;.&lt;br /&gt;&lt;br /&gt;Do you really want to remove the current sub-form?</source>
         <translation type="unfinished"></translation>
     </message>

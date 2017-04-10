@@ -37,72 +37,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_account.h" line="35"/>
-        <source>Accountancy</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/translationutils/trans_account.h" line="36"/>
-        <source>Bank details</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/translationutils/trans_account.h" line="37"/>
-        <source>Available movements</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/translationutils/trans_account.h" line="38"/>
-        <source>Medical procedures</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/translationutils/trans_account.h" line="39"/>
-        <source>Payment</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/translationutils/trans_account.h" line="40"/>
-        <source>Payments</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/translationutils/trans_account.h" line="41"/>
-        <source>Fee</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/translationutils/trans_account.h" line="42"/>
-        <source>Fees</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/translationutils/trans_account.h" line="43"/>
-        <source>Sites</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/translationutils/trans_account.h" line="44"/>
+        <location filename="../../libs/translationutils/trans_patient.h" line="100"/>
         <source>Insurance</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_account.h" line="45"/>
-        <source>Percentages</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/translationutils/trans_account.h" line="46"/>
-        <source>Distance rules</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/translationutils/trans_account.h" line="47"/>
-        <source>Assets rates</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/translationutils/trans_account.h" line="50"/>
+        <location filename="../../libs/translationutils/trans_numbers.h" line="72"/>
         <source>cent</source>
         <translation type="unfinished"></translation>
     </message>

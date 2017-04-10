@@ -174,11 +174,12 @@ Voulez-vous réellement supprimer cet épisode ?</translation>
     <message>
         <source>The current episode has been modified. Do you want to save changes?
 Answering &apos;No&apos; will cause definitive data loss.</source>
-        <translation type="unfinished"></translation>
+        <translation>L&apos;épisode actuel a été modifié. Souhaitez-vous sauvegarder les changements?
+Répondre &apos;Non&apos; entraînera une perte définitive des données.</translation>
     </message>
     <message>
         <source>WARNING: Episode (%1) from form (%2) cannot be saved</source>
-        <translation type="unfinished"></translation>
+        <translation>Avertissement: l&apos;épisode %1 du formulaire %2 ne peut être sauvegardé</translation>
     </message>
 </context>
 <context>

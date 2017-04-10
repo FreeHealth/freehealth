@@ -90,62 +90,62 @@
 <context>
     <name>Alert::AlertScript</name>
     <message>
-        <location filename="../../plugins/alertplugin/alertitem.cpp" line="1751"/>
+        <location filename="../../plugins/alertplugin/alertitem.cpp" line="1750"/>
         <source>Check alert validity</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/alertplugin/alertitem.cpp" line="1752"/>
+        <location filename="../../plugins/alertplugin/alertitem.cpp" line="1751"/>
         <source>Compute cycling starting date</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/alertplugin/alertitem.cpp" line="1753"/>
+        <location filename="../../plugins/alertplugin/alertitem.cpp" line="1752"/>
         <source>About to show alert</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/alertplugin/alertitem.cpp" line="1754"/>
+        <location filename="../../plugins/alertplugin/alertitem.cpp" line="1753"/>
         <source>During the alert presentation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/alertplugin/alertitem.cpp" line="1755"/>
+        <location filename="../../plugins/alertplugin/alertitem.cpp" line="1754"/>
         <source>About to validate the alert</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/alertplugin/alertitem.cpp" line="1756"/>
+        <location filename="../../plugins/alertplugin/alertitem.cpp" line="1755"/>
         <source>On alert about to be overridden</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/alertplugin/alertitem.cpp" line="1757"/>
+        <location filename="../../plugins/alertplugin/alertitem.cpp" line="1756"/>
         <source>On alert overridden</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/alertplugin/alertitem.cpp" line="1758"/>
+        <location filename="../../plugins/alertplugin/alertitem.cpp" line="1757"/>
         <source>On patient about to change</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/alertplugin/alertitem.cpp" line="1759"/>
+        <location filename="../../plugins/alertplugin/alertitem.cpp" line="1758"/>
         <source>On user about to change</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/alertplugin/alertitem.cpp" line="1760"/>
+        <location filename="../../plugins/alertplugin/alertitem.cpp" line="1759"/>
         <source>On episode about to save</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/alertplugin/alertitem.cpp" line="1761"/>
+        <location filename="../../plugins/alertplugin/alertitem.cpp" line="1760"/>
         <source>On episode loaded</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/alertplugin/alertitem.cpp" line="1762"/>
+        <location filename="../../plugins/alertplugin/alertitem.cpp" line="1761"/>
         <source>On remind later requested</source>
         <translation type="unfinished"></translation>
     </message>

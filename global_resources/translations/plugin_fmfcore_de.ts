@@ -828,10 +828,6 @@ Please check out the log files and contact your administrator.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>The server is already configured for FreeMedForms.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Server configured</source>
         <translation type="unfinished"></translation>
     </message>
@@ -854,6 +850,10 @@ Please check out the log files and contact your administrator.</source>
     <message>
         <source>You need to connect with another user that has the following global privileges: select, udpate, delete, insert, create, drop, alter and create user.
 Please contact your server administrator.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The server is already configured for FreeHealth.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

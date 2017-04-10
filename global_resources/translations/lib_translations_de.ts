@@ -498,18 +498,6 @@
         <translation>Medikamenten-Doppelverschreibung</translation>
     </message>
     <message>
-        <source>Bank details</source>
-        <translation>Bank-Details</translation>
-    </message>
-    <message>
-        <source>Available movements</source>
-        <translation>Verfügbare Bewegungen</translation>
-    </message>
-    <message>
-        <source>Medical procedures</source>
-        <translation>Medizinische Prozeduren</translation>
-    </message>
-    <message>
         <source>The %1 driver is not available.</source>
         <translation>Der Treiber &apos;%1&apos; ist nicht verfügbar.</translation>
     </message>
@@ -1464,27 +1452,7 @@ Text Align Justify shortcut key : Mac specific</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Accountancy</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Sites</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Insurance</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Percentages</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Distance rules</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Assets rates</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2575,22 +2543,6 @@ Text Align Justify shortcut key : Mac specific</extracomment>
     </message>
     <message>
         <source>cent</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Payment</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Payments</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Fee</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Fees</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

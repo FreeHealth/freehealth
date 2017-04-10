@@ -4,62 +4,62 @@
 <context>
     <name>Identity::IdentityEditorWidget</name>
     <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="797"/>
+        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="854"/>
         <source>You must specify a usualName.</source>
         <translation>Vous devez spécifier un nom usuel.</translation>
     </message>
     <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="798"/>
+        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="855"/>
         <source>You can not create a patient without a usualName</source>
         <translation>Vous ne pouvez pas créer un patient sans nom usuel</translation>
     </message>
     <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="799"/>
+        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="856"/>
         <source>No usualName</source>
         <translation>Pas de nom usuel</translation>
     </message>
     <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="805"/>
+        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="862"/>
         <source>You must specify a first name.</source>
         <translation>You devez spécifier un prénom.</translation>
     </message>
     <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="806"/>
+        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="863"/>
         <source>You can not create a patient without a first name</source>
         <translation>Vous ne pouvez pas créer un patient sans prénom</translation>
     </message>
     <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="807"/>
+        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="864"/>
         <source>No firstname</source>
         <translation>Pas de prénom</translation>
     </message>
     <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="813"/>
+        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="870"/>
         <source>You must specify a date of birth.</source>
         <translation>Vous devez spécifier un date de naissance.</translation>
     </message>
     <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="814"/>
+        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="871"/>
         <source>You can not create a patient without a date of birth</source>
         <translation>Vous ne pouvez pas créer un patient sans date de naissance</translation>
     </message>
     <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="815"/>
+        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="872"/>
         <source>No date of birth</source>
         <translation>Pas de date de naissance</translation>
     </message>
     <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="821"/>
+        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="878"/>
         <source>You must specify a gender.</source>
         <translation>Vous devez spécifier un genre.</translation>
     </message>
     <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="822"/>
+        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="879"/>
         <source>You can not create a patient without a gender</source>
         <translation>Vous ne pouvez pas créer un patient sans genre</translation>
     </message>
     <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="823"/>
+        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="880"/>
         <source>No gender</source>
         <translation>Pas de genre</translation>
     </message>
@@ -88,32 +88,57 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.ui" line="46"/>
-        <source>Other names:</source>
-        <translation>Autres noms :</translation>
+        <location filename="../../plugins/identityplugin/identityeditorwidget.ui" line="91"/>
+        <source>Gender</source>
+        <translation>Genre</translation>
     </message>
     <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.ui" line="102"/>
-        <source>Gender:</source>
-        <translation>Genre :</translation>
+        <location filename="../../plugins/identityplugin/identityeditorwidget.ui" line="143"/>
+        <source>Work phone</source>
+        <translation>Téléphone professionnel</translation>
     </message>
     <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.ui" line="131"/>
-        <source>First name:</source>
-        <translation>Prénom :</translation>
+        <location filename="../../plugins/identityplugin/identityeditorwidget.ui" line="153"/>
+        <source>Email</source>
+        <translation>Courriel</translation>
     </message>
     <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.ui" line="179"/>
-        <source>Language:</source>
-        <translation>Langage :</translation>
+        <location filename="../../plugins/identityplugin/identityeditorwidget.ui" line="224"/>
+        <source>Other names</source>
+        <translation>Autres noms</translation>
     </message>
     <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.ui" line="198"/>
-        <source>Date of birth:</source>
-        <translation>Date de naissance :</translation>
+        <location filename="../../plugins/identityplugin/identityeditorwidget.ui" line="234"/>
+        <source>Landline phone</source>
+        <translation>Téléphone fixe</translation>
     </message>
     <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.ui" line="77"/>
+        <location filename="../../plugins/identityplugin/identityeditorwidget.ui" line="256"/>
+        <source>Language</source>
+        <translation>Langue</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/identityplugin/identityeditorwidget.ui" line="278"/>
+        <source>Date of birth</source>
+        <translation>Date de naissance</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/identityplugin/identityeditorwidget.ui" line="300"/>
+        <source>First name</source>
+        <translation>Prénom</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/identityplugin/identityeditorwidget.ui" line="310"/>
+        <source>Mobile phone</source>
+        <translation>Téléphone mobile</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/identityplugin/identityeditorwidget.ui" line="323"/>
+        <source>Send mail</source>
+        <translation>Envoyer un courriel</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/identityplugin/identityeditorwidget.ui" line="66"/>
         <source>Click to add/change the photo</source>
         <translation>Cliquez pour ajouter/modifier la photographie</translation>
     </message>

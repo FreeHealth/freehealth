@@ -1024,6 +1024,11 @@ Please check and validate the proxy settings.</source>
 <context>
     <name>Core::ServerConfigPage</name>
     <message>
+        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="190"/>
+        <source>The server is already configured for FreeHealth.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="689"/>
         <source>Missing files.</source>
         <translation type="unfinished"></translation>
@@ -1057,11 +1062,6 @@ Please contact your server administrator.</source>
     <message>
         <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="189"/>
         <source>Server already configured</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="190"/>
-        <source>The server is already configured for FreeMedForms.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1199,7 +1199,7 @@ Please check out the log files and contact your administrator.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/ipatient.cpp" line="66"/>
+        <location filename="../../plugins/coreplugin/ipatient.cpp" line="65"/>
         <source>This token namespace contains all patient&apos;s related tokens.
 It does include the form&apos;s extracted token (when forms use &apos;patientDataRepresentation&apos;),
 but does not contains all other form items.</source>

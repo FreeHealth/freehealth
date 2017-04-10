@@ -213,18 +213,6 @@ Voulez-vous les sauvegarder aussi ?</translation>
         <translation>Le schema de durée doit être défini.</translation>
     </message>
     <message>
-        <source>full tab.</source>
-        <translation>comprimé entier</translation>
-    </message>
-    <message>
-        <source>half tab.</source>
-        <translation>demi comprimé</translation>
-    </message>
-    <message>
-        <source>quarter tab.</source>
-        <translation>quart de comprimé</translation>
-    </message>
-    <message>
         <source>dose per kilogram</source>
         <translation>dose par kilogramme</translation>
     </message>
@@ -283,6 +271,26 @@ Voulez-vous les sauvegarder aussi ?</translation>
     <message>
         <source>Model Error: unable to insert a row</source>
         <translation>Erreur du modèle : impossible d&apos;ajouter une ligne</translation>
+    </message>
+    <message>
+        <source>full tablet</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>quarter tablet</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>third tablet</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>half tablet</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>scored tablet</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

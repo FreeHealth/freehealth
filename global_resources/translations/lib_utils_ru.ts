@@ -4,47 +4,47 @@
 <context>
     <name>Database</name>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="739"/>
+        <location filename="../../libs/utils/database.cpp" line="740"/>
         <source>WARNING: %1 database already in use</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="872"/>
+        <location filename="../../libs/utils/database.cpp" line="873"/>
         <source>ERROR: Database `%1` is not readable. Path: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="883"/>
+        <location filename="../../libs/utils/database.cpp" line="884"/>
         <source>ERROR: Database %1 is not readable. Host: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="892"/>
+        <location filename="../../libs/utils/database.cpp" line="893"/>
         <source>ERROR: Database %1 is not readable. Path: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="916"/>
+        <location filename="../../libs/utils/database.cpp" line="917"/>
         <source>ERROR: Database %1 is not writable. Path: %2.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="960"/>
+        <location filename="../../libs/utils/database.cpp" line="961"/>
         <source>INFO: database %1 connection = %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="1187"/>
+        <location filename="../../libs/utils/database.cpp" line="1193"/>
         <source>Database Scheme Error: wrong number of fields for table %1 (expected: %2; current: %3)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="1199"/>
+        <location filename="../../libs/utils/database.cpp" line="1205"/>
         <source>Database Scheme Error: field number %1 differs: %2 instead of %3 in table %4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="2452"/>
+        <location filename="../../libs/utils/database.cpp" line="2511"/>
         <source>Can not create table %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -62,24 +62,21 @@
     <name>Log</name>
     <message>
         <location filename="../../libs/utils/log.cpp" line="208"/>
-        <source>SQL Error: 
-     * %1
-     * %2
-     * %3</source>
+        <source>SQL Error: %1 %2 %3 %4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/log.cpp" line="244"/>
+        <location filename="../../libs/utils/log.cpp" line="242"/>
         <source>%1 ms: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/log.cpp" line="317"/>
+        <location filename="../../libs/utils/log.cpp" line="315"/>
         <source>Unable to save %1: Error %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/log.cpp" line="347"/>
+        <location filename="../../libs/utils/log.cpp" line="345"/>
         <source>*****  Registered Errors  *****
 </source>
         <translation type="unfinished"></translation>
@@ -464,78 +461,63 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="169"/>
-        <source>FreeMedForms:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="179"/>
-        <source>FreeDiams:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="189"/>
-        <source>FreeAccount:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="222"/>
+        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="212"/>
         <source>Category:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="248"/>
+        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="238"/>
         <source>Tooltip:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="258"/>
+        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="248"/>
         <source>Specialties:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="268"/>
+        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="258"/>
         <source>Short description:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="278"/>
+        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="268"/>
         <source>Long description:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="288"/>
+        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="278"/>
         <source>License terms:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="321"/>
+        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="311"/>
         <source>Versions:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="350"/>
+        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="340"/>
         <source>From:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="360"/>
+        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="350"/>
         <source>To:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="370"/>
+        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="360"/>
         <source>Author:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="380"/>
+        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="370"/>
         <source>Date:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="99"/>
-        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="387"/>
+        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="377"/>
         <source>dd/MM/yyyy</source>
         <translation type="unfinished"></translation>
     </message>
@@ -550,27 +532,37 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="216"/>
+        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="169"/>
+        <source>FreeHealth</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="179"/>
+        <source>FreeRx</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="206"/>
         <source>Descriptions</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="303"/>
+        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="293"/>
         <source>Update</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="309"/>
+        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="299"/>
         <source>Selection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="344"/>
+        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="334"/>
         <source>Version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="401"/>
+        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="391"/>
         <source>XML</source>
         <translation type="unfinished"></translation>
     </message>
@@ -613,34 +605,34 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="384"/>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="383"/>
         <source>Download failed: %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="385"/>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="390"/>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="384"/>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="389"/>
         <source>HTTP</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="387"/>
         <location filename="../../libs/utils/httpdownloader.cpp" line="388"/>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="389"/>
         <source>Redirect to %1?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="402"/>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="401"/>
         <source>Downloaded %1 to current directory.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="458"/>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="457"/>
         <source>Server authentication required</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="485"/>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="484"/>
         <source>Proxy authentication required</source>
         <translation type="unfinished"></translation>
     </message>

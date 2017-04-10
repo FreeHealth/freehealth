@@ -574,19 +574,27 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Telephone numbers</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Fax number</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Email</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>user@example.com</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Work phone</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Fax</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Home phone</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mobile phone</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
