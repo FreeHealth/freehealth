@@ -91,8 +91,6 @@ RESOURCES="\
 global_resources/datapacks/appinstalled/defaultservers.txt \
 global_resources/datapacks/appinstalled/drugs/master.db \
 global_resources/datapacks/appinstalled/drugs/readme.txt \
-global_resources/datapacks/appinstalled/account/readme.txt \
-global_resources/doc/freeaccount \
 global_resources/doc/freediams \
 global_resources/doc/freedrc \
 global_resources/doc/freeicd \
@@ -100,7 +98,6 @@ global_resources/doc/freehealth \
 global_resources/doc/freepad \
 global_resources/doc/freetoolbox \
 global_resources/forms \
-global_resources/package_helpers/freeaccount* \
 global_resources/package_helpers/freediams* \
 global_resources/package_helpers/freedrc* \
 global_resources/package_helpers/freeicd* \
@@ -118,7 +115,6 @@ global_resources/pixmap/svg/*.icns \
 global_resources/pixmap/svg/*.ico \
 global_resources/pixmap/svg/*.bmp \
 global_resources/profiles \
-global_resources/sql/account \
 global_resources/sql/drugdb \
 global_resources/sql/druginfodb \
 global_resources/sql/icd10 \
@@ -162,8 +158,6 @@ contrib \
 "
 
 APP_SOURCES="\
-freeaccount.pro \
-freeaccount \
 freediams.pro \
 freediams \
 freedrc.pro \
@@ -180,9 +174,6 @@ freetoolbox \
 PLUGINS_SOURCES="\
 plugins/fmf_plugins.pri \
 plugins/pluginjsonmetadata.xsl \
-plugins/accountbaseplugin \
-plugins/accountplugin \
-plugins/account2plugin \
 plugins/agendaplugin \
 plugins/aggirplugin \
 plugins/alertplugin \

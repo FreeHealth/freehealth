@@ -1,4 +1,0 @@
-"ASSETSRATES_ID","USER_UID","NAME","YEARS_RANGE","RATE","DATE"
-"1","{f5291a40-d274-408c-ac39-4d4465ae6bb7}","French rate 3-4","3_4","1.25","2011-03-27"
-"2","{f5291a40-d274-408c-ac39-4d4465ae6bb7}","French rate 5-6","5_6","1.75","2011-03-27"
-"3","{f5291a40-d274-408c-ac39-4d4465ae6bb7}","French rate >6","6_99","2.25","2011-03-27"
