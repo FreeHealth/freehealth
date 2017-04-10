@@ -187,7 +187,7 @@ namespace {
                 LOG_FOR("AppConfigWzard::configureServer",
                         "Server already configured");
                 Utils::informativeMessageBox(QApplication::translate("Core::ServerConfigPage", "Server already configured"),
-                                             QApplication::translate("Core::ServerConfigPage", "The server is already configured for FreeMedForms."));
+                                             QApplication::translate("Core::ServerConfigPage", "The server is already configured for FreeHealth."));
                 query.finish();
                 QSqlDatabase::removeDatabase(connection);
                 return true;

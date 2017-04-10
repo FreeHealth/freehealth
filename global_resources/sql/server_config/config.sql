@@ -45,7 +45,7 @@
 --  *
 --  */
 
--- Create the main FreeMedForms administrator on MySQL user
+-- Create the main EHR administrator on MySQL user
 -- An error will occur if the user already exists and the script will fail
 CREATE USER 'fmf_admin' IDENTIFIED BY 'fmf_admin';
 
@@ -67,5 +67,3 @@ GRANT SELECT, UPDATE, INSERT, DELETE, CREATE ON `mysql`.* TO 'fmf_admin'@'127.0.
 GRANT SELECT, UPDATE, INSERT, DELETE, CREATE ON `mysql`.* TO 'fmf_admin'@'::1' IDENTIFIED BY 'fmf_admin' WITH GRANT OPTION;
 
 FLUSH PRIVILEGES;
-
--- Create the main FreeMedForms administrator on FreeMedForms user table

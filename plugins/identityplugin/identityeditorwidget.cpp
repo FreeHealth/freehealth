@@ -50,6 +50,7 @@
  * - firstnames
  * - date of birth
  * - photo
+ * - landline phone number
  * - full address with
  *    - street
  *    - city
@@ -94,7 +95,7 @@
 #include <QDateEdit>
 #include <QMenu>
 #include <QRegExpValidator>
-
+#include <QDesktopServices>
 #include <QDebug>
 
 using namespace Identity;
@@ -121,6 +122,10 @@ const char * const XML_GENDER   = "gdr";
 const char * const XML_LANG     = "i18";
 const char * const XML_DOB      = "dob";
 //const char * const XML_DOD      = "dod";
+const char * const XML_MOBILEPHONE = "mobile";
+const char * const XML_LANDLINEPHONE = "landline";
+const char * const XML_WORKPHONE = "workphone";
+const char * const XML_EMAIL = "email";
 const char * const XML_PHOTO    = "pix";
 const char * const XML_STREET   = "str";
 const char * const XML_CITY     = "city";
@@ -255,6 +260,8 @@ public:
         Utils::CapitalizationValidator *capVal = new Utils::CapitalizationValidator(q);
         ui->firstname->setValidator(capVal);
 
+        ui->emailPushButton->setEnabled(false);
+
         QObject::connect(ui->photoButton, SIGNAL(clicked()), q, SLOT(photoButton_clicked()));
         q->updateGenderImage();
         //            QObject::connect(ui->genderCombo, SIGNAL(currentIndexChanged(int)), q, SLOT(updateGenderImage()));
@@ -286,6 +293,8 @@ public:
         QObject::connect(ui->photoButton->deletePhotoAction(), SIGNAL(triggered()), q, SLOT(updateGenderImage()));
         QObject::connect(ui->passwordWidget, SIGNAL(uncryptedPasswordChanged(QString)), q, SIGNAL(clearPasswordChanged(QString)));
         QObject::connect(ui->passwordWidget, SIGNAL(uncryptedPasswordChanged(QString)), q, SIGNAL(passwordConfirmed()));
+        QObject::connect(ui->emailLineEdit, SIGNAL(textChanged(QString)),
+                         q, SLOT(updateEmailButtonState()));
     }
 
     void connectPropertiesNotifier()
@@ -293,6 +302,14 @@ public:
         QObject::connect(ui->usualName, SIGNAL(textChanged(QString)), q, SIGNAL(usualNameChanged(QString)));
         QObject::connect(ui->otherNames, SIGNAL(textChanged(QString)), q, SIGNAL(otherNamesChanged(QString)));
         QObject::connect(ui->firstname, SIGNAL(textChanged(QString)), q, SIGNAL(firstNameChanged(QString)));
+        QObject::connect(ui->landlinePhoneLineEdit, SIGNAL(textChanged(QString)),
+                         q, SIGNAL(landlinePhoneChanged(QString)));
+        QObject::connect(ui->mobilePhoneLineEdit, SIGNAL(textChanged(QString)),
+                         q, SIGNAL(mobilePhoneChanged(QString)));
+        QObject::connect(ui->workPhoneLineEdit, SIGNAL(textChanged(QString)),
+                         q, SIGNAL(workPhoneChanged(QString)));
+        QObject::connect(ui->emailLineEdit, SIGNAL(textChanged(QString)),
+                         q, SIGNAL(emailChanged(QString)));
         QObject::connect(ui->dob, SIGNAL(dateChanged(QDate)), q, SIGNAL(dateOfBirthChanged(QDate)));
         QObject::connect(ui->genderCombo, SIGNAL(currentIndexChanged(int)), q, SIGNAL(genderIndexChanged(int)));
         QObject::connect(ui->genderCombo, SIGNAL(currentIndexChanged(QString)), q, SIGNAL(genderChanged(QString)));
@@ -352,6 +369,10 @@ public:
         m_Mapper->addMapping(ui->usualName, Core::IPatient::UsualName, "text");
         m_Mapper->addMapping(ui->otherNames, Core::IPatient::OtherNames, "text");
         m_Mapper->addMapping(ui->firstname, Core::IPatient::Firstname, "text");
+        m_Mapper->addMapping(ui->landlinePhoneLineEdit, Core::IPatient::Tels, "text");
+        m_Mapper->addMapping(ui->mobilePhoneLineEdit, Core::IPatient::MobilePhone, "text");
+        m_Mapper->addMapping(ui->workPhoneLineEdit, Core::IPatient::WorkPhone, "text");
+        m_Mapper->addMapping(ui->emailLineEdit, Core::IPatient::Email, "text");
         m_Mapper->addMapping(ui->genderCombo, Core::IPatient::GenderIndex, "currentIndex");
         m_Mapper->addMapping(ui->titleCombo, Core::IPatient::TitleIndex, "currentIndex");
         m_Mapper->addMapping(ui->dob, Core::IPatient::DateOfBirth, "date");
@@ -382,6 +403,10 @@ public:
         case IdentityEditorWidget::Photo: return ui->photoButton;
         case IdentityEditorWidget::Extra_Login: return ui->passwordWidget->loginEditor();
         case IdentityEditorWidget::Extra_Password: return ui->passwordWidget;
+        case IdentityEditorWidget::LandlinePhone: return ui->landlinePhoneLineEdit;
+        case IdentityEditorWidget::MobilePhone: return ui->mobilePhoneLineEdit;
+        case IdentityEditorWidget::WorkPhone: return ui->workPhoneLineEdit;
+        case IdentityEditorWidget::Email: return ui->emailLineEdit;
         default: break;
         }
         return 0;
@@ -399,6 +424,10 @@ public:
         case IdentityEditorWidget::OtherNames:
         case IdentityEditorWidget::FirstName:
         case IdentityEditorWidget::Extra_Login:
+        case IdentityEditorWidget::LandlinePhone:
+        case IdentityEditorWidget::MobilePhone:
+        case IdentityEditorWidget::WorkPhone:
+        case IdentityEditorWidget::Email:
             return "text";
         case IdentityEditorWidget::Extra_Password:
             return "cryptedPassword";
@@ -453,6 +482,10 @@ public:
             id = 2;
         ui->genderCombo->setCurrentIndex(id);
         ui->language->setCurrentIsoLanguage(tags.value(::XML_LANG));
+        ui->landlinePhoneLineEdit->setText(tags.value(::XML_LANDLINEPHONE));
+        ui->mobilePhoneLineEdit->setText(tags.value(::XML_MOBILEPHONE));
+        ui->workPhoneLineEdit->setText(tags.value(::XML_WORKPHONE));
+        ui->emailLineEdit->setText(tags.value(::XML_EMAIL));
         ui->dob->setDate(QDate::fromString(tags.value(::XML_DOB), Qt::ISODate));
         //ui->dod->setText(tags.value(::XML_DOD));
         ui->photoButton->setPixmap(Utils::pixmapFromBase64(tags.value(::XML_PHOTO).toUtf8()));
@@ -486,6 +519,10 @@ public:
             break;
         }
         tags.insert(::XML_LANG, ui->language->currentLanguageIsoName());
+        tags.insert(::XML_LANDLINEPHONE, ui->landlinePhoneLineEdit->text());
+        tags.insert(::XML_MOBILEPHONE, ui->mobilePhoneLineEdit->text());
+        tags.insert(::XML_WORKPHONE, ui->workPhoneLineEdit->text());
+        tags.insert(::XML_EMAIL, ui->emailLineEdit->text());
         tags.insert(::XML_DOB, ui->dob->date().toString(Qt::ISODate));
         //tags.insert(::XML_DOD, ui->dod->date().toString(Qt::ISODate));
         tags.insert(::XML_PHOTO, Utils::pixmapToBase64(ui->photoButton->pixmap()));
@@ -583,6 +620,10 @@ void IdentityEditorWidget::setAvailableWidgets(AvailableWidgets widgets)
     d->ui->otherNames->setEnabled(widgets.testFlag(OtherNames));
     d->ui->firstname->setEnabled(widgets.testFlag(FirstName));
     d->ui->language->setEnabled(widgets.testFlag(Language_QLocale) || widgets.testFlag(LanguageIso));
+    d->ui->landlinePhoneLineEdit->setEnabled(widgets.testFlag(LandlinePhone));
+    d->ui->mobilePhoneLineEdit->setEnabled(widgets.testFlag(MobilePhone));
+    d->ui->workPhoneLineEdit->setEnabled(widgets.testFlag(WorkPhone));
+    d->ui->emailLineEdit->setEnabled(widgets.testFlag(Email));
     d->ui->dob->setEnabled(widgets.testFlag(DateOfBirth));
     //d->ui->dod->setEnabled(widgets.testFlag(DateOfDeath));
     d->ui->photoButton->setEnabled(widgets.testFlag(Photo));
@@ -599,6 +640,14 @@ void IdentityEditorWidget::setAvailableWidgets(AvailableWidgets widgets)
     d->ui->genderLabel->setVisible(d->ui->genderCombo->isEnabled());
     d->ui->language->setVisible(d->ui->language->isEnabled());
     d->ui->languageLabel->setVisible(d->ui->language->isEnabled());
+    d->ui->landlinePhoneLabel->setVisible(d->ui->landlinePhoneLineEdit->isEnabled());
+    d->ui->landlinePhoneLineEdit->setVisible(d->ui->landlinePhoneLineEdit->isEnabled());
+    d->ui->mobilePhoneLabel->setVisible(d->ui->mobilePhoneLineEdit->isEnabled());
+    d->ui->mobilePhoneLineEdit->setVisible(d->ui->mobilePhoneLineEdit->isEnabled());
+    d->ui->workPhoneLabel->setVisible(d->ui->workPhoneLineEdit->isEnabled());
+    d->ui->workPhoneLineEdit->setVisible(d->ui->workPhoneLineEdit->isEnabled());
+    d->ui->emailLabel->setVisible(d->ui->emailLineEdit->isEnabled());
+    d->ui->emailLineEdit->setVisible(d->ui->emailLineEdit->isEnabled());
     d->ui->dob->setVisible(d->ui->dob->isEnabled());
     d->ui->dobLabel->setVisible(d->ui->dob->isEnabled());
     //d->ui->dod->setVisible(d->ui->dod->isEnabled());
@@ -610,8 +659,12 @@ void IdentityEditorWidget::setAvailableWidgets(AvailableWidgets widgets)
     QWidget::setTabOrder(d->ui->firstname, d->ui->otherNames);
     QWidget::setTabOrder(d->ui->otherNames, d->ui->dob);
     QWidget::setTabOrder(d->ui->dob, d->ui->genderCombo);
+    QWidget::setTabOrder(d->ui->genderCombo, d->ui->mobilePhoneLineEdit);
+    QWidget::setTabOrder(d->ui->mobilePhoneLineEdit, d->ui->landlinePhoneLineEdit);
+    QWidget::setTabOrder(d->ui->landlinePhoneLineEdit, d->ui->workPhoneLineEdit);
+    QWidget::setTabOrder(d->ui->workPhoneLineEdit, d->ui->emailLineEdit);
 
-    QWidget *lastTab = d->ui->genderCombo;
+    QWidget *lastTab = d->ui->emailLineEdit;
 
     // Manage address
     bool showAddress = (widgets.testFlag(Street)
@@ -651,6 +704,10 @@ void IdentityEditorWidget::setReadOnly(bool readOnly)
     d->ui->titleCombo->setEnabled(!readOnly);
     d->ui->language->setEnabled(!readOnly);
     d->ui->photoButton->setEnabled(!readOnly);
+    d->ui->landlinePhoneLineEdit->setReadOnly(readOnly);
+    d->ui->mobilePhoneLineEdit->setReadOnly(readOnly);
+    d->ui->workPhoneLineEdit->setReadOnly(readOnly);
+    d->ui->emailLineEdit->setReadOnly(readOnly);
 }
 
 bool IdentityEditorWidget::isReadOnly() const
@@ -786,8 +843,8 @@ void IdentityEditorWidget::setCurrentIndex(const QModelIndex &modelIndex)
 }
 
 /**
- * Test the validity of the "actually shown" identity. The default implementation
- * test the content of the firstname, usualName, gender & DOB.
+ * Test the validity of the currently shown identity. The default implementation
+ * tests the content of the firstname, usualName, gender & DOB.
  * When subclassing, if you return false, the object can not submit to the model.
  */
 bool IdentityEditorWidget::isIdentityValid(bool warnUser) const
@@ -900,6 +957,30 @@ QDate IdentityEditorWidget::currentDateOfBirth() const
 QString IdentityEditorWidget::currentLanguage() const
 {
     return d->ui->language->currentLanguageName();
+}
+
+/** Return the current editing value */
+QString IdentityEditorWidget::currentLandlinePhone() const
+{
+    return d->ui->landlinePhoneLineEdit->text();
+}
+
+/** Return the current editing value */
+QString IdentityEditorWidget::currentMobilePhone() const
+{
+    return d->ui->mobilePhoneLineEdit->text();
+}
+
+/** Return the current editing value */
+QString IdentityEditorWidget::currentWorkPhone() const
+{
+    return d->ui->workPhoneLineEdit->text();
+}
+
+/** Return the current editing value */
+QString IdentityEditorWidget::currentEmail() const
+{
+    return d->ui->emailLineEdit->text();
 }
 
 /** Return the current editing value */
@@ -1033,6 +1114,15 @@ void IdentityEditorWidget::updateGenderImage(int genderIndex)
 }
 
 /**
+ * \internal
+ * Connected to the email QLineEdit, update the QPushButton state
+ */
+void IdentityEditorWidget::updateEmailButtonState()
+{
+    d->ui->emailPushButton->setEnabled(!d->ui->emailLineEdit->text().isEmpty());
+}
+
+/**
  * Set the current data from an XML content.
  * \sa toXml(), setXmlInOut()
  */
@@ -1109,4 +1199,18 @@ void IdentityEditorWidget::onPhotoProviderPhotoReady(const QPixmap &pixmap)
         return;
     d->ui->photoButton->setPixmap(pixmap);
     d->m_requestedProvider = 0;
+}
+
+/**
+ * \internal
+ * Send an email to the address inside emailLineEdit if emailPushButton is clicked
+ */
+void IdentityEditorWidget::on_emailPushButton_clicked()
+{
+    if (d->ui->emailLineEdit->text().isEmpty()) {
+        return;
+    }
+    QString email = d->ui->emailLineEdit->text();
+    QDesktopServices::openUrl(QString("mailto:%1")
+            .arg(email));
 }

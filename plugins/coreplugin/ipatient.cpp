@@ -219,7 +219,7 @@ void IPatient::registerPatientTokens()
     t = new PatientToken(Constants::TOKEN_PATIENTADDRESS_COUNTRY, Country);
     t->setUntranslatedHumanReadableName(Trans::Constants::COUNTRY);
     _tokens << t;
-    t = new PatientToken(Constants::TOKEN_PATIENTCONTACT_EMAIL, Mails);
+    t = new PatientToken(Constants::TOKEN_PATIENTCONTACT_EMAIL, Email);
     t->setUntranslatedHumanReadableName(Trans::Constants::EMAIL);
     _tokens << t;
     t = new PatientToken(Constants::TOKEN_PATIENTCONTACT_TELS, Tels);

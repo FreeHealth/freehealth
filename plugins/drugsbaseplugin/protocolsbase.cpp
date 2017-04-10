@@ -131,78 +131,78 @@ ProtocolsBase::ProtocolsBase(QObject *parent) :
     d(new ProtocolsBasePrivate)
 {
     setObjectName("ProtocolsBase");
-//    addTable(Table_PROTOMASTER,   "PROTO_MASTER");
-//    addTable(Table_PROTORELAT,    "PROTO_REL");
-//    addTable(Table_PROTODISTRIB,  "PROTO_DIST");
-//    addTable(Table_PROTOINFO,     "PROTO_INFO");
-//    addTable(Table_PROTODRUG,     "PROTO_DRUG");
-//    addTable(Table_PROTOATC,      "PROTO_ATC");
-//    addTable(Table_PROTOPREC,     "PROTO_PREC");
+    //    addTable(Table_PROTOMASTER,   "PROTO_MASTER");
+    //    addTable(Table_PROTORELAT,    "PROTO_REL");
+    //    addTable(Table_PROTODISTRIB,  "PROTO_DIST");
+    //    addTable(Table_PROTOINFO,     "PROTO_INFO");
+    //    addTable(Table_PROTODRUG,     "PROTO_DRUG");
+    //    addTable(Table_PROTOATC,      "PROTO_ATC");
+    //    addTable(Table_PROTOPREC,     "PROTO_PREC");
 
-//    addField(Table_PROTOMASTER, PROTOMASTER_ID, "PID", FieldIsUniquePrimaryKey);
-//    addField(Table_PROTOMASTER, PROTOMASTER_LABEL, "LABEL", FieldIsShortText);
-//    addField(Table_PROTOMASTER, PROTOMASTER_INTAKEFROM, "INTAKEFROM", FieldIsReal );
-//    addField(Table_PROTOMASTER, PROTOMASTER_INTAKETO, "INTAKETO", FieldIsReal);
-//    addField(Table_PROTOMASTER, PROTOMASTER_INTAKEFROMTO, "INTAKEFROMTO", FieldIsBoolean);
-//    addField(Table_PROTOMASTER, PROTOMASTER_INTAKESCHEME, "INTAKESCHEME", FieldIsShortText);
-//    addField(Table_PROTOMASTER, PROTOMASTER_INTAKEINTERVALOFTIME, "INTAKE_IT", FieldIsInteger);
-//    addField(Table_PROTOMASTER, PROTOMASTER_INTAKESINTERVALSCHEME, "INTAKE_ITSCHEME", FieldIsShortText);
-//    addField(Table_PROTOMASTER, PROTOMASTER_ROUTEID, "RID", FieldIsInteger);
-//    addField(Table_PROTOMASTER, PROTOMASTER_DURATIONFROM, "DURATIONFROM", FieldIsReal);
-//    addField(Table_PROTOMASTER, PROTOMASTER_DURATIONTO, "DURATIONTO", FieldIsReal);
-//    addField(Table_PROTOMASTER, PROTOMASTER_DURATIONFROMTO, "DURATIONFROMTO", FieldIsBoolean);
-//    addField(Table_PROTOMASTER, PROTOMASTER_DURATIONSCHEME, "DURATIONSCHEME", FieldIs);
-//    addField(Table_PROTOMASTER, PROTOMASTER_PERIOD, "PERIOD", FieldIsInteger);
-//    addField(Table_PROTOMASTER, PROTOMASTER_PERIODSCHEME, "PERIODSCHEME", FieldIs);
-//    addField(Table_PROTOMASTER, PROTOMASTER_ADMINSCHEME, "ADMINSCHEME", FieldIs);
-//    addField(Table_PROTOMASTER, PROTOMASTER_DAILYSCHEME, "DAILYSCHEME", FieldIs);
-//    addField(Table_PROTOMASTER, PROTOMASTER_MEALSCHEME, "MEALSCHEME", FieldIs);
-//    addField(Table_PROTOMASTER, PROTOMASTER_ISALD, "ISALD", FieldIsBoolean);
-//    addField(Table_PROTOMASTER, PROTOMASTER_TYPEOFTREATEMENT, "TYPEOFTREATEMENT", FieldIs);
-//    addField(Table_PROTOMASTER, PROTOMASTER_NOTE, "NOTE", FieldIsLongText);
+    //    addField(Table_PROTOMASTER, PROTOMASTER_ID, "PID", FieldIsUniquePrimaryKey);
+    //    addField(Table_PROTOMASTER, PROTOMASTER_LABEL, "LABEL", FieldIsShortText);
+    //    addField(Table_PROTOMASTER, PROTOMASTER_INTAKEFROM, "INTAKEFROM", FieldIsReal );
+    //    addField(Table_PROTOMASTER, PROTOMASTER_INTAKETO, "INTAKETO", FieldIsReal);
+    //    addField(Table_PROTOMASTER, PROTOMASTER_INTAKEFROMTO, "INTAKEFROMTO", FieldIsBoolean);
+    //    addField(Table_PROTOMASTER, PROTOMASTER_INTAKESCHEME, "INTAKESCHEME", FieldIsShortText);
+    //    addField(Table_PROTOMASTER, PROTOMASTER_INTAKEINTERVALOFTIME, "INTAKE_IT", FieldIsInteger);
+    //    addField(Table_PROTOMASTER, PROTOMASTER_INTAKESINTERVALSCHEME, "INTAKE_ITSCHEME", FieldIsShortText);
+    //    addField(Table_PROTOMASTER, PROTOMASTER_ROUTEID, "RID", FieldIsInteger);
+    //    addField(Table_PROTOMASTER, PROTOMASTER_DURATIONFROM, "DURATIONFROM", FieldIsReal);
+    //    addField(Table_PROTOMASTER, PROTOMASTER_DURATIONTO, "DURATIONTO", FieldIsReal);
+    //    addField(Table_PROTOMASTER, PROTOMASTER_DURATIONFROMTO, "DURATIONFROMTO", FieldIsBoolean);
+    //    addField(Table_PROTOMASTER, PROTOMASTER_DURATIONSCHEME, "DURATIONSCHEME", FieldIs);
+    //    addField(Table_PROTOMASTER, PROTOMASTER_PERIOD, "PERIOD", FieldIsInteger);
+    //    addField(Table_PROTOMASTER, PROTOMASTER_PERIODSCHEME, "PERIODSCHEME", FieldIs);
+    //    addField(Table_PROTOMASTER, PROTOMASTER_ADMINSCHEME, "ADMINSCHEME", FieldIs);
+    //    addField(Table_PROTOMASTER, PROTOMASTER_DAILYSCHEME, "DAILYSCHEME", FieldIs);
+    //    addField(Table_PROTOMASTER, PROTOMASTER_MEALSCHEME, "MEALSCHEME", FieldIs);
+    //    addField(Table_PROTOMASTER, PROTOMASTER_ISALD, "ISALD", FieldIsBoolean);
+    //    addField(Table_PROTOMASTER, PROTOMASTER_TYPEOFTREATEMENT, "TYPEOFTREATEMENT", FieldIs);
+    //    addField(Table_PROTOMASTER, PROTOMASTER_NOTE, "NOTE", FieldIsLongText);
 
-//    addField(Table_PROTORELAT, PROTORELAT_, "", FieldIs);
+    //    addField(Table_PROTORELAT, PROTORELAT_, "", FieldIs);
 
-//    addField(Table_PROTODISTRIB, PROTODISTRIB_, "", FieldIs);
+    //    addField(Table_PROTODISTRIB, PROTODISTRIB_, "", FieldIs);
 
-//    addField(Table_PROTOINFO, PROTOINFO_, "", FieldIs);
-//    "`USERVALIDATOR`         varchar(200)   NULL,"
-//    "`CREATIONDATE`          date           NULL,"    // put NOT NULL
-//    "`MODIFICATIONDATE`      date           NULL,"
-//    "`TRANSMITTED`           date           NULL,"
+    //    addField(Table_PROTOINFO, PROTOINFO_, "", FieldIs);
+    //    "`USERVALIDATOR`         varchar(200)   NULL,"
+    //    "`CREATIONDATE`          date           NULL,"    // put NOT NULL
+    //    "`MODIFICATIONDATE`      date           NULL,"
+    //    "`TRANSMITTED`           date           NULL,"
 
-//    addField(Table_PROTODRUG, PROTODRUG_, "", FieldIs);
-//    "`DRUGS_DATABASE_IDENTIFIANT` varchar(200) NULL,   "
-//    "`DRUG_UID1`           varchar(20)    NULL,";
-//    "`DRUG_UID2`           varchar(20)    NULL,";
-//    "`DRUG_UID3`           varchar(20)    NULL,";
-//    "`DRUG_OLDUID`         varchar(20)    NULL,";
+    //    addField(Table_PROTODRUG, PROTODRUG_, "", FieldIs);
+    //    "`DRUGS_DATABASE_IDENTIFIANT` varchar(200) NULL,   "
+    //    "`DRUG_UID1`           varchar(20)    NULL,";
+    //    "`DRUG_UID2`           varchar(20)    NULL,";
+    //    "`DRUG_UID3`           varchar(20)    NULL,";
+    //    "`DRUG_OLDUID`         varchar(20)    NULL,";
 
-//    addField(Table_PROTOATC, PROTOATC_, "", FieldIs);
-//    "`ATC_CODE`              varchar(7)     ,";
-//    "`STRENGTH`            varchar(100)   NULL,";
-//    "`STRENGTH_UNIT`            varchar(100)   NULL,";
+    //    addField(Table_PROTOATC, PROTOATC_, "", FieldIs);
+    //    "`ATC_CODE`              varchar(7)     ,";
+    //    "`STRENGTH`            varchar(100)   NULL,";
+    //    "`STRENGTH_UNIT`            varchar(100)   NULL,";
 
-//    addField(Table_PROTOPREC, PROTOPREC_, "", FieldIs);
-//    "`MINAGE`                int(10)        NULL,"
-//    "`MAXAGE`                int(10)        NULL,"
-//    "`MINAGEREFERENCE`       int(10)        NULL,"
-//    "`MAXAGEREFERENCE`       int(10)        NULL,"
-//    "`MINWEIGHT`             int(10)        NULL,"
-//    "`SEXLIMIT`              int(10)        NULL,"
-//    "`MINCLEARANCE`          int(10)        NULL,"
-//    "`MAXCLEARANCE`          int(10)        NULL,"
-//    "`PREGNANCYLIMITS`       int(10)        NULL,"
-//    "`BREASTFEEDINGLIMITS`   int(10)        NULL,"
+    //    addField(Table_PROTOPREC, PROTOPREC_, "", FieldIs);
+    //    "`MINAGE`                int(10)        NULL,"
+    //    "`MAXAGE`                int(10)        NULL,"
+    //    "`MINAGEREFERENCE`       int(10)        NULL,"
+    //    "`MAXAGEREFERENCE`       int(10)        NULL,"
+    //    "`MINWEIGHT`             int(10)        NULL,"
+    //    "`SEXLIMIT`              int(10)        NULL,"
+    //    "`MINCLEARANCE`          int(10)        NULL,"
+    //    "`MAXCLEARANCE`          int(10)        NULL,"
+    //    "`PREGNANCYLIMITS`       int(10)        NULL,"
+    //    "`BREASTFEEDINGLIMITS`   int(10)        NULL,"
 
 
 
-//    "`CIM10_LK`              varchar(150)   NULL,"
-//    "`CIM10_LIMITS_LK`       varchar(150)   NULL,"
-//    "`EDRC_LK`               varchar(150)   NULL,"
+    //    "`CIM10_LK`              varchar(150)   NULL,"
+    //    "`CIM10_LIMITS_LK`       varchar(150)   NULL,"
+    //    "`EDRC_LK`               varchar(150)   NULL,"
 
-//    "`EXTRAS`                blob           NULL,"
-//    "`ORDER`                 int(10)        NULL"
+    //    "`EXTRAS`                blob           NULL,"
+    //    "`ORDER`                 int(10)        NULL"
 
 
     // Connect first run database creation requested
@@ -230,62 +230,69 @@ void ProtocolsBase::onCoreFirstRunCreationRequested()
 QString ProtocolsBase::dosageCreateTableSqlQuery()
 {
     // TODO: add UserUuid field or lkid
-    return "CREATE TABLE IF NOT EXISTS `DOSAGE` ("
-           "`POSO_ID`               INT NOT NULL AUTO_INCREMENT PRIMARY KEY,"
-           "`POSO_UUID`             varchar(40)    NULL,"    // put NOT NULL
-           "`DRUGS_DATABASE_IDENTIFIANT` varchar(200) NULL,   "
-           "`INN_LK`                int(11)        DEFAULT -1,"
-           "`INN_DOSAGE`            varchar(100)   NULL,"    // contains the dosage of the SA INN
-           "`DRUG_UID_LK`           varchar(20)    NULL,"
-           "`CIP_LK`                int(11)        DEFAULT -1,"
-           "`LABEL`                 varchar(300)   NULL,"    // put NOT NULL
+    QString sql= "CREATE TABLE IF NOT EXISTS `DOSAGE` ("
+                 "`POSO_ID`               INT NOT NULL %1 PRIMARY KEY,"
+                 "`POSO_UUID`             varchar(40)    NULL,"    // put NOT NULL
+            "`DRUGS_DATABASE_IDENTIFIANT` varchar(200) NULL,   "
+            "`INN_LK`                int(11)        DEFAULT -1,"
+            "`INN_DOSAGE`            varchar(100)   NULL,"    // contains the dosage of the SA INN
+            "`DRUG_UID_LK`           varchar(20)    NULL,"
+            "`CIP_LK`                int(11)        DEFAULT -1,"
+            "`LABEL`                 varchar(300)   NULL,"    // put NOT NULL
 
-           "`INTAKEFROM`            double         NULL,"    // put NOT NULL
-           "`INTAKETO`              double         NULL,"
-           "`INTAKEFROMTO`          bool           NULL,"
-           "`INTAKESCHEME`          varchar(200)   NULL,"    // put NOT NULL
-           "`INTAKESINTERVALOFTIME` int(10)        NULL,"
-           "`INTAKESINTERVALSCHEME` varchar(200)   NULL,"
-           "`ROUTE_ID`              integer        NULL,"
+            "`INTAKEFROM`            double         NULL,"    // put NOT NULL
+            "`INTAKETO`              double         NULL,"
+            "`INTAKEFROMTO`          bool           NULL,"
+            "`INTAKESCHEME`          varchar(200)   NULL,"    // put NOT NULL
+            "`INTAKESINTERVALOFTIME` int(10)        NULL,"
+            "`INTAKESINTERVALSCHEME` varchar(200)   NULL,"
+            "`ROUTE_ID`              integer        NULL,"
 
-           "`DURATIONFROM`          double         NULL,"    // put NOT NULL
-           "`DURATIONTO`            double         NULL,"
-           "`DURATIONFROMTO`        bool           NULL,"
-           "`DURATIONSCHEME`        varchar(200)   NULL,"    // put NOT NULL
+            "`DURATIONFROM`          double         NULL,"    // put NOT NULL
+            "`DURATIONTO`            double         NULL,"
+            "`DURATIONFROMTO`        bool           NULL,"
+            "`DURATIONSCHEME`        varchar(200)   NULL,"    // put NOT NULL
 
-           "`PERIOD`                int(10)        NULL,"    // put NOT NULL
-           "`PERIODSCHEME`          varchar(200)   NULL,"    // put NOT NULL
-           "`ADMINCHEME`            varchar(100)   NULL,"    // put NOT NULL
-           "`DAILYSCHEME`           varchar(250)   NULL,"
-           "`MEALSCHEME`            int(10)        NULL,"
-           "`ISALD`                 bool           NULL,"
-           "`TYPEOFTREATEMENT`      int(10)        NULL,"
+            "`PERIOD`                int(10)        NULL,"    // put NOT NULL
+            "`PERIODSCHEME`          varchar(200)   NULL,"    // put NOT NULL
+            "`ADMINCHEME`            varchar(100)   NULL,"    // put NOT NULL
+            "`DAILYSCHEME`           varchar(250)   NULL,"
+            "`MEALSCHEME`            int(10)        NULL,"
+            "`ISALD`                 bool           NULL,"
+            "`TYPEOFTREATEMENT`      int(10)        NULL,"
 
-           "`MINAGE`                int(10)        NULL,"
-           "`MAXAGE`                int(10)        NULL,"
-           "`MINAGEREFERENCE`       int(10)        NULL,"
-           "`MAXAGEREFERENCE`       int(10)        NULL,"
-           "`MINWEIGHT`             int(10)        NULL,"
-           "`SEXLIMIT`              int(10)        NULL,"
-           "`MINCLEARANCE`          int(10)        NULL,"
-           "`MAXCLEARANCE`          int(10)        NULL,"
-           "`PREGNANCYLIMITS`       int(10)        NULL,"
-           "`BREASTFEEDINGLIMITS`   int(10)        NULL,"
-           "`PHYSIOLOGICALLIMITS`   int(10)        NULL,"  // Is this really needed ?
+            "`MINAGE`                int(10)        NULL,"
+            "`MAXAGE`                int(10)        NULL,"
+            "`MINAGEREFERENCE`       int(10)        NULL,"
+            "`MAXAGEREFERENCE`       int(10)        NULL,"
+            "`MINWEIGHT`             int(10)        NULL,"
+            "`SEXLIMIT`              int(10)        NULL,"
+            "`MINCLEARANCE`          int(10)        NULL,"
+            "`MAXCLEARANCE`          int(10)        NULL,"
+            "`PREGNANCYLIMITS`       int(10)        NULL,"
+            "`BREASTFEEDINGLIMITS`   int(10)        NULL,"
+            "`PHYSIOLOGICALLIMITS`   int(10)        NULL,"  // Is this really needed ?
 
-           "`NOTE`                  varchar(500)   NULL,"
+            "`NOTE`                  varchar(500)   NULL,"
 
-           "`CIM10_LK`              varchar(150)   NULL,"
-           "`CIM10_LIMITS_LK`       varchar(150)   NULL,"
-           "`EDRC_LK`               varchar(150)   NULL,"
+            "`CIM10_LK`              varchar(150)   NULL,"
+            "`CIM10_LIMITS_LK`       varchar(150)   NULL,"
+            "`EDRC_LK`               varchar(150)   NULL,"
 
-           "`EXTRAS`                blob           NULL,"
-           "`USERVALIDATOR`         varchar(200)   NULL,"
-           "`CREATIONDATE`          date           NULL,"    // put NOT NULL
-           "`MODIFICATIONDATE`      date           NULL,"
-           "`TRANSMITTED`           date           NULL,"
-           "`ORDER`                 int(10)        NULL"
-           ");";
+            "`EXTRAS`                blob           NULL,"
+            "`USERVALIDATOR`         varchar(200)   NULL,"
+            "`CREATIONDATE`          date           NULL,"    // put NOT NULL
+            "`MODIFICATIONDATE`      date           NULL,"
+            "`TRANSMITTED`           date           NULL,"
+            "`ORDER`                 int(10)        NULL"
+            ");";
+    if (driver()==MySQL) {
+        return sql.arg("AUTO_INCREMENT");
+    }  else if (driver()==SQLite) {
+        return sql.arg("AUTOINCREMENT");
+    } else {
+        return QString();
+    }
 }
 
 void ProtocolsBase::forceReinitialization()
@@ -333,12 +340,12 @@ bool ProtocolsBase::initialize()
 
 /** \brief Create the protocols database if it does not exist. */
 bool ProtocolsBase::createDatabase(const QString &connectionName , const QString &dbName,
-                               const QString &pathOrHostName,
-                               TypeOfAccess /*access*/, AvailableDrivers driver,
-                               const QString & login, const QString & pass,
-                               const int port,
-                               CreationOption /*createOption*/
-                              )
+                                   const QString &pathOrHostName,
+                                   TypeOfAccess /*access*/, AvailableDrivers driver,
+                                   const QString & login, const QString & pass,
+                                   const int port,
+                                   CreationOption /*createOption*/
+                                   )
 {
     // TODO:  ask user if he wants : 1. an empty dosage base ; 2. to retrieve dosages from internet FMF website
     if (connectionName != Dosages::Constants::DB_DOSAGES_NAME)
@@ -397,17 +404,17 @@ bool ProtocolsBase::createDatabase(const QString &connectionName , const QString
     // The SQL scheme MUST BE synchronized with the Dosages::Constants Model Enumerator !!!
     // TODO: code here
     if (executeSQL(QStringList()
-        << dosageCreateTableSqlQuery().remove("AUTOINCREMENT")
-        << "CREATE TABLE IF NOT EXISTS `VERSION` ("
-           "`ACTUAL`                varchar(10)    NULL"
-           ");"
-        << QString("INSERT INTO `VERSION` (`ACTUAL`) VALUES('%1');").arg(versionUpdater().lastDosageDabaseVersion())
-        , DB)) {
+                   << dosageCreateTableSqlQuery().remove("AUTOINCREMENT")
+                   << "CREATE TABLE IF NOT EXISTS `VERSION` ("
+                   "`ACTUAL`                varchar(10)    NULL"
+                   ");"
+                   << QString("INSERT INTO `VERSION` (`ACTUAL`) VALUES('%1');").arg(versionUpdater().lastDosageDabaseVersion())
+                   , DB)) {
         LOG(tkTr(Trans::Constants::DATABASE_1_CORRECTLY_CREATED).arg(dbName));
         return true;
     } else {
         LOG_ERROR(tkTr(Trans::Constants::DATABASE_1_CANNOT_BE_CREATED_ERROR_2)
-                         .arg(dbName, DB.lastError().text()));
+                  .arg(dbName, DB.lastError().text()));
     }
     return false;
 }
@@ -480,8 +487,8 @@ bool ProtocolsBase::markAllDosageTransmitted(const QStringList &dosageUuids)
     QStringList reqs;
     foreach(const QString &s, dosageUuids) {
         QString req = QString("UPDATE `DOSAGE` SET `TRANSMITTED`='%1' WHERE %2")
-                      .arg(QDateTime::currentDateTime().toString(Qt::ISODate))
-                      .arg(QString("`POSO_UUID`='%1'").arg(s));
+                .arg(QDateTime::currentDateTime().toString(Qt::ISODate))
+                .arg(QString("`POSO_UUID`='%1'").arg(s));
         reqs << req;
     }
     if (!executeSQL(reqs,DB)) {
@@ -626,7 +633,7 @@ QMultiHash<int,QString> ProtocolsBase::getAllINNThatHaveRecordedDosages() const
 bool ProtocolsBase::onCoreDatabaseServerChanged()
 {
     d->m_initialized = false;
-//    d->m_RefreshDosageBase = true;
+    //    d->m_RefreshDosageBase = true;
     Q_EMIT protocolsBaseIsAboutToChange();
     bool r = initialize();
     if (r)

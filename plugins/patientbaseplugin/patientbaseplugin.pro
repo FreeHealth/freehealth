@@ -62,3 +62,6 @@ OTHER_FILES = PatientBase.pluginspec
 # include translations
 TRANSLATION_NAME = patientbase
 include($${SOURCES_ROOT_PATH}/buildspecs/translations.pri)
+
+RESOURCES += \
+    patientbaseplugin.qrc

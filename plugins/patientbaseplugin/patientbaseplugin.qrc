@@ -1,0 +1,14 @@
+<RCC>
+    <qresource prefix="/">
+        <file>sql/update/updatepatients1.sql</file>
+    </qresource>
+    <qresource prefix="/">                                                      
+        <file>sql/update/updatesqlitepatients1.sql</file>                             
+    </qresource>
+    <qresource prefix="/s">
+        <file>sql/initial/initialpatients.sql</file>
+    </qresource>
+    <qresource prefix="/sq">
+        <file>sql/baseline/baselinepatients1.sql</file>
+    </qresource>
+</RCC>

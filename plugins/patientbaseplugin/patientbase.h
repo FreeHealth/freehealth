@@ -68,22 +68,46 @@ public:
 //    bool initialize(Core::ISettings *settings);
     bool isInitialized() const {return m_initialized;}
 
-    bool createVirtualPatient(const QString &usualName, const QString &otherNames, const QString &firstname,
-                              const QString &gender, const int title, const QDate &dob,
-                              const QString &country, const QString &note,
-                              const QString &street, const QString &zip, const QString &city,
-                              QString uuid, const int lkid,
-                              const QString &photoFile = QString(), const QDate &death = QDate());
+    bool createVirtualPatient(const QString &usualName,
+                              const QString &otherNames,
+                              const QString &firstname,
+                              const QString &gender,
+                              const int title,
+                              const QDate &dob,
+                              const QString &country,
+                              const QString &note,
+                              const QString &street,
+                              const QString &zip,
+                              const QString &city,
+                              QString uuid,
+                              const int lkid,
+                              const QString &mobilePhone = QString(),
+                              const QString &workPhone = QString(),
+                              const QString &photoFile = QString(),
+                              const QDate &death = QDate());
 
-    QString patientUuid(const QString &usualname, const QString &othernames, const QString &firstname,
-                        const QString &gender, const QDate &dob) const;
-    bool isPatientExists(const QString &usualname, const QString &othernames, const QString &firstname,
-                         const QString &gender, const QDate &dob) const;
+    QString patientUuid(const QString &usualname,
+                        const QString &othernames,
+                        const QString &firstname,
+                        const QString &gender,
+                        const QDate &dob) const;
+    bool isPatientExists(const QString &usualname,
+                         const QString &othernames,
+                         const QString &firstname,
+                         const QString &gender,
+                         const QDate &dob) const;
 
     bool setPatientActiveProperty(const QString &uuid, bool active);
 
     void toTreeWidget(QTreeWidget *tree) const;
 
+    bool updateDatabase();
+    quint32 getSchemaVersionNumber() const;
+    bool executeQueryFile(QFile &file, QSqlDatabase &db) const;
+    QString getOldVersionField() const;
+    bool transferPhone();
+    bool insertMobilePhone(QHash<QString, QString> mP);
+    bool insertWorkPhone(QHash<QString, QString> wP);
 private:
     bool createDatabase(const QString &connectionName, const QString &dbName,
                           const QString &pathOrHostName,

@@ -560,7 +560,6 @@ FormPlaceHolder::~FormPlaceHolder()
 bool FormPlaceHolder::enableAction(WidgetAction action) const
 {
     if (!d->_formTreeModel || !d->_currentEpisodeModel) {
-        qDebug() << Q_FUNC_INFO << "return false";
         return false;
     }
     switch (action) {
@@ -826,7 +825,6 @@ bool FormPlaceHolder::validateCurrentEpisode()
 
     // get the episodeModel corresponding to the currently selected form
     if (!d->_currentEpisodeModel) {
-        qDebug() << "_currentEpisodeModel is false";
         return false;
     }
     if (!d->saveCurrentEditingEpisode()) {

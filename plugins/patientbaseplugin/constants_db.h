@@ -32,15 +32,19 @@
 namespace Patients {
 namespace Constants {
 
-    const char * const  DB_NAME            = "patients";
-    const char * const  DB_FILENAME        = "patients.db";
-    const char * const  DB_CURRENTVERSION   = "0.1";
+    const char * const DB_NAME            = "patients";
+    const char * const DB_FILENAME        = "patients.db";
+    const char * const DB_INITIAL_VERSION = "0.1";
+    const char * const OLD_VERSION_TABLE  = "VERSION";
+    const char * const OLD_VERSION_FIELD  = "VERSION";
+    const int          DB_CURRENT_CODE_VERSION  = 1;
 
     // Tables
     enum Tables {
       Table_IDENT = 0,
       Table_PATIENT_PHOTO,
-      Table_VERSION
+      //Table_VERSION
+      Table_SCHEMA
     };
 
     // Fields
@@ -70,7 +74,8 @@ namespace Constants {
         IDENTITY_MAILS,
         IDENTITY_TELS,
         IDENTITY_FAXES,
-        IDENT_VERSION
+        IDENTITY_MOBILE_PHONE,
+        IDENTITY_WORK_PHONE
     };
     enum LkFields {
         LK_TOPRACT_ID = 0,
@@ -84,8 +89,14 @@ namespace Constants {
         PHOTO_PATIENT_UID,
         PHOTO_BLOB
     };
-    enum VersionFields {
+    /*enum VersionFields {
         VERSION_TEXT = 0
+    };*/
+    enum SchemaFields {
+        SCHEMA_ID =0 ,
+        SCHEMA_VERSION,
+        SCHEMA_SCRIPT,
+        SCHEMA_TIMESTAMP
     };
 
     static const QColor femaleColor(255, 207, 255, 90);  //ffcfff

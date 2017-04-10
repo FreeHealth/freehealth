@@ -140,7 +140,7 @@ bool UserIdentityAndLoginPage::checkLogin() const
 {
     // user login must be unique in the USERS table of fmf_users database
     // user login must be unique on the RDBMS
-    // MySQL user names can be up to 16 characters long.
+    // MySQL (version < 5.7.8) user names can be up to 16 characters long.
     const QString &login = _identity->currentClearLogin();
     if (login.length() < 6 || login.length() > 16 ) // FIXME : avoid magic number \sa void PasswordWidget::onLoginChanged(const QString &login)
         return false;

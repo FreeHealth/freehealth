@@ -124,7 +124,7 @@ void VirtualDatabasePreferences::on_populateDb_clicked()
         patientBase()->createVirtualPatient(name,sec, sur,g,title,
                       dob,"France","",r.randomString(65),
                       QString::number(p.first), p.second,
-                      Utils::Database::createUid(), lk, "", death);
+                      Utils::Database::createUid(), lk, "", "", "", death);
 
         if (i % 100 == 99)
             patientBase()->database().commit();

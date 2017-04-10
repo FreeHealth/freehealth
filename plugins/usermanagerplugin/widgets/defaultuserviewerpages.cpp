@@ -78,7 +78,6 @@ DefaultUserContactWidget::DefaultUserContactWidget(QWidget *parent) :
     lay->setMargin(0);
     lay->setSpacing(0);
     _identity = new Identity::IdentityEditorWidget(this);
-//    _identity->setAvailableWidgets(Identity::IdentityEditorWidget::FullIdentity | Identity::IdentityEditorWidget::FullAddress | Identity::IdentityEditorWidget::Photo | Identity::IdentityEditorWidget::FullLogin);
     lay->addWidget(_identity);
     connect(_identity, SIGNAL(clearPasswordChanged(QString)), this, SLOT(passwordChanged(QString)));
 }
@@ -106,6 +105,10 @@ void DefaultUserContactWidget::setUserModel(UserModel *model)
     _identity->addMapping(Identity::IdentityEditorWidget::LanguageIso, Core::IUser::LanguageISO);
     _identity->addMapping(Identity::IdentityEditorWidget::DateOfBirth, Core::IUser::DateOfBirth);
     _identity->addMapping(Identity::IdentityEditorWidget::Photo, Core::IUser::PhotoPixmap);
+    _identity->addMapping(Identity::IdentityEditorWidget::WorkPhone, Core::IUser::Tel1);
+    _identity->addMapping(Identity::IdentityEditorWidget::LandlinePhone, Core::IUser::Tel2);
+    _identity->addMapping(Identity::IdentityEditorWidget::MobilePhone, Core::IUser::Tel3);
+    _identity->addMapping(Identity::IdentityEditorWidget::Email, Core::IUser::Mail);
 
     _identity->addMapping(Identity::IdentityEditorWidget::Extra_Login, Core::IUser::ClearLogin);
     _identity->addMapping(Identity::IdentityEditorWidget::Extra_Password, Core::IUser::CryptedPassword);

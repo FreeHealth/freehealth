@@ -82,9 +82,9 @@ public:
         IsoCountry,
         FullHtmlAddress,
         FullAddress,
-        Tel1,
-        Tel2,
-        Tel3,
+        Tel1, // WorkPhone
+        Tel2, // LandlinePhone / Home phone
+        Tel3, // MobilePhone
         Fax,
         FullHtmlContact,
         Specialities,

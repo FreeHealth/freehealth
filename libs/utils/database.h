@@ -158,7 +158,10 @@ public:
         FieldIsShortText,           // varchar(200)
         FieldIsOneChar,
         FieldIsTwoChars,
-        FieldIsLanguageText = FieldIsTwoChars,
+        FieldIs19Chars,             // MySQL UTC Timestamp
+        FieldIs32Chars,             // Phone numbers
+        FieldIs255Chars,            // Maximum Linux filename length
+        FieldIsLanguageText,
         FieldIsDate,
         FieldIsTime,
         FieldIsDateTime,
@@ -239,24 +242,29 @@ public:
     static void logAvailableDrivers();
 
     // connection
-    virtual bool createConnection(const QString &connectionName, const QString &nonPrefixedDbName,
+    virtual bool createConnection(const QString &connectionName,
+                                  const QString &nonPrefixedDbName,
                                   const Utils::DatabaseConnector &connector,
-                                  CreationOption createOption = WarnOnly);
+                                  const CreationOption createOption = WarnOnly);
 
 
     /**
         \brief This member is called by createConnection() if the asked database does not exist.
                By default it does nothing and return an error state (false).
     */
-    virtual bool createDatabase(const QString &connectionName , const QString &prefixedDbName,
+    virtual bool createDatabase(const QString &connectionName,
+                                const QString &prefixedDbName,
                                 const Utils::DatabaseConnector &connector,
                                 CreationOption createOption
                                 );
 
-    virtual bool createDatabase(const QString &/*connectionName*/ , const QString &/*prefixedDbName*/,
+    virtual bool createDatabase(const QString &/*connectionName*/ ,
+                                const QString &/*prefixedDbName*/,
                                 const QString &/*pathOrHostName*/,
-                                TypeOfAccess /*access*/, AvailableDrivers /*driver*/,
-                                const QString &/*login*/, const QString &/*pass*/,
+                                TypeOfAccess /*access*/,
+                                AvailableDrivers /*driver*/,
+                                const QString &/*login*/,
+                                const QString &/*pass*/,
                                 const int /*port*/,
                                 CreationOption /*createOption*/
                                 ) { return false; }
@@ -297,10 +305,11 @@ public:
 
     virtual bool checkDatabaseScheme();
     virtual bool checkVersion(const Field &field, const QString &expectedVersion);
-    virtual QString getVersion(const Field &field)const;
-    virtual quint32 getVersionNumber(const Field &field)const;
+    virtual QString getVersion(const Field &field) const;
+    virtual quint32 getVersionNumber(const Field &field) const;
     virtual bool setVersion(const Field &field, const QString &version);
     virtual bool setVersion(const Field &field, const int &version);
+    virtual bool setSchemaVersion(const int &version);
 
     virtual QString fieldName(const int &tableref, const int &fieldref) const;
     virtual Field field(const int &tableref, const int &fieldref) const;
@@ -340,6 +349,7 @@ public:
     virtual QString select(const Field &select, const Join &join, const FieldList &conditions) const;
     virtual QString select(const Field &select, const JoinList &joins, const FieldList &conditions) const;
     virtual QString select(const Field &select, const Join &join, const Field &conditions) const;
+    virtual QString selectLast(const Field &fieldref) const;
 
     virtual QString fieldEquality(const int tableRef1, const int fieldRef1, const int tableRef2, const int fieldRef2) const;
 
