@@ -64,14 +64,16 @@ UserCreationPage::UserCreationPage(QWidget *parent) :
     _userWizard(0)
 {
     ui->setupUi(this);
-    ui->userManagerButton->setIcon(theme()->icon(Core::Constants::ICONUSERMANAGER, Core::ITheme::MediumIcon));
+    // don't show user manager button
+    ui->userManagerButton->setVisible(false);
+    //ui->userManagerButton->setIcon(theme()->icon(Core::Constants::ICONUSERMANAGER, Core::ITheme::MediumIcon));
     ui->completeWizButton->setIcon(theme()->icon(Core::Constants::ICONNEWUSER, Core::ITheme::MediumIcon));
 
     QPixmap pix = theme()->splashScreenPixmap("wizard-users.png");
     setPixmap(QWizard::BackgroundPixmap, pix);
     setPixmap(QWizard::WatermarkPixmap, pix);
 
-    connect(ui->userManagerButton, SIGNAL(clicked()), this, SLOT(userManager()));
+    //connect(ui->userManagerButton, SIGNAL(clicked()), this, SLOT(userManager()));
     connect(ui->completeWizButton, SIGNAL(clicked()), this, SLOT(userWizard()));
 
     retranslate();
