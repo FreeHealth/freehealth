@@ -92,7 +92,6 @@ Source: "freehealth.exe"; DestDir: "{app}"; Components: program
 Source: "*.dll"; DestDir: "{app}"; Components: program
 Source: "plugins/*"; DestDir: "{app}/plugins"; Components: program; Flags: recursesubdirs
 Source: "platforms/*"; DestDir: "{app}/platforms"; Components: program; Flags: recursesubdirs
-Source: "Resources/datapacks/appinstalled/account/*"; DestDir: "{app}/Resources/datapacks/appinstalled/account"; Flags: recursesubdirs; Components: program
 Source: "Resources/datapacks/appinstalled/drugs/*"; DestDir: "{app}/Resources/datapacks/appinstalled/drugs"; Components: program
 Source: "Resources/datapacks/appinstalled/defaultservers.txt"; DestDir: "{app}/Resources/datapacks/appinstalled"; Components: program
 Source: "Resources/forms/*"; DestDir: "{app}/Resources/forms/"; Components: program; Flags: recursesubdirs

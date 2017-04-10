@@ -24,8 +24,9 @@ set VERSION=0.9.9
 set PATH_TO_MYSQL=C:\PROGRA~1\MySQL\MYSQLS~1.5\lib
 set PATH_TO_INNOSETUP=C:\Progra~1\InnoSe~1\iscc.exe
 set WORKING_DIRECTORY=%CD%
-set PATH_TO_MINGW=C:\Qt\QT56~1.1\Tools\MINGW4~1\I686-W~1\lib
-set PATH_TO_QT_ICU=C:\Qt\QT56~1.1\5.6\MINGW4~1\bin
+set PATH_TO_MINGW=C:\Qt\Tools\MINGW5~1\I686-W~1\lib
+REM # ICU is no longer necessary on Windows, Qt uses the Windows API
+REM # set PATH_TO_QT_ICU=C:\Qt\QT56~1.1\5.6\MINGW4~1\bin
 set PATH_TO_OPENSSL=C:\OPENSS~1
 set PATH_TO_SYSTEM32=C:\Windows\System32
 
