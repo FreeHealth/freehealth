@@ -63,7 +63,7 @@
 #include <QSqlError>
 #include <QSqlQuery>
 #include <QSqlRecord>
-#include <QSql>
+//#include <QSql>
 #include <QDir>
 #include <QProgressDialog>
 #include <QTreeWidgetItem>

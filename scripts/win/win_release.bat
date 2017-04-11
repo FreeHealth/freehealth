@@ -60,9 +60,9 @@ copy %PATH_TO_MINGW%\libstdc++-6.dll packages\win\%1\
 REM # Copy ICU libraries into package dir
 REM # ICU is a mature, widely used set of C/C++ and Java libraries providing
 REM # Unicode and Globalization support for software applications
-copy %PATH_TO_QT_ICU%\icudt54.dll packages\win\%1\
-copy %PATH_TO_QT_ICU%\icuin54.dll packages\win\%1\
-copy %PATH_TO_QT_ICU%\icuuc54.dll packages\win\%1\
+REM # copy %PATH_TO_QT_ICU%\icudt54.dll packages\win\%1\
+REM # copy %PATH_TO_QT_ICU%\icuin54.dll packages\win\%1\
+REM # copy %PATH_TO_QT_ICU%\icuuc54.dll packages\win\%1\
 
 REM # Copy OpenSSL lib into package dir
 copy %PATH_TO_OPENSSL%\ssleay32.dll packages\win\%1\
