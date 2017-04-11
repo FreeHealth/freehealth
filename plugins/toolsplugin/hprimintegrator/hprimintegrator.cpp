@@ -97,21 +97,7 @@ public:
     QString readFileContent()
     {
         QModelIndex index = ui->dirContentTableView->currentIndex();
-        QString encoding;
-        switch (settings()->value(Constants::S_DEFAULT_FILE_ENCODING).toInt()) {
-        case Constants::AutoDetect:
-            if (Utils::isRunningOnLinux())
-                encoding = "UTF-8";
-            else if (Utils::isRunningOnMac())
-                encoding = "MacRoman";
-            else if (Utils::isRunningOnWin())
-                encoding = "ISO-8859-1";
-            break;
-        case Constants::ForceUtf8: encoding = "UTF-8"; break;
-        case Constants::ForceMacRoman: encoding = "MacRoman"; break;
-        case Constants::ForceIso8859_1: encoding = "ISO-8859-1"; break;
-        }
-        return Utils::readTextFile(_fileModel->fileInfo(index).absoluteFilePath(), encoding);
+        return Utils::readTextFile(_fileModel->fileInfo(index).absoluteFilePath());
     }
 
     // Return the SHA1 hash of the string

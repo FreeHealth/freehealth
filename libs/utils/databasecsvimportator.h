@@ -46,15 +46,12 @@ class DatabaseCsvImportatorPrivate;
 struct UTILS_EXPORT ImportationJob
 {
     ImportationJob() :
-        fileEncoding("UTF-8"),
         fieldSeparator(','),
         textEscapingChar('"'),
         omitFirstLine(false)
     {}
 
     QString absFilePath;
-    QString fileEncoding;
-
     QString databaseConnectionName;
     QString tableName;
     QChar fieldSeparator;
