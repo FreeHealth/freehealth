@@ -812,16 +812,13 @@ bool saveStringToFile(const QString &toSave, const QString &dirPath, const QStri
     return Utils::saveStringToFile(toSave, fileName, Overwrite, WarnUser, wgt);
 }
 
-QString readTextFile(const QString &toRead, const Warn warnUser)
-{return readTextFile(toRead, QString("UTF-8"), warnUser);}
-
 /**
  \brief Return the content of a text file.
   You can choose:
   - to warn the user if an error is encountered.
   - the encoding of the file (using the QTextCodec supported encodings)
 **/
-QString readTextFile(const QString &toRead, const QString &encoder, const Warn warnUser)
+QString readTextFile(const QString &toRead, const Warn warnUser)
 {
     if (toRead.isEmpty())
         return QString();
@@ -843,15 +840,13 @@ QString readTextFile(const QString &toRead, const QString &encoder, const Warn w
                           .arg(correctFileName, file.errorString()));
             return QString::null;
         }
-        QTextCodec *codec = QTextCodec::codecForName(encoder.toUtf8());
-        if (!codec) {
-            LOG_ERROR_FOR("Utils", "No codec for " + encoder);
-            return QString();
-        }
-        QString str = codec->toUnicode(file.readAll());
+        QTextStream in(&file);
+        QString text;
+        text = in.readAll();
+        file.close();
         if (Log::debugFileInOutProcess())
             LOG_FOR("Utils", tkTr(Trans::Constants::FILE_1_LOADED).arg(toRead));
-        return str;
+        return text;
     }
     return QString::null;
 }
