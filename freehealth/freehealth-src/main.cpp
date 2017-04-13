@@ -42,6 +42,7 @@
 
 #include <QLocale>
 #include <QDebug>
+#include <QTextCodec>
 
 enum { WarnAllPluginSpecs=false };
 
@@ -97,6 +98,8 @@ static const QString HELP_MESSAGE =
 int main(int argc, char *argv[])
 {
      QApplication app(argc, argv);
+
+     QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));
      app.setApplicationName(BINARY_NAME);
      app.setOrganizationName(BINARY_NAME);
      app.setApplicationVersion(PACKAGE_VERSION);

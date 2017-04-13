@@ -835,12 +835,13 @@ QString readTextFile(const QString &toRead, const Warn warnUser)
         return QString::null;
     } else {
         QFile file(correctFileName);
-        if (!file.open(QFile::ReadOnly)) {
+        if (!file.open(QFile::ReadOnly | QFile::Text)) {
             LOG_ERROR_FOR("Utils", QCoreApplication::translate("Utils", "Error %1 while trying to open file %2")
                           .arg(correctFileName, file.errorString()));
             return QString::null;
         }
         QTextStream in(&file);
+        in.setCodec("UTF-8");
         QString text;
         text = in.readAll();
         file.close();

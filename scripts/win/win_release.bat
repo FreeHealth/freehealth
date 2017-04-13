@@ -78,7 +78,7 @@ unix2dos packages\win\%1\COPYING.txt
 
 REM # Create the installer
 copy global_resources\package_helpers\%1.iss packages\win\%1\%1.iss
-copy %1\ehr-src\ehr.ico packages\win\%1\
+copy %1\%1-src\ehr.ico packages\win\%1\
 %PATH_TO_INNOSETUP% packages\win\%1\%1.iss"
 del packages\win\%1\%1.iss
 

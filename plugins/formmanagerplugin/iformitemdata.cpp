@@ -37,7 +37,7 @@
  * data managers are created and managed by the Form::IFormWidget. This object is deleted
  * by its parent Form::FormItem in its dtor.
  *
- * Automatic access to the episode database of FreeMedForms:
+ * Automatic access to the episode database:
  * You can store any stringified value in the database and receive it exactly as you set it in return.
  * The storable data can be anything you want: serialized values, XML, HTML, JSON... But only strings.
  * This will evolve in future version using QVariant.\n
