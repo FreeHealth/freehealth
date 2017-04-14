@@ -326,7 +326,7 @@ void IPatient::replaceTokens(QString &stringWillBeModified)
     Utils::replaceToken(stringWillBeModified, Constants::TOKEN_PATIENTFULLADDRESS, data(IPatient::FullAddress).toString());
     Utils::replaceToken(stringWillBeModified, Constants::TOKEN_PATIENTTELS, data(IPatient::Tels).toString());
     Utils::replaceToken(stringWillBeModified, Constants::TOKEN_PATIENTFAXES, data(IPatient::Faxes).toString());
-    Utils::replaceToken(stringWillBeModified, Constants::TOKEN_PATIENTMAILS, data(IPatient::Mails).toString());
+    Utils::replaceToken(stringWillBeModified, Constants::TOKEN_PATIENTMAILS, data(IPatient::Email).toString());
     Utils::replaceToken(stringWillBeModified, Constants::TOKEN_PATIENTMOBILEPHONE, data(IPatient::MobilePhone).toString());
 #endif
 }
