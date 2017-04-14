@@ -32,7 +32,7 @@ namespace Trans {
 namespace Constants {
 
 // Team functions
-const char* const TEAM_CREATOR = QT_TRANSLATE_NOOP("tkConstants", "Creator and Main Developer");
+const char* const TEAM_CREATOR = QT_TRANSLATE_NOOP("tkConstants", "Creator and Developer");
 const char* const TEAM_DEVELOPERS_CONTRIBUTORS = QT_TRANSLATE_NOOP("tkConstants", "Developers and Contributors");
 const char* const TEAM_DEBUGGER_ADVISOR = QT_TRANSLATE_NOOP("tkConstants", "Debugger advisor");
 const char* const TEAM_DEVELOPER_AND_DEBUGGER = QT_TRANSLATE_NOOP("tkConstants", "Developer and debugger advisor");

@@ -3,7 +3,7 @@ copyright © 2016 Jerome Pinguet
 
 FreeHealth EHR is a fork of:
 FreeMedForms
-Copyright (C) 2008-2016 by Eric MAEKER
+Copyright (C) 2008 by Eric MAEKER
 eric.maeker@gmail.com
 
 I. What is FreeHealth ?
@@ -12,7 +12,7 @@ An Electronic Health Record including FreeRx, the electronic
 prescribing plugin.
 
 This project is free and open source: join the community!
-FreeMedForms and derivatives are released under the terms
+FreeHealth and derivatives are released under the terms
 of the GPLv3 License. Some parts of the code are LGPL v2.1.
 
 FreeHealth EHR and derived apps are coded in C++/Qt5
@@ -33,9 +33,16 @@ III. Installation
 
 See online documentation:
 https://freehealth.io/en/manuals/ehr/install/server
-We recommand that you install FreeHealth EHR with a MySQL database, as the
-alternative installation procedure using SQLite database is deprecated. SQlite
-support will be discontinued in a future release and MySQL will become mandatory.
-You can install FreeHealth 0.9.9 over FreeMedFoms 0.9.8, the upgrade process is
-automatic, you just need to answer Yes to 2 questions about copying FreeMedForms
-parameters folder and user folder.
+
+We recommand that you install FreeHealth EHR databases on 1 of the following RDBMS:
+  * MariaDB 10.1
+  * MySQL 5.7
+
+The alternative installation procedure using SQLite database is deprecated.
+SQlite support will be discontinued in the next release and one of the RDBMS
+will become mandatory.
+
+If you are upgrading from FreeMedFoms 0.9.8, install FreeHealth 0.9.9 first: the
+upgrade process is automatic, you just need to answer Yes to 2 questions about
+copying FreeMedForms parameters folder and user folder. If you want to switch
+from FreeMedForms 1.0.0, contact us, we are working on a conversion tool.

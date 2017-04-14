@@ -20,7 +20,7 @@ REM #
 REM # After the compilation, you will find the installer in the source root dir
 
 REM # Var definition
-set VERSION=0.9.9
+set VERSION=0.10.0
 set PATH_TO_MYSQL=C:\PROGRA~1\MySQL\MYSQLS~1.5\lib
 set PATH_TO_INNOSETUP=C:\Progra~1\InnoSe~1\iscc.exe
 set WORKING_DIRECTORY=%CD%
