@@ -25,6 +25,7 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #include "patient.h"
+#include <patientbaseplugin/constants_settings.h>
 
 #include <utils/global.h>
 #include <utils/log.h>
@@ -35,6 +36,8 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/constants_icons.h>
+#include <coreplugin/isettings.h>
+//#include <coreplugin/constants_tokensandsettings.h>
 
 #include <QHash>
 #include <QString>
@@ -44,6 +47,7 @@ using namespace Core;
 using namespace Core::Internal;
 
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
+static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 
 static const char* const MAIN_PATIENT_TAG  = "PatientDatas";
 
@@ -162,7 +166,7 @@ QVariant Patient::data(const QModelIndex &index, int role) const
                     return d->m_Values.value(ref);
                 if (has(DateOfBirth)) {
                     QString tmp;
-                    tmp = MedicalUtils::readableAge(d->m_Values.value(IPatient::DateOfBirth).toDate());
+                    tmp = MedicalUtils::readableAge(d->m_Values.value(IPatient::DateOfBirth).toDate(), settings()->value(Patients::Constants::S_PEDIATRICSMONTHSYEARSLIMIT, 36).toInt());
                     d->m_Values.insert(Age,tmp);
                     return tmp;
                 }
