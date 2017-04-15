@@ -23,7 +23,7 @@ CONFIG(dontbuildquazip) {
   # will avoid to build duplicate code and will link the present lib
   # to the existing quazip
   message(Using system libquazip0 package)
-  LIBS+=-lquazip
+  LIBS+=-lquazip5
 } else {
   # On other OS we need to build the quazip code.
   # QuaZip version = 0.5.1
