@@ -311,7 +311,7 @@ createSource()
 
     echo "**** SIGNING SOURCE FILE, KEY: $GPG_KEY ****"
     # --armor: GPG signature in ASCII Armor format: This format is more human readable and more portable.
-    gpg -u $GPG_KEY --armor --output ../$ZIP_PATH/$ZIP_FILENAME.asc --detach-sig ../$ZIP_PATH/$ZIP_FILENAME
+    gpg -u $GPG_KEY --armor --output ../$ZIP_PATH/$ZIP_FILENAME.sig --detach-sig ../$ZIP_PATH/$ZIP_FILENAME
 
     echo "**** CLEANING TMP SOURCES PATH ****"
     rm -R $PACKPATH
