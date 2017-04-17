@@ -244,7 +244,7 @@ createSource()
     --exclude '*.app' --exclude '*.zip' --exclude '*.a' \
     --exclude '*.o' --exclude 'moc_*' --exclude 'ui_*.h' --exclude '*.dylib' \
     --exclude 'global_resources/databases' \
-    --exclude 'sources.tar' \
+    --exclude 'sources.tar' --exclude '.qmake.cache' --exclude '.qmake.stash' \
     $EXCLUSIONS \
     $SELECTED_SOURCES
 
