@@ -48,6 +48,7 @@
 #include <coreplugin/actionmanager/actioncontainer.h>
 #include <coreplugin/contextmanager/contextmanager.h>
 #include <coreplugin/dialogs/settingsdialog.h>
+#include <coreplugin/icommandline.h>
 #include <coreplugin/ipatient.h>
 #include <coreplugin/iuser.h>
 #include <coreplugin/theme.h>
@@ -97,15 +98,12 @@ static inline Core::ActionManager *actionManager() { return Core::ICore::instanc
 static inline Core::ContextManager *contextManager() { return Core::ICore::instance()->contextManager(); }
 static inline Core::FileManager *fileManager() { return Core::ICore::instance()->fileManager(); }
 static inline Core::ModeManager *modeManager() { return Core::ICore::instance()->modeManager(); }
-
 static inline Core::IUser *user() {return Core::ICore::instance()->user();}
 static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
-
 static inline ExtensionSystem::PluginManager *pluginManager() { return ExtensionSystem::PluginManager::instance(); }
-
 static inline Form::FormCore &formCore() {return Form::FormCore::instance();}
-
 static inline Patients::PatientCore *patientCore() {return Patients::PatientCore::instance();}
+static inline Core::ICommandLine *commandLine()  { return Core::ICore::instance()->commandLine(); }
 
 // SplashScreen Messagers
 static inline void messageSplash(const QString &s) {theme()->messageSplashScreen(s); }
@@ -164,41 +162,41 @@ void MainWindow::init()
     createHelpMenu();
 
     // Connect menus for recent managers
-//    Core::ActionContainer *fmenu = actionManager()->actionContainer(Core::Constants::M_FILE);
-//    Q_ASSERT(fmenu);
-//    connect(fmenu->menu(), SIGNAL(aboutToShow()),this, SLOT(aboutToShowRecentFiles()));
+    //    Core::ActionContainer *fmenu = actionManager()->actionContainer(Core::Constants::M_FILE);
+    //    Q_ASSERT(fmenu);
+    //    connect(fmenu->menu(), SIGNAL(aboutToShow()),this, SLOT(aboutToShowRecentFiles()));
 
     Core::MainWindowActions actions;
 
     actions.setGeneralActions(
-//            Core::MainWindowActions::A_FileNew  |
-            Core::MainWindowActions::A_FileSave |
-            Core::MainWindowActions::A_FilePrint |
-            Core::MainWindowActions::A_FilePrintPreview |
-            Core::MainWindowActions::A_FileQuit |
-            Core::MainWindowActions::A_Patients_New
-            );
+                //            Core::MainWindowActions::A_FileNew  |
+                Core::MainWindowActions::A_FileSave |
+                Core::MainWindowActions::A_FilePrint |
+                Core::MainWindowActions::A_FilePrintPreview |
+                Core::MainWindowActions::A_FileQuit |
+                Core::MainWindowActions::A_Patients_New
+                );
 
     actions.setPatientsActions(
-            Core::MainWindowActions::A_Patients_ViewIdentity |
-            Core::MainWindowActions::A_Patients_Remove
-            );
+                Core::MainWindowActions::A_Patients_ViewIdentity |
+                Core::MainWindowActions::A_Patients_Remove
+                );
 
     actions.setConfigurationActions(
-            Core::MainWindowActions::A_AppPreferences |
-//            Core::MainWindowActions::A_AppConfigurator |
-            Core::MainWindowActions::A_PluginsPreferences |
-            Core::MainWindowActions::A_LanguageChange
-            );
+                Core::MainWindowActions::A_AppPreferences |
+                //            Core::MainWindowActions::A_AppConfigurator |
+                Core::MainWindowActions::A_PluginsPreferences |
+                Core::MainWindowActions::A_LanguageChange
+                );
 
     actions.setHelpActions(
-            Core::MainWindowActions::A_AppAbout |
-            Core::MainWindowActions::A_PluginsAbout |
-            Core::MainWindowActions::A_AppHelp |
-            Core::MainWindowActions::A_DebugDialog |
-            Core::MainWindowActions::A_CheckUpdate |
-            Core::MainWindowActions::A_AppGoToWebSite
-            );
+                Core::MainWindowActions::A_AppAbout |
+                Core::MainWindowActions::A_PluginsAbout |
+                Core::MainWindowActions::A_AppHelp |
+                Core::MainWindowActions::A_DebugDialog |
+                Core::MainWindowActions::A_CheckUpdate |
+                Core::MainWindowActions::A_AppGoToWebSite
+                );
     actions.setTemplatesActions(Core::MainWindowActions::A_Templates_New);
 
     actions.createEditActions(true);
@@ -215,7 +213,7 @@ void MainWindow::init()
  */
 void MainWindow::extensionsInitialized()
 {
-//    qWarning() << Q_FUNC_INFO << "user ok" << user()->hasCurrentUser();
+    //    qWarning() << Q_FUNC_INFO << "user ok" << user()->hasCurrentUser();
     // First check if there is a logged user
     if (!user()->hasCurrentUser()) {
         return;
@@ -230,10 +228,12 @@ void MainWindow::extensionsInitialized()
     connectHelpActions();
 
     // Start the update checker
-    if (updateChecker()->needsUpdateChecking(settings()->getQSettings())) {
-        settings()->setPath(Core::ISettings::UpdateUrl, Utils::Constants::EHR_UPDATE_URL);
-        if (checkUpdate())
-            settings()->setValue(Utils::Constants::S_LAST_CHECKUPDATE, QDate::currentDate());
+    if (!commandLine()->value(Core::ICommandLine::NoCheckUpdate).toBool()) {
+        if (updateChecker()->needsUpdateChecking(settings()->getQSettings())) {
+            settings()->setPath(Core::ISettings::UpdateUrl, Utils::Constants::EHR_UPDATE_URL);
+            if (checkUpdate())
+                settings()->setValue(Utils::Constants::S_LAST_CHECKUPDATE, QDate::currentDate());
+        }
     }
 
     m_modeStack->insertTopWidget(patientCore()->patientBar());
@@ -241,14 +241,14 @@ void MainWindow::extensionsInitialized()
 
     setCentralWidget(m_modeStack);
 
-//    if (settings()->firstTimeRunning()) {
-//        if (!applicationConfiguratorWizard()) {
-//            theme()->finishSplashScreen(this);
-//            qApp->exit(1234);
-//            return;
-//        }
-//        settings()->noMoreFirstTimeRunning();
-//    }
+    //    if (settings()->firstTimeRunning()) {
+    //        if (!applicationConfiguratorWizard()) {
+    //            theme()->finishSplashScreen(this);
+    //            qApp->exit(1234);
+    //            return;
+    //        }
+    //        settings()->noMoreFirstTimeRunning();
+    //    }
 }
 
 MainWindow::~MainWindow()
@@ -392,7 +392,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
 void MainWindow::changeEvent(QEvent *event)
 {
     if (event->type()==QEvent::LanguageChange) {
-//	m_ui->retranslateUi(this);
+        //	m_ui->retranslateUi(this);
         if (actionManager())
             actionManager()->retranslateMenusAndActions();
         // Save last used language
@@ -416,7 +416,7 @@ void MainWindow::updateCheckerEnd(bool error)
 void MainWindow::openPatientFormsFile()
 {
     // TODO: Save patient forms file to database
-//    loadFile(settings()->value(Core::Constants::S_PATIENTFORMS_FILENAME).toString());
+    //    loadFile(settings()->value(Core::Constants::S_PATIENTFORMS_FILENAME).toString());
 }
 
 /** \brief Load a patient XML file into the FormManager. */
@@ -439,14 +439,14 @@ bool MainWindow::loadFile(const QString &absDirPath)
         return false;
 
     // Get the PatientFile FormMain empty root from FormManager
-//    Form::FormMain *root = 0;
-//    if (root = formManager().loadFile(filename, list)) {
-//        fileManager()->setCurrentFile(filename);
-//    } else {
-//        return false;
-//    }
+    //    Form::FormMain *root = 0;
+    //    if (root = formManager().loadFile(filename, list)) {
+    //        fileManager()->setCurrentFile(filename);
+    //    } else {
+    //        return false;
+    //    }
 
-//    Q_EMIT loadPatientForms(absDirPath);
+    //    Q_EMIT loadPatientForms(absDirPath);
 
     return true;
 }
@@ -508,7 +508,7 @@ void MainWindow::openRecentFile()
 /** \brief Reads main window's settings */
 void MainWindow::readSettings()
 {
-//    statusBar()->showMessage(tkTr(Trans::Constants::LOADING_SETTINGS));
+    //    statusBar()->showMessage(tkTr(Trans::Constants::LOADING_SETTINGS));
 
     // Main Application settings
     settings()->restoreState(this);
@@ -522,7 +522,7 @@ void MainWindow::readSettings()
 
     Utils::StyleHelper::setBaseColor(Utils::StyleHelper::DEFAULT_BASE_COLOR);
     // Notify
-//    statusBar()->showMessage(tkTr(Trans::Constants::SETTINGS_RECOVERED), 2000);
+    //    statusBar()->showMessage(tkTr(Trans::Constants::SETTINGS_RECOVERED), 2000);
 }
 
 /** \brief Write main window's settings */
@@ -551,8 +551,8 @@ bool MainWindow::applicationPreferences()
 bool MainWindow::applicationConfiguratorWizard()
 {
     // TODO: code here?
-//    AppConfigWizard wiz(this);
-//    int r = wiz.exec();
-//    return r==QDialog::Accepted;
+    //    AppConfigWizard wiz(this);
+    //    int r = wiz.exec();
+    //    return r==QDialog::Accepted;
     return true;
 }
