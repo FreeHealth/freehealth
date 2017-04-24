@@ -34,6 +34,7 @@
 /**
  * \file icommandline.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
+ * \author Jerome Pinguet
  * \version 0.6.0
  * \date 09 Aug 2011
  * \class Core::ICommandLine
@@ -57,6 +58,7 @@ public:
         UserClearPassword,
         CheckFormUpdates,
         AlwaysUpdateForms,
+        NoCheckUpdate,
         MaxParam
     };
 

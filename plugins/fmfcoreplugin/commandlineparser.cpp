@@ -19,9 +19,9 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *  Main developer: Eric MAEKER, <eric.maeker@gmail.com>                   *
- *  Contributors:                                                          *
- *       NAME <MAIL@ADDRESS.COM>                                           *
+ *  Authors:                                                               *
+ *       Eric MAEKER, <eric.maeker@gmail.com>                              *
+ *       Jerome Pinguet <jerome@jerome.cc                                  *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #include "commandlineparser.h"
@@ -48,6 +48,7 @@ CommandLine::CommandLine(QObject *parent) :
     ref.insert(UserClearPassword,    "--user-clear-password");
     ref.insert(CheckFormUpdates,     "--dont-check-form-update");
     ref.insert(AlwaysUpdateForms,    "--always-update-forms");
+    ref.insert(NoCheckUpdate, "--no-check-update");
 
     // set default values
     params.insert(Chrono, false);
@@ -59,6 +60,7 @@ CommandLine::CommandLine(QObject *parent) :
     params.insert(UserClearPassword, QVariant());
     params.insert(CheckFormUpdates, true);
     params.insert(AlwaysUpdateForms, false);
+    params.insert(NoCheckUpdate, false);
 
     // read command line params
     QStringList args = qApp->arguments();
@@ -80,13 +82,13 @@ CommandLine::CommandLine(QObject *parent) :
         case UserClearPassword: params.insert(CommandLine::UserClearPassword, a.mid(a.indexOf("=")+1).remove("\"")); break;
         case CheckFormUpdates: params.insert(CommandLine::CheckFormUpdates, false); break;
         case AlwaysUpdateForms: params.insert(CommandLine::AlwaysUpdateForms, true); break;
+        case NoCheckUpdate: params.insert(CommandLine::NoCheckUpdate, true); break;
         default : break;
         }
     }
 
     if (Utils::isReleaseCompilation()) {
         params.insert(ClearUserDatabases, false);
-//        params.insert(CreateVirtuals, false);
     }
 }
 
