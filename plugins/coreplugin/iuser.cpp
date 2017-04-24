@@ -151,8 +151,12 @@ void IUser::registerUserTokens() const
     t->setUntranslatedHumanReadableName(Trans::Constants::SPECIALTIES);
     _tokens << t;
 
-    t = new UserToken(Constants::TOKEN_USERIDENTIFIER, ProfessionalIdentifiants);
-    t->setUntranslatedHumanReadableName(Trans::Constants::IDENTIFIANTS);
+    t = new UserToken(Constants::TOKEN_USERIDENTIFIER_OLD, ProfessionalIdentifiers);
+    t->setUntranslatedHumanReadableName(Trans::Constants::IDENTIFIERS_OLD);
+    _tokens << t;
+
+    t = new UserToken(Constants::TOKEN_USERIDENTIFIER, ProfessionalIdentifiers);
+    t->setUntranslatedHumanReadableName(Trans::Constants::IDENTIFIERS);
     _tokens << t;
 
     t = new UserToken(Constants::TOKEN_USERQUALIFICATIONS, Qualifications);
@@ -229,7 +233,12 @@ void IUser::replaceTokens(QString &stringWillBeModified)
     Utils::replaceToken(stringWillBeModified, Constants::TOKEN_USERTITLE,      value(IUser::Title).toString() );
 //    Utils::replaceToken(stringWillBeModified, Constants::TOKEN_USERAGE,        value(IUser::Age).toString() );
     Utils::replaceToken(stringWillBeModified, Constants::TOKEN_USERSPECIALITIES, value(IUser::Specialities).toStringList().join("<br />") );
-    Utils::replaceToken(stringWillBeModified, Constants::TOKEN_USERIDENTIFIER, value(IUser::ProfessionalIdentifiants).toStringList().join("<br />") );
+    // TOKEN_USERIDENTIFIER_OLD corresponds to User.Professional.Identifiants
+    // We need to keep it until users modify their forms and documents
+    // to support the new token User.Professional.Identifiers
+    // "identifiers" is the correct English word, "identifiants" is a French word.
+    Utils::replaceToken(stringWillBeModified, Constants::TOKEN_USERIDENTIFIER_OLD, value(IUser::ProfessionalIdentifiers).toStringList().join("<br />") );
+    Utils::replaceToken(stringWillBeModified, Constants::TOKEN_USERIDENTIFIER, value(IUser::ProfessionalIdentifiers).toStringList().join("<br />") );
     Utils::replaceToken(stringWillBeModified, Constants::TOKEN_USERQUALIFICATIONS, value(IUser::Qualifications).toStringList().join("<br />") );
 
     Utils::replaceToken(stringWillBeModified, Constants::TOKEN_USERFULLADDRESS,   value(IUser::FullAddress).toString());

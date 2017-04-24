@@ -397,7 +397,7 @@ void UserCreatorWizard::done(int r)
     d->m_User->setMail(field("Mail"));
     d->m_User->setSpecialty(field("Specialities").toStringList());
     d->m_User->setQualification(field("Qualifications").toStringList());
-    d->m_User->setPractitionerIdentifiant(field("Identifiants").toStringList());
+    d->m_User->setPractitionerIdentifiers(field("Identifiers").toStringList());
 
     d->m_User->setRights(Constants::USER_ROLE_USERMANAGER, Core::IUser::UserRights(d->m_Rights.value(Core::IUser::ManagerRights)));
     d->m_User->setRights(Constants::USER_ROLE_MEDICAL, Core::IUser::UserRights(d->m_Rights.value(Core::IUser::MedicalRights)));
@@ -634,7 +634,7 @@ UserSpecialiesQualificationsPage::UserSpecialiesQualificationsPage(QWidget *pare
 
     registerField("Specialities", speView, "stringList");
     registerField("Qualifications", quaView, "stringList");
-    registerField("Identifiants", idsView, "stringList");
+    registerField("Identifiers", idsView, "stringList");
 
     QGridLayout *layout = new QGridLayout;
     layout->addWidget(tab, 0, 1);
@@ -746,7 +746,7 @@ void UserLastPage::initializePage()
 
     QTreeWidgetItem *idents = new QTreeWidgetItem(tree, QStringList() << tr("Professionnal identifiers"));
     idents->setFont(0, bold);
-    const QStringList &ids =  field("Identifiants").toStringList();
+    const QStringList &ids =  field("Identifiers").toStringList();
     foreach(const QString &s, ids) {
         new QTreeWidgetItem(idents, QStringList() << s);
     }

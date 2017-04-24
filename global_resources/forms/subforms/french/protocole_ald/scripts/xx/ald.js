@@ -270,7 +270,7 @@ namespace.module('com.freemedforms.subs.french.protocole.ald', function (exports
         // identification du médecin traitant établissant le protocole
         pdf.addFdfValue("ident méd", user.fullName);
         pdf.addFdfValue("ident méd2", user.fullAddress);
-        pdf.addFdfValue("num ident méd", user.identifiants.join("; "));
+        pdf.addFdfValue("num ident méd", user.identifiers.join("; "));
 
         // identification de l'établissement
         // pdf.addFdfValue("nom étab", "nom étab");

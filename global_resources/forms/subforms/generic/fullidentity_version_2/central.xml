@@ -316,7 +316,7 @@
                           //return;
                       }
 
-                      pdf.addFdfValue("num ident med1", user.identifiants.join("; "));
+                      pdf.addFdfValue("num ident med1", user.identifiers.join("; "));
                       pdf.addFdfValue("nom medecin", user.usualName + " " + user.otherNames);
                       pdf.addFdfValue("prénom médecin", user.firstName);
                       pdf.addFdfValue("identif  medecin", user.fullAddress);

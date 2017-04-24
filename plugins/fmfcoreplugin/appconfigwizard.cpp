@@ -565,7 +565,7 @@ bool ClientConfigPage::validatePage()
     if (!serverWidget->connectionSucceeded())
         return false;
 
-    // Test server identifiants
+    // Test server credentials
     settings()->setValue(Core::Constants::S_LASTLOGIN, QString());
     settings()->setValue(Core::Constants::S_LASTPASSWORD, QString());
 

@@ -184,7 +184,7 @@ public:
     void  setTel2(const QVariant &val)                { setDynamicDataValue(USER_DATA_TEL2 , val); }
     void  setTel3(const QVariant &val)                { setDynamicDataValue(USER_DATA_TEL3 , val); }
     void  setFax(const QVariant &val)                 { setDynamicDataValue(USER_DATA_FAX , val); }
-    void  setPractitionerIdentifiant(const QStringList &val) { setDynamicDataValue(USER_DATA_PRACTIDENTIFIANT, Utils::Serializer::toString(val)); }
+    void  setPractitionerIdentifiers(const QStringList &val) { setDynamicDataValue(USER_DATA_USERIDENTIFIER, Utils::Serializer::toString(val)); }
 
     void  setSpecialty(const QStringList &val)         { setDynamicDataValue(USER_DATA_SPECIALTY, Utils::Serializer::toString(val)); }
     void  setQualification(const QStringList &val)     { setDynamicDataValue(USER_DATA_QUALIFICATION, Utils::Serializer::toString(val)); }
@@ -249,7 +249,7 @@ public:
     QString fax() const                  { return dynamicDataValue(USER_DATA_FAX).toString(); }
 
 
-    QStringList professionalIdentifiants() const   { return Utils::Serializer::toStringList(dynamicDataValue(USER_DATA_PRACTIDENTIFIANT).toString()); }
+    QStringList professionalIdentifiers() const   { return Utils::Serializer::toStringList(dynamicDataValue(USER_DATA_USERIDENTIFIER).toString()); }
     QStringList specialties() const        { return Utils::Serializer::toStringList(dynamicDataValue(USER_DATA_SPECIALTY).toString());  }
     QStringList qualifications() const   { return Utils::Serializer::toStringList(dynamicDataValue(USER_DATA_QUALIFICATION).toString()); }
 

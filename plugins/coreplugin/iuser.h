@@ -89,7 +89,7 @@ public:
         FullHtmlContact,
         Specialities,
         Qualifications,
-        ProfessionalIdentifiants,
+        ProfessionalIdentifiers,
         Preferences,  // 33
 
         GenericHeader,

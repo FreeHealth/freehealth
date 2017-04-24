@@ -117,7 +117,7 @@ QStringList ScriptUserWrapper::qualifications() const
     return user()->value(Core::IUser::Qualifications).toStringList();
 }
 
-QStringList ScriptUserWrapper::identifiants() const
+QStringList ScriptUserWrapper::identifiers() const
 {
-    return user()->value(Core::IUser::ProfessionalIdentifiants).toStringList();
+    return user()->value(Core::IUser::ProfessionalIdentifiers).toStringList();
 }

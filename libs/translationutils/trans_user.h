@@ -52,11 +52,12 @@ const char* const MAIL                              = QT_TRANSLATE_NOOP("tkConst
 const char* const PROFESSIONAL                      = QT_TRANSLATE_NOOP("tkConstants", "Professional");
 const char* const PROFESSION                        = QT_TRANSLATE_NOOP("tkConstants", "Profession");
 const char* const SPECIALTIES                       = QT_TRANSLATE_NOOP("tkConstants", "Specialties");
-const char* const IDENTIFIANTS                      = QT_TRANSLATE_NOOP("tkConstants", "Identifiants");
+const char* const IDENTIFIERS                       = QT_TRANSLATE_NOOP("tkConstants", "Identifiers");
+const char* const IDENTIFIERS_OLD                   = QT_TRANSLATE_NOOP("tkConstants", "Identifiants");
 const char* const QUALIFICATIONS                    = QT_TRANSLATE_NOOP("tkConstants", "Qualifications");
 
-const char* const ENTER_MYSQL_ADMIN_LOGIN           = QT_TRANSLATE_NOOP("tkConstants", "Enter MySQL administrator login");
-const char* const ENTER_YOUR_PERSONAL_LOGIN         = QT_TRANSLATE_NOOP("tkConstants", "Enter your personal identifiants");
+const char* const ENTER_MYSQL_ADMIN_LOGIN           = QT_TRANSLATE_NOOP("tkConstants", "Enter database administrator login");
+const char* const ENTER_YOUR_PERSONAL_LOGIN         = QT_TRANSLATE_NOOP("tkConstants", "Enter your personal login");
 const char* const SAVE_AND_RESTORE                  = QT_TRANSLATE_NOOP("tkConstants", "Save and restore");
 
 

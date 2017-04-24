@@ -64,7 +64,7 @@ class ScriptUserWrapper : public QObject  //, public QScriptClass
 
     Q_PROPERTY(QStringList specialties READ specialties())
     Q_PROPERTY(QStringList qualifications READ qualifications())
-    Q_PROPERTY(QStringList identifiants READ identifiants())
+    Q_PROPERTY(QStringList identifiers READ identifiers())
 
 public:
     ScriptUserWrapper(QObject *parent);
@@ -90,7 +90,7 @@ public Q_SLOTS:
 
     QStringList specialties() const;
     QStringList qualifications() const;
-    QStringList identifiants() const;
+    QStringList identifiers() const;
 
 };
 

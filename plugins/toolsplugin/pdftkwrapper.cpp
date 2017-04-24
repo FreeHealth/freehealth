@@ -484,10 +484,10 @@ function franceDeclarationMedTraitant()
         //return;
     }
 
-    pdf.addFdfValue("num ident med1", user.identifiants.join("; "));
+    pdf.addFdfValue("num ident med1", user.identifiers.join("; "));
     pdf.addFdfValue("nom medecin", user.usualName + " " + user.otherNames);
     pdf.addFdfValue("prénom médecin", user.firstName);
-    pdf.addFdfValue("identif  medecin", user.identifiants.join("; "));
+    pdf.addFdfValue("identif  medecin", user.identifiers.join("; "));
 
     pdf.addFdfValue("date déclaration", freemedforms.tools.dateToString(new Date(), "ddMMyyyy"));
 
@@ -756,7 +756,7 @@ function franceDeclarationAld()
         //return;
     }
 
-    pdf.addFdfValue("IDENTIF MEDECIN", user.fullName.toUpperCase() + "\\n" + user.fullAddress.toUpperCase() + "\\n" + user.identifiants.join("; ").toUpperCase(), false);
+    pdf.addFdfValue("IDENTIF MEDECIN", user.fullName.toUpperCase() + "\\n" + user.fullAddress.toUpperCase() + "\\n" + user.identifiers.join("; ").toUpperCase(), false);
     // cachet de l'établissement ou du centre de référence
     // pdf.addFdfValue("IDENTIF ETABLT", "IDENTIF ETABLT");
 
@@ -766,7 +766,7 @@ function franceDeclarationAld()
     // identification du médecin traitant établissant le protocole
     pdf.addFdfValue("ident méd", user.fullName);
     pdf.addFdfValue("ident méd2", user.fullAddress);
-    pdf.addFdfValue("num ident méd", user.identifiants.join("; "));
+    pdf.addFdfValue("num ident méd", user.identifiers.join("; "));
 
     // identification de l'établissement
     // pdf.addFdfValue("nom étab", "nom étab");

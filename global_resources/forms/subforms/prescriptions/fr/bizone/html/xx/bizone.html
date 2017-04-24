@@ -20,7 +20,7 @@
 <td align="center" style=" font-size: 11pt;">Identification du prescripteur</td>
 <td rowspan="3">
 <div style=" font-family:'Code 128'; font-size:16pt; valign=middle;">
-{{~User.Professional.Identifiants~}}
+{{~User.Professional.Identifiers~}}
 </div>
 </td>
 </tr>
@@ -130,15 +130,20 @@ style="border-style: none; background-color: white; margin-top: 0px; margin-bott
 <td></td></tr>
 <tr>
 <td width="33%">
-<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'Lucida Grande'; font-size:14pt;">{{~User.Identity.FullName~}}</span> <span style=" font-family:'Lucida Grande'; font-size:13pt;">{{~User.Professional.Specialties~}} </span></p>
-<p style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'Code 128'; font-size:36pt;">{{~User.Professional.Identifiants~}} </span></p>
-<p style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'Sans Serif'; font-size:10pt;">{{~User.Professional.Qualifications~}} </span></p></td>
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'Lucida Grande'; font-size:14pt;"> {{~User.Identity.FullName~}} </span>
+<span style="font-family:'Lucida Grande';font-size:13pt;">
+{{ ~User.Professional.Specialties~ }}
+</span>
+</p>
+<p style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'Code 128'; font-size:36pt;"> {{ ~User.Professional.Identifiers~ }} </span></p>
+<p style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'Sans Serif'; font-size:10pt;"> {{~User.Professional.Qualifications~}} </span></p>
+</td>
 <td colspan="2">
-<p align="right" style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'Lucida Grande'; font-size:13pt;">[[DATE]]</span></p>
+<p align="right" style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'Lucida Grande'; font-size:13pt;"> [[DATE]] </span></p>
 <p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;"><br /></p>
-<p align="right" style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'Sans Serif'; font-size:14pt;">{{~Patient.Identity.FullName~}}</span><br/>{{Date de naissance: ~Patient.Age.DateOfBirth~}}</p>{{~Patient.Age.DateFullAge~}}
+<p align="right" style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'Sans Serif'; font-size:14pt;"> {{~Patient.Identity.FullName~}} </span><br/> {{Date de naissance: ~Patient.Age.DateOfBirth~}} </p> {{~Patient.Age.DateFullAge~}}
 <p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Lucida Grande'; font-size:13pt;"><br /></p>
-<p align="right" style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'Sans Serif'; font-size:9pt;">{{~Patient.Age.YearsOld~}}</span></p></td></tr></table>
+<p align="right" style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'Sans Serif'; font-size:9pt;"> {{~Patient.Age.YearsOld~}} </span></p></td></tr></table>
 
 <div style="color: white;">~Form.Data.Item.Prescription::Fr::Bizone::Header~</div>
 }}

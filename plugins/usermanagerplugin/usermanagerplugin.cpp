@@ -346,7 +346,7 @@ bool UserManagerPlugin::identifyUser()
     if (commandLine()->value(Core::ICommandLine::UserClearLogin).isValid()) {
         log = commandLine()->value(Core::ICommandLine::UserClearLogin).toString();
         pass = commandLine()->value(Core::ICommandLine::UserClearPassword).toString();
-        LOG(tr("Using command line user identifiants: %1").arg(log));
+        LOG(tr("Using command line user identifiers: %1").arg(log));
     }
 
     // Try to connect to user database

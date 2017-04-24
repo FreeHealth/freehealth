@@ -239,8 +239,8 @@ void UserManagerPlugin::test_userdata_basics()
 
         QStringList practIds;
         practIds << r.randomString(r.randomInt(5, 20)) << r.randomString(r.randomInt(5, 20)) << r.randomString(r.randomInt(5, 20));
-        data.setPractitionerIdentifiant(practIds); CHECK_DYNAMICDATA_MODIFIED(); CHECK_MODIFIED;
-        QCOMPARE(data.professionalIdentifiants(), practIds);
+        data.setPractitionerIdentifiers(practIds); CHECK_DYNAMICDATA_MODIFIED(); CHECK_MODIFIED;
+        QCOMPARE(data.professionalIdentifiers(), practIds);
 
         QStringList spe;
         spe << r.randomString(r.randomInt(5, 20)) << r.randomString(r.randomInt(5, 20)) << r.randomString(r.randomInt(5, 20));
@@ -370,8 +370,8 @@ void UserManagerPlugin::test_userbase_test_with_virtualuser()
 
     QStringList practIds;
     practIds << r.randomString(r.randomInt(5, 20)) << r.randomString(r.randomInt(5, 20)) << r.randomString(r.randomInt(5, 20));
-    data.setPractitionerIdentifiant(practIds); CHECK_MODIFIED;
-    QCOMPARE(data.professionalIdentifiants(), practIds);
+    data.setPractitionerIdentifiers(practIds); CHECK_MODIFIED;
+    QCOMPARE(data.professionalIdentifiers(), practIds);
 
     QStringList spe;
     spe << r.randomString(r.randomInt(5, 20)) << r.randomString(r.randomInt(5, 20)) << r.randomString(r.randomInt(5, 20));
@@ -518,8 +518,8 @@ void UserManagerPlugin::test_userbase_basics()
 
     QStringList practIds;
     practIds << r.randomString(r.randomInt(5, 20)) << r.randomString(r.randomInt(5, 20)) << r.randomString(r.randomInt(5, 20));
-    data.setPractitionerIdentifiant(practIds);
-    QCOMPARE(data.professionalIdentifiants(), practIds);
+    data.setPractitionerIdentifiers(practIds);
+    QCOMPARE(data.professionalIdentifiers(), practIds);
 
     QStringList spe;
     spe << r.randomString(r.randomInt(5, 20)) << r.randomString(r.randomInt(5, 20)) << r.randomString(r.randomInt(5, 20));
@@ -581,7 +581,7 @@ void UserManagerPlugin::test_userbase_basics()
     QCOMPARE(fromDb->city(), data.city());
     QCOMPARE(fromDb->tels(), data.tels());
     QCOMPARE(fromDb->fax(), data.fax());
-    QCOMPARE(fromDb->professionalIdentifiants(), data.professionalIdentifiants());
+    QCOMPARE(fromDb->professionalIdentifiers(), data.professionalIdentifiers());
     QCOMPARE(fromDb->specialties(), data.specialties());
     QCOMPARE(fromDb->qualifications(), data.qualifications());
     // TODO: test Print::TextDocumentExtra
@@ -611,7 +611,7 @@ void UserManagerPlugin::test_userbase_basics()
     QCOMPARE(fromDb->city(), data.city());
     QCOMPARE(fromDb->tels(), data.tels());
     QCOMPARE(fromDb->fax(), data.fax());
-    QCOMPARE(fromDb->professionalIdentifiants(), data.professionalIdentifiants());
+    QCOMPARE(fromDb->professionalIdentifiers(), data.professionalIdentifiers());
     QCOMPARE(fromDb->specialties(), data.specialties());
     QCOMPARE(fromDb->qualifications(), data.qualifications());
     // TODO: test Print::TextDocumentExtra
@@ -696,7 +696,7 @@ void UserManagerPlugin::test_usermodel_basics()
 
     QStringList practIds;
     practIds << r.randomString(r.randomInt(5, 20)) << r.randomString(r.randomInt(5, 20)) << r.randomString(r.randomInt(5, 20));
-    data.setPractitionerIdentifiant(practIds);
+    data.setPractitionerIdentifiers(practIds);
 
     QStringList spe;
     spe << r.randomString(r.randomInt(5, 20)) << r.randomString(r.randomInt(5, 20)) << r.randomString(r.randomInt(5, 20));
@@ -808,7 +808,7 @@ void UserManagerPlugin::test_usermodel_basics()
 //    QCOMPARE(userModel()->currentUserData(Core::IUser::FullHtmlContact), QVariant(fromDb->con));
     QCOMPARE(userModel()->currentUserData(Core::IUser::Specialities), QVariant(fromDb->specialties()));
     QCOMPARE(userModel()->currentUserData(Core::IUser::Qualifications), QVariant(fromDb->qualifications()));
-    QCOMPARE(userModel()->currentUserData(Core::IUser::ProfessionalIdentifiants), QVariant(fromDb->professionalIdentifiants()));
+    QCOMPARE(userModel()->currentUserData(Core::IUser::ProfessionalIdentifiers), QVariant(fromDb->professionalIdentifiers()));
     // TODO: QCOMPARE(userModel()->currentUserData(Core::IUser::Preferences), QVariant(fromDb->preferences()));
 
     Print::TextDocumentExtra *doc = fromDb->extraDocument(Core::IUser::GenericHeader);

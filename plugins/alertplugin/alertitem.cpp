@@ -396,14 +396,14 @@ AlertItem::~AlertItem()
     d = 0;
 }
 
-/** Store database identifiants. This part is protected and should only be used by Alert::Internal::AlertBase */
+/** Store database identifiers. This part is protected and should only be used by Alert::Internal::AlertBase */
 void AlertItem::setDb(int ref, const QVariant &value)
 {
     if (!value.toString().isEmpty())
         d->_db.insert(ref, value);
 }
 
-/** Returns database identifiants. This part is protected and should only be used by Alert::Internal::AlertBase */
+/** Returns database identifiers. This part is protected and should only be used by Alert::Internal::AlertBase */
 QVariant AlertItem::db(int ref) const
 {
     return d->_db.value(ref, QVariant());

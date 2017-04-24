@@ -53,7 +53,8 @@ namespace Constants {
     const char * const USER_DATA_TEL2              = "identity.tel2";
     const char * const USER_DATA_TEL3              = "identity.tel3";
     const char * const USER_DATA_FAX               = "identity.fax";
-    const char * const USER_DATA_PRACTIDENTIFIANT  = "identity.identifiant";
+    const char * const USER_DATA_USERIDENTIFIER    = "identity.identifier";
+    const char * const USER_DATA_USERIDENTIFIER_OLD  = "identity.identifiant";
     const char * const USER_DATA_SPECIALTY         = "identity.specialty";
     const char * const USER_DATA_QUALIFICATION     = "identity.qualification";
     const char * const USER_DATA_PREFERENCES       = "pref";
@@ -107,7 +108,7 @@ namespace Constants {
             " <td>&nbsp;</td>" \
             "</tr>" \
             "<tr>" \
-            " <td>[:identity.identifiant] adds your recorded ids</td>" \
+            " <td>[:identity.identifier] adds your recorded ids</td>" \
             " <td>&nbsp;</td>" \
             " <td>&nbsp;</td>" \
             "</tr>" \

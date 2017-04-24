@@ -410,7 +410,7 @@ void ConsultResultValidator::clearSelectedCriterias()
 
 /**
  * Define the selected criteria. The list contains an ordered or unordered list
- * of criteria database unique identifiants
+ * of criteria database unique identifiers
  */
 void ConsultResultValidator::setSelectedCriterias(const QList<int> &selectedId)
 {
@@ -428,7 +428,7 @@ void ConsultResultValidator::setSelectedCriterias(const QList<int> &selectedId)
     validator.check();
 
     // Check reported wrong ids
-    QList<int> wrongCriteriaIdentifiants = validator.wrongCriteriaIds();
+    QList<int> wrongCriteriaIdentifiers = validator.wrongCriteriaIds();
     ...
  * \endcode
  */

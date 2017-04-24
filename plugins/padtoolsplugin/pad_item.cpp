@@ -47,7 +47,8 @@
 using namespace PadTools;
 using namespace Internal;
 
-PadConditionnalSubItem::PadConditionnalSubItem(TokenCoreCondition cond, Place place, PadFragment *parent) :
+PadConditionnalSubItem::PadConditionnalSubItem(TokenCoreCondition cond,
+                                               Place place, PadFragment *parent) :
     PadFragment(parent), _coreCond(cond), _place(place)
 {}
 
@@ -73,7 +74,7 @@ void PadConditionnalSubItem::debug(int indent) const
 
 void PadConditionnalSubItem::run(QMap<QString,QVariant> &tokens, PadDocument *document)
 {
-//qWarning() << "run PadConditionnalSubItem";
+    //qWarning() << "run PadConditionnalSubItem";
     // Get parent PadItem
     PadFragment *f = parent();
     PadItem *item = 0;
@@ -90,7 +91,7 @@ void PadConditionnalSubItem::run(QMap<QString,QVariant> &tokens, PadDocument *do
 
     const QString &value = tokens.value(item->getCore()->uid()).toString();
 
-//const QString &value = tokens[_name].toString();
+    //const QString &value = tokens[_name].toString();
     bool removeMe = false;
     if (value.isEmpty()) {
         // Keep Type::Undefined / Before && After
@@ -113,10 +114,10 @@ void PadConditionnalSubItem::run(QMap<QString,QVariant> &tokens, PadDocument *do
         document->positionTranslator().addOutputTranslation(outputStart(), -rawLength());
         return;
     } else {
-// Remove only delimiters
+        // Remove only delimiters
         foreach(const PadDelimiter &delim, _delimiters) {
 
-//qWarning() << "SUBITEM DELIM raw" << delim.rawPos << "size" << delim.size << "output" << (document->positionTranslator().rawToOutput(delim.rawPos));
+            //qWarning() << "SUBITEM DELIM raw" << delim.rawPos << "size" << delim.size << "output" << (document->positionTranslator().rawToOutput(delim.rawPos));
 
             QTextCursor cursor(document->outputDocument());
             int pos = document->positionTranslator().rawToOutput(delim.rawPos);
@@ -136,7 +137,7 @@ void PadConditionnalSubItem::run(QMap<QString,QVariant> &tokens, PadDocument *do
 
 void PadConditionnalSubItem::toOutput(Core::ITokenPool *pool, PadDocument *document, TokenReplacementMethod method)
 {
-//qWarning() << "run PadConditionnalSubItem";
+    //qWarning() << "run PadConditionnalSubItem";
     // Get parent PadItem
     PadFragment *f = parent();
     PadItem *item = 0;
@@ -185,7 +186,7 @@ void PadConditionnalSubItem::toOutput(Core::ITokenPool *pool, PadDocument *docum
         document->positionTranslator().addOutputTranslation(outputStart(), -rawLength());
         return;
     } else {
-// Remove only delimiters
+        // Remove only delimiters
         foreach(const PadDelimiter &delim, _delimiters) {
 
             // qWarning() << "SUBITEM DELIM raw" << delim.rawPos << "size" << delim.size << "output" << (document->positionTranslator().rawToOutput(delim.rawPos));
@@ -206,19 +207,25 @@ void PadConditionnalSubItem::toOutput(Core::ITokenPool *pool, PadDocument *docum
     setOutputEnd(document->positionTranslator().rawToOutput(end()));
 }
 
-/** Overwrite the position tester, by default a PadTools::PadConditionnalSubItem does not include the outputStart() and outputEnd() position. */
+/** Overwrite the position tester, by default a PadTools::PadConditionnalSubItem
+ *  does not include the outputStart() and outputEnd() position.
+ */
 bool PadConditionnalSubItem::containsOutputPosition(const int pos) const
 {
     return IN_RANGE_STRICTLY(pos, _outputStart, _outputEnd);
 }
 
-/** Overwrite the position tester, by default a PadTools::PadConditionnalSubItem does not include the outputStart() and outputEnd() position. */
+/** Overwrite the position tester, by default a PadTools::PadConditionnalSubItem
+ *  does not include the outputStart() and outputEnd() position.
+ */
 bool PadConditionnalSubItem::isBeforeOutputPosition(const int pos) const
 {
     return pos >= _outputEnd;
 }
 
-/** Overwrite the position tester, by default a PadTools::PadConditionnalSubItem does not include the outputStart() and outputEnd() position. */
+/** Overwrite the position tester, by default a PadTools::PadConditionnalSubItem
+ *  does not include the outputStart() and outputEnd() position.
+ */
 bool PadConditionnalSubItem::isAfterOutputPosition(const int pos) const
 {
     return pos <= _outputStart;
@@ -274,7 +281,7 @@ void PadCore::debug(int indent) const
 
 void PadCore::run(QMap<QString,QVariant> &tokens, PadDocument *document)
 {
-//qWarning() << "run Core";
+    //qWarning() << "run Core";
     // PadItem calls run on the Core only if core value is defined
     const QString &value = tokens[_uid].toString();
     if (value.isEmpty()) {
@@ -330,7 +337,7 @@ void PadCore::toOutput(Core::ITokenPool *pool, PadDocument *document, TokenRepla
 
     // Add core value in the output document according to the contentType
     if ((document->contentType() == PadDocument::ContentAutoType
-            && Qt::mightBeRichText(coreValue))
+         && Qt::mightBeRichText(coreValue))
             || document->contentType() == PadDocument::ContentIsHtml) {
         cursor.insertHtml(coreValue);
         setOutputEnd(cursor.selectionEnd());
@@ -393,7 +400,7 @@ QString PadCore::tokenValue(Core::ITokenPool *pool, TokenReplacementMethod metho
         if (pool->token(uid()))
             return pool->token(uid())->value().toString();
         else
-            qWarning() << "**** Missing token "<<uid();
+            qWarning() << "**** Missing token " << uid();
     }
     return QString::null;
 }
@@ -409,28 +416,28 @@ PadItem::~PadItem()
 /** Debug to console */
 void PadItem::debug(int indent) const
 {
-	QString str(indent, ' ');
+    QString str(indent, ' ');
     str += QString("[padItem:Source(%1;%2);Output(%3;%4)]")
             .arg(start()).arg(end())
             .arg(outputStart()).arg(outputEnd());
-	qDebug("%s", qPrintable(str));
+    qDebug("%s", qPrintable(str));
     foreach (PadFragment *fragment, _fragments) {
         fragment->debug(indent + 2);
-	}
+    }
 }
 
 /** Find nested PadItem in conditional texts (before and after) */
 QList<PadFragment*> PadItem::children() const
 {
-	QList<PadFragment*> fragments;
-	PadItem *padItem;
-	fragments.append(_fragments);
+    QList<PadFragment*> fragments;
+    PadItem *padItem;
+    fragments.append(_fragments);
     foreach (PadFragment *fragment, _fragments) {
-		padItem = dynamic_cast<PadItem*>(fragment);
-		if (padItem)
+        padItem = dynamic_cast<PadItem*>(fragment);
+        if (padItem)
             fragments.append(padItem->children());
-	}
-	return fragments;
+    }
+    return fragments;
 }
 
 void PadItem::addDelimiter(const int posInRaw, const int size)
@@ -441,25 +448,33 @@ void PadItem::addDelimiter(const int posInRaw, const int size)
     _delimiters << delim;
 }
 
-/** Overwrite the position tester, by default a PadTools::PadItem does not include the outputStart() and outputEnd() position. */
+/** Overwrite the position tester, by default a PadTools::PadItem does not
+ * include the outputStart() and outputEnd() position.
+ */
 bool PadItem::containsOutputPosition(const int pos) const
 {
     return IN_RANGE_STRICTLY(pos, _outputStart, _outputEnd);
 }
 
-/** Overwrite the position tester, by default a PadTools::PadItem does not include the outputStart() and outputEnd() position. */
+/** Overwrite the position tester, by default a PadTools::PadItem does not
+ *  include the outputStart() and outputEnd() position.
+ */
 bool PadItem::isBeforeOutputPosition(const int pos) const
 {
     return pos >= _outputEnd;
 }
 
-/** Overwrite the position tester, by default a PadTools::PadItem does not include the outputStart() and outputEnd() position. */
+/** Overwrite the position tester, by default a PadTools::PadItem does not
+ *  include the outputStart() and outputEnd() position.
+ */
 bool PadItem::isAfterOutputPosition(const int pos) const
 {
     return pos <= _outputStart;
 }
 
-/** Returns the PadTools::PadCore of the PadTools::PadItem. If no core is found, 0 is returned. */
+/** Returns the PadTools::PadCore of the PadTools::PadItem. If no core is found,
+ *  0 is returned.
+ */
 PadCore *PadItem::getCore() const
 {
     PadCore *core;
@@ -487,7 +502,7 @@ PadConditionnalSubItem *PadItem::subItem(const PadConditionnalSubItem::TokenCore
 
 void PadItem::run(QMap<QString,QVariant> &tokens, PadDocument *document)
 {
-//qWarning() << "run Item: rawStart" << start() << "outputStart" << document->positionTranslator().rawToOutput(start()) << document->positionTranslator().deltaForSourcePosition(start());
+    //qWarning() << "run Item: rawStart" << start() << "outputStart" << document->positionTranslator().rawToOutput(start()) << document->positionTranslator().deltaForSourcePosition(start());
     PadCore *core = getCore();
     QString coreValue;
 
@@ -507,11 +522,11 @@ void PadItem::run(QMap<QString,QVariant> &tokens, PadDocument *document)
         } else {
             // Remove delimiters before the core
             foreach(const PadDelimiter &delim, _delimiters) {
-//qWarning() << delim.rawPos << core->start();
+                //qWarning() << delim.rawPos << core->start();
                 if (delim.rawPos >= core->start())
                     continue;
 
-//qWarning() << "ITEM DELIM raw" << delim.rawPos << "size" << delim.size << "output" << (document->positionTranslator().rawToOutput(delim.rawPos));
+                //qWarning() << "ITEM DELIM raw" << delim.rawPos << "size" << delim.size << "output" << (document->positionTranslator().rawToOutput(delim.rawPos));
 
                 QTextCursor cursor(document->outputDocument());
                 int pos = document->positionTranslator().rawToOutput(delim.rawPos);
@@ -531,7 +546,7 @@ void PadItem::run(QMap<QString,QVariant> &tokens, PadDocument *document)
                 if (delim.rawPos < core->end())
                     continue;
 
-//qWarning() << "ITEM DELIM raw" << delim.rawPos << "size" << delim.size << "output" << (document->positionTranslator().rawToOutput(delim.rawPos));
+                //qWarning() << "ITEM DELIM raw" << delim.rawPos << "size" << delim.size << "output" << (document->positionTranslator().rawToOutput(delim.rawPos));
 
                 QTextCursor cursor(document->outputDocument());
                 int pos = document->positionTranslator().rawToOutput(delim.rawPos);
