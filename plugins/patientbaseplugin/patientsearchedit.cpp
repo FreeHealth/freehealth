@@ -114,7 +114,11 @@ public:
                 } else if (g=="F") {
                     return Constants::femaleColor;
                 } else if (g=="H") {
-                    return Constants::hermaColor;
+                    return Constants::otherColor;
+                } else if (g=="K") {
+                    return Constants::unknownColor;
+                } else {
+                    return Constants::unknownColor;
                 }
             } else if (role==Qt::DecorationRole) {
                 const QString &g = QSqlQueryModel::data(QSqlQueryModel::index(idx.row(), 4)).toString();
@@ -123,9 +127,10 @@ public:
                 } else if (g=="F") {
                     return theme()->icon(Core::Constants::ICONFEMALE);
                 } else if (g=="H") {
-                    return theme()->icon(Core::Constants::ICONHERMAPHRODISM);
+                    return theme()->icon(Core::Constants::ICONOTHERGENDER);
+                } else {
+                    return theme()->icon(Core::Constants::ICONGENDERUNKNOWN);
                 }
-                return QIcon();
             }
         } else if (idx.column()==Uid && role==Qt::DisplayRole) {
             return QSqlQueryModel::data(QSqlQueryModel::index(idx.row(), 6)).toString();

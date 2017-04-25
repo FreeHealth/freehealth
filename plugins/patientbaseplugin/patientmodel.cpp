@@ -139,9 +139,10 @@ public:
         } else if (g=="F") {
             return theme()->icon(Core::Constants::ICONFEMALE);
         } else if (g=="H") {
-            return theme()->icon(Core::Constants::ICONHERMAPHRODISM);
+            return theme()->icon(Core::Constants::ICONOTHERGENDER);
+        } else {
+            return theme()->icon(Core::Constants::ICONGENDERUNKNOWN);
         }
-        return QIcon();
     }
 
     bool savePatientPhoto(const QPixmap &pix, const QString &patientUid)
@@ -445,6 +446,8 @@ QVariant PatientModel::data(const QModelIndex &index, int role) const
                 return 1;
             if (g=="H")
                 return 2;
+            if (g=="K")
+                return 3;
             return -1;
         }
         case IPatient::DateOfBirth:
@@ -595,7 +598,11 @@ QVariant PatientModel::data(const QModelIndex &index, int role) const
             } else if (g=="F") {
                 return Constants::femaleColor;
             } else if (g=="H") {
-                return Constants::hermaColor;
+                return Constants::otherColor;
+            } else if (g=="K") {
+                return Constants::unknownColor;
+            } else {
+                return Constants::unknownColor;
             }
         }
     }
