@@ -99,9 +99,10 @@ namespace Constants {
         SCHEMA_TIMESTAMP
     };
 
-    static const QColor femaleColor(255, 207, 255, 90);  //ffcfff
-    static const QColor maleColor(225, 225, 255, 90);    //e0e0ff
-    static const QColor hermaColor(255, 214, 255, 90);   //ffd6ff
+    static const QColor femaleColor(255, 178, 255, 90); //#b2ffff (ffcfff)
+    static const QColor maleColor(178, 255, 255, 90); //#ffb2ff (e0e0ff)
+    static const QColor otherColor(255, 255, 178, 90); //#ffffb2 (ffd6ff)
+    static const QColor unknownColor(178,178,178, 90); //#b2b2b2
 
 }  // End namespace Patients::Constants
 }  // End namespace Patients

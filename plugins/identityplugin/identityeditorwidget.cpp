@@ -478,8 +478,10 @@ public:
             id = 0;
         else if (g == "F")
             id = 1;
-        if (g == "H")
+        else if (g == "H")
             id = 2;
+        else
+            id = 3;
         ui->genderCombo->setCurrentIndex(id);
         ui->language->setCurrentIsoLanguage(tags.value(::XML_LANG));
         ui->landlinePhoneLineEdit->setText(tags.value(::XML_LANDLINEPHONE));
@@ -514,8 +516,10 @@ public:
         case 1: //Female
             tags.insert(::XML_GENDER, "F");
             break;
-        case 2: //Herma
+        case 2: //Other gender
             tags.insert(::XML_GENDER, "H");
+        default : // Unknown
+            tags.insert(::XML_GENDER, "K");
             break;
         }
         tags.insert(::XML_LANG, ui->language->currentLanguageIsoName());

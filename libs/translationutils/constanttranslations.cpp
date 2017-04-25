@@ -309,7 +309,7 @@ QString mealTime(const int index)
     return QString();
 }
 
-/** Return the list of available translated gender (male, female, hermaphrodism) */
+/** Return the list of available translated gender (male, female, other, unknown) */
 QStringList genders()
 {
     return QStringList()
