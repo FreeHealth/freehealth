@@ -287,7 +287,7 @@ public:
     void readFile(const QString &file)
     {
         QString str = Utils::readTextFile(file, Utils::WarnUser);
-        // run token if FreeMedForms
+        // run token if app is EHR
     #ifdef FREEHEALTH
         patient()->replaceTokens(str);
         user()->replaceTokens(str);
@@ -607,7 +607,7 @@ void TextEditor::fileOpen()
             << tkTr(Trans::Constants::FILE_FILTER_TXT)
             << tkTr(Trans::Constants::FILE_FILTER_RTF)
             << tkTr(Trans::Constants::FILE_FILTER_ALL_FILES);
-    QString selected = tkTr(Trans::Constants::FILE_FILTER_HTML);
+    QString selected = tkTr(Trans::Constants::FILE_FILTER_ALL_FILES);
 
     QString file = QFileDialog::getOpenFileName(this, title,
                                                 settings()->path(Core::ISettings::UserDocumentsPath),
