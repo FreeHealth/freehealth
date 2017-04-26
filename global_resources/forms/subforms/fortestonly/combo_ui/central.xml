@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE FreeMedForms>
+
+<FreeMedForms>
+
+  <formdescription>
+    <!-- Non translatable values -->
+    <authors>Jerome Pinguet</authors>
+    <version>test</version>
+    <fmfv>0.10.1</fmfv>
+    <cdate>2017-04-28</cdate>
+    <lmdate>2017-04-28</lmdate>
+    <icon>test.png</icon>
+    <weblink></weblink>
+    <bibliography pmid=""></bibliography>
+
+    <!-- Translatable values -->
+    <license>GPLv3</license>
+    <description lang="xx">Combo with UI</description>
+    <description lang="fr">Combo with UI</description>
+    <category lang="xx">Test</category>
+    <category lang="fr">Test</category>
+    <specialties lang="fr">Test</specialties>
+    <specialties lang="xx">Test</specialties>
+
+  </formdescription>
+
+ <MedForm name="Test::Combo::Ui" uifilename="./ui/xx/combo.ui">
+   <label lang="xx">Test combo with UI file</label>
+   <options>DontPrintEmptyValues;UseFormNameAsNameSpace</options>
+
+     <Item>
+       <name>combo_ui</name>
+       <type>combo</type>
+       <uilink widget="comboBox"/>
+       <label>Combo + UI + default value (third)</label>
+       <value>
+         <uuid id="0">first</uuid>
+         <uuid id="1">second</uuid>
+         <uuid id="2">third</uuid>
+         <uuid id="3">fourth</uuid>
+         <possible id="0">First Element</possible>
+         <possible id="1">Second Element</possible>
+         <possible id="2">Third Element</possible>
+         <possible id="3">Fourth Element</possible>
+       </value>
+       <default>third</default>
+     </Item>
+
+  </MedForm>
+
+</FreeMedForms>
