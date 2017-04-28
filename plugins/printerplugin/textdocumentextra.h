@@ -47,7 +47,7 @@ const char* const TKDOCUMENT_PRESENCE_XML_TAG  = "Presence";         /*!< \brief
 const char* const TKDOCUMENT_PRIORITY_XML_TAG  = "Priority";         /*!< \brief tkDocumentExtra Xml Tag. \sa tkDocumentExtra::toXml(), tkDocumentExtra::fromXml() */
 const char* const TKDOCUMENT_EXTRA_XML_TAG     = "Extras";           /*!< \brief tkDocumentExtra Xml Tag. \sa tkDocumentExtra::toXml(), tkDocumentExtra::fromXml() */
 const char* const TKDOCUMENT_HTML_XML_TAG      = "tkDocumentHtml";   /*!< \brief tkDocumentExtra Xml Tag. \sa tkDocumentExtra::toXml(), tkDocumentExtra::fromXml() */
-const char* const TKDOCUMENT_XML_ACTUALVERSION = "1.0";              /*!< \brief tkDocumentExtra Xml Tag. \sa tkDocumentExtra::toXml(), tkDocumentExtra::fromXml() */
+const char* const TKDOCUMENT_XML_CURRENTVERSION = "1.0";              /*!< \brief tkDocumentExtra Xml Tag. \sa tkDocumentExtra::toXml(), tkDocumentExtra::fromXml() */
 
 }  // End Constants
 

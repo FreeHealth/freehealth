@@ -77,7 +77,7 @@ public:
 TextDocumentExtra::TextDocumentExtra() : d(0)
 {
     d = new TextDocumentExtraPrivate();
-    d->xmlVersion = Constants::TKDOCUMENT_XML_ACTUALVERSION;
+    d->xmlVersion = Constants::TKDOCUMENT_XML_CURRENTVERSION;
     d->m_Html = "";
     d->m_Priority = Printer::First;
     d->m_Presence = Printer::EachPages;
@@ -88,7 +88,7 @@ TextDocumentExtra::TextDocumentExtra( const QString &html, const int presence, c
 {
     d = new TextDocumentExtraPrivate();
     if (version.isEmpty())
-        d->xmlVersion = Constants::TKDOCUMENT_XML_ACTUALVERSION;
+        d->xmlVersion = Constants::TKDOCUMENT_XML_CURRENTVERSION;
     else
         d->xmlVersion = version;
     d->m_Priority = Printer::Priority(priority);
