@@ -1,0 +1,127 @@
+<html>
+<head>
+<style>
+table, tr, td {
+    margin: 15px;
+    padding: 15px;
+}
+
+.__school_absence__formContent {
+  font-size: 12pt;
+  color: black;
+  border: 2px solid gray;
+}
+
+.__school_absence__formContent .formHeader {
+}
+
+.__school_absence__formContent .formLabel {
+  font-weight: 600;
+  text-transform: uppercase;
+  background-color: #f2f2f2;
+  color: black;
+  padding: 2px;
+  text-align: center;
+}
+
+.__school_absence__formContent .episodeHeader {
+  margin: 0 2em 0 0;
+  padding: 0px;
+}
+
+.__school_absence__formContent .episodeContent {
+  margin-left: 3em;
+}
+
+.__school_absence__formContent .episodeLabel {
+  font-weight: 600;
+  /* text-transform: uppercase;
+  background-color: gray;
+  color: white; */
+  padding: 5px;
+  margin-bottom: 0.2em;
+}
+
+.__school_absence__formContent .episodeUserCreator {
+  font-size: 9pt;
+  color: gray;
+  margin-left: 1em;
+}
+
+.__school_absence__formContent .episodeUserDate {
+  font-size: 9pt;
+  color: gray;
+  margin-left: 1em;
+}
+
+.__school_absence__formContent .textContainer {
+  font-size: 12pt;
+  color: black;
+}
+
+.__school_absence__formContent .textContainer #textContent {
+}
+
+.__school_absence__formContent ul {
+  list-style-type:none;
+  padding:0px;
+  margin:10px;
+}
+</style>
+</head>
+<body>
+<!--<table width="80%" border="0" cellspacing="0" cellpadding="0" align="right" BORDERCOLOR="lightgrey" RULES="cols" VALIGN="top">
+<tr align="right">
+<th align="right" colspan="2" bgcolor="gainsboro">
+{{<div id="name" align="right">~User.Identity.FullName~</div>}}
+</th>
+</tr>
+<tr align="right">
+<td align="right" valign="top">
+{{~User.Professional.Specialties~<br>}}
+{{~User.Professional.Identifiants~<br>}}
+{{~User.Professional.Qualifications~}}
+</td>
+<td align="right" valign="top">
+{{<nobr>~User.Contact.Street~</nobr><br>}}{{~User.Contact.Zipcode~}}{{ ~User.Contact.City~<br>}}
+{{Tél ~User.Contact.Tel1~ }}{{~User.Contact.Tel2~ }}{{~User.Contact.Tel3~}}<br>
+{{Fax ~User.Contact.Fax~<br>}}
+{{~User.Contact.Mail~}}
+</td>
+</tr>
+</table>-->
+
+<!--<p align="right" style="text-transform: uppercase;">
+[[DATE]]
+</p>-->
+
+<div class="__school_absence__formContent">
+
+    <div class="formHeader">
+        <div class="formLabel">[[EpisodeFullFormLabel]]</div>
+    </div> <!-- formHeader -->
+
+    <!--
+    <div class="episodeHeader">
+        [<div class="episodeLabel">[EpisodeUserLabel] </div> ]
+        [<span class="episodeUserCreator">[EpisodeUserName.createdBy]</span>]
+        [&nbsp;<span class="episodeUserDate">[EpisodeUserDate]</span>]
+    </div> <!-- episodeHeader -->
+
+    <div class="episodeContent">
+        <div class="textContainer">
+            <div id="textContent">
+
+                {{~Form.Data.Print.Subforms::Certificates::School::Absence::Medical::Certificate::Certificate::Texteditor~}}
+
+            </div>
+        </div> <!-- textContainer -->
+    </div> <!-- episodeContent -->
+    <div style="margin-left: 100%;">Fait à {{User.Contact.City}}, le [[EpisodeUserDate]]</div>
+
+</div> <!-- __school_absence__formContent -->
+<p align="right">
+{{~User.Identity.FullName~}}
+</p>
+</body>
+</html>

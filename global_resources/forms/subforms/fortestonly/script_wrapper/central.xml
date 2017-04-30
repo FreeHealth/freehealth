@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE FreeMedForms>
+<FreeMedForms>
+
+  <formdescription>
+
+    <!-- Non translatable values -->
+    <authors>Jérôme Pinguet</authors>
+    <version>4.0.0</version>
+    <fmfv>0.10.0</fmfv>
+    <cdate>2016-06-27</cdate>
+    <lmdate>2017-04-26</lmdate>
+    <icon>edit.png</icon>
+    <weblink>https://www.medecinelibre.com</weblink>
+    <!-- Translatable values -->
+    <license>GPLv3</license>
+    <description lang="xx">Test script wrapper</description>
+    <description lang="fr">Test script wrapper</description>
+    <category lang="xx">Test</category>
+    <category lang="fr">Test</category>
+
+    <updateinfo>
+
+    </updateinfo>
+
+  </formdescription>
+
+  <file type="script" name="onload">./scripts/xx/schoolabsencemedicalcertificate.js</file>
+
+  <MedForm type="form" name="Subforms::Certificates::School::Absence::Medical::Certificate" uifilename="./ui/xx/schoolabsencemedicalcertificate.ui">
+    <label lang="xx">Test script wrapper</label>
+    <label lang="fr">Test script wrapper</label>
+    <icon>__theme__/typewriter.png</icon>
+    <options>DontPrintEmptyValues;UseFormNameAsNameSpace;GenericHeader</options>
+    <file type="htmlprintmask">./html/xx/schoolabsence_mask.html</file>
+    <file type="htmlexportmask">./html/xx/schoolabsence_mask.html</file>
+
+      <Item type="group" name="Items::Group">
+        <uilink label="" widget="itemsGroupBox" layout=""/>
+        <label lang="xx">Items à compléter</label>
+        <label lang="fr">Items à compléter</label>
+        <options>DontPrintEmptyValues</options>
+
+        <Item type="date" name="Start::Date">
+            <uilink label="startDateLabel" widget="startDateEdit" layout=""/>
+            <!--<dateformat>dddd dd/MM/yyyy</dateformat>-->
+            <options>DontPrintEmptyValues;now</options>
+            <label lang="xx">Date de début</label>
+            <label lang="fr">Date de début</label>
+        </Item>
+
+        <Item type="button" name="Start::Date::Today::Button">
+            <uilink widget="startTodayPushButton"/>
+            <label lang="xx">Today</label>
+            <label lang="fr">Aujourd'hui</label>
+        </Item>
+
+        <Item type="button" name="Start::Date::Clear::Button">
+            <uilink widget="clearStartDatePushButton"/>
+            <label lang="xx">Clear</label>
+            <label lang="fr">Effacer</label>
+        </Item>
+
+        <Item type="date" name="End::Date">
+            <uilink label="endDateLabel" widget="endDateEdit" layout=""/>
+            <options>DontPrintEmptyValues</options>
+            <label lang="xx">Date de fin</label>
+            <label lang="fr">Date de fin</label>
+        </Item>
+
+        <Item type="button" name="End::Date::Today::Button">
+            <uilink widget="endTodayPushButton"/>
+            <label lang="xx">Today</label>
+            <label lang="fr">Aujourd'hui</label>
+        </Item>
+
+        <Item type="button" name="End::Date::Clear::Button">
+            <uilink widget="clearEndDatePushButton"/>
+            <label lang="xx">Clear</label>
+            <label lang="fr">Effacer</label>
+        </Item>
+
+        <Item type="shorttext" name="Additional::Text::Shorttext">               
+            <uilink label="additionalTextLabel" widget="additionalTextLineEdit" layout=""/>
+            <options>DontPrintEmptyValues</options>                             
+            <label lang="xx">Texte supplémentaire</label>                               
+            <label lang="fr">Texte supplémentaire</label>                               
+            <placeholder lang="xx"></placeholder>                 
+            <placeholder lang="fr"></placeholder>                 
+        </Item>
+
+      </Item> <!-- end of group Items::Group -->
+
+      <Item type="texteditor" name="Certificate::Texteditor">
+        <uilink label="" widget="" layout="certificateFormLayout"/>
+        <options>DontPrintEmptyValues;fulleditor</options>
+      </Item>
+
+  </MedForm>
+</FreeMedForms>
