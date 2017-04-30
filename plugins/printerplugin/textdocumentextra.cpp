@@ -32,12 +32,12 @@
   \brief This class is used by Printer for header/footer/watermark management.
   Xml structure looks like:\n
   \verbatim
-  <tkConstants::TKDOCUMENT_GENERAL_XML_TAG> </idem>\n
-    <tkConstants::TKDOCUMENT_VERSION_XML_TAG> </idem>\n
-    <tkConstants::TKDOCUMENT_PRESENCE_XML_TAG> </idem>\n
-    <tkConstants::TKDOCUMENT_PRIORITY_XML_TAG> </idem>\n
-    <tkConstants::TKDOCUMENT_EXTRA_XML_TAG> </idem>\n
-    <tkConstants::TKDOCUMENT_HTML_XML_TAG> </idem>\n
+  <tkConstants::TKDOCUMENT_GENERAL_XML_TAG> </tkConstants::TKDOCUMENT_GENERAL_XML_TAG>\n
+    <tkConstants::TKDOCUMENT_VERSION_XML_TAG> </tkConstants::TKDOCUMENT_VERSION_XML_TAG>\n
+    <tkConstants::TKDOCUMENT_PRESENCE_XML_TAG> </tkConstants::TKDOCUMENT_PRESENCE_XML_TAG>\n
+    <tkConstants::TKDOCUMENT_PRIORITY_XML_TAG> </tkConstants::TKDOCUMENT_PRIORITY_XML_TAG>\n
+    <tkConstants::TKDOCUMENT_EXTRA_XML_TAG> </tkConstants::TKDOCUMENT_EXTRA_XML_TAG>\n
+    <tkConstants::TKDOCUMENT_HTML_XML_TAG> </tkConstants::TKDOCUMENT_HTML_XML_TAG>\n
   </tkConstants::TKDOCUMENT_GENERAL_XML_TAG>\n
   \endverbatim
   You can:
