@@ -263,7 +263,7 @@ QVariant PatientFormItemDataWrapper::data(int ref, int role) const
             if (!item->itemData()
                     || item->patientDataRepresentation() == -1)
                 continue;
-            // TODO: if the lastepisode does not contain the data, try to find the lastest recorded value
+            // TODO: if the lastepisode does not contain the data, try to find the latest recorded value
             if (item->patientDataRepresentation() == ref) {
 //                 qWarning() << "PATIENTMODEL DATA" << item->itemData() << item->itemData()->data(ref, Form::IFormItemData::PatientModelRole);
                 return item->itemData()->data(ref, role);

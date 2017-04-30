@@ -18,10 +18,10 @@
     <license>GPLv3</license>
     <description lang="xx">droplist</description>
     <description lang="fr">droplist</description>
-    <category lang="xx">test</category>
-    <category lang="fr">test</category>
-    <specialties lang="xx">test</specialties>
-    <specialties lang="fr">test</specialties>
+    <category lang="xx">Test</category>
+    <category lang="fr">Test</category>
+    <specialties lang="xx">Test</specialties>
+    <specialties lang="fr">Test</specialties>
 
     <updateinfo>
       <updateversion from="1" to="2">

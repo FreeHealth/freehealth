@@ -953,7 +953,15 @@ QHash<QString, QVariant> FormManager::formToTokens(Form::FormMain *form) const
     }
 #endif
     // Create tokens for episode data
-    tokens.insert("EpisodeUserDate", QLocale().toString(form->itemData()->data(Form::IFormItemData::ID_EpisodeDateTime).toDateTime(), QLocale::LongFormat));
+    // date
+    tokens.insert("EpisodeUserDate", QLocale().toString(form->itemData()->data(Form::IFormItemData::ID_EpisodeDateTime).toDate(), QLocale::ShortFormat));
+    tokens.insert("EpisodeUserDateLong", QLocale().toString(form->itemData()->data(Form::IFormItemData::ID_EpisodeDateTime).toDate(), QLocale::LongFormat));
+    // date & time
+    QDateTime userDateTimeUtc(QDateTime::fromString(form->itemData()->data(Form::IFormItemData::ID_EpisodeDateTime).toString(), Qt::ISODate));
+    QDateTime userDateTimeLocal(userDateTimeUtc.toLocalTime());
+    tokens.insert("EpisodeUserDateTime", QLocale().toString(userDateTimeLocal, QLocale::ShortFormat));
+    tokens.insert("EpisodeUserDateTimeLong", QLocale().toString(userDateTimeLocal, QLocale::LongFormat));
+
     tokens.insert("EpisodeUserLabel", form->itemData()->data(Form::IFormItemData::ID_EpisodeLabel));
     // Force the full name of the user
     QString userName = form->itemData()->data(Form::IFormItemData::ID_UserName).toString();
