@@ -132,7 +132,11 @@ public:
         _xmlContentCache.clear();
     }
 
-    // Update the SQL filter based on the Form UUID and its equivalents for the patient \e patientUid
+    /* Update the SQL filter based on:
+     *   - form uid
+     *   - patient uid
+     * \e patientUid
+     */
     void updateFilter(const QString &patientUid)
     {
         if (_currentPatientUuid == patientUid)
@@ -142,10 +146,14 @@ public:
         // Filter valid episodes
         QHash<int, QString> where;
         Utils::FieldList uuid;
-        uuid << Utils::Field(Constants::Table_EPISODES, Constants::EPISODES_FORM_PAGE_UID, QString("='%1'").arg(_formMain->uuid()));
+        uuid << Utils::Field(Constants::Table_EPISODES,
+                             Constants::EPISODES_FORM_PAGE_UID,
+                             QString("='%1'").arg(_formMain->uuid()));
         if (!_formMain->spec()->equivalentUuid().isEmpty()) {
             foreach(const QString &eq, _formMain->spec()->equivalentUuid())
-                uuid << Utils::Field(Constants::Table_EPISODES, Constants::EPISODES_FORM_PAGE_UID, QString("='%1'").arg(eq));
+                uuid << Utils::Field(Constants::Table_EPISODES,
+                                     Constants::EPISODES_FORM_PAGE_UID,
+                                     QString("='%1'").arg(eq));
         }
         where.insert(Constants::EPISODES_ISVALID, "=1");
         where.insert(Constants::EPISODES_PATIENT_UID, QString("='%1'").arg(patientUid));
@@ -165,7 +173,7 @@ public:
         return (_xmlContentCache.keys().contains(_sqlModel->data(id).toInt()));
     }
 
-    QString getEpisodeContentFormCache(const QModelIndex &index)
+    QString getEpisodeContentFromCache(const QModelIndex &index)
     {
         if (!_useCache)
             return QString::null;
@@ -184,7 +192,7 @@ public:
     QString getEpisodeContent(const QModelIndex &index)
     {
         if (isEpisodeContentInCache(index))
-            return getEpisodeContentFormCache(index);
+            return getEpisodeContentFromCache(index);
         QModelIndex id = _sqlModel->index(index.row(), Constants::EPISODES_ID);
         QString xml = episodeBase()->getEpisodeContent(_sqlModel->data(id));
         storeEpisodeContentInCache(id, xml);

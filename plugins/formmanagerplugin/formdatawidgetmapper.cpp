@@ -102,6 +102,7 @@ public:
 
     void populateStack(Form::FormMain *rootForm)
     {
+        WARN_FUNC;
         if (!_stack) {
             _stack = new QStackedLayout(q);
             q->setLayout(_stack);
@@ -146,6 +147,7 @@ public:
                 vl->addWidget(form->formWidget());
                 int id = _stack->addWidget(sa);
                 _stackId_FormUuid.insert(id, form->uuid());
+                qDebug() << "id: " << id << " form->uuid(): " << form->uuid();
             }
         }
     }
