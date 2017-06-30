@@ -47,7 +47,7 @@ public:
 }
 
 ScrollingWidget::ScrollingWidget( QWidget *parent ) :
-        QWidget(parent), d(0)
+    QWidget(parent), d(0)
 {
     d = new ScrollingWidgetPrivate();
     d->m_XOffset = 0;
@@ -60,7 +60,10 @@ ScrollingWidget::ScrollingWidget( QWidget *parent ) :
 
 ScrollingWidget::~ScrollingWidget()
 {
-    if (d) delete d; d=0;
+    if (d) {
+        delete d;
+        d=0;
+    }
 }
 
 void ScrollingWidget::setDirection( int direction )
@@ -90,7 +93,7 @@ void ScrollingWidget::setTimerDelay( const int delay )
 {
     d->m_TimerDelay = delay;
     if (d->m_TimerId != 0)
-            d->m_TimerId = startTimer(d->m_TimerDelay);
+        d->m_TimerId = startTimer(d->m_TimerDelay);
 }
 
 int ScrollingWidget::timerDelay()
@@ -111,24 +114,24 @@ void ScrollingWidget::paintEvent( QPaintEvent *event)
     {
     case LeftToRight :
     case RightToLeft :
-        {
-            int x = -d->m_XOffset;
-            while (x < width()) {
-                painter.drawText( x, 0, d->m_TextSize.width(), height(), Qt::AlignLeft | Qt::AlignVCenter, d->m_Text );
-                x += d->m_TextSize.width() + 10;
-            }
-            break;
+    {
+        int x = -d->m_XOffset;
+        while (x < width()) {
+            painter.drawText( x, 0, d->m_TextSize.width(), height(), Qt::AlignLeft | Qt::AlignVCenter, d->m_Text );
+            x += d->m_TextSize.width() + 10;
         }
+        break;
+    }
     case TopToBottom :
     case BottomToTop :
-        {
-            int y = -d->m_YOffset -d->m_TextSize.height();
-            while (y < (height() + d->m_TextSize.height())) {
-                painter.drawText( 0, y, d->m_TextSize.width(), d->m_TextSize.height(), Qt::AlignLeft | Qt::AlignVCenter, d->m_Text );
-                y += d->m_TextSize.height();
-            }
-            break;
+    {
+        int y = -d->m_YOffset -d->m_TextSize.height();
+        while (y < (height() + d->m_TextSize.height())) {
+            painter.drawText( 0, y, d->m_TextSize.width(), d->m_TextSize.height(), Qt::AlignLeft | Qt::AlignVCenter, d->m_Text );
+            y += d->m_TextSize.height();
         }
+        break;
+    }
     }
 
 }
@@ -139,37 +142,37 @@ void ScrollingWidget::timerEvent( QTimerEvent *event)
         switch (d->m_Direction)
         {
         case LeftToRight :
-            {
-                ++d->m_XOffset;
-                if (d->m_XOffset >= d->m_TextSize.width())
-                    d->m_XOffset = 0;
-                scroll(-1,0);
-                break;
-            }
+        {
+            ++d->m_XOffset;
+            if (d->m_XOffset >= d->m_TextSize.width())
+                d->m_XOffset = 0;
+            scroll(-1,0);
+            break;
+        }
         case RightToLeft :
-            {
-                ++d->m_XOffset;
-                if (d->m_XOffset >= d->m_TextSize.width())
-                    d->m_XOffset = 0;
-                scroll(1,0);
-                break;
-            }
+        {
+            ++d->m_XOffset;
+            if (d->m_XOffset >= d->m_TextSize.width())
+                d->m_XOffset = 0;
+            scroll(1,0);
+            break;
+        }
         case TopToBottom :
-            {
-                ++d->m_YOffset;
-                if (d->m_YOffset >= d->m_TextSize.height())
-                    d->m_YOffset = 0;
-                scroll(0,1);
-                break;
-            }
+        {
+            ++d->m_YOffset;
+            if (d->m_YOffset >= d->m_TextSize.height())
+                d->m_YOffset = 0;
+            scroll(0,1);
+            break;
+        }
         case BottomToTop :
-            {
-                ++d->m_YOffset;
-                if (d->m_YOffset >= d->m_TextSize.height())
-                    d->m_YOffset = 0;
-                scroll(0,-1);
-                break;
-            }
+        {
+            ++d->m_YOffset;
+            if (d->m_YOffset >= d->m_TextSize.height())
+                d->m_YOffset = 0;
+            scroll(0,-1);
+            break;
+        }
         } // End switch
 
     } else {
