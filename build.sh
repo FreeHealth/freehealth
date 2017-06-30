@@ -30,8 +30,9 @@ GIT_PULL=""               # y / n (if "y" a git pull command will be executed)
 SLEEP_TIME=0              # Sleep time for zenity progress bar
 REQUESTED_PLUGINS=""      # This var will store the optional plugins requested by the user
 AVAILABLE_OPTIONAL_PLUGINS="agenda alerts feedback pad pmh webcam edrc"
-AVAILABLE_CAMELCASE_APPS="FreeMedForms FreeDiams FreePad FreePort FreeDRC FreeDDIManager FreeICD FreeToolBox"
+AVAILABLE_CAMELCASE_APPS="FreeHealth FreeDiams FreePad FreePort FreeDRC FreeDDIManager FreeICD FreeToolBox"
 RUNNING_ZENITY=0          # 0 / 1 (when zenity is used => set to 1)
+PROJECT_NAME="FreeHealth" # name of the project
 
 SCRIPT_NAME=`basename $0`
 if [ "`echo $0 | cut -c1`" = "/" ]; then
@@ -45,14 +46,13 @@ PROJECT_VERSION=`cat $SCRIPT_PATH/buildspecs/projectversion.pri | grep "PACKAGE_
 
 showHelp()
 {
-    echo $SCRIPT_NAME" builds the *debug_without_install* Linux versions of the FreeMedForms applications project."
+    echo $SCRIPT_NAME" builds the *debug_without_install* Linux versions of the FreeHealth applications project."
     echo "Project version: $PROJECT_VERSION - $SCRIPT_VERSION"
     echo "Usage : $SCRIPT_NAME -txch -dri -s <qt.spec> -b <AppToBuild>"
     echo
     echo "Options :"
     echo "  -b  Application name in CamelCase. Values can be:"
-    echo "      FreeMedForms, FreeDiams, FreeDDIManager, FreeToolBox"
-    echo "      FreeICD, FreeDRC, FreePad..."
+    echo "      $AVAILABLE_CAMELCASE_APPS"
     echo "  -d  Build a debug 'no-install' version (default)"
     echo "  -r  Build a release version and install it:"
     echo "        1. Clean build path"
@@ -149,7 +149,7 @@ detectSpec()
         return 0
     else
         echo "Your Qt version seems to be incorrect."
-        echo "To build FreeMedForms applications, use Qt 5.3 or higher"
+        echo "To build $PROJECT_NAME applications, use Qt 5.7 or higher"
         exit 1
     fi
 }
@@ -496,7 +496,7 @@ done
 #########################################################################################
 ## Zenity dialogs
 #########################################################################################
-ZENITY_TITLE="FreeMedForms project builder assistant"
+ZENITY_TITLE="$PROJECT_NAME project builder assistant"
 SEPARATOR=";"        # on modification, change also in secondPage() Release;
 ZENITY="/usr/bin/zenity"
 ZENITY_SIZED="$ZENITY --width 400  --height 400 --separator $SEPARATOR"
@@ -506,7 +506,7 @@ RET=""
 
 createDefaultConfig()
 {
-    $CONFIG="FreeMedForms;Default_debug_compilation_(recommended)"
+    $CONFIG="$PROJECT_NAME;Default_debug_compilation_(recommended)"
     $CONFIG="$CONFIG;Create_translations;Parallel_build;Notify_when_done;Run_application;$SPEC"
 }
 
@@ -518,7 +518,7 @@ zenityBuild()
         build
     else
         build > >($ZENITY --progress --auto-kill \
-                          --title "Building FreeMedForms project's applications" \
+                          --title "Building $PROJECT_NAME project's applications" \
                           --text "Building..." --percentage=0 --auto-close)
     fi
 
@@ -587,7 +587,7 @@ firstPage()
 
     RET=$($ZENITY_SIZED --title "$ZENITY_TITLE" --list --text "Select the project to build" \
             --radiolist --column "Select" --column "Project"  \
-            `[ $(expr "$CONFIG" : ".*FreeMedForms.*") -ne 0 ] && echo 'True' ||  echo 'False'` "FreeMedForms"  \
+            `[ $(expr "$CONFIG" : ".*$PROJECT_NAME.*") -ne 0 ] && echo 'True' ||  echo 'False'` "$PROJECT_NAME"  \
             `[ $(expr "$CONFIG" : ".*FreeDiams.*") -ne 0 ] && echo 'True' ||  echo 'False'` "FreeDiams"  \
             `[ $(expr "$CONFIG" : ".*FreeDDIManager.*") -ne 0 ] && echo 'True' ||  echo 'False'` "FreeDDIManager"  \
             `[ $(expr "$CONFIG" : ".*FreePad.*") -ne 0 ] && echo 'True' ||  echo 'False'` "FreePad"  \
