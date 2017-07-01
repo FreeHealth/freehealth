@@ -47,7 +47,7 @@ SOURCES_ROOT_PATH=$SCRIPT_PATH"/../"
 PROJECT_VERSION=`cat $SOURCES_ROOT_PATH/buildspecs/projectversion.pri | grep "PACKAGE_VERSION" | cut -d = -s -f2 | tr -d ' '`
 
 # file naming
-ZIP_FILENAME="freehealth-src_$PROJECT_VERSION.tgz"
+ZIP_FILENAME="freehealth_$PROJECT_VERSION.orig.tar.gz"
 PARENT_PATH="freehealth-$PROJECT_VERSION" # root dir name in the zipfile
 ZIP_PATH="source_package/"`date "+%F-%s"` # Path where to store the source zip file starting from the RootSourcePath
 
@@ -303,6 +303,7 @@ createSource()
 
     # Remove all backup files
     find . -type f -name '*bkup' -exec rm {} \;
+    find . -type f -name '.qmake.stash' -exec rm {} \;
 
     echo "**** REPACK SOURCES PACKAGE FROM CREATED DIR ****"
     cd $SCRIPT_PATH

@@ -1,9 +1,7 @@
 #!/bin/sh
 #
-# This script is part of the FreeMedForms project
+# This script is part of the FreeHealth project
 # License : GPLv3
-# Self usage script for creation of the Debian packages from my Mac
-# Using VirtualBox sharedFolder
 
 echo "****  ****"
 PACKDIR=`pwd`"/package"
