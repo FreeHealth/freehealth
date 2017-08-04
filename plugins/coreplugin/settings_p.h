@@ -104,6 +104,7 @@ public:
     void setDatabaseConnector(Utils::DatabaseConnector &dbConnector);
     void readDatabaseConnector();
     void writeDatabaseConnector();
+    bool updateDatabaseSettings();
 
     // values management
     void appendToValue(const QString &key, const QString &value);

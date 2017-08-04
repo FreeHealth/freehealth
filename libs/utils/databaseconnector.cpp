@@ -366,8 +366,8 @@ QString DatabaseConnector::forSettings() const
     tmp << QString::number(d->m_Driver);
     tmp << d->m_GlobalDatabasePrefix;
     tmp << absPathToSqliteReadWriteDatabase();
-    if (CryptSerialization)
-        return Utils::nonDestructiveEncryption(tmp.join(SEPARATOR));
+    /*if (CryptSerialization)
+        return Utils::nonDestructiveEncryption(tmp.join(SEPARATOR));*/
     return tmp.join(SEPARATOR);
 }
 
@@ -379,9 +379,9 @@ void DatabaseConnector::fromSettings(const QString &value)
 {
     clear();
     QString tmp;
-    if (CryptSerialization)
+    /*if (CryptSerialization)
         tmp = Utils::decrypt(value.toUtf8());
-    else
+    else*/
         tmp = value;
     QStringList vals = tmp.split(SEPARATOR);
     if (vals.count() < 5) {

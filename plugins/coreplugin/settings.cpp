@@ -308,9 +308,21 @@ namespace {
     // const char* const WRITABLEDATABASE     = "/databases";
 
     // SETTINGS
-    const char* const S_LICENSE_VERSION    = "License/AcceptedVersion";
-    const char* const S_DATABASECONNECTOR  = "Network/Db";
-    const char* const S_DEFAULTFORM        = "Form/Default";
+    const char* const S_LICENSE_VERSION     = "License/AcceptedVersion";
+    const char* const S_DATABASECONNECTOR   = "Network/Db";
+    const char* const S_DEFAULTFORM         = "Form/Default";
+    const char* const S_DATABASE_USER       = "database/user";
+    const char* const S_DATABASE_PASSWORD   = "database/password";
+    const char* const S_DATABASE_HOSTNAME   = "database/hostname";
+    const char* const S_DATABASE_PORT       = "database/port";
+    const char* const S_DATABASE_DRIVER     = "database/driver";
+    const char* const S_DATABASE_PREFIX     = "database/prefix";
+    const char* const S_DATABASE_PATH       = "database/path";
+    const char* const S_DATABASE_SSL_KEY    = "database/ssl/key";
+    const char* const S_DATABASE_SSL_CERT   = "database/ssl/cert";
+    const char* const S_DATABASE_SSL_CA     = "database/ssl/ca";
+    const char* const S_DATABASE_SSL_CAPATH = "database/ssl/capath";
+    const char* const S_DATABASE_SSL_CIPHER = "database/ssl/cipher";
 
 }
 
@@ -1296,15 +1308,30 @@ void SettingsPrivate::setDatabaseConnector(Utils::DatabaseConnector &dbConnector
 /**
  * Read RDBMS server connection parameters.
  * Parameters are automatically transmitted to static objects of the application.
+ * If old serialized setting S_DATABASECONNECTOR (Network/Db) exists, update the
+ * ini file to the new format then delete it.
  */
 void SettingsPrivate::readDatabaseConnector()
 {
-    m_DbConnector.fromSettings(m_NetworkSettings->value(S_DATABASECONNECTOR).toString());
-    m_DbConnector.setAbsPathToReadOnlySqliteDatabase(path(Core::ISettings::ReadOnlyDatabasesPath));
-    if (m_DbConnector.absPathToSqliteReadWriteDatabase().isEmpty())
-        m_DbConnector.setAbsPathToReadWriteSqliteDatabase(path(Core::ISettings::ReadWriteDatabasesPath));
-    // Inform Utils::Database static member for any database prefix
-    Utils::Database::setDatabasePrefix(m_DbConnector.globalDatabasePrefix());
+    if(m_NetworkSettings->contains(S_DATABASECONNECTOR)) {
+        updateDatabaseSettings();
+    } else {
+        m_DbConnector.setClearLog(m_NetworkSettings->value(S_DATABASE_USER).toString());
+        m_DbConnector.setClearPass(m_NetworkSettings->value(S_DATABASE_PASSWORD).toString());
+        m_DbConnector.setHost(m_NetworkSettings->value(S_DATABASE_HOSTNAME).toString());
+        m_DbConnector.setPort(m_NetworkSettings->value(S_DATABASE_PORT).toInt());
+        m_DbConnector.setDriver(Utils::Database::AvailableDrivers(m_NetworkSettings->value(S_DATABASE_DRIVER).toInt()));
+        m_DbConnector.setAbsPathToReadOnlySqliteDatabase(path(Core::ISettings::ReadOnlyDatabasesPath));
+        if(!m_NetworkSettings->value(S_DATABASE_PREFIX).isNull()) {
+            m_DbConnector.setGlobalDatabasePrefix(m_NetworkSettings->value(S_DATABASE_PREFIX).toString());
+            // Inform Utils::Database static member for any database prefix
+            Utils::Database::setDatabasePrefix(m_DbConnector.globalDatabasePrefix());
+        }
+        if(!m_NetworkSettings->value(S_DATABASE_PATH).isNull())
+            m_DbConnector.setAbsPathToReadWriteSqliteDatabase(m_NetworkSettings->value(S_DATABASE_PATH).toString());
+        if (m_DbConnector.absPathToSqliteReadWriteDatabase().isEmpty())
+            m_DbConnector.setAbsPathToReadWriteSqliteDatabase(path(Core::ISettings::ReadWriteDatabasesPath));
+    }
 }
 
 /**
@@ -1312,6 +1339,34 @@ void SettingsPrivate::readDatabaseConnector()
  */
 void SettingsPrivate::writeDatabaseConnector()
 {
-    m_NetworkSettings->setValue(S_DATABASECONNECTOR, m_DbConnector.forSettings());
+#ifdef WITH_LOGINANDPASSWORD_CACHING
+    m_NetworkSettings->setValue(S_DATABASE_USER, m_DbConnector.clearLog());
+    m_NetworkSettings->setValue(S_DATABASE_PASSWORD, m_DbConnector.clearPass());
+#endif
+    m_NetworkSettings->setValue(S_DATABASE_HOSTNAME, m_DbConnector.host());
+    m_NetworkSettings->setValue(S_DATABASE_PORT, QString::number(m_DbConnector.port()));
+    m_NetworkSettings->setValue(S_DATABASE_DRIVER, QString::number(m_DbConnector.driver()));
+    m_NetworkSettings->setValue(S_DATABASE_PREFIX, m_DbConnector.globalDatabasePrefix());
+    m_NetworkSettings->setValue(S_DATABASE_PATH, m_DbConnector.absPathToSqliteReadWriteDatabase());
     m_NetworkSettings->sync();
+}
+
+/**
+ * Update settings for database in config-net.ini
+ */
+bool SettingsPrivate::updateDatabaseSettings()
+{
+    // Read current settings from Network/Db
+    m_DbConnector.fromSettings(m_NetworkSettings->value(S_DATABASECONNECTOR).toString());
+    m_DbConnector.setAbsPathToReadOnlySqliteDatabase(path(Core::ISettings::ReadOnlyDatabasesPath));
+    if (m_DbConnector.absPathToSqliteReadWriteDatabase().isEmpty())
+        m_DbConnector.setAbsPathToReadWriteSqliteDatabase(path(Core::ISettings::ReadWriteDatabasesPath));
+    // Inform Utils::Database static member for any database prefix
+    Utils::Database::setDatabasePrefix(m_DbConnector.globalDatabasePrefix());
+    // Write settings with new format and synchronize the file
+    writeDatabaseConnector();
+    // Remove old setting Network/Db
+    m_NetworkSettings->remove(S_DATABASECONNECTOR);
+    m_NetworkSettings->sync();
+    return true;
 }
