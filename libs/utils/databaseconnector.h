@@ -82,7 +82,6 @@ public:
     bool useExactFile() const;
     QString globalDatabasePrefix() const;
 
-    QString forSettings() const;
     void fromSettings(const QString &value);
 
     DatabaseConnector &operator=(const DatabaseConnector &in);

@@ -346,46 +346,19 @@ QString DatabaseConnector::globalDatabasePrefix() const
 }
 
 /**
- * Serialize the object to a string suitable for the settings storing. \n
- * NOTE: We have a compilation option: \e WITH_LOGINANDPASSWORD_CACHING.
- * If this DEFINE is activated, the login & the password are stored in the
- * Utils::DatabaseConnector serialization. If the DEFINE is not used, clear
- * password and clear login are not stored in the setting string.
- */
-QString DatabaseConnector::forSettings() const
-{
-    QStringList tmp;
-#ifdef WITH_LOGINANDPASSWORD_CACHING
-    tmp << d->m_ClearLog;
-    tmp << d->m_ClearPass;
-#else
-    tmp << QString(SEPARATOR);
-#endif
-    tmp << d->m_HostName;
-    tmp << QString::number(d->m_Port);
-    tmp << QString::number(d->m_Driver);
-    tmp << d->m_GlobalDatabasePrefix;
-    tmp << absPathToSqliteReadWriteDatabase();
-    /*if (CryptSerialization)
-        return Utils::nonDestructiveEncryption(tmp.join(SEPARATOR));*/
-    return tmp.join(SEPARATOR);
-}
-
-/**
  * Deserialize a setting value.
- * \sa forSettings()
+ * Left to handle transition from old serialized to new database settings format
  */
 void DatabaseConnector::fromSettings(const QString &value)
 {
     clear();
     QString tmp;
-    /*if (CryptSerialization)
+    if (CryptSerialization)
         tmp = Utils::decrypt(value.toUtf8());
-    else*/
+    else
         tmp = value;
     QStringList vals = tmp.split(SEPARATOR);
     if (vals.count() < 5) {
-        // LOG_ERROR_FOR("DatabaseConnector", "Unable to decrypt connector settings value");
         return;
     }
     d->m_ClearLog = vals[0];
