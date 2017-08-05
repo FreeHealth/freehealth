@@ -51,15 +51,6 @@
 #include <QApplication>
 #include <QFileInfo>
 
-enum {
-    CryptSerialization =
-#ifdef RELEASE
-    true // In release mode, you must keep encryption enabled
-#else
-    true // for your tests you can change this value only in a debug compilation
-#endif
-};
-
 using namespace Utils;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;
@@ -353,10 +344,7 @@ void DatabaseConnector::fromSettings(const QString &value)
 {
     clear();
     QString tmp;
-    if (CryptSerialization)
-        tmp = Utils::decrypt(value.toUtf8());
-    else
-        tmp = value;
+    tmp = Utils::decrypt(value.toUtf8());
     QStringList vals = tmp.split(SEPARATOR);
     if (vals.count() < 5) {
         return;
