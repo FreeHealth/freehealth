@@ -137,6 +137,9 @@ private:
                           const int port,
                           CreationOption createOption
                          );
+    bool updateDatabase();
+    quint32 getSchemaVersionNumber() const;
+    QString getOldVersionField() const;
 
     // Alerts
     bool updateAlertItem(AlertItem &item);

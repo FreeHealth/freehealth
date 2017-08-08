@@ -110,6 +110,8 @@ PatientBase::PatientBase(QObject *parent) :
     setObjectName("PatientBase");
 
     using namespace Patients::Constants;
+
+    // Table PATIENT_IDENTITY
     addTable(Table_IDENT, "PATIENT_IDENTITY");
 
     // Identifiers
@@ -157,7 +159,8 @@ PatientBase::PatientBase(QObject *parent) :
     addField(Table_IDENT, IDENTITY_FAXES, "FAXES", FieldIsLongText);  // Context:Value;Context;Value...
     addField(Table_IDENT, IDENTITY_MOBILE_PHONE, "MOBILE_PHONE", FieldIs32Chars);
     addField(Table_IDENT, IDENTITY_WORK_PHONE, "WORK_PHONE", FieldIs32Chars);
-    // Photo
+
+    // Table PATIENT_PHOTO
     addTable(Table_PATIENT_PHOTO, "PATIENT_PHOTO");
     addField(Table_PATIENT_PHOTO, PHOTO_ID, "PHOTO_ID", FieldIsUniquePrimaryKey);
     addField(Table_PATIENT_PHOTO, PHOTO_UID, "PHOTO_UID", FieldIsUUID);
@@ -166,11 +169,11 @@ PatientBase::PatientBase(QObject *parent) :
     addIndex(Table_PATIENT_PHOTO, PHOTO_UID);
     addIndex(Table_PATIENT_PHOTO, PHOTO_PATIENT_UID);
 
-    // Version
+    // old table VERSION
     //addTable(Table_VERSION, "VERSION");
     //addField(Table_VERSION, VERSION_TEXT, "VERSION", FieldIsShortText);
 
-    // SchemaChanges
+    // Table SCHEMA_CHANGES
     addTable(Table_SCHEMA, "SCHEMA_CHANGES");
     addField(Table_SCHEMA, SCHEMA_ID, "ID", FieldIsUniquePrimaryKey);
     addField(Table_SCHEMA, SCHEMA_VERSION, "VERSION_NUMBER", FieldIsInteger);
@@ -431,10 +434,13 @@ bool PatientBase::setPatientActiveProperty(const QString &uuid, bool active)
 }
 
 /** Private part of the Patients::PatientBase that creates the database. \sa Utils::Database. */
-bool PatientBase::createDatabase(const QString &connectionName , const QString &dbName,
+bool PatientBase::createDatabase(const QString &connectionName,
+                                 const QString &dbName,
                                  const QString &pathOrHostName,
-                                 TypeOfAccess access, AvailableDrivers driver,
-                                 const QString & login, const QString & pass,
+                                 TypeOfAccess access,
+                                 AvailableDrivers driver,
+                                 const QString & login,
+                                 const QString & pass,
                                  const int port,
                                  CreationOption /*createOption*/
                                  )
@@ -515,7 +521,7 @@ bool PatientBase::createDatabase(const QString &connectionName , const QString &
                   .arg(dbName, DB.lastError().text()));
         return false;
     }
-    if (!setSchemaVersion(Constants::DB_CURRENT_CODE_VERSION)) {
+    if (!setSchemaVersion(Constants::DB_CURRENT_CODE_VERSION, Constants::DB_NAME)) {
         LOG_ERROR(QString("Couldn't set schema version for database %1").arg(Constants::DB_NAME));
         return false;
     }
@@ -566,7 +572,7 @@ void PatientBase::toTreeWidget(QTreeWidget *tree) const
 /**
  * Update patients database
  * Old versioning (fhio version <= 0.9.9): version string = "0.1"
- * New versioning (fhio version >= 0.9.10): The version number is a integer,
+ * New versioning (fhio version >= 0.9.10): The version number is an integer,
  * starting from 1 for fhio version 0.9.10
  * The field VERSION_NUMBER of the last row of the table SCHEMA_CHANGES.
  * By definition, this number must be a positive, non null integer.
@@ -638,7 +644,6 @@ bool PatientBase::updateDatabase()
  */
 quint32 PatientBase::getSchemaVersionNumber() const
 {
-    //bool SchemaTableExists = false;
     QSqlDatabase DB = QSqlDatabase::database(Constants::DB_NAME);
     if (!connectDatabase(DB, __LINE__)) {
         return 0;
@@ -947,4 +952,3 @@ bool PatientBase::insertWorkPhone(QHash<QString, QString> wP)
     //database().close();
     return true;
 }
-

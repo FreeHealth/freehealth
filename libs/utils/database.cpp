@@ -72,6 +72,7 @@
 #include <QDir>
 #include <QSqlRecord>
 #include <QSqlField>
+#include <QSqlDriver>
 #include <QCoreApplication>
 #include <QHash>
 #include <QMultiHash>
@@ -104,9 +105,15 @@ static inline bool connectedDatabase(QSqlDatabase &db, int line)
 namespace Utils {
 namespace Internal {
 
+/** @struct DbIndex
+ *  @brief The DbIndex struct is used to add an index to a SQL table
+ *  @var DbIndex::prefix
+ *  Member 'prefix' contains the index prefix length
+ */
 struct DbIndex {
     Utils::Field field;
     QString name;
+    int prefix;
 };
 
 /*
@@ -1136,17 +1143,23 @@ void Database::addPrimaryKey(const int &tableref, const int &fieldref)
  * Create an index on the specified \e tableRef, \e fieldRef, named \e name.
  * If \e name is not specified a unique name is created.
  */
-void Database::addIndex(const int &tableref, const int &fieldref, const QString &name)
+void Database::addIndex(const int &tableref,
+                        const int &fieldref,
+                        const int &prefix,
+                        const QString &name
+                        )
 {
     Utils::Field f = this->field(tableref, fieldref);
-    addIndex(f, name);
+    addIndex(f, prefix, name);
 }
 
 /**
  * Create an index on the specified \e field, named \e name.
  * If \e name is not specified a unique name is created.
+ * @param[in] prefix The length in characters of the index to create (the column
+ * type must be string)
  */
-void Database::addIndex(const Utils::Field &field, const QString &name)
+void Database::addIndex(const Utils::Field &field, const int &prefix, const QString &name)
 {
     Internal::DbIndex index;
     // Get the correct field with field and table names
@@ -1157,6 +1170,7 @@ void Database::addIndex(const Utils::Field &field, const QString &name)
     } else {
         index.name = name;
     }
+    index.prefix = prefix;
     // Store index
     d_database->m_DbIndexes.append(index);
 }
@@ -1362,8 +1376,9 @@ bool Database::setVersion(const Field &field, const int &version)
  * deleted and a new row will be inserted with the new version value.
  * \sa getVersion(), setVersion()
  */
-bool Database::setSchemaVersion(const int &version)
+bool Database::setSchemaVersion(const int &version, const QString &dbname)
 {
+    QString scriptName = QString("initial%1").arg(dbname);
     QSqlDatabase DB = database();
     if (!connectedDatabase(DB, __LINE__)) {
         return false;
@@ -1375,14 +1390,14 @@ bool Database::setSchemaVersion(const int &version)
     query.prepare("INSERT INTO `SCHEMA_CHANGES` (`VERSION_NUMBER`, `SCRIPT_NAME`, `TIMESTAMP_UTC_APPLIED`) "
                       "VALUES (:version, :script, UTC_TIMESTAMP())");
         query.bindValue(":version", version);
-        query.bindValue(":script", "initialpatients");
+        query.bindValue(":script", scriptName);
     } else if (driver()==SQLite) {
         QString v = QString::number(version);
         QString timestamp =  QDateTime::currentDateTimeUtc().toString("YYYY-MM-DD HH:MM:SS");
         query.prepare("INSERT INTO SCHEMA_CHANGES(VERSION_NUMBER, SCRIPT_NAME, TIMESTAMP_UTC_APPLIED) "
                           "VALUES(?, ?, ?)");
             query.bindValue(0, v);
-            query.bindValue(1, "initialpatients");
+            query.bindValue(1, scriptName);
             query.bindValue(2, timestamp);
     } else {
         LOG_ERROR_FOR("Database", "Driver not recognized");
@@ -2791,8 +2806,82 @@ bool Database::executeSqlFile(const QString &connectionName, const QString &file
 }
 
 /**
+ * @brief Database::executeQueryFile
+ * @param file
+ * @param db
+ * TODO: test & use Utils::Database::executeSqlFile()
+ * @return
+ */
+bool Database::executeQueryFile(QFile &file, QSqlDatabase &db)
+{
+    WARN_FUNC;
+    QSqlQuery query(db);
+    //Read query file content
+    file.open(QIODevice::ReadOnly);
+    QString queryStr(file.readAll());
+    file.close();
+
+    //Check if SQL Driver supports Transactions
+    if(db.driver()->hasFeature(QSqlDriver::Transactions)) {
+        //Replace comments and tabs and new lines with space
+        queryStr = queryStr.replace(QRegularExpression("(\\/\\*(.|\\n)*?\\*\\/|^--.*\\n|\\t|\\n)", QRegularExpression::CaseInsensitiveOption|QRegularExpression::MultilineOption), " ");
+        //Remove waste spaces
+        queryStr = queryStr.trimmed();
+
+        //Extracting queries
+        QStringList qList = queryStr.split(';', QString::SkipEmptyParts);
+
+        //Initialize regular expression for detecting special queries (`begin transaction` and `commit`).
+        //NOTE: I used new regular expression for Qt5 as recommended by Qt documentation.
+        QRegularExpression re_transaction("\\bbegin.transaction.*", QRegularExpression::CaseInsensitiveOption);
+        QRegularExpression re_commit("\\bcommit.*", QRegularExpression::CaseInsensitiveOption);
+
+        //Check if query file is already wrapped with a transaction
+        bool isStartedWithTransaction = re_transaction.match(qList.at(0)).hasMatch();
+        if(!isStartedWithTransaction) {
+            db.transaction();     //<=== not wrapped with a transaction, so we wrap it with a transaction.
+        }
+        //Execute each individual queries
+        foreach(const QString &s, qList) {
+            if (re_transaction.match(s).hasMatch()) {    //<== detecting special query
+                db.transaction();
+            }
+            else if(re_commit.match(s).hasMatch()) {    //<== detecting special query
+                db.commit();
+            } else {
+                query.exec(s);                        //<== execute normal query
+                if(query.lastError().type() != QSqlError::NoError) {
+                    LOG_QUERY_ERROR_FOR(file.fileName(), query);
+                    db.rollback();                    //<== rollback the transaction if there is any problem
+                }
+            }
+        }
+        if (!isStartedWithTransaction) {
+            db.commit();          //<== ... completing of wrapping with transaction
+        }
+
+        //Sql Driver doesn't supports transaction
+    } else {
+
+        //...so we need to remove special queries (`begin transaction` and `commit`)
+        queryStr = queryStr.replace(QRegularExpression("(\\bbegin.transaction.*;|\\bcommit.*;|\\/\\*(.|\\n)*?\\*\\/|^--.*\\n|\\t|\\n)", QRegularExpression::CaseInsensitiveOption|QRegularExpression::MultilineOption), " ");
+        queryStr = queryStr.trimmed();
+
+        //Execute each individual queries
+        QStringList qList = queryStr.split(';', QString::SkipEmptyParts);
+        foreach(const QString &s, qList) {
+            query.exec(s);
+            if(query.lastError().type() != QSqlError::NoError) {
+                LOG_QUERY_ERROR_FOR(file.fileName(), query);
+            }
+        }
+    }
+    return true;
+}
+
+/**
  * Import a CSV structured file \e fileName into a database \e connectionName,
- * table \e table, using the speficied \e separator, and \e ignoreFirstLine or not.\n
+ * table \e table, using the specified \e separator, and \e ignoreFirstLine or not.\n
  * Creates a transaction on the database.
 */
 bool Database::importCsvToDatabase(const QString &connectionName, const QString &fileName, const QString &table, const QString &separator, bool ignoreFirstLine)
@@ -2978,13 +3067,20 @@ QStringList DatabasePrivate::getSQLCreateTable(const int &tableref)
     toReturn.append(");");
 
     QStringList indexes;
+    QString prefix;
     for(int i = 0; i < m_DbIndexes.count(); ++i) {
         const DbIndex &idx = m_DbIndexes.at(i);
+        if (idx.prefix > 0 && m_Driver==Database::MySQL) {
+            prefix = QString("(%1)").arg(idx.prefix);
+        } else {
+            prefix.clear();
+        }
         if (idx.field.table==tableref) {
-            indexes << QString("CREATE INDEX %1 ON %2 (%3);")
+            indexes << QString("CREATE INDEX %1 ON %2 (%3%4);")
                        .arg(idx.name)
                        .arg(idx.field.tableName)
-                       .arg(idx.field.fieldName);
+                       .arg(idx.field.fieldName)
+                       .arg(prefix);
         }
     }
 

@@ -60,6 +60,7 @@
 #include <QTreeWidget>
 #include <QHash>
 #include <QSqlQuery>
+#include <QSqlRecord>
 
 enum { WarnGetAlertQuerySQLCommand = false, WarnMemberNames = false };
 
@@ -289,7 +290,11 @@ AlertBase::AlertBase(QObject *parent) :
     addTable(Table_ALERT_TIMING, "TIM");
     addTable(Table_ALERT_VALIDATION, "VAL");
     addTable(Table_ALERT_PACKS, "PACKS");
-    addTable(Table_ALERT_VERSION, "VER");
+    // old code for version table VER
+    //addTable(Table_ALERT_VERSION, "VER");
+
+    // Table SCHEMA_CHANGES
+    addTable(Table_SCHEMA, "SCHEMA_CHANGES");
 
     addField(Table_ALERT, ALERT_ID, "A_ID", FieldIsUniquePrimaryKey);
     addField(Table_ALERT, ALERT_UID, "A_UID", FieldIsUUID);
@@ -322,7 +327,7 @@ AlertBase::AlertBase(QObject *parent) :
 
     addIndex(Table_ALERT, ALERT_ID);
     addIndex(Table_ALERT, ALERT_UID);
-    addIndex(Table_ALERT, ALERT_PACKUID);
+    addIndex(Table_ALERT, ALERT_PACKUID, 190);
     addIndex(Table_ALERT, ALERT_REL_ID);
     addIndex(Table_ALERT, ALERT_CATEGORY_UID);
 
@@ -400,9 +405,17 @@ AlertBase::AlertBase(QObject *parent) :
     addField(Table_ALERT_PACKS, ALERT_PACKS_LASTUPDATE, "UDT", FieldIsDateTime);
     addField(Table_ALERT_PACKS, ALERT_PACKS_XTRAXML, "XTR", FieldIsBlob);
 
-    addIndex(Table_ALERT_PACKS, ALERT_PACKS_UID);
+    addIndex(Table_ALERT_PACKS, ALERT_PACKS_UID, 190);
 
-    addField(Table_ALERT_VERSION, VERSION_TEXT, "TXT", FieldIsShortText);
+    // old code for version table VER
+    //addField(Table_ALERT_VERSION, VERSION_TEXT, "TXT", FieldIsShortText);
+
+    // fields for table SCHEMA_CHANGES
+    addField(Table_SCHEMA, SCHEMA_ID, "ID", FieldIsUniquePrimaryKey);
+    addField(Table_SCHEMA, SCHEMA_VERSION, "VERSION_NUMBER", FieldIsInteger);
+    addField(Table_SCHEMA, SCHEMA_SCRIPT, "SCRIPT_NAME", FieldIs255Chars);
+    addField(Table_SCHEMA, SCHEMA_TIMESTAMP, "TIMESTAMP_UTC_APPLIED", FieldIs19Chars);
+    addIndex(Table_SCHEMA, SCHEMA_ID);
 
     // Connect first run database creation requested
     connect(Core::ICore::instance(), SIGNAL(firstRunDatabaseCreation()), this, SLOT(onCoreFirstRunCreationRequested()));
@@ -440,7 +453,14 @@ bool AlertBase::initialize()
         LOG(tkTr(Trans::Constants::CONNECTED_TO_DATABASE_1_DRIVER_2).arg(database().databaseName()).arg(database().driverName()));
     }
 
-//    d->checkDatabaseVersion();
+    int currentDatabaseVersion = getSchemaVersionNumber();
+    if (currentDatabaseVersion != Constants::DB_CURRENT_CODE_VERSION) {
+        if(!updateDatabase()) {
+            LOG_ERROR(QString("Couldn't upgrade database %1").arg(Constants::DB_NAME));
+            return false;
+        }
+        initialize();
+    }
 
     if (!checkDatabaseScheme()) {
         LOG_ERROR(tkTr(Trans::Constants::DATABASE_1_SCHEMA_ERROR).arg(Constants::DB_NAME));
@@ -533,11 +553,100 @@ bool AlertBase::createDatabase(const QString &connectionName , const QString &db
     }
 
     // Add version number
-    if (!setVersion(Utils::Field(Constants::Table_ALERT_VERSION, Constants::VERSION_TEXT), Constants::DB_CURRENTVERSION)) {
-        LOG_ERROR_FOR("AlertBase", "Unable to set version");
+    if (!setSchemaVersion(Constants::DB_CURRENT_CODE_VERSION, Constants::DB_NAME)) {
+        LOG_ERROR(QString("Couldn't set schema version for database %1").arg(Constants::DB_NAME));
+        return false;
     }
 
     return true;
+}
+
+/**
+ * Update alerts database
+ * Old versioning (fhio version <= 0.9.10): version string = "0.1"
+ * New versioning (fhio version >= 0.11.0): The version number is an integer,
+ * starting from 1 for fhio version 0.11.0
+ * The field VERSION_NUMBER of the last row of the table SCHEMA_CHANGES.
+ * By definition, this number must be a positive, non null integer.
+ * This function will run all sql update scripts to update the database to
+ * the current code version
+ */
+bool AlertBase::updateDatabase()
+{
+    QSqlDatabase DB = QSqlDatabase::database(Constants::DB_NAME);
+    QString updateScriptFileName;
+    for (int i = 1; i <= Constants::DB_CURRENT_CODE_VERSION; i++) {
+        if (driver()==MySQL) {
+            updateScriptFileName= QString(":/sql/update/update%1%2.sql")
+                    .arg(Constants::DB_NAME)
+                    .arg(QString::number(i));
+        } else if (driver()==SQLite) {
+            updateScriptFileName= QString(":/sql/update/updatesqlite%1%2.sql")
+                    .arg(Constants::DB_NAME)
+                    .arg(QString::number(i));
+        }
+        QFile updateScriptFile(updateScriptFileName);
+        if(!executeQueryFile(updateScriptFile, DB)) {
+            LOG_ERROR(QString("Error during update of database %1 with update script %2").arg(Constants::DB_NAME).arg(updateScriptFileName));
+            return false;
+        }
+    }
+    return true;
+}
+
+/**
+ * Returns the current schema version number of the database or 0
+ * The version number is a positive integer.
+ * Version number is the value of the field VERSION_NUMBER of the last row of
+ * the table SCHEMA_CHANGES.
+ * By definition, this number must be a positive, non null integer.
+ * If the table SCHEMA_CHANGES doesn't exist (in fhio version <= 0.10) this
+ * function returns 0
+ */
+quint32 AlertBase::getSchemaVersionNumber() const
+{
+    if (!connectDatabase(Constants::DB_NAME, __LINE__)) {
+        return 0;
+    }
+    QSqlDatabase DB = database();
+    using namespace Alert::Constants;
+    QSqlQuery query(DB);
+    DB.transaction();
+    quint32 value = 0;
+    query.clear();
+    Utils::Field field(Table_SCHEMA, SCHEMA_VERSION);
+    if (query.exec(selectLast(field))) {
+        if (query.next()) {
+            value = query.value(0).toUInt();
+        }
+    } else {
+        LOG_QUERY_ERROR_FOR(DB_NAME, query);
+    }
+    query.finish();
+    DB.commit();
+    return value;
+}
+
+/**
+ * @brief AlertBase::getOldVersionField return the old style database version
+ * @return string representing the old style version number
+ */
+QString AlertBase::getOldVersionField() const
+{
+    WARN_FUNC;
+    QString oldVersionValue;
+    if (!connectDatabase(Constants::DB_NAME, __LINE__)) {
+        LOG_ERROR("Can't connect to DB");
+        return QString();
+    }
+    QSqlDatabase DB = database();
+    QSqlQuery query("SELECT TXT FROM VER ORDER BY TXT ASC LIMIT 1", DB);
+    int fieldNo = query.record().indexOf("TXT");
+    while (query.next()) {
+        oldVersionValue = query.value(fieldNo).toString();
+    }
+    qWarning() << oldVersionValue << endl;
+    return oldVersionValue;
 }
 
 /**

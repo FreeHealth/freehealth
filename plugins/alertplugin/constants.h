@@ -37,9 +37,12 @@
 namespace Alert {
 namespace Constants {
 
-const char * const  DB_NAME            = "alerts";
-const char * const  DB_FILENAME        = "alerts.db";
-const char * const  DB_CURRENTVERSION   = "0.1";
+const char * const DB_NAME                 = "alerts";
+const char * const DB_FILENAME             = "alerts.db";
+const char * const DB_INITIAL_VERSION      = "0.1";
+const char * const OLD_VERSION_TABLE       = "VER";
+const char * const OLD_VERSION_FIELD       = "TXT";
+const int          DB_CURRENT_CODE_VERSION = 1;
 
 // Tables
 enum Tables {
@@ -50,7 +53,8 @@ enum Tables {
     Table_ALERT_TIMING,
     Table_ALERT_VALIDATION,
     Table_ALERT_PACKS,
-    Table_ALERT_VERSION
+    //Table_ALERT_VERSION
+    Table_SCHEMA
 };
 
 // Fields
@@ -158,8 +162,11 @@ enum AlertPacksFields {
     ALERT_PACKS_XTRAXML
 };
 
-enum VersionFields {
-    VERSION_TEXT = 0
+enum SchemaFields {
+    SCHEMA_ID =0 ,
+    SCHEMA_VERSION,
+    SCHEMA_SCRIPT,
+    SCHEMA_TIMESTAMP
 };
 
 // Pack description

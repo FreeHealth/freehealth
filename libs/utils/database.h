@@ -42,6 +42,7 @@
 QT_BEGIN_NAMESPACE
 class QTreeWidget;
 class QProgressDialog;
+class QFile;
 QT_END_NAMESPACE
 
 /**
@@ -300,8 +301,13 @@ public:
     virtual int addTable(const int &ref, const QString &name);
     virtual int addField(const int &tableref, const int &fieldref, const QString &name, TypeOfField type = FieldUndefined, const QString &defaultValue = "NULL");
     virtual void addPrimaryKey(const int &tableref, const int &fieldref);
-    virtual void addIndex(const int &tableref, const int &fieldref, const QString &name = QString::null);
-    virtual void addIndex(const Utils::Field &field, const QString &name = QString::null);
+    virtual void addIndex(const int &tableref,
+                          const int &fieldref,
+                          const int &prefix = 0,
+                          const QString &name = QString::null);
+    virtual void addIndex(const Utils::Field &field,
+                          const int &prefix = 0,
+                          const QString &name = QString::null);
 
     virtual bool checkDatabaseScheme();
     virtual bool checkVersion(const Field &field, const QString &expectedVersion);
@@ -309,7 +315,7 @@ public:
     virtual quint32 getVersionNumber(const Field &field) const;
     virtual bool setVersion(const Field &field, const QString &version);
     virtual bool setVersion(const Field &field, const int &version);
-    virtual bool setSchemaVersion(const int &version);
+    virtual bool setSchemaVersion(const int &version, const QString &dbname);
 
     virtual QString fieldName(const int &tableref, const int &fieldref) const;
     virtual Field field(const int &tableref, const int &fieldref) const;
@@ -387,6 +393,7 @@ public:
     static bool executeSQL(const QStringList &list, QSqlDatabase &DB);
     static bool executeSQL(const QString &req, QSqlDatabase &DB);
     static bool executeSqlFile(const QString &connectionName, const QString &fileName, QString *error = 0);
+    static bool executeQueryFile(QFile &file, QSqlDatabase &db);
     static bool importCsvToDatabase(const QString &connectionName, const QString &fileName, const QString &table, const QString &separator = QString(";"), bool ignoreFirstLine = false);
     virtual void toTreeWidget(QTreeWidget *tree) const;
 
