@@ -2,5 +2,8 @@
     <qresource prefix="/">
         <file>sql/update/updatealerts1.sql</file>
         <file>sql/update/updatesqlitealerts1.sql</file>
+        <file>sql/baseline/baselinealerts.sql</file>
+        <file>sql/initial/initialdataalerts.sql</file>
+        <file>sql/initial/initialstructurealerts.sql</file>
     </qresource>
 </RCC>
