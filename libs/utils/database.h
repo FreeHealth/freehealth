@@ -315,6 +315,7 @@ public:
     virtual quint32 getVersionNumber(const Field &field) const;
     virtual bool setVersion(const Field &field, const QString &version);
     virtual bool setVersion(const Field &field, const int &version);
+    virtual quint32 getSchemaVersionNumber(const QString &dbname) const;
     virtual bool setSchemaVersion(const int &version, const QString &dbname);
 
     virtual QString fieldName(const int &tableref, const int &fieldref) const;

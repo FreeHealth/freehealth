@@ -88,7 +88,6 @@ CategoryBase::CategoryBase(QObject *parent) :
     addTable(Table_CATEGORIES, "CATEGORIES");
     addTable(Table_CATEGORY_LABEL, "LABEL");
     addTable(Table_PROTECTION, "PROTECTION");
-    addTable(Table_VERSION, "VERSION");
 
     addField(Table_CATEGORIES, CATEGORY_ID,              "CID",        FieldIsUniquePrimaryKey);
     addField(Table_CATEGORIES, CATEGORY_UUID,            "UUID",       FieldIsShortText);
@@ -102,10 +101,10 @@ CategoryBase::CategoryBase(QObject *parent) :
     addField(Table_CATEGORIES, CATEGORY_THEMEDICON,      "THEMED_ICON",FieldIsShortText);
     addField(Table_CATEGORIES, CATEGORY_EXTRAXML,        "EXTRA",      FieldIsLongText);
     addIndex(Table_CATEGORIES, CATEGORY_ID);
-    addIndex(Table_CATEGORIES, CATEGORY_UUID);
+    addIndex(Table_CATEGORIES, CATEGORY_UUID, 190);
     addIndex(Table_CATEGORIES, CATEGORY_PARENT);
     addIndex(Table_CATEGORIES, CATEGORY_LABEL_ID);
-    addIndex(Table_CATEGORIES, CATEGORY_MIME);
+    addIndex(Table_CATEGORIES, CATEGORY_MIME, 190);
     addIndex(Table_CATEGORIES, CATEGORY_PROTECTION_ID);
     addIndex(Table_CATEGORIES, CATEGORY_SORT_ID);
 
@@ -124,8 +123,6 @@ CategoryBase::CategoryBase(QObject *parent) :
     addField(Table_PROTECTION, PROTECTION_RESTRICTEDTOGROUP, "GROUP_RESTRICTED",FieldIsUUID);
     addIndex(Table_PROTECTION, PROTECTION_ID);
     addIndex(Table_PROTECTION, PROTECTION_PID);
-
-    addField(Table_VERSION, VERSION_TEXT, "VERSION",  FieldIsShortText);
 
     // Connect first run database creation requested
     connect(Core::ICore::instance(), SIGNAL(firstRunDatabaseCreation()), this, SLOT(onCoreFirstRunCreationRequested()));
@@ -167,7 +164,15 @@ bool CategoryBase::initialize()
         return false;
     }
 
-    //    checkDatabaseVersion();
+    // compare database version with the version of the code, if not equal, update
+    int currentDatabaseVersion = getSchemaVersionNumber(Constants::DB_NAME);
+    if (currentDatabaseVersion != Constants::DB_CURRENT_CODE_VERSION) {
+        if(!updateDatabase()) {
+            LOG_ERROR(QString("Couldn't upgrade database %1").arg(Constants::DB_NAME));
+            return false;
+        }
+        initialize();
+    }
 
     connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
     m_initialized = true;
@@ -253,10 +258,44 @@ bool CategoryBase::createDatabase(const QString &connectionName , const QString 
     }
 
     // Add version number
-    if (!setVersion(Utils::Field(Constants::Table_VERSION, Constants::VERSION_TEXT), Constants::DB_CURRENTVERSION)) {
-        LOG_ERROR_FOR("CategoryBase", "Unable to set version");
+    if (!setSchemaVersion(Constants::DB_CURRENT_CODE_VERSION, Constants::DB_NAME)) {
+        LOG_ERROR(QString("Couldn't set schema version for database %1").arg(Constants::DB_NAME));
+        return false;
     }
 
+    return true;
+}
+
+/**
+ * Update category database
+ * Old versioning (fhio version <= 0.10): version string = "0.1"
+ * New versioning (fhio version >= 0.11.0): The version number is an integer,
+ * starting from 1 for fhio version 0.11.0
+ * The field VERSION_NUMBER of the last row of the table SCHEMA_CHANGES.
+ * By definition, this number must be a positive, non null integer.
+ * This function will run all sql update scripts to update the database to
+ * the current code version
+ */
+bool CategoryBase::updateDatabase()
+{
+    QSqlDatabase DB = QSqlDatabase::database(Constants::DB_NAME);
+    QString updateScriptFileName;
+    for (int i = 1; i <= Constants::DB_CURRENT_CODE_VERSION; i++) {
+        if (driver()==MySQL) {
+            updateScriptFileName= QString(":/sql/update/update%1%2.sql")
+                    .arg(Constants::DB_NAME)
+                    .arg(QString::number(i));
+        } else if (driver()==SQLite) {
+            updateScriptFileName= QString(":/sql/update/updatesqlite%1%2.sql")
+                    .arg(Constants::DB_NAME)
+                    .arg(QString::number(i));
+        }
+        QFile updateScriptFile(updateScriptFileName);
+        if(!executeQueryFile(updateScriptFile, DB)) {
+            LOG_ERROR(QString("Error during update of database %1 with update script %2").arg(Constants::DB_NAME).arg(updateScriptFileName));
+            return false;
+        }
+    }
     return true;
 }
 

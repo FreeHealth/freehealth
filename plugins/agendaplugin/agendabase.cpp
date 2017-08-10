@@ -283,7 +283,6 @@ AgendaBase::AgendaBase(QObject *parent) :
     addIndex(Table_EVENTS, EVENT_ID);
     addIndex(Table_EVENTS, EVENT_CAL_ID);
     addIndex(Table_EVENTS, EVENT_COMMON_ID);
-//    addIndex(Table_COMMON, COMMON_ID);
 
     // People are related to one of the following:
     //  - Event --> EVENT_ID is populated, CAL_ID is null

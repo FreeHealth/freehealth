@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>sql/update/updatecategory1.sql</file>
+        <file>sql/update/updatesqlitecategory1.sql</file>
+    </qresource>
+</RCC>

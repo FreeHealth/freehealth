@@ -15,7 +15,7 @@ contains(FREEHEALTH,1){
     # *                                  Agenda Plugin                                      *
     # ***************************************************************************************
     # Uncomment the following line to build the plugin
-    # CONFIG *= with-agenda
+      CONFIG *= with-agenda
     # ***************************************************************************************
 
 

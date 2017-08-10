@@ -1370,6 +1370,36 @@ bool Database::setVersion(const Field &field, const int &version)
 }
 
 /**
+ * Returns the current schema version number of the database or 0
+ * The version number is a positive integer.
+ * Version number is the value of the field VERSION_NUMBER of the last row of
+ * the table SCHEMA_CHANGES.
+ * By definition, this number must be a positive, non null integer.
+ * If the table SCHEMA_CHANGES doesn't exist this function returns 0
+ */
+quint32 Database::getSchemaVersionNumber(const QString &dbname) const
+{
+    QSqlDatabase DB = QSqlDatabase::database(dbname);
+    if (!connectedDatabase(DB, __LINE__)) {
+        return 0;
+    }
+    QSqlQuery query(DB);
+    DB.transaction();
+    quint32 value = 0;
+    query.clear();
+    if (query.exec("SELECT `VERSION_NUMBER` FROM `SCHEMA_CHANGES` ORDER BY `VERSION_NUMBER` DESC LIMIT 1")) {
+        if (query.next()) {
+            value = query.value(0).toUInt();
+        }
+    } else {
+        LOG_QUERY_ERROR_FOR(dbname, query);
+    }
+    query.finish();
+    DB.commit();
+    return value;
+}
+
+/**
  * Set the database version to \e version text (QString) using the field
  * \e field.
  * \warning The table containing this field will be totally

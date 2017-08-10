@@ -55,13 +55,16 @@ public:
     bool isInitialized() const {return m_initialized;}
 
 private:
-    bool createDatabase(const QString &connectionName, const QString &dbName,
-                          const QString &pathOrHostName,
-                          TypeOfAccess access, AvailableDrivers driver,
-                          const QString &login, const QString &pass,
-                          const int port,
-                          CreationOption createOption
-                         );
+    bool createDatabase(const QString &connectionName,
+                        const QString &dbName,
+                        const QString &pathOrHostName,
+                        TypeOfAccess access,
+                        AvailableDrivers driver,
+                        const QString &login,
+                        const QString &pass,
+                        const int port,
+                        CreationOption createOption);
+    bool updateDatabase();
 
 public:
     QVector<CategoryItem *> getCategories(const QString &mime, const QStringList &uuids = QStringList()) const;

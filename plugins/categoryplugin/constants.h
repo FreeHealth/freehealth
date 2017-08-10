@@ -36,41 +36,63 @@ namespace Constants {
     const char * const  CATEGORY_CONSTANTS_TR_CONTEXT = "Category";
 
     // Database
-    const char * const  DB_NAME            = "category";
-    const char * const  DB_FILENAME        = "category.db";
-    const char * const  DB_CURRENTVERSION   = "0.1";
+    const char * const DB_NAME            = "category";
+    const char * const DB_FILENAME        = "category.db";
+    //const char * const DB_CURRENTVERSION   = "0.1";
+    const char * const DB_INITIAL_VERSION = "0.1";
+    const char * const OLD_VERSION_TABLE  = "VERSION";
+    const char * const OLD_VERSION_FIELD  = "VERSION";
+    const int          DB_CURRENT_CODE_VERSION  = 1;
 
     enum Tables {
       Table_CATEGORIES = 0,
       Table_CATEGORY_LABEL,
       Table_PROTECTION,
-      Table_VERSION
+      //Table_VERSION
+      Table_SCHEMA
     };
 
     enum CategoryFields {
-        CATEGORY_ID = 0, CATEGORY_UUID, CATEGORY_PARENT, CATEGORY_LABEL_ID,CATEGORY_MIME,
-        CATEGORY_PROTECTION_ID, CATEGORY_SORT_ID, CATEGORY_PASSWORD,
-        CATEGORY_ISVALID, CATEGORY_THEMEDICON, CATEGORY_EXTRAXML,
+        CATEGORY_ID = 0,
+        CATEGORY_UUID,
+        CATEGORY_PARENT,
+        CATEGORY_LABEL_ID,
+        CATEGORY_MIME,
+        CATEGORY_PROTECTION_ID,
+        CATEGORY_SORT_ID,
+        CATEGORY_PASSWORD,
+        CATEGORY_ISVALID,
+        CATEGORY_THEMEDICON,
+        CATEGORY_EXTRAXML,
         CATEGORY_MaxParam
     };
 
     enum CategoryLabelFields {
-        CATEGORYLABEL_ID = 0, CATEGORYLABEL_LABEL_ID, CATEGORYLABEL_LANG, CATEGORYLABEL_VALUE,
+        CATEGORYLABEL_ID = 0,
+        CATEGORYLABEL_LABEL_ID,
+        CATEGORYLABEL_LANG,
+        CATEGORYLABEL_VALUE,
         CATEGORYLABEL_ISVALID,
         CATEGORYLABEL_MaxParam
     };
 
     enum ProtectionFields {
-        PROTECTION_ID = 0, PROTECTION_PID,
-        PROTECTION_RESTRICTEDTOUSER, PROTECTION_RESTRICTEDTOGROUP,
+        PROTECTION_ID = 0,
+        PROTECTION_PID,
+        PROTECTION_RESTRICTEDTOUSER,
+        PROTECTION_RESTRICTEDTOGROUP,
         PROTECTION_MaxParam
     };
 
-    enum VersionFields {
+    /*enum VersionFields {
         VERSION_TEXT = 0
+    };*/
+    enum SchemaFields {
+        SCHEMA_ID =0 ,
+        SCHEMA_VERSION,
+        SCHEMA_SCRIPT,
+        SCHEMA_TIMESTAMP
     };
-
-
 
 }  // End namespace Constants
 }  // End namespace Category
