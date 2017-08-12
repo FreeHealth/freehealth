@@ -370,7 +370,6 @@ bool DataPackCore::createServer(const QString &serverUid)
             descr.setData(DataPack::ServerDescription::Version, qApp->applicationVersion());
             descr.setData(DataPack::PackDescription::FreeMedFormsCompatVersion, qApp->applicationVersion());
             descr.setData(DataPack::PackDescription::FreeDiamsCompatVersion, qApp->applicationVersion());
-            descr.setData(DataPack::PackDescription::FreeAccountCompatVersion, qApp->applicationVersion());
         }
 
         QString outputPackDescriptionFile = QString("%1/%2").arg(QFileInfo(path).absolutePath()).arg(DataPack::Constants::PACKDESCRIPTION_FILENAME);
@@ -398,7 +397,6 @@ bool DataPackCore::createServer(const QString &serverUid)
         descr.setData(DataPack::ServerDescription::Version, qApp->applicationVersion());
         descr.setData(DataPack::ServerDescription::FreeMedFormsCompatVersion, qApp->applicationVersion());
         descr.setData(DataPack::ServerDescription::FreeDiamsCompatVersion, qApp->applicationVersion());
-        descr.setData(DataPack::ServerDescription::FreeAccountCompatVersion, qApp->applicationVersion());
     }
     // Find final tag of the server description
     QString xml = descr.toXml();

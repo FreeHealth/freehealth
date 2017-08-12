@@ -303,7 +303,7 @@ void MainWindow::extensionsInitialized()
 
     createDockWindows();
 
-    setWindowTitle(QString("%1 %2 - (c) %3").arg(qApp->applicationName()).arg(qApp->applicationVersion()).arg(tkTr(Trans::Constants::THE_FREEMEDFORMS_COMMUNITY)));
+    setWindowTitle(QString("%1 %2 - (c) %3").arg(qApp->applicationName()).arg(qApp->applicationVersion()).arg(tkTr(Trans::Constants::EHR_COMMUNITY)));
     setWindowIcon(theme()->icon(Core::Constants::ICONFREEDRC));
 
     connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreOpened()));
