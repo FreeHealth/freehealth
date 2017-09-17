@@ -288,7 +288,7 @@ createSource()
 
     echo "   * ADDING LIBRARY VERSION NUMBER"
     cd $PACKPATH/libs
-    find . -type f -name '*.pro' -exec sed $SED_INPLACE 's/# VERSION=1.0.0/!win32:{VERSION='$NON_ALPHABETA_PROJECT_VERSION'}/' {} \;
+    find . -type f -name '*.pro' -exec sed $SED_INPLACE 's/# VERSION=1.0.0/!win32 {VERSION='$NON_ALPHABETA_PROJECT_VERSION'}/' {} \;
 
     echo "   * REMOVING TEST VERSION IN FORMS"
     cd $PACKPATH/global_resources/forms
