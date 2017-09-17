@@ -582,7 +582,7 @@ void PatientBase::toTreeWidget(QTreeWidget *tree) const
 bool PatientBase::updateDatabase()
 {
     WARN_FUNC;
-    int currentDatabaseVersion = getSchemaVersionNumber();
+    int currentDatabaseVersion = Database::getSchemaVersionNumber(Constants::DB_NAME);
     QSqlDatabase DB = QSqlDatabase::database(Constants::DB_NAME);
     if (currentDatabaseVersion == 0) {
         if(getOldVersionField() == Constants::DB_INITIAL_VERSION) {

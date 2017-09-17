@@ -32,7 +32,11 @@ namespace Constants {
 
     const char * const  DB_NAME            = "episodes";
     const char * const  DB_FILENAME        = "episodes.db";
-    const char * const  DB_CURRENTVERSION   = "2";
+    //const char * const  DB_CURRENTVERSION   = "2";
+    const char * const DB_INITIAL_VERSION = "0.1";
+    const char * const OLD_VERSION_TABLE  = "VERSION";
+    const char * const OLD_VERSION_FIELD  = "VERSION";
+    const int          DB_CURRENT_CODE_VERSION  = 3;
 
     // Tables
     enum Tables {
@@ -41,7 +45,7 @@ namespace Constants {
         Table_EPISODE_CONTENT,
         Table_EPISODES_MODIF,
         Table_FORM,
-        Table_VERSION
+        Table_SCHEMA
     };
 
     // Fields
@@ -74,8 +78,14 @@ namespace Constants {
     };
 
     enum fieldsFORM {
-        FORM_ID = 0, FORM_VALID, FORM_GENERIC, FORM_PATIENTUID,
-        FORM_SUBFORMUID, FORM_INSERTIONPOINT, FORM_INSERTASCHILD, FORM_APPEND,
+        FORM_ID = 0,
+        FORM_VALID,
+        FORM_GENERIC,
+        FORM_PATIENTUID,
+        FORM_SUBFORMUID,
+        FORM_INSERTIONPOINT,
+        FORM_INSERTASCHILD,
+        FORM_APPEND,
         FORM_USER_RESTRICTION_ID,
         FORM_MaxParam
     };
@@ -88,9 +98,13 @@ namespace Constants {
         EP_MODIF_TRACE
     };
 
-    enum VersionFields {
-        VERSION_TEXT = 0
+    enum SchemaFields {
+        SCHEMA_ID =0 ,
+        SCHEMA_VERSION,
+        SCHEMA_SCRIPT,
+        SCHEMA_TIMESTAMP
     };
+
 
     // Some constants
     const char * const ROOT_FORM_TAG = "__root__form__";

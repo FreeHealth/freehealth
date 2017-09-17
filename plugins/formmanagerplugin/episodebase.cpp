@@ -123,7 +123,7 @@ EpisodeBase::EpisodeBase(QObject *parent) :
     addTable(Table_VALIDATION, "VALIDATION");
     addTable(Table_EPISODE_CONTENT, "EPISODES_CONTENT");
     addTable(Table_FORM, "FORM_FILES");
-    addTable(Table_VERSION, "VERSION");
+    addTable(Table_SCHEMA, "SCHEMA_CHANGES");
 
     addField(Table_EPISODES, EPISODES_ID, "EPISODE_ID", FieldIsUniquePrimaryKey);
     addField(Table_EPISODES, EPISODES_PATIENT_UID, "PATIENT_UID", FieldIsUUID);
@@ -138,7 +138,7 @@ EpisodeBase::EpisodeBase(QObject *parent) :
     addField(Table_EPISODES, EPISODES_PRIORITY, "PRIOR", FieldIsInteger, "1"); // Medium
     addIndex(Table_EPISODES, EPISODES_ID);
     addIndex(Table_EPISODES, EPISODES_PATIENT_UID);
-    addIndex(Table_EPISODES, EPISODES_FORM_PAGE_UID);
+    addIndex(Table_EPISODES, EPISODES_FORM_PAGE_UID, 190);
 
     addField(Table_EPISODES_MODIF, EP_MODIF_ID, "MOD_ID", FieldIsUniquePrimaryKey);
     addField(Table_EPISODES_MODIF, EP_MODIF_EPISODE_ID, "EPISODE_ID", FieldIsInteger);
@@ -177,11 +177,15 @@ EpisodeBase::EpisodeBase(QObject *parent) :
     addField(Table_FORM, FORM_USER_RESTRICTION_ID, "USER_REST_ID", FieldIsInteger, "NULL");
     addIndex(Table_FORM, FORM_ID);
     addIndex(Table_FORM, FORM_PATIENTUID);
-    addIndex(Table_FORM, FORM_SUBFORMUID);
-    addIndex(Table_FORM, FORM_INSERTIONPOINT);
+    addIndex(Table_FORM, FORM_SUBFORMUID, 190);
+    addIndex(Table_FORM, FORM_INSERTIONPOINT, 190);
 
-    // Version
-    addField(Table_VERSION, VERSION_TEXT, "VERSION", FieldIsShortText);
+    // fields for table SCHEMA_CHANGES
+    addField(Table_SCHEMA, SCHEMA_ID, "ID", FieldIsUniquePrimaryKey);
+    addField(Table_SCHEMA, SCHEMA_VERSION, "VERSION_NUMBER", FieldIsInteger);
+    addField(Table_SCHEMA, SCHEMA_SCRIPT, "SCRIPT_NAME", FieldIs255Chars);
+    addField(Table_SCHEMA, SCHEMA_TIMESTAMP, "TIMESTAMP_UTC_APPLIED", FieldIs19Chars);
+    addIndex(Table_SCHEMA, SCHEMA_ID);
 
     // Connect first run database creation requested
     connect(Core::ICore::instance(), SIGNAL(firstRunDatabaseCreation()), this, SLOT(onCoreFirstRunCreationRequested()));
@@ -222,9 +226,13 @@ bool EpisodeBase::initialize()
         LOG(tkTr(Trans::Constants::CONNECTED_TO_DATABASE_1_DRIVER_2).arg(database().databaseName()).arg(database().driverName()));
     }
 
-    if (!checkDatabaseVersion()) {
-        LOG_ERROR(tr("Unable to update the database schema"));
-        return false;
+    int currentDatabaseVersion = getSchemaVersionNumber(Constants::DB_NAME);
+    if (currentDatabaseVersion != Constants::DB_CURRENT_CODE_VERSION) {
+        if(!updateDatabase()) {
+            LOG_ERROR(QString("Couldn't upgrade database %1").arg(Constants::DB_NAME));
+            return false;
+        }
+        initialize();
     }
 
     if (!checkDatabaseScheme()) {
@@ -320,27 +328,109 @@ bool EpisodeBase::createDatabase(const QString &connectionName , const QString &
                   .arg(dbName, DB.lastError().text()));
         return false;
     }
-
     // Add version number
-    if (!setVersion(Utils::Field(Constants::Table_VERSION, Constants::VERSION_TEXT), Constants::DB_CURRENTVERSION)) {
-        LOG_ERROR_FOR("EpisodeBase", "Unable to set version");
+    if (!setSchemaVersion(Constants::DB_CURRENT_CODE_VERSION, Constants::DB_NAME)) {
+        LOG_ERROR(QString("Couldn't set schema version for database %1").arg(Constants::DB_NAME));
+        return false;
     }
     populateWithDefaultValues();
 
     return true;
 }
 
+int EpisodeBase::currentDatabaseVersion() const
+{
+int currentDatabaseVersion = Database::getSchemaVersionNumber(Constants::DB_NAME);
+if (currentDatabaseVersion > 0)
+    return currentDatabaseVersion;
+
+QString oldVersion = getOldVersionField();
+qWarning() << "old database version: " << oldVersion << endl;
+bool ok;
+if (!oldVersion.isEmpty()) {
+    if (oldVersion.contains(".")) {
+        currentDatabaseVersion = 0;
+    } else {
+    currentDatabaseVersion = oldVersion.toInt(&ok, 10);
+    }
+}
+return currentDatabaseVersion;
+}
+
+/**
+ * Update episode database
+ * Old versioning (fhio version <= 0.10): version string = "0.1" or "0.2"
+ * New versioning (fhio version >= 0.11.0): The version number is an integer,
+ * starting from 3 for fhio version 0.11.0
+ * The field VERSION_NUMBER of the last row of the table SCHEMA_CHANGES.
+ * By definition, this number must be a positive, non null integer.
+ * This function will run all sql update scripts to update the database to
+ * the current code version
+ * Update script 1 takes care of update from version 0.1 to version 1
+ * Update from 0.1 to 0.2 is not necessary because the change it introduced was
+ * erased by a subsequent update.
+ * Script 2 takes care of update from version 1 to 2 and so on and so forth.
+ */
+bool EpisodeBase::updateDatabase()
+{
+    qWarning() << "current episodes database version: " << currentDatabaseVersion() << endl;
+    QSqlDatabase DB = QSqlDatabase::database(Constants::DB_NAME);
+    QString updateScriptFileName;
+    int currentVersion = currentDatabaseVersion();
+    for (int i = currentVersion++; i <= Constants::DB_CURRENT_CODE_VERSION; i++) {
+        if (driver()==MySQL) {
+            updateScriptFileName= QString(":/sql/update/update%1%2.sql")
+                    .arg(Constants::DB_NAME)
+                    .arg(QString::number(i));
+        } else if (driver()==SQLite) {
+            updateScriptFileName= QString(":/sql/update/updatesqlite%1%2.sql")
+                    .arg(Constants::DB_NAME)
+                    .arg(QString::number(i));
+        }
+        QFile updateScriptFile(updateScriptFileName);
+        if(!executeQueryFile(updateScriptFile, DB)) {
+            LOG_ERROR(QString("Error during update of database %1 with update script %2").arg(Constants::DB_NAME).arg(updateScriptFileName));
+            return false;
+        }
+    }
+    return true;
+}
+
+/**
+ * @brief AlertBase::getOldVersionField return the old style database version
+ * @return string representing the old style version number
+ */
+QString EpisodeBase::getOldVersionField() const
+{
+    WARN_FUNC;
+    QString oldVersionValue;
+    QSqlDatabase DB = QSqlDatabase::database(DB_NAME);
+    if (!connectDatabase(DB, __LINE__)) {
+        LOG_ERROR("Can't connect to DB");
+        return QString();
+    }
+    QSqlQuery query("SELECT `VERSION` FROM `VERSION` ORDER BY `VERSION` ASC LIMIT 1", DB);
+    int fieldNo = query.record().indexOf("VERSION");
+    while (query.next()) {
+        oldVersionValue = query.value(fieldNo).toString();
+    }
+    qWarning() << oldVersionValue << endl;
+    return oldVersionValue;
+}
+
 /** Populate the database with the default value after its creation. */
 void EpisodeBase::populateWithDefaultValues()
 {
     // set default patient FormFile
-    setGenericPatientFormFile(QString("%1/%2").arg(Core::Constants::TAG_APPLICATION_COMPLETEFORMS_PATH).arg(Core::Constants::S_DEF_PATIENTFORMS_FILENAME));
+    setGenericPatientFormFile(QString("%1/%2")
+                              .arg(Core::Constants::TAG_APPLICATION_COMPLETEFORMS_PATH)
+                              .arg(Core::Constants::S_DEF_PATIENTFORMS_FILENAME));
 }
 
 /**
  * Checks the current version of the database.
  * Returns \e true if the version is the latest one.
- */
+
 bool EpisodeBase::checkDatabaseVersion()
 {
     Utils::Field vField(Constants::Table_VERSION, Constants::VERSION_TEXT);
@@ -429,6 +519,7 @@ bool EpisodeBase::checkDatabaseVersion()
     // Update the database version
     return setVersion(vField, Constants::DB_CURRENTVERSION);
 }
+*/
 
 void EpisodeBase::onCoreDatabaseServerChanged()
 {

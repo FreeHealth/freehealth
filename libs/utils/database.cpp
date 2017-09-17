@@ -2857,7 +2857,8 @@ bool Database::executeQueryFile(QFile &file, QSqlDatabase &db)
         queryStr = queryStr.replace(QRegularExpression("(\\/\\*(.|\\n)*?\\*\\/|^--.*\\n|\\t|\\n)", QRegularExpression::CaseInsensitiveOption|QRegularExpression::MultilineOption), " ");
         //Remove waste spaces
         queryStr = queryStr.trimmed();
-
+        if (queryStr.isEmpty())
+            return true;
         //Extracting queries
         QStringList qList = queryStr.split(';', QString::SkipEmptyParts);
 

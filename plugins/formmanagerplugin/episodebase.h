@@ -162,8 +162,11 @@ private:
                           const int port,
                           CreationOption createOption
                          );
+    QString getOldVersionField() const;
+    int currentDatabaseVersion() const;
+    bool updateDatabase();
     void populateWithDefaultValues();
-    bool checkDatabaseVersion();
+    /*bool checkDatabaseVersion();*/
 
     // Episodes
     bool saveEpisodeValidations(Internal::EpisodeData *episode);

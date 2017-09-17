@@ -90,4 +90,5 @@ TRANSLATION_NAME = formmanager
 include($${SOURCES_ROOT_PATH}/buildspecs/translations.pri)
 
 RESOURCES += \
-    resources.qrc
+    resources.qrc \
+    formmanagerplugin.qrc

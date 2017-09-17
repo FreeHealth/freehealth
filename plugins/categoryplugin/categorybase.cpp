@@ -88,6 +88,7 @@ CategoryBase::CategoryBase(QObject *parent) :
     addTable(Table_CATEGORIES, "CATEGORIES");
     addTable(Table_CATEGORY_LABEL, "LABEL");
     addTable(Table_PROTECTION, "PROTECTION");
+    addTable(Table_SCHEMA, "SCHEMA_CHANGES");
 
     addField(Table_CATEGORIES, CATEGORY_ID,              "CID",        FieldIsUniquePrimaryKey);
     addField(Table_CATEGORIES, CATEGORY_UUID,            "UUID",       FieldIsShortText);
@@ -124,6 +125,14 @@ CategoryBase::CategoryBase(QObject *parent) :
     addIndex(Table_PROTECTION, PROTECTION_ID);
     addIndex(Table_PROTECTION, PROTECTION_PID);
 
+    // fields for table SCHEMA_CHANGES
+    addField(Table_SCHEMA, SCHEMA_ID, "ID", FieldIsUniquePrimaryKey);
+    addField(Table_SCHEMA, SCHEMA_VERSION, "VERSION_NUMBER", FieldIsInteger);
+    addField(Table_SCHEMA, SCHEMA_SCRIPT, "SCRIPT_NAME", FieldIs255Chars);
+    addField(Table_SCHEMA, SCHEMA_TIMESTAMP, "TIMESTAMP_UTC_APPLIED", FieldIs19Chars);
+    addIndex(Table_SCHEMA, SCHEMA_ID);
+
+
     // Connect first run database creation requested
     connect(Core::ICore::instance(), SIGNAL(firstRunDatabaseCreation()), this, SLOT(onCoreFirstRunCreationRequested()));
 }
@@ -159,11 +168,6 @@ bool CategoryBase::initialize()
         LOG(tkTr(Trans::Constants::CONNECTED_TO_DATABASE_1_DRIVER_2).arg(database().databaseName()).arg(database().driverName()));
     }
 
-    if (!checkDatabaseScheme()) {
-        LOG_ERROR(tkTr(Trans::Constants::DATABASE_1_SCHEMA_ERROR).arg(Constants::DB_NAME));
-        return false;
-    }
-
     // compare database version with the version of the code, if not equal, update
     int currentDatabaseVersion = getSchemaVersionNumber(Constants::DB_NAME);
     if (currentDatabaseVersion != Constants::DB_CURRENT_CODE_VERSION) {
@@ -172,6 +176,11 @@ bool CategoryBase::initialize()
             return false;
         }
         initialize();
+    }
+
+    if (!checkDatabaseScheme()) {
+        LOG_ERROR(tkTr(Trans::Constants::DATABASE_1_SCHEMA_ERROR).arg(Constants::DB_NAME));
+        return false;
     }
 
     connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));

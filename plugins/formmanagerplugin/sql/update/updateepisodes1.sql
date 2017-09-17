@@ -1,0 +1,2 @@
+/* Update from 0.1 or 0.2 to 1. */
+ALTER TABLE `EPISODES` ADD PRIOR INT DEFAULT 1;

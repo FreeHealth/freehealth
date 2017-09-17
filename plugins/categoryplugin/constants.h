@@ -48,7 +48,6 @@ namespace Constants {
       Table_CATEGORIES = 0,
       Table_CATEGORY_LABEL,
       Table_PROTECTION,
-      //Table_VERSION
       Table_SCHEMA
     };
 
@@ -84,9 +83,6 @@ namespace Constants {
         PROTECTION_MaxParam
     };
 
-    /*enum VersionFields {
-        VERSION_TEXT = 0
-    };*/
     enum SchemaFields {
         SCHEMA_ID =0 ,
         SCHEMA_VERSION,

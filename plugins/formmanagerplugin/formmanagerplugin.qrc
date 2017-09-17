@@ -1,0 +1,10 @@
+<RCC>
+    <qresource prefix="/">
+        <file>sql/update/updateepisodes1.sql</file>
+        <file>sql/update/updateepisodes2.sql</file>
+        <file>sql/update/updateepisodes3.sql</file>
+        <file>sql/update/updatesqliteepisodes3.sql</file>
+        <file>sql/update/updatesqliteepisodes2.sql</file>
+        <file>sql/update/updatesqliteepisodes1.sql</file>
+    </qresource>
+</RCC>
