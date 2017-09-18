@@ -159,7 +159,7 @@
 <context>
     <name>Tools::Internal::HprimIntegratorMode</name>
     <message>
-        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="491"/>
+        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="477"/>
         <source>HPRIM</source>
         <translation type="unfinished"></translation>
     </message>
@@ -218,60 +218,60 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="326"/>
-        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="386"/>
+        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="312"/>
+        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="372"/>
         <source>Select a patient</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="355"/>
+        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="341"/>
         <source>No patient found with the following names: %1; %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="359"/>
+        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="345"/>
         <source>There are multiple patient with the same names: %1 %2. You will have to select the correct one.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="367"/>
+        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="353"/>
         <source>No correct HPRIM header found: %1; %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="387"/>
+        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="373"/>
         <source>No patient selected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="399"/>
-        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="400"/>
+        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="385"/>
+        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="386"/>
         <source>Unable to find the form item for importation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="408"/>
-        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="418"/>
+        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="394"/>
+        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="404"/>
         <source>Error during importation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="409"/>
+        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="395"/>
         <source>Error during importation (content is empty)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="419"/>
+        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="405"/>
         <source>Error during importation (wrong checking)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="467"/>
+        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="453"/>
         <source>Importation was successful</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="468"/>
+        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="454"/>
         <source>Importation was successful. 
 %1</source>
         <translation type="unfinished"></translation>

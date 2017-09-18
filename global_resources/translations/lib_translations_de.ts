@@ -2037,10 +2037,6 @@ Text Align Justify shortcut key : Mac specific</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Creator and Main Developer</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Developers and Contributors</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2743,6 +2739,10 @@ Text Align Justify shortcut key : Mac specific</extracomment>
     </message>
     <message>
         <source>Secretary rights</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Creator</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

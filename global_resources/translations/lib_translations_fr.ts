@@ -1592,10 +1592,6 @@ Emplacement : %2</translation>
         <translation>Conseiller déboggage</translation>
     </message>
     <message>
-        <source>Creator and Main Developer</source>
-        <translation>Créateur et développeur principal</translation>
-    </message>
-    <message>
         <source>Developers and Contributors</source>
         <translation>Développeurs et contributeurs</translation>
     </message>
@@ -2739,6 +2735,10 @@ Text Align Justify shortcut key : Mac specific</extracomment>
     <message>
         <source>Secretary rights</source>
         <translation>Droits du secrétariat</translation>
+    </message>
+    <message>
+        <source>Creator</source>
+        <translation>Créateur</translation>
     </message>
 </context>
 </TS>
