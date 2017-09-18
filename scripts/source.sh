@@ -33,6 +33,7 @@ PACKPATH=""
 SOURCES_ROOT_PATH=""
 GPG_KEY=""
 SED_INPLACE="-ibkup" # on macos change to "-i bkup"
+GITHASH=`git rev-parse HEAD` 
 
 # Some path definition
 SCRIPT_NAME=`basename $0`
@@ -49,7 +50,7 @@ PROJECT_VERSION=`cat $SOURCES_ROOT_PATH/buildspecs/projectversion.pri | grep "PA
 # file naming
 ZIP_FILENAME="freehealth_$PROJECT_VERSION.orig.tar.gz"
 PARENT_PATH="freehealth-$PROJECT_VERSION" # root dir name in the zipfile
-ZIP_PATH="source_package/"`date "+%F-%s"` # Path where to store the source zip file starting from the RootSourcePath
+ZIP_PATH="source_package/"$GITHASH # Default path to store the source tar.gz file starting from the RootSourcePath
 
 showHelp()
 {
@@ -61,6 +62,7 @@ showHelp()
     echo "  -d  Include eDRC non-free datapack in datapacks/appinstalled"
     echo "  -h  Show this help"
     echo "  -k pgpkey    Use this specific key to sign the package (indicate key long ID starting with 0x)"
+    echo "  -p path to folder where the tar.gz archive will be created"
     echo
 }
 
@@ -297,7 +299,6 @@ createSource()
     # git version is computed in the buildspecs/githash.pri
     # but the source package needs a static reference
     # while source package does not include the git logs
-    GITHASH=`git rev-parse HEAD`
     echo "   * SETTING GIT revision hash to " $GITHASH
     sed $SED_INPLACE 's/GIT_HASH=.*/GIT_HASH='$GITHASH'/' $PACKPATH/buildspecs/githash.pri
 
@@ -307,8 +308,13 @@ createSource()
 
     echo "**** REPACK SOURCES PACKAGE FROM CREATED DIR ****"
     cd $SCRIPT_PATH
-    mkdir -p ../$ZIP_PATH
-    tar czf ../$ZIP_PATH/$ZIP_FILENAME  ./$PARENT_PATH
+    if [ -z "$TARGET_PATH" ]
+    then
+      mkdir -p ../$ZIP_PATH                                                       
+      tar czf ../$ZIP_PATH/$ZIP_FILENAME  ./$PARENT_PATH 
+    else
+      tar czf $TARGET_PATH/$ZIP_FILENAME  ./$PARENT_PATH
+    fi
 
     echo "**** SIGNING SOURCE FILE, KEY: $GPG_KEY ****"
     # --armor: GPG signature in ASCII Armor format: This format is more human readable and more portable.
@@ -317,8 +323,13 @@ createSource()
     echo "**** CLEANING TMP SOURCES PATH ****"
     rm -R $PACKPATH
 
-    cd ..
-    echo "*** Source package: `pwd`/$ZIP_PATH/$ZIP_FILENAME"
+    if [ -z "$TARGET_PATH" ]                                                    
+    then                                                                        
+      cd ..
+      echo "*** Source package: `pwd`/$ZIP_PATH/$ZIP_FILENAME"
+    else                                                                        
+      echo "*** Source package: $TARGET_PATH/$ZIP_FILENAME"                         
+    fi
 }
 
 #########################################################################################
@@ -327,7 +338,7 @@ createSource()
 
 prepareFileSelection
 
-while getopts "hdk:" option
+while getopts "hdkp:" option
 do
   case $option in
     h) showHelp
@@ -336,6 +347,8 @@ do
     d) includeEdrcFiles
     ;;
     k) GPG_KEY=$OPTARG
+    ;;
+    p) TARGET_PATH=$OPTARG
     ;;
   esac
 done
