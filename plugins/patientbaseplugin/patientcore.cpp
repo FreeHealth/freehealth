@@ -155,20 +155,76 @@ bool PatientCore::createDefaultVirtualPatients() const
     int userLkId = 1;
 
     QString uid = "b04936fafccb4174a7a6af25dd2bb71c";
-    d->_base->createVirtualPatient("KIRK", "", "James Tiberius", "M", 6, QDate(1968, 04, 20), "US", "USS Enterprise",
-                  "21, StarFleet Command", "1968", "EarthTown", uid, userLkId, "", "", path+"captainkirk.jpg");
+    d->_base->createVirtualPatient("KIRK",
+                                   "",
+                                   "James Tiberius",
+                                   "M",
+                                   6,
+                                   QDate(1968, 04, 20),
+                                   "US",
+                                   "USS Enterprise",
+                                   "21, StarFleet Command",
+                                   "1968",
+                                   "EarthTown",
+                                   uid,
+                                   userLkId,
+                                   "",
+                                   "",
+                                   path+"captainkirk.jpg");
 
     uid = "2c49299b9b554300b46a6e3ef6d40a65";
-    d->_base->createVirtualPatient("PICARD", "", "Jean-Luc", "M", 6, QDate(1948, 04, 20), "US", "USS Enterprise-D",
-                  "21, StarFleet Command", "1968", "EarthTown", uid, userLkId, "", "", path+"captainpicard.png");
+    d->_base->createVirtualPatient("PICARD",
+                                   "",
+                                   "Jean-Luc",
+                                   "M",
+                                   6,
+                                   QDate(1948, 04, 20),
+                                   "US",
+                                   "USS Enterprise-D",
+                                   "21, StarFleet Command",
+                                   "1968",
+                                   "EarthTown",
+                                   uid,
+                                   userLkId,
+                                   "",
+                                   "",
+                                   path+"captainpicard.png");
 
     uid = "ef97f37361824b6f826d5c9246f9dc49";
-    d->_base->createVirtualPatient("ARCHER", "", "Jonathan", "M", 6, QDate(1928, 04, 20), "US", "Enterprise (NX-01) commanding officer",
-                  "21, StarFleet Command", "1968", "EarthTown", uid, userLkId, "0601020304", "0901020304", path+"captainarcher.jpg");
+    d->_base->createVirtualPatient("ARCHER",
+                                   "",
+                                   "Jonathan",
+                                   "M",
+                                   6,
+                                   QDate(1928, 04, 20),
+                                   "US",
+                                   "Enterprise (NX-01) commanding officer",
+                                   "21, StarFleet Command",
+                                   "1968",
+                                   "EarthTown",
+                                   uid,
+                                   userLkId,
+                                   "0601020304",
+                                   "0901020304",
+                                   path+"captainarcher.jpg");
 
     uid = "493aa06a1b8745b2ae6c79c531ef12a0";
-    d->_base->createVirtualPatient("JANEWAY", "", "Kathryn", "F", 6, QDate(1938, 04, 20), "US", "USS Voyager",
-                  "21, StarFleet Command", "1968", "EarthTown", uid, userLkId, "0601020304", "0901020304", path+"captainjaneway.jpg");
+    d->_base->createVirtualPatient("JANEWAY",
+                                   "",
+                                   "Kathryn",
+                                   "F",
+                                   6,
+                                   QDate(1938, 04, 20),
+                                   "US",
+                                   "USS Voyager",
+                                   "21, StarFleet Command",
+                                   "1968",
+                                   "EarthTown",
+                                   uid,
+                                   userLkId,
+                                   "0601020304",
+                                   "0901020304",
+                                   path+"captainjaneway.jpg");
     return true;
 }
 
