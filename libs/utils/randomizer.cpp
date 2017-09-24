@@ -432,8 +432,8 @@ QDateTime Randomizer::randomDateTime(const QDateTime &minDateTime) const
                     break;
                 }
             }
-            toReturn.addMSecs(r);
-            if (++i == 20)
+
+            if (toReturn.addMSecs(r).isValid() && ++i == 20)
                 break;
         }
     } else {
