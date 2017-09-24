@@ -79,16 +79,16 @@ QString teens(int number)
     case 1:
     {
         switch (digit) {
-        case 0 : tkTr(Trans::Constants::TEN);
-        case 1 : tkTr(Trans::Constants::ELEVEN);
-        case 2 : tkTr(Trans::Constants::TWELVE);
-        case 3 : tkTr(Trans::Constants::THIRTEEN);
-        case 4 : tkTr(Trans::Constants::FOURTEEN);
-        case 5 : tkTr(Trans::Constants::FIFTEEN);
-        case 6 : tkTr(Trans::Constants::SIXTEEN);
-        case 7 : tkTr(Trans::Constants::SEVENTEEN);
-        case 8 : tkTr(Trans::Constants::EIGHTEEN);
-        case 9 : tkTr(Trans::Constants::NINETEEN);
+        case 0 : return tkTr(Trans::Constants::TEN);
+        case 1 : return tkTr(Trans::Constants::ELEVEN);
+        case 2 : return tkTr(Trans::Constants::TWELVE);
+        case 3 : return tkTr(Trans::Constants::THIRTEEN);
+        case 4 : return tkTr(Trans::Constants::FOURTEEN);
+        case 5 : return tkTr(Trans::Constants::FIFTEEN);
+        case 6 : return tkTr(Trans::Constants::SIXTEEN);
+        case 7 : return tkTr(Trans::Constants::SEVENTEEN);
+        case 8 : return tkTr(Trans::Constants::EIGHTEEN);
+        case 9 : return tkTr(Trans::Constants::NINETEEN);
         }
     }
     case 2:
@@ -143,7 +143,8 @@ QString stringSegment(int number)
 /**
  * Returns the human readable string corresponding to the number (integer and decimal) into
  * a stringlist: [0] is the integer, [1] is the decimal (if decimal > 0, otherwise there are no [1]).
- * Eg: 1222 -> one thousand deux hundred twenty-two
+ * Eg: 1222 -> one thousand two hundred twenty-two
+ * TODO: (if those functions are actually used in the future) use https://github.com/trodevel/HumanizerCpp
  */
 QString integerToHumanReadableString(int n)
 {
