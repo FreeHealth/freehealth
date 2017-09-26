@@ -1093,6 +1093,13 @@ bool UserBase::createDefaultUser()
     user->setExtraDocument(Print::TextDocumentExtra::fromXml(defaultWatermark("admin", "administrative")), Core::IUser::AdministrativeWatermark);
 
     qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
+    user->setExtraDocument(Print::TextDocumentExtra::fromXml(defaultHeader("admin")), Core::IUser::PrescriptionHeader);
+    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
+    user->setExtraDocument(Print::TextDocumentExtra::fromXml(defaultFooter("admin")), Core::IUser::PrescriptionFooter);
+    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
+    user->setExtraDocument(Print::TextDocumentExtra::fromXml(defaultWatermark("admin", "administrative")), Core::IUser::PrescriptionWatermark);
+
+    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     saveUser(user);
 
     // create the linker
