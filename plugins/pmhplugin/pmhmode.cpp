@@ -162,7 +162,7 @@ PmhModeWidget::PmhModeWidget(QWidget *parent) :
     ui->treeView->setCommands(QStringList()
                               << Constants::A_PMH_NEW
                               << Constants::A_PMH_REMOVE
-                              << Constants::A_PMH_CATEGORYMANAGER);
+                              /*<< Constants::A_PMH_CATEGORYMANAGER*/);
     ui->treeView->addContext(Core::Context(Constants::C_PMH_PLUGINS));
     ui->treeView->setModel(catModel());
     ui->treeView->header()->hide();

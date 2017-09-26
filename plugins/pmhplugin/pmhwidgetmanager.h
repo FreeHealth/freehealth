@@ -72,7 +72,7 @@ protected:
     QAction *aAddPmh;
     QAction *aRemovePmh;
     QAction *aAddCat;
-    QAction *aCategoryManager;
+    //QAction *aCategoryManager;
     QAction *aPmhDatabaseInformation;
     QAction *aCreateEpisode, *aValidateEpisode, *aRenewEpisode, *aRemoveEpisode, *aSaveEpisode;
     QAction *aTakeScreenshot;
