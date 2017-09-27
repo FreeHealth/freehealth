@@ -50,7 +50,7 @@ namespace MedicalUtils {
 /** \brief Returns a readable age calculated from the date to now */
 QString readableAge(const QDate &DOB, const int &monthsYearsLimit)
 {
-
+    int n; // plural
     QDate current = QDate::currentDate();
     int daysTo = DOB.daysTo(current);
     if (daysTo < 0)
@@ -63,9 +63,13 @@ QString readableAge(const QDate &DOB, const int &monthsYearsLimit)
     if (current.month() == DOB.month()
             && current.day() == DOB.day()) {
         int years = current.year() - DOB.year();
-        if (ageInMonths <= monthsYearsLimit)
-            return QString(QObject::tr("%n month(s)", "", ageInMonths));
-        return QString(QObject::tr("%n year(s)", "", years));
+        if (ageInMonths <= monthsYearsLimit) {
+            n = ageInMonths;
+            return QString(QObject::tr("%n month(s)", "", n));
+        } else {
+            n = years;
+            return QString(QObject::tr("%n year(s)", "", n));
+        }
     }
     // Compute average age
     double age = daysTo / 365.242199;
@@ -74,7 +78,8 @@ QString readableAge(const QDate &DOB, const int &monthsYearsLimit)
     int years = (int)age;
 
     if (ageInMonths >= monthsYearsLimit) {
-        QString tmp = (QString(QObject::tr("%n year(s)", "", years)));
+        n = years;
+        QString tmp = (QString(QObject::tr("%n year(s)", "", n)));
         readableAge << tmp;
         age -= years;
     }
@@ -83,14 +88,16 @@ QString readableAge(const QDate &DOB, const int &monthsYearsLimit)
     months = age * 12;
     if (months > 0) {
         age -= months / 12.0;
-        QString tmp = (QString(QObject::tr("%n month(s)", "", months)));
+        n = months;
+        QString tmp = (QString(QObject::tr("%n month(s)", "", n)));
         readableAge << tmp;
     }
     //int days;
     //days = daysTo - (years*365.25) - (months*12);
     if (age > 0) {
         int numberOfDays = (int)(age*365.242199);
-        QString tmp = QString(QObject::tr("%n day(s)", "", numberOfDays));
+        n = numberOfDays;
+        QString tmp = QString(QObject::tr("%n day(s)", "", n));
         readableAge << tmp;
     }
     return readableAge.join(" ");

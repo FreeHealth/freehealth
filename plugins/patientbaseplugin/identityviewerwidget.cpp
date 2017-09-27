@@ -740,7 +740,8 @@ public:
             age = m_PatientModel->index(row, Core::IPatient::Age).data().toString();
         } else {
             int yearsOld = m_PatientModel->index(row, Core::IPatient::YearsOld).data().toInt();
-            age = QString(QObject::tr("%n year(s)", "", yearsOld));
+            int n = yearsOld;
+            age = QString(QObject::tr("%n year(s)", "", n));
         }
         QString dobShort = QLocale().toString(m_PatientModel->index(row, Core::IPatient::DateOfBirth).data().toDate(), QLocale::ShortFormat);
         QString dobLong = QLocale().toString(m_PatientModel->index(row, Core::IPatient::DateOfBirth).data().toDate(), QLocale::LongFormat);
