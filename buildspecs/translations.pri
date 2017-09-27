@@ -1,5 +1,6 @@
 # This file is included in the fmf-plugins.pri and the libsworkbench
 TRANSLATIONS += \
+    $${SOURCES_TRANSLATIONS}/$$lower($${PRE_TRANSLATION})_$$lower($${TRANSLATION_NAME})_en.ts \
     $${SOURCES_TRANSLATIONS}/$$lower($${PRE_TRANSLATION})_$$lower($${TRANSLATION_NAME})_fr.ts \
     $${SOURCES_TRANSLATIONS}/$$lower($${PRE_TRANSLATION})_$$lower($${TRANSLATION_NAME})_de.ts \
     $${SOURCES_TRANSLATIONS}/$$lower($${PRE_TRANSLATION})_$$lower($${TRANSLATION_NAME})_es.ts \
