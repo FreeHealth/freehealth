@@ -2245,9 +2245,9 @@ void BaseDateTimeData::onValueChanged()
     Q_EMIT dataChanged(0);
 }
 
-//--------------------------------------------------------------------------------------------------------
-//------------------------------------------ BaseSpin --------------------------------------------------
-//--------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+//------------------------------ BaseSpin --------------------------------------
+//------------------------------------------------------------------------------
 BaseSpin::BaseSpin(Form::FormItem *formItem, QWidget *parent, bool doubleSpin) :
     Form::IFormWidget(formItem,parent), m_Spin(0)
 {
@@ -2327,6 +2327,10 @@ BaseSpin::BaseSpin(Form::FormItem *formItem, QWidget *parent, bool doubleSpin) :
 BaseSpin::~BaseSpin()
 {}
 
+/*
+ * HTML 4 encoded text to print
+ * If the specialValueText "∅" has been set in the ui file, return empty string.
+ */
 QString BaseSpin::printableHtml(bool withValues) const
 {
     if (m_FormItem->getOptions().contains(Constants::NOT_PRINTABLE))
@@ -2351,14 +2355,14 @@ QString BaseSpin::printableHtml(bool withValues) const
         QSpinBox *spin = qobject_cast<QSpinBox*>(m_Spin);
         QString value;
         if (spin) {
-            if ((spin->value()) == 0) {
+            if (spin->specialValueText() == QString("∅") && spin->value() == spin->minimum()) {
                 return QString();
             }
             value = spin->text();
         } else {
             QDoubleSpinBox *dspin = qobject_cast<QDoubleSpinBox*>(m_Spin);
             if (dspin) {
-                if ((dspin->value()) == 0.0) {
+                if (dspin->specialValueText() == QString("∅") && dspin->value() == dspin->minimum()) {
                     return QString();
                 }
                 value = dspin->text();
@@ -2402,14 +2406,21 @@ BaseSpinData::~BaseSpinData()
 /** \brief Set the widget to the default value \sa FormItem::FormItemValue*/
 void BaseSpinData::clear()
 {
-    m_OriginalValue = m_FormItem->valueReferences()->defaultValue().toDouble();
     QSpinBox *spin = qobject_cast<QSpinBox*>(m_Spin->m_Spin);
     if (spin) {
-        spin->setValue(m_FormItem->valueReferences()->defaultValue().toInt());
+        if (!(m_FormItem->valueReferences()->defaultValue() == QVariant())) {
+            spin->setValue(m_FormItem->valueReferences()->defaultValue().toInt());
+        } else {
+            spin->setValue(spin->minimum());
+        }
     } else {
         QDoubleSpinBox *dspin = qobject_cast<QDoubleSpinBox*>(m_Spin->m_Spin);
         if (dspin) {
-            dspin->setValue(m_OriginalValue);
+            if (!(m_FormItem->valueReferences()->defaultValue() == QVariant())) {
+                dspin->setValue(m_FormItem->valueReferences()->defaultValue().toDouble());
+            } else {
+                dspin->setValue(dspin->minimum());
+            }
         }
     }
 }
