@@ -73,9 +73,12 @@ const char * const DEFAULT_DATETIME_FORMAT = "yyyy-MM-dd hh:mm:ss"; // default f
 const char * const DATETIME_DEFAULT_FORMAT = "yyyy-MM-dd hh:mm:ss"; // default printing format for all DateTime widgets
 
 // Spins
-const char * const  SPIN_EXTRAS_KEY_MIN         = "min";
-const char * const  SPIN_EXTRAS_KEY_MAX         = "max";
-const char * const  SPIN_EXTRAS_KEY_STEP        = "step";
+const char * const  SPIN_EXTRAS_KEY_MIN              = "min";
+const char * const  SPIN_EXTRAS_KEY_MAX              = "max";
+const char * const  SPIN_EXTRAS_KEY_STEP             = "step";
+const char * const  SPIN_EXTRAS_KEY_SUFFIX           = "suffix";
+const char * const  SPIN_EXTRAS_KEY_DECIMALS         = "decimals";
+const char * const  SPIN_EXTRAS_KEY_SPECIALVALUETEXT = "special";
 
 // General options
 const char * const  LABEL_ALIGN_TOP      = "labelontop";

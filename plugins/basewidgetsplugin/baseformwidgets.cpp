@@ -2261,6 +2261,11 @@ BaseSpin::BaseSpin(Form::FormItem *formItem, QWidget *parent, bool doubleSpin) :
         if (doubleSpin) {
             QDoubleSpinBox *dbl = formItem->parentFormMain()->formWidget()->findChild<QDoubleSpinBox*>(widget);
             if (dbl) {
+                if(dbl->suffix().isEmpty()) {
+                    dbl->setSuffix(formItem->extraData().value(Constants::SPIN_EXTRAS_KEY_SUFFIX, ""));
+                }
+                if (!formItem->extraData().value(Constants::SPIN_EXTRAS_KEY_DECIMALS).isEmpty())
+                    dbl->setDecimals(formItem->extraData().value(Constants::SPIN_EXTRAS_KEY_DECIMALS).toInt());
                 m_Spin = dbl;
                 connect(dbl, SIGNAL(valueChanged(double)), data, SLOT(onValueChanged()));
             } else {
@@ -2275,6 +2280,9 @@ BaseSpin::BaseSpin(Form::FormItem *formItem, QWidget *parent, bool doubleSpin) :
         } else {
             QSpinBox *dbl = formItem->parentFormMain()->formWidget()->findChild<QSpinBox*>(widget);
             if (dbl) {
+                if(dbl->suffix().isEmpty()) {
+                    dbl->setSuffix(formItem->extraData().value(Constants::SPIN_EXTRAS_KEY_SUFFIX, ""));
+                }
                 m_Spin = dbl;
                 connect(dbl, SIGNAL(valueChanged(int)), data, SLOT(onValueChanged()));
             } else {
@@ -2288,6 +2296,9 @@ BaseSpin::BaseSpin(Form::FormItem *formItem, QWidget *parent, bool doubleSpin) :
             }
         }
         m_Spin->setToolTip(m_FormItem->spec()->tooltip());
+        if(m_Spin->specialValueText().isEmpty() && !formItem->extraData().value(Constants::SPIN_EXTRAS_KEY_SPECIALVALUETEXT).isEmpty()) {
+            m_Spin->setSpecialValueText(formItem->extraData().value(Constants::SPIN_EXTRAS_KEY_SPECIALVALUETEXT, ""));
+        }
         // Find label
         m_Label = Constants::findLabel(formItem);
     } else {
@@ -2299,9 +2310,11 @@ BaseSpin::BaseSpin(Form::FormItem *formItem, QWidget *parent, bool doubleSpin) :
         if (doubleSpin) {
             QDoubleSpinBox *spin = new QDoubleSpinBox(this);
             spin->setObjectName("DoubleSpin_" + m_FormItem->uuid());
+            spin->setDecimals(formItem->extraData().value(Constants::SPIN_EXTRAS_KEY_DECIMALS, "3").toInt());
             spin->setMinimum(formItem->extraData().value(Constants::SPIN_EXTRAS_KEY_MIN, "0").toDouble());
             spin->setMaximum(formItem->extraData().value(Constants::SPIN_EXTRAS_KEY_MAX, "10000").toDouble());
             spin->setSingleStep(formItem->extraData().value(Constants::SPIN_EXTRAS_KEY_STEP, "0.1").toDouble());
+            spin->setSuffix(formItem->extraData().value(Constants::SPIN_EXTRAS_KEY_SUFFIX, ""));
             connect(spin, SIGNAL(valueChanged(double)), data, SLOT(onValueChanged()));
             m_Spin = spin;
         } else {
@@ -2310,6 +2323,7 @@ BaseSpin::BaseSpin(Form::FormItem *formItem, QWidget *parent, bool doubleSpin) :
             spin->setMinimum(formItem->extraData().value(Constants::SPIN_EXTRAS_KEY_MIN, "0").toInt());
             spin->setMaximum(formItem->extraData().value(Constants::SPIN_EXTRAS_KEY_MAX, "10000").toInt());
             spin->setSingleStep(formItem->extraData().value(Constants::SPIN_EXTRAS_KEY_STEP, "1").toInt());
+            spin->setSuffix(formItem->extraData().value(Constants::SPIN_EXTRAS_KEY_SUFFIX, ""));
             m_Spin = spin;
             connect(spin, SIGNAL(valueChanged(int)), data, SLOT(onValueChanged()));
         }
