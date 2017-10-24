@@ -19,9 +19,32 @@
   text-align: center;
 }
 
+.__drugsprescr__formContent .prescriptionDate {                                 
+  font-weight: 600;                                                             
+  text-transform: uppercase;                                                    
+  background-color: #f2f2f2;/* #6d8526; #7f9a2c #6d8526 #A7C942*/               
+  color: black;                                                                 
+  padding: 2px;                                                                 
+  text-align: right;                                                            
+} 
+
 .__drugsprescr__formContent .episodeHeader {
   margin: 0 2em 0 0;
   padding: 0px;
+}
+
+.__drugsprescr__formContent .patientName {                                      
+  font-size: 16pt;                                                              
+  color: black;                                                                 
+  margin-left: 1em;                                                             
+  text-align: right;                                                            
+}                                                                               
+                                                                                
+.__drugsprescr__formContent .patientDateOfBirth {                               
+  font-size: 12pt;                                                              
+  color: black;                                                                 
+  margin-left: 1em;                                                             
+  text-align: right;                                                            
 }
 
 .__drugsprescr__formContent .episodeContent {
@@ -61,13 +84,13 @@
 <div class="__drugsprescr__formContent">
 
     <div class="formHeader">
-        <div class="formLabel">[[EpisodeFullFormLabel]]</div>
+        <div class="prescriptionDate">[[EpisodeUserDate]]</div>
     </div> <!-- formHeader -->
 
-    <div class="episodeHeader">
-        [<div class="episodeLabel">[EpisodeUserLabel] </div> ]
-        [<span class="episodeUserCreator">[EpisodeUserName.createdBy]</span>]
-        [&nbsp;<span class="episodeUserDate">[EpisodeUserDate]</span>]
+    <div class="episodeHeader">                                                 
+        {{<div class="patientName">~Patient.Identity.FullName~</div>}}          
+        {{<br/><span class="patientDateOfBirth">~Patient.Age.DateOfBirth~ –</span>}}
+        {{<span class="patientFullAge">~Patient.Age.FullAge~</span>}}           
     </div> <!-- episodeHeader -->
 
     <div class="episodeContent">

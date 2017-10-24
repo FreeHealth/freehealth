@@ -120,8 +120,8 @@
         <label lang="fr">Résultats de biologie (textuels)</label>
         <icon>__theme__/labtest.png</icon>
         <options>DontPrintEmptyValues</options>
-        <file type="htmlprintmask">./html/xx/padtools_consultation_results_mask.html</file>
-        <file type="htmlexportmask">./html/xx/padtools_consultation_results_mask.html</file>
+        <file type="htmlprintmask">./html/xx/labresults.html</file>
+        <file type="htmlexportmask">./html/xx/labresults.html</file>
 
         <Item type="texteditor" name="GP::Basic::Consultation::LabResults::Textual">
           <label lang="xx">Textual results</label>

@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Form</class>
+ <widget class="QWidget" name="Form">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>480</width>
+    <height>640</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_2">
+   <item>
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="0" column="0">
+      <widget class="QLabel" name="bleedingTimeLabel">
+       <property name="text">
+        <string>bleeding time</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QSpinBox" name="bleedingTimeSpinBox">
+       <property name="suffix">
+        <string comment="second">s</string>
+       </property>
+       <property name="maximum">
+        <number>999</number>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="2">
+      <widget class="QLabel" name="bleedingTimeMethodLabel">
+       <property name="text">
+        <string>method</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="3" colspan="2">
+      <widget class="QLineEdit" name="bleedingTimeMethodLineEdit"/>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="prothrombinTimeLabel">
+       <property name="text">
+        <string>pt prothrombin time</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QSpinBox" name="prothrombinTimeSpinBox">
+       <property name="suffix">
+        <string comment="second">s</string>
+       </property>
+       <property name="maximum">
+        <number>999</number>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="2">
+      <widget class="QLabel" name="inrLabel">
+       <property name="text">
+        <string>INR</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="3">
+      <widget class="QDoubleSpinBox" name="inrDoubleSpinBox">
+       <property name="decimals">
+        <number>1</number>
+       </property>
+       <property name="maximum">
+        <double>99.900000000000006</double>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="4">
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>108</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="apttLabel">
+       <property name="text">
+        <string>aPTT</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QSpinBox" name="apttSpinBox">
+       <property name="suffix">
+        <string comment="second">s</string>
+       </property>
+       <property name="maximum">
+        <number>999</number>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <widget class="QLabel" name="thrombinTimeLabel">
+       <property name="text">
+        <string>thrombin time</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <widget class="QSpinBox" name="thrombinTimeSpinBox">
+       <property name="suffix">
+        <string comment="second">s</string>
+       </property>
+       <property name="maximum">
+        <number>999</number>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="hemostasisOtherGroupBox">
+     <property name="title">
+      <string>other</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <item>
+       <widget class="QGroupBox" name="hemostasisOtherGroupBox1">
+        <property name="title">
+         <string>other1</string>
+        </property>
+        <layout class="QHBoxLayout" name="horizontalLayout_5">
+         <item>
+          <widget class="QLineEdit" name="hemostasisOtherTestLineEdit1"/>
+         </item>
+         <item>
+          <widget class="QDoubleSpinBox" name="hemostasisOtherDoubleSpinBox1"/>
+         </item>
+         <item>
+          <widget class="QComboBox" name="hemostasisOtherComboBox1"/>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="hemostasisOtherCommentLineEdit1"/>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item>
+       <widget class="QGroupBox" name="hemostasisOtherGroupBox2">
+        <property name="title">
+         <string>other2</string>
+        </property>
+        <layout class="QHBoxLayout" name="horizontalLayout_4">
+         <item>
+          <widget class="QLineEdit" name="hemostasisOtherTestLineEdit2"/>
+         </item>
+         <item>
+          <widget class="QDoubleSpinBox" name="hemostasisOtherDoubleSpinBox2"/>
+         </item>
+         <item>
+          <widget class="QComboBox" name="hemostasisOtherComboBox2"/>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="hemostasisOtherCommentLineEdit2"/>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item>
+       <widget class="QGroupBox" name="hemostasisOtherGroupBox3">
+        <property name="title">
+         <string>other3</string>
+        </property>
+        <layout class="QHBoxLayout" name="horizontalLayout_3">
+         <item>
+          <widget class="QLineEdit" name="hemostasisOtherTestLineEdit3"/>
+         </item>
+         <item>
+          <widget class="QDoubleSpinBox" name="hemostasisOtherDoubleSpinBox3"/>
+         </item>
+         <item>
+          <widget class="QComboBox" name="hemostasisOtherComboBox3"/>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="hemostasisOtherCommentLineEdit3"/>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item>
+       <widget class="QGroupBox" name="hemostasisOtherGroupBox4">
+        <property name="title">
+         <string>other4</string>
+        </property>
+        <layout class="QHBoxLayout" name="horizontalLayout_2">
+         <item>
+          <widget class="QLineEdit" name="hemostasisOtherTestLineEdit4"/>
+         </item>
+         <item>
+          <widget class="QDoubleSpinBox" name="hemostasisOtherDoubleSpinBox4"/>
+         </item>
+         <item>
+          <widget class="QComboBox" name="hemostasisOtherComboBox4"/>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="hemostasisOtherCommentLineEdit4"/>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item>
+       <widget class="QGroupBox" name="hemostasisOtherGroupBox5">
+        <property name="title">
+         <string>other5</string>
+        </property>
+        <layout class="QHBoxLayout" name="horizontalLayout">
+         <item>
+          <widget class="QLineEdit" name="hemostasisOtherTestLineEdit5"/>
+         </item>
+         <item>
+          <widget class="QDoubleSpinBox" name="hemostasisOtherDoubleSpinBox5"/>
+         </item>
+         <item>
+          <widget class="QComboBox" name="hemostasisOtherComboBox5"/>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="hemostasisOtherCommentLineEdit5"/>
+         </item>
+        </layout>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

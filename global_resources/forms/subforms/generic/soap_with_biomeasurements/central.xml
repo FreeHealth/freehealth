@@ -5,20 +5,20 @@
 
   <formdescription>
     <!-- Non translatable values -->
-    <authors>Eric Maeker, MD</authors>
+    <authors>Eric Maeker, MD ; Jerome Pinguet</authors>
     <version>test</version>
-    <fmfv>0.8.4</fmfv>
+    <fmfv>0.9.7</fmfv>
     <cdate>2012-10-13</cdate>
-    <lmdate>2013-04-18</lmdate>
+    <lmdate>2016-04-26</lmdate>
     <icon>__theme__/stethoscope.png</icon>
     <weblink></weblink>
     <bibliography/>
 
     <!-- Translatable values -->
     <license>GPLv3</license>
-    <description lang="xx">SOAP with biometrics</description>
-    <description lang="fr">POMR avec biométrie</description>
-    <description lang="de">SOAP mit Biometriedaten</description>
+    <description lang="xx">SOAP with biometrics version 2</description>
+    <description lang="fr">POMR avec biométrie version 2</description>
+    <description lang="de">SOAP mit Biometriedaten version 2</description>
     <category lang="xx">Generic tools</category>
     <category lang="fr">Outils généraux</category>
     <category lang="de">Allgemeine Tools</category>
@@ -177,14 +177,68 @@
           <tooltip lang="fr">Index de masse corporelle (kg/m2)&lt;br />BMI=Taille (cm) / (Poids (kg) ^2)</tooltip>
           <options>DontPrintEmptyValues</options>
         </Item>
+        <Item type="helptext" name="ObjectiveGroup::Temperature::TemperatureLabel">
+          <uilink label="temperatureLabel" widget="" layout=""/>
+          <label lang="xx">T°</label>
+          <label lang="fr">T°</label>
+          <label lang="de">T°</label>
+          <tooltip lang="xx">Temperature</tooltip>
+          <tooltip lang="fr">Température</tooltip>
+          <tooltip lang="de">Temperatur</tooltip>
+        </Item>
 
-    </Item>
+        <Item type="doublespin" name="ObjectiveGroup::Temperature::TemperatureValue">
+          <uilink label="" widget="temperatureValue" layout=""/>
+          <tooltip lang="xx">Temperature</tooltip>
+          <tooltip lang="fr">Température</tooltip>
+          <tooltip lang="de">Temperatur</tooltip>
+          <options>DontPrintEmptyValues</options>
+        </Item>
 
-    <Item type="group" name="AssessmentPlanGroup">
-      <uilink widget="apGroup"/>
-      <label lang="xx">Assessment and plan</label>
-      <label lang="fr">Analyse et prise en charge</label>
-      <label lang="de">Beurteilung / Procedere</label>
+        <Item type="combo" name="ObjectiveGroup::Temperature::TemperatureUnit">
+          <uilink label="" widget="temperatureUnit" layout=""/>
+          <value>
+            <uuid id="0">celsius</uuid>
+            <uuid id="1">fahrenheit</uuid>
+            <possible id="0" lang="xx">°Celsius</possible>
+            <possible id="1" lang="xx">°Fahrenheit</possible>
+            <possible id="0" lang="fr">°Celsius</possible>
+            <possible id="1" lang="fr">°Fahrenheit</possible>
+            <possible id="0" lang="de">°Celsius</possible>
+            <possible id="1" lang="de">°Fahrenheit</possible>
+          </value>
+          <default>celsius</default>
+        </Item>
+
+        <Item type="doublespin" name="ObjectiveGroup::HeadCircumference::Value">
+          <uilink label="headCircumferenceLabel" widget="headCircumferenceValue" layout=""/>
+          <label lang="xx">Head Circumference</label>
+          <label lang="fr">Périmètre crânien</label>
+          <label lang="de">Kopfumfang</label>
+          <tooltip lang="xx">Head Circumference</tooltip>
+          <tooltip lang="fr">Périmètre crânien</tooltip>
+          <tooltip lang="de">Kopfumfang</tooltip>
+          <options>DontPrintEmptyValues</options>
+          <patientdata>HeadCircumferenceInCentimeters</patientdata>
+        </Item>
+
+        <Item type="helptext" name="ObjectiveGroup::HeadCircumference::Unit">
+          <uilink label="HeadCircumferenceUnitLabel" widget="" layout=""/>
+          <label lang="xx">centimetres</label>
+          <label lang="fr">centimètres</label>
+          <label lang="de">Zentimeter</label>
+          <tooltip lang="xx">Head circumference unit</tooltip>
+          <tooltip lang="fr">Unité du périmètre crânien</tooltip>
+          <tooltip lang="de">Kopfumgang Einheit</tooltip>
+        </Item>
+
+    </Item><!-- end ObjectiveGroup group -->
+
+    <Item type="group" name="AssessmentGroup">
+      <uilink widget="aGroup"/>
+      <label lang="xx">Assessment</label>
+      <label lang="fr">Analyse</label>
+      <label lang="de">Beurteilung</label>
       <options>DontPrintEmptyValues</options>
 
         <Item type="texteditor" name="AssessmentPlanGroup::Assessment">
@@ -194,6 +248,15 @@
           <tooltip lang="fr">Analyse</tooltip>
           <tooltip lang="de">Beurteilung, Zusammenfassung</tooltip>
         </Item>
+
+    </Item> <!-- end of group AssessmentPlanGroup -->
+
+    <Item type="group" name="PlanGroup">
+      <uilink widget="pGroup"/>
+      <label lang="xx">Plan</label>
+      <label lang="fr">Prise en charge</label>
+      <label lang="de">Procedere</label>
+      <options>DontPrintEmptyValues</options>
 
         <Item type="texteditor" name="AssessmentPlanGroup::Plan">
           <uilink label="" widget="" layout="pLayout"/>

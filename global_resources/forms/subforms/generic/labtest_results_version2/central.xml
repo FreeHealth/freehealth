@@ -1,0 +1,1344 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE FreeMedForms>
+
+<FreeMedForms>
+
+  <formdescription>
+    <!-- Non translatable values -->
+    <authors>Eric Maeker, MD</authors>
+    <version>3.0.0</version>
+    <fmfv>0.8.2</fmfv>
+    <cdate>2013-02-27</cdate>
+    <lmdate>2017-04-26</lmdate>
+    <icon>__theme__/labtests.png</icon>
+    <weblink>https://freemedsoft.com</weblink>
+    <bibliography/>
+
+    <!-- Translatable values -->
+    <license>GPLv3</license>
+    <description lang="xx">Labtests results V2</description>
+    <description lang="fr">Résultats de biologie V2</description>
+    <category lang="xx">Generic tools</category>
+    <category lang="fr">Outils généraux</category>
+    <category lang="de">Allgemeine Tools</category>
+    <specialties lang="xx">Tools</specialties>
+    <specialties lang="fr">Outils</specialties>
+    <specialties lang="de">Tools</specialties>
+
+    <updateinfo>
+      <updateversion from="" to="0.8.2">
+        <text lang="fr">Première version</text>
+        <text lang="xx">First version</text>
+      </updateversion>
+    </updateinfo>
+
+  </formdescription>
+
+  <!-- file type="script" name="onload">./scripts/xx/script.js</file -->
+
+  <MedForm name="Subs::Tools::LabTests::Results::Helper" uifilename="./ui/xx/labtests_results.ui">
+    <label lang="xx">Labtests results V2</label>
+    <label lang="fr">Résultats de biologie V2</label>
+    <options>UseFormNameAsNameSpace;AdministrativeHeader</options>
+    <icon>__theme__/labtest.png</icon>
+
+        <Item type="detailswidget" name="CBC" uifilename="./ui/xx/cbc.ui">
+            <uilink label="" widget="" layout="mainLayout"/>
+            <label lang="xx">CBC</label>
+            <label lang="fr">NFS</label>
+            <options>SummaryFontBold;expanded</options>
+
+        <Item name="HelpText" type="helptext">
+           <uilink widget="unitChangeWarningLabel"/>
+           <label lang="xx">Units have been added. WBC, RBC and platelet counts use SI units (international system).</label>
+           <label lang="fr">Des unités ont été ajoutées. Leucocytes, hématies et plaquettes utilisent les unités du système international (SI).</label>
+           <options>notprintable</options>
+        </Item>
+
+        <Item type="doublespin" name="CBC::Red::Blood::Cells">
+            <uilink label="rbcLabel" widget="rbcDoubleSpinBox"/>
+            <label lang="xx">Red Blood Cells</label>
+            <label lang="fr">Hématies</label>
+            <tooltip lang="xx"></tooltip>
+            <tooltip lang="fr"></tooltip>
+            <min></min>
+            <max></max>
+            <step></step>
+            <special>∅</special>
+        </Item>
+
+            <Item type="doublespin" name="CBC::Hb">
+                <uilink label="hbLabel" widget="hb"/>
+                <label lang="xx">Hemoglobin</label>
+                <label lang="fr">Hémoglobine</label>
+                <tooltip lang="xx"></tooltip>
+                <tooltip lang="fr"></tooltip>
+                <min>1</min>
+                <max></max>
+                <step>0.1</step>
+                <special>∅</special>
+            </Item>
+
+            <Item type="doublespin" name="CBC::Ht">
+                <uilink label="htLabel" widget="ht"/>
+                <label lang="xx">Hematocrite</label>
+                <label lang="fr">Hématocrite</label>
+                <tooltip lang="xx"></tooltip>
+                <tooltip lang="fr"></tooltip>
+                <min>1</min>
+                <max></max>
+                <step>0.1</step>
+                <special>∅</special>
+            </Item>
+
+            <Item type="doublespin" name="CBC::MCV">
+                <uilink label="mcvLabel" widget="mcv"/>
+                <label lang="xx">MCV</label>
+                <label lang="fr">VGM</label>
+                <tooltip lang="xx"></tooltip>
+                <tooltip lang="fr"></tooltip>
+                <min></min>
+                <max></max>
+                <step></step>
+                <special>∅</special>
+            </Item>
+            <Item type="doublespin" name="CBC::MCH">
+                <uilink label="mchLabel" widget="mchDoubleSpinBox"/>
+                <label lang="xx">MCH</label>
+                <label lang="fr">TCMH</label>
+                <tooltip lang="xx">Mean Corpuscular Hemoglobin</tooltip>
+                <tooltip lang="fr">Teneur Corpusculaire Moyenne en Hémoglobine</tooltip>
+                <min></min>
+                <max></max>
+                <step></step>
+                <special>∅</special>
+            </Item>
+
+<Item type="doublespin" name="CBC::MCHC">
+    <uilink label="mchcLabel" widget="mchcDoubleSpinBox"/>
+    <label lang="xx">MCHC</label>
+    <label lang="fr">CCMH</label>
+    <tooltip lang="xx">Mean Corpuscular Hemoglobin Concentration</tooltip>
+    <tooltip lang="fr">Concentration Corpusculaire Moyenne en Hémoglobine</tooltip>
+    <min></min>
+    <max></max>
+    <step></step>
+    <special>∅</special>
+</Item>
+
+            <Item type="doublespin" name="CBC::Reticulo">
+                <uilink widget="reticulocytesPctDoubleSpinBox"/>
+                <label lang="xx"></label>
+                <label lang="fr"></label>
+                <tooltip lang="xx"></tooltip>
+                <tooltip lang="fr"></tooltip>
+                <min></min>
+                <max></max>
+                <step></step>
+                <special>∅</special>
+            </Item>
+
+<Item type="doublespin" name="CBC::Reticulocytes::Value">
+    <uilink label="reticulocytesLabel" widget="reticulocytesDoubleSpinBox"/>
+    <label lang="xx">Reticulocytes</label>
+    <label lang="fr">Réticulocytes</label>
+    <tooltip lang="xx"></tooltip>
+    <tooltip lang="fr"></tooltip>
+    <min></min>
+    <max></max>
+    <step></step>
+    <special>∅</special>
+</Item>
+
+            <Item type="doublespin" name="CBC::Leuco">
+                <uilink label="leucoLabel" widget="leucocytesDoubleSpinBox"/>
+                <label lang="xx">Leukocytes</label>
+                <label lang="fr">Leucocytes</label>
+                <min></min>
+                <max></max>
+                <step></step>
+                <suffix> 10⁹/L</suffix>
+                <tooltip lang="xx">Leukocytes [#/volume] in Blood by Automated count Unit: 10⁹ cells per liter</tooltip>
+                <tooltip lang="fr">Leucocytes: Nombre/​Volume: Ponctuel: Sang: Numérique: Comptage automate Unité: 10⁹ cellules par litre</tooltip>
+                <unit>10*9/L</unit>
+                <loinc>6690-2</loinc>
+                <special>∅</special>
+            </Item>
+
+<Item type="doublespin" name="CBC::Neutrophils::Value">
+    <uilink  label="neutrophilsLabel"  widget="neutrophilsDoubleSpinBox"/>
+    <label lang="xx">Neutrophils</label>
+    <label lang="fr">Neutrophiles</label>
+    <tooltip lang="xx"></tooltip>
+    <tooltip lang="fr"></tooltip>
+    <special>∅</special>
+</Item>
+
+            <Item type="doublespin" name="CBC::PNN">
+            <!-- old value limited to [0-99] now considered as percentage -->
+                <uilink widget="neutrophilsPctDoubleSpinBox"/>
+                <label lang="xx"></label>
+                <label lang="fr"></label>
+                <tooltip lang="xx"></tooltip>
+                <tooltip lang="fr"></tooltip>
+                <min></min>
+                <max></max>
+                <step></step>
+                <special>∅</special>
+            </Item>
+
+<Item type="doublespin" name="CBC::Eosinophils::Value">
+    <uilink label="eosinophilsLabel" widget="eosinophilsDoubleSpinBox"/>
+    <label lang="xx">Eosinophils</label>
+    <label lang="fr">Éosinophiles</label>
+    <tooltip lang="xx"></tooltip>
+    <tooltip lang="fr"></tooltip>
+    <min></min>
+    <max></max>
+    <step></step>
+    <special>∅</special>
+</Item>
+
+            <Item type="doublespin" name="CBC::Eosino">
+            <!-- old value limited to [0-99] now considered as percentage -->
+                <uilink widget="eosinophilsPctDoubleSpinBox"/>
+                <label lang="xx"></label>
+                <label lang="fr"></label>
+                <tooltip lang="xx"></tooltip>
+                <tooltip lang="fr"></tooltip>
+                <special>∅</special>
+            </Item>
+
+<Item type="doublespin" name="CBC::Lymphocytes::Value">
+    <uilink label="lymphocytesLabel" widget="lymphocytesDoubleSpinBox"/>
+    <label lang="xx">Lymphocytes</label>
+    <label lang="fr">Lymphocytes</label>
+    <tooltip lang="xx"></tooltip>
+    <tooltip lang="fr"></tooltip>
+    <min></min>
+    <max></max>
+    <step></step>
+    <special>∅</special>
+</Item>
+
+            <Item type="doublespin" name="CBC::Lymphocytes">
+            <!-- old value limited to [0-99] now considered as percentage -->
+                <uilink widget="lymphocytesPctDoubleSpinBox"/>
+                <label lang="xx"></label>
+                <label lang="fr"></label>
+                <tooltip lang="xx"></tooltip>
+                <tooltip lang="fr"></tooltip>
+                <min></min>
+                <max></max>
+                <step></step>
+                <special>∅</special>
+            </Item>
+
+            <Item type="doublespin" name="CBC::Monocytes::Value">
+                <uilink label="monocytesLabel" widget="monocytesDoubleSpinBox"/>
+                <label lang="xx">Monocytes</label>
+                <label lang="fr">Monocytes</label>
+                <tooltip lang="xx"></tooltip>
+                <tooltip lang="fr"></tooltip>
+                <min></min>
+                <max></max>
+                <step></step>
+                <special>∅</special>
+            </Item>
+
+            <Item type="doublespin" name="CBC::Monocytes">
+            <!-- old value limited to [0-99] now considered as percentage -->
+                <uilink widget="monocytesPctDoubleSpinBox"/>
+                <label lang="xx"></label>
+                <label lang="fr"></label>
+                <tooltip lang="xx"></tooltip>
+                <tooltip lang="fr"></tooltip>
+                <min></min>
+                <max></max>
+                <step></step>
+                <special>∅</special>
+            </Item>
+
+<Item type="doublespin" name="CBC::Basophils::Value">
+    <uilink label="basophilsLabel" widget="basophilsDoubleSpinBox"/>
+    <label lang="xx">Basophils</label>
+    <label lang="fr">Basophiles</label>
+    <tooltip lang="xx"></tooltip>
+    <tooltip lang="fr"></tooltip>
+    <min></min>
+    <max></max>
+    <step></step>
+    <special>∅</special>
+</Item>
+
+            <Item type="doublespin" name="CBC::Baso">
+            <!-- old value limited to [0-99] now considered as percentage -->
+                <uilink widget="basophilsPctDoubleSpinBox"/>
+                <label lang="xx"></label>
+                <label lang="fr"></label>
+                <tooltip lang="xx"></tooltip>
+                <tooltip lang="fr"></tooltip>
+                <min></min>
+                <max></max>
+                <step></step>
+                <special>∅</special>
+            </Item>
+
+            <Item type="doublespin" name="CBC::Blasts::Value">
+                <uilink label="blastsLabel" widget="blastsDoubleSpinBox"/>
+                <label lang="xx">Blasts</label>
+                <label lang="fr">Blastes</label>
+                <tooltip lang="xx"></tooltip>
+                <tooltip lang="fr"></tooltip>
+                <min></min>
+                <max></max>
+                <step></step>
+                <special>∅</special>
+            </Item>
+
+            <Item type="doublespin" name="CBC::Blastes">
+            <!-- old value limited to [0-99] now considered as percentage -->
+                <uilink widget="blastsPctDoubleSpinBox"/>
+                <label lang="xx"></label>
+                <label lang="fr"></label>
+                <tooltip lang="xx"></tooltip>
+                <tooltip lang="fr"></tooltip>
+                <min></min>
+                <max></max>
+                <step></step>
+                <special>∅</special>
+            </Item>
+
+            <Item type="doublespin" name="CBC::Platelets">
+                <uilink label="plateletsLabel" widget="plateletsDoubleSpinBox"/>
+                <label lang="xx">Platelets</label>
+                <label lang="fr">Plaquettes</label>
+                <tooltip lang="xx"></tooltip>
+                <tooltip lang="fr"></tooltip>
+                <min></min>
+                <max></max>
+                <step></step>
+                <special>∅</special>
+            </Item>
+
+            <Item type="doublespin" name="CBC::SR1">
+                <uilink label="sr1Label" widget="sr1"/>
+                <label lang="xx">ESR 1</label>
+                <label lang="fr">VS 1</label>
+                <tooltip lang="xx"></tooltip>
+                <tooltip lang="fr"></tooltip>
+                <min></min>
+                <max></max>
+                <step></step>
+                <special>∅</special>
+            </Item>
+
+            <Item type="doublespin" name="CBC::SR2">
+                <uilink label="sr2Label" widget="sr2"/>
+                <label lang="xx">ESR 2</label>
+                <label lang="fr">VS 2</label>
+                <tooltip lang="xx"></tooltip>
+                <tooltip lang="fr"></tooltip>
+                <min></min>
+                <max></max>
+                <step></step>
+                <special>∅</special>
+            </Item>
+
+            <Item type="shorttext" name="CBC::BloodGroup">
+                <uilink label="groupLabel" widget="group"/>
+                <label lang="xx">Blood group</label>
+                <label lang="fr">Groupe sanguin</label>
+                <tooltip lang="xx"></tooltip>
+                <tooltip lang="fr"></tooltip>
+            </Item>
+
+            <Item type="shorttext" name="CBC::RIA">
+                <uilink label="riaLabel" widget="ria"/>
+                <label lang="xx">RIA</label>
+                <label lang="fr">RAI</label>
+                <tooltip lang="xx"></tooltip>
+                <tooltip lang="fr"></tooltip>
+            </Item>
+
+<Item type="doublespin" name="CBC::RDW">
+    <uilink label="rdwLabel" widget="rdwDoubleSpinBox"/>
+    <label lang="xx">RDW-CV</label>
+    <label lang="fr">IDR</label>
+    <tooltip lang="xx">Red blood cell Distribution Width</tooltip>
+    <tooltip lang="fr">Indice de Distribution des globules Rouges</tooltip>
+    <min></min>
+    <max></max>
+    <step></step>
+    <special>∅</special>
+</Item>
+
+        </Item> <!-- end of CBC details widget -->
+
+        <Item type="detailswidget" name="Kidney" uifilename="./ui/xx/kidney.ui">
+            <uilink label="" widget="" layout="mainLayout"/>
+            <label lang="xx">Kidney and proteins</label>
+            <label lang="fr">Reins et protéines</label>
+            <options>SummaryFontBold;expanded</options>
+
+            <Item type="doublespin" name="Kidney::Urea">
+                <uilink label="ureaLabel" widget="urea"/>
+                <label lang="xx">BUN (Urea)</label>
+                <label lang="fr">Urée</label>
+                <tooltip lang="xx"></tooltip>
+                <tooltip lang="fr"></tooltip>
+                <min></min>
+                <max></max>
+                <step></step>
+            </Item>
+            <Item type="doublespin" name="Kidney::Creatinine">
+                <!-- unit micromol/liter -->
+                <uilink label="creatLabel" widget="creat"/>
+                <label lang="xx">Creatinin</label>
+                <label lang="fr">Créatinine</label>
+                <tooltip lang="xx"></tooltip>
+                <tooltip lang="fr"></tooltip>
+                <patientdata>Creatinine</patientdata>
+            </Item>
+            <Item type="doublespin" name="Kidney::Creatinine::Clearance::Rate">
+                <uilink label="crclLabel" widget="crclDoubleSpinBox"/>
+                <label lang="xx">Creatinin clearance rate</label>
+                <label lang="fr">Clairance de la créatinine</label>
+                <tooltip lang="xx"></tooltip>
+                <tooltip lang="fr"></tooltip>
+                <patientdata>Creatinine</patientdata>
+            </Item>
+
+            <!--Item type="combo" name="Kidney::CreatinineUnit">
+                <uilink label="" widget="creatUnits"/>
+                <value>
+                    <uuid id="0">mg_l</uuid>
+                    <uuid id="0">mg_dl</uuid>
+                    <uuid id="1">umol_l</uuid>
+                    <uuid id="2"></uuid>
+                    <possible id="0" lang="xx">mg/L</possible>
+                    <possible id="1" lang="xx">mg/dL</possible>
+                    <possible id="2" lang="xx">umol/L</possible>
+                    <possible id="0" lang="fr">mg/L</possible>
+                    <possible id="1" lang="fr">mg/dL</possible>
+                    <possible id="2" lang="fr">umol/L</possible>
+                    <default>secondcombo</default>
+                </value>
+                <patientdata>CreatinineUnit</patientdata>
+            </Item-->
+
+            <Item type="doublespin" name="Kidney::Na">
+                <uilink label="naLabel" widget="na"/>
+                <label lang="xx">Na</label>
+                <label lang="fr">Na</label>
+                <tooltip lang="xx"></tooltip>
+                <tooltip lang="fr"></tooltip>
+                <min></min>
+                <max></max>
+                <step></step>
+            </Item>
+
+            <Item type="doublespin" name="Kidney::K">
+                <uilink label="kLabel" widget="k"/>
+                <label lang="xx">K</label>
+                <label lang="fr">K</label>
+                <tooltip lang="xx"></tooltip>
+                <tooltip lang="fr"></tooltip>
+                <min></min>
+                <max></max>
+                <step></step>
+            </Item>
+
+            <Item type="doublespin" name="Kidney::Cl">
+                <uilink label="clLabel" widget="cl"/>
+                <label lang="xx">Cl</label>
+                <label lang="fr">Cl</label>
+                <tooltip lang="xx"></tooltip>
+                <tooltip lang="fr"></tooltip>
+            </Item>
+
+            <Item type="doublespin" name="Kidney::Ca">
+                <uilink label="caLabel" widget="ca"/>
+                <label lang="xx">Ca</label>
+                <label lang="fr">Ca</label>
+                <tooltip lang="xx"></tooltip>
+                <tooltip lang="fr"></tooltip>
+             </Item>
+
+            <Item type="doublespin" name="Kidney::IonizedCa">
+                <uilink label="caIoLabel" widget="caIo"/>
+                <label lang="xx">IonizedCa</label>
+                <label lang="fr">Ca ionisé</label>
+                <tooltip lang="xx"></tooltip>
+                <tooltip lang="fr"></tooltip>
+            </Item>
+
+            <Item type="doublespin" name="Kidney::Phosphore">
+                <uilink label="phLabel" widget="ph"/>
+                <label lang="xx">Phosphate</label>
+                <label lang="fr">Phosphore</label>
+                <tooltip lang="xx"></tooltip>
+                <tooltip lang="fr"></tooltip>
+            </Item>
+
+            <Item type="doublespin" name="Kidney::Osmlality">
+                <uilink label="osmLabel" widget="osm"/>
+                <label lang="xx">Serum Osmolality</label>
+                <label lang="fr">Osmolarité</label>
+                <tooltip lang="xx"></tooltip>
+                <tooltip lang="fr"></tooltip>
+            </Item>
+
+            <Item type="doublespin" name="Kidney::LacticAcid">
+                <uilink label="lactLabel" widget="lact"/>
+                <label lang="xx">Lactic Acide</label>
+                <label lang="fr">Lactates</label>
+                <tooltip lang="xx"></tooltip>
+                <tooltip lang="fr"></tooltip>
+            </Item>
+
+            <Item type="doublespin" name="Kidney::CO2">
+                <uilink label="co2Label" widget="co2"/>
+                <label lang="xx">CO2</label>
+                <label lang="fr">CO2</label>
+                <tooltip lang="xx"></tooltip>
+                <tooltip lang="fr"></tooltip>
+            </Item>
+
+            <Item type="doublespin" name="Kidney::TotalProtein">
+                <uilink label="protLabel" widget="prot"/>
+                <label lang="xx">Proteins</label>
+                <label lang="fr">Protéines</label>
+                <tooltip lang="xx"></tooltip>
+                <tooltip lang="fr"></tooltip>
+            </Item>
+
+            <Item type="doublespin" name="Kidney::Albumin">
+                <uilink label="albuLabel" widget="albu"/>
+                <label lang="xx">Albumin</label>
+                <label lang="fr">Albumine</label>
+                <tooltip lang="xx"></tooltip>
+                <tooltip lang="fr"></tooltip>
+            </Item>
+
+            <Item type="doublespin" name="Kidney::CRP">
+                <uilink label="crpLabel" widget="crp"/>
+                <label lang="xx">CRP</label>
+                <label lang="fr">CRP</label>
+                <tooltip lang="xx"></tooltip>
+                <tooltip lang="fr"></tooltip>
+            </Item>
+        </Item>
+
+        <Item type="detailswidget" name="Liver" uifilename="./ui/xx/liver.ui">
+            <uilink label="" widget="" layout="mainLayout"/>
+            <label lang="xx">Liver</label>
+            <label lang="fr">Foie</label>
+            <options>SummaryFontBold;expanded</options>
+
+            <Item type="doublespin" name="Liver::TGO">
+                <uilink label="tgoLabel" widget="tgo"/>
+                <label lang="xx">Aspartate transaminase (AST, SGOT)</label>
+                <label lang="fr">ASAT (TGO)</label>
+                <tooltip lang="xx">Aspartate transaminase</tooltip>
+                <tooltip lang="fr">Aspartate aminotransférase</tooltip>
+            </Item>
+
+            <Item type="doublespin" name="Liver::TGP">
+                <uilink label="tgpLabel" widget="tgp"/>
+                <label lang="xx">Alanine transaminase (ALT, SGPT)</label>
+                <label lang="fr">ALAT (TGP)</label>
+                <tooltip lang="xx">Alanine transaminase</tooltip>
+                <tooltip lang="fr">Alanine aminotransférase</tooltip>
+            </Item>
+
+            <Item type="doublespin" name="Liver::GGT">
+                <uilink label="ggtLabel" widget="ggt"/>
+                <label lang="xx">GGT</label>
+                <label lang="fr">GGT</label>
+                <tooltip lang="xx">Gamma-glutamyltransferase</tooltip>
+                <tooltip lang="fr">Gamma-glutamyl transferase</tooltip>
+            </Item>
+
+
+            <Item type="doublespin" name="Liver::BiliT">
+                <uilink label="biliTLabel" widget="bilirubinTotalDoubleSpinBox"/>
+                <label lang="xx">Bilirubin, total</label>
+                <label lang="fr">Bilirubine totale</label>
+                <tooltip lang="xx"></tooltip>
+                <tooltip lang="fr"></tooltip>
+            </Item>
+            <Item type="combo" name="Liver::Bilirubin::Total::Combo">
+              <uilink label="" widget="bilirubinTotalComboBox" layout="" />
+              <label lang="xx"></label>
+              <label lang="fr"></label>
+              <value>
+                <uuid id="0">µmol/L</uuid>
+                <uuid id="1">mg/dL</uuid>
+
+                <possible id="0" lang="xx">µmol/L</possible>
+                <possible id="1" lang="xx">mg/dL</possible>
+
+                <possible id="0" lang="fr">µmol/L</possible>
+                <possible id="1" lang="fr">mg/dL</possible>
+              </value>
+              <options>DontPrintEmptyValues</options>
+            </Item>
+
+            <Item type="doublespin" name="Liver::BiliU">
+                <uilink label="biliULabel" widget="biliU"/>
+                <label lang="xx">Bilirubin, unconjugated  (indirect)</label>
+                <label lang="fr">Bilirubine libre</label>
+                <tooltip lang="xx">Bilirubin, indirect, unconjugated</tooltip>
+                <tooltip lang="fr">Bilirubine libre, indirecte ou non conjuguée</tooltip>
+            </Item>
+            <Item type="combo" name="Liver::Bilirubin::Unconjugated::Combo">
+              <uilink label="" widget="bilirubinUnconjugatedComboBox" layout="" />
+              <label lang="xx"></label>
+              <label lang="fr"></label>
+              <value>
+                <uuid id="0">µmol/L</uuid>
+                <uuid id="1">mg/dL</uuid>
+
+                <possible id="0" lang="xx">µmol/L</possible>
+                <possible id="1" lang="xx">mg/dL</possible>
+
+                <possible id="0" lang="fr">µmol/L</possible>
+                <possible id="1" lang="fr">mg/dL</possible>
+              </value>
+              <options>DontPrintEmptyValues</options>
+            </Item>
+
+            <Item type="doublespin" name="Liver::BiliC">
+                <uilink label="biliCLabel" widget="biliC"/>
+                <label lang="xx">Bilirubin, conjugated (direct)</label>
+                <label lang="fr">Bilirubine conjuguée (directe)</label>
+                <tooltip lang="xx"></tooltip>
+                <tooltip lang="fr"></tooltip>
+            </Item>
+            <Item type="combo" name="Liver::Bilirubin::Conjugated::Combo">
+              <uilink label="" widget="bilirubinConjugatedComboBox" layout="" />
+              <label lang="xx"></label>
+              <label lang="fr"></label>
+              <value>
+                <uuid id="0">µmol/L</uuid>
+                <uuid id="1">mg/dL</uuid>
+
+                <possible id="0" lang="xx">µmol/L</possible>
+                <possible id="1" lang="xx">mg/dL</possible>
+
+                <possible id="0" lang="fr">µmol/L</possible>
+                <possible id="1" lang="fr">mg/dL</possible>
+              </value>
+              <options>DontPrintEmptyValues</options>
+            </Item>
+
+            <Item type="doublespin" name="Liver::Amylase">
+                <uilink label="amylaseLabel" widget="amylase"/>
+                <label lang="xx">Amylase (blood)</label>
+                <label lang="fr">Amylase (sang)</label>
+                <tooltip lang="xx"></tooltip>
+                <tooltip lang="fr"></tooltip>
+            </Item>
+
+            <Item type="doublespin" name="Liver::Lipase">
+                <uilink label="lipaseLabel" widget="lipase"/>
+                <label lang="xx">Lipase (blood)</label>
+                <label lang="fr">Lipase (sang)</label>
+                <tooltip lang="xx"></tooltip>
+                <tooltip lang="fr"></tooltip>
+            </Item>
+
+            <Item type="doublespin" name="Liver::NH4">
+                <uilink label="ammoniaLabel" widget="ammoniaDoubleSpinBox"/>
+                <label lang="xx">Ammonia NH3 (blood)</label>
+                <label lang="fr">Ammoniémie (NH3)</label>
+                <tooltip lang="xx"></tooltip>
+                <tooltip lang="fr"></tooltip>
+            </Item>
+            <Item type="combo" name="Liver::Ammonia::Combo">
+              <uilink label="" widget="ammoniaComboBox" layout="" />
+              <label lang="xx"></label>
+              <label lang="fr"></label>
+              <value>
+                <uuid id="0">µmol/L</uuid>
+                <uuid id="1">mg/L</uuid>
+
+                <possible id="0" lang="xx">µmol/L</possible>
+                <possible id="1" lang="xx">mg/L</possible>
+
+                <possible id="0" lang="fr">µmol/L</possible>
+                <possible id="1" lang="fr">mg/L</possible>
+              </value>
+              <options>DontPrintEmptyValues</options>
+            </Item>
+
+        </Item>
+
+        <Item type="detailswidget" name="Metabolic" uifilename="./ui/xx/metab.ui">
+            <uilink label="" widget="" layout="mainLayout"/>
+            <label lang="xx">Metabolic</label>
+            <label lang="fr">Métabolique</label>
+            <options>SummaryFontBold;expanded</options>
+
+            <Item type="doublespin" name="Metabolic::BloodGlucose">
+                <uilink label="bloodGlucoseLabel" widget="bloodGlucoseDoubleSpinBox"/>
+                <label lang="xx">Blood glucose</label>
+                <label lang="fr">Glycémie</label>
+                <tooltip lang="xx"></tooltip>
+                <tooltip lang="fr"></tooltip>
+            </Item>
+            <Item type="combo" name="Metabolic::BloodGlucose::Combo">
+              <uilink label="" widget="bloodGlucoseComboBox" layout="" />
+              <label lang="xx"></label>
+              <label lang="fr"></label>
+              <value>
+                <uuid id="0">mmol/L</uuid>
+                <!--<sctid></sctid>-->
+                <uuid id="1">mg/dL</uuid>
+                <uuid id="2">g/L</uuid>
+
+                <possible id="0" lang="xx">mmol/L</possible>
+                <possible id="1" lang="xx">mg/dL</possible>
+                <possible id="2" lang="xx">g/L</possible>
+
+                <possible id="0" lang="fr">mmol/L</possible>
+                <possible id="1" lang="fr">mg/dL</possible>
+                <possible id="2" lang="fr">g/L</possible>
+              </value>
+              <options>DontPrintEmptyValues</options>
+            </Item>
+
+            <Item type="doublespin" name="Metabolic::HbA1C">
+                <uilink label="hba1cLabel" widget="hba1c"/>
+                <label lang="xx">HbA1C</label>
+                <label lang="fr">HbA1C</label>
+                <tooltip lang="xx"></tooltip>
+                <tooltip lang="fr"></tooltip>
+            </Item>
+
+            <Item type="doublespin" name="Metabolic::TotalCholesterol">
+                <uilink label="cholTLabel" widget="cholT"/>
+                <label lang="xx">Total cholesterol</label>
+                <label lang="fr">Choléterol total</label>
+                <tooltip lang="xx"></tooltip>
+                <tooltip lang="fr"></tooltip>
+            </Item>
+
+            <Item type="doublespin" name="Metabolic::HDL">
+                <uilink label="hdlLabel" widget="hdl"/>
+                <label lang="xx">HDL</label>
+                <label lang="fr">HDL</label>
+                <tooltip lang="xx"></tooltip>
+                <tooltip lang="fr"></tooltip>
+            </Item>
+
+            <Item type="doublespin" name="Metabolic::LDL">
+                <uilink label="ldlLabel" widget="ldl"/>
+                <label lang="xx">LDL</label>
+                <label lang="fr">LDL</label>
+                <tooltip lang="xx"></tooltip>
+                <tooltip lang="fr"></tooltip>
+            </Item>
+
+            <Item type="doublespin" name="Metabolic::TriGlycerides">
+                <uilink label="triglyLabel" widget="trigly"/>
+                <label lang="xx">Triglycerides</label>
+                <label lang="fr">Triglycérides</label>
+                <tooltip lang="xx"></tooltip>
+                <tooltip lang="fr"></tooltip>
+            </Item>
+
+            <Item type="doublespin" name="Metabolic::LPA">
+                <uilink label="lpaLabel" widget="lpa"/>
+                <label lang="xx">Lp(a)</label>
+                <label lang="fr">Lp(a)</label>
+                <tooltip lang="xx"></tooltip>
+                <tooltip lang="fr"></tooltip>
+            </Item>
+
+        </Item>
+
+        <Item type="detailswidget" name="Hemostasis" uifilename="./ui/xx/hemostasis.ui">
+          <uilink label="" widget="" layout="mainLayout"/>
+          <label lang="xx">Hemostasis</label>
+          <label lang="fr">Hémostase</label>
+          <options>SummaryFontBold;expanded</options>
+
+            <Item type="spin" name="Hemostasis::Bleeding::Time::Spin">
+                <uilink label="bleedingTimeLabel" widget="bleedingTimeSpinBox"/>
+                <label lang="xx">Bleeding time</label>
+                <label lang="fr">Temps de saignement</label>
+                <tooltip lang="xx"></tooltip>
+                <tooltip lang="fr"></tooltip>
+            </Item>
+
+            <Item type="shorttext" name="Hemostasis::Bleeding::Time::Shorttext">
+                <uilink label="bleedingTimeMethodLabel" widget="bleedingTimeMethodLineEdit"/>
+                <label lang="xx">Method</label>
+                <label lang="fr">Méthode</label>
+                <tooltip lang="xx"></tooltip>
+                <tooltip lang="fr"></tooltip>
+            </Item>
+
+            <Item type="spin" name="CBC::PT">
+                <uilink label="prothrombinTimeLabel" widget="prothrombinTimeSpinBox"/>
+                <label lang="xx">Prothrombin time (PT)</label>
+                <label lang="fr">Temps de Quick (TP)</label>
+                <tooltip lang="xx"></tooltip>
+                <tooltip lang="fr"></tooltip>
+            </Item>
+
+            <Item type="doublespin" name="CBC::INR">
+                <uilink label="inrLabel" widget="inrDoubleSpinBox"/>
+                <label lang="xx">INR</label>
+                <label lang="fr">INR</label>
+                <tooltip lang="xx">International Normalized Ratio</tooltip>
+                <tooltip lang="fr">International Normalized Ratio</tooltip>
+            </Item>
+
+            <Item type="spin" name="CBC::APTT">
+                <uilink label="apttLabel" widget="apttSpinBox"/>
+                <label lang="xx">Activated partial thromboplastin time (aPTT)</label>
+                <label lang="fr">Temps de céphaline activée (TCA)</label>
+                <tooltip lang="xx"></tooltip>
+                <tooltip lang="fr"></tooltip>
+            </Item>
+
+            <Item type="spin" name="Hemostasis::Thrombin::Time::Spin">
+                <uilink label="thrombinTimeLabel" widget="thrombinTimeSpinBox"/>
+                <label lang="xx">Thrombin time (TT)</label>
+                <label lang="fr">Temps de thrombine (TT)</label>
+                <tooltip lang="xx"></tooltip>
+                <tooltip lang="fr"></tooltip>
+            </Item>
+
+            <Item type="group" name="Hemostasis::Other::Group">
+              <uilink widget="hemostasisOtherGroupBox"/>
+              <label lang="xx">Hemostasis: other</label>
+              <label lang="fr">Hémostase: autre</label>
+              <options>collapsible;SummaryFontBold;DontPrintEmptyValues</options>
+
+            <Item type="group" name="Hemostasis::Other::Group1">
+              <uilink widget="hemostasisOtherGroupBox1"/>
+              <label lang="xx">Hemostasis 1</label>
+              <label lang="fr">Hémostase 1</label>
+              <options>collapsible;SummaryFontBold;DontPrintEmptyValues</options>
+
+                <Item type="shorttext" name="Hemostasis::Other::1::Test">
+                  <uilink label="" widget="hemostasisOtherTestLineEdit1" layout="" />
+                  <label lang="xx"></label>
+                  <label lang="fr"></label>
+                  <placeholder lang="xx">Test name</placeholder>
+                  <placeholder lang="fr">Nom du test</placeholder>
+                </Item>
+
+                <Item type="doublespin" name="Hemostasis::Other::1::Doublespin">
+                  <uilink label="" widget="hemostasisOtherDoubleSpinBox1" layout="" />
+                  <label lang="xx"></label>
+                  <label lang="fr"></label>
+                  <options></options>
+                </Item>
+
+                <Item type="combo" name="Hemostasis::Other::1::Unit::Combo">
+                  <uilink label="" widget="hemostasisOtherComboBox1" layout="" />
+                  <label lang="xx"></label>
+                  <label lang="fr"></label>
+                  <value>
+                    <uuid id="0">Not done</uuid>
+                    <!--<sctid>385660001</sctid>-->
+                    <uuid id="1">IU/mL</uuid>
+                    <uuid id="2">Index</uuid>
+                    <uuid id="3">Titer</uuid>
+                    <uuid id="4">Optical Density Ratio</uuid>
+                    <uuid id="5">Second</uuid>
+                    <uuid id="6">Percentage</uuid>
+
+                    <possible id="0" lang="xx">ø</possible>
+                    <possible id="1" lang="xx">IU/mL</possible>
+                    <possible id="2" lang="xx">Index</possible>
+                    <possible id="3" lang="xx">Titer</possible>
+                    <possible id="4" lang="xx">OD ratio</possible>
+                    <possible id="5" lang="xx">s</possible>
+                    <possible id="6" lang="xx">%</possible>
+
+                    <possible id="0" lang="fr">ø</possible>
+                    <possible id="1" lang="fr">UI/mL</possible>
+                    <possible id="2" lang="fr">Indice</possible>
+                    <possible id="3" lang="fr">Titre</possible>
+                    <possible id="4" lang="fr">DO</possible>
+                    <possible id="5" lang="fr">s</possible>
+                    <possible id="6" lang="fr">%</possible>
+
+                    <default></default>
+                  </value>
+                  <options>DontPrintEmptyValues</options>
+                </Item>
+
+                <Item type="shorttext" name="Hemostasis::Other::1::Comment">
+                  <uilink label="" widget="hemostasisOtherCommentLineEdit1" layout="" />
+                  <label lang="xx"></label>
+                  <label lang="fr"></label>
+                  <placeholder lang="xx">Comment, other unit</placeholder>
+                  <placeholder lang="fr">Commentaire, autre unité</placeholder>
+                </Item>
+
+              </Item> end of group hemostasis other 1
+              <Item type="group" name="Hemostasis::Other::Group2">
+                <uilink widget="hemostasisOtherGroupBox2"/>
+                <label lang="xx">Hemostasis 2</label>
+                <label lang="fr">Hémostase 2</label>
+                <options>collapsible;SummaryFontBold;DontPrintEmptyValues</options>
+
+                  <Item type="shorttext" name="Hemostasis::Other::2::Test">
+                    <uilink label="" widget="hemostasisOtherTestLineEdit2" layout="" />
+                    <label lang="xx"></label>
+                    <label lang="fr"></label>
+                    <placeholder lang="xx">Test name</placeholder>
+                    <placeholder lang="fr">Nom du test</placeholder>
+                  </Item>
+
+                  <Item type="doublespin" name="Hemostasis::Other::2::Doublespin">
+                    <uilink label="" widget="hemostasisOtherDoubleSpinBox2" layout="" />
+                    <label lang="xx"></label>
+                    <label lang="fr"></label>
+                    <options></options>
+                  </Item>
+
+                  <Item type="combo" name="Hemostasis::Other::2::Unit::Combo">
+                    <uilink label="" widget="hemostasisOtherComboBox2" layout="" />
+                    <label lang="xx"></label>
+                    <label lang="fr"></label>
+                    <value>
+                      <uuid id="0">Not done</uuid>
+                      <!--<sctid>385660001</sctid>-->
+                      <uuid id="1">IU/mL</uuid>
+                      <uuid id="2">Index</uuid>
+                      <uuid id="3">Titer</uuid>
+                      <uuid id="4">Optical Density Ratio</uuid>
+                      <uuid id="5">Second</uuid>
+                      <uuid id="6">Percentage</uuid>
+
+                      <possible id="0" lang="xx">ø</possible>
+                      <possible id="1" lang="xx">IU/mL</possible>
+                      <possible id="2" lang="xx">Index</possible>
+                      <possible id="3" lang="xx">Titer</possible>
+                      <possible id="4" lang="xx">OD ratio</possible>
+                      <possible id="5" lang="xx">s</possible>
+                      <possible id="6" lang="xx">%</possible>
+
+                      <possible id="0" lang="fr">ø</possible>
+                      <possible id="1" lang="fr">UI/mL</possible>
+                      <possible id="2" lang="fr">Indice</possible>
+                      <possible id="3" lang="fr">Titre</possible>
+                      <possible id="4" lang="fr">DO</possible>
+                      <possible id="5" lang="fr">s</possible>
+                      <possible id="6" lang="fr">%</possible>
+
+                      <default></default>
+                    </value>
+                    <options>DontPrintEmptyValues</options>
+                  </Item>
+
+                  <Item type="shorttext" name="Hemostasis::Other::2::Comment">
+                    <uilink label="" widget="hemostasisOtherCommentLineEdit2" layout="" />
+                    <label lang="xx"></label>
+                    <label lang="fr"></label>
+                    <placeholder lang="xx">Comment, other unit</placeholder>
+                    <placeholder lang="fr">Commentaire, autre unité</placeholder>
+                  </Item>
+
+                </Item> end of group hemostasis other 2
+
+                <Item type="group" name="Hemostasis::Other::Group3">
+                <uilink widget="hemostasisOtherGroupBox3"/>
+                <label lang="xx">Hemostasis 3</label>
+                <label lang="fr">Hémostase 3</label>
+                <options>collapsible;SummaryFontBold;DontPrintEmptyValues</options>
+
+                  <Item type="shorttext" name="Hemostasis::Other::3::Test">
+                    <uilink label="" widget="hemostasisOtherTestLineEdit3" layout="" />
+                    <label lang="xx"></label>
+                    <label lang="fr"></label>
+                    <placeholder lang="xx">Test name</placeholder>
+                    <placeholder lang="fr">Nom du test</placeholder>
+                  </Item>
+
+                  <Item type="doublespin" name="Hemostasis::Other::3::Doublespin">
+                    <uilink label="" widget="hemostasisOtherDoubleSpinBox3" layout="" />
+                    <label lang="xx"></label>
+                    <label lang="fr"></label>
+                    <options></options>
+                  </Item>
+
+                  <Item type="combo" name="Hemostasis::Other::3::Unit::Combo">
+                    <uilink label="" widget="hemostasisOtherComboBox3" layout="" />
+                    <label lang="xx"></label>
+                    <label lang="fr"></label>
+                    <value>
+                      <uuid id="0">Not done</uuid>
+                      <!--<sctid>385660001</sctid>-->
+                      <uuid id="1">IU/mL</uuid>
+                      <uuid id="2">Index</uuid>
+                      <uuid id="3">Titer</uuid>
+                      <uuid id="4">Optical Density Ratio</uuid>
+                      <uuid id="5">Second</uuid>
+                      <uuid id="6">Percentage</uuid>
+
+                      <possible id="0" lang="xx">ø</possible>
+                      <possible id="1" lang="xx">IU/mL</possible>
+                      <possible id="2" lang="xx">Index</possible>
+                      <possible id="3" lang="xx">Titer</possible>
+                      <possible id="4" lang="xx">OD ratio</possible>
+                      <possible id="5" lang="xx">s</possible>
+                      <possible id="6" lang="xx">%</possible>
+
+                      <possible id="0" lang="fr">ø</possible>
+                      <possible id="1" lang="fr">UI/mL</possible>
+                      <possible id="2" lang="fr">Indice</possible>
+                      <possible id="3" lang="fr">Titre</possible>
+                      <possible id="4" lang="fr">DO</possible>
+                      <possible id="5" lang="fr">s</possible>
+                      <possible id="6" lang="fr">%</possible>
+
+                      <default></default>
+                    </value>
+                    <options>DontPrintEmptyValues</options>
+                  </Item>
+
+                  <Item type="shorttext" name="Hemostasis::Other::3::Comment">
+                    <uilink label="" widget="hemostasisOtherCommentLineEdit3" layout="" />
+                    <label lang="xx"></label>
+                    <label lang="fr"></label>
+                    <placeholder lang="xx">Comment, other unit</placeholder>
+                    <placeholder lang="fr">Commentaire, autre unité</placeholder>
+                  </Item>
+
+                </Item> end of group hemostasis other 3
+
+                <Item type="group" name="Hemostasis::Other::Group4">
+                <uilink widget="hemostasisOtherGroupBox4"/>
+                <label lang="xx">Hemostasis 4</label>
+                <label lang="fr">Hémostase 4</label>
+                <options>collapsible;SummaryFontBold;DontPrintEmptyValues</options>
+
+                  <Item type="shorttext" name="Hemostasis::Other::4::Test">
+                    <uilink label="" widget="hemostasisOtherTestLineEdit4" layout="" />
+                    <label lang="xx"></label>
+                    <label lang="fr"></label>
+                    <placeholder lang="xx">Test name</placeholder>
+                    <placeholder lang="fr">Nom du test</placeholder>
+                  </Item>
+
+                  <Item type="doublespin" name="Hemostasis::Other::4::Doublespin">
+                    <uilink label="" widget="hemostasisOtherDoubleSpinBox4" layout="" />
+                    <label lang="xx"></label>
+                    <label lang="fr"></label>
+                    <options></options>
+                  </Item>
+
+                  <Item type="combo" name="Hemostasis::Other::4::Unit::Combo">
+                    <uilink label="" widget="hemostasisOtherComboBox4" layout="" />
+                    <label lang="xx"></label>
+                    <label lang="fr"></label>
+                    <value>
+                      <uuid id="0">Not done</uuid>
+                      <!--<sctid>385660001</sctid>-->
+                      <uuid id="1">IU/mL</uuid>
+                      <uuid id="2">Index</uuid>
+                      <uuid id="3">Titer</uuid>
+                      <uuid id="4">Optical Density Ratio</uuid>
+                      <uuid id="5">Second</uuid>
+                      <uuid id="6">Percentage</uuid>
+
+                      <possible id="0" lang="xx">ø</possible>
+                      <possible id="1" lang="xx">IU/mL</possible>
+                      <possible id="2" lang="xx">Index</possible>
+                      <possible id="3" lang="xx">Titer</possible>
+                      <possible id="4" lang="xx">OD ratio</possible>
+                      <possible id="5" lang="xx">s</possible>
+                      <possible id="6" lang="xx">%</possible>
+
+                      <possible id="0" lang="fr">ø</possible>
+                      <possible id="1" lang="fr">UI/mL</possible>
+                      <possible id="2" lang="fr">Indice</possible>
+                      <possible id="3" lang="fr">Titre</possible>
+                      <possible id="4" lang="fr">DO</possible>
+                      <possible id="5" lang="fr">s</possible>
+                      <possible id="6" lang="fr">%</possible>
+
+                      <default></default>
+                    </value>
+                    <options>DontPrintEmptyValues</options>
+                  </Item>
+
+                  <Item type="shorttext" name="Hemostasis::Other::4::Comment">
+                    <uilink label="" widget="hemostasisOtherCommentLineEdit4" layout="" />
+                    <label lang="xx"></label>
+                    <label lang="fr"></label>
+                    <placeholder lang="xx">Comment, other unit</placeholder>
+                    <placeholder lang="fr">Commentaire, autre unité</placeholder>
+                  </Item>
+
+                </Item> end of group hemostasis other 4
+
+                <Item type="group" name="Hemostasis::Other::Group5">
+                <uilink widget="hemostasisOtherGroupBox5"/>
+                <label lang="xx">Hemostasis 5</label>
+                <label lang="fr">Hémostase 5</label>
+                <options>collapsible;SummaryFontBold;DontPrintEmptyValues</options>
+
+                  <Item type="shorttext" name="Hemostasis::Other::5::Test">
+                    <uilink label="" widget="hemostasisOtherTestLineEdit5" layout="" />
+                    <label lang="xx"></label>
+                    <label lang="fr"></label>
+                    <placeholder lang="xx">Test name</placeholder>
+                    <placeholder lang="fr">Nom du test</placeholder>
+                  </Item>
+
+                  <Item type="doublespin" name="Hemostasis::Other::5::Doublespin">
+                    <uilink label="" widget="hemostasisOtherDoubleSpinBox5" layout="" />
+                    <label lang="xx"></label>
+                    <label lang="fr"></label>
+                    <options></options>
+                  </Item>
+
+                  <Item type="combo" name="Hemostasis::Other::5::Unit::Combo">
+                    <uilink label="" widget="hemostasisOtherComboBox5" layout="" />
+                    <label lang="xx"></label>
+                    <label lang="fr"></label>
+                    <value>
+                      <uuid id="0">Not done</uuid>
+                      <!--<sctid>385660001</sctid>-->
+                      <uuid id="1">IU/mL</uuid>
+                      <uuid id="2">Index</uuid>
+                      <uuid id="3">Titer</uuid>
+                      <uuid id="4">Optical Density Ratio</uuid>
+                      <uuid id="5">Second</uuid>
+                      <uuid id="6">Percentage</uuid>
+
+                      <possible id="0" lang="xx">ø</possible>
+                      <possible id="1" lang="xx">IU/mL</possible>
+                      <possible id="2" lang="xx">Index</possible>
+                      <possible id="3" lang="xx">Titer</possible>
+                      <possible id="4" lang="xx">OD ratio</possible>
+                      <possible id="5" lang="xx">s</possible>
+                      <possible id="6" lang="xx">%</possible>
+
+                      <possible id="0" lang="fr">ø</possible>
+                      <possible id="1" lang="fr">UI/mL</possible>
+                      <possible id="2" lang="fr">Indice</possible>
+                      <possible id="3" lang="fr">Titre</possible>
+                      <possible id="4" lang="fr">DO</possible>
+                      <possible id="5" lang="fr">s</possible>
+                      <possible id="6" lang="fr">%</possible>
+
+                      <default></default>
+                    </value>
+                    <options>DontPrintEmptyValues</options>
+                  </Item>
+
+                  <Item type="shorttext" name="Hemostasis::Other::5::Comment">
+                    <uilink label="" widget="hemostasisOtherCommentLineEdit5" layout="" />
+                    <label lang="xx"></label>
+                    <label lang="fr"></label>
+                    <placeholder lang="xx">Comment, other unit</placeholder>
+                    <placeholder lang="fr">Commentaire, autre unité</placeholder>
+                  </Item>
+
+                </Item> end of group hemostasis other 5
+
+                </Item> end of group other hemostasis
+
+
+          </Item> <!-- end of detailswidget hemostasis -->
+
+
+        <Item type="detailswidget" name="Tumor" uifilename="./ui/xx/tumor.ui">
+            <uilink label="" widget="" layout="mainLayout"/>
+            <label lang="xx">Tumors</label>
+            <label lang="fr">Tumeurs</label>
+            <options>SummaryFontBold;expanded</options>
+
+            <Item type="doublespin" name="Tumor::ACE">
+                <uilink label="aceLabel" widget="ace"/>
+                <label lang="xx">ACE</label>
+                <label lang="fr">ACE</label>
+                <tooltip lang="xx"></tooltip>
+                <tooltip lang="fr"></tooltip>
+            </Item>
+
+            <Item type="doublespin" name="Tumor::AFP">
+                <uilink label="afpLabel" widget="afp"/>
+                <label lang="xx">AFP</label>
+                <label lang="fr">AFP</label>
+                <tooltip lang="xx"></tooltip>
+                <tooltip lang="fr"></tooltip>
+            </Item>
+
+            <Item type="doublespin" name="Tumor::CA125">
+                <uilink label="ca125Label" widget="ca125"/>
+                <label lang="xx">CA 125</label>
+                <label lang="fr">CA 125</label>
+                <tooltip lang="xx"></tooltip>
+                <tooltip lang="fr"></tooltip>
+            </Item>
+
+            <Item type="doublespin" name="Tumor::CA153">
+                <uilink label="ca153Label" widget="ca153"/>
+                <label lang="xx">CA 15-3</label>
+                <label lang="fr">CA 15-3</label>
+                <tooltip lang="xx"></tooltip>
+                <tooltip lang="fr"></tooltip>
+            </Item>
+
+            <Item type="doublespin" name="Tumor::CA199">
+                <uilink label="ca199Label" widget="ca199"/>
+                <label lang="xx">CA 19.9</label>
+                <label lang="fr">CA 19.9</label>
+                <tooltip lang="xx"></tooltip>
+                <tooltip lang="fr"></tooltip>
+            </Item>
+
+            <Item type="doublespin" name="Tumor::CA2729">
+                <uilink label="ca2729Label" widget="ca2729"/>
+                <label lang="xx">CA 27.29</label>
+                <label lang="fr">CA 27.29</label>
+                <tooltip lang="xx"></tooltip>
+                <tooltip lang="fr"></tooltip>
+            </Item>
+
+            <Item type="doublespin" name="Tumor::CYFRA211">
+                <uilink label="cyfra211Label" widget="cyfra211"/>
+                <label lang="xx">CYFRA 21-1</label>
+                <label lang="fr">CYFRA 21-1</label>
+                <tooltip lang="xx"></tooltip>
+                <tooltip lang="fr"></tooltip>
+            </Item>
+
+            <Item type="doublespin" name="Tumor::HCG">
+                <uilink label="hcgLabel" widget="hcg"/>
+                <label lang="xx">HCG</label>
+                <label lang="fr">HCG</label>
+                <tooltip lang="xx"></tooltip>
+                <tooltip lang="fr"></tooltip>
+            </Item>
+
+        </Item>
+
+        <Item type="detailswidget" name="Prostate" uifilename="./ui/xx/prostate.ui">
+            <uilink label="" widget="" layout="mainLayout"/>
+            <label lang="xx">Prostate</label>
+            <label lang="fr">Prostate</label>
+            <options>SummaryFontBold</options>
+
+            <Item type="doublespin" name="Prostate::PSA">
+                <uilink label="psaTotalLabel" widget="psaTotal"/>
+                <label lang="xx">Total PSA</label>
+                <label lang="fr">PSA total</label>
+                <tooltip lang="xx"></tooltip>
+                <tooltip lang="fr"></tooltip>
+            </Item>
+            <Item type="doublespin" name="Prostate::PSA::Free">
+                <uilink label="psaFreeLabel" widget="psaFree"/>
+                <label lang="xx">Free PSA</label>
+                <label lang="fr">PSA libre</label>
+                <tooltip lang="xx"></tooltip>
+                <tooltip lang="fr"></tooltip>
+            </Item>
+            <Item type="spin" name="Prostate::PSA::Ratio">
+                <uilink label="psaRatioLabel" widget="psaRatio"/>
+                <label lang="xx">free PSA / total PSA ratio</label>
+                <label lang="fr">Rapport PSA libre / PSA total</label>
+                <tooltip lang="xx"></tooltip>
+                <tooltip lang="fr"></tooltip>
+            </Item>
+
+            <Item type="doublespin" name="Prostate::PAP">
+                <uilink label="papLabel" widget="pap"/>
+                <label lang="xx">PAP</label>
+                <label lang="fr">PAP</label>
+                <tooltip lang="xx"></tooltip>
+                <tooltip lang="fr"></tooltip>
+            </Item>
+
+            <Item type="doublespin" name="Prostate::DHT">
+                <uilink label="dhtLabel" widget="dht"/>
+                <label lang="xx">DHT</label>
+                <label lang="fr">DHT</label>
+                <tooltip lang="xx"></tooltip>
+                <tooltip lang="fr"></tooltip>
+            </Item>
+
+        </Item>
+
+        <Item type="detailswidget" name="Thyroid" uifilename="./ui/xx/thyroid.ui">
+            <uilink label="" widget="" layout="mainLayout"/>
+            <label lang="xx">Thyroid</label>
+            <label lang="fr">Thyroïde</label>
+            <options>SummaryFontBold;expanded</options>
+
+            <Item type="doublespin" name="Thyroid::THS">
+                <uilink label="tshLabel" widget="tsh"/>
+                <label lang="xx">TSH</label>
+                <label lang="fr">TSH</label>
+                <tooltip lang="xx">Thyroid-stimulating hormone</tooltip>
+                <tooltip lang="fr">Thryéostimuline</tooltip>
+            </Item>
+
+            <Item type="doublespin" name="Thyroid::FT4">
+                <uilink label="t4Label" widget="t4"/>
+                <label lang="xx">T4 free</label>
+                <label lang="fr">T4 libre</label>
+                <tooltip lang="xx">Thyroxine</tooltip>
+                <tooltip lang="fr">Thyroxine libre (T4 L ou FT4) (SANG)</tooltip>
+            </Item>
+
+<Item type="combo" name="Thyroid::FT4::Unit::Combo">
+  <uilink label="" widget="ft4ComboBox" layout="" />
+  <label lang="xx"></label>
+  <label lang="fr"></label>
+  <value>
+    <uuid id="0">ng/dL</uuid>
+    <!--<sctid></sctid>-->
+    <uuid id="1">pmol/L</uuid>
+
+    <possible id="0" lang="xx">ng/dL</possible>
+    <possible id="1" lang="xx">pmol/L</possible>
+
+    <possible id="0" lang="fr">ng/dL</possible>
+    <possible id="1" lang="fr">pmol/L</possible>
+  </value>
+  <options>DontPrintEmptyValues</options>
+</Item>
+
+            <Item type="doublespin" name="Thyroid::FT3">
+                <uilink label="t3Label" widget="t3"/>
+                <label lang="xx">T3 free</label>
+                <label lang="fr">T3 libre</label>
+                <tooltip lang="xx">Free triiodothyronine (fT3)</tooltip>
+                <tooltip lang="fr">Triiodothyronine libre (T3 L ou FT3) (SANG)</tooltip>
+            </Item>
+            <Item type="combo" name="Thyroid::FT3::Unit::Combo">
+              <uilink label="" widget="ft3ComboBox" layout="" />
+              <label lang="xx"></label>
+              <label lang="fr"></label>
+              <value>
+                <uuid id="0">pg/mL</uuid>
+                <!--<sctid></sctid>-->
+                <uuid id="1">pmol/L</uuid>
+
+                <possible id="0" lang="xx">pg/mL</possible>
+                <possible id="1" lang="xx">pmol/L</possible>
+
+                <possible id="0" lang="fr">pg/mL</possible>
+                <possible id="1" lang="fr">pmol/L</possible>
+              </value>
+              <options>DontPrintEmptyValues</options>
+            </Item>
+
+        </Item>
+
+  </MedForm>
+
+</FreeMedForms>

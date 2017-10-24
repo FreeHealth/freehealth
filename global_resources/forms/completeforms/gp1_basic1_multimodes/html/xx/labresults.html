@@ -1,13 +1,13 @@
 <html>
 <body>
 <style type="text/css">
-.__consulttextresult__formContent {
+.__labresults__formContent {
   font-size: 12pt;
   color: black;
   border: 2px solid gray;
 }
 
-.__consulttextresult__formContent .patientIdentification {
+.__labresults__formContent .patientIdentification {
   font-size: 16 pt;
   margin: 0 0 0 0;                                                            
   padding: 0px;                                                                 
@@ -15,10 +15,10 @@
   text-align: right                                                             
 }
 
-.__consulttextresult__formContent .formHeader {
+.__labresults__formContent .formHeader {
 }
 
-.__consulttextresult__formContent .formLabel {
+.__labresults__formContent .formLabel {
   font-weight: 600;
   text-transform: uppercase;
   background-color: gray;/* #6d8526; #7f9a2c #6d8526 #A7C942*/
@@ -27,43 +27,43 @@
   text-align: center;
 }
 
-.__consulttextresult__formContent .episodeHeader {
+.__labresults__formContent .episodeHeader {
   margin: 0 2em 0 0;
   padding: 0px;
 }
 
-.__consulttextresult__formContent .episodeContent {
+.__labresults__formContent .episodeContent {
   margin-left: 3em;
 }
 
-.__consulttextresult__formContent .episodeLabel {
+.__labresults__formContent .episodeLabel {
   font-weight: 600;
   font-size: 14pt;
   padding: 5px;
 }
 
-.__consulttextresult__formContent .episodeUserCreator {
+.__labresults__formContent .episodeUserCreator {
   font-size: 9pt;
   color: gray;
   margin-left: 1em;
 }
 
-.__consulttextresult__formContent .episodeUserDate {
+.__labresults__formContent .episodeUserDate {
   font-size: 9pt;
   color: gray;
   margin-left: 1em;
 }
 
-.__consulttextresult__formContent .textContainer {
+.__labresults__formContent .textContainer {
   font-size: 12pt;
   color: black;
 }
 
-.__consulttextresult__formContent .textContainer #textContent {
+.__labresults__formContent .textContainer #textContent {
 }
 </style>
 
-<div class="__consulttextresult__formContent">
+<div class="__labresults__formContent">
 
     <div class="patientIdentification">                                         
         {{~Patient.Identity.FullName~ – }}      
@@ -85,12 +85,12 @@
 <div class="episodeContent">
 
 <div class="textContainer">
-  <div id="textContent">{{~Form.Data.Item.GP::Basic::Consultation::Reports::Textual~}}</div>
+  <div id="textContent">{{~Form.Data.Item.GP::Basic::Consultation::LabResults::Textual~}}</div>
 </div> <!-- textContainer -->
 
 </div> <!-- episodeContent -->
 
-</div> <!-- __consulttextresult__formContent -->
+</div> <!-- __labresults__formContent -->
 
 </body>
 </html>
