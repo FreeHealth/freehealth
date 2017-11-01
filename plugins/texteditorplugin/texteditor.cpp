@@ -39,6 +39,7 @@
   Complex text editor for the FreeMedForms project.
 */
 
+#include "constants.h"
 #include "texteditor.h"
 #include "editormanager.h"
 #include "editorcontext.h"
@@ -90,6 +91,7 @@
 using namespace Editor;
 using namespace Editor::Internal;
 using namespace Trans::ConstantTranslations;
+using namespace Editor::Constants;
 
 static inline Core::IUser *user() {return Core::ICore::instance()->user();}
 static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
@@ -107,9 +109,53 @@ namespace Internal {
 class TextEditorWithControl : public QTextEdit
 {
 public:
-    TextEditorWithControl(QWidget *parent = 0) : QTextEdit(parent), _control(0) {}
-    TextEditorWithControl(const QString &text, QWidget *parent = 0) : QTextEdit(text, parent), _control(0) {}
+    TextEditorWithControl(QWidget *parent = 0) : QTextEdit(parent), _control(0) {
+        setAcceptDrops(true);
+    }
+    TextEditorWithControl(const QString &text, QWidget *parent = 0) : QTextEdit(text, parent), _control(0) {
+        setAcceptDrops(true);
+    }
     ~TextEditorWithControl() {}
+
+    void dragEnterEvent(QDragEnterEvent *event)
+    {
+        qWarning() << "inside class TextEditorWithControl dragEnterEvent()";
+        const QMimeData* mimeData = event->mimeData();
+        if (mimeData->hasUrls()) {
+            qWarning() << mimeData->text();
+            if (mimeData->text().startsWith("http")) {
+                event->acceptProposedAction();
+            } else {
+                event->ignore();
+            }
+        } else {
+            event->acceptProposedAction();
+        }
+    }
+
+    void dropEvent(QDropEvent *event)
+    {
+        qWarning() << "inside TextEditorWithControl dropEvent()";
+        const QMimeData* mimeData = event->mimeData();
+        qWarning() << mimeData->text();
+
+        if (mimeData->hasUrls()) {
+            qWarning() << "hasUrls()";
+            if (mimeData->text().startsWith("http")) {
+                qWarning() << "start with http";
+                //event->accept();
+                event->acceptProposedAction();
+            } else {
+                qWarning() << "doesn't start with http: ignore event";
+                event->ignore();
+            }
+        } else {
+            qWarning() << "accept";
+            //event->accept();
+            event->acceptProposedAction();
+        }
+    }
+
 
     void setTextControl(ITextControl *control)
     {
@@ -287,7 +333,7 @@ public:
     void readFile(const QString &file)
     {
         QString str = Utils::readTextFile(file, Utils::WarnUser);
-        // run token if FreeMedForms
+        // run token if current app is EHR
     #ifdef FREEHEALTH
         patient()->replaceTokens(str);
         user()->replaceTokens(str);
@@ -298,9 +344,9 @@ public:
 
     #endif
         if (Qt::mightBeRichText(str)) {
-            q->textEdit()->setHtml(str);
+            q->textEdit()->insertHtml(str);
         } else {
-            q->textEdit()->setPlainText(str);
+            q->textEdit()->insertPlainText(str);
         }
     }
 
@@ -359,6 +405,7 @@ TextEditor::TextEditor(QWidget *parent, Types type) :
     vb->addWidget(d->textEdit);
 
     setFocusProxy(d->textEdit);
+    setAcceptDrops(true);
 }
 
 TextEditor::~TextEditor()
@@ -375,6 +422,40 @@ TextEditor::~TextEditor()
 QTextEdit *TextEditor::textEdit() const
 {
     return d->textEdit;
+}
+
+void TextEditor::dragEnterEvent(QDragEnterEvent *event)
+{
+    qWarning() << "inside TextEditor::dragEnterEvent()";
+    const QMimeData* mimeData = event->mimeData();
+
+    if (mimeData->hasUrls() && !mimeData->text().startsWith("http")) {
+        event->setAccepted(true);
+    } else {
+        event->setAccepted(false);
+    }
+    //event->acceptProposedAction();
+}
+
+void TextEditor::dropEvent(QDropEvent *event)
+{
+    qWarning() << "inside TextEditor::dropEvent()";
+    const QMimeData* mimeData = event->mimeData();
+
+    if (mimeData->hasUrls() && !mimeData->text().startsWith("http")) {
+    QList<QUrl> urls = event->mimeData()->urls();
+    if (urls.isEmpty())
+        return;
+
+    QString filename = urls.first().toLocalFile();
+    if (filename.isEmpty())
+        return;
+
+    d->readFile(filename);
+    } else {
+        //event->setAccepted(false);
+        event->acceptProposedAction();
+    }
 }
 
 void TextEditor::setTextControl(ITextControl *control)
@@ -644,10 +725,12 @@ void TextEditor::saveAs()
                                     fileName, Utils::Overwrite, Utils::WarnUser, this))
             textEdit()->document()->setModified(false);
     } else if (selected==tkTr(Trans::Constants::FILE_FILTER_TXT)) {
-        bool yes = Utils::yesNoMessageBox(tr("Save in pure textual format?"),
-                                          tr("The conversion of the document to a pure textual format will cause "
-                                             "the lost of the paragraph and characters format. Do you really want "
-                                             "to save in pure textual format?"));
+                bool yes = Utils::yesNoMessageBox(tr("Save as plain text?"),
+                                                  tr("The conversion of the document to "
+                                                     "a plain text will cause "
+                                                     "the loss of the paragraph and "
+                                                     "characters format. Do you really "
+                                                     "want to save as plain text?"));
         if (yes) {
             if (Utils::saveStringToFile(textEdit()->document()->toPlainText(),
                                         fileName, Utils::Overwrite, Utils::WarnUser, this))

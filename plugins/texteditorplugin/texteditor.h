@@ -167,6 +167,8 @@ protected:
     virtual QMenu *getContextMenu();
     virtual bool toolbarIsVisible() const;
     virtual void hideToolbar();
+    void dragEnterEvent(QDragEnterEvent *event) override;
+    void dropEvent(QDropEvent *event) override;
 
 private:
     Internal::TextEditorPrivate *d;

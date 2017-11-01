@@ -12,7 +12,8 @@ HEADERS +=  \
     $${PWD}/tableeditor.h \
     $${PWD}/texteditor.h \
     $${PWD}/tablepropertieswidget.h \
-    $${PWD}/texteditordialog.h
+    $${PWD}/texteditordialog.h \
+    $$PWD/constants.h
 
 SOURCES += \
     $${PWD}/editoractionhandler.cpp \
