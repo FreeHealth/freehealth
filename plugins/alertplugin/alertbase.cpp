@@ -1921,7 +1921,7 @@ bool AlertBase::updateAlertPackDescription(AlertPackDescription &descr, const in
     query.bindValue(++i, descr.data(AlertPackDescription::URL));
     query.bindValue(++i, descr.data(AlertPackDescription::GeneralIcon));
     query.bindValue(++i, descr.data(AlertPackDescription::Version));
-    query.bindValue(++i, descr.data(AlertPackDescription::FreeMedFormsCompatVersion));
+    query.bindValue(++i, descr.data(AlertPackDescription::EHRCompatVersion));
     query.bindValue(++i, descr.data(AlertPackDescription::CreationDate));
     query.bindValue(++i, descr.data(AlertPackDescription::LastModificationDate));
     query.bindValue(++i, QString()); //TODO:: descr.extraXml());
@@ -1983,7 +1983,7 @@ bool AlertBase::saveAlertPackDescription(AlertPackDescription &descr)
     query.bindValue(Constants::ALERT_PACKS_URL, descr.data(AlertPackDescription::URL));
     query.bindValue(Constants::ALERT_PACKS_THEMEDICON, descr.data(AlertPackDescription::GeneralIcon));
     query.bindValue(Constants::ALERT_PACKS_VERSION, descr.data(AlertPackDescription::Version));
-    query.bindValue(Constants::ALERT_PACKS_FMFVERSION, descr.data(AlertPackDescription::FreeMedFormsCompatVersion));
+    query.bindValue(Constants::ALERT_PACKS_FMFVERSION, descr.data(AlertPackDescription::EHRCompatVersion));
     query.bindValue(Constants::ALERT_PACKS_CREATEDATE, descr.data(AlertPackDescription::CreationDate));
     query.bindValue(Constants::ALERT_PACKS_LASTUPDATE, descr.data(AlertPackDescription::LastModificationDate));
     query.bindValue(Constants::ALERT_PACKS_XTRAXML, QString()); // TODO: descr.extraXml());
@@ -2116,7 +2116,7 @@ AlertPackDescription AlertBase::getAlertPackDescription(const QString &uuid)
             pack.setData(AlertPackDescription::WebLink, query.value(Constants::ALERT_PACKS_URL));
             pack.setData(AlertPackDescription::GeneralIcon, query.value(Constants::ALERT_PACKS_THEMEDICON));
             pack.setData(AlertPackDescription::Version, query.value(Constants::ALERT_PACKS_VERSION));
-            pack.setData(AlertPackDescription::FreeMedFormsCompatVersion, query.value(Constants::ALERT_PACKS_FMFVERSION));
+            pack.setData(AlertPackDescription::EHRCompatVersion, query.value(Constants::ALERT_PACKS_FMFVERSION));
             pack.setData(AlertPackDescription::CreationDate, query.value(Constants::ALERT_PACKS_CREATEDATE));
             pack.setData(AlertPackDescription::LastModificationDate, query.value(Constants::ALERT_PACKS_LASTUPDATE));
 //            pack.setData(AlertPackDescription::XtraXml, query.value(Constants::ALERT_PACKS_XTRAXML));

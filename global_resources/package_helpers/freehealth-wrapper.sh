@@ -7,10 +7,9 @@
 # *  License of this file: BSD-3 clause                                     *
 # ***************************************************************************/
 #/***************************************************************************
-# *   Main developers : Eric MAEKER, <eric.maeker@gmail.com>                *
-# *  Contributors:                                                          *
-# *       NAME <MAIL@ADDRESS.COM>                                           *
-# *       NAME <MAIL@ADDRESS.COM>                                           *
+# *  Authors:                                                               *
+# *  Eric MAEKER <eric.maeker@gmail.com>                                    *
+# *  NAME <MAIL@ADDRESS.COM>                                                *
 # ***************************************************************************/
 #
 #/***************************************************************************

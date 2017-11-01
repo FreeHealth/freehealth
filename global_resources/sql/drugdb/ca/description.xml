@@ -18,7 +18,7 @@
     <druguidbname>DIN</druguidbname>
     <atcvalid>true</atcvalid>
     <interactionvalid>true</interactionvalid>
-    <complementweblink>http://code.google.com/p/freemedforms/wiki/Database_ca</complementweblink>
+    <complementweblink></complementweblink>
     <packuidname>UPC</packuidname>
     <drugnameconstructor>NAME (FORM, STRENGTH)</drugnameconstructor>
     <uuid>CA_HCDPD</uuid>

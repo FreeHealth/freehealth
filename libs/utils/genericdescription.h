@@ -66,7 +66,7 @@ public:
         AbsFileName,                    //!< absolute filename path
         Vendor,                         //!< Vendor of this data
         Validity,                       //!< Validity
-        FreeMedFormsCompatVersion,      //!< With which version of FreeMedForms is this data compatible
+        EHRCompatVersion,      //!< With which version of FreeMedForms is this data compatible
         FreeDiamsCompatVersion,         //!< With which version of FreeDiams is this data compatible
         CreationDate,                   //!< Creation date
         LastModificationDate,           //!< Last modification date

@@ -183,7 +183,7 @@ bool PackServerCreator::createServer(const QString &serverAbsPath) const
         }
 
         // Update Pack description
-        descr.setData(PackDescription::FreeMedFormsCompatVersion, qApp->applicationVersion());
+        descr.setData(PackDescription::EHRCompatVersion, qApp->applicationVersion());
         descr.setData(PackDescription::FreeDiamsCompatVersion, qApp->applicationVersion());
         descr.setData(PackDescription::LastModificationDate, QDateTime::currentDateTime().toString(Qt::ISODate));
         descr.setData(PackDescription::Size, QFileInfo(zipFile).size());
@@ -220,7 +220,7 @@ bool PackServerCreator::createServer(const QString &serverAbsPath) const
         descr.setData(DataPack::ServerDescription::LastModificationDate, QDate::currentDate());
         if (autoVersionning()) {
             descr.setData(DataPack::ServerDescription::Version, qApp->applicationVersion());
-            descr.setData(DataPack::ServerDescription::FreeMedFormsCompatVersion, qApp->applicationVersion());
+            descr.setData(DataPack::ServerDescription::EHRCompatVersion, qApp->applicationVersion());
             descr.setData(DataPack::ServerDescription::FreeDiamsCompatVersion, qApp->applicationVersion());
         }
 

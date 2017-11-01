@@ -15,7 +15,7 @@
  *  GNU General Public License for more details.                           *
  *                                                                         *
  *  You should have received a copy of the GNU General Public License      *
- *  along with this program (COPYING.FREEMEDFORMS file).                   *
+ *  along with this program.                                               *
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
@@ -368,7 +368,7 @@ bool DataPackCore::createServer(const QString &serverUid)
             // For Description use the qApp->applicationVersion()
             descr.setData(DataPack::ServerDescription::AbsFileName, versionnedFileName);
             descr.setData(DataPack::ServerDescription::Version, qApp->applicationVersion());
-            descr.setData(DataPack::PackDescription::FreeMedFormsCompatVersion, qApp->applicationVersion());
+            descr.setData(DataPack::PackDescription::EHRCompatVersion, qApp->applicationVersion());
             descr.setData(DataPack::PackDescription::FreeDiamsCompatVersion, qApp->applicationVersion());
         }
 
@@ -395,7 +395,7 @@ bool DataPackCore::createServer(const QString &serverUid)
     descr.setData(DataPack::ServerDescription::LastModificationDate, QDate::currentDate());
     if (server.autoVersion()) {
         descr.setData(DataPack::ServerDescription::Version, qApp->applicationVersion());
-        descr.setData(DataPack::ServerDescription::FreeMedFormsCompatVersion, qApp->applicationVersion());
+        descr.setData(DataPack::ServerDescription::EHRCompatVersion, qApp->applicationVersion());
         descr.setData(DataPack::ServerDescription::FreeDiamsCompatVersion, qApp->applicationVersion());
     }
     // Find final tag of the server description

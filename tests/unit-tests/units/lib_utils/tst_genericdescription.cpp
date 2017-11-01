@@ -15,7 +15,7 @@
  *  GNU General Public License for more details.                           *
  *                                                                         *
  *  You should have received a copy of the GNU General Public License      *
- *  along with this program (COPYING.FREEMEDFORMS file).                   *
+ *  along with this program.                                               *
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
@@ -102,7 +102,7 @@ private slots:
             data.insert(Utils::GenericDescription::AbsFileName, r.randomString(r.randomInt(10, 100)));
             data.insert(Utils::GenericDescription::Vendor, r.randomWords(r.randomInt(1,10)));
             data.insert(Utils::GenericDescription::Validity, r.randomBool());
-            data.insert(Utils::GenericDescription::FreeMedFormsCompatVersion, r.randomVersionNumber());
+            data.insert(Utils::GenericDescription::EHRCompatVersion, r.randomVersionNumber());
             data.insert(Utils::GenericDescription::FreeDiamsCompatVersion, r.randomVersionNumber());
             data.insert(Utils::GenericDescription::FreeAccountCompatVersion, r.randomVersionNumber());
             data.insert(Utils::GenericDescription::CreationDate, r.randomDateTime(QDateTime::currentDateTime().addYears(-1)));
@@ -164,7 +164,7 @@ private slots:
             data.insert(Utils::GenericDescription::AbsFileName, r.randomString(r.randomInt(10, 100)));
             data.insert(Utils::GenericDescription::Vendor, r.randomWords(r.randomInt(1,10)));
             data.insert(Utils::GenericDescription::Validity, r.randomBool());
-            data.insert(Utils::GenericDescription::FreeMedFormsCompatVersion, r.randomVersionNumber());
+            data.insert(Utils::GenericDescription::EHRCompatVersion, r.randomVersionNumber());
             data.insert(Utils::GenericDescription::FreeDiamsCompatVersion, r.randomVersionNumber());
             data.insert(Utils::GenericDescription::FreeAccountCompatVersion, r.randomVersionNumber());
             data.insert(Utils::GenericDescription::CreationDate, r.randomDateTime(QDateTime::currentDateTime().addYears(-1)));

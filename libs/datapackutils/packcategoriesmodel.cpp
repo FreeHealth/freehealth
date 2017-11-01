@@ -238,7 +238,7 @@ public:
         }
 
         // Keep only application compatible Packs
-        int appId = PackDescription::FreeMedFormsCompatVersion;
+        int appId = PackDescription::EHRCompatVersion;
         if (qApp->applicationName().contains("freediams", Qt::CaseInsensitive)) {
             appId = PackDescription::FreeDiamsCompatVersion;
         }

@@ -15,7 +15,7 @@
  *  GNU General Public License for more details.                           *
  *                                                                         *
  *  You should have received a copy of the GNU General Public License      *
- *  along with this program (COPYING.FREEMEDFORMS file).                   *
+ *  along with this program.                                               *
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
@@ -481,7 +481,7 @@ bool IDrugDatabase::saveDrugDatabaseDescription()
         query.bindValue(SOURCES_DATE, QDateTime::currentDateTime().toString(Qt::ISODate));
         query.bindValue(SOURCES_DRUGS_VERSION, descr.data(DrugDatabaseDescription::Version));
         query.bindValue(SOURCES_AUTHORS, descr.data(DrugDatabaseDescription::Author));
-        query.bindValue(SOURCES_VERSION, descr.data(DrugDatabaseDescription::FreeMedFormsCompatVersion));
+        query.bindValue(SOURCES_VERSION, descr.data(DrugDatabaseDescription::EHRCompatVersion));
         query.bindValue(SOURCES_PROVIDER, descr.data(DrugDatabaseDescription::Vendor));
         query.bindValue(SOURCES_WEBLINK, descr.data(DrugDatabaseDescription::WebLink));
         query.bindValue(SOURCES_DRUGUID_NAME, descr.data(DrugDatabaseDescription::DrugUidName));
@@ -492,7 +492,7 @@ bool IDrugDatabase::saveDrugDatabaseDescription()
         query.bindValue(SOURCES_COMPLETION, QVariant());
         query.bindValue(SOURCES_AUTHOR_COMMENTS, QVariant());
         query.bindValue(SOURCES_DRUGNAMECONSTRUCTOR, descr.data(DrugDatabaseDescription::DrugNameConstructor));
-        query.bindValue(SOURCES_FMFCOMPAT, descr.data(DrugDatabaseDescription::FreeMedFormsCompatVersion));
+        query.bindValue(SOURCES_FMFCOMPAT, descr.data(DrugDatabaseDescription::EHRCompatVersion));
         query.bindValue(SOURCES_OPENREACT_COMPAT, QVariant());
         if (!query.exec()) {
             LOG_QUERY_ERROR_FOR("Tools", query);
@@ -535,7 +535,7 @@ bool IDrugDatabase::saveDrugDatabaseDescription()
         query.bindValue(++i, QDateTime::currentDateTime().toString(Qt::ISODate));
         query.bindValue(++i, descr.data(DrugDatabaseDescription::Version));
         query.bindValue(++i, descr.data(DrugDatabaseDescription::Author));
-        query.bindValue(++i, descr.data(DrugDatabaseDescription::FreeMedFormsCompatVersion));
+        query.bindValue(++i, descr.data(DrugDatabaseDescription::EHRCompatVersion));
         query.bindValue(++i, descr.data(DrugDatabaseDescription::Vendor));
         query.bindValue(++i, descr.data(DrugDatabaseDescription::WebLink));
         query.bindValue(++i, descr.data(DrugDatabaseDescription::DrugUidName));
@@ -546,7 +546,7 @@ bool IDrugDatabase::saveDrugDatabaseDescription()
         query.bindValue(++i, QVariant());
         query.bindValue(++i, QVariant());
         query.bindValue(++i, descr.data(DrugDatabaseDescription::DrugNameConstructor));
-        query.bindValue(++i, descr.data(DrugDatabaseDescription::FreeMedFormsCompatVersion));
+        query.bindValue(++i, descr.data(DrugDatabaseDescription::EHRCompatVersion));
         query.bindValue(++i, QVariant());
         if (!query.exec()) {
             LOG_QUERY_ERROR_FOR("Tools", query);
