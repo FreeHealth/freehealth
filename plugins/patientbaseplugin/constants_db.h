@@ -37,7 +37,8 @@ namespace Constants {
     const char * const DB_INITIAL_VERSION = "0.1";
     const char * const OLD_VERSION_TABLE  = "VERSION";
     const char * const OLD_VERSION_FIELD  = "VERSION";
-    const int          DB_CURRENT_CODE_VERSION  = 1;
+    //bump for i96 const int          DB_CURRENT_CODE_VERSION  = 1;
+    const int          DB_CURRENT_CODE_VERSION  = 2;
 
     // Tables
     enum Tables {

@@ -135,9 +135,9 @@ PatientBase::PatientBase(QObject *parent) :
     addField(Table_IDENT, IDENTITY_MARITAL_STATUS, "MARITAL_STATUS", FieldIsOneChar, "NULL");
     addField(Table_IDENT, IDENTITY_DATEOFDEATH, "DATEOFDEATH", FieldIsDate, "NULL");
     addField(Table_IDENT, IDENTITY_PROFESSION, "PROFESSION", FieldIsShortText, "NULL");
-    addIndex(Table_IDENT, IDENTITY_USUALNAME);
-    addIndex(Table_IDENT, IDENTITY_FIRSTNAME);
-    addIndex(Table_IDENT, IDENTITY_OTHERNAMES);
+    addIndex(Table_IDENT, IDENTITY_USUALNAME, 10);
+    addIndex(Table_IDENT, IDENTITY_FIRSTNAME, 10);
+    addIndex(Table_IDENT, IDENTITY_OTHERNAMES, 10);
     addIndex(Table_IDENT, IDENTITY_DOB);
 
     // Contact
@@ -582,7 +582,7 @@ void PatientBase::toTreeWidget(QTreeWidget *tree) const
 bool PatientBase::updateDatabase()
 {
     WARN_FUNC;
-    int currentDatabaseVersion = Database::getSchemaVersionNumber(Constants::DB_NAME);
+    int currentDatabaseVersion = getSchemaVersionNumber();
     QSqlDatabase DB = QSqlDatabase::database(Constants::DB_NAME);
     if (currentDatabaseVersion == 0) {
         if(getOldVersionField() == Constants::DB_INITIAL_VERSION) {

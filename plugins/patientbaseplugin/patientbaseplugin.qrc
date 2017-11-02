@@ -1,9 +1,9 @@
 <RCC>
     <qresource prefix="/">
         <file>sql/update/updatepatients1.sql</file>
-    </qresource>
-    <qresource prefix="/">                                                      
-        <file>sql/update/updatesqlitepatients1.sql</file>                             
+        <file>sql/update/updatesqlitepatients1.sql</file>
+        <file>sql/update/updatepatients2.sql</file>
+        <file>sql/update/updatesqlitepatients2.sql</file>
     </qresource>
     <qresource prefix="/s">
         <file>sql/initial/initialpatients.sql</file>
