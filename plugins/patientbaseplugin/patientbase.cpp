@@ -663,6 +663,7 @@ quint32 PatientBase::getSchemaVersionNumber() const
     }
     query.finish();
     DB.commit();
+    qWarning() << "patients base getSchemaVersionNumber() " << value;
     return value;
 }
 

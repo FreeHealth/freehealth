@@ -173,6 +173,7 @@ QVariant ServerModel::data(const QModelIndex &index, int role) const
                 return icon(::ICON_SERVER_CONNECTED);
             return icon(::ICON_SERVER_NOT_CONNECTED);
         }
+        /* FALLTHRU */
     default: return QVariant();
     }
 
