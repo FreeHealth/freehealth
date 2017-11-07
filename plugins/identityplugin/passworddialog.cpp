@@ -204,7 +204,7 @@ void PasswordDialog::done(int result)
                 info = tr("The old password is not correct. Please retry with the correct password.");
             else
                 info = tr("Wrong password confirmation.");
-            Utils::warningMessageBox(tr("Password can not be change."),
+            Utils::warningMessageBox(tr("Password cannot be changed."),
                                      info, "", windowTitle());
             QDialog::done(Rejected);
         }

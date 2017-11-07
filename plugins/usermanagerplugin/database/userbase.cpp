@@ -134,10 +134,10 @@ UserBase::UserBase(QObject *parent) :
     addField(Table_USERS, USER_LANGUAGE,     "LANGUAGE",        FieldIsLanguageText);
     addField(Table_USERS, USER_LOCKER,       "LOCKER",          FieldIsBoolean);
     addIndex(Table_USERS, USER_UUID);
-    addIndex(Table_USERS, USER_LOGIN);
-    addIndex(Table_USERS, USER_USUALNAME);
-    addIndex(Table_USERS, USER_OTHERNAMES);
-    addIndex(Table_USERS, USER_FIRSTNAME);
+    addIndex(Table_USERS, USER_LOGIN, 32);
+    addIndex(Table_USERS, USER_USUALNAME, 10);
+    addIndex(Table_USERS, USER_OTHERNAMES, 10);
+    addIndex(Table_USERS, USER_FIRSTNAME, 10);
 
     addField(Table_DATA, DATAS_ID,          "DATAS_ID",        FieldIsUniquePrimaryKey);
     addField(Table_DATA, DATA_USER_UUID,   "USER_UUID",       FieldIsUUID);
@@ -174,10 +174,18 @@ UserBase::UserBase(QObject *parent) :
     addIndex(Table_USER_LK_ID, LK_GROUP_UUID);
     addIndex(Table_USER_LK_ID, LK_LKID);
 
-    // information
+    /* information: deleted
     addTable(Table_INFORMATION, "INFORMATIONS"); // Keep typo
     addField(Table_INFORMATION, INFO_VERSION,  "VERSION", FieldIsShortText);
-    addField(Table_INFORMATION, INFO_MAX_LKID, "MAX_LK_ID", FieldIsInteger);
+    addField(Table_INFORMATION, INFO_MAX_LKID, "MAX_LK_ID", FieldIsInteger);*/
+
+    // Table SCHEMA_CHANGES
+    addTable(Table_SCHEMA, "SCHEMA_CHANGES");
+    addField(Table_SCHEMA, SCHEMA_ID, "ID", FieldIsUniquePrimaryKey);
+    addField(Table_SCHEMA, SCHEMA_VERSION, "VERSION_NUMBER", FieldIsInteger);
+    addField(Table_SCHEMA, SCHEMA_SCRIPT, "SCRIPT_NAME", FieldIs255Chars);
+    addField(Table_SCHEMA, SCHEMA_TIMESTAMP, "TIMESTAMP_UTC_APPLIED", FieldIs19Chars);
+    addIndex(Table_SCHEMA, SCHEMA_ID);
 
     // Connect first run database creation requested
     connect(Core::ICore::instance(), SIGNAL(firstRunDatabaseCreation()), this, SLOT(onCoreFirstRunCreationRequested()));
@@ -191,12 +199,12 @@ bool UserBase::initialize()
 
     // connect
     if (commandLine()->value(Core::ICommandLine::ClearUserDatabases).toBool()) {
-        if (!createConnection(USER_DB_CONNECTION, USER_DB_CONNECTION,
+        if (!createConnection(DB_NAME, DB_NAME,
                          settings()->databaseConnector(),
                          Utils::Database::DeleteAndRecreateDatabase))
             return false;
     } else {
-        if (!createConnection(USER_DB_CONNECTION, USER_DB_CONNECTION,
+        if (!createConnection(DB_NAME, DB_NAME,
                          settings()->databaseConnector(),
                          Utils::Database::CreateDatabase))
             return false;
@@ -204,7 +212,7 @@ bool UserBase::initialize()
 
     if (!database().isOpen()) {
         if (!database().open()) {
-            LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(USER_DB_CONNECTION).arg(database().lastError().text()));
+            LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(DB_NAME).arg(database().lastError().text()));
         } else {
             LOG(tkTr(Trans::Constants::CONNECTED_TO_DATABASE_1_DRIVER_2).arg(database().databaseName()).arg(database().driverName() + "@" + database().databaseName()));
         }
@@ -212,13 +220,18 @@ bool UserBase::initialize()
         LOG(tkTr(Trans::Constants::CONNECTED_TO_DATABASE_1_DRIVER_2).arg(database().databaseName()).arg(database().driverName() + "@" + database().databaseName()));
     }
 
-    if (!checkDatabaseScheme()) {
-        LOG_ERROR(tkTr(Trans::Constants::DATABASE_1_SCHEMA_ERROR).arg(USER_DB_CONNECTION));
-        return false;
+    int currentDatabaseVersion = getSchemaVersionNumber(Constants::DB_NAME);
+    if (currentDatabaseVersion != Constants::DB_CURRENT_CODE_VERSION) {
+        if(!updateDatabase()) {
+            LOG_ERROR(QString("Couldn't upgrade database %1").arg(Constants::DB_NAME));
+            return false;
+        }
     }
 
-    if (!checkDatabaseVersion())
+    if (!checkDatabaseScheme()) {
+        LOG_ERROR(tkTr(Trans::Constants::DATABASE_1_SCHEMA_ERROR).arg(DB_NAME));
         return false;
+    }
 
 //    connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
     m_initialized = true;
@@ -238,8 +251,9 @@ bool UserBase::isNewlyCreated() const
 }
 
 /**
- * Returns the database scheme number with the current
- * Qt version for database version checking.
+ * Returns the database scheme numberfrom the current code and the current
+ * Qt version (the version against which the application is compiled).
+ * This string is used to check the database version.
  */
 QString UserBase::databaseAndQtVersion() const
 {
@@ -251,7 +265,7 @@ QString UserBase::databaseAndQtVersion() const
 /**
  * Returns Users database Qt version
  * If Qt version not set (FMF =< 0.9.0) returns an empty string
- */
+
 QString UserBase::getDatabaseQtVersion() const
 {
     Utils::Field vField(Constants::Table_INFORMATION, Constants::INFO_VERSION); 
@@ -262,11 +276,11 @@ QString UserBase::getDatabaseQtVersion() const
     } else {
         return QString();
     }   
-}
+} */
 
 /**                                                                             
  * Returns Users database FMF version                                            
- */
+
 QString UserBase::getDatabaseFmfVersion() const                                  
 {                                                                               
     Utils::Field vField(Constants::Table_INFORMATION, Constants::INFO_VERSION); 
@@ -277,7 +291,7 @@ QString UserBase::getDatabaseFmfVersion() const
     } else {                                                                    
         return fullVersion;                                                       
     }                                                                           
-}
+} */
 
 /**
  * Update LASTLOGIN colum type to TimeStamp
@@ -305,7 +319,7 @@ bool UserBase::updateLastloginTypeToTimeStamp()
  * Checks also if the current running Qt version is compatible
  * with the database version.
  * \warning The database-qt-version can get updated.
- */
+
 bool UserBase::checkDatabaseVersion()
 {
     // Since FreeMedForms EMR v0.9.1 the userbase version now includes
@@ -385,12 +399,49 @@ bool UserBase::checkDatabaseVersion()
     }
     return ((UserBase::getDatabaseFmfVersion() == Constants::USER_DB_VERSION)
              && (UserBase::getDatabaseQtVersion() == QT_VERSION_STR));
-}
+} */
 
 void UserBase::onCoreFirstRunCreationRequested()
 {
     disconnect(Core::ICore::instance(), SIGNAL(firstRunDatabaseCreation()), this, SLOT(onCoreFirstRunCreationRequested()));
     initialize();
+}
+
+/**
+ * Update users database
+ * Old versioning:
+ *   fmf version < 0.9.8): version string = "0.4"
+ *   0.9.8 <fmf/fhio version <= 0.10): version string = "0.9.8"
+ * New versioning (fhio version >= 0.11): The version number is an integer,
+ * starting from 1 for fhio version 0.11
+ * The field VERSION_NUMBER of the last row of the table SCHEMA_CHANGES.
+ * By definition, this number must be a positive, non null integer.
+ * This function will run all sql update scripts to update the database to
+ * the current code version
+ */
+bool UserBase::updateDatabase() const
+{
+    WARN_FUNC;
+    int currentDatabaseVersion = getSchemaVersionNumber(Constants::DB_NAME);
+    QSqlDatabase DB = QSqlDatabase::database(Constants::DB_NAME);
+    QString updateScriptFileName;
+    for (int i = currentDatabaseVersion++; i <= Constants::DB_CURRENT_CODE_VERSION; i++) {
+        if (driver()==MySQL) {
+            updateScriptFileName= QString(":/database/sql/update/update%1%2.sql")
+                    .arg(Constants::DB_NAME)
+                    .arg(QString::number(i));
+        } else if (driver()==SQLite) {
+            updateScriptFileName= QString(":/database/sql/update/updatesqlite%1%2.sql")
+                    .arg(Constants::DB_NAME)
+                    .arg(QString::number(i));
+        }
+        QFile updateScriptFile(updateScriptFileName);
+        if(!executeQueryFile(updateScriptFile, DB)) {
+            LOG_ERROR(QString("Error during update with updatescript%1").arg(i));
+            return false;
+        }
+    }
+return true;
 }
 
 //------------------------------------------------------------------------------
@@ -399,7 +450,7 @@ void UserBase::onCoreFirstRunCreationRequested()
 /** Retrieve all users data from the users' database. If an error occurs, it returns 0. */
 UserData *UserBase::getUser(const QHash<int, QString> &conditions) const
 {
-    QSqlDatabase DB = QSqlDatabase::database(Constants::USER_DB_CONNECTION);
+    QSqlDatabase DB = QSqlDatabase::database(Constants::DB_NAME);
     if (!connectDatabase(DB, __LINE__)) {
         return 0;
     }
@@ -599,7 +650,7 @@ bool UserBase::checkLogin(const QString &clearLogin, const QString &clearPasswor
     }
 
     // Connect to the user database
-    QSqlDatabase DB = QSqlDatabase::database(Constants::USER_DB_CONNECTION);
+    QSqlDatabase DB = QSqlDatabase::database(Constants::DB_NAME);
     if (!connectDatabase(DB, __LINE__))
         return false;
     DB.transaction();
@@ -655,7 +706,7 @@ bool UserBase::checkLogin(const QString &clearLogin, const QString &clearPasswor
 /** Returns true if the \e login is already used in freemedforms user database. */
 bool UserBase::isLoginAlreadyExists(const QString &clearLogin) const
 {
-    QSqlDatabase DB = QSqlDatabase::database(Constants::USER_DB_CONNECTION);
+    QSqlDatabase DB = QSqlDatabase::database(Constants::DB_NAME);
     if (!connectDatabase(DB, __LINE__)) {
         return 0;
     }
@@ -672,7 +723,7 @@ bool UserBase::userExists(const QString &clearLogin) const
     switch (driver()) {                                                         
     case Utils::Database::MySQL:
     {
-        QSqlDatabase DB = QSqlDatabase::database(Constants::USER_DB_CONNECTION);    
+        QSqlDatabase DB = QSqlDatabase::database(Constants::DB_NAME);
         if (!connectDatabase(DB, __LINE__)) {
         LOG_FOR("In userbase.cpp", "userExists() can't connect to database, return false");                                       
         return false;                                                           
@@ -721,7 +772,7 @@ QString UserBase::getUuid(const QString &log64, const QString &cryptpass64)
     m_LastLogin.clear();
     m_LastPass.clear();
 
-    QSqlDatabase DB = QSqlDatabase::database(Constants::USER_DB_CONNECTION);
+    QSqlDatabase DB = QSqlDatabase::database(Constants::DB_NAME);
     if (!connectDatabase(DB, __LINE__)) {
         return QString::null;
     }
@@ -751,7 +802,7 @@ QString UserBase::getUuid(const QString &log64, const QString &cryptpass64)
 /** Return a new Uuid assuming that it is not already used in base. */
 QString UserBase::createNewUuid()
 {
-    QSqlDatabase DB = QSqlDatabase::database(Constants::USER_DB_CONNECTION);
+    QSqlDatabase DB = QSqlDatabase::database(Constants::DB_NAME);
     if (!connectDatabase(DB, __LINE__)) {
         return QString::null;
     }
@@ -786,7 +837,7 @@ QString UserBase::getLogin64(const QString &uuid)
     if (uuid == m_LastUuid)
         return m_LastLogin;
 
-    QSqlDatabase DB = QSqlDatabase::database(Constants::USER_DB_CONNECTION);
+    QSqlDatabase DB = QSqlDatabase::database(Constants::DB_NAME);
     if (!connectDatabase(DB, __LINE__)) {
         return QString::null;
     }
@@ -825,7 +876,7 @@ QString UserBase::getCryptedPassword(const QString &clearLogin)
         return m_LastPass;
 
     // Connect DB
-    QSqlDatabase DB = QSqlDatabase::database(Constants::USER_DB_CONNECTION);
+    QSqlDatabase DB = QSqlDatabase::database(Constants::DB_NAME);
     if (!connectDatabase(DB, __LINE__)) {
         return QString::null;
     }
@@ -857,7 +908,7 @@ QString UserBase::getCryptedPassword(const QString &clearLogin)
 /** Returns a specific dynamic data of a user. */
 QString UserBase::getUserDynamicData(const QString &userUid, const QString &dynDataUuid)
 {
-    QSqlDatabase DB = QSqlDatabase::database(Constants::USER_DB_CONNECTION);
+    QSqlDatabase DB = QSqlDatabase::database(Constants::DB_NAME);
     if (!connectDatabase(DB, __LINE__)) {
         return QString::null;
     }
@@ -885,9 +936,9 @@ QString UserBase::getUserDynamicData(const QString &userUid, const QString &dynD
     DB.commit();
     return QString::null;
 }
-//--------------------------------------------------------------------------------------------------------
-//--------------------------------------------- Data savers ----------------------------------------------
-//--------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+//-------------------------- Data savers --------------_------------------------
+//------------------------------------------------------------------------------
 static inline QString defaultPaper(const QString &profession, const QString &paper, const QString &paperType = QString::null)
 {
     QString lang = QLocale().name().left(2).toLower();
@@ -978,7 +1029,7 @@ bool UserBase::createDatabase(const QString &connectionName , const QString &dbN
     Q_UNUSED(access);
     Q_UNUSED(createOption);
 
-    if (connectionName != Constants::USER_DB_CONNECTION)
+    if (connectionName != Constants::DB_NAME)
         return false;
 
     LOG(QCoreApplication::translate("UserBase",
@@ -1046,10 +1097,15 @@ bool UserBase::createDatabase(const QString &connectionName , const QString &dbN
 
     // Add version number
     // FIXME: tag version number with the Qt version (needed for password hashing)
-    QString version = databaseAndQtVersion();
+    /*QString version = databaseAndQtVersion();
     Utils::Field vField(Constants::Table_INFORMATION, Constants::INFO_VERSION);
     if (!setVersion(vField, version)) {
         LOG_ERROR_FOR("UserBase", "Unable to set version");
+    }*/
+
+    if (!setSchemaVersion(Constants::DB_CURRENT_CODE_VERSION, Constants::DB_NAME)) {
+        LOG_ERROR(QString("Couldn't set schema version for database %1").arg(Constants::DB_NAME));
+        return false;
     }
 
     LOG(tkTr(Trans::Constants::DATABASE_1_CORRECTLY_CREATED).arg(pathOrHostName + QDir::separator() + dbName));
@@ -1096,7 +1152,7 @@ bool UserBase::createDefaultUser()
     saveUser(user);
 
     // create the linker
-    QSqlDatabase DB = QSqlDatabase::database(Constants::USER_DB_CONNECTION);
+    QSqlDatabase DB = QSqlDatabase::database(Constants::DB_NAME);
     if (!connectDatabase(DB, __LINE__)) {
         return false;
     }
@@ -1126,7 +1182,7 @@ bool UserBase::createVirtualUser(const QString &uid, const QString &name, const 
                                  QLocale::Language lang)  // static
 {
     qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
-    QSqlDatabase DB = QSqlDatabase::database(Constants::USER_DB_CONNECTION);
+    QSqlDatabase DB = QSqlDatabase::database(Constants::DB_NAME);
     if (!connectDatabase(DB, __LINE__)) {
         return false;
     }
@@ -1221,7 +1277,7 @@ bool UserBase::createVirtualUser(const QString &uid, const QString &name, const 
 QDateTime UserBase::recordLastLoggedIn(const QString &log, const QString &pass)
 {
     // create the linker
-    QSqlDatabase DB = QSqlDatabase::database(Constants::USER_DB_CONNECTION);
+    QSqlDatabase DB = QSqlDatabase::database(Constants::DB_NAME);
     if (!connectDatabase(DB, __LINE__)) {
         return QDateTime();
     }
@@ -1338,7 +1394,7 @@ bool UserBase::saveUser(UserData *user)
     }
 
     qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
-    QSqlDatabase DB = QSqlDatabase::database(Constants::USER_DB_CONNECTION);
+    QSqlDatabase DB = QSqlDatabase::database(Constants::DB_NAME);
     if (!connectDatabase(DB, __LINE__)) {
         return false;
     }
@@ -1588,7 +1644,7 @@ bool UserBase::saveUser(UserData *user)
 */
 bool UserBase::purgeUser(const QString &uuid)
 {
-    QSqlDatabase DB = QSqlDatabase::database(Constants::USER_DB_CONNECTION);
+    QSqlDatabase DB = QSqlDatabase::database(Constants::DB_NAME);
     if (!connectDatabase(DB, __LINE__)) {
         return false;
     }
@@ -1691,7 +1747,7 @@ bool UserBase::savePapers(UserData *user)
     if (!user->hasModifiedDynamicDataToStore())
         return true;
 
-    QSqlDatabase DB = QSqlDatabase::database(Constants::USER_DB_CONNECTION);
+    QSqlDatabase DB = QSqlDatabase::database(Constants::DB_NAME);
     if (!connectDatabase(DB, __LINE__)) {
         return false;
     }
@@ -1755,7 +1811,7 @@ bool UserBase::changeUserPassword(UserData *user, const QString &newClearPasswor
     if (newClearPassword.isEmpty())
         return false;
 
-    QSqlDatabase DB = QSqlDatabase::database(Constants::USER_DB_CONNECTION);
+    QSqlDatabase DB = QSqlDatabase::database(Constants::DB_NAME);
     if (!connectDatabase(DB, __LINE__)) {
         return false;
     }
@@ -1812,7 +1868,7 @@ bool UserBase::changeUserPassword(UserData *user, const QString &newClearPasswor
 /** Save a dynamic data for \e user using \e value. The data will be saved as a file field. */
 bool UserBase::saveUserDynamicData(const QString &userUid, const QString &dynDataUuid, const QVariant &value)
 {
-    QSqlDatabase DB = QSqlDatabase::database(Constants::USER_DB_CONNECTION);
+    QSqlDatabase DB = QSqlDatabase::database(Constants::DB_NAME);
     if (!connectDatabase(DB, __LINE__)) {
         return false;
     }
@@ -1861,7 +1917,7 @@ bool UserBase::saveUserDynamicData(const QString &userUid, const QString &dynDat
 int UserBase::getMaxLinkId()
 {
     // TODO: change to Utils::Database::max()
-    QSqlDatabase DB = QSqlDatabase::database(Constants::USER_DB_CONNECTION);
+    QSqlDatabase DB = QSqlDatabase::database(Constants::DB_NAME);
     if (!connectDatabase(DB, __LINE__)) {
         return false;
     }
@@ -1886,7 +1942,7 @@ int UserBase::getMaxLinkId()
 
 bool UserBase::updateMaxLinkId(const int max)
 {
-    QSqlDatabase DB = QSqlDatabase::database(Constants::USER_DB_CONNECTION);
+    QSqlDatabase DB = QSqlDatabase::database(Constants::DB_NAME);
     if (!connectDatabase(DB, __LINE__)) {
         return false;
     }
@@ -1937,8 +1993,8 @@ void UserBase::toTreeWidget(QTreeWidget *tree) const
 void UserBase::onCoreDatabaseServerChanged()
 {
     m_initialized = false;
-    if (QSqlDatabase::connectionNames().contains(Constants::USER_DB_CONNECTION)) {
-        QSqlDatabase::removeDatabase(Constants::USER_DB_CONNECTION);
+    if (QSqlDatabase::connectionNames().contains(Constants::DB_NAME)) {
+        QSqlDatabase::removeDatabase(Constants::DB_NAME);
     }
     initialize();
 }

@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>database/sql/update/updatesqliteusers1.sql</file>
+        <file>database/sql/update/updateusers1.sql</file>
+    </qresource>
+</RCC>

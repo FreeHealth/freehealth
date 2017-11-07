@@ -69,7 +69,8 @@ public:
     virtual ~UserBase() {}
 
     bool isInitialized() const;
-    bool checkDatabaseVersion();
+//    bool checkDatabaseVersion();
+    bool updateDatabase() const;
     bool isNewlyCreated() const;
 
     bool createDefaultUser();
@@ -123,8 +124,8 @@ private:
     // privates retrievers
     UserData *getUser(const QHash<int, QString> &conditions) const;
     QString databaseAndQtVersion() const;
-    QString getDatabaseQtVersion() const;
-    QString getDatabaseFmfVersion() const;
+//    QString getDatabaseQtVersion() const;
+//    QString getDatabaseFmfVersion() const;
 
 private:
     bool m_initialized;

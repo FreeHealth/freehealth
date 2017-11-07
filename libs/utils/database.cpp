@@ -2655,6 +2655,7 @@ bool Database::modifyMySQLColumnType(const int & tableref, const int & fieldref)
 
 /**                                                                             
  * Modify the type of an existing column of a table in a MySQL database
+ * The type of field is retrieved from the
  * Default value is set by QString & defaultValue
  */
 bool Database::modifyMySQLColumnType(const int & tableref, const int & fieldref,

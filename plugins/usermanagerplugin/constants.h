@@ -38,8 +38,9 @@ namespace UserPlugin {
 namespace Constants {
 
     // User Database connection
-    const char * const USER_DB_CONNECTION           = "users";
+    const char * const DB_NAME           = "users";
     const char * const USER_DB_VERSION              = "0.9.8";
+    const int          DB_CURRENT_CODE_VERSION      = 1;
 
     // constants for DATA table represent DATANAME field
     const char * const USER_DATA_PHOTO             = "identity.photo";
@@ -135,7 +136,8 @@ namespace Constants {
         Table_RIGHTS,
         Table_GROUPS,
         Table_USER_LK_ID,
-        Table_INFORMATION,
+        //Table_INFORMATION,
+        Table_SCHEMA,
         Table_MaxParam
     };
 
@@ -143,11 +145,20 @@ namespace Constants {
     enum USER_FIELDS
     {
         USER_ID = 0,
-        USER_UUID, USER_VALIDITY, USER_ISVIRTUAL,
-        USER_LOGIN, USER_PASSWORD, USER_LASTLOG,
-        USER_USUALNAME, USER_OTHERNAMES, USER_FIRSTNAME,
-        USER_TITLE, USER_GENDER,
-        USER_MAIL, USER_LANGUAGE, USER_LOCKER,
+        USER_UUID,
+        USER_VALIDITY,
+        USER_ISVIRTUAL,
+        USER_LOGIN,
+        USER_PASSWORD,
+        USER_LASTLOG,
+        USER_USUALNAME,
+        USER_OTHERNAMES,
+        USER_FIRSTNAME,
+        USER_TITLE,
+        USER_GENDER,
+        USER_MAIL,
+        USER_LANGUAGE,
+        USER_LOCKER,
         USER_MaxParam
     };
 
@@ -185,9 +196,16 @@ namespace Constants {
         LK_GROUP_UUID
     };
 
-    enum INFO_Fields {
+    /*enum INFO_Fields {
         INFO_VERSION = 0,
         INFO_MAX_LKID
+    };*/
+
+    enum SchemaFields {
+        SCHEMA_ID =0 ,
+        SCHEMA_VERSION,
+        SCHEMA_SCRIPT,
+        SCHEMA_TIMESTAMP
     };
 
     // Translations

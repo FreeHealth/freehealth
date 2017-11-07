@@ -183,7 +183,7 @@ bool PasswordCrypter::checkPassword(const QString &clear, const QString &crypted
 QString cryptPassword(const QString &toCrypt)
 {
     // FIXME: How to improve the password security (currently using SHA1)
-    // NOTE: Hash methods > SHA1 was introduced in Qt5
+    // NOTE: Hash methods > SHA1 were introduced in Qt5
     // SEE: Issue #1 https://github.com/FreeHealth/freehealth/issues/1
     QCryptographicHash crypter(QCryptographicHash::Sha1);
     crypter.addData(toCrypt.toUtf8());
