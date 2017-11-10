@@ -70,7 +70,7 @@ public:
         ClearLogin,
         ClearPassword,
         LocaleCodedLanguage,
-        PersonalLinkId,
+        PersonalLinkId, // Used to link an app object (eg patient) to a user
         FullName,
         Gender,
         Title,
