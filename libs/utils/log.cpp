@@ -56,8 +56,15 @@
 #include <QTreeWidgetItem>
 #include <QTreeWidget>
 #include <QHeaderView>
+#include <QDateTime>
 
 using namespace Utils;
+
+namespace {
+const char * const DEFAULT_LOG_FILENAME = "EHR_log_";
+const char * const DEFAULT_DATETIME_FORMAT = "yyyy_MM_dd_HH_mm_ss";
+const char * const DEFAULT_LOG_FILENAME_EXTENSION = "txt";
+}
 
 QList<LogData> Log::m_Messages;
 bool Log::m_HasError = false;
@@ -105,17 +112,17 @@ QString Log::versionInformation()
     return QString("%1 - %2 ; %3 ; Compiled with Qt %6 - Running with Qt %7\n")
             .arg(BINARY_NAME " - " PACKAGE_VERSION)
         #ifdef LINUX_INTEGRATED
-            #  ifdef DEBUG
+        #  ifdef DEBUG
             .arg("Debug (Linux Integrated)")
-            #  else
+        #  else
             .arg("Release (Linux Integrated)")
-            #  endif
+        #  endif
         #else
-            #  ifdef DEBUG
+        #  ifdef DEBUG
             .arg("Debug")
-            #  else
+        #  else
             .arg("Release")
-            #  endif
+        #  endif
         #endif
 
         #ifdef FULLAPPLICATION_BUILD
@@ -149,7 +156,7 @@ void Log::muteConsoleWarnings()
 void Log::muteObjectConsoleWarnings(const QString &objectName)
 {
     if (!m_MutedObjects.contains(objectName, Qt::CaseInsensitive))
-            m_MutedObjects << objectName.toLower();
+        m_MutedObjects << objectName.toLower();
 }
 
 /** \sa Utils::Log::muteObjectConsoleWarnings() */
@@ -186,8 +193,8 @@ void Log::addError(const QString &object, const QString &err, const QString &fil
         e = lineWrapString(e, 90-26);
         e = indentString(e, 26).mid(26);
         qDebug() << QString("%1 %2")
-                      .arg(object.leftJustified(25, QChar(' ')))
-                      .arg(e);
+                    .arg(object.leftJustified(25, QChar(' ')))
+                    .arg(e);
     }
     addData(object, err, QDateTime::currentDateTime(), LogData::Error);
 }
@@ -224,15 +231,22 @@ void Log::addDatabaseLog( const QString & o, const QSqlDatabase & q, const QStri
     }
     using namespace Trans::Constants;
     using namespace Trans::ConstantTranslations;
-    addError(o,
-             QString("%1 ; %2 ; %3 ; %4 ; %5 ; %6")
-             .arg(tkTr(_1_COLON_2).arg(o, QDateTime::currentDateTime().toString()))
-             .arg(tkTr(_1_COLON_2).arg(tkTr(DATABASE), q.driverName()))
-             .arg(tkTr(_1_COLON_2).arg(tkTr(HOST), q.hostName()))
-             .arg(tkTr(_1_COLON_2).arg(tkTr(PORT)).arg(q.port()))
-             .arg(tkTr(_1_COLON_2).arg(tkTr(LOGIN), q.userName()))
-             .arg(tkTr(_1_COLON_2).arg(tkTr(PASSWORD), q.password())),
-             file, line, forceWarning);
+    QString log = QString("%1 ; %2 ; %3 ; %4 ; %5 ; %6")
+            .arg(tkTr(_1_COLON_2).arg(o, QDateTime::currentDateTime().toString()))
+            .arg(tkTr(_1_COLON_2).arg(tkTr(DATABASE), q.driverName()))
+            .arg(tkTr(_1_COLON_2).arg(tkTr(HOST), q.hostName()))
+            .arg(tkTr(_1_COLON_2).arg(tkTr(PORT)).arg(q.port()))
+            .arg(tkTr(_1_COLON_2).arg(tkTr(LOGIN), q.userName()))
+            .arg(tkTr(_1_COLON_2).arg(tkTr(PASSWORD), q.password()));
+    if(q.lastError().isValid()) {
+        log+=(QString("; %1 ; %2 ; %3 ; %4")
+              .arg(tkTr(_1_COLON_2).arg(tkTr(ERROR_DRIVER), q.lastError().driverText()))
+              .arg(tkTr(_1_COLON_2).arg(tkTr(ERROR_DATABASE), q.lastError().databaseText()))
+              .arg(tkTr(_1_COLON_2).arg(tkTr(ERROR_NATIVE), q.lastError().nativeErrorCode()))
+              .arg(tkTr(_1_COLON_2).arg(tkTr(ERROR_TYPE), QString::number(q.lastError().type())))
+              );
+    }
+    addError(o, log, file, line, forceWarning);
 }
 
 
@@ -307,9 +321,13 @@ void Log::addErrors(const QObject *o, const QStringList &err, const QString &fil
 QString Log::saveLog(const QString &fileName)
 {
     QString f = fileName;
-    if (fileName.isEmpty())
-        f = QDir::homePath() + "/FMF_LOG.TXT";
-
+    if (fileName.isEmpty()) {
+        f = QString("%1/%2%3.%4")
+                .arg(QDir::homePath())
+                .arg(DEFAULT_LOG_FILENAME)
+                .arg(QDateTime::currentDateTime().toString(DEFAULT_DATETIME_FORMAT))
+                .arg(DEFAULT_LOG_FILENAME_EXTENSION);
+    }
     QFile file(f);
     if (!file.open(QFile::WriteOnly)) {
         Log::addError("Log", QCoreApplication::translate("Log", "Unable to save %1: Error %2").arg(f , file.errorString()));

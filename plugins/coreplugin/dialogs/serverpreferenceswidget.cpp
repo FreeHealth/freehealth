@@ -341,8 +341,10 @@ void ServerPreferencesWidget::on_testMySQLButton_clicked()
     }
     // Try to open a database
     if (!test.open()) {
+        Utils::Log::addDatabaseLog(this->objectName(), test);
+        Utils::Log::saveLog();
         d->ui->testMySQLButton->setIcon(theme()->icon(Core::Constants::ICONERROR));
-        d->ui->testConnectionLabel->setText(tr("Connection error: %1").arg(test.lastError().number()));
+        d->ui->testConnectionLabel->setText(tr("Connection error: %1").arg(test.lastError().databaseText()));
         d->ui->testConnectionLabel->setToolTip(test.lastError().driverText());
         d->_connectionSucceeded = false;
         d->_grants = Utils::Database::Grant_NoGrant;
