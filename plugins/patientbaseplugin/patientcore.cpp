@@ -42,6 +42,8 @@
 #include <coreplugin/ipatient.h>
 #include <coreplugin/isettings.h>
 
+#include <usermanagerplugin/constants.h>
+
 #include <utils/log.h>
 #include <translationutils/constants.h>
 
@@ -151,24 +153,41 @@ void PatientCore::postCoreInitialization()
  */
 bool PatientCore::createDefaultVirtualPatients() const
 {
+    QUuid defaultUuid = QUuid(UserPlugin::Constants::DEFAULT_USER_UUID);
+    qWarning() << defaultUuid;
     QString path = settings()->path(Core::ISettings::BigPixmapPath) + QDir::separator();
-    int userLkId = 1;
+    int userLkId = 0;
 
     QString uid = "b04936fafccb4174a7a6af25dd2bb71c";
-    d->_base->createVirtualPatient("KIRK", "", "James Tiberius", "M", 6, QDate(1968, 04, 20), "US", "USS Enterprise",
-                  "21, StarFleet Command", "1968", "EarthTown", uid, userLkId, "", "", path+"captainkirk.jpg");
+    d->_base->createVirtualPatient("KIRK",
+                                   "",
+                                   "James Tiberius",
+                                   "M",
+                                   6,
+                                   QDate(1968, 04, 20),
+                                   "US",
+                                   "USS Enterprise",
+                                   "21, StarFleet Command",
+                                   "1968", "EarthTown",
+                                   uid,
+                                   userLkId,
+                                   "",
+                                   "",
+                                   path+"captainkirk.jpg",
+                                   QDate(),
+                                   defaultUuid);
 
     uid = "2c49299b9b554300b46a6e3ef6d40a65";
     d->_base->createVirtualPatient("PICARD", "", "Jean-Luc", "M", 6, QDate(1948, 04, 20), "US", "USS Enterprise-D",
-                  "21, StarFleet Command", "1968", "EarthTown", uid, userLkId, "", "", path+"captainpicard.png");
+                  "21, StarFleet Command", "1968", "EarthTown", uid, userLkId, "", "", path+"captainpicard.png", QDate(), defaultUuid);
 
     uid = "ef97f37361824b6f826d5c9246f9dc49";
     d->_base->createVirtualPatient("ARCHER", "", "Jonathan", "M", 6, QDate(1928, 04, 20), "US", "Enterprise (NX-01) commanding officer",
-                  "21, StarFleet Command", "1968", "EarthTown", uid, userLkId, "0601020304", "0901020304", path+"captainarcher.jpg");
+                  "21, StarFleet Command", "1968", "EarthTown", uid, userLkId, "0601020304", "0901020304", path+"captainarcher.jpg", QDate(), defaultUuid);
 
     uid = "493aa06a1b8745b2ae6c79c531ef12a0";
     d->_base->createVirtualPatient("JANEWAY", "", "Kathryn", "F", 6, QDate(1938, 04, 20), "US", "USS Voyager",
-                  "21, StarFleet Command", "1968", "EarthTown", uid, userLkId, "0601020304", "0901020304", path+"captainjaneway.jpg");
+                  "21, StarFleet Command", "1968", "EarthTown", uid, userLkId, "0601020304", "0901020304", path+"captainjaneway.jpg", QDate(), defaultUuid);
     return true;
 }
 

@@ -3206,6 +3206,9 @@ QString DatabasePrivate::getTypeOfField(const int &fieldref) const
     case Database::FieldIsReal :
         toReturn = "DOUBLE";
         break;
+    case Database::FieldIsBinaryUUID :
+        toReturn = "BINARY(16)";
+        break;
     default : toReturn = QString::null; break;
     }
     return toReturn;

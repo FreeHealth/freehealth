@@ -283,7 +283,7 @@ void PatientSelector::setPatientModel(PatientModel *m)
     d->ui->tableView->horizontalHeader()->setSectionResizeMode(Core::IPatient::Title, QHeaderView::ResizeToContents);
     d->ui->tableView->horizontalHeader()->setSectionResizeMode(Core::IPatient::DateOfBirth, QHeaderView::ResizeToContents);
     d->ui->tableView->horizontalHeader()->setSectionResizeMode(Core::IPatient::FullAddress, QHeaderView::Stretch);
-    d->ui->tableView->horizontalHeader()->setSectionResizeMode(Core::IPatient::PractitionnerLkID, QHeaderView::ResizeToContents);
+    d->ui->tableView->horizontalHeader()->setSectionResizeMode(Core::IPatient::PractitionerUuid, QHeaderView::ResizeToContents);
 
     d->ui->numberOfPatients->setText(QString::number(m->numberOfFilteredPatients()));
     d->ui->identity->setCurrentPatientModel(m);

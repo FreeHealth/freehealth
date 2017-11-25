@@ -31,6 +31,7 @@
 
 #include <QObject>
 #include <QVariant>
+#include <QUuid>
 
 /**
  * \file iuser.h
@@ -51,14 +52,14 @@ public:
         Uuid,           /*!< \brief Unique identifier of each user */
         Validity,       /*!< \brief Validity of this user */
         IsVirtual,      /*!< \brief User is virtual?*/
-        Login64,        /*!< \brief Encrypted login username \sa UserGlobal::loginForSQL() */
+        Login64,        /*!< \brief Base64 serialized login \sa UserGlobal::loginForSQL() */
         CryptedPassword,/*!< \brief Encrypted password \sa UserGlobal::crypt() */
         LastLoggedIn,   /*!< \brief Date and Time of the last successful log-in */
         UsualName,      /*!< \brief Lastname */
         OtherNames,     /*!< \brief Second name (name after marriage) */
         Firstname,      /*!< \brief Firstname, ("Given" name) */
-        TitleIndex,     /*!< \brief Index of the user title accorging to Trans::ConstantTranslations::titles() */
-        GenderIndex,    /*!< \brief Index of the user title accorging to Trans::ConstantTranslations::genders() */
+        TitleIndex,     /*!< \brief Index of the user title according to Trans::ConstantTranslations::titles() */
+        GenderIndex,    /*!< \brief Index of the user title according to Trans::ConstantTranslations::genders() */
         Mail,           /*!< \brief Mail address */
         LanguageISO,    /*!< \brief Language for interface */
         Locker,         /*!< \brief Locker */
@@ -70,7 +71,6 @@ public:
         ClearLogin,
         ClearPassword,
         LocaleCodedLanguage,
-        PersonalLinkId,
         FullName,
         Gender,
         Title,
@@ -171,6 +171,7 @@ public:
 
     // Some code easiers
     QString uuid() const {return value(Uuid).toString();}
+    QUuid quuid() const {return value(Uuid).toUuid();}
     bool isAdministrator() const;
 
 Q_SIGNALS:

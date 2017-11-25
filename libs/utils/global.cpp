@@ -2301,6 +2301,19 @@ QString createUid()
 }
 
 /**
+ * Create an hyphenated uuid string from a raw uuid string
+ */
+
+QString hyphenatedUuid(const QString &uuid)
+{
+    QString hyphenatedUuid(uuid);
+    QChar hyphen = QChar(Constants::HYPHEN_MINUS);
+    for (int index : Constants::HYPHEN_INDEXES)
+        hyphenatedUuid.insert(index, hyphen);
+    return hyphenatedUuid;
+}
+
+/**
  * Link all QAbstractItemModel signals of the first model \e model1 to the second model \e model2 signals.
  * The SQLModel specific signal are not connected (primeInsert...)
  */

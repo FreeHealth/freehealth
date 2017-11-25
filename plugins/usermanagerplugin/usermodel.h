@@ -111,9 +111,6 @@ public:
 
     QString tableName() const;
 
-    QList<int> practionnerLkIds(const QString &uid) const;
-    int practionnerLkId(const QString &uid) const;
-
     static QHash<QString, QString> getUserNames(const QStringList &uid);
     bool createVirtualUsers(const int count);
 

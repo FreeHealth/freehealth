@@ -71,6 +71,7 @@
 #include <QByteArray>
 #include <QBuffer>
 #include <QDomDocument>
+#include <QUuid>
 
 using namespace Patients::Internal;
 using namespace Trans::ConstantTranslations;
@@ -117,6 +118,7 @@ PatientBase::PatientBase(QObject *parent) :
     // Identifiers
     addField(Table_IDENT, IDENTITY_ID, "IDENT_ID", FieldIsUniquePrimaryKey);
     addField(Table_IDENT, IDENTITY_UID, "IDENT_UID", FieldIsUUID);
+    // TODO TO_PRACT_LKID column shall be removed when SQLite is discontinued
     addField(Table_IDENT, IDENTITY_LK_TOPRACT_LKID, "TO_PRACT_LKID", FieldIsLongInteger);
     addField(Table_IDENT, IDENTITY_FAMILY_UID, "IDENT_FAMILY_UID", FieldIsUUID);
     addField(Table_IDENT, IDENTITY_ISACTIVE, "IDENT_ISACTIVE", FieldIsBoolean, "1");
@@ -159,6 +161,8 @@ PatientBase::PatientBase(QObject *parent) :
     addField(Table_IDENT, IDENTITY_FAXES, "FAXES", FieldIsLongText);  // Context:Value;Context;Value...
     addField(Table_IDENT, IDENTITY_MOBILE_PHONE, "MOBILE_PHONE", FieldIs32Chars);
     addField(Table_IDENT, IDENTITY_WORK_PHONE, "WORK_PHONE", FieldIs32Chars);
+    addField(Table_IDENT, IDENTITY_USER_UUID, "USER_UUID", FieldIsBinaryUUID);
+    addIndex(Table_IDENT, IDENTITY_USER_UUID);
 
     // Table PATIENT_PHOTO
     addTable(Table_PATIENT_PHOTO, "PATIENT_PHOTO");
@@ -223,7 +227,6 @@ bool PatientBase::initialize()
             LOG_ERROR(QString("Couldn't upgrade database %1").arg(Constants::DB_NAME));
             return false;
         }
-        initialize();
     }
     if (!checkDatabaseScheme()) {
         LOG_ERROR(tkTr(Trans::Constants::DATABASE_1_SCHEMA_ERROR).arg(Constants::DB_NAME));
@@ -251,7 +254,8 @@ bool PatientBase::createVirtualPatient(const QString &usualName,
                                        const QString &mobilePhone,
                                        const QString &workPhone,
                                        const QString &photoFile,
-                                       const QDate &death)
+                                       const QDate &death,
+                                       const QUuid &userUuid)
 {
     qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     QSqlDatabase DB = QSqlDatabase::database(Constants::DB_NAME);
@@ -309,6 +313,7 @@ bool PatientBase::createVirtualPatient(const QString &usualName,
     query.bindValue(IDENTITY_FAXES, QVariant());
     query.bindValue(IDENTITY_MOBILE_PHONE, mobilePhone);
     query.bindValue(IDENTITY_WORK_PHONE, workPhone);
+    query.bindValue(IDENTITY_USER_UUID, userUuid.toRfc4122());
 
     qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     if (!query.exec()) {
@@ -551,21 +556,11 @@ void PatientBase::onCoreFirstRunCreationRequested()
 void PatientBase::toTreeWidget(QTreeWidget *tree) const
 {
     Database::toTreeWidget(tree);
-    QString uuid = user()->uuid();
-    QHash<int, QString> where;
-    // TODO: here
-    //    where.clear();
-    //    where.insert(Constants::LK_TOPRACT_PRACT_UUID, QString("='%1'").arg(uuid));
-    //    QString req = select(Constants::Table_LK_TOPRACT, Constants::LK_TOPRACT_LKID, where);
-    //    where.clear();
-    //    where.insert(Constants::IDENTITY_LK_TOPRACT_LKID, QString("IN (%1)").arg(req));
-    //    req = getWhereClause(Constants::Table_IDENT, where);
     QFont bold;
     bold.setBold(true);
     QTreeWidgetItem *db = new QTreeWidgetItem(tree, QStringList() << "Patients count");
     db->setFont(0, bold);
     new QTreeWidgetItem(db, QStringList() << "Total patients" << QString::number(count(Constants::Table_IDENT, Constants::IDENTITY_ID)));
-    //    new QTreeWidgetItem(db, QStringList() << "User's patients" << QString::number(count(Constants::Table_IDENT, Constants::IDENTITY_ID, req)));
     tree->expandAll();
 }
 
@@ -588,6 +583,16 @@ bool PatientBase::updateDatabase()
         if(getOldVersionField() == Constants::DB_INITIAL_VERSION) {
             QString updateScriptFileName;
             for (int i = 1; i <= Constants::DB_CURRENT_CODE_VERSION; i++) {
+                // launch transfer of phone numbers from xml to patients db here:
+                if (getSchemaVersionNumber()==1) {
+                    bool OK= transferPhone();
+                    if (OK) {
+                        return true;
+                    } else {
+                        LOG_ERROR(QString("Error during transferPhone() execution"));
+                        return false;
+                    }
+                }
                 if (driver()==MySQL) {
                     updateScriptFileName= QString(":/sql/update/update%1%2.sql")
                             .arg(Constants::DB_NAME)
@@ -603,8 +608,6 @@ bool PatientBase::updateDatabase()
                     return false;
                 }
             }
-            // launch transfer of phone numbers from xml to patients db here:
-            transferPhone();
             return true;
         } else {
             LOG_ERROR("You database structure is not recognized");
@@ -612,7 +615,8 @@ bool PatientBase::updateDatabase()
         }
     } else if (currentDatabaseVersion > 0) {
         QString updateScriptFileName;
-        for (int i = currentDatabaseVersion++; i <= Constants::DB_CURRENT_CODE_VERSION; i++) {
+        currentDatabaseVersion++;
+        for (int i = currentDatabaseVersion; i <= Constants::DB_CURRENT_CODE_VERSION; i++) {
             if (driver()==MySQL) {
                 updateScriptFileName= QString(":/sql/update/update%1%2.sql")
                         .arg(Constants::DB_NAME)
@@ -663,7 +667,6 @@ quint32 PatientBase::getSchemaVersionNumber() const
     }
     query.finish();
     DB.commit();
-    qWarning() << "patients base getSchemaVersionNumber() " << value;
     return value;
 }
 

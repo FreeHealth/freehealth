@@ -52,7 +52,7 @@ namespace Constants {
     enum fieldsEPISODES {
         EPISODES_ID = 0,
         EPISODES_PATIENT_UID,
-        EPISODES_LK_TOPRACT_LKID,
+        EPISODES_LK_TOPRACT_LKID, // Not used. Will be removed in a future release.
         EPISODES_ISVALID,
         EPISODES_FORM_PAGE_UID,
         EPISODES_LABEL,

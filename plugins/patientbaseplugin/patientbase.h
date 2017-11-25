@@ -36,6 +36,7 @@
 #include <QObject>
 #include <QString>
 #include <QDate>
+#include <QUuid>
 
 /**
  * \file patientbase.h
@@ -84,7 +85,8 @@ public:
                               const QString &mobilePhone = QString(),
                               const QString &workPhone = QString(),
                               const QString &photoFile = QString(),
-                              const QDate &death = QDate());
+                              const QDate &death = QDate(),
+                              const QUuid &userUuid = QUuid());
 
     QString patientUuid(const QString &usualname,
                         const QString &othernames,

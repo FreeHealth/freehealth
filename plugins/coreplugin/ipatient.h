@@ -144,7 +144,7 @@ public:
         ICD10Diseases,
 
         // For debugging purpose
-        PractitionnerLkID,
+        PractitionerUuid,
         NumberOfColumns
     };
 

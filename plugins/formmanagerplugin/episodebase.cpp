@@ -345,7 +345,6 @@ if (currentDatabaseVersion > 0)
     return currentDatabaseVersion;
 
 QString oldVersion = getOldVersionField();
-qWarning() << "old database version: " << oldVersion << endl;
 bool ok;
 if (!oldVersion.isEmpty()) {
     if (oldVersion.contains(".")) {
@@ -373,11 +372,11 @@ return currentDatabaseVersion;
  */
 bool EpisodeBase::updateDatabase()
 {
-    qWarning() << "current episodes database version: " << currentDatabaseVersion() << endl;
     QSqlDatabase DB = QSqlDatabase::database(Constants::DB_NAME);
     QString updateScriptFileName;
     int currentVersion = currentDatabaseVersion();
-    for (int i = currentVersion++; i <= Constants::DB_CURRENT_CODE_VERSION; i++) {
+    currentVersion++;
+    for (int i = currentVersion; i <= Constants::DB_CURRENT_CODE_VERSION; i++) {
         if (driver()==MySQL) {
             updateScriptFileName= QString(":/sql/update/update%1%2.sql")
                     .arg(Constants::DB_NAME)
@@ -414,7 +413,6 @@ QString EpisodeBase::getOldVersionField() const
     while (query.next()) {
         oldVersionValue = query.value(fieldNo).toString();
     }
-    qWarning() << oldVersionValue << endl;
     return oldVersionValue;
 }
 
@@ -840,7 +838,6 @@ bool EpisodeBase::saveEpisode(Internal::EpisodeData *episode)
  * database. Return true if all goes fine. */
 bool EpisodeBase::saveEpisode(const QList<EpisodeData *> &episodes)
 {
-//    qWarning() << Q_FUNC_INFO << episodes.count();
     if (episodes.isEmpty())
         return true;
 
@@ -983,7 +980,6 @@ bool EpisodeBase::saveEpisode(const QList<EpisodeData *> &episodes)
 /** Save the raw XML episode content. Does not manage modification traces. */
 bool EpisodeBase::saveEpisodeContent(const QVariant &uid, const QString &xml)
 {
-    qWarning() << "EpisodeBase::saveEpisodeContent" << uid.toString() << xml.length();
     if (!uid.isValid())
         return false;
     if (uid.toInt() < 0)
@@ -1026,7 +1022,6 @@ bool EpisodeBase::saveEpisodeContent(const QVariant &uid, const QString &xml)
         query.finish();
         DB.commit();
     }
-    qWarning() << "     correctly saved";
     return true;
 }
 
@@ -1146,7 +1141,6 @@ bool EpisodeBase::removeAllEpisodeForForm(const QVariant &formUid, const QString
 /** Return all recorded episodes form the database according to the Form::Internal::EpisodeBaseQuery \e baseQuery. Episodes are sorted by UserDate. */
 QList<EpisodeData *> EpisodeBase::getEpisodes(const EpisodeBaseQuery &baseQuery)
 {
-//    qWarning() << Q_FUNC_INFO;
     QList<EpisodeData *> toReturn;
     QSqlDatabase DB = QSqlDatabase::database(DB_NAME);
     if (!connectDatabase(DB, __LINE__)) {
@@ -1195,8 +1189,6 @@ QList<EpisodeData *> EpisodeBase::getEpisodes(const EpisodeBaseQuery &baseQuery)
     }
 
     req = select(get, joins, conds) + order + limit;
-
-//    qWarning() << req;
 
     DB.transaction();
     QSqlQuery query(DB);
@@ -1382,7 +1374,8 @@ QList<EpisodeValidationData *> EpisodeBase::getEpisodeValidations(const QVariant
 }
 
 /**
- * Returns the total number of episodes recorded for one Form identified by its \e formUid for the current patient.
+ * Returns the total number of episodes recorded for one Form identified by its
+ * \e formUid for the current patient.
  * Counts also all form equivalents.
  */
 int EpisodeBase::getNumberOfEpisodes(const QString &formUid, const QStringList &equivalents)
@@ -1405,18 +1398,10 @@ int EpisodeBase::getNumberOfEpisodes(const QString &formUid, const QStringList &
     return count(Constants::Table_EPISODES, Constants::EPISODES_ID, filter);
 }
 
+/** For debugging purpose */
 void EpisodeBase::toTreeWidget(QTreeWidget *tree) const
 {
     Database::toTreeWidget(tree);
-    QString uuid = user()->uuid();
-    QHash<int, QString> where;
-    where.clear();
-    // TODO: here
-//    where.insert(LK_TOPRACT_PRACT_UUID, QString("='%1'").arg(uuid));
-//    QString req = select(Table_LK_TOPRACT, LK_TOPRACT_LKID, where);
-//    where.clear();
-//    where.insert(IDENTITY_LK_TOPRACT_LKID, QString("IN (%1)").arg(req));
-//    req = getWhereClause(Table_IDENT, where);
     QFont bold;
     bold.setBold(true);
     QTreeWidgetItem *db = new QTreeWidgetItem(tree, QStringList() << "Episodes count");

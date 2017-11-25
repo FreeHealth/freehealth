@@ -162,6 +162,7 @@ bool PatientDataExtractorDialog::initialize()
     d->ui->availablePatients->showColumn(Core::IPatient::Title);
     d->ui->availablePatients->showColumn(Core::IPatient::DateOfBirth);
     d->ui->availablePatients->showColumn(Core::IPatient::FullAddress);
+    d->ui->availablePatients->showColumn(Core::IPatient::PractitionerUuid);
     d->ui->availablePatients->horizontalHeader()->setStretchLastSection(false);
 
     d->ui->availablePatients->horizontalHeader()->setSectionResizeMode(Core::IPatient::UsualName, QHeaderView::Stretch);
@@ -172,7 +173,7 @@ bool PatientDataExtractorDialog::initialize()
     d->ui->availablePatients->horizontalHeader()->setSectionResizeMode(Core::IPatient::Title, QHeaderView::ResizeToContents);
     d->ui->availablePatients->horizontalHeader()->setSectionResizeMode(Core::IPatient::DateOfBirth, QHeaderView::ResizeToContents);
     d->ui->availablePatients->horizontalHeader()->setSectionResizeMode(Core::IPatient::FullAddress, QHeaderView::Stretch);
-    d->ui->availablePatients->horizontalHeader()->setSectionResizeMode(Core::IPatient::PractitionnerLkID, QHeaderView::ResizeToContents);
+    d->ui->availablePatients->horizontalHeader()->setSectionResizeMode(Core::IPatient::PractitionerUuid, QHeaderView::ResizeToContents);
 
     connect(d->ui->availablePatients, SIGNAL(activated(QModelIndex)),
             this, SLOT(onPatientActivated(QModelIndex)));

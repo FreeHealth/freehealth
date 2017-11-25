@@ -274,13 +274,6 @@ public:
     QVariant rightsValue(const char *name) const;
     bool hasRight(const char *name, const int rightToTest) const;
 
-    // Linkers
-    QList<int> linkIds() const;
-    QString linkIdsToString() const;
-    /** \todo these two must be removed: setPersonalLkId(), personalLinkId */
-    void setPersonalLkId(const int lkid);
-    int personalLinkId() const;
-
     // viewers
     void warn() const;
     QString debugText() const;
@@ -291,7 +284,6 @@ protected:
     void setValue(const int tableref, const int fieldref, const QVariant &val);
     void addDynamicDataFromDatabase(const QList<UserDynamicData*> &list);
     void addRightsFromDatabase(const char * roleName, const int fieldref, const QVariant &val);
-    void setLkIds(const QList<int> &lkids);
 
     // Login can not be changed for any users
     void setLogin64(const QVariant &val)             { setValue(Table_USERS, USER_LOGIN, val); }

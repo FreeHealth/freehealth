@@ -445,7 +445,6 @@ public:
         m_IsNull(false),
         m_IsCurrent(false),
         m_HasModifiedDynamicData(false),
-        m_PersonalLkId(-1),
         m_PasswordChanged(false)
     {
         if (m_Link_PaperName_ModelIndex.count() == 0)
@@ -525,9 +524,7 @@ public:
     QSet< QString > m_ModifiedRoles;
     QHash<QString, UserDynamicData*> m_DynamicData;
     bool m_HasModifiedDynamicData;
-    QList<int> m_LkIds;
-    int m_PersonalLkId;
-    QString m_LkIdsToString, m_ClearPassword;
+    QString m_ClearPassword;
     bool m_PasswordChanged;
     Utils::PasswordCrypter crypter;
 };
@@ -566,7 +563,6 @@ UserData::UserData() :
     createUuid();
     d->m_IsNull = true;
     d->m_IsCurrent = false;
-    d->m_PersonalLkId = -1;
 //    setDynamicDataValue(USER_DATAS_LOGINHISTORY,
 //                        QCoreApplication::translate("tkUser", "User created at %1\n")
 //                        .arg(QDateTime::currentDateTime().toString(Qt::DefaultLocaleLongDate)));
@@ -600,7 +596,6 @@ UserData::UserData(const QString & uuid)
     setLocker(false);
     d->m_IsNull = true;
     d->m_IsCurrent = false;
-    d->m_PersonalLkId = -1;
 //    setDynamicDataValue(USER_DATAS_LOGINHISTORY,
 //                        QCoreApplication::translate("tkUser", "User created at %1\n")
 //                        .arg(QDateTime::currentDateTime().toString(Qt::DefaultLocaleLongDate)));
@@ -793,45 +788,6 @@ void UserData::addRightsFromDatabase(const char *roleName, const int fieldref, c
     d->m_Role_Rights[roleName].insert(fieldref, val);
     d->m_IsNull = false;
     setModified(true);
-}
-
-void UserData::setLkIds(const QList<int> &lkids)
-{
-    for(int i = 0; i < lkids.count(); ++i) {
-        d->m_LkIdsToString += QString::number(lkids.at(i)) + ",";
-    }
-    d->m_LkIdsToString.chop(1);
-    d->m_LkIds = lkids;
-}
-
-QList<int> UserData::linkIds() const
-{
-    if (d->m_PersonalLkId != -1) {
-        return QList<int>() << d->m_LkIds << d->m_PersonalLkId;
-    }
-    return QList<int>() << d->m_LkIds;
-}
-
-QString UserData::linkIdsToString() const
-{
-    QString tmp;
-    for(int i = 0; i < d->m_LkIds.count(); ++i) {
-        tmp += QString::number(d->m_LkIds.at(i)) + ",";
-    }
-    tmp.chop(1);
-    if (d->m_PersonalLkId != -1)
-        tmp += QString::number(d->m_PersonalLkId);
-    return tmp;
-}
-
-void UserData::setPersonalLkId(const int lkid)
-{
-    d->m_PersonalLkId = lkid;
-}
-
-int UserData::personalLinkId() const
-{
-    return d->m_PersonalLkId;
 }
 
 /**
@@ -1216,12 +1172,6 @@ QString UserData::debugText() const
     }
 
     return QString("UserData(%1\n           )").arg(s.join(",\n           "));
-
-//    tmp += QString("%1 = %2\n").arg("LkIds").arg(linkIdsToString());
-//    tmp += QString("%1 = ").arg("LkIds (list)");
-//    for(int i = 0; i < d->m_LkIds.count(); ++i) {
-//        tmp += QString::number(d->m_LkIds.at(i)) + ";";
-//    }
 
     /*
     const QList<UserDynamicData*> &dynList = modifiedDynamicData();

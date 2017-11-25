@@ -80,7 +80,6 @@ void VirtualDatabasePreferences::on_populateDb_clicked()
     writeDefaultSettings(0);
     // Prepare virtual patients
     int nb = nbVirtualPatients->value();
-    int userLkId = userModel()->practionnerLkIds(userModel()->currentUserData(Core::IUser::Uuid).toString()).at(0);
     QProgressDialog dlg(tr("Creating %1 virtual patients").arg(nb), tr("Cancel"), 0, nb, qApp->activeWindow());
     dlg.setWindowModality(Qt::WindowModal);
 
@@ -93,7 +92,7 @@ void VirtualDatabasePreferences::on_populateDb_clicked()
             dlg.setValue(i);
         }
         QString name, sur, sec, g;
-        int title, lk;
+        int title;
         QDate death, dob;
 
         while (name.isEmpty())
@@ -116,15 +115,12 @@ void VirtualDatabasePreferences::on_populateDb_clicked()
             death = r.randomDate(1980);
         }
         QPair<int, QString> p = r.randomFrenchCity();
-        if (r.randomInt(3) == 1)
-            lk =  userLkId + 1;
-        else
-            lk = userLkId;
 
+        // int LkId is set to 0, this column will be removed in a future release
         patientBase()->createVirtualPatient(name,sec, sur,g,title,
                       dob,"France","",r.randomString(65),
                       QString::number(p.first), p.second,
-                      Utils::Database::createUid(), lk, "", "", "", death);
+                      Utils::Database::createUid(), 0, "", "", "", death, user()->quuid());
 
         if (i % 100 == 99)
             patientBase()->database().commit();
@@ -163,7 +159,6 @@ void VirtualDatabasePreferences::on_populateEpisodes_clicked()
     testingForms << "episodeTester_1" << "baseWidgetsFormSample";
 
     int zz = 0;
-    int userLkId = userModel()->practionnerLkIds(userModel()->currentUserData(Core::IUser::Uuid).toString()).at(0);
     qDebug() << "episodeBase()->database()" << episodeBase()->database();
     QSqlQuery episodeQuery(episodeBase()->database());
 
@@ -186,10 +181,8 @@ void VirtualDatabasePreferences::on_populateEpisodes_clicked()
 
                 episodeQuery.bindValue(Constants::EPISODES_ID, QVariant());
                 episodeQuery.bindValue(Constants::EPISODES_PATIENT_UID, uid);
-                if (r.randomInt(3) == 1)
-                    episodeQuery.bindValue(Constants::EPISODES_LK_TOPRACT_LKID, userLkId + 1);
-                else
-                    episodeQuery.bindValue(Constants::EPISODES_LK_TOPRACT_LKID, userLkId);
+                // EPISODES_LK_TOPRACT_LKID column is not used and will be removed in a future release.
+                episodeQuery.bindValue(Constants::EPISODES_LK_TOPRACT_LKID, QVariant());
                 episodeQuery.bindValue(Constants::EPISODES_ISVALID, QVariant(1));
                 episodeQuery.bindValue(Constants::EPISODES_FORM_PAGE_UID, form);
                 QString tmp;

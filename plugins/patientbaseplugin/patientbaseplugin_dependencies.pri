@@ -1,6 +1,7 @@
 include( ../coreplugin/coreplugin.pri )
 include( ../identityplugin/identityplugin.pri )
 include( ../formmanagerplugin/formmanagerplugin.pri )
+include( ../usermanagerplugin/usermanagerplugin.pri)
 include( ../listviewplugin/listviewplugin.pri )
 include( ../zipcodesplugin/zipcodesplugin.pri )
 

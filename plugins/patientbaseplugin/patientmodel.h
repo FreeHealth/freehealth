@@ -109,9 +109,6 @@ protected:
     bool setCurrentPatient(const QModelIndex &index);
     void endChangeCurrentPatient();
 
-protected Q_SLOTS:
-    void changeUserUuid();
-
 private Q_SLOTS:
 //    void onPrimeInsert(int row, QSqlRecord &record);
     void onCoreDatabaseServerChanged();

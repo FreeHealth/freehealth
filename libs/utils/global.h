@@ -61,6 +61,8 @@ namespace Utils {
 namespace Constants {
 const char* const TOKEN_OPEN   = "[";
 const char* const TOKEN_CLOSE  = "]";
+const int HYPHEN_MINUS = 45;
+const QList<int> HYPHEN_INDEXES = {8,13,18,23};
 }
 
 enum Warn {
@@ -203,6 +205,7 @@ UTILS_EXPORT QString testInternetConnection();
 
 // Some database identifiers helpers
 UTILS_EXPORT QString createUid();
+UTILS_EXPORT QString hyphenatedUuid(const QString &uuid);
 
 // Models
 UTILS_EXPORT void linkSignalsFromFirstModelToSecondModel(QAbstractItemModel *model1, QAbstractItemModel *model2, bool connectDataChanged);

@@ -135,8 +135,6 @@ namespace Constants {
         Table_DATA,
         Table_RIGHTS,
         Table_GROUPS,
-        Table_USER_LK_ID,
-        //Table_INFORMATION,
         Table_SCHEMA,
         Table_MaxParam
     };
@@ -188,18 +186,6 @@ namespace Constants {
         GROUPS_USER_UID,
         GROUPS_PARENT_GROUP_UID
     };
-
-    enum LK_Fields {
-        LK_ID = 0,
-        LK_LKID,
-        LK_USER_UUID,
-        LK_GROUP_UUID
-    };
-
-    /*enum INFO_Fields {
-        INFO_VERSION = 0,
-        INFO_MAX_LKID
-    };*/
 
     enum SchemaFields {
         SCHEMA_ID =0 ,

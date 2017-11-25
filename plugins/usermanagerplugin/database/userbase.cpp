@@ -19,24 +19,24 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *  Main developer: Eric MAEKER, <eric.maeker@gmail.com>                   *
- *  Contributors:                                                          *
- *       Jerome Pinguet <jerome@jerome.cc>                                 *
- *       NAME <MAIL@ADDRESS.COM>                                           *
+ *  Authors:                                                               *
+ *  Eric MAEKER <eric.maeker@gmail.com>                                    *
+ *  Jerome Pinguet <jerome@jerome.cc>                                      *
  ***************************************************************************/
 /**
  * \class UserPlugin::Internal::UserBase
- * This class owns the user database mechanism. It should never be directly accessed. Use tkUserModel to access to the database.
+ * This class owns the user database mechanism. It should never be accessed directly.
+ * Use tkUserModel to access to the database.
  *
  * 1. Initialization\n
- * This class owns a singleton. To instanciate it, use instance(). When instanciate for the first time,
- * the initialize() member is called.
+ * This class owns a singleton. To instanciate it, use instance().
+ * When instanciate for the first time, the initialize() member is called.
  *
  * 2. Users retriever\n
  * You can retrieve users using getUserByUuid() or using getUserByLoginPassword().
  *
  * 3. Users saver\n
- * You can regardless save or update users to database using the unique member : saveUser().
+ * You can save or update users to database using the unique member: saveUser().
  *
  * 4. Users data checkers\n
  * You can check the identifiers of users with the checkLogin() member.
@@ -164,20 +164,6 @@ UserBase::UserBase(QObject *parent) :
     addField(Table_GROUPS, GROUPS_PARENT_GROUP_UID, "PARENT_GROUP_UID", FieldIsUUID);
 //    addIndex(Table_RIGHTS, RIGHTS_USER_UUID);
 
-    // links
-    addTable(Table_USER_LK_ID, "LK_USER");
-    addField(Table_USER_LK_ID, LK_ID,         "ID", FieldIsUniquePrimaryKey);
-    addField(Table_USER_LK_ID, LK_LKID,       "LK_ID", FieldIsInteger);
-    addField(Table_USER_LK_ID, LK_USER_UUID,  "USER_UID", FieldIsUUID);
-    addField(Table_USER_LK_ID, LK_GROUP_UUID, "GROUP_UID", FieldIsUUID);
-    addIndex(Table_USER_LK_ID, LK_USER_UUID);
-    addIndex(Table_USER_LK_ID, LK_GROUP_UUID);
-    addIndex(Table_USER_LK_ID, LK_LKID);
-
-    /* information: deleted
-    addTable(Table_INFORMATION, "INFORMATIONS"); // Keep typo
-    addField(Table_INFORMATION, INFO_VERSION,  "VERSION", FieldIsShortText);
-    addField(Table_INFORMATION, INFO_MAX_LKID, "MAX_LK_ID", FieldIsInteger);*/
 
     // Table SCHEMA_CHANGES
     addTable(Table_SCHEMA, "SCHEMA_CHANGES");
@@ -425,7 +411,8 @@ bool UserBase::updateDatabase() const
     int currentDatabaseVersion = getSchemaVersionNumber(Constants::DB_NAME);
     QSqlDatabase DB = QSqlDatabase::database(Constants::DB_NAME);
     QString updateScriptFileName;
-    for (int i = currentDatabaseVersion++; i <= Constants::DB_CURRENT_CODE_VERSION; i++) {
+    currentDatabaseVersion++;
+    for (int i = currentDatabaseVersion; i <= Constants::DB_CURRENT_CODE_VERSION; i++) {
         if (driver()==MySQL) {
             updateScriptFileName= QString(":/database/sql/update/update%1%2.sql")
                     .arg(Constants::DB_NAME)
@@ -488,7 +475,6 @@ UserData *UserBase::getUser(const QHash<int, QString> &conditions) const
             QByteArray id = query.value(RIGHTS_ROLE).toByteArray();
             for (i = 0; i < RIGHTS_MaxParam; ++i) {
                 toReturn->addRightsFromDatabase(id , i , query.value(i));
-                // qWarning() << "Right" << id << toReturn->rightsValue(id, RIGHTS_RIGHTS);
             }
         }
     } else {
@@ -518,28 +504,6 @@ UserData *UserBase::getUser(const QHash<int, QString> &conditions) const
     if (list.count())
         toReturn->addDynamicDataFromDatabase(list);
 
-    // get personal LINK_ID
-    // TODO: this must be updated: manage groups too
-    where.clear();
-    where.insert(Constants::LK_USER_UUID, QString("='%1'").arg(uuid));
-    req = select(Constants::Table_USER_LK_ID, Constants::LK_LKID, where);
-    int lkid = -1;
-    if (query.exec(req)) {
-        if (query.next()) {
-            lkid = query.value(0).toInt();
-        }
-    } else {
-        LOG_QUERY_ERROR(query);
-    }
-    query.finish();
-
-    if (lkid == -1) {
-        LOG_ERROR(QString("No linker for user %1").arg(uuid));
-//        DB.rollback();
-//        return 0;
-    }
-
-    toReturn->setPersonalLkId(lkid);
     toReturn->setModified(false);
 
     DB.commit();
@@ -1072,7 +1036,6 @@ bool UserBase::createDatabase(const QString &connectionName , const QString &dbN
         }
 
         qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
-        //        qWarning() << "createMySQLDatabase(dbName);";
         createMySQLDatabase(dbName);
         // change database connection
         DB.setDatabaseName(dbName);
@@ -1132,7 +1095,6 @@ bool UserBase::createDefaultUser()
     user->setRights(Constants::USER_ROLE_MEDICAL, Core::IUser::AllRights);
     user->setRights(Constants::USER_ROLE_SECRETARY, Core::IUser::AllRights);
     user->setRights(Constants::USER_ROLE_PARAMEDICAL, Core::IUser::AllRights);
-    user->setPersonalLkId(1);
 
     qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     user->setExtraDocument(Print::TextDocumentExtra::fromXml(defaultHeader("admin")), Core::IUser::GenericHeader);
@@ -1150,27 +1112,6 @@ bool UserBase::createDefaultUser()
 
     qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     saveUser(user);
-
-    // create the linker
-    QSqlDatabase DB = QSqlDatabase::database(Constants::DB_NAME);
-    if (!connectDatabase(DB, __LINE__)) {
-        return false;
-    }
-    DB.transaction();
-    QSqlQuery query(DB);
-    query.prepare(prepareInsertQuery(Constants::Table_USER_LK_ID));
-    query.bindValue(Constants::LK_ID, QVariant());
-    query.bindValue(Constants::LK_GROUP_UUID, QVariant());
-    query.bindValue(Constants::LK_USER_UUID, user->uuid());
-    query.bindValue(Constants::LK_LKID, user->personalLinkId());
-    if (!query.exec()) {
-        LOG_QUERY_ERROR(query);
-        delete user;
-        query.finish();
-        DB.rollback();
-        return false;
-    }
-    DB.commit();
     delete user;
     return true;
 }
@@ -1223,8 +1164,6 @@ bool UserBase::createVirtualUser(const QString &uid, const QString &name, const 
     user->setRights(Constants::USER_ROLE_SECRETARY, Core::IUser::UserRights(secretaryRights));
     user->setRights(Constants::USER_ROLE_PARAMEDICAL, Core::IUser::UserRights(paramedicRights));
     user->setRights(Constants::USER_ROLE_AGENDA, Core::IUser::UserRights(agendaRights));
-//    user->setPersonalLkId(1);
-
     qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     user->setExtraDocument(Print::TextDocumentExtra::fromXml(defaultHeader("medicals")), Core::IUser::GenericHeader);
     user->setExtraDocument(Print::TextDocumentExtra::fromXml(defaultFooter("medicals")), Core::IUser::GenericFooter);
@@ -1248,24 +1187,7 @@ bool UserBase::createVirtualUser(const QString &uid, const QString &name, const 
         // TODO: this can be a serious security problem
         createMySQLUser(pass, pass, Grant_Select|Grant_Update|Grant_Insert|Grant_Delete|Grant_Create|Grant_Index);
     }
-
     qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
-    // create the linker
-    DB.transaction();
-    QSqlQuery query(DB);
-    query.prepare(prepareInsertQuery(Constants::Table_USER_LK_ID));
-    query.bindValue(Constants::LK_ID, QVariant());
-    query.bindValue(Constants::LK_GROUP_UUID, QVariant());
-    query.bindValue(Constants::LK_USER_UUID, user->uuid());
-    query.bindValue(Constants::LK_LKID, user->personalLinkId());
-    if (!query.exec()) {
-        LOG_QUERY_ERROR(query);
-        delete user;
-        query.finish();
-        DB.rollback();
-        return false;
-    }
-    DB.commit();
     delete user;
     return true;
 }
@@ -1276,7 +1198,6 @@ bool UserBase::createVirtualUser(const QString &uid, const QString &name, const 
 */
 QDateTime UserBase::recordLastLoggedIn(const QString &log, const QString &pass)
 {
-    // create the linker
     QSqlDatabase DB = QSqlDatabase::database(Constants::DB_NAME);
     if (!connectDatabase(DB, __LINE__)) {
         return QDateTime();
@@ -1366,9 +1287,9 @@ bool UserBase::createUser(UserData *user)
  * You can use this function to save a newly created user or to update
  * an already existing user. This function manages both cases. To be correctly
  * saved into database, the UserData must meet the following criterias:
- * - an UUID is defined
- * - a login is defined
- * - a UserPlugin::Internal::UserData::cryptedPassword() is defined
+ * - 1 UUID is defined
+ * - 1 login is defined
+ * - 1 UserPlugin::Internal::UserData::cryptedPassword() is defined
  * \warning if you are updating a user, you must use specific method for the password. UUID and ID cannot be updated
 */
 bool UserBase::saveUser(UserData *user)
@@ -1470,7 +1391,6 @@ bool UserBase::saveUser(UserData *user)
         if (user->hasModifiedDynamicDataToStore()) {
             const QList<UserDynamicData*> &dataToUpdate = user->modifiedDynamicData();
             foreach(UserDynamicData *dyn, dataToUpdate) {
-                //                qWarning() << "SAVE UDD TO BASE" ;
                 //                dyn->warn();
                 if (dyn->id() == -1) {
                     // create the dynamic data
@@ -1537,8 +1457,6 @@ bool UserBase::saveUser(UserData *user)
                 }
             }
         }
-
-        // TODO: code here : --> update UserLkId
         LOG(QCoreApplication::translate("UserBase", "User %1 successfully updated.").arg(user->uuid()));
         user->setModified(false);
     } else {
@@ -1610,24 +1528,6 @@ bool UserBase::saveUser(UserData *user)
                 query.finish();
             }
         }
-
-        // create the USER_LK
-        qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
-        if (user->personalLinkId() == -1) {
-            user->setPersonalLkId(getMaxLinkId() + 1);
-            query.prepare(prepareInsertQuery(Table_USER_LK_ID));
-            query.bindValue(LK_ID,         QVariant());
-            query.bindValue(LK_LKID,       user->personalLinkId());
-            query.bindValue(LK_USER_UUID,  user->uuid());
-            query.bindValue(LK_GROUP_UUID, QVariant());
-            if (!query.exec()) {
-                LOG_QUERY_ERROR(query);
-                query.finish();
-                DB.rollback();
-                return false;
-            }
-            query.finish();
-        }
     }
 
     user->setModified(false);
@@ -1640,8 +1540,7 @@ bool UserBase::saveUser(UserData *user)
 /**
  * Remove all data of user identified by its \e uuid from the database and
  * the server (network configuration).
- * \todo delete the user's LKID
-*/
+ */
 bool UserBase::purgeUser(const QString &uuid)
 {
     QSqlDatabase DB = QSqlDatabase::database(Constants::DB_NAME);
@@ -1689,16 +1588,6 @@ bool UserBase::purgeUser(const QString &uuid)
     // delete user rows from table DATA
     where.insert(Constants::RIGHTS_USER_UUID, QString("='%1'").arg(uuid));
     if (!query.exec(prepareDeleteQuery(Table_DATA, where))) {
-        LOG_QUERY_ERROR(query);
-        query.finish();
-        DB.rollback();
-        return false;
-    }
-    query.finish();
-    where.clear();
-    // delete user rows from table LK_USERS
-    where.insert(Constants::LK_USER_UUID, QString("='%1'").arg(uuid));
-    if (!query.exec(prepareDeleteQuery(Table_USER_LK_ID, where))) {
         LOG_QUERY_ERROR(query);
         query.finish();
         DB.rollback();
@@ -1769,7 +1658,6 @@ bool UserBase::savePapers(UserData *user)
     foreach(UserDynamicData *dyn, dataToUpdate) {
         if (!papersId.contains(dyn->name()))
             continue;
-        //            qWarning() << "SAVE PAPER TO BASE" << dyn->name();
         //                dyn->warn();
         if (dyn->id() == -1) {
             // create the dynamic data
@@ -1914,52 +1802,6 @@ bool UserBase::saveUserDynamicData(const QString &userUid, const QString &dynDat
     return true;
 }
 
-int UserBase::getMaxLinkId()
-{
-    // TODO: change to Utils::Database::max()
-    QSqlDatabase DB = QSqlDatabase::database(Constants::DB_NAME);
-    if (!connectDatabase(DB, __LINE__)) {
-        return false;
-    }
-    DB.transaction();
-    QSqlQuery query(DB);
-    if (!query.exec(select(Constants::Table_INFORMATION, Constants::INFO_MAX_LKID))) {
-        LOG_QUERY_ERROR(query);
-        query.finish();
-        DB.rollback();
-        return -1;
-    } else {
-        if (query.next()) {
-            int id = query.value(0).toInt();
-            query.finish();
-            DB.commit();
-            return id;
-        }
-    }
-    DB.rollback();
-    return -1;
-}
-
-bool UserBase::updateMaxLinkId(const int max)
-{
-    QSqlDatabase DB = QSqlDatabase::database(Constants::DB_NAME);
-    if (!connectDatabase(DB, __LINE__)) {
-        return false;
-    }
-    DB.transaction();
-    QSqlQuery query(DB);
-    query.prepare(prepareUpdateQuery(Constants::Table_INFORMATION, Constants::INFO_MAX_LKID));
-    query.bindValue(0, max);
-    if (!query.exec()) {
-        LOG_QUERY_ERROR(query);
-        query.finish();
-        DB.rollback();
-        return false;
-    }
-    DB.commit();
-    return true;
-}
-
 void UserBase::toTreeWidget(QTreeWidget *tree) const
 {
     Database::toTreeWidget(tree);
@@ -1978,7 +1820,9 @@ void UserBase::toTreeWidget(QTreeWidget *tree) const
     where.clear();
     where.insert(Constants::USER_ISVIRTUAL, QString("=1"));
     new QTreeWidgetItem(db, QStringList() << "Number of virtual users" << QString::number(count(Constants::Table_USERS, Constants::USER_ID, getWhereClause(Constants::Table_USERS, where))));
-    new QTreeWidgetItem(db, QStringList() << "Database version" << getVersion(Utils::Field(Constants::Table_INFORMATION, Constants::INFO_VERSION)));
+    new QTreeWidgetItem(db, QStringList()
+                        << "Database version"
+                        << QString::number(getSchemaVersionNumber(Constants::DB_NAME)));
     if (isInitialized()) {
         new QTreeWidgetItem(db, QStringList() << "Database" << "initialized");
     } else {

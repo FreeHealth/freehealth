@@ -193,7 +193,6 @@ public:
         switch (ref)
         {
         case Core::IUser::Id : toReturn = user->id(); break;
-        case Core::IUser::PersonalLinkId: toReturn = user->personalLinkId(); break;
         case Core::IUser::Uuid : toReturn = user->uuid(); break;
         case Core::IUser::Validity : toReturn = user->validity(); break;
         case Core::IUser::IsVirtual : toReturn = user->isVirtual(); break;
@@ -874,7 +873,7 @@ bool UserModel::insertRows(int row, int count, const QModelIndex &parent)
         }
         // feed the QSqlTableModel with uuid and crypted empty password
         QString uuid = d->createNewEmptyUser(this, row+i);
-        Internal::UserData *user = d->m_Uuid_UserList.value(uuid, 0);
+        //Internal::UserData *user = d->m_Uuid_UserList.value(uuid, 0);
         QModelIndex newIndex = index(row+i, Core::IUser::Uuid);
         if (!d->m_Sql->setData(newIndex, uuid, Qt::EditRole)) {
             LOG_ERROR(QString("Can not add user's uuid into the new user into SQL Table. Row = %1 , UUID = %2 ")
@@ -888,20 +887,6 @@ bool UserModel::insertRows(int row, int count, const QModelIndex &parent)
                       .arg(row+i).arg(uuid));
             return i;
         }
-        // define a lkid for this user
-        int maxLkId = userBase()->getMaxLinkId();
-        // TODO: user already have a lkid ? --> manage this
-        QSqlQuery query(userBase()->database());
-        query.prepare(userBase()->prepareInsertQuery(Constants::Table_USER_LK_ID));
-        query.bindValue(Constants::LK_ID, QVariant());
-        query.bindValue(Constants::LK_GROUP_UUID, QVariant());
-        query.bindValue(Constants::LK_USER_UUID, uuid);
-        query.bindValue(Constants::LK_LKID, maxLkId + 1);
-        if (!query.exec()) {
-            LOG_QUERY_ERROR(query);
-        }
-        userBase()->updateMaxLinkId(maxLkId + 1);
-        user->setLkIds(QList<int>() << maxLkId+1);
     }
     d->checkNullUser();
     return i;
@@ -1402,63 +1387,8 @@ void UserModel::setFilter(const QHash<int,QString> &conditions)
     d->checkNullUser();
 }
 
-/** Return the LinkId for the user with uuid \e uid */
-int UserModel::practionnerLkId(const QString &uid) const
-{
-    // TODO: manage user's groups
-    if (d->m_Uuid_UserList.keys().contains(uid)) {
-        Internal::UserData *user = d->m_Uuid_UserList.value(uid, 0);
-        //        qWarning() << "xxxxxxxxxxxxx memory" << uid << user->linkIds();
-        return user->personalLinkId();
-    }
-    int lk_id = -1;
-    if (uid.isEmpty())
-        return lk_id;
-
-    QHash<int, QString> where;
-    where.clear();
-    where.insert(Constants::LK_USER_UUID, QString("='%1'").arg(uid));
-    QString req = userBase()->select(Constants::Table_USER_LK_ID, Constants::LK_LKID, where);
-    QSqlQuery query(req, userBase()->database());
-    if (query.isActive()) {
-        if (query.next())
-            return query.value(0).toInt();
-    } else {
-        LOG_QUERY_ERROR(query);
-    }
-    //    qWarning() << "xxxxxxxxxxxxx database" << uid << lk_ids;
-    return lk_id;
-}
-
-QList<int> UserModel::practionnerLkIds(const QString &uid) const
-{
-    //    qWarning() << "\n\n" << Q_FUNC_INFO << uid;
-    // TODO: manage user's groups
-    if (d->m_Uuid_UserList.keys().contains(uid)) {
-        Internal::UserData *user = d->m_Uuid_UserList.value(uid, 0);
-        //        qWarning() << "xxxxxxxxxxxxx memory" << uid << user->linkIds();
-        return user->linkIds();
-    }
-    QList<int> lk_ids;
-    if (uid.isEmpty())
-        return lk_ids;
-
-    QHash<int, QString> where;
-    where.clear();
-    where.insert(Constants::LK_USER_UUID, QString("='%1'").arg(uid));
-    QString req = userBase()->select(Constants::Table_USER_LK_ID, Constants::LK_LKID, where);
-    QSqlQuery query(req, userBase()->database());
-    if (query.isActive()) {
-        while (query.next())
-            lk_ids.append(query.value(0).toInt());
-    } else {
-        LOG_QUERY_ERROR(query);
-    }
-    //    qWarning() << "xxxxxxxxxxxxx database" << uid << lk_ids << "\n\n";
-    return lk_ids;
-}
-
-/** Get all user's name from their \e uids. The returned QHash contains as key the uid of users, and as key their name. */
+/** Get all user's name from their \e uids.
+ * The returned QHash contains as key the uid of users, and as value their name. */
 QHash<QString, QString> UserModel::getUserNames(const QStringList &uids)  // static
 {
     QHash<QString, QString> toReturn;

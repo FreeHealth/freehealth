@@ -19,10 +19,9 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *  Main developer: Eric MAEKER, <eric.maeker@gmail.com>                   *
- *  Contributors:                                                          *
- *       NAME <MAIL@ADDRESS.COM>                                           *
- *       NAME <MAIL@ADDRESS.COM>                                           *
+ *  Authors:                                                               *
+ *       Eric MAEKER <eric.maeker@gmail.com>                               *
+ *       Jerome PINGUET <jerome@jerome.cc>                                 *
  ***************************************************************************/
 /**
  * \class Patients::PatientModel
@@ -54,12 +53,16 @@
 #include <translationutils/trans_titles.h>
 #include <extensionsystem/pluginmanager.h>
 
+#include <usermanagerplugin/usercore.h>
+#include <usermanagerplugin/usermodel.h>
+
 #include <QObject>
 #include <QSqlTableModel>
 #include <QSqlDatabase>
 #include <QPixmap>
 #include <QBuffer>
 #include <QByteArray>
+#include <QUuid>
 
 enum { WarnDatabaseFilter = false };
 
@@ -72,6 +75,9 @@ static inline Core::ISettings *settings()  { return Core::ICore::instance()->set
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline Patients::PatientCore *patientCore() {return Patients::PatientCore::instance();}
 static inline Patients::Internal::PatientBase *patientBase() {return patientCore()->patientBase();}
+
+static inline UserPlugin::UserCore &userCore() {return UserPlugin::UserCore::instance();}
+static inline UserPlugin::UserModel *userModel() {return userCore().userModel();}
 
 namespace Patients {
 namespace Internal {
@@ -111,7 +117,7 @@ public:
             where.insert(Constants::IDENTITY_ISVIRTUAL, "=0");
 
         // All users share the same patients
-        //        where.insert(Constants::IDENTITY_LK_TOPRACT_LKID, QString("IN (%1)").arg(m_LkIds));
+        //where.insert(Constants::IDENTITY_USER_UUID, QString("IN (%1)").arg(m_LkIds));
         where.insert(Constants::IDENTITY_ISACTIVE, "=1");
 
         QString filter = patientBase()->getWhereClause(Constants::Table_IDENT, where);
@@ -218,6 +224,45 @@ public:
         DB.commit();
         return QPixmap();
     }
+    QString getPatientCreator(const QModelIndex &index)
+    {
+        QString creator;
+        QHash<int, QString> where;
+        QString patientUid = m_SqlPatient->index(index.row(), Constants::IDENTITY_UID).data().toString();
+        where.insert(Constants::IDENTITY_UID, QString("='%1'").arg(patientUid));
+        QSqlDatabase DB = patientBase()->database();
+        DB.transaction();
+        QSqlQuery query(DB);
+        QString req = patientBase()->select(Constants::Table_IDENT, Constants::IDENTITY_USER_UUID, where);
+        QString stringUuid;
+        if (!query.exec(req)) {
+            LOG_QUERY_ERROR_FOR(q, query);
+            query.finish();
+            DB.rollback();
+        } else {
+            if (query.next()) {
+                if (query.value(0).isNull())
+                        return QString();
+                QByteArray binUuid;
+                binUuid = query.value(0).toByteArray();
+                query.finish();
+                DB.commit();
+                stringUuid = QUuid::fromRfc4122(binUuid)
+                        .toString()
+                        .remove("-")
+                        .remove("{")
+                        .remove("}");
+            }
+        }
+        query.finish();
+        DB.commit();
+        QStringList uuids(stringUuid);
+        QHash<QString, QString> names = UserPlugin::UserModel::getUserNames(uuids);
+        if (!names.isEmpty()) {
+            creator = names.value(stringUuid);
+        }
+        return creator;
+    }
 
 public:
     QSqlTableModel *m_SqlPatient, *m_SqlPhoto;
@@ -254,20 +299,6 @@ PatientModel::~PatientModel()
     }
 }
 
-void PatientModel::changeUserUuid()
-{
-    d->m_UserUuid = user()->uuid();
-    QList<int> ids = QList<int>() << user()->value(Core::IUser::PersonalLinkId).toInt();
-    d->m_LkIds.clear();
-    foreach(int i, ids)
-        d->m_LkIds.append(QString::number(i) + ",");
-    d->m_LkIds.chop(1);
-
-    //    qWarning() << Q_FUNC_INFO << d->m_LkIds << userModel()->practionnerLkIds(uuid);
-
-    d->refreshFilter();
-}
-
 //void PatientModel::onPrimeInsert(int row, QSqlRecord &record)
 //{
 //    // find an unused uuid
@@ -283,7 +314,7 @@ void PatientModel::changeUserUuid()
 //        ok = false;
 //        LOG_ERROR("Unable to setData to newly created patient.");
 //    }
-//    if (!d->m_SqlPatient->setData(d->m_SqlPatient->index(row+i, Constants::IDENTITY_LK_TOPRACT_LKID), user()->value(Core::IUser::PersonalLinkId))) { // linkIds
+//    if (!d->m_SqlPatient->setData(d->m_SqlPatient->index(row+i, Constants::IDENTITY_LK_TOPRACT_LKID), user()->value(Core::IUser::PersonalLinkId))) { // linkId <- was removed in version 0.11
 //        ok = false;
 //        LOG_ERROR("Unable to setData to newly created patient.");
 //    }
@@ -577,7 +608,7 @@ QVariant PatientModel::data(const QModelIndex &index, int role) const
             }
             return pix.scaled(QSize(64,64));
         }
-        case IPatient::PractitionnerLkID: return d->m_LkIds;
+        case IPatient::PractitionerUuid: return d->getPatientCreator(index);
         }
         QVariant r = d->m_SqlPatient->data(d->m_SqlPatient->index(index.row(), col), role);
         switch (index.column()) {
@@ -922,7 +953,10 @@ bool PatientModel::insertRows(int row, int count, const QModelIndex &parent)
             ok = false;
             LOG_ERROR("Unable to setData to newly created patient.");
         }
-        if (!d->m_SqlPatient->setData(d->m_SqlPatient->index(row+i, Constants::IDENTITY_LK_TOPRACT_LKID), user()->value(Core::IUser::PersonalLinkId))) { // linkIds
+        const QString rawUuid = user()->value(Core::IUser::Uuid).toString();
+        const QString hyphenatedUuid = Utils::hyphenatedUuid(rawUuid);
+        QByteArray binUuid = QUuid(hyphenatedUuid).toRfc4122();
+        if (!d->m_SqlPatient->setData(d->m_SqlPatient->index(row+i, Constants::IDENTITY_USER_UUID), binUuid)) {
             ok = false;
             LOG_ERROR("Unable to setData to newly created patient.");
         }

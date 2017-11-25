@@ -289,9 +289,7 @@ void UserManagerPlugin::test_userbase_test_with_virtualuser()
     Utils::Randomizer r;
     r.setPathToFiles(settings()->path(Core::ISettings::BundleResourcesPath) + "/textfiles/");
 
-    QCOMPARE(userCore().userBase()->checkDatabaseVersion(), true);
     QCOMPARE(userCore().userBase()->checkDatabaseScheme(), true);
-    QCOMPARE(userCore().userBase()->getVersion(Utils::Field(Constants::Table_INFORMATION, Constants::INFO_VERSION)), QString(Constants::USER_DB_VERSION));
 
     // Test with virtual user
     UserData data;
@@ -789,7 +787,6 @@ void UserManagerPlugin::test_usermodel_basics()
     QCOMPARE(userModel()->currentUserData(Core::IUser::ClearLogin), QVariant(fromDb->clearLogin()));
     // QCOMPARE(userModel()->currentUserData(Core::IUser::ClearPassword), QVariant(fromDb->clearPassword()));
     QCOMPARE(userModel()->currentUserData(Core::IUser::LocaleCodedLanguage), QVariant(fromDb->localeLanguage()));
-    QCOMPARE(userModel()->currentUserData(Core::IUser::PersonalLinkId), QVariant(fromDb->personalLinkId()));
     QCOMPARE(userModel()->currentUserData(Core::IUser::FullName), QVariant(fromDb->fullName()));
     QCOMPARE(userModel()->currentUserData(Core::IUser::Gender), QVariant(fromDb->gender()));
     QCOMPARE(userModel()->currentUserData(Core::IUser::Title), QVariant(fromDb->title()));

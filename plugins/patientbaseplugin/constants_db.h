@@ -52,7 +52,7 @@ namespace Constants {
     enum IdentFields {
         IDENTITY_ID = 0,
         IDENTITY_UID,
-        IDENTITY_LK_TOPRACT_LKID,
+        IDENTITY_LK_TOPRACT_LKID, // Not used. Will be removed in a future release.
         IDENTITY_FAMILY_UID,
         IDENTITY_ISACTIVE,
         IDENTITY_ISVIRTUAL,
@@ -76,7 +76,8 @@ namespace Constants {
         IDENTITY_TELS,
         IDENTITY_FAXES,
         IDENTITY_MOBILE_PHONE,
-        IDENTITY_WORK_PHONE
+        IDENTITY_WORK_PHONE,
+        IDENTITY_USER_UUID
     };
     enum LkFields {
         LK_TOPRACT_ID = 0,

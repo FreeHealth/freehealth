@@ -173,7 +173,8 @@ public:
         FieldIsUUID,                // varchar(32) (see Utils::createUid())
         FieldIsBoolean,
         FieldIsUniquePrimaryKey,
-        FieldIsReal
+        FieldIsReal,
+        FieldIsBinaryUUID
     };
 
     enum TypeOfJoin {
