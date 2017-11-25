@@ -28,7 +28,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="1486"/>
+        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="1502"/>
         <source>User %1 successfully updated.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -227,8 +227,8 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="1250"/>
-        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="1270"/>
+        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="1266"/>
+        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="1286"/>
         <source>Last recorded user login: %1 </source>
         <translation type="unfinished"></translation>
     </message>
@@ -391,7 +391,7 @@ p, li { white-space: pre-wrap; }
     <name>UserPlugin::Internal::UserManagerPlugin</name>
     <message>
         <location filename="../../plugins/usermanagerplugin/usermanagerplugin.cpp" line="148"/>
-        <location filename="../../plugins/usermanagerplugin/usermanagerplugin.cpp" line="234"/>
+        <location filename="../../plugins/usermanagerplugin/usermanagerplugin.cpp" line="265"/>
         <source>Initializing user manager plugin...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -406,17 +406,17 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/usermanagerplugin.cpp" line="349"/>
+        <location filename="../../plugins/usermanagerplugin/usermanagerplugin.cpp" line="380"/>
         <source>Using command line user identifiants: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/usermanagerplugin.cpp" line="411"/>
+        <location filename="../../plugins/usermanagerplugin/usermanagerplugin.cpp" line="442"/>
         <source>Unable to change current user</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/usermanagerplugin.cpp" line="412"/>
+        <location filename="../../plugins/usermanagerplugin/usermanagerplugin.cpp" line="443"/>
         <source>An error occured when trying to change the current user. %1</source>
         <translation type="unfinished"></translation>
     </message>

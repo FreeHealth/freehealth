@@ -195,7 +195,7 @@
       <label lang="xx">Drugs prescriptions</label>
       <label lang="fr">Prescriptions médicamenteuses</label>
       <icon>__theme__/drugs.png</icon>
-      <options>DontPrintEmptyValues</options>
+      <options>DontPrintEmptyValues;PrescriptionHeader</options>
       <file type="htmlprintmask">./html/xx/padtools_prescription_drugs_mask.html</file>
       <file type="htmlexportmask">./html/xx/padtools_prescription_drugs_mask.html</file>
 

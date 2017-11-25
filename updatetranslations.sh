@@ -16,7 +16,7 @@
 #  *  GNU General Public License for more details.                           *
 #  *                                                                         *
 #  *  You should have received a copy of the GNU General Public License      *
-#  *  along with this program (COPYING.FREEMEDFORMS file).                   *
+#  *  along with this program.                                               *
 #  *  If not, see <http://www.gnu.org/licenses/>.                            *
 #  ***************************************************************************
 # /***************************************************************************
@@ -35,7 +35,7 @@ NO_COLOUR="\033[0m"
 #for i in $( ls plugins ); do
 #    if [ -f plugins/$i/*.pro ]; then
 #        echo
-#        echo "$WHITE********* Updating translation for FreeMedForms plugin: $i$NO_COLOUR"
+#        echo "$WHITE********* Updating translation for EHR plugin: $i$NO_COLOUR"
 #        echo
 #        lupdate plugins/$i/*plugin.pro -no-obsolete  2>&1
 #    fi

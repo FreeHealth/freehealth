@@ -324,7 +324,7 @@ QDebug operator<<(QDebug dbg, const Form::FormIODescription &c)
     attribs << "country: " + c.data(Form::FormIODescription::Country).toString();
 //    attribs << "languages: " + c.data(Form::FormIODescription::AvailableLanguages).toString();
     attribs << "v: " + c.data(Form::FormIODescription::Version).toString();
-    attribs << "compat: " + c.data(Form::FormIODescription::FreeMedFormsCompatVersion).toString();
+    attribs << "compat: " + c.data(Form::FormIODescription::EHRCompatVersion).toString();
     attribs << "cdate: " + c.data(Form::FormIODescription::CreationDate).toString();
     attribs << "ludate: " + c.data(Form::FormIODescription::LastModificationDate).toString();
     attribs << "cat: " + c.data(Form::FormIODescription::Category).toString();

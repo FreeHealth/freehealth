@@ -2245,9 +2245,9 @@ void BaseDateTimeData::onValueChanged()
     Q_EMIT dataChanged(0);
 }
 
-//--------------------------------------------------------------------------------------------------------
-//------------------------------------------ BaseSpin --------------------------------------------------
-//--------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+//------------------------------ BaseSpin --------------------------------------
+//------------------------------------------------------------------------------
 BaseSpin::BaseSpin(Form::FormItem *formItem, QWidget *parent, bool doubleSpin) :
     Form::IFormWidget(formItem,parent), m_Spin(0)
 {
@@ -2261,6 +2261,11 @@ BaseSpin::BaseSpin(Form::FormItem *formItem, QWidget *parent, bool doubleSpin) :
         if (doubleSpin) {
             QDoubleSpinBox *dbl = formItem->parentFormMain()->formWidget()->findChild<QDoubleSpinBox*>(widget);
             if (dbl) {
+                if(dbl->suffix().isEmpty()) {
+                    dbl->setSuffix(formItem->extraData().value(Constants::SPIN_EXTRAS_KEY_SUFFIX, ""));
+                }
+                if (!formItem->extraData().value(Constants::SPIN_EXTRAS_KEY_DECIMALS).isEmpty())
+                    dbl->setDecimals(formItem->extraData().value(Constants::SPIN_EXTRAS_KEY_DECIMALS).toInt());
                 m_Spin = dbl;
                 connect(dbl, SIGNAL(valueChanged(double)), data, SLOT(onValueChanged()));
             } else {
@@ -2275,6 +2280,9 @@ BaseSpin::BaseSpin(Form::FormItem *formItem, QWidget *parent, bool doubleSpin) :
         } else {
             QSpinBox *dbl = formItem->parentFormMain()->formWidget()->findChild<QSpinBox*>(widget);
             if (dbl) {
+                if(dbl->suffix().isEmpty()) {
+                    dbl->setSuffix(formItem->extraData().value(Constants::SPIN_EXTRAS_KEY_SUFFIX, ""));
+                }
                 m_Spin = dbl;
                 connect(dbl, SIGNAL(valueChanged(int)), data, SLOT(onValueChanged()));
             } else {
@@ -2288,6 +2296,9 @@ BaseSpin::BaseSpin(Form::FormItem *formItem, QWidget *parent, bool doubleSpin) :
             }
         }
         m_Spin->setToolTip(m_FormItem->spec()->tooltip());
+        if(m_Spin->specialValueText().isEmpty() && !formItem->extraData().value(Constants::SPIN_EXTRAS_KEY_SPECIALVALUETEXT).isEmpty()) {
+            m_Spin->setSpecialValueText(formItem->extraData().value(Constants::SPIN_EXTRAS_KEY_SPECIALVALUETEXT, ""));
+        }
         // Find label
         m_Label = Constants::findLabel(formItem);
     } else {
@@ -2299,9 +2310,11 @@ BaseSpin::BaseSpin(Form::FormItem *formItem, QWidget *parent, bool doubleSpin) :
         if (doubleSpin) {
             QDoubleSpinBox *spin = new QDoubleSpinBox(this);
             spin->setObjectName("DoubleSpin_" + m_FormItem->uuid());
+            spin->setDecimals(formItem->extraData().value(Constants::SPIN_EXTRAS_KEY_DECIMALS, "3").toInt());
             spin->setMinimum(formItem->extraData().value(Constants::SPIN_EXTRAS_KEY_MIN, "0").toDouble());
             spin->setMaximum(formItem->extraData().value(Constants::SPIN_EXTRAS_KEY_MAX, "10000").toDouble());
             spin->setSingleStep(formItem->extraData().value(Constants::SPIN_EXTRAS_KEY_STEP, "0.1").toDouble());
+            spin->setSuffix(formItem->extraData().value(Constants::SPIN_EXTRAS_KEY_SUFFIX, ""));
             connect(spin, SIGNAL(valueChanged(double)), data, SLOT(onValueChanged()));
             m_Spin = spin;
         } else {
@@ -2310,6 +2323,7 @@ BaseSpin::BaseSpin(Form::FormItem *formItem, QWidget *parent, bool doubleSpin) :
             spin->setMinimum(formItem->extraData().value(Constants::SPIN_EXTRAS_KEY_MIN, "0").toInt());
             spin->setMaximum(formItem->extraData().value(Constants::SPIN_EXTRAS_KEY_MAX, "10000").toInt());
             spin->setSingleStep(formItem->extraData().value(Constants::SPIN_EXTRAS_KEY_STEP, "1").toInt());
+            spin->setSuffix(formItem->extraData().value(Constants::SPIN_EXTRAS_KEY_SUFFIX, ""));
             m_Spin = spin;
             connect(spin, SIGNAL(valueChanged(int)), data, SLOT(onValueChanged()));
         }
@@ -2327,6 +2341,10 @@ BaseSpin::BaseSpin(Form::FormItem *formItem, QWidget *parent, bool doubleSpin) :
 BaseSpin::~BaseSpin()
 {}
 
+/*
+ * HTML 4 encoded text to print
+ * If the specialValueText "∅" has been set in the ui file, return empty string.
+ */
 QString BaseSpin::printableHtml(bool withValues) const
 {
     if (m_FormItem->getOptions().contains(Constants::NOT_PRINTABLE))
@@ -2351,14 +2369,14 @@ QString BaseSpin::printableHtml(bool withValues) const
         QSpinBox *spin = qobject_cast<QSpinBox*>(m_Spin);
         QString value;
         if (spin) {
-            if ((spin->value()) == 0) {
+            if (spin->specialValueText() == QString("∅") && spin->value() == spin->minimum()) {
                 return QString();
             }
             value = spin->text();
         } else {
             QDoubleSpinBox *dspin = qobject_cast<QDoubleSpinBox*>(m_Spin);
             if (dspin) {
-                if ((dspin->value()) == 0.0) {
+                if (dspin->specialValueText() == QString("∅") && dspin->value() == dspin->minimum()) {
                     return QString();
                 }
                 value = dspin->text();
@@ -2402,14 +2420,21 @@ BaseSpinData::~BaseSpinData()
 /** \brief Set the widget to the default value \sa FormItem::FormItemValue*/
 void BaseSpinData::clear()
 {
-    m_OriginalValue = m_FormItem->valueReferences()->defaultValue().toDouble();
     QSpinBox *spin = qobject_cast<QSpinBox*>(m_Spin->m_Spin);
     if (spin) {
-        spin->setValue(m_FormItem->valueReferences()->defaultValue().toInt());
+        if (!(m_FormItem->valueReferences()->defaultValue() == QVariant())) {
+            spin->setValue(m_FormItem->valueReferences()->defaultValue().toInt());
+        } else {
+            spin->setValue(spin->minimum());
+        }
     } else {
         QDoubleSpinBox *dspin = qobject_cast<QDoubleSpinBox*>(m_Spin->m_Spin);
         if (dspin) {
-            dspin->setValue(m_OriginalValue);
+            if (!(m_FormItem->valueReferences()->defaultValue() == QVariant())) {
+                dspin->setValue(m_FormItem->valueReferences()->defaultValue().toDouble());
+            } else {
+                dspin->setValue(dspin->minimum());
+            }
         }
     }
 }

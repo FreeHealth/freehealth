@@ -156,33 +156,33 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="836"/>
+        <location filename="../../libs/utils/global.cpp" line="833"/>
         <source>File %1 does not exist or is not readable.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="842"/>
+        <location filename="../../libs/utils/global.cpp" line="839"/>
         <source>Error %1 while trying to open file %2</source>
         <translation>Error %1 während des schreibens auf Datei %2</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="1100"/>
+        <location filename="../../libs/utils/global.cpp" line="1096"/>
         <source>Cancel</source>
         <translation>Abbrechen</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="1191"/>
+        <location filename="../../libs/utils/global.cpp" line="1187"/>
         <source>This function is not available in this version.</source>
         <translation>Diese Funktion ist nicht verfügbar in dieser Version.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="1253"/>
+        <location filename="../../libs/utils/global.cpp" line="1249"/>
         <source>Do you agree these terms?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="1233"/>
-        <location filename="../../libs/utils/global.cpp" line="1234"/>
+        <location filename="../../libs/utils/global.cpp" line="1229"/>
+        <location filename="../../libs/utils/global.cpp" line="1230"/>
         <source>License agreement acceptation</source>
         <translation>Nehme die Lizenz an</translation>
     </message>
@@ -193,27 +193,27 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="1192"/>
+        <location filename="../../libs/utils/global.cpp" line="1188"/>
         <source>You can send an email to developers and explain your difficulties: dev@freehealth.io</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="1245"/>
+        <location filename="../../libs/utils/global.cpp" line="1241"/>
         <source>&lt;b&gt;Before you can use this software, you must agree its license terms&lt;/b&gt;</source>
         <translation>&lt;b&gt;Bevor sie diese Software nutzen können, müssen sie die Lizenzbestimmungen annehmen&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="1320"/>
+        <location filename="../../libs/utils/global.cpp" line="1316"/>
         <source>%1 is now in fullScreen Mode.</source>
         <translation>%1 ist nun im Vollbildmodus.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="1325"/>
+        <location filename="../../libs/utils/global.cpp" line="1321"/>
         <source>%1 is now in non fullScreen Mode.</source>
         <translation>%1 ist nun in keinem Vollbildmodus.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="2229"/>
+        <location filename="../../libs/utils/global.cpp" line="2225"/>
         <source>Token replacement error (%1). Wrong number of parentheses.</source>
         <translation>Token ersetzungs Error (%1) Falsche Anzahl an Eltern.</translation>
     </message>

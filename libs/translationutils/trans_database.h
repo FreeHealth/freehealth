@@ -65,6 +65,11 @@ const char* const ICD_DATABASE_INFORMATION            = QT_TRANSLATE_NOOP("tkCon
 const char* const PATIENT_DATABASE_INFORMATION        = QT_TRANSLATE_NOOP("tkConstants", "Patient database information");
 const char* const TEMPLATE_DATABASE_INFORMATION       = QT_TRANSLATE_NOOP("tkConstants", "Template database information");
 const char* const XMLIO_DATABASE_INFORMATION          = QT_TRANSLATE_NOOP("tkConstants", "Xml IO form database information");
+const char* const ERROR_DRIVER                        = QT_TRANSLATE_NOOP("tkConstants", "Driver error");
+const char* const ERROR_DATABASE                      = QT_TRANSLATE_NOOP("tkConstants", "Database error");
+const char* const ERROR_NATIVE                        = QT_TRANSLATE_NOOP("tkConstants", "Database-specific error");
+const char* const ERROR_TYPE                          = QT_TRANSLATE_NOOP("tkConstants", "Error type");
+
 
 } // end Constants
 } // end TranslationUtils

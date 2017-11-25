@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE FreeMedForms>
+
+<FreeMedForms>
+
+  <formdescription>
+    <!-- Non translatable values -->
+    <authors>Eric Maeker, MD</authors>
+    <version>test</version>
+    <fmfv>0.11</fmfv>
+    <cdate>2011-11-10</cdate>
+    <lmdate>2017-09-25</lmdate>
+    <icon>generalpractitioner.png</icon>
+    <weblink>https://freehealth.io</weblink>
+    <bibliography/>
+
+    <!-- Translatable values -->
+    <license>GPLv3</license>
+    <description lang="xx">Clinical correspondence (from Generic ultra-simplified patient file)</description>
+    <description lang="fr">Correspondance clinique (du Dossier médical ultra-simplifié)</description>
+    <description lang="de">Korrespondenz (aus Allgemeine, stark vereinfachte Krankenakte)</description>
+    <category lang="xx">General practice</category>
+    <category lang="fr">Médecine générale</category>
+    <category lang="de">Allgemeinmedizin</category>
+    <specialties lang="xx">General practice</specialties>
+    <specialties lang="fr">Médecine générale</specialties>
+    <specialties lang="de">Allgemeinmedizin</specialties>
+    <updateinfo>
+    </updateinfo>
+
+  </formdescription>
+
+    <MedForm name="GP::Basic::Central::Correspondance">
+      <label lang="xx">Correspondence</label>
+      <label lang="fr">Correspondance</label>
+      <label lang="de">Korrespondenz</label>
+      <icon>__theme__/edit.png</icon>
+      <options>DontPrintEmptyValues</options>
+      <file type="htmlprintmask">./html/xx/clinical_correspondence.html</file>
+      <file type="htmlexportmask">./html/xx/clinical_correspondence.html</file>
+
+      <Item name="GP::Basic::Central::Correspondance::Text" type="texteditor">
+        <label lang="xx">Correspondence</label>
+        <label lang="fr">Correspondance</label>
+        <label lang="de">Korrespondenz</label>
+        <options>FullEditor;DontPrintEmptyValues;expanded</options>
+      </Item>
+    </MedForm>
+
+</FreeMedForms>

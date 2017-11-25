@@ -15,7 +15,7 @@
  *  GNU General Public License for more details.                           *
  *                                                                         *
  *  You should have received a copy of the GNU General Public License      *
- *  along with this program (COPYING.FREEMEDFORMS file).                   *
+ *  along with this program.                                               *
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
@@ -455,7 +455,7 @@ void DrugsDbModeWidget::onCreateDatapackFiles()
     descr.setData(DataPack::PackDescription::Version, packVersion);
     // TODO: improve version compatibility coding
     descr.setData(DataPack::PackDescription::FreeDiamsCompatVersion, qApp->applicationVersion());
-    descr.setData(DataPack::PackDescription::FreeMedFormsCompatVersion, qApp->applicationVersion());
+    descr.setData(DataPack::PackDescription::EHRCompatVersion, qApp->applicationVersion());
     descr.setData(DataPack::PackDescription::LastModificationDate, QDate::currentDate().toString(Qt::ISODate));
     descr.setData(DataPack::PackDescription::Size, QFileInfo(base->absoluteFilePath()).size());
     descr.setData(DataPack::PackDescription::Md5, Utils::fileMd5(base->absoluteFilePath()));

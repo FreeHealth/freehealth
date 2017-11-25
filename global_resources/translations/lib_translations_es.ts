@@ -2907,7 +2907,7 @@ Text Align Justify shortcut key : Mac specific</extracomment>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_team.h" line="35"/>
-        <source>Creator and Main Developer</source>
+        <source>Creator</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

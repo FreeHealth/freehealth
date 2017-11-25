@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE FreeMedForms>
+
+<FreeMedForms>
+
+  <formdescription>
+    <!-- Non translatable values -->
+    <authors>Eric Maeker, MD</authors>
+    <version>test</version>
+    <fmfv>0.11</fmfv>
+    <cdate>2011-11-10</cdate>
+    <lmdate>2017-09-25</lmdate>
+    <icon>generalpractitioner.png</icon>
+    <weblink>https://freehealth.io</weblink>
+    <bibliography/>
+
+    <!-- Translatable values -->
+    <license>GPLv3</license>
+    <description lang="xx">Clinical examination (from Generic ultra-simplified patient file)</description>
+    <description lang="fr">Observation clinique (du Dossier médical ultra-simplifié)</description>
+    <description lang="de">Untersuchung (aus Allgemeine, stark vereinfachte Krankenakte)</description>
+    <category lang="xx">General practice</category>
+    <category lang="fr">Médecine générale</category>
+    <category lang="de">Allgemeinmedizin</category>
+    <specialties lang="xx">General practice</specialties>
+    <specialties lang="fr">Médecine générale</specialties>
+    <specialties lang="de">Allgemeinmedizin</specialties>
+    <updateinfo>
+    </updateinfo>
+
+  </formdescription>
+
+    <MedForm name="GP::Basic::Central::Observation">
+      <label lang="xx">Examination</label>
+      <label lang="fr">Observation</label>
+      <label lang="de">Untersuchung</label>
+      <icon>__theme__/edit.png</icon>
+      <file type="htmlprintmask">./html/xx/clinical_examination.html</file>
+      <file type="htmlexportmask">./html/xx/clinical_examination.html</file>
+
+      <Item name="GP::Basic::Central::Observation::Text" type="texteditor">
+        <label lang="xx">Examination</label>
+        <label lang="fr">Observation</label>
+        <label lang="de">Untersuchung</label>
+        <options>FullEditor;DontPrintEmptyValues;expanded</options>
+      </Item>
+    </MedForm>
+
+</FreeMedForms>

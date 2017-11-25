@@ -487,7 +487,7 @@ Warning: If you are using FreeMedForms over a network, this can lead to heavy ne
 <context>
     <name>QObject</name>
     <message numerus="yes">
-        <location filename="../../plugins/patientbaseplugin/identityviewerwidget.cpp" line="743"/>
+        <location filename="../../plugins/patientbaseplugin/identityviewerwidget.cpp" line="744"/>
         <source>%n year(s)</source>
         <translation type="unfinished">
             <numerusform></numerusform>

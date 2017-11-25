@@ -1,5 +1,5 @@
-# Use this file to define the optional plugins to build for FreeMedForms EMR
-# This file only apply for the FreeMedForms EMR Application
+# Use this file to define the optional plugins to build for the EHR
+# This file only applies to the EHR application
 
 include(compiling.pri)
 contains(FREEHEALTH,1){

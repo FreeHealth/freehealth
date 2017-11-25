@@ -185,28 +185,59 @@ bool UserManagerPlugin::initialize(const QStringList &arguments, QString *errorS
         dlg.setFocus();
         dlg.setValue(0);
 
-        // Doctors
-        bool created = userBase()->createVirtualUser("d1f29ad4a4ea4dabbe40ec888d153228", "McCoy", "Leonard", Trans::Constants::Doctor, genders().indexOf(tkTr(Trans::Constants::MALE)),
+        // physician
+        bool created = userBase()->createVirtualUser("d1f29ad4a4ea4dabbe40ec888d153228",
+                                                     "McCoy",
+                                                     "Leonard",
+                                                     Trans::Constants::Doctor,
+                                                     genders().indexOf(tkTr(Trans::Constants::MALE)),
                                                      QStringList() << "Medical Doctor",
                                                      QStringList() << "Chief medical officer USS Enterprise",
-                                                     Core::IUser::AllRights, Core::IUser::AllRights, 0, Core::IUser::AllRights, Core::IUser::AllRights);
+                                                     Core::IUser::AllRights,
+                                                     Core::IUser::AllRights,
+                                                     Core::IUser::ReadOwn | Core::IUser::WriteOwn | Core::IUser::Delete,
+                                                     Core::IUser::AllRights,
+                                                     Core::IUser::AllRights);
         if (created) {
-            userBase()->createVirtualUser("b5caead635a246a2a87ce676e9d2ef4d", "Phlox", "", Trans::Constants::Doctor, genders().indexOf(tkTr(Trans::Constants::MALE)),
+            // "physician"
+            userBase()->createVirtualUser("b5caead635a246a2a87ce676e9d2ef4d",
+                                          "Phlox",
+                                          "",
+                                          Trans::Constants::Doctor,
+                                          genders().indexOf(tkTr(Trans::Constants::MALE)),
                                           QStringList() << "Intergalactic medicine",
                                           QStringList() << "Chief medical officer Enterprise NX-01",
-                                          Core::IUser::AllRights, Core::IUser::AllRights, 0, Core::IUser::AllRights, Core::IUser::AllRights);
-            // Secretaries or so :  Uhura  U.S.S. Enterprise
-            userBase()->createVirtualUser("0f148ea3de6e47b8bbf9c2cedea47511", "Uhura", "", Trans::Constants::Madam, genders().indexOf(tkTr(Trans::Constants::FEMALE)),
+                                          Core::IUser::AllRights,
+                                          Core::IUser::AllRights,
+                                          Core::IUser::ReadOwn | Core::IUser::WriteOwn | Core::IUser::Delete,
+                                          Core::IUser::AllRights,
+                                          Core::IUser::AllRights);
+            // "secretary"
+            userBase()->createVirtualUser("0f148ea3de6e47b8bbf9c2cedea47511",
+                                          "Uhura",
+                                          "",
+                                          Trans::Constants::Madam,
+                                          genders().indexOf(tkTr(Trans::Constants::FEMALE)),
                                           QStringList() << "Communications officer",
                                           QStringList() << "Enterprise NX-01",
-                                          0, 0, 0, Core::IUser::AllRights, 0);
-            // Nurses : Christine Chapel U.S.S. Enterprise
-            userBase()->createVirtualUser("b94ad4ee401a4fada0bf29fc8f8f3597", "Chapel", "Christine", Trans::Constants::Madam, genders().indexOf(tkTr(Trans::Constants::FEMALE)),
+                                          0,
+                                          0,
+                                          0,
+                                          Core::IUser::AllRights,
+                                          0);
+            // "nurse"
+            userBase()->createVirtualUser("b94ad4ee401a4fada0bf29fc8f8f3597",
+                                          "Chapel",
+                                          "Christine",
+                                          Trans::Constants::Madam,
+                                          genders().indexOf(tkTr(Trans::Constants::FEMALE)),
                                           QStringList() << "Space nurse",
                                           QStringList() << "Nurse, Enterprise NX-01",
-                                          0, 0, 0, Core::IUser::AllRights, Core::IUser::AllRights);
-            // Admins
-
+                                          0,
+                                          0,
+                                          0,
+                                          Core::IUser::AllRights,
+                                          Core::IUser::AllRights);
             // refresh model
             userModel()->refresh();
             // reconnect user
@@ -268,7 +299,7 @@ void UserManagerPlugin::extensionsInitialized()
     Core::Command *cmd = 0;
 
     // Create user
-    // TODO: manage user's right to enable/unable these actions
+    // TODO: manage user's right to enable/disable these actions
     a = aCreateUser = new QAction(this);
     a->setObjectName("aCreateUser");
     a->setIcon(QIcon(Core::Constants::ICONNEWUSER));

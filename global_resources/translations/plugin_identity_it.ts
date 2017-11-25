@@ -88,57 +88,57 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.ui" line="91"/>
+        <location filename="../../plugins/identityplugin/identityeditorwidget.ui" line="90"/>
         <source>Gender</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.ui" line="143"/>
+        <location filename="../../plugins/identityplugin/identityeditorwidget.ui" line="142"/>
         <source>Work phone</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.ui" line="153"/>
+        <location filename="../../plugins/identityplugin/identityeditorwidget.ui" line="152"/>
         <source>Email</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.ui" line="224"/>
+        <location filename="../../plugins/identityplugin/identityeditorwidget.ui" line="223"/>
         <source>Other names</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.ui" line="234"/>
+        <location filename="../../plugins/identityplugin/identityeditorwidget.ui" line="233"/>
         <source>Landline phone</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.ui" line="256"/>
+        <location filename="../../plugins/identityplugin/identityeditorwidget.ui" line="255"/>
         <source>Language</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.ui" line="278"/>
+        <location filename="../../plugins/identityplugin/identityeditorwidget.ui" line="277"/>
         <source>Date of birth</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.ui" line="300"/>
+        <location filename="../../plugins/identityplugin/identityeditorwidget.ui" line="299"/>
         <source>First name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.ui" line="310"/>
+        <location filename="../../plugins/identityplugin/identityeditorwidget.ui" line="309"/>
         <source>Mobile phone</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.ui" line="323"/>
+        <location filename="../../plugins/identityplugin/identityeditorwidget.ui" line="322"/>
         <source>Send mail</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.ui" line="66"/>
+        <location filename="../../plugins/identityplugin/identityeditorwidget.ui" line="65"/>
         <source>Click to add/change the photo</source>
         <translation type="unfinished"></translation>
     </message>

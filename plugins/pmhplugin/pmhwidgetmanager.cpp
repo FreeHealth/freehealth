@@ -197,7 +197,7 @@ PmhActionHandler::PmhActionHandler(QObject *parent) :
         aAddPmh(0),
         aRemovePmh(0),
         aAddCat(0),
-        aCategoryManager(0),
+        //aCategoryManager(0),
         aPmhDatabaseInformation(0),
         aCreateEpisode(0),
         aValidateEpisode(0),
@@ -253,21 +253,22 @@ PmhActionHandler::PmhActionHandler(QObject *parent) :
     pmhMenu->addAction(cmd, Core::Id(Constants::G_PMH_NEW));
 //    connect(a, SIGNAL(triggered()), this, SLOT(createPmh()));
 
-    a = aAddCat = new QAction(this);
+    /*a = aAddCat = new QAction(this);
     a->setObjectName("aAddCat");
     a->setIcon(th->icon(Core::Constants::ICONCATEGORY_ADD));
     cmd = actionManager()->registerAction(a, Core::Id(Constants::A_PMH_NEWCATEGORY), ctx);
     cmd->setTranslations(Constants::CREATECATEGORY_TEXT, Constants::CREATECATEGORY_TEXT, Constants::PMHCONSTANTS_TR_CONTEXT);
-    pmhMenu->addAction(cmd, Core::Id(Constants::G_PMH_NEW));
+    pmhMenu->addAction(cmd, Core::Id(Constants::G_PMH_NEW));*/
 //    connect(a, SIGNAL(triggered()), this, SLOT(createPmh()));
 
-    a = aCategoryManager= new QAction(this);
+    // TODO: repair category manager
+    /*a = aCategoryManager= new QAction(this);
     a->setObjectName("aCategoryManager");
     a->setIcon(th->icon(Core::Constants::ICONCATEGORY_MANAGER));
     cmd = actionManager()->registerAction(a, Core::Id(Constants::A_PMH_CATEGORYMANAGER), globalcontext);
     cmd->setTranslations(Constants::CATEGORYMANAGER_TEXT, Constants::CATEGORYMANAGER_TEXT, Constants::PMHCONSTANTS_TR_CONTEXT);
     pmhMenu->addAction(cmd, Core::Id(Constants::G_PMH_EDITION));
-    connect(a, SIGNAL(triggered()), this, SLOT(categoryManager()));
+    connect(a, SIGNAL(triggered()), this, SLOT(categoryManager()));*/
 
     Core::ActionContainer *hmenu = actionManager()->actionContainer(Core::Id(Core::Constants::M_HELP_DATABASES));
     a = aPmhDatabaseInformation = new QAction(this);

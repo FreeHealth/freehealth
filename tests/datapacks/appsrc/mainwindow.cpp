@@ -15,7 +15,7 @@
  *  GNU General Public License for more details.                           *
  *                                                                         *
  *  You should have received a copy of the GNU General Public License      *
- *  along with this program (COPYING.FREEMEDFORMS file).                   *
+ *  along with this program.                                               *
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
@@ -71,7 +71,7 @@ static DataPack::ServerDescription getDescription()
     desc.setData(DataPack::ServerDescription::AbsFileName, "file://");
     desc.setData(DataPack::ServerDescription::Vendor, "vendor__");
     desc.setData(DataPack::ServerDescription::Validity, "val");
-    desc.setData(DataPack::ServerDescription::FreeMedFormsCompatVersion, "fmf v");
+    desc.setData(DataPack::ServerDescription::EHRCompatVersion, "fmf v");
     desc.setData(DataPack::ServerDescription::FreeDiamsCompatVersion, "fd v");
     desc.setData(DataPack::ServerDescription::FreeAccountCompatVersion, "fa v");
     desc.setData(DataPack::ServerDescription::CreationDate, "createdate");

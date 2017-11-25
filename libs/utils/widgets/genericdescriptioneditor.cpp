@@ -74,7 +74,7 @@ void GenericDescriptionEditor::setDescription(const Utils::GenericDescription &d
     // Setup translated
     ui->url->setText(descr.data(Utils::GenericDescription::URL).toString());
     ui->absFileName->setText(descr.data(Utils::GenericDescription::AbsFileName).toString());
-    ui->fmfCompat->setText(descr.data(Utils::GenericDescription::FreeMedFormsCompatVersion).toString());
+    ui->fmfCompat->setText(descr.data(Utils::GenericDescription::EHRCompatVersion).toString());
     ui->fdCompat->setText(descr.data(Utils::GenericDescription::FreeDiamsCompatVersion).toString());
     m_PreviousLang.clear();
     on_langSelector_activated(ui->langSelector->currentText());
@@ -181,7 +181,7 @@ Utils::GenericDescription GenericDescriptionEditor::submit()
 
     m_desc.setData(Utils::GenericDescription::URL, ui->url->text());
     m_desc.setData(Utils::GenericDescription::AbsFileName, ui->absFileName->text());
-    m_desc.setData(Utils::GenericDescription::FreeMedFormsCompatVersion, ui->fmfCompat->text());
+    m_desc.setData(Utils::GenericDescription::EHRCompatVersion, ui->fmfCompat->text());
     m_desc.setData(Utils::GenericDescription::FreeDiamsCompatVersion, ui->fdCompat->text());
     m_desc.setData(Utils::GenericDescription::Category, ui->category->text(), ui->langSelector->currentText());
     m_desc.setData(Utils::GenericDescription::HtmlDescription, ui->htmlDescr->toHtml(), ui->langSelector->currentText());
