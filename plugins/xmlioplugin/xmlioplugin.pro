@@ -43,3 +43,6 @@ equals(TEST, 1){
 # include translations
 TRANSLATION_NAME = xmlio
 include($${SOURCES_ROOT_PATH}/buildspecs/translations.pri)
+
+RESOURCES += \
+    resource.qrc

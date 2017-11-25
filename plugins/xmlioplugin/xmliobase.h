@@ -119,7 +119,7 @@ private:
                         const int port,
                         CreationOption createOption
                        );
-    bool checkDatabaseVersion();
+    bool updateDatabase() const;
 
     bool saveContent(const QString &formUid, const QString &xmlContent, const int type, const QString &modeName = QString::null, const QDateTime &date = QDateTime::currentDateTime());
 

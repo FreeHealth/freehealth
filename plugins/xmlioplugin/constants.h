@@ -33,8 +33,9 @@ namespace XmlForms {
 namespace Constants {
 
     // User Database connection
-    const char * const DB_NAME           = "xmlforms";
-    const char * const DB_VERSION        = "0.1";
+    const char * const DB_NAME                      = "xmlforms";
+    const char * const DB_VERSION                   = "0.1";
+    const int          DB_CURRENT_CODE_VERSION      = 1;
 
     // For database management
     /** \brief Enumerates all the tables of the users' database */
@@ -42,7 +43,7 @@ namespace Constants {
     {
         Table_FORMS = 0,
         Table_FORM_CONTENT,
-        Table_VERSION,
+        Table_SCHEMA,
         Table_MaxParam
     };
 
@@ -65,11 +66,12 @@ namespace Constants {
         FORMCONTENT_MaxParam
     };
 
-    enum fieldsVERSION {
-        VERSION_ACTUAL = 0
+    enum SchemaFields {
+        SCHEMA_ID =0 ,
+        SCHEMA_VERSION,
+        SCHEMA_SCRIPT,
+        SCHEMA_TIMESTAMP
     };
-
-
 
     /** \todo Add an attribute when creating Forms/Page --> don't present in MainWindow::centralWidget's TreeWidget */
     /** \todo Add an attribute when creating Scripts --> load script from file 'fileName/#anchor' so that file can contain a multitude of scripts marked with an anchor. */

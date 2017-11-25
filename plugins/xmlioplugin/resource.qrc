@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>sql/update/updatesqlitexmlforms1.sql</file>
+        <file>sql/update/updatexmlforms1.sql</file>
+    </qresource>
+</RCC>

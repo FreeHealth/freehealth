@@ -126,9 +126,9 @@ XmlIOBase::XmlIOBase(QObject *parent) :
     setObjectName("XmlIOBase");
 
     // populate tables and fields of database
-    addTable(Table_FORMS,         "FORMS");
-    addTable(Table_FORM_CONTENT,  "CONTENT");
-    addTable(Table_VERSION,       "VERSION");
+    addTable(Table_FORMS,        "FORMS");
+    addTable(Table_FORM_CONTENT, "CONTENT");
+    addTable(Table_SCHEMA,       "SCHEMA_CHANGES");
 
     addField(Table_FORMS, FORM_ID,           "FORM_ID",        FieldIsUniquePrimaryKey);
     addField(Table_FORMS, FORM_UUID,         "FORM_UUID",      FieldIsShortText);
@@ -147,9 +147,13 @@ XmlIOBase::XmlIOBase(QObject *parent) :
     addIndex(Table_FORM_CONTENT, FORMCONTENT_ID);
     addIndex(Table_FORM_CONTENT, FORMCONTENT_FORM_ID);
 
-    // information
-    addTable(Table_VERSION, "VERSION");
-    addField(Table_VERSION, VERSION_ACTUAL,  "ACTUAL", FieldIsShortText);
+    // Table SCHEMA_CHANGES
+    addTable(Table_SCHEMA, "SCHEMA_CHANGES");
+    addField(Table_SCHEMA, SCHEMA_ID, "ID", FieldIsUniquePrimaryKey);
+    addField(Table_SCHEMA, SCHEMA_VERSION, "VERSION_NUMBER", FieldIsInteger);
+    addField(Table_SCHEMA, SCHEMA_SCRIPT, "SCRIPT_NAME", FieldIs255Chars);
+    addField(Table_SCHEMA, SCHEMA_TIMESTAMP, "TIMESTAMP_UTC_APPLIED", FieldIs19Chars);
+    addIndex(Table_SCHEMA, SCHEMA_ID);
 
     // Connect first run database creation requested
     connect(Core::ICore::instance(), SIGNAL(firstRunDatabaseCreation()), this, SLOT(onCoreFirstRunCreationRequested()));
@@ -185,13 +189,18 @@ bool XmlIOBase::initialize()
         LOG(tkTr(Trans::Constants::CONNECTED_TO_DATABASE_1_DRIVER_2).arg(database().databaseName()).arg(database().driverName()));
     }
 
+    int currentDatabaseVersion = getSchemaVersionNumber(Constants::DB_NAME);
+    if (currentDatabaseVersion != Constants::DB_CURRENT_CODE_VERSION) {
+        if(!updateDatabase()) {
+            LOG_ERROR(QString("Couldn't upgrade database %1").arg(Constants::DB_NAME));
+            return false;
+        }
+    }
+
     if (!checkDatabaseScheme()) {
         LOG_ERROR(tkTr(Trans::Constants::DATABASE_1_SCHEMA_ERROR).arg(Constants::DB_NAME));
         return false;
     }
-
-    if (!checkDatabaseVersion())
-        return false;
 
     connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
     m_initialized = true;
@@ -204,11 +213,42 @@ bool XmlIOBase::isInitialized() const
     return m_initialized;
 }
 
-/** Return true if the XmlIOBase is the last version (database is updated by this member if needed) */
-bool XmlIOBase::checkDatabaseVersion()
+/**
+ * Update xmlforms database
+ * Old versioning:
+ *   fmf/fhio version < 0.11.0): version string = "0.1"
+ *   fhio version <= 0.11.0): VERSION_NUMBER <= 1
+ * New versioning (fhio version >= 0.11): The version number is an integer,
+ * starting from 1 for fhio version 0.11
+ * The field VERSION_NUMBER of the last row of the table SCHEMA_CHANGES.
+ * By definition, this number must be a positive, non null integer.
+ * This function will run all sql update scripts to update the database to
+ * the current code version
+ */
+bool XmlIOBase::updateDatabase() const
 {
-    // TODO: Code : XmlIOBase::checkDatabaseVersion()
-    return true;
+    WARN_FUNC;
+    int currentDatabaseVersion = getSchemaVersionNumber(Constants::DB_NAME);
+    QSqlDatabase DB = QSqlDatabase::database(Constants::DB_NAME);
+    QString updateScriptFileName;
+    currentDatabaseVersion++;
+    for (int i = currentDatabaseVersion; i <= Constants::DB_CURRENT_CODE_VERSION; i++) {
+        if (driver()==MySQL) {
+            updateScriptFileName= QString(":/sql/update/update%1%2.sql")
+                    .arg(Constants::DB_NAME)
+                    .arg(QString::number(i));
+        } else if (driver()==SQLite) {
+            updateScriptFileName= QString(":/sql/update/updatesqlite%1%2.sql")
+                    .arg(Constants::DB_NAME)
+                    .arg(QString::number(i));
+        }
+        QFile updateScriptFile(updateScriptFileName);
+        if(!executeQueryFile(updateScriptFile, DB)) {
+            LOG_ERROR(QString("Error during update with updatescript%1").arg(i));
+            return false;
+        }
+    }
+return true;
 }
 
 /** Create the default users database if it does not exist. */
@@ -283,8 +323,9 @@ bool XmlIOBase::createDatabase(const QString &connectionName , const QString &db
     }
 
     // Add version number
-    if (!setVersion(Utils::Field(Constants::Table_VERSION, Constants::VERSION_ACTUAL), Constants::DB_VERSION)) {
-        LOG_ERROR_FOR("XmlIOBase", "Unable to set version");
+    if (!setSchemaVersion(Constants::DB_CURRENT_CODE_VERSION, Constants::DB_NAME)) {
+        LOG_ERROR(QString("Couldn't set schema version for database %1").arg(Constants::DB_NAME));
+        return false;
     }
 
     // database is readable/writable
