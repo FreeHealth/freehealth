@@ -303,9 +303,9 @@ void AlertPlugin::test_alerttiming_object()
         QDateTime dt = QDateTime::currentDateTime();
         dt = r.randomDateTime(dt);
         t.setStart(r.randomDateTime(dt));
-        dt.addDays(r.randomInt(1, r.randomInt(2, 20)));
+        dt = dt.addDays(r.randomInt(1, r.randomInt(2, 20)));
         t.setEnd(dt);
-        dt.addDays(r.randomInt(1, r.randomInt(2, 20)));
+        dt = dt.addDays(r.randomInt(1, r.randomInt(2, 20)));
         t.setExpiration(dt);
         t.setCycling(false);
         AlertTiming t2(t);
@@ -373,9 +373,9 @@ void AlertPlugin::test_alerttiming_object()
         QDateTime dt = QDateTime::currentDateTime();
         dt = r.randomDateTime(dt);
         t.setStart(r.randomDateTime(dt));
-        dt.addDays(r.randomInt(1, r.randomInt(2, 20)));
+        dt = dt.addDays(r.randomInt(1, r.randomInt(2, 20)));
         t.setEnd(dt);
-        dt.addDays(r.randomInt(1, r.randomInt(2, 20)));
+        dt = dt.addDays(r.randomInt(1, r.randomInt(2, 20)));
         t.setExpiration(dt);
         t.setCycling(false);
         AlertTiming t2 = AlertTiming::fromXml(t.toXml());
@@ -412,9 +412,9 @@ void AlertPlugin::test_alerttiming_object()
         QDateTime dt = QDateTime::currentDateTime();
         dt = r.randomDateTime(dt);
         tc.setStart(r.randomDateTime(dt));
-        dt.addDays(r.randomInt(1, r.randomInt(2, 20)));
+        dt = dt.addDays(r.randomInt(1, r.randomInt(2, 20)));
         tc.setEnd(dt);
-        dt.addDays(r.randomInt(1, r.randomInt(2, 20)));
+        dt = dt.addDays(r.randomInt(1, r.randomInt(2, 20)));
         tc.setExpiration(dt);
         tc.setCycling(true);
         // TODO: obsolete

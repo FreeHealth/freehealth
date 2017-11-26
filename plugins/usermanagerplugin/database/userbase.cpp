@@ -1136,6 +1136,7 @@ bool UserBase::createVirtualUser(const QString &uid,
                                  int userManagerRights,
                                  int agendaRights,
                                  int paramedicRights,
+                                 int drugDosageRights,
                                  QLocale::Language lang)  // static
 {
     qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
@@ -1180,6 +1181,7 @@ bool UserBase::createVirtualUser(const QString &uid,
     user->setRights(Constants::USER_ROLE_SECRETARY, Core::IUser::UserRights(secretaryRights));
     user->setRights(Constants::USER_ROLE_PARAMEDICAL, Core::IUser::UserRights(paramedicRights));
     user->setRights(Constants::USER_ROLE_AGENDA, Core::IUser::UserRights(agendaRights));
+    user->setRights(Constants::USER_ROLE_DOSAGES, Core::IUser::UserRights(drugDosageRights));
     qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     user->setExtraDocument(Print::TextDocumentExtra::fromXml(defaultHeader("medicals")), Core::IUser::GenericHeader);
     user->setExtraDocument(Print::TextDocumentExtra::fromXml(defaultFooter("medicals")), Core::IUser::GenericFooter);

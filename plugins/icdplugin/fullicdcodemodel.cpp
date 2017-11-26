@@ -211,7 +211,7 @@ int FullIcdCodeModel::columnCount(const QModelIndex &) const
 
 QVariant FullIcdCodeModel::data(const QModelIndex &index, int role) const
 {
-    if (index.column()==Memo && (role == Qt::DisplayRole || Qt::EditRole)) {
+    if (index.column()==Memo && (role == Qt::DisplayRole || role == Qt::EditRole)) {
         return icdBase()->getMemo(d->m_SID);
     }
     return d->m_LabelModel->data(index, role);
