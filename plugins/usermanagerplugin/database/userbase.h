@@ -85,6 +85,7 @@ public:
                            int userManagerRights = 0,
                            int agendaRights = 0,
                            int paramedicRights = 0,
+                           int drugDosageRights = 0,
                            QLocale::Language lang = QLocale().language());
 
     // retrievers

@@ -1095,6 +1095,7 @@ bool UserBase::createDefaultUser()
     user->setRights(Constants::USER_ROLE_MEDICAL, Core::IUser::AllRights);
     user->setRights(Constants::USER_ROLE_SECRETARY, Core::IUser::AllRights);
     user->setRights(Constants::USER_ROLE_PARAMEDICAL, Core::IUser::AllRights);
+    user->setRights(Constants::USER_ROLE_DOSAGES, Core::IUser::AllRights);
 
     qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     user->setExtraDocument(Print::TextDocumentExtra::fromXml(defaultHeader("admin")), Core::IUser::GenericHeader);

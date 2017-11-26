@@ -197,6 +197,7 @@ bool UserManagerPlugin::initialize(const QStringList &arguments, QString *errorS
                                                      Core::IUser::AllRights,
                                                      Core::IUser::ReadOwn | Core::IUser::WriteOwn | Core::IUser::Delete,
                                                      Core::IUser::AllRights,
+                                                     Core::IUser::AllRights,
                                                      Core::IUser::AllRights);
         if (created) {
             // "physician"
@@ -211,6 +212,7 @@ bool UserManagerPlugin::initialize(const QStringList &arguments, QString *errorS
                                           Core::IUser::AllRights,
                                           Core::IUser::ReadOwn | Core::IUser::WriteOwn | Core::IUser::Delete,
                                           Core::IUser::AllRights,
+                                          Core::IUser::AllRights,
                                           Core::IUser::AllRights);
             // "secretary"
             userBase()->createVirtualUser("0f148ea3de6e47b8bbf9c2cedea47511",
@@ -224,6 +226,7 @@ bool UserManagerPlugin::initialize(const QStringList &arguments, QString *errorS
                                           0,
                                           0,
                                           Core::IUser::AllRights,
+                                          0,
                                           0);
             // "nurse"
             userBase()->createVirtualUser("b94ad4ee401a4fada0bf29fc8f8f3597",
@@ -237,7 +240,8 @@ bool UserManagerPlugin::initialize(const QStringList &arguments, QString *errorS
                                           0,
                                           0,
                                           Core::IUser::AllRights,
-                                          Core::IUser::AllRights);
+                                          Core::IUser::AllRights,
+                                          0);
             // refresh model
             userModel()->refresh();
             // reconnect user

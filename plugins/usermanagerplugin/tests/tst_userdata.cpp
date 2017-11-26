@@ -417,6 +417,7 @@ void UserManagerPlugin::test_userbase_test_with_virtualuser()
                                                        data.rightsValue(Constants::USER_ROLE_USERMANAGER).toInt(),
                                                        data.rightsValue(Constants::USER_ROLE_AGENDA).toInt(),
                                                        data.rightsValue(Constants::USER_ROLE_PARAMEDICAL).toInt(),
+                                                       data.rightsValue(Constants::USER_ROLE_DOSAGES).toInt(),
                                                        data.localeLanguage());
     QCOMPARE(ok, true);
 
