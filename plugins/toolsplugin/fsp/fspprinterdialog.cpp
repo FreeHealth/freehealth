@@ -221,12 +221,14 @@ public:
                     Utils::ModernDateEditor *date = q->findChild<Utils::ModernDateEditor*>(objNames.at(objId) + QString::number(i + 1));
                     if (date)
                         date->setDate(_fsp.amountLineData(i, j).toDate());
+                    break;
                 }
                 case Fsp::Amount_Amount:
                 {
                     QDoubleSpinBox *date = q->findChild<QDoubleSpinBox*>(objNames.at(objId) + QString::number(i + 1));
                     if (date)
                         date->setValue(_fsp.amountLineData(i, j).toDouble());
+                    break;
                 }
                 default:
                 {
@@ -321,12 +323,14 @@ public:
                     Utils::ModernDateEditor *date = q->findChild<Utils::ModernDateEditor*>(objNames.at(objId) + QString::number(i + 1));
                     if (date && date->date().isValid() && !date->date().isNull())
                         _fsp.addAmountData(i, j, date->date());
+                    break;
                 }
                 case Fsp::Amount_Amount:
                 {
                     QDoubleSpinBox *spin = q->findChild<QDoubleSpinBox*>(objNames.at(objId) + QString::number(i + 1));
                     if (spin && spin->value() > 0.0)
                         _fsp.addAmountData(i, j, spin->value());
+                    break;
                 }
                 default:
                 {

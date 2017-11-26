@@ -334,6 +334,7 @@ public:
                 return QString::null;
             if (fsp.data(fspIndex).toString().size() < 2)
                 return QString::null;
+            break;
         case Fsp::Patient_Assure_NSSKey:
             if (fsp.data(fspIndex).toString().size() < 2)
                 return QString::null;
@@ -357,6 +358,7 @@ public:
         case Fsp::Condition_Maladie_ETM:
             if (cerfa==FspPrinter::S12541_01)
                 return "X";
+            break;
         case Fsp::Condition_Maladie:
         case Fsp::Condition_Maladie_ETM_Ald:
         case Fsp::Condition_Maladie_ETM_Autre:
