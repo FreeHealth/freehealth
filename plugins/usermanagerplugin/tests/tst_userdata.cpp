@@ -872,8 +872,6 @@ void UserManagerPlugin::test_usermodel_basics()
     delete fromDb;
 }
 
-// TODO: write tests for: bool UserBase::checkDatabaseVersion()
-
 //void UserManagerPlugin::test_usermodel_row_modifications()
 //{
 //}

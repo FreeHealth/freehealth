@@ -68,7 +68,6 @@ public:
     virtual ~UserBase() {}
 
     bool isInitialized() const;
-//    bool checkDatabaseVersion();
     bool updateDatabase() const;
     bool isNewlyCreated() const;
 
@@ -115,10 +114,6 @@ public:
     bool userExists(const QString &clearLogin) const;
     QDateTime recordLastLoggedIn(const QString &log, const QString &pass);
 
-    // Linkers
-    //int getMaxLinkId();
-    //bool updateMaxLinkId(const int max);
-
     void toTreeWidget(QTreeWidget *tree) const;
 
 private:
@@ -132,9 +127,6 @@ private:
     bool updateLastloginTypeToTimeStamp();
     // privates retrievers
     UserData *getUser(const QHash<int, QString> &conditions) const;
-    QString databaseAndQtVersion() const;
-//    QString getDatabaseQtVersion() const;
-//    QString getDatabaseFmfVersion() const;
 
 private:
     bool m_initialized;
