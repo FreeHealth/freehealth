@@ -32,6 +32,7 @@
 #include <coreplugin/isettings.h>
 
 #include <utils/global.h>
+#include <utils/log.h>
 #include <extensionsystem/pluginmanager.h>
 
 #include <QEvent>
@@ -72,6 +73,7 @@ void FirstRunFormManagerWizardPage::initializePage()
         selector = new Form::FormFilesSelectorWidget(this);
         selector->setFormType(Form::FormFilesSelectorWidget::CompleteForms);
         selector->expandAllItems();
+        selector->setSelectionType(Form::FormFilesSelectorWidget::SelectionType::Single);
         layout->addWidget(selector, 0, 0);
         adjustSize();
         selector->updateGeometry();
@@ -93,8 +95,7 @@ bool FirstRunFormManagerWizardPage::validatePage()
 {
     QList<Form::FormIODescription *> sel = selector->selectedForms();
     if (sel.count() != 1) {
-        Utils::warningMessageBox(tr("Please one (and only one) form for your default patient file."),
-                                 tr("You must select one file to be used by default."));
+        LOG_ERROR("QList<Form::FormIODescription *> sel should contain 1 and only 1 element.");
         return false;
     }
     // Save the selected form in the network settings
@@ -120,4 +121,3 @@ void FirstRunFormManagerWizardPage::changeEvent(QEvent *e)
         break;
     }
 }
-

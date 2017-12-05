@@ -109,6 +109,16 @@
      - Core::ISettings::BundleRootPath
 */
 
+/*! \var Core::ISettings::Paths Core::ISettings::LocalResourcesPath
+* Linux only. Make local forms available to all users of the system
+* inside the /usr/local/share directory, keep them separate from the forms
+* distributed with the .deb package
+* This path is to be considered as read-only for the application.
+* When this path is defined, some paths are automatically calculated:
+    - Core::ISettings::LocalCompleteFormsPath
+    - Core::ISettings::LocalSubFormsPath
+*/
+
 /*! \var Core::ISettings::Paths Core::ISettings::BundleRootPath
  * Defines the root path of the bundle:
  * - macOs: path of Application.app
@@ -274,12 +284,15 @@
 namespace {
 
     const char* const WEBSITE              = "https://freehealth.io/";
+    const char* const EHR_NAME_LOWER = "freehealth";
 
     // BUNDLE RESOURCES  --> located inside the bundle. Location calculated from BundleRootPath
     // const char* const READONLYRESOURCES    = "";
     const char* const READONLYDATABASE     = "/databases";
     const char* const TRANSLATIONS_PATH    = "/translations";
     const char* const DEFAULTFORMS         = "/forms";
+    const char* const SUBFORMS         = "/subforms";
+    const char* const COMPLETEFORMS         = "/completeforms";
     // const char* const DEFAULTDATAPACK      = "/datapacks";
     const char* const DEFAULTDATAPACK_APPINSTALLED               = "/datapacks/appinstalled";
     const char* const DEFAULTDATAPACK_APPINSTALLED_SUBFORMS      = "/datapacks/appinstalled/forms/subforms";
@@ -290,6 +303,14 @@ namespace {
     // const char* const DEFAULTTHEME_SPLASH  = "/pixmap/splashscreens";
     const char* const USERMANUAL_PATH      = "/doc/%1";
     const char* const LINUX_USERMANUAL_PATH  = "/usr/share/doc/freehealth/%1/html";
+    // Linux only: packaged resources /usr/share
+    const char* const USR_SHARE = "/usr/share";
+    // Linux only: packaged local resources /usr/local/share
+    const char* const USR_LOCAL_SHARE = "/usr/local/share";
+    // Debug local resources folder name
+    const char* const LOCAL_RESOURCES = "local_resources";
+    // Debug global resources folder name
+    const char* const GLOBAL_RESOURCES = "global_resources";
     // User documents sub-paths
     const char* const USER_SUBFORMSPATH       = "/forms/subforms";
     const char* const USER_COMPLETEFORMSPATH  = "/forms/completeforms";
@@ -354,7 +375,8 @@ SettingsPrivate::SettingsPrivate(QObject *parent, const QString &appName, const 
     LOG_FOR("Settings", "Using network ini file " + networkFileName);
 
     m_UserSettings = new QSettings(userFileName, QSettings::IniFormat, this);
-    QString resourcesPath;
+    QString globalResourcesPath;
+    QString localResourcesPath;
     QString applicationName;
 
     // if appName like "AppName - debug"  --> use "AppName" only
@@ -388,29 +410,40 @@ SettingsPrivate::SettingsPrivate(QObject *parent, const QString &appName, const 
     if (Utils::isDebugWithoutInstallCompilation()) {
         LOG("Compiled with the debug_without_install configuration");
         // DEBUG WITHOUT INSTALL BUILD
-        QString res;
-        if (Utils::isRunningOnMac())
-            res = qApp->applicationDirPath() + "/../../../../../global_resources";
-        else
-            res = qApp->applicationDirPath() + "/../../global_resources";
+        QString root;
+        QString globalResources;
+        QString localResources;
+        if (Utils::isRunningOnMac()) {
+            root = qApp->applicationDirPath() + "/../../../../../";
+        } else {
+            root = qApp->applicationDirPath() + "/../../";
+        }
+        globalResources = root + GLOBAL_RESOURCES;
+        localResources = root + LOCAL_RESOURCES;
 
-        res = QDir::cleanPath(res);
-        resourcesPath = res + "/";
+        globalResources = QDir::cleanPath(globalResources);
+        localResources = QDir::cleanPath(localResources);
+        globalResourcesPath = globalResources + "/";
+        localResourcesPath = localResources + "/";
         setPath(UserResourcesPath, QFileInfo(file).absolutePath());
-        setPath(BundleResourcesPath, resourcesPath);
+        setPath(BundleResourcesPath, globalResourcesPath);
+        Utils::checkDir(localResourcesPath, true, "Settings::localResourcesPath");
+        setPath(LocalResourcesPath, localResourcesPath);
     } else {
         // RELEASE OR DEBUG INSTALLED BUILD
         if (Utils::isLinuxIntegratedCompilation()) {
-            setPath(BundleResourcesPath, QString("/usr/share/freehealth"));
+            setPath(BundleResourcesPath, QString("%1/%2").arg(USR_SHARE).arg(EHR_NAME_LOWER));
+            setPath(LocalResourcesPath, QString("%1/%2").arg(USR_LOCAL_SHARE).arg(EHR_NAME_LOWER));
         } else {
             QString bundleResourcesPath;
             if (!Utils::isDebugWithoutInstallCompilation())
                 bundleResourcesPath = "Resources";  // resources are located into global_resources paths
 
-            if (Utils::isRunningOnMac())
+            if (Utils::isRunningOnMac()) {
                 setPath(BundleResourcesPath, qApp->applicationDirPath() + "/../" + bundleResourcesPath);
-            else
-                setPath(BundleResourcesPath, qApp->applicationDirPath() + QDir::separator() + bundleResourcesPath);
+            } else {
+                setPath(BundleResourcesPath, qApp->applicationDirPath() + "/" + bundleResourcesPath);
+            }
         }
         m_FirstTime = value("FirstTimeRunning", true).toBool();
         setPath(UserResourcesPath, QFileInfo(file).absolutePath());//QDir::homePath() + "/." + applicationName);//resourcesPath);
@@ -574,8 +607,8 @@ void SettingsPrivate::setPath(const int type, const QString & absPath)
             m_Enum_Path.insert(BigPixmapPath, bundlePath + DEFAULTTHEME_PIXMAP + "/64x64/");
             m_Enum_Path.insert(SvgPixmapPath, bundlePath + DEFAULTTHEME_PIXMAP + "/svg/");
             m_Enum_Path.insert(SplashScreenPixmapPath, bundlePath + DEFAULTTHEME_PIXMAP + "/splashscreens/");
-            m_Enum_Path.insert(SubFormsPath, bundlePath + DEFAULTFORMS + "/subforms");
-            m_Enum_Path.insert(CompleteFormsPath, bundlePath + DEFAULTFORMS + "/completeforms");
+            m_Enum_Path.insert(SubFormsPath, bundlePath + DEFAULTFORMS + SUBFORMS);
+            m_Enum_Path.insert(CompleteFormsPath, bundlePath + DEFAULTFORMS + COMPLETEFORMS);
             m_Enum_Path.insert(DataPackApplicationPath, bundlePath + DEFAULTDATAPACK_APPINSTALLED);
             m_Enum_Path.insert(DataPackCompleteFormsPath, bundlePath + DEFAULTDATAPACK_APPINSTALLED_COMPLETEFORMS);
             m_Enum_Path.insert(DataPackSubFormsPath, bundlePath + DEFAULTDATAPACK_APPINSTALLED_SUBFORMS);
@@ -632,6 +665,24 @@ void SettingsPrivate::setPath(const int type, const QString & absPath)
             }
             break;
         }
+    // LocalResourcesPath, LocalCompleteFormsPath & LocalSubFormsPath
+    // are handled for GNU/Linux only
+    // TODO: macOS & Windows
+    case LocalResourcesPath:
+    {
+        if (m_Enum_Path.value(LocalResourcesPath)==QDir::cleanPath(absPath))
+            break;
+        QString localResourcePath = QDir::cleanPath(absPath);
+        QString localCompleteFormsPath{localResourcePath + DEFAULTFORMS + COMPLETEFORMS};
+        QString localSubFormsPath{localResourcePath + DEFAULTFORMS + SUBFORMS};
+        if (Utils::isRunningOnLinux()) {
+            Utils::checkDir(localCompleteFormsPath, true, "Settings::localCompleteFormsPath");
+            Utils::checkDir(localSubFormsPath, true, "Settings::localSubFormsPath");
+            m_Enum_Path.insert(LocalCompleteFormsPath, QDir::cleanPath(localCompleteFormsPath));
+            m_Enum_Path.insert(LocalSubFormsPath, QDir::cleanPath(localSubFormsPath));
+        }
+        break;
+    }
     case UserDocumentsPath:
     {
         const QString &cleanPath = QDir::cleanPath(absPath);

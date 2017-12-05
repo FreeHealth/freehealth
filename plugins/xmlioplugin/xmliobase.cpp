@@ -252,13 +252,15 @@ return true;
 }
 
 /** Create the default users database if it does not exist. */
-bool XmlIOBase::createDatabase(const QString &connectionName , const QString &dbName,
-                    const QString &pathOrHostName,
-                    TypeOfAccess access, AvailableDrivers driver,
-                    const QString &login, const QString &pass,
-                    const int port,
-                    CreationOption createOption
-                   )
+bool XmlIOBase::createDatabase(const QString &connectionName,
+                               const QString &dbName,
+                               const QString &pathOrHostName,
+                               TypeOfAccess access,
+                               AvailableDrivers driver,
+                               const QString &login,
+                               const QString &pass,
+                               const int port,
+                               CreationOption createOption)
 {
     Q_UNUSED(access);
     Q_UNUSED(createOption);

@@ -511,7 +511,7 @@ bool XmlFormIO::checkDatabaseFormFileForUpdates() const
         query.setFormUuid(dbFormUid);
         query.setForceFileReading(true);
 
-        // get actual version number of a form in database
+        // get current version number of a form in database
         Utils::VersionNumber dbVersion(dbDescription->data(Form::FormIODescription::Version).toString());
 
         // get file description list of that form and iterate through this list

@@ -61,6 +61,7 @@ public:
 
     enum Paths {
         UserResourcesPath = 0,
+        LocalResourcesPath,
         ApplicationPath,
         BundleRootPath,
         BundleResourcesPath,
@@ -85,7 +86,9 @@ public:
         SubFormsPath,
         UserDocumentsPath,
         UserCompleteFormsPath,
+        LocalCompleteFormsPath,
         UserSubFormsPath,
+        LocalSubFormsPath,
         DataPackCompleteFormsPath,
         DataPackSubFormsPath,
         // DataPack path

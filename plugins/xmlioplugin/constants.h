@@ -51,7 +51,9 @@ namespace Constants {
     enum fieldsFORMS
     {
         FORM_ID = 0,
-        FORM_UUID, FORM_ORIGINALUID, FORM_ORIGINALDATE,
+        FORM_UUID,
+        FORM_ORIGINALUID,
+        FORM_ORIGINALDATE,
         FORM_MaxParam
     };
 
