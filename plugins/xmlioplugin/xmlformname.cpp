@@ -67,23 +67,22 @@ XmlFormName::XmlFormName(const QString &_uid) :
         absFileName.replace(Core::Constants::TAG_APPLICATION_COMPLETEFORMS_PATH, settings()->path(Core::ISettings::CompleteFormsPath));
         absFileName.replace(Core::Constants::TAG_APPLICATION_SUBFORMS_PATH, settings()->path(Core::ISettings::SubFormsPath));
         absFileName.replace(Core::Constants::TAG_APPLICATION_RESOURCES_PATH, settings()->path(Core::ISettings::BundleResourcesPath));
-
         absFileName.replace(Core::Constants::TAG_APPLICATION_USER_COMPLETEFORMS_PATH, settings()->path(Core::ISettings::UserCompleteFormsPath));
         absFileName.replace(Core::Constants::TAG_APPLICATION_USER_SUBFORMS_PATH, settings()->path(Core::ISettings::SubFormsPath));
-
+        absFileName.replace(Core::Constants::TAG_APPLICATION_LOCAL_COMPLETEFORMS_PATH, settings()->path(Core::ISettings::LocalCompleteFormsPath));
+        absFileName.replace(Core::Constants::TAG_APPLICATION_LOCAL_SUBFORMS_PATH, settings()->path(Core::ISettings::LocalSubFormsPath));
         absFileName.replace(Core::Constants::TAG_DATAPACK_COMPLETEFORMS_PATH, settings()->path(Core::ISettings::DataPackCompleteFormsInstallPath));
         absFileName.replace(Core::Constants::TAG_DATAPACK_SUBFORMS_PATH, settings()->path(Core::ISettings::DataPackSubFormsInstallPath));
     } else {
         // uuid was a full abs path --> recreate the tags
         uid.replace(settings()->path(Core::ISettings::DataPackCompleteFormsInstallPath), Core::Constants::TAG_DATAPACK_COMPLETEFORMS_PATH);
         uid.replace(settings()->path(Core::ISettings::DataPackSubFormsInstallPath), Core::Constants::TAG_DATAPACK_SUBFORMS_PATH);
-
         uid.replace(settings()->path(Core::ISettings::CompleteFormsPath), Core::Constants::TAG_APPLICATION_COMPLETEFORMS_PATH);
         uid.replace(settings()->path(Core::ISettings::SubFormsPath), Core::Constants::TAG_APPLICATION_SUBFORMS_PATH);
-
         uid.replace(settings()->path(Core::ISettings::UserCompleteFormsPath), Core::Constants::TAG_APPLICATION_USER_COMPLETEFORMS_PATH);
         uid.replace(settings()->path(Core::ISettings::UserSubFormsPath), Core::Constants::TAG_APPLICATION_USER_SUBFORMS_PATH);
-
+        uid.replace(settings()->path(Core::ISettings::LocalCompleteFormsPath), Core::Constants::TAG_APPLICATION_LOCAL_COMPLETEFORMS_PATH);
+        uid.replace(settings()->path(Core::ISettings::LocalSubFormsPath), Core::Constants::TAG_APPLICATION_LOCAL_SUBFORMS_PATH);
         uid.replace(settings()->path(Core::ISettings::BundleResourcesPath), Core::Constants::TAG_APPLICATION_RESOURCES_PATH);
     }
 

@@ -206,7 +206,7 @@ void XmlFormContentReader::warnXmlReadError(bool muteUserWarnings, const QString
             .arg(msg).arg(line).arg(col),"",qApp->applicationName());
 }
 
-/** Check if the xmlContent is conform to the XML Form IO. formUid must be an absolute path if corresponding to a file. */
+/** Check if the xmlContent is conforming to the XML Form IO. formUid must be an absolute path if corresponding to a file. */
 bool XmlFormContentReader::checkFileContent(const QString &formUidOrFullAbsPath, const QString &contents) const
 {
 //    qWarning() << "CHECK" << formUidOrFullAbsPath;
@@ -788,6 +788,8 @@ bool XmlFormContentReader::addFile(const QDomElement &element, const XmlFormName
     fileName = element.text();
     fileName = fileName.replace(Core::Constants::TAG_APPLICATION_COMPLETEFORMS_PATH, settings()->path(Core::ISettings::CompleteFormsPath), Qt::CaseInsensitive);
     fileName = fileName.replace(Core::Constants::TAG_APPLICATION_SUBFORMS_PATH, settings()->path(Core::ISettings::SubFormsPath), Qt::CaseInsensitive);
+    fileName = fileName.replace(Core::Constants::TAG_APPLICATION_LOCAL_COMPLETEFORMS_PATH, settings()->path(Core::ISettings::LocalCompleteFormsPath), Qt::CaseInsensitive);
+    fileName = fileName.replace(Core::Constants::TAG_APPLICATION_LOCAL_SUBFORMS_PATH, settings()->path(Core::ISettings::LocalSubFormsPath), Qt::CaseInsensitive);
     if (QFileInfo(fileName).isRelative())
         fileName.prepend(QFileInfo(form.absFileName).absolutePath() + QDir::separator());
     fileName = QDir::cleanPath(fileName);

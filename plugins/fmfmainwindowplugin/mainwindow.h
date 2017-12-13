@@ -107,7 +107,7 @@ private Q_SLOTS:
     void onUserDataChanged(int);
     void onCurrentPatientChanged();
 
-    // Interface of MainWidowActionHandler
+    // Interface of MainWindowActionHandler
     bool openFile();
     bool loadFile(const QString &absDirPath);
 

@@ -654,6 +654,8 @@ QVector<Form::SubFormInsertionPoint> EpisodeBase::getSubFormFiles()
             QString insertUid = query.value(1).toString();
             insertUid.replace(Core::Constants::TAG_APPLICATION_COMPLETEFORMS_PATH, settings()->path(Core::ISettings::CompleteFormsPath));
             insertUid.replace(Core::Constants::TAG_APPLICATION_SUBFORMS_PATH, settings()->path(Core::ISettings::SubFormsPath));
+            insertUid.replace(Core::Constants::TAG_APPLICATION_LOCAL_COMPLETEFORMS_PATH, settings()->path(Core::ISettings::LocalCompleteFormsPath));
+            insertUid.replace(Core::Constants::TAG_APPLICATION_LOCAL_SUBFORMS_PATH, settings()->path(Core::ISettings::LocalSubFormsPath));
             if (insertUid.endsWith("/central.xml"))
                 insertUid = insertUid.remove("/central.xml");
             QString subFormUid = query.value(0).toString();

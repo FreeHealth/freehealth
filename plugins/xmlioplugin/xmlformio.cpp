@@ -252,6 +252,7 @@ QList<Form::FormIODescription *> XmlFormIO::getFormFileDescriptions(const Form::
         QStringList path;
         path << settings()->path(Core::ISettings::CompleteFormsPath);
         path << settings()->path(Core::ISettings::UserCompleteFormsPath);
+        path << settings()->path(Core::ISettings::LocalCompleteFormsPath);
         path << settings()->path(Core::ISettings::DataPackCompleteFormsInstallPath);
         foreach(const QString &startPath, path) {
             QDir start(startPath);
@@ -278,6 +279,7 @@ QList<Form::FormIODescription *> XmlFormIO::getFormFileDescriptions(const Form::
         QStringList path;
         path << settings()->path(Core::ISettings::SubFormsPath);
         path << settings()->path(Core::ISettings::UserSubFormsPath);
+        path << settings()->path(Core::ISettings::LocalSubFormsPath);
         path << settings()->path(Core::ISettings::DataPackSubFormsInstallPath);
         foreach(const QString &startPath, path) {
             QDir start(startPath);

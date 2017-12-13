@@ -1173,6 +1173,8 @@ QTreeWidget* SettingsPrivate::getTreeWidget(QWidget *parent) const
     paths.insert(tr("SubFormsPath"), path(SubFormsPath));
     paths.insert(tr("UserCompleteFormsPath"), path(UserCompleteFormsPath));
     paths.insert(tr("UserSubFormsPath"), path(UserSubFormsPath));
+    paths.insert(tr("LocalCompleteFormsPath"), path(LocalCompleteFormsPath));
+    paths.insert(tr("LocalSubFormsPath"), path(LocalSubFormsPath));
     paths.insert(tr("Default installed datapack path"), path(DataPackApplicationPath));
     paths.insert(tr("Datapack persistent temporary path"), path(DataPackPersistentTempPath));
     paths.insert(tr("Datapack installation path"), path(DataPackInstallPath));
