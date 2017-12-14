@@ -73,3 +73,6 @@ libs/aggregation/aggregation.qbs.user
 
 # .pluginspec files
 freehealth/plugins/*/*.pluginspec
+
+# local_resources folder
+local_resources
