@@ -86,6 +86,7 @@ patientbase.depends += listview
 patientbase.depends += zipcodes
 patientbase.depends += formmanager
 patientbase.depends += identity
+patientbase.depends += usermanager
 
 basewidgets.subdir   = $${PLUGINS_PATH}/basewidgetsplugin
 basewidgets.depends += core
