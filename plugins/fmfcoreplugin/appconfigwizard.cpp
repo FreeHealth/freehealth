@@ -141,7 +141,7 @@ namespace {
 
     static bool configureServer(const Utils::DatabaseConnector &connector)
     {
-        // Create QSqlDatabase and open mysql database
+        // Create QSqlDatabase and open MariaDB database
         const QString connection = Utils::createUid();
         QSqlDatabase mysql = QSqlDatabase::addDatabase("QMYSQL", connection);
         mysql.setHostName(connector.host());
@@ -202,7 +202,7 @@ namespace {
         QString sqlCommands = Utils::readTextFile(serverConfigurationSqlScript());
         // Replace __PREFIX__ with the current user database prefix
         QString prefix = connector.globalDatabasePrefix();
-        // Always escape '_' for MySQL commands
+        // Always escape '_' for MariaDB commands
         prefix = prefix.replace("_", "\\_");
         sqlCommands = sqlCommands.replace("__PREFIX__", prefix);
 
@@ -351,11 +351,10 @@ void CoreConfigPage::retranslate()
     // Keep typeOfInstall combo order sync with the constants:
     // INSTALLING_MYSQL_SERVER, INSTALLING_MYSQL_CLIENT, INSTALLING_SQLITE
     if (QSqlDatabase::drivers().contains("QMYSQL")) {
-        // FIXME: test if mysql-client/mysql-server is available on this machine
-        installCombo->addItem(theme()->icon(Constants::ICONNETWORK), tr("Create MySQL databases"));
-        installCombo->addItem(theme()->icon(Constants::ICONNETWORK), tr("Connect to MySQL databases"));
+        installCombo->addItem(theme()->icon(Constants::ICONNETWORK), tr("Create MariaDB databases"));
+        installCombo->addItem(theme()->icon(Constants::ICONNETWORK), tr("Connect to MariaDB databases"));
     }
-    installCombo->addItem(theme()->icon(Constants::ICONCOMPUTER), tr("Test without MySQL"));
+    installCombo->addItem(theme()->icon(Constants::ICONCOMPUTER), tr("Test without MariaDB"));
 }
 
 bool CoreConfigPage::validatePage()
@@ -430,7 +429,7 @@ void CoreConfigPage::sqliteWarn(int i)
     if (i==INSTALLING_SQLITE) {
         QMessageBox msgBox;
         msgBox.setIcon(QMessageBox::Warning);
-        msgBox.setText("Test FreeMedForms without MySQL");
+        msgBox.setText("Test FreeHealth without MariaDB");
         msgBox.setInformativeText(tr("<b>This simplified installation procedure is"
                                      " for testing purposes only.</b> \n"
                                      "It is using SQLite as a temporary"
@@ -438,9 +437,9 @@ void CoreConfigPage::sqliteWarn(int i)
                                      " SQLite to store medical data because "
                                      " FreeHealth support of SQLite will end soon. If you want to"
                                      " install FreeHealth for professional use,"
-                                     " please choose <b>Create MySQL databases</b> instead.\n"
+                                     " please choose <b>Create MariaDB databases</b> instead.\n"
                                      "Click Ok to test FreeHealth, or click Cancel"
-                                     " to install FreeHealth with MySQL."));
+                                     " to install FreeHealth with MariaDB."));
         msgBox.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
         msgBox.setDefaultButton(QMessageBox::Cancel);
         int ret = msgBox.exec();
@@ -569,7 +568,7 @@ bool ClientConfigPage::validatePage()
     settings()->setValue(Core::Constants::S_LASTLOGIN, QString());
     settings()->setValue(Core::Constants::S_LASTPASSWORD, QString());
 
-    // try to connect the MySQL server and test existence of a FreeMedForms configuration
+    // try to connect the MariaDB server and test existence of a FreeHealth configuration
     Utils::DatabaseConnector connector = settings()->databaseConnector();
     const QString connection = Utils::createUid();
     QSqlDatabase mysql = QSqlDatabase::addDatabase("QMYSQL", connection);
@@ -579,7 +578,7 @@ bool ClientConfigPage::validatePage()
     mysql.setPassword(connector.clearPass());
     mysql.setDatabaseName("mysql");
     if (!mysql.open()) {
-        LOG_ERROR("Unable to connect to MySQL databases");
+        LOG_ERROR("Unable to connect to MariaDB databases");
         Q_EMIT completeChanged();
         return false;
     }
@@ -794,11 +793,11 @@ void CoreDatabaseCreationPage::startDbCreation()
     // Store database settings to the app settings
     settings()->setDatabaseConnector(c);
 
-    // If selected installation mode is "MySQL server" -> configure the server
+    // If selected installation mode is "MariaDB server" -> configure the server
     if (field(::FIELD_TYPEOFINSTALL).toInt() == INSTALLING_MYSQL_SERVER) {
         LOG("Preparing server configuration before creating databases");
         if (!configureServer(settings()->databaseConnector())) {
-            LOG_ERROR("Unable to configure MySQL server");
+            LOG_ERROR("Unable to configure MariaDB server");
             return;
         }
     }
