@@ -935,6 +935,26 @@ Place: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../libs/translationutils/trans_database.h" line="68"/>
+        <source>Driver error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_database.h" line="69"/>
+        <source>Database error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_database.h" line="70"/>
+        <source>Database-specific error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_database.h" line="71"/>
+        <source>Error type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../libs/translationutils/trans_datetime.h" line="83"/>
         <source>Duration</source>
         <translation type="unfinished"></translation>

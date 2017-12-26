@@ -188,7 +188,7 @@
     </message>
     <message>
         <location filename="../../plugins/identityplugin/passworddialog.cpp" line="207"/>
-        <source>Password can not be change.</source>
+        <source>Password cannot be changed.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

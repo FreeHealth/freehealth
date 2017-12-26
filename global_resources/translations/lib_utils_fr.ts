@@ -4,47 +4,47 @@
 <context>
     <name>Database</name>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="740"/>
+        <location filename="../../libs/utils/database.cpp" line="747"/>
         <source>WARNING: %1 database already in use</source>
         <translation>ATTENTION: base de données %1 déjà en cours d&apos;utilisation</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="873"/>
+        <location filename="../../libs/utils/database.cpp" line="880"/>
         <source>ERROR: Database `%1` is not readable. Path: %2</source>
         <translation>ERREUR: base de données %1 n&apos;est pas lisible. Chemin %2</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="884"/>
+        <location filename="../../libs/utils/database.cpp" line="891"/>
         <source>ERROR: Database %1 is not readable. Host: %2</source>
         <translation>ERREUR: base de données %1 n&apos;est pas lisible. Hôte %2</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="893"/>
+        <location filename="../../libs/utils/database.cpp" line="900"/>
         <source>ERROR: Database %1 is not readable. Path: %2</source>
         <translation>ERREUR: base de données %1 n&apos;est pas lisible. Chemin : %2</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="917"/>
+        <location filename="../../libs/utils/database.cpp" line="924"/>
         <source>ERROR: Database %1 is not writable. Path: %2.</source>
         <translation>ERREUR: base de données %1 n&apos;est pas inscriptible. Chemin : %2.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="961"/>
+        <location filename="../../libs/utils/database.cpp" line="968"/>
         <source>INFO: database %1 connection = %2</source>
         <translation>INFO : base de données %1 connexion %2</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="1193"/>
+        <location filename="../../libs/utils/database.cpp" line="1207"/>
         <source>Database Scheme Error: wrong number of fields for table %1 (expected: %2; current: %3)</source>
         <translation>Erreur de schéma de base de données: nombre de champs incorrect pour la table %1 (attendus: %2, actuels: %3)</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="1205"/>
+        <location filename="../../libs/utils/database.cpp" line="1219"/>
         <source>Database Scheme Error: field number %1 differs: %2 instead of %3 in table %4</source>
         <translation>Schema de base erroné : champs numéro %1 différe : %2 au lieu de %3 dans la table %4</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="2511"/>
+        <location filename="../../libs/utils/database.cpp" line="2556"/>
         <source>Can not create table %1</source>
         <translation>Impossible de créer la table %1</translation>
     </message>
@@ -61,22 +61,22 @@
 <context>
     <name>Log</name>
     <message>
-        <location filename="../../libs/utils/log.cpp" line="208"/>
+        <location filename="../../libs/utils/log.cpp" line="215"/>
         <source>SQL Error: %1 %2 %3 %4</source>
         <translation>Erreur SQL: %1 %2 %3 %4</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/log.cpp" line="242"/>
+        <location filename="../../libs/utils/log.cpp" line="256"/>
         <source>%1 ms: %2</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/log.cpp" line="315"/>
+        <location filename="../../libs/utils/log.cpp" line="333"/>
         <source>Unable to save %1: Error %2</source>
         <translation>Impossible de sauvegarder %1 : Erreur %2</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/log.cpp" line="345"/>
+        <location filename="../../libs/utils/log.cpp" line="363"/>
         <source>*****  Registered Errors  *****
 </source>
         <translation>*****  Erreurs engistrées  *****

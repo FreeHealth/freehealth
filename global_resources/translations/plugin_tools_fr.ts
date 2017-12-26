@@ -87,7 +87,7 @@
 <context>
     <name>Tools::Internal::FspPrinterDialog</name>
     <message>
-        <location filename="../../plugins/toolsplugin/fsp/fspprinterdialog.cpp" line="390"/>
+        <location filename="../../plugins/toolsplugin/fsp/fspprinterdialog.cpp" line="394"/>
         <source>French &apos;FSP&apos; printing assistant</source>
         <translation>Assistant d&apos;impression des FSP</translation>
     </message>

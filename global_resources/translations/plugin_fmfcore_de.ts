@@ -58,21 +58,21 @@ Select your preferred language and the installation type.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Create MySQL databases</source>
+        <source>Create MariaDB databases</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Connect to MySQL databases</source>
+        <source>Connect to MariaDB databases</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Test without MySQL</source>
+        <source>Test without MariaDB</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>&lt;b&gt;This simplified installation procedure is for testing purposes only.&lt;/b&gt; 
-It is using SQLite as a temporary database. We do not recommend that you use SQLite to store medical data because  FreeHealth support of SQLite will end soon. If you want to install FreeHealth for professional use, please choose &lt;b&gt;Create MySQL databases&lt;/b&gt; instead.
-Click Ok to test FreeHealth, or click Cancel to install FreeHealth with MySQL.</source>
+It is using SQLite as a temporary database. We do not recommend that you use SQLite to store medical data because  FreeHealth support of SQLite will end soon. If you want to install FreeHealth for professional use, please choose &lt;b&gt;Create MariaDB databases&lt;/b&gt; instead.
+Click Ok to test FreeHealth, or click Cancel to install FreeHealth with MariaDB.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -682,6 +682,14 @@ Click Ok to test FreeHealth, or click Cancel to install FreeHealth with MySQL.</
     </message>
     <message>
         <source>We found a FreeMedForms parameter directory inside your user directory. It contains the connection parameters for your existing databases. If you want to use these databases with FreeHealth, click Yes. If you want to start a new installation from scratch, click No.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>LocalCompleteFormsPath</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>LocalSubFormsPath</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -2745,5 +2745,21 @@ Text Align Justify shortcut key : Mac specific</extracomment>
         <source>Creator</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Driver error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Database error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Database-specific error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error type</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 </TS>

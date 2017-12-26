@@ -218,56 +218,25 @@ Do you really want to remove the current episode?</source>
     </message>
 </context>
 <context>
-    <name>Form::Internal::EpisodeBase</name>
-    <message>
-        <location filename="../../plugins/formmanagerplugin/episodebase.cpp" line="226"/>
-        <source>Unable to update the database schema</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formmanagerplugin/episodebase.cpp" line="356"/>
-        <location filename="../../plugins/formmanagerplugin/episodebase.cpp" line="380"/>
-        <location filename="../../plugins/formmanagerplugin/episodebase.cpp" line="417"/>
-        <source>Episode database updated from version %1 to version: %2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formmanagerplugin/episodebase.cpp" line="386"/>
-        <location filename="../../plugins/formmanagerplugin/episodebase.cpp" line="424"/>
-        <source>No change happened but episode database updated from version %1 to version: %2</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>Form::Internal::FirstRunFormManagerWizardPage</name>
     <message>
-        <location filename="../../plugins/formmanagerplugin/firstrunformmanager.cpp" line="55"/>
+        <location filename="../../plugins/formmanagerplugin/firstrunformmanager.cpp" line="56"/>
         <source>General patient form selection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/firstrunformmanager.cpp" line="56"/>
+        <location filename="../../plugins/formmanagerplugin/firstrunformmanager.cpp" line="57"/>
         <source>You can define your own patient form file, or use the default one. All patients will have the same (central) form.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/firstrunformmanager.cpp" line="63"/>
+        <location filename="../../plugins/formmanagerplugin/firstrunformmanager.cpp" line="64"/>
         <source>Reading available forms</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/firstrunformmanager.cpp" line="63"/>
+        <location filename="../../plugins/formmanagerplugin/firstrunformmanager.cpp" line="64"/>
         <source>Please wait</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formmanagerplugin/firstrunformmanager.cpp" line="96"/>
-        <source>Please one (and only one) form for your default patient file.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formmanagerplugin/firstrunformmanager.cpp" line="97"/>
-        <source>You must select one file to be used by default.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -487,77 +456,77 @@ Do you really want to remove the current episode?</source>
 <context>
     <name>Forms</name>
     <message>
-        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="119"/>
+        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="133"/>
         <source>Forms</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="120"/>
+        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="134"/>
         <source>Add Episode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="121"/>
+        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="135"/>
         <source>Validate Episode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="122"/>
+        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="136"/>
         <source>Add Form</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="123"/>
+        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="137"/>
         <source>Remove Form</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="124"/>
+        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="138"/>
         <source>Print Form</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="125"/>
+        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="139"/>
         <source>Show patients&apos; synthesis</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="126"/>
+        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="140"/>
         <source>Show patients&apos; last episodes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="127"/>
+        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="141"/>
         <source>Patients&apos; last episodes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="129"/>
+        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="143"/>
         <source>Forms font</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="130"/>
+        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="144"/>
         <source>Episodes font</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="141"/>
+        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="155"/>
         <source>Data</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="142"/>
+        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="156"/>
         <source>Patient extracted data</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="143"/>
+        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="157"/>
         <source>Print output</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="144"/>
+        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="158"/>
         <source>Item current data</source>
         <translation type="unfinished"></translation>
     </message>

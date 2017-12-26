@@ -61,24 +61,22 @@ Select your preferred language and the installation type.</source>
 Sélectionnez votre langue et votre type d&apos;installation.</translation>
     </message>
     <message>
-        <source>Create MySQL databases</source>
-        <translation>Créer les bases de données MySQL</translation>
+        <source>Create MariaDB databases</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Connect to MySQL databases</source>
-        <translation>Se connecter aux bases de données MySQL</translation>
+        <source>Connect to MariaDB databases</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Test without MySQL</source>
-        <translation>Tester sans MySQL</translation>
+        <source>Test without MariaDB</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>&lt;b&gt;This simplified installation procedure is for testing purposes only.&lt;/b&gt; 
-It is using SQLite as a temporary database. We do not recommend that you use SQLite to store medical data because  FreeHealth support of SQLite will end soon. If you want to install FreeHealth for professional use, please choose &lt;b&gt;Create MySQL databases&lt;/b&gt; instead.
-Click Ok to test FreeHealth, or click Cancel to install FreeHealth with MySQL.</source>
-        <translation>&lt;b&gt;Cette procédure d&apos;installation simplifiée permet de tester le logiciel rapidement.&lt;/b&gt; 
-Elle utilise des fichiers SQLite comme bases de données temporaires. Nous ne recommandons pas l&apos;utilisation de SQLite car le support de SQLite sera bientôt interrompu. Si vous souhaitez installer FreeHealth pour un usage professionnel, merci d&apos;installer le logiciel libre et gratuit MySQL puis choisissez &lt;b&gt;Créer les bases de données MySQL&lt;/b&gt;.
-Cliquez Ok pour tester FreeHealth, ou Annuler pour installer FreeHealth avec MySQL.</translation>
+It is using SQLite as a temporary database. We do not recommend that you use SQLite to store medical data because  FreeHealth support of SQLite will end soon. If you want to install FreeHealth for professional use, please choose &lt;b&gt;Create MariaDB databases&lt;/b&gt; instead.
+Click Ok to test FreeHealth, or click Cancel to install FreeHealth with MariaDB.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -688,6 +686,14 @@ Cliquez Ok pour tester FreeHealth, ou Annuler pour installer FreeHealth avec MyS
     <message>
         <source>We found a FreeMedForms parameter directory inside your user directory. It contains the connection parameters for your existing databases. If you want to use these databases with FreeHealth, click Yes. If you want to start a new installation from scratch, click No.</source>
         <translation>Nous avons trouvé un dossier contenant des paramètres de connexion à des bases de données FreeMedForms dans votre répertoire utilisateur. Si vous souhaitez continuer à utiliser ces bases de données avec FreeHealth, cliquez sur Oui. Si vous souhaitez effectuer une installation de FreeHealth en partant de zéro (avec de nouvelles bases de données), cliquez sur Non.</translation>
+    </message>
+    <message>
+        <source>LocalCompleteFormsPath</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>LocalSubFormsPath</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

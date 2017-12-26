@@ -223,14 +223,6 @@ This option is not recommended with big patient database (&gt; 10.000 patients).
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientbasepreferencespage.ui" line="161"/>
-        <source>When this option is checked, the patient selector updates the search result while you are typing.When this option is unckecked you need to hit enter to refresh the search results.
-
-Warning: If you are using FreeMedForms over a network, this can lead to heavy network usage. This option is not recommended with big patient database (&gt; 10.000 patients).
-</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../plugins/patientbaseplugin/patientbasepreferencespage.ui" line="214"/>
         <source>Pediatrics</source>
         <translation type="unfinished"></translation>
@@ -268,6 +260,14 @@ Warning: If you are using FreeMedForms over a network, this can lead to heavy ne
     <message>
         <location filename="../../plugins/patientbaseplugin/patientbasepreferencespage.ui" line="78"/>
         <source>Default city</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/patientbaseplugin/patientbasepreferencespage.ui" line="161"/>
+        <source>When this option is checked, the patient selector updates the search result while you are typing.When this option is unckecked you need to hit enter to refresh the search results.
+
+Warning: If you are using the application over a network, this can lead to heavy network usage. This option is not recommended with big patient database (&gt; 10.000 patients).
+</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -384,43 +384,43 @@ Warning: If you are using FreeMedForms over a network, this can lead to heavy ne
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientdataextractordialog.cpp" line="339"/>
+        <location filename="../../plugins/patientbaseplugin/patientdataextractordialog.cpp" line="340"/>
         <source>Start patient file extraction</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientdataextractordialog.cpp" line="357"/>
-        <location filename="../../plugins/patientbaseplugin/patientdataextractordialog.cpp" line="447"/>
+        <location filename="../../plugins/patientbaseplugin/patientdataextractordialog.cpp" line="358"/>
+        <location filename="../../plugins/patientbaseplugin/patientdataextractordialog.cpp" line="448"/>
         <source>Setting patient uuid %1 as current patient</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientdataextractordialog.cpp" line="407"/>
+        <location filename="../../plugins/patientbaseplugin/patientdataextractordialog.cpp" line="408"/>
         <source>Exporting %1 file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientdataextractordialog.cpp" line="413"/>
+        <location filename="../../plugins/patientbaseplugin/patientdataextractordialog.cpp" line="414"/>
         <source>Patient file exportation - %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientdataextractordialog.cpp" line="422"/>
+        <location filename="../../plugins/patientbaseplugin/patientdataextractordialog.cpp" line="423"/>
         <source>An error occured when saving the HTML patient file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientdataextractordialog.cpp" line="426"/>
+        <location filename="../../plugins/patientbaseplugin/patientdataextractordialog.cpp" line="427"/>
         <source>Patient HTML file correctly created</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientdataextractordialog.cpp" line="436"/>
+        <location filename="../../plugins/patientbaseplugin/patientdataextractordialog.cpp" line="437"/>
         <source>An error occured when saving the PDF patient file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientdataextractordialog.cpp" line="440"/>
+        <location filename="../../plugins/patientbaseplugin/patientdataextractordialog.cpp" line="441"/>
         <source>Patient PDF file correctly created</source>
         <translation type="unfinished"></translation>
     </message>
@@ -474,7 +474,7 @@ Warning: If you are using FreeMedForms over a network, this can lead to heavy ne
 <context>
     <name>Patients::PatientModel</name>
     <message numerus="yes">
-        <location filename="../../plugins/patientbaseplugin/patientmodel.cpp" line="536"/>
+        <location filename="../../plugins/patientbaseplugin/patientmodel.cpp" line="567"/>
         <source>%n year(s)</source>
         <translation type="unfinished">
             <numerusform></numerusform>

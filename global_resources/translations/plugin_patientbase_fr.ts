@@ -201,15 +201,6 @@ Cette option n&apos;est pas recommandée pour les bases de données larges (&gt;
         <translation>Rechercher les patients pendant la frappe</translation>
     </message>
     <message>
-        <source>When this option is checked, the patient selector updates the search result while you are typing.When this option is unckecked you need to hit enter to refresh the search results.
-
-Warning: If you are using FreeMedForms over a network, this can lead to heavy network usage. This option is not recommended with big patient database (&gt; 10.000 patients).
-</source>
-        <translation>Lorsque vous activez cette option, le sélecteur de patient met à jour les résultats de la recherche durant la frappe. Si vous désactivez cette option, vous devrez appuyer sur la touche &apos;Entrée&apos; pour rafraîchir les résultats de la recherche.
-
-Attention : Si vous utilisez FreeMedForms en réseau, cela peut causer une surcharge de l&apos;utilisation du réseau. Cette option n&apos;est pas recommandée pour les bases de données larges (&gt; 10 000 patients).</translation>
-    </message>
-    <message>
         <source>Maximum patient in the recent list (default 10)</source>
         <translation>Nombre maximum de patient dans l&apos;historique de navigation (10 par défaut)</translation>
     </message>
@@ -240,6 +231,13 @@ Attention : Si vous utilisez FreeMedForms en réseau, cela peut causer une surch
     <message>
         <source>months</source>
         <translation>mois</translation>
+    </message>
+    <message>
+        <source>When this option is checked, the patient selector updates the search result while you are typing.When this option is unckecked you need to hit enter to refresh the search results.
+
+Warning: If you are using the application over a network, this can lead to heavy network usage. This option is not recommended with big patient database (&gt; 10.000 patients).
+</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

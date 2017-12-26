@@ -443,374 +443,384 @@
 <context>
     <name>Core::Internal::SettingsPrivate</name>
     <message>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="818"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="869"/>
         <source>Passing command line ini file: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="827"/>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="860"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="878"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="911"/>
         <source>Using ini file %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="830"/>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="863"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="881"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="914"/>
         <source>Ini file %1 is not writable. Can not use it.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="836"/>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="873"/>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="973"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="887"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="924"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1024"/>
         <source>Using ini file %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="839"/>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="876"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="890"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="927"/>
         <source>WARNING: Ini file %1 can not be used.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="851"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="902"/>
         <source>Found a configuration file next to the binary. Reading file.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="869"/>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="879"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="920"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="930"/>
         <source>File does not exists and can not be created: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="906"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="957"/>
         <source>Trying ini file %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="924"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="975"/>
         <source>We found a FreeMedforms parameter directory.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="926"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="977"/>
         <source>We found a FreeMedForms parameter directory inside your user directory. It contains the connection parameters for your existing databases. If you want to use these databases with FreeHealth, click Yes. If you want to start a new installation from scratch, click No.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="968"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1019"/>
         <source>Unable to create dir: %1, no Ini File can be used.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1073"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1124"/>
         <source>Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1073"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1124"/>
         <source>Value</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1078"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1129"/>
         <source>System information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1080"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1131"/>
         <source>Operating System</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1082"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1133"/>
         <source>uname output</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1088"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1139"/>
         <source>Compile Qt version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1089"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1140"/>
         <source>Actual Qt version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1092"/>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1095"/>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1097"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1143"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1146"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1148"/>
         <source>Compile mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1100"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1151"/>
         <source>GIT revision</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1106"/>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1219"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1157"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1272"/>
         <source>Binary</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1107"/>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1220"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1158"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1273"/>
         <source>UserResourcesPath</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1108"/>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1221"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1159"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1274"/>
         <source>Read only Databases</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1109"/>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1222"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1160"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1275"/>
         <source>Writable databases</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1110"/>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1223"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1161"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1276"/>
         <source>Bundle root path</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1111"/>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1224"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1162"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1277"/>
         <source>Bundle resources path</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1112"/>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1225"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1163"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1278"/>
         <source>Translations path</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1113"/>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1226"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1164"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1279"/>
         <source>Qt Plugins path</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1114"/>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1227"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1165"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1280"/>
         <source>Qt FrameWorks path</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="647"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="698"/>
         <source>We found a FreeMedForms user directory.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="648"/>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="925"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="699"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="976"/>
         <source>Do you want to use this directory with FreeHealth?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="649"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="700"/>
         <source>We found a freemedforms directory inside your user directory. If you want to use it with FreeHealth, click Yes and we will make a copy of it named freehealth. If you want to start a new installation from scratch, click No.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1115"/>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1228"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1166"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1281"/>
         <source>Application Plugins path</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1116"/>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1229"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1167"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1282"/>
         <source>SmallPixmapPath</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1117"/>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1230"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1168"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1283"/>
         <source>MediumPixmapPath</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1118"/>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1231"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1169"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1284"/>
         <source>BigPixmapPath</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1119"/>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1232"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1170"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1285"/>
         <source>SystemTempPath</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1120"/>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1233"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1171"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1286"/>
         <source>ApplicationTempPath</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1121"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1172"/>
         <source>CompleteFormsPath</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1122"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1173"/>
         <source>SubFormsPath</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1123"/>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1235"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1174"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1288"/>
         <source>UserCompleteFormsPath</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1124"/>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1236"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1175"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1289"/>
         <source>UserSubFormsPath</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1125"/>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1237"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1176"/>
+        <source>LocalCompleteFormsPath</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1177"/>
+        <source>LocalSubFormsPath</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1178"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1290"/>
         <source>Default installed datapack path</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1126"/>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1238"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1179"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1291"/>
         <source>Datapack persistent temporary path</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1127"/>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1239"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1180"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1292"/>
         <source>Datapack installation path</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1128"/>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1240"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1181"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1293"/>
         <source>Datapack Complete Forms installation path</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1129"/>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1241"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1182"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1294"/>
         <source>Datapack SubForms installation path</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1130"/>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1242"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1183"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1295"/>
         <source>DocumentationPath</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1132"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1185"/>
         <source>Absolute Paths</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1134"/>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1138"/>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1202"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1187"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1191"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1255"/>
         <source>Using Ini File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1136"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1189"/>
         <source>Relative Paths</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1144"/>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1145"/>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1243"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1197"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1198"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1296"/>
         <source>WebSiteUrl</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1151"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1204"/>
         <source>Settings values</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1154"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1207"/>
         <source>Orphan settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1191"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1244"/>
         <source>Running version: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1192"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1245"/>
         <source>Qt Build version: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1193"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1246"/>
         <source>Qt running version: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1194"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1247"/>
         <source>Application Version: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1196"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1249"/>
         <source>Actual build: Debug</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1198"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1251"/>
         <source>Actual build: Release</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1199"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1252"/>
         <source>GIT revision: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1200"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1253"/>
         <source>Application path: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1204"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1257"/>
         <source>Running on Linux</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1205"/>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1209"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1258"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1262"/>
         <source>uname returns: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1208"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1261"/>
         <source>Running on MacOs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1212"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1265"/>
         <source>Running on Windows</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1234"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1287"/>
         <source>FormsPath</source>
         <translation type="unfinished"></translation>
     </message>
@@ -979,12 +989,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.cpp" line="345"/>
+        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.cpp" line="347"/>
         <source>Connection error: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.cpp" line="352"/>
+        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.cpp" line="354"/>
         <source>Connected</source>
         <translation type="unfinished"></translation>
     </message>

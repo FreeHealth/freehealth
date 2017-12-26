@@ -12,7 +12,7 @@
 <context>
     <name>Category::Internal::CategoryBase</name>
     <message>
-        <location filename="../../plugins/categoryplugin/categorybase.cpp" line="237"/>
+        <location filename="../../plugins/categoryplugin/categorybase.cpp" line="251"/>
         <source>Please contact dev team.</source>
         <translation type="unfinished"></translation>
     </message>

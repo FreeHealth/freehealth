@@ -578,6 +578,14 @@
         <source>We found a FreeMedForms parameter directory inside your user directory. It contains the connection parameters for your existing databases. If you want to use these databases with FreeHealth, click Yes. If you want to start a new installation from scratch, click No.</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>LocalCompleteFormsPath</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>LocalSubFormsPath</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Core::Internal::SimpleTextDialog</name>

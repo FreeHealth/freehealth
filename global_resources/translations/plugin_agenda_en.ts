@@ -445,7 +445,7 @@
 <context>
     <name>AgendaBase</name>
     <message>
-        <location filename="../../plugins/agendaplugin/agendabase.cpp" line="401"/>
+        <location filename="../../plugins/agendaplugin/agendabase.cpp" line="400"/>
         <source>Trying to create empty database.
        Location: %1
        FileName: %2

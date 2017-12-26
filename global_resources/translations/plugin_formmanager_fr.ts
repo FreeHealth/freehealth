@@ -183,21 +183,6 @@ Répondre &apos;Non&apos; entraînera une perte définitive des données.</trans
     </message>
 </context>
 <context>
-    <name>Form::Internal::EpisodeBase</name>
-    <message>
-        <source>Unable to update the database schema</source>
-        <translation>Impossible de mettre à jour le schéma de la base de données</translation>
-    </message>
-    <message>
-        <source>Episode database updated from version %1 to version: %2</source>
-        <translation>La base de données épisodes a été mise à jour de la version %1 à la version %2</translation>
-    </message>
-    <message>
-        <source>No change happened but episode database updated from version %1 to version: %2</source>
-        <translation>Aucune modification mais la version de la base de données episodes a été mise à jour: ancienne version: %1, nouvelle version: %2</translation>
-    </message>
-</context>
-<context>
     <name>Form::Internal::FirstRunFormManagerWizardPage</name>
     <message>
         <source>General patient form selection</source>
@@ -210,14 +195,6 @@ Répondre &apos;Non&apos; entraînera une perte définitive des données.</trans
     <message>
         <source>Please wait</source>
         <translation>Veuillez patienter</translation>
-    </message>
-    <message>
-        <source>Please one (and only one) form for your default patient file.</source>
-        <translation>Veuillez ne sélectionner qu&apos;un seul formulaire pour le formulaire par défaut.</translation>
-    </message>
-    <message>
-        <source>You must select one file to be used by default.</source>
-        <translation>Vous devez ne sélectionner qu&apos;un seul formulaire.</translation>
     </message>
     <message>
         <source>You can define your own patient form file, or use the default one. All patients will have the same (central) form.</source>

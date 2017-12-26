@@ -200,13 +200,6 @@ This option is not recommended with big patient database (&gt; 10.000 patients).
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>When this option is checked, the patient selector updates the search result while you are typing.When this option is unckecked you need to hit enter to refresh the search results.
-
-Warning: If you are using FreeMedForms over a network, this can lead to heavy network usage. This option is not recommended with big patient database (&gt; 10.000 patients).
-</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Maximum patient in the recent list (default 10)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -236,6 +229,13 @@ Warning: If you are using FreeMedForms over a network, this can lead to heavy ne
     </message>
     <message>
         <source>months</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>When this option is checked, the patient selector updates the search result while you are typing.When this option is unckecked you need to hit enter to refresh the search results.
+
+Warning: If you are using the application over a network, this can lead to heavy network usage. This option is not recommended with big patient database (&gt; 10.000 patients).
+</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

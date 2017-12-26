@@ -4,23 +4,23 @@
 <context>
     <name>UserBase</name>
     <message>
-        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="743"/>
-        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="772"/>
+        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="628"/>
+        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="657"/>
         <source>Can not create a new user&apos;s UUID, database access error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="809"/>
+        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="694"/>
         <source>Can not retrieve login from the uuid</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="848"/>
+        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="733"/>
         <source>Can not retrieve crypted password from the login %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="984"/>
+        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="869"/>
         <source>Trying to create empty user database.
        Location: %1
        FileName: %2
@@ -28,7 +28,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="1502"/>
+        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="1349"/>
         <source>User %1 successfully updated.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -117,27 +117,27 @@
 <context>
     <name>UserPlugin</name>
     <message>
-        <location filename="../../plugins/usermanagerplugin/constants.h" line="196"/>
+        <location filename="../../plugins/usermanagerplugin/constants.h" line="200"/>
         <source>User creator wizard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/constants.h" line="197"/>
+        <location filename="../../plugins/usermanagerplugin/constants.h" line="201"/>
         <source>Create user</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/constants.h" line="198"/>
+        <location filename="../../plugins/usermanagerplugin/constants.h" line="202"/>
         <source>Modify user</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/constants.h" line="199"/>
+        <location filename="../../plugins/usermanagerplugin/constants.h" line="203"/>
         <source>Delete user</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/constants.h" line="200"/>
+        <location filename="../../plugins/usermanagerplugin/constants.h" line="204"/>
         <source>Save user</source>
         <translation type="unfinished"></translation>
     </message>
@@ -216,19 +216,19 @@
 <context>
     <name>UserPlugin::Internal::UserBase</name>
     <message>
-        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="585"/>
-        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="593"/>
+        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="470"/>
+        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="478"/>
         <source>Unable to initialize the database with the login: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="624"/>
+        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="509"/>
         <source>Login not found: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="1266"/>
-        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="1286"/>
+        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="1116"/>
+        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="1136"/>
         <source>Last recorded user login: %1 </source>
         <translation type="unfinished"></translation>
     </message>
@@ -391,7 +391,7 @@ p, li { white-space: pre-wrap; }
     <name>UserPlugin::Internal::UserManagerPlugin</name>
     <message>
         <location filename="../../plugins/usermanagerplugin/usermanagerplugin.cpp" line="148"/>
-        <location filename="../../plugins/usermanagerplugin/usermanagerplugin.cpp" line="265"/>
+        <location filename="../../plugins/usermanagerplugin/usermanagerplugin.cpp" line="269"/>
         <source>Initializing user manager plugin...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -411,17 +411,17 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/usermanagerplugin.cpp" line="380"/>
+        <location filename="../../plugins/usermanagerplugin/usermanagerplugin.cpp" line="384"/>
         <source>Using command line user identifiants: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/usermanagerplugin.cpp" line="442"/>
+        <location filename="../../plugins/usermanagerplugin/usermanagerplugin.cpp" line="446"/>
         <source>Unable to change current user</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/usermanagerplugin.cpp" line="443"/>
+        <location filename="../../plugins/usermanagerplugin/usermanagerplugin.cpp" line="447"/>
         <source>An error occured when trying to change the current user. %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -818,43 +818,43 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>UserPlugin::UserModel</name>
     <message>
-        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="561"/>
+        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="560"/>
         <source>Unable to retrieve user into the model using login and password.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="588"/>
+        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="587"/>
         <source>Setting current user uuid to %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="682"/>
-        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="710"/>
+        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="681"/>
+        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="709"/>
         <source>Database server administrator</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="700"/>
+        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="699"/>
         <source>Setting current user uuid to %1 (su)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="824"/>
+        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="823"/>
         <source>User can not be deleted.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="825"/>
+        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="824"/>
         <source>You can not delete your own user.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="835"/>
+        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="834"/>
         <source>You can not delete a modified user, save it before.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="847"/>
+        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="846"/>
         <source>User can not be deleted from database.</source>
         <translation type="unfinished"></translation>
     </message>

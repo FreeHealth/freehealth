@@ -21,7 +21,7 @@ Error: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/xmlioplugin/xmlformio.cpp" line="316"/>
+        <location filename="../../plugins/xmlioplugin/xmlformio.cpp" line="318"/>
         <source>No form file name</source>
         <translation type="unfinished"></translation>
     </message>
@@ -29,7 +29,7 @@ Error: %2</source>
 <context>
     <name>XmlForms::Internal::XmlIOBase</name>
     <message>
-        <location filename="../../plugins/xmlioplugin/xmliobase.cpp" line="947"/>
+        <location filename="../../plugins/xmlioplugin/xmliobase.cpp" line="994"/>
         <source>Error while saving PMHxCateogries (%1)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -37,7 +37,7 @@ Error: %2</source>
 <context>
     <name>XmlIOBase</name>
     <message>
-        <location filename="../../plugins/xmlioplugin/xmliobase.cpp" line="229"/>
+        <location filename="../../plugins/xmlioplugin/xmliobase.cpp" line="271"/>
         <source>Trying to create empty database.
        Location: %1
        FileName: %2

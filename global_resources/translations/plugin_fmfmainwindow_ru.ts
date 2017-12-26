@@ -50,18 +50,18 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfmainwindowplugin/virtualdatabasepreferences.cpp" line="84"/>
+        <location filename="../../plugins/fmfmainwindowplugin/virtualdatabasepreferences.cpp" line="83"/>
         <source>Creating %1 virtual patients</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfmainwindowplugin/virtualdatabasepreferences.cpp" line="84"/>
-        <location filename="../../plugins/fmfmainwindowplugin/virtualdatabasepreferences.cpp" line="159"/>
+        <location filename="../../plugins/fmfmainwindowplugin/virtualdatabasepreferences.cpp" line="83"/>
+        <location filename="../../plugins/fmfmainwindowplugin/virtualdatabasepreferences.cpp" line="155"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfmainwindowplugin/virtualdatabasepreferences.cpp" line="159"/>
+        <location filename="../../plugins/fmfmainwindowplugin/virtualdatabasepreferences.cpp" line="155"/>
         <source>Creating %1 virtual episodes</source>
         <translation type="unfinished"></translation>
     </message>

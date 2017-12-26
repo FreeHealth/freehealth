@@ -179,21 +179,6 @@ Answering &apos;No&apos; will cause definitive data loss.</source>
     </message>
 </context>
 <context>
-    <name>Form::Internal::EpisodeBase</name>
-    <message>
-        <source>Unable to update the database schema</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Episode database updated from version %1 to version: %2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>No change happened but episode database updated from version %1 to version: %2</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>Form::Internal::FirstRunFormManagerWizardPage</name>
     <message>
         <source>General patient form selection</source>
@@ -205,14 +190,6 @@ Answering &apos;No&apos; will cause definitive data loss.</source>
     </message>
     <message>
         <source>Please wait</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Please one (and only one) form for your default patient file.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>You must select one file to be used by default.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
