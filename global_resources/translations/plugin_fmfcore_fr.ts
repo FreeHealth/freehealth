@@ -62,21 +62,23 @@ Sélectionnez votre langue et votre type d&apos;installation.</translation>
     </message>
     <message>
         <source>Create MariaDB databases</source>
-        <translation type="unfinished"></translation>
+        <translation>Créer les bases de données MariaDB</translation>
     </message>
     <message>
         <source>Connect to MariaDB databases</source>
-        <translation type="unfinished"></translation>
+        <translation>Se connecter aux bases de données MariaDB</translation>
     </message>
     <message>
         <source>Test without MariaDB</source>
-        <translation type="unfinished"></translation>
+        <translation>Tester sans MariaDB</translation>
     </message>
     <message>
         <source>&lt;b&gt;This simplified installation procedure is for testing purposes only.&lt;/b&gt; 
 It is using SQLite as a temporary database. We do not recommend that you use SQLite to store medical data because  FreeHealth support of SQLite will end soon. If you want to install FreeHealth for professional use, please choose &lt;b&gt;Create MariaDB databases&lt;/b&gt; instead.
 Click Ok to test FreeHealth, or click Cancel to install FreeHealth with MariaDB.</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;Cette procédure d&apos;installation simplifiée sert uniquement à tester l&apos;application.&lt;/b&gt; 
+Elle utilise une base de données temporaire SQLite. Nous vous recommandons de ne pas utiliser SQLite pour stocker des données médicales car le support de SQLite sera bientôt abandonné. Si vous voulez installer FreeHealth pour un usage professionnel, merci d&apos;installer MariaDB puis de choisir  &lt;b&gt;Créer les bases de données MariaDB&lt;/b&gt; dans le menu déroulant.
+Cliquer sur &lt;b&gt;Ok&lt;/b&gt; pour tester FreeHealth, ou cliquer sur &lt;b&gt;Annuler&lt;/b&gt; pour installer FreeHealth avec MariaDB.</translation>
     </message>
 </context>
 <context>
@@ -689,11 +691,11 @@ Click Ok to test FreeHealth, or click Cancel to install FreeHealth with MariaDB.
     </message>
     <message>
         <source>LocalCompleteFormsPath</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>LocalSubFormsPath</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -871,7 +873,7 @@ Merci de contacter l&apos;administrateur de votre serveur de bases de données.<
     </message>
     <message>
         <source>The server is already configured for FreeHealth.</source>
-        <translation type="unfinished"></translation>
+        <translation>Le serveur est déjà configuré pour FreeHealth.</translation>
     </message>
 </context>
 <context>
