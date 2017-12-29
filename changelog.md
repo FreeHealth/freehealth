@@ -4,6 +4,33 @@ Changelog
 See https://github.com/FreeHealth/freehealth/issues for more details
 
 
+0.11.0
+------
+
+### Summary
+
+  * MariaDB (version 10.0 or 10.1) becomes the officialy supported database backend
+  * Improved versioning and update mechanism of databases
+  * SOAP form: temperature and head circumference added
+  * Simplification: "multipage generic patient file" becomes the main form structure,
+    which can be adapted by adding subforms. Users updating from a previous version
+    can keep their old form structure.
+
+### Database
+Versioning system changed on most databases. See https://www.freehealth.io/en/code/database
+You should always backup all your databases before updating to a new version.
+
+### Bugs fixed
+Here are the 17 issues that were closed since the release of FreeHealth 0.10.0:
+
+https://github.com/FreeHealth/freehealth/issues?utf8=%E2%9C%93&q=is%3Aissue+closed%3A%222017-04-15+..+2017-12-29%22+
+
+### Known issues
+
+  * After complete form switch, PMH items are not classified according to categories
+    (https://github.com/FreeHealth/freehealth/issues/107) users shouldn't switch
+    to another complete form structure until we release a fix in the next version
+
 0.10.0
 ------
 
